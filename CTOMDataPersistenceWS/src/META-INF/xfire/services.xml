@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://xfire.codehaus.org/config/1.0">
+  <service>
+   <serviceClass>gov.nih.nci.ctom.ws.CTOMDataPersistenceService</serviceClass>
+    <implementationClass>gov.nih.nci.ctom.ws.CTOMDataPersistenceServiceImpl</implementationClass>  
+  </service>
+</beans>
+
