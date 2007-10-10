@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- 
+  Portions of this file Copyright 1999-2005 University of Chicago
+  Portions of this file Copyright 1999-2005 The University of Southern California.
+  
+  This file or a portion of this file is licensed under the
+  terms of the Globus Toolkit Public License, found at
+  http://www.globus.org/toolkit/download/license.html.
+  If you redistribute this file, with or without
+  modifications, you must include this notice in the file.
+-->
+
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web
+Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  <display-name>WSRF Container Servlet</display-name>
+
+   <listener>
+     <listener-class>org.apache.axis.transport.http.AxisHTTPSessionListener</listener-class>
+   </listener>
+
+  <servlet>
+    <servlet-name>WSRFServlet</servlet-name>
+    <display-name>WSRF Container Servlet</display-name>
+    <servlet-class>
+        org.globus.wsrf.container.AxisServlet
+    </servlet-class>
+    <load-on-startup>true</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>WSRFServlet</servlet-name>
+    <url-pattern>/servlet/AxisServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>WSRFServlet</servlet-name>
+    <url-pattern>*.jws</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>WSRFServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+
+  <session-config>
+    <!-- Default to 5 minute session timeouts -->
+    <session-timeout>5</session-timeout>
+  </session-config>
+
+  <mime-mapping>
+      <extension>wsdl</extension>
+      <mime-type>text/xml</mime-type>
+  </mime-mapping>
+
+  <mime-mapping>
+     <extension>xsd</extension>
+     <mime-type>text/xml</mime-type>
+  </mime-mapping>
+
+</web-app>
