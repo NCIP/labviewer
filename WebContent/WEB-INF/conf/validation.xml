@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE form-validation PUBLIC
+          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+          "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+
+<form-validation>
+   <global>
+     <constant>
+        <constant-name>phone</constant-name>
+        <constant-value>^\(?(\d{3})\)?[-| ]?(\d{3})[-| ]?(\d{4})$</constant-value>
+     </constant>
+     <constant>
+        <constant-name>zip</constant-name>
+        <constant-value>^\d{5}(-\d{4})?$</constant-value>
+     </constant>
+     <constant>
+        <constant-name>customDate</constant-name>
+        <constant-value>(((0?[1-9])|(1[012]))[- /.]((0?[1-9])|([12][0-9])|(3[01]))[- /.]((19|20)[0-9][0-9]))</constant-value>
+     </constant>
+     <constant>
+        <constant-name>email</constant-name>
+        <constant-value>\w@\w.$\w</constant-value>
+     </constant>
+   </global>
+   
+   <formset>
+
+  	<form name="LoginForm">
+ 		<field property="loginId" depends="required">
+  			<arg0 key="LoginForm.loginId.displayLabel"/>
+  		</field>
+  		<field property="password" depends="required" >
+  			<arg0 key="LoginForm.password.displayLabel"/>
+  		</field>
+	</form>
+   
+  	<form name="MenuForm">
+ 		<field property="tableId" depends="required">
+  			<arg0 key="MenuForm.tableId.displayLabel"/>
+  		</field>
+	</form>
+
+    <form name="LabActivitiesForm">
+		<field property="studyId" depends="required,maxlength">
+  			<arg0 key="LabActivitiesForm.studyId.displayLabel"/>
+  			<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+  			<var>
+  				<var-name>maxlength</var-name>
+  				<var-value>100</var-value>
+  			</var>
+  		</field>
+		<field property="patientId" depends="required,maxlength">
+  			<arg0 key="LabActivitiesForm.patientId.displayLabel"/>
+  			<arg1 name="maxlength" key="${var:maxlength}" resource="false"/>
+  			<var>
+  				<var-name>maxlength</var-name>
+  				<var-value>100</var-value>
+  			</var>
+  		</field>
+		<field property="beginDate" depends="required, mask">
+  			<arg0 key="LabActivitiesForm.beginDate.displayLabel"/>
+  			<var>
+  				<var-name>mask</var-name>
+  				<var-value>${customDate}</var-value>
+  			</var>
+  		</field>
+		<field property="endDate" depends="required, mask">
+  			<arg0 key="LabActivitiesForm.endDate.displayLabel"/>
+  			<var>
+  				<var-name>mask</var-name>
+  				<var-value>${customDate}</var-value>
+  			</var>
+  		</field>
+    </form>
+   </formset>
+   
+</form-validation>
