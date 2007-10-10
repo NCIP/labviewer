@@ -1,0 +1,82 @@
+<project name="UPT Project" basedir="." default="all">
+	<description>UPT Project Build File</description>
+
+	<target name="init" >
+		<property name="app.name"				value="ctomlabviewer" />
+		<property name="app.path"				value="/${app.name}" />
+		<property name="src.home"				value="${basedir}/src" />
+		<property name="sdkclient.home"			value="${basedir}/sdkclient/conf" />
+		<property name="web.home"				value="${basedir}/WebContent" />
+		<property name="webinf.home"			value="${web.home}/WEB-INF" />
+		<property name="lib.home"				value="${webinf.home}/lib" />
+		<property name="otherlib.home"			value="${basedir}/otherlib" />
+		<property name="libext.home"			value="${basedir}/lib-ext" />
+		<property name="build.home"				value="${basedir}/build" />
+		<property name="dist.home"				value="${basedir}/dist" />
+		<property name="classes.home"			value="${webinf.home}/classes" />
+		<property name="war.file"				value="${dist.home}/${app.name}.war" />
+	</target>
+
+
+	<target name="clean" depends="init" description="Delete the Build and Dist directories">
+		<delete dir="${build.home}" />
+		<delete dir="${dist.home}" />
+	</target>
+
+
+	<target name="prepareDir" depends="init">
+		<mkdir dir="${build.home}" />
+		<mkdir dir="${build.home}/WEB-INF" />
+		<mkdir dir="${build.home}/WEB-INF/tld" />
+		<mkdir dir="${build.home}/WEB-INF/conf" />
+		<mkdir dir="${build.home}/WEB-INF/lib" />
+		<mkdir dir="${build.home}/META-INF" />
+		<mkdir dir="${classes.home}" />
+
+		<mkdir dir="${dist.home}" />
+	</target>
+
+
+	<target name="prepareBuild" depends="prepareDir">
+
+		<copy todir="${build.home}">
+			<fileset dir="${web.home}"/>
+		</copy>
+
+		<copy todir="${build.home}/WEB-INF/">
+			<fileset dir="${webinf.home}"/>
+		</copy>
+
+		<copy todir="${build.home}/WEB-INF/lib">
+			<fileset dir="${lib.home}" includes="**/*.jar"/>
+		</copy>
+	</target>
+
+
+	<target name="prepare" depends="prepareDir,prepareBuild"/>
+
+	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
+		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
+			<classpath>
+				<fileset dir="${lib.home}" includes="*.jar" />
+				<fileset dir="${otherlib.home}" includes="*.jar" />
+				<fileset dir="${libext.home}" includes="*.jar" />
+			</classpath>
+		</javac>
+		<copy todir="${build.home}/WEB-INF/classes" >
+			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
+		</copy>
+
+	</target>
+
+	<target name="dist" depends="init,compile" description="Creates war file">
+		<jar jarfile="${war.file}" basedir="${build.home}" />
+	</target>
+
+	<target name="cleanup" depends="dist" description="Delete the Build directory">
+		<delete dir="${build.home}" />
+	</target>
+	
+	<target name="all" depends="init,clean,prepare,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+
+</project>
