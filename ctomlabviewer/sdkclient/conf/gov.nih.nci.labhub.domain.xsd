@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.cabig/3.2/gov.nih.nci.labhub.domain" targetNamespace="gme://caCORE.cabig/3.2/gov.nih.nci.labhub.domain" elementFormDefault="qualified">
+  <xs:element name="SpecimenCollection" type="SpecimenCollection" />
+  <xs:complexType name="SpecimenCollection">
+    <xs:complexContent>
+      <xs:extension base="Activity">
+        <xs:sequence>
+          <xs:element name="centralLab" type="CentralLaboratory" minOccurs="0" maxOccurs="1" />
+          <xs:element name="specimenCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="Specimen" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="subjectAgeAtCollection" type="xs:integer" />
+        <xs:attribute name="subjectAgeAtCollectionUnits" type="xs:string" />
+        <xs:attribute name="fastingStatus" type="xs:string" />
+        <xs:attribute name="method" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Specimen" type="Specimen" />
+  <xs:complexType name="Specimen">
+    <xs:sequence>
+      <xs:element name="labTestCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="LabTest" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="materialType" type="ConceptDescriptorDataType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="accessionNumber" type="xs:string" />
+    <xs:attribute name="condition" type="xs:string" />
+    <xs:attribute name="commentsFromLaboratory" type="xs:string" />
+    <xs:attribute name="commentsFromInvestigator" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="PerformingLaboratory" type="PerformingLaboratory" />
+  <xs:complexType name="PerformingLaboratory">
+    <xs:complexContent>
+      <xs:extension base="Organization">
+        <xs:sequence>
+          <xs:element name="labResultCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="LabResult" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StudySite" type="StudySite" />
+  <xs:complexType name="StudySite">
+    <xs:sequence>
+      <xs:element name="subjectAssignmentCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="SubjectAssignment" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="healthCareSite" type="HealthCareSite" minOccurs="0" maxOccurs="1" />
+      <xs:element name="investigatorCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Investigator" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="study" type="Study" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+  </xs:complexType>
+  <xs:element name="SubjectAssignment" type="SubjectAssignment" />
+  <xs:complexType name="SubjectAssignment">
+    <xs:sequence>
+      <xs:element name="studySite" type="StudySite" minOccurs="0" maxOccurs="1" />
+      <xs:element name="activityCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="Activity" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="participant" type="Participant" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="type" type="xs:string" />
+    <xs:attribute name="studySubjectIdentifier" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="LabTest" type="LabTest" />
+  <xs:complexType name="LabTest">
+    <xs:sequence>
+      <xs:element name="labTestCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="LabTest" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="specimen" type="Specimen" minOccurs="0" maxOccurs="1" />
+      <xs:element name="labResult" type="LabResult" minOccurs="0" maxOccurs="1" />
+      <xs:element name="labTestId" type="ConceptDescriptorDataType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="status" type="xs:string" />
+    <xs:attribute name="additionalTestDescription" type="xs:string" />
+    <xs:attribute name="comments" type="xs:string" />
+    <xs:attribute name="studyDefinedIndicator" type="xs:boolean" />
+    <xs:attribute name="studyScheduledIndicator" type="xs:boolean" />
+  </xs:complexType>
+  <xs:element name="HealthCareSite" type="HealthCareSite" />
+  <xs:complexType name="HealthCareSite">
+    <xs:complexContent>
+      <xs:extension base="Organization">
+        <xs:sequence>
+          <xs:element name="studySiteCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StudySite" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Person" type="Person" />
+  <xs:complexType name="Person">
+    <xs:sequence>
+      <xs:element name="race" type="ConceptDescriptorDataType" minOccurs="0" maxOccurs="1" />
+      <xs:element name="gender" type="ConceptDescriptorDataType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="dateOfBirth" type="xs:dateTime" />
+    <xs:attribute name="initials" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="LabResult" type="LabResult" />
+  <xs:complexType name="LabResult">
+    <xs:sequence>
+      <xs:element name="labTest" type="LabTest" minOccurs="0" maxOccurs="1" />
+      <xs:element name="performingLaboratory" type="PerformingLaboratory" minOccurs="0" maxOccurs="1" />
+      <xs:element name="units" type="ConceptDescriptorDataType" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="numericResult" type="xs:integer" />
+    <xs:attribute name="numericPrecision" type="xs:integer" />
+    <xs:attribute name="textResult" type="xs:string" />
+    <xs:attribute name="referenceRangeLow" type="xs:integer" />
+    <xs:attribute name="referenceRangeHigh" type="xs:integer" />
+    <xs:attribute name="referenceRangeComments" type="xs:string" />
+    <xs:attribute name="referenceTextList" type="xs:string" />
+    <xs:attribute name="reportedResultStatus" type="xs:string" />
+    <xs:attribute name="testPerformedDateTime" type="xs:dateTime" />
+    <xs:attribute name="referenceFlag" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Study" type="Study" />
+  <xs:complexType name="Study">
+    <xs:sequence>
+      <xs:element name="studySiteCollection" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="StudySite" minOccurs="0" maxOccurs="unbounded" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="assigningAuthority" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="ConceptDescriptorDataType" type="ConceptDescriptorDataType" />
+  <xs:complexType name="ConceptDescriptorDataType">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="code" type="xs:string" />
+    <xs:attribute name="codeSystem" type="xs:string" />
+    <xs:attribute name="codeSystemName" type="xs:string" />
+    <xs:attribute name="codeSystemVersion" type="xs:string" />
+    <xs:attribute name="displayName" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Organization" type="Organization" />
+  <xs:complexType name="Organization">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Activity" type="Activity" />
+  <xs:complexType name="Activity">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:integer" />
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="actualStartDateTime" type="xs:dateTime" />
+    <xs:attribute name="actualEndDateTime" type="xs:dateTime" />
+    <xs:attribute name="plannedTimeElapsed" type="xs:string" />
+    <xs:attribute name="plannedTimeElapsedDescription" type="xs:string" />
+    <xs:attribute name="reason" type="xs:string" />
+    <xs:attribute name="plannedIndicator" type="xs:boolean" />
+    <xs:attribute name="typeModifier" type="xs:string" />
+  </xs:complexType>
+  <xs:element name="Participant" type="Participant" />
+  <xs:complexType name="Participant">
+    <xs:complexContent>
+      <xs:extension base="Person">
+        <xs:sequence>
+          <xs:element name="subjectAssignment" type="SubjectAssignment" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CentralLaboratory" type="CentralLaboratory" />
+  <xs:complexType name="CentralLaboratory">
+    <xs:complexContent>
+      <xs:extension base="Organization">
+        <xs:sequence>
+          <xs:element name="specimenCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="SpecimenCollection" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Investigator" type="Investigator" />
+  <xs:complexType name="Investigator">
+    <xs:complexContent>
+      <xs:extension base="Person">
+        <xs:sequence>
+          <xs:element name="studySiteCollection" minOccurs="0" maxOccurs="1">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element ref="StudySite" minOccurs="0" maxOccurs="unbounded" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="identifier" type="xs:string" />
+        <xs:attribute name="name" type="xs:string" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
+
