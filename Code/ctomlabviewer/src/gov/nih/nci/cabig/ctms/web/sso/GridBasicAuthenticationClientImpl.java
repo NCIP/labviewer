@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.cabig.ctms.web.sso;
 
 import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
