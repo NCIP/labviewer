@@ -107,8 +107,8 @@ public interface BaseAssociationForm extends BaseDBForm
 {
 	public String[] getAssociatedIds();
 	
-	public void buildAssociationObject(HttpServletRequest request)throws Exception;
+	//public void buildAssociationObject(HttpServletRequest request)throws Exception;
 
-	public void setAssociationObject(HttpServletRequest request)throws Exception;
+	//public void setAssociationObject(HttpServletRequest request)throws Exception;
 
 }

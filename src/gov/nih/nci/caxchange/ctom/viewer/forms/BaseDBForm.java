@@ -114,23 +114,23 @@ public interface BaseDBForm
 {
 	public String getFormName();
 	
-	public ArrayList getAddFormElements();
+	//public ArrayList getAddFormElements();
 
-	public ArrayList getDisplayFormElements();
+	//public ArrayList getDisplayFormElements();
 	
-	public ArrayList getSearchFormElements();
+	//public ArrayList getSearchFormElements();
 
-	public void buildDisplayForm(HttpServletRequest request) throws Exception;
+	//public void buildDisplayForm(HttpServletRequest request) throws Exception;
 	
-	public void submitAdverseEvent(HttpServletRequest request) throws Exception;
+	//public void submitAdverseEvent(HttpServletRequest request) throws Exception;
 	
-	public void loadToCTMS(HttpServletRequest request) throws Exception;
+	//public void loadToCTMS(HttpServletRequest request) throws Exception;
 
-	public void removeDBObject(HttpServletRequest request) throws Exception;
+	//public void removeDBObject(HttpServletRequest request) throws Exception;
 	
-	public SearchResult searchObjects(HttpServletRequest request, ActionErrors errors, ActionMessages messages) throws Exception;
+	//public SearchResult searchObjects(HttpServletRequest request, ActionErrors errors, ActionMessages messages) throws Exception;
 
-	public String getPrimaryId();
+	//public String getPrimaryId();
 	
 	public void resetForm();
 
