@@ -15,6 +15,7 @@
 		<property name="dist.home"				value="${basedir}/dist" />
 		<property name="classes.home"			value="${webinf.home}/classes" />
 		<property name="war.file"				value="${dist.home}/${app.name}.war" />
+		<property name="jboss.home"             value="D:\Jboss-4.0.5\jboss-4.0.5.GA"/>
 	</target>
 
 
@@ -65,6 +66,8 @@
 		</javac>
 		<copy todir="${build.home}/WEB-INF/classes" >
 			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
+			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties"/>
+			<fileset file="${src.home}/applicationContext.xml"/>
 		</copy>
 
 	</target>
@@ -76,7 +79,11 @@
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
 		<delete dir="${build.home}" />
 	</target>
-	
-	<target name="all" depends="init,clean,prepare,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 
+	<target name="all" depends="init,clean,prepare,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+	<target name="deploy" depends="all">
+		<copy todir="${jboss.home}/server/default/deploy" >
+			<fileset file ="${war.file}" />
+		</copy>
+	</target>
 </project>
