@@ -128,7 +128,7 @@ public class CommonAction extends DispatchAction
 {
 	private static final Logger logDB = Logger.getLogger(CommonAction.class);
 	
-	public ActionForward loadHome(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+	/*public ActionForward loadHome(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ActionErrors errors = new ActionErrors();
 		ActionMessages messages = new ActionMessages();
@@ -374,6 +374,6 @@ public class CommonAction extends DispatchAction
 				+form.toString()+"|");
 		return (mapping.findForward(ForwardConstants.SEARCH_SUCCESS));	
 	}
-
+*/
 	
 }

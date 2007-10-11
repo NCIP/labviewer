@@ -148,7 +148,8 @@ public class MenuSelectionAction extends Action
 		if (menuSelectionForm.getTableId().equalsIgnoreCase(DisplayConstants.ADMIN_HOME_ID))
 			return (mapping.findForward(ForwardConstants.ADMIN_HOME_PAGE));
 		else if (menuSelectionForm.getTableId().equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID))
-			return (mapping.findForward(ForwardConstants.LABACTIVITIES_HOME_PAGE));
+			//return (mapping.findForward(ForwardConstants.LABACTIVITIES_HOME_PAGE));
+			return (mapping.findForward(ForwardConstants.LOAD_SEARCH_SUCCESS));
 		else if (menuSelectionForm.getTableId().equalsIgnoreCase(DisplayConstants.LOGOUT_ID))
 			return (mapping.findForward(ForwardConstants.LOGOUT_ACTION));
 		else
