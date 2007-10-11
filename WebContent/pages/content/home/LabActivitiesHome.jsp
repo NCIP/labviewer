@@ -61,8 +61,8 @@
 									<td class="sidebarTitle" height="20">LAB ACTIVITIES LINKS</td>
 								</tr>
 								<tr>
-									<td class="sidebarContent"><a
-										href="javascript: setAndSubmit('loadSearch')">Search for an
+									<td class="sidebarContent">
+									<a href="javascript: setAndSubmit('execute')">Search for an
 									Existing Lab Activities</a><br>
 									Enter search criteria to find the lab activity you wish to operate on.</td>
 								</tr>

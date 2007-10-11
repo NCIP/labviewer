@@ -12,60 +12,59 @@
 <!--
    	function submitAdverseEvent(recordIdvalue)
    	{
-	  		document.LabActivitiesForm.operation.value="submitAdverseEvent";
-            document.LabActivitiesForm.target="_self";
-            document.LabActivitiesForm.action="<%="LabActivitiesDBOperation.do"%>";
-	  		document.LabActivitiesForm.recordId.value=recordIdvalue;
-	  		document.LabActivitiesForm.submit();
+	  		document.LabActivitiesSearchResultForm.operation.value="execute";
+            document.LabActivitiesSearchResultForm.target="_self";
+            document.LabActivitiesSearchResultForm.action="<%="submitAdverseEvent.do"%>";
+	  		document.LabActivitiesSearchResultForm.recordId.value=recordIdvalue;
+	  		document.LabActivitiesSearchResultForm.submit();
  	}
 
    	function setAndRedirect(patientId, studyId)
    	{
 
-	  		document.LabActivitiesForm.operation.value="redirect";
-	  		document.LabActivitiesForm.target="_blank";
-	  		document.LabActivitiesForm.mrn.value=patientId;
-	  		document.LabActivitiesForm.nciIdentifier.value=studyId;
-            document.LabActivitiesForm.target="_blank";
-	  		document.LabActivitiesForm.action="<%=DisplayConstants.CAAERS_URL%>";
-	  		document.LabActivitiesForm.submit();
+	  		document.LabActivitiesSearchResultForm.operation.value="redirect";
+	  		document.LabActivitiesSearchResultForm.target="_blank";
+	  		document.LabActivitiesSearchResultForm.mrn.value=patientId;
+	  		document.LabActivitiesSearchResultForm.nciIdentifier.value=studyId;
+            document.LabActivitiesSearchResultForm.target="_blank";
+	  		document.LabActivitiesSearchResultForm.action="<%=DisplayConstants.CAAERS_URL%>";
+	  		document.LabActivitiesSearchResultForm.submit();
  	}
 
    	function setAndSubmit(target)
    	{
-   		document.LabActivitiesForm.target="_self";
+   		document.LabActivitiesSearchResultForm.target="_self";
   		var ischecked = false;
   		if (target=="loadSearch")
   		{
-	  		document.LabActivitiesForm.operation.value="loadSearch";
+	  		document.LabActivitiesSearchResultForm.action="LabActivitiesDB.do";  
+	  		document.LabActivitiesSearchResultForm.operation.value="execute";
 	  		ischecked = true;
   		}
   		else
-  		{
-	  		var radioLen = document.LabActivitiesForm.recordIds.length;
+  		{   
+	  		var radioLen = document.LabActivitiesSearchResultForm.recordIds.length;
 	
 	  		if(radioLen == undefined)
 	  		{
-	 			if (document.LabActivitiesForm.recordIds.checked) 
-				{		
-					document.LabActivitiesForm.recordId.value = document.LabActivitiesForm.recordIds.value;
+	 			if (document.LabActivitiesSearchResultForm.recordIds.checked) 
+				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordIds.value;
 					ischecked = true;
 				}
 	  		}
 			for (var i = 0; i <radioLen; i++)
-			{
-				if (document.LabActivitiesForm.recordIds[i].checked) 
-				{
-					document.LabActivitiesForm.recordId.value = document.LabActivitiesForm.recordId.value + "," + document.LabActivitiesForm.recordIds[i].value;
+			{   
+				if (document.LabActivitiesSearchResultForm.recordIds[i].checked) 
+				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordId.value + "," + document.LabActivitiesSearchResultForm.recordIds[i].value;
 					ischecked = true;
 				}
-			}
-	  		document.LabActivitiesForm.operation.value=target;
+			}   
+			document.LabActivitiesSearchResultForm.action="loadToCTMS.do";  
+	  		document.LabActivitiesSearchResultForm.operation.value="execute";
 		}
 		if(ischecked) {
-		   document.LabActivitiesForm.target="_self";
-     	   document.LabActivitiesForm.action="LabActivitiesDBOperation.do";  
-     	   document.LabActivitiesForm.submit();
+		   document.LabActivitiesSearchResultForm.target="_self";
+     	   document.LabActivitiesSearchResultForm.submit();
      	   }
 		else
 			alert("Atleast one check box should be checked.");
@@ -76,7 +75,7 @@
 
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" height="100%">
-	<html:form styleId="LabActivitiesForm" action="<%="/LabActivitiesDBOperation"%>" target="_self">
+	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self">
 		<html:hidden property="operation" value="read" />
 		<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
 		<html:hidden property="gridProxy" value="<%=loginObject.getGridProxy()%>" />
@@ -296,7 +295,7 @@
 											<table cellpadding="4" cellspacing="0" border="0">
 												<tr>
 													<td>
-														<html:button style="actionButton" property="back" onclick="setAndSubmit('loadSearch');">Back</html:button>
+														<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Back</html:cancel>
 													</td>
 													<td>
 														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Activities to CTMS</html:button>
