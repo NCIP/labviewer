@@ -95,7 +95,7 @@ package gov.nih.nci.caxchange.ctom.viewer.forms;
  */
 
 
-import org.apache.struts.validator.ValidatorForm;
+import org.apache.struts.action.ActionForm;
 
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
@@ -103,7 +103,7 @@ import org.apache.struts.validator.ValidatorForm;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class LoginForm extends ValidatorForm 
+public class LoginForm extends ActionForm 
 {
 	private String loginId;
 	private String password;
