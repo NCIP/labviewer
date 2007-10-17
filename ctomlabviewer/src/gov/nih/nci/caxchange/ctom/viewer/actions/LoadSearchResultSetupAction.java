@@ -21,6 +21,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class performs the search result page setup action. The action loads the search result page 
+ * after valid search criteria has been entered in the search page. 
+ * Before displaying the search results it checks if the login information is valid: 
+ * if not it redirects the user to login page to enter valid login information.
  * @author asharma
  *
  */
@@ -33,20 +37,20 @@ public class LoadSearchResultSetupAction extends Action {
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
-		
+		//gets the session object from HttpRequest	
 		HttpSession session = request.getSession();
 		LabActivitiesSearchResultForm baseDBForm = (LabActivitiesSearchResultForm)form;
-		
+		//if the session is new or the login object is null; redirects the user to login page  
 		if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)) {
 			if (logDB.isDebugEnabled())
 				logDB.debug("||"+baseDBForm.getFormName()+"|loadSearchResult|Failure|No Session or User Object Forwarding to the Login Page||");
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
+		//if the user clicks on cancel button; it loads the search page and resets the search form.
 		if (isCancelled(request)){
 			return (mapping.findForward(ForwardConstants.LOAD_SEARCH_SUCCESS));
 		} 
+		//if the login is valid and search criteria is valid; loads the search result page with search results
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
 					"|"+baseDBForm.getFormName()+"|loadSearchResult|Success|Loading the Search Result Page||");		
