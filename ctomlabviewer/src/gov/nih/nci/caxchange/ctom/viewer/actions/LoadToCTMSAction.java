@@ -29,6 +29,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class performs the Load to CTMS action. It loads the selected form data to CTMS.
+ * It checks if valid login information is in session; if not it redirects the user to login page.
+ * 
  * @author asharma
  *
  */
@@ -46,7 +49,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 	
 	HttpSession session = request.getSession();
 	LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm) form;
-	
+	  //if the session is new or the login object is null; redirects the user to login page  
 	if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)) {
 		if (logDB.isDebugEnabled())
 			logDB.debug("||"+lForm.getFormName()+"|create|Failure|No Session or User Object Forwarding to the Login Page||");
@@ -54,7 +57,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 	}
 	UserInfoHelper.setUserInfo(((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(), session.getId());		
 	try
-	{
+	{  //calls the loadToCTMS method
 		loadToCTMS(request, lForm);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, "Messages Submitted to CTMS Successfully"));
 		saveMessages( request, messages );
@@ -69,6 +72,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 				+form.toString()+"|"+ cse.getMessage());
 	}
 	session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
+	//if the login is valid and the selected form data is successfully loaded to CTMS; 
+	//it returns to the search results page and displays the load successful message
 	if (logDB.isDebugEnabled())
 		logDB.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
 			"|"+lForm.getFormName()+"|create|Success|Adding a  new "+lForm.getFormName()+" object|"
@@ -76,7 +81,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServlet
 	return (mapping.findForward(ForwardConstants.LOAD_TO_CTMS_EVENT_SUCCESS));
 }
 
-  /**
+ /**
+ * Collects the selectd form data and calls the EvenManager sendLabActivitiesmethod to
+ * load the data to CTMS
  * @param request
  * @param form
  * @throws Exception

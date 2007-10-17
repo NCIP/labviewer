@@ -21,6 +21,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class performs the home page setup action. The action loads the home page 
+ * after a login information is authenticated. In case the login authentication fails,
+ * it  redirects the user to login page to enter valid login information.
+ *
  * @author asharma
  *
  */
@@ -33,9 +37,6 @@ public class LoadHomeSetupAction extends Action{
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
-		
 		HttpSession session = request.getSession();
 		BaseDBForm baseDBForm = (BaseDBForm)form;
 		
