@@ -18,6 +18,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
 /**
+ * The LabActivitiesSearchResultForm class is the form for lab activites search results
+ * 
  * @author asharma
  *
  */

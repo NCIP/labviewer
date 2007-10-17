@@ -60,6 +60,10 @@ import org.apache.struts.action.ActionMessages;
 import org.hibernate.Session;
 
 /**
+ * This class performs the search action. The search action calls the searchObjects method with
+ * the user entered search criteria and queries the database.
+ * If the search returns a non null resultset; it forwards the user to search results page and
+ * displays the results.
  * @author asharma
  * 
  */
@@ -75,36 +79,20 @@ public class SearchAction extends Action {
 		
 		ActionErrors errors = new ActionErrors();
 		ActionMessages messages = new ActionMessages();
-
+        //gets the session object from HttpRequest 
 		HttpSession session = request.getSession();
-
+        //search form
 		LabActivitiesSearchForm lForm = (LabActivitiesSearchForm) form;
-
+       
 		UserInfoHelper.setUserInfo(((LoginForm) session
 				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
 				session.getId());
 		try {
-			//errors = lForm.validate(mapping, request);
-			if (!errors.isEmpty()) {
-				saveErrors(request, errors);
-				session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
-				if (logDB.isDebugEnabled())
-					logDB
-							.debug(session.getId()
-									+ "|"
-									+ ((LoginForm) session
-											.getAttribute(DisplayConstants.LOGIN_OBJECT))
-											.getLoginId() + "|"
-									+ lForm.getFormName()
-									+ "|create|Failure|Error validating the "
-									+ lForm.getFormName() + " object|"
-									+ form.toString() + "|");
-				return mapping.getInputForward();
-			}
-			SearchResult searchResult=new SearchResult();
+			   SearchResult searchResult=new SearchResult();
+			   //search based on the given search criteria
 				searchResult = searchObjects(mapping, lForm, request, errors,
 						messages);
-			
+		      //if the search returned nothing/null; display message  	
 			if (searchResult.getSearchResultObjects() == null
 					|| searchResult.getSearchResultObjects().isEmpty()) {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -124,6 +112,7 @@ public class SearchAction extends Action {
 									+ form.toString() + "|");
 				return (mapping.findForward(ForwardConstants.SEARCH_FAILURE));
 			}
+			//if search result is not null; forward to searchresults page
 			if (searchResult.getSearchResultMessage() != null
 					&& !(searchResult.getSearchResultMessage().trim()
 							.equalsIgnoreCase(""))) {
@@ -150,8 +139,10 @@ public class SearchAction extends Action {
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			logDB.error(e.getMessage());
 		}
+		//if search result is not null; forward to searchresults page
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()
@@ -166,18 +157,22 @@ public class SearchAction extends Action {
 
 
 	/**
+	 * SearchObjects queries the database with the user entered search criteria.
+	 * returns the search results
 	 * @param mapping
 	 * @param form
 	 * @param request
 	 * @param errors
 	 * @param messages
-	 * @return
+	 * @return searchResult
 	 * @throws Exception
 	 */
-	public SearchResult searchObjects(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	private SearchResult searchObjects(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			ActionErrors errors, ActionMessages messages) throws Exception {
+		
 		HashMap map = new HashMap();
 		List allLarList = new ArrayList();
+		//search form 
 		LabActivitiesSearchForm lForm = (LabActivitiesSearchForm) form;
 		try {
 
@@ -251,7 +246,7 @@ public class SearchAction extends Action {
 
 					LabActivityResult labActivityResult = null;
 
-					larlist = this.printRecord(sa, lForm.getBeginDate(), lForm
+					larlist = printRecord(sa, lForm.getBeginDate(), lForm
 							.getEndDate());
 
 					for (int j = 0; j < larlist.size(); j++) {
@@ -301,7 +296,6 @@ public class SearchAction extends Action {
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			System.out.println("Test client throws Exception = " + ex);
 		}
 		SearchResult searchResult = new SearchResult();
 		// searchResult.setSearchResultObjects(new ArrayList(map.values()));
@@ -402,8 +396,7 @@ public class SearchAction extends Action {
 
 										if (labResult != null) {
 											Double numResult = null;
-											numericResult = labResult
-													.getNumericResult();
+											numericResult = labResult.getNumericResult();
 											labActivityResult
 													.setLabResultId(labResult
 															.getId().toString());
