@@ -17,6 +17,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 
 /**
+ * The LabActivitiesSearchForm is the class for lab search form. It performs
+ * validations on user entered form data.
  * @author asharma
  *
  */
@@ -171,61 +173,4 @@ public class LabActivitiesSearchForm extends ActionForm implements
 		}
        	return errors;
 	}
-/*
-	*//**
-	 * @return the recordId
-	 *//*
-	public String getRecordId() {
-		return recordId;
-	}
-
-	*//**
-	 * @param recordId the recordId to set
-	 *//*
-	public void setRecordId(String recordId) {
-		this.recordId = recordId;
-	}
-
-	*//**
-	 * @return the recordIds
-	 *//*
-	public String[] getRecordIds() {
-		return recordIds;
-	}
-
-	*//**
-	 * @param recordIds the recordIds to set
-	 *//*
-	public void setRecordIds(String[] recordIds) {
-		this.recordIds = recordIds;
-	}
-
-	*//**
-	 * @return the mrn
-	 *//*
-	public String getMrn() {
-		return mrn;
-	}
-
-	*//**
-	 * @param mrn the mrn to set
-	 *//*
-	public void setMrn(String mrn) {
-		this.mrn = mrn;
-	}
-
-	*//**
-	 * @return the nciIdentifier
-	 *//*
-	public String getNciIdentifier() {
-		return nciIdentifier;
-	}
-
-	*//**
-	 * @param nciIdentifier the nciIdentifier to set
-	 *//*
-	public void setNciIdentifier(String nciIdentifier) {
-		this.nciIdentifier = nciIdentifier;
-	}
-*/
 }

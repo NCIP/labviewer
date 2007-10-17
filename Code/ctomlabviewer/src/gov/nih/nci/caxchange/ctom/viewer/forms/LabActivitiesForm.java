@@ -94,7 +94,6 @@ package gov.nih.nci.caxchange.ctom.viewer.forms;
  *
  */
 
-
 import gov.nih.nci.caxchange.ctom.viewer.applicationservice.EventsManager;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.util.ObjectFactory;
@@ -102,9 +101,6 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.FormElement;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResultComparator;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
-import gov.nih.nci.common.util.HQLCriteria;
-import gov.nih.nci.common.util.PrintUtils;
-import gov.nih.nci.common.util.XMLUtility;
 import gov.nih.nci.labhub.domain.ConceptDescriptorDataType;
 import gov.nih.nci.labhub.domain.LabResult;
 import gov.nih.nci.labhub.domain.LabTest;
@@ -124,13 +120,9 @@ import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
 
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,9 +141,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.ValidatorForm;
-import org.hibernate.Query;
 import org.hibernate.Session;
-
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
  *

@@ -5,7 +5,7 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
-import gov.nih.nci.caxchange.ctom.viewer.forms.BaseDBForm;
+import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +21,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class performs the search page setup action. The action loads the search page 
+ * after login information is authenticated. 
+ * if authentication fails it redirects the user to login page to enter valid login information.
  * @author asharma
  *
  */
@@ -33,16 +36,13 @@ public class LoadSearchSetupAction extends Action{
 	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
-		
 		HttpSession session = request.getSession();
-		BaseDBForm baseDBForm = (BaseDBForm)form;
+		LabActivitiesSearchForm baseDBForm = (LabActivitiesSearchForm)form;
 		
 		String gridId = null;
 		String gridProxy = null;
 		
-		
+		//gets the login object from the session
 		LoginForm fm = (LoginForm)request.getSession().getAttribute(DisplayConstants.LOGIN_OBJECT);
 		if(fm == null){
 			gridId = (String)request.getParameter("gridId");
@@ -73,18 +73,19 @@ public class LoadSearchSetupAction extends Action{
 			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
 		}
 		else
-		{
+		{   //if the session is new or the login object is null; redirects the user to login page  
 			if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)) {
 				if (logDB.isDebugEnabled())
 					logDB.debug("||"+baseDBForm.getFormName()+"|loadSearch|Failure|No Session or User Object Forwarding to the Login Page||");
 				return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 			}
-			
+			//resets the search page form
 			baseDBForm.resetForm();
 		}
 		session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.SEARCH);
 		session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
-
+         
+		//if the login is valid; loads the search page
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
 					"|"+baseDBForm.getFormName()+"|loadSearch|Success|Loading the Search Page||");

@@ -33,6 +33,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class performs the submitAdverseEvent action. 
+ * If the session is not null and the user login information is valid, 
+ * it submits the selected search result record to EventManager's sendAdverseEvent method.
+ * If the session is null;it redirects the user to the login page to enter valid login information.
+ * After successful submit of an adverse event, it returns to the searchresults page and displays appropriate 
+ * messages. 
  * @author asharma
  * 
  */
@@ -49,10 +55,11 @@ public class SubmitAdverseEventAction extends Action {
 			throws Exception {
 		ActionErrors errors = new ActionErrors();
 		ActionMessages messages = new ActionMessages();
-
+        //gets the session object from HttpRequest   
 		HttpSession session = request.getSession();
+		//Search results form
 		LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm) form;
-
+        //if the session is new or login object is null; it redirects the user to login page
 		if (session.isNew()
 				|| (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)) {
 			if (logDB.isDebugEnabled())
@@ -66,6 +73,7 @@ public class SubmitAdverseEventAction extends Action {
 				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
 				session.getId());
 		try {
+			//calls the submitAdverseEvent method
 			submitAdverseEvent(request, lForm);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					DisplayConstants.MESSAGE_ID,
@@ -100,6 +108,8 @@ public class SubmitAdverseEventAction extends Action {
 	}
 
 	/**
+	 * submitAdverseEvent submits the selected form record to the Eventmanager's
+	 * sendAdverseEvent method. 
 	 * @param request
 	 * @throws Exception
 	 */
