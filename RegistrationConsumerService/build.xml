@@ -10,6 +10,9 @@
 				<fileset dir="${webapp.lib.dir}">
 					<include name="*.jar"/>
 				</fileset>
+				<fileset dir="${artifacts.dir}">
+					<include name="*.jar"/>
+				</fileset>
 			</classpath>
 		</javac>
 		<copy todir="${build.classes.dir}">
@@ -31,6 +34,11 @@
 		<copy todir="${build.dist.dir}">
 			<fileset dir="${build.source.dir}">
 				<include name="application*.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${build.dist.dir}">
+			<fileset dir="${artifacts.dir}">
+				<include name="*.jar"/>
 			</fileset>
 		</copy>
 	</target>
