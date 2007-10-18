@@ -1,76 +1,59 @@
-<project name="Security Web Services Project" basedir="." default="all">
-	<description>Security Web Services Project Build File</description>
+<project name="CTOM Data Services" basedir="." default="all">
 
-	<target name="init" >
-		<property name="app.name"				value="CTOMDataPersistenceWebService" />
-		<property name="app.path"				value="/${app.name}" />
-		<property name="src.home"				value="${basedir}/src" />
-		<property name="web.home"				value="${basedir}/WebContent" />
-		<property name="webinf.home"			value="${web.home}/WEB-INF" />
-		<property name="lib.home"				value="${webinf.home}/lib" />
-		<property name="lib-ext.home"			value="${basedir}/lib-ext" />
-		<property name="build.home"				value="${basedir}/build" />
-		<property name="dist.home"				value="${basedir}/dist" />
-		<property name="classes.home"			value="${webinf.home}/classes" />
-		<property name="war.file"				value="${dist.home}/${app.name}.war" />
+	<property file="build.properties"/>
+	
+	<target name="clean" description="Delete the Build and Dist directories">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
 	</target>
 
-
-	<target name="clean" depends="init" description="Delete the Build and Dist directories">
-		<delete dir="${build.home}" />
-		<delete dir="${dist.home}" />
-	</target>
-
-
-	<target name="prepareDir" depends="init">
-		<mkdir dir="${build.home}" />
-		<mkdir dir="${build.home}/WEB-INF" />
-		<mkdir dir="${build.home}/WEB-INF/lib" />
-		<mkdir dir="${build.home}/META-INF" />
-		<mkdir dir="${build.home}/WEB-INF/classes" />
-
-		<mkdir dir="${dist.home}" />
+	<target name="prepareDir">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dir}/WEB-INF" />
+		<mkdir dir="${build.dir}/WEB-INF/lib" />
+		<mkdir dir="${build.dir}/META-INF" />
+		<mkdir dir="${build.dir}/WEB-INF/classes" />
+		<mkdir dir="${dist.dir}" />
 	</target>
 
 
 	<target name="prepareBuild" depends="prepareDir">
-
-		<copy todir="${build.home}">
-			<fileset dir="${web.home}"/>
+		<copy todir="${build.dir}">
+			<fileset dir="${web.dir}"/>
 		</copy>
 
-		<copy todir="${build.home}/WEB-INF/">
-			<fileset dir="${webinf.home}"/>
+		<copy todir="${build.dir}/WEB-INF/">
+			<fileset dir="${web.dir}/WEB-INF"/>
 		</copy>
 
-		<copy todir="${build.home}/WEB-INF/lib">
-			<fileset dir="${lib.home}" includes="**/*.jar"/>
+		<copy todir="${build.dir}/WEB-INF/lib">
+			<fileset dir="${web.dir}/WEB-INF/lib" includes="**/*.jar"/>
 		</copy>
 	</target>
-
 
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
 
-	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
-		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
+	<target name="compile" depends="prepare" description="Compiles all the files in the project">
+		<javac srcdir="${build.source.dir}" destdir="${build.dir}/WEB-INF/classes" debug="true" deprecation="true" >
 			<classpath>
-				<fileset dir="${lib.home}" includes="*.jar" />
-				<fileset dir="${lib-ext.home}" includes="*.jar" />
+				<fileset dir="${web.dir}/WEB-INF/lib" includes="*.jar" />
+				<fileset dir="${lib-ext.dir}" includes="*.jar" />
+				<fileset dir="${artifacts.dir}" includes="*.jar" />
 			</classpath>
 		</javac>
-		<copy todir="${build.home}/WEB-INF/classes" >
-			<fileset dir="${src.home}" excludes="**/*.java" />
+		<copy todir="${build.dir}/WEB-INF/classes" >
+			<fileset dir="${build.source.dir}" excludes="**/*.java" />
 		</copy>
 	</target>
 
-	<target name="dist" depends="init,compile" description="Creates war file">
-		<jar jarfile="${war.file}" basedir="${build.home}" />
+	<target name="dist" depends="compile" description="Creates war file">
+		<jar jarfile="${dist.dir}/${app.name}.war" basedir="${build.dir}" />
 	</target>
 
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
-		<delete dir="${build.home}" />
+		<delete dir="${build.dir}" />
 	</target>
 	
-	<target name="all" depends="clean,init,prepare,compile,dist" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+	<target name="all" depends="clean,prepare,compile,dist" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 
 </project>
