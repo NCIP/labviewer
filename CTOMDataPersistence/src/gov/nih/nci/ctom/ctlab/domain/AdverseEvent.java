@@ -3,7 +3,8 @@ package gov.nih.nci.ctom.ctlab.domain;
 public class AdverseEvent {
 
 	
-	String ctcTermTypeCd = null;
+	
+	private String ctcTermTypeCd = null;
 	String ctcTermTypeCdSystem = null;
 	String ctcGradeCd = null;
 	String ctcGradeCdSystem = null;
