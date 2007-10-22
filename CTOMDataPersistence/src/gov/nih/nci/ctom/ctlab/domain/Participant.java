@@ -8,43 +8,53 @@ public class Participant {
 	private String initials = null;
 	private String lastName = null;
 	private String firstName = null;
-	private String adminGenderCode = null;
-	private String adminGenderCodeSystem = null;
-	private String adminGenderCodeSystemName = null;
-	private String ethnicGroupCode;
+	private String middleName = null;
+	
 	private Date birthDate = null;
 	private String birthDateOrig = null;
-	private String raceCode;
-	private String raceCodeSystem;
-	private String raceCodeSystemName;
-	private String postalCode;
-	private String countryCode;
-	private String maritalStatusCode;
-	private Identifier identifier;
+	private String adminGenderCode = null;
 	
+	private String telecomAddress=null;
+	private String streetAddress = null;
+	private String city = null;
+	private String state = null;
+	private String zipCode = null;
+	private String countryCode;
+	private String phone = null;
+	
+	private String educationLevelCode =null;
+	
+	private String ethnicGroupCode=null;
+	private String householdIncomeCode=null;
+	private String maritalStatusCode;
+	private String raceCode;
+	private String employmentStatusCode = null;
+	private String employmentStatusOtherTxt = null;
+	
+	private String paymentMethodCode=null;
+	private String confidentialityInd=null;
+	
+	private Long admGndrConceptDescId=null;
+	private Long raceConceptDescId=null;
+	
+	private Long securityKey=null;
+	private String source=null;
+	private Date sourceExtractDate =null;
+	private Date ctomInsertDate=null;
+	private Date ctomUpdateDate=null;
+	
+	private Identifier identifier;
 	/**
-	 * @return the adminGenderCode
+	 * @return the id
 	 */
-	public String getAdminGenderCode() {
-		return adminGenderCode;
+	public Long getId() {
+		return id;
 	}
 	/**
-	 * @param adminGenderCode the adminGenderCode to set
+	 * @param id the id to set
 	 */
-	public void setAdminGenderCode(String adminGenderCode) {
-		this.adminGenderCode = adminGenderCode;
-	}
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-	/**
-	 * @param firstName the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	/**
 	 * @return the initials
@@ -71,6 +81,30 @@ public class Participant {
 		this.lastName = lastName;
 	}
 	/**
+	 * @return the firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
+	/**
+	 * @param firstName the firstName to set
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	/**
+	 * @return the middleName
+	 */
+	public String getMiddleName() {
+		return middleName;
+	}
+	/**
+	 * @param middleName the middleName to set
+	 */
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	/**
 	 * @return the birthDate
 	 */
 	public Date getBirthDate() {
@@ -95,76 +129,76 @@ public class Participant {
 		this.birthDateOrig = birthDateOrig;
 	}
 	/**
-	 * @return the id
+	 * @return the adminGenderCode
 	 */
-	public Long getId() {
-		return id;
+	public String getAdminGenderCode() {
+		return adminGenderCode;
 	}
 	/**
-	 * @param id the id to set
+	 * @param adminGenderCode the adminGenderCode to set
 	 */
-	public void setId(Long id) {
-		this.id = id;
+	public void setAdminGenderCode(String adminGenderCode) {
+		this.adminGenderCode = adminGenderCode;
 	}
 	/**
-	 * @return the raceCode
+	 * @return the telecomAddress
 	 */
-	public String getRaceCode() {
-		return raceCode;
+	public String getTelecomAddress() {
+		return telecomAddress;
 	}
 	/**
-	 * @param raceCode the raceCode to set
+	 * @param telecomAddress the telecomAddress to set
 	 */
-	public void setRaceCode(String raceCode) {
-		this.raceCode = raceCode;
+	public void setTelecomAddress(String telecomAddress) {
+		this.telecomAddress = telecomAddress;
 	}
 	/**
-	 * @return the adminGenderCodeSystem
+	 * @return the streetAddress
 	 */
-	public String getAdminGenderCodeSystem() {
-		return adminGenderCodeSystem;
+	public String getStreetAddress() {
+		return streetAddress;
 	}
 	/**
-	 * @param adminGenderCodeSystem the adminGenderCodeSystem to set
+	 * @param streetAddress the streetAddress to set
 	 */
-	public void setAdminGenderCodeSystem(String adminGenderCodeSystem) {
-		this.adminGenderCodeSystem = adminGenderCodeSystem;
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
 	}
 	/**
-	 * @return the adminGenderCodeSystemName
+	 * @return the city
 	 */
-	public String getAdminGenderCodeSystemName() {
-		return adminGenderCodeSystemName;
+	public String getCity() {
+		return city;
 	}
 	/**
-	 * @param adminGenderCodeSystemName the adminGenderCodeSystemName to set
+	 * @param city the city to set
 	 */
-	public void setAdminGenderCodeSystemName(String adminGenderCodeSystemName) {
-		this.adminGenderCodeSystemName = adminGenderCodeSystemName;
+	public void setCity(String city) {
+		this.city = city;
 	}
 	/**
-	 * @return the raceCodeSystem
+	 * @return the state
 	 */
-	public String getRaceCodeSystem() {
-		return raceCodeSystem;
+	public String getState() {
+		return state;
 	}
 	/**
-	 * @param raceCodeSystem the raceCodeSystem to set
+	 * @param state the state to set
 	 */
-	public void setRaceCodeSystem(String raceCodeSystem) {
-		this.raceCodeSystem = raceCodeSystem;
+	public void setState(String state) {
+		this.state = state;
 	}
 	/**
-	 * @return the raceCodeSystemName
+	 * @return the zipCode
 	 */
-	public String getRaceCodeSystemName() {
-		return raceCodeSystemName;
+	public String getZipCode() {
+		return zipCode;
 	}
 	/**
-	 * @param raceCodeSystemName the raceCodeSystemName to set
+	 * @param zipCode the zipCode to set
 	 */
-	public void setRaceCodeSystemName(String raceCodeSystemName) {
-		this.raceCodeSystemName = raceCodeSystemName;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 	/**
 	 * @return the countryCode
@@ -179,28 +213,28 @@ public class Participant {
 		this.countryCode = countryCode;
 	}
 	/**
-	 * @return the maritalStatusCode
+	 * @return the phone
 	 */
-	public String getMaritalStatusCode() {
-		return maritalStatusCode;
+	public String getPhone() {
+		return phone;
 	}
 	/**
-	 * @param maritalStatusCode the maritalStatusCode to set
+	 * @param phone the phone to set
 	 */
-	public void setMaritalStatusCode(String maritalStatusCode) {
-		this.maritalStatusCode = maritalStatusCode;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	/**
-	 * @return the postalCode
+	 * @return the educationLevelCode
 	 */
-	public String getPostalCode() {
-		return postalCode;
+	public String getEducationLevelCode() {
+		return educationLevelCode;
 	}
 	/**
-	 * @param postalCode the postalCode to set
+	 * @param educationLevelCode the educationLevelCode to set
 	 */
-	public void setPostalCode(String zipCode) {
-		this.postalCode = zipCode;
+	public void setEducationLevelCode(String educationLevelCode) {
+		this.educationLevelCode = educationLevelCode;
 	}
 	/**
 	 * @return the ethnicGroupCode
@@ -214,11 +248,187 @@ public class Participant {
 	public void setEthnicGroupCode(String ethnicGroupCode) {
 		this.ethnicGroupCode = ethnicGroupCode;
 	}
+	/**
+	 * @return the householdIncomeCode
+	 */
+	public String getHouseholdIncomeCode() {
+		return householdIncomeCode;
+	}
+	/**
+	 * @param householdIncomeCode the householdIncomeCode to set
+	 */
+	public void setHouseholdIncomeCode(String householdIncomeCode) {
+		this.householdIncomeCode = householdIncomeCode;
+	}
+	/**
+	 * @return the maritalStatusCode
+	 */
+	public String getMaritalStatusCode() {
+		return maritalStatusCode;
+	}
+	/**
+	 * @param maritalStatusCode the maritalStatusCode to set
+	 */
+	public void setMaritalStatusCode(String maritalStatusCode) {
+		this.maritalStatusCode = maritalStatusCode;
+	}
+	/**
+	 * @return the raceCode
+	 */
+	public String getRaceCode() {
+		return raceCode;
+	}
+	/**
+	 * @param raceCode the raceCode to set
+	 */
+	public void setRaceCode(String raceCode) {
+		this.raceCode = raceCode;
+	}
+	/**
+	 * @return the employmentStatusCode
+	 */
+	public String getEmploymentStatusCode() {
+		return employmentStatusCode;
+	}
+	/**
+	 * @param employmentStatusCode the employmentStatusCode to set
+	 */
+	public void setEmploymentStatusCode(String employmentStatusCode) {
+		this.employmentStatusCode = employmentStatusCode;
+	}
+	/**
+	 * @return the employmentStatusOtherTxt
+	 */
+	public String getEmploymentStatusOtherTxt() {
+		return employmentStatusOtherTxt;
+	}
+	/**
+	 * @param employmentStatusOtherTxt the employmentStatusOtherTxt to set
+	 */
+	public void setEmploymentStatusOtherTxt(String employmentStatusOtherTxt) {
+		this.employmentStatusOtherTxt = employmentStatusOtherTxt;
+	}
+	/**
+	 * @return the paymentMethodCode
+	 */
+	public String getPaymentMethodCode() {
+		return paymentMethodCode;
+	}
+	/**
+	 * @param paymentMethodCode the paymentMethodCode to set
+	 */
+	public void setPaymentMethodCode(String paymentMethodCode) {
+		this.paymentMethodCode = paymentMethodCode;
+	}
+	/**
+	 * @return the confidentialityInd
+	 */
+	public String getConfidentialityInd() {
+		return confidentialityInd;
+	}
+	/**
+	 * @param confidentialityInd the confidentialityInd to set
+	 */
+	public void setConfidentialityInd(String confidentialityInd) {
+		this.confidentialityInd = confidentialityInd;
+	}
+	/**
+	 * @return the admGndrConceptDescId
+	 */
+	public Long getAdmGndrConceptDescId() {
+		return admGndrConceptDescId;
+	}
+	/**
+	 * @param admGndrConceptDescId the admGndrConceptDescId to set
+	 */
+	public void setAdmGndrConceptDescId(Long admGndrConceptDescId) {
+		this.admGndrConceptDescId = admGndrConceptDescId;
+	}
+	/**
+	 * @return the raceConceptDescId
+	 */
+	public Long getRaceConceptDescId() {
+		return raceConceptDescId;
+	}
+	/**
+	 * @param raceConceptDescId the raceConceptDescId to set
+	 */
+	public void setRaceConceptDescId(Long raceConceptDescId) {
+		this.raceConceptDescId = raceConceptDescId;
+	}
+	/**
+	 * @return the securityKey
+	 */
+	public Long getSecurityKey() {
+		return securityKey;
+	}
+	/**
+	 * @param securityKey the securityKey to set
+	 */
+	public void setSecurityKey(Long securityKey) {
+		this.securityKey = securityKey;
+	}
+	/**
+	 * @return the source
+	 */
+	public String getSource() {
+		return source;
+	}
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+	/**
+	 * @return the sourceExtractDate
+	 */
+	public Date getSourceExtractDate() {
+		return sourceExtractDate;
+	}
+	/**
+	 * @param sourceExtractDate the sourceExtractDate to set
+	 */
+	public void setSourceExtractDate(Date sourceExtractDate) {
+		this.sourceExtractDate = sourceExtractDate;
+	}
+	/**
+	 * @return the ctomInsertDate
+	 */
+	public Date getCtomInsertDate() {
+		return ctomInsertDate;
+	}
+	/**
+	 * @param ctomInsertDate the ctomInsertDate to set
+	 */
+	public void setCtomInsertDate(Date ctomInsertDate) {
+		this.ctomInsertDate = ctomInsertDate;
+	}
+	/**
+	 * @return the ctomUpdateDate
+	 */
+	public Date getCtomUpdateDate() {
+		return ctomUpdateDate;
+	}
+	/**
+	 * @param ctomUpdateDate the ctomUpdateDate to set
+	 */
+	public void setCtomUpdateDate(Date ctomUpdateDate) {
+		this.ctomUpdateDate = ctomUpdateDate;
+	}
+	/**
+	 * @return the identifier
+	 */
 	public Identifier getIdentifier() {
 		return identifier;
 	}
+	/**
+	 * @param identifier the identifier to set
+	 */
 	public void setIdentifier(Identifier identifier) {
 		this.identifier = identifier;
 	}
-
+	
+	
+	
 }

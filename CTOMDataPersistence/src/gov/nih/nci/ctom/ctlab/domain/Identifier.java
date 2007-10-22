@@ -1,5 +1,7 @@
 package gov.nih.nci.ctom.ctlab.domain;
 
+import java.util.Date;
+
 public class Identifier
 {
 	private Long id;
@@ -11,6 +13,8 @@ public class Identifier
 	private Long participantId;
 	private Long studyParticipantAssignmentId;
 	private String source;
+	private Date ctomInsertDate=null;
+	private Date ctomUpdateDAte=null;
 	
 	public String getAssigningAuthorityName() {
 		return assigningAuthorityName;
@@ -65,5 +69,29 @@ public class Identifier
 	}
 	public void setStudyParticipantAssignmentId(Long studyParticipantAssignmentId) {
 		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
+	}
+	/**
+	 * @return the ctomInsertDate
+	 */
+	public Date getCtomInsertDate() {
+		return ctomInsertDate;
+	}
+	/**
+	 * @param ctomInsertDate the ctomInsertDate to set
+	 */
+	public void setCtomInsertDate(Date ctomInsertDate) {
+		this.ctomInsertDate = ctomInsertDate;
+	}
+	/**
+	 * @return the ctomUpdateDAte
+	 */
+	public Date getCtomUpdateDAte() {
+		return ctomUpdateDAte;
+	}
+	/**
+	 * @param ctomUpdateDAte the ctomUpdateDAte to set
+	 */
+	public void setCtomUpdateDAte(Date ctomUpdateDAte) {
+		this.ctomUpdateDAte = ctomUpdateDAte;
 	}
 }
