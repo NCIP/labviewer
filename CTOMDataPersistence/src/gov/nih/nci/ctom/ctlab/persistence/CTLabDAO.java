@@ -2,7 +2,6 @@ package gov.nih.nci.ctom.ctlab.persistence;
 
 import gov.nih.nci.ctom.ctlab.domain.Activity;
 import gov.nih.nci.ctom.ctlab.domain.CentralLaboratory;
-import gov.nih.nci.ctom.ctlab.domain.ClinicalResult;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
 import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Observation;
@@ -10,19 +9,19 @@ import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.PerformingLaboratory;
 import gov.nih.nci.ctom.ctlab.domain.Procedure;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
-import gov.nih.nci.ctom.ctlab.domain.Specimen;
 import gov.nih.nci.ctom.ctlab.domain.SpecimenCollection;
 import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
 import gov.nih.nci.ctom.ctlab.domain.StudyTimePoint;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
 import java.sql.Statement;
 
-public class CTLabDAO extends BaseJDBCDAO {
 
+public class CTLabDAO extends BaseJDBCDAO {
+	
 	public void saveProtocol(Connection con, Protocol prot) throws Exception {
 
 		PreparedStatement ps = null;
@@ -183,23 +182,38 @@ public class CTLabDAO extends BaseJDBCDAO {
 	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		Long personId = null;
+		boolean identifierUpdInd = false;
+		//Long personId = null;
 
 		// Get the concept descriptor ids for the race and gender
 		Long genderCDId = insertOrsaveConceptDescriptor(con, participant
-				.getAdminGenderCode(), participant.getAdminGenderCodeSystem(),
-				participant.getAdminGenderCodeSystemName(), null, null);
+				.getAdminGenderCode(), null, null);
 		Long raceCDId = insertOrsaveConceptDescriptor(con, participant
-				.getRaceCode(), participant.getRaceCodeSystem(), participant
-				.getRaceCodeSystemName(), null, null);
+				.getRaceCode(),null, null);
 
 		// Get the next person ID
-		Statement stmt = con.createStatement();
-		rs = stmt.executeQuery("select PERSON_SEQ.nextval from dual");
-		rs.next();
-		personId = rs.getLong(1);
-		participant.setId(personId);
-
+		//Statement stmt = con.createStatement();
+		//rs = stmt.executeQuery("select PERSON_SEQ.nextval from dual");
+		//rs.next();
+		//personId = rs.getLong(1);
+		//participant.setId(personId);
+		
+		//check if there exists a identifier with the same value; if yes- returns its participantID else return null
+		saveOrInsertIdentifier(con, participant);
+		System.out.println("The participantid="+participant.getId() );
+		if(participant.getId()==null)
+		{
+			identifierUpdInd=true;
+			ps=con.prepareStatement("select Person_SEQ.nextval from dual");
+			rs=ps.executeQuery();
+			
+			while(rs.next())
+			{
+	        participant.setId(rs.getLong(1));
+	        System.out.println("Get the participantid if null="+rs.getLong(1) );
+			break;
+			}
+		}
 		boolean gc = false;
 		boolean rc = false;
 		if (genderCDId != null)
@@ -209,43 +223,116 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		if (rc && gc)
 		{
-			ps = con.prepareStatement("insert into PARTICIPANT (PERSON_ID, BIRTH_DATE, BIRTH_DATE_ORIG, INITIALS, LAST_NAME, FIRST_NAME, ADM_GNDR_CONCEPT_DESCRIPTOR_ID,RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?)");
+			ps = con.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID,RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?)");
 			ps.setLong(7, genderCDId);
 			ps.setLong(8, raceCDId);
 		}
 		else if (!rc && !gc)
 		{
-			ps = con.prepareStatement("insert into PARTICIPANT (PERSON_ID, BIRTH_DATE, BIRTH_DATE_ORIG, INITIALS, LAST_NAME, FIRST_NAME, MARITAL_STATUS_CODE, ZIP_CODE, COUNTRY_CODE )  values(?,?,?,?,?,?,?,?,?)");
+			ps = con.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE)  values(?,?,?,?,?,?)");
 
 		}
 		else if (!rc)
 		{
-			ps = con.prepareStatement("insert into PARTICIPANT (PERSON_ID, BIRTH_DATE, BIRTH_DATE_ORIG, INITIALS, LAST_NAME, FIRST_NAME, MARITAL_STATUS_CODE, ZIP_CODE, COUNTRY_CODE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?,?,?)");
+			ps = con.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?)");
 			ps.setLong(7, genderCDId);
 		}
 		else if (!gc)
 		{
-			ps = con.prepareStatement("insert into PARTICIPANT (PERSON_ID, BIRTH_DATE, BIRTH_DATE_ORIG, INITIALS, LAST_NAME, FIRST_NAME, MARITAL_STATUS_CODE, ZIP_CODE, COUNTRY_CODE, RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?,?,?)");
+			ps = con.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?)");
 			ps.setLong(7, raceCDId);
 		}
 
-		ps.setLong(1, personId);
+		ps.setLong(1, participant.getId());
 		if (participant.getBirthDate() != null)
 			ps.setDate(2, new java.sql.Date(participant.getBirthDate()
 					.getTime()));
 		else
 			ps.setDate(2, null);
 
-		ps.setString(3, participant.getBirthDateOrig());
-		ps.setString(4, participant.getInitials());
-		ps.setString(5, participant.getLastName());
-		ps.setString(6, participant.getFirstName());
-		ps.setString(7, participant.getMaritalStatusCode());
-		ps.setString(8, participant.getPostalCode());
-		ps.setString(9, participant.getCountryCode());
+		ps.setString(3, participant.getInitials());
+		ps.setString(4, participant.getLastName());
+		ps.setString(5, participant.getFirstName());
+		ps.setString(6, participant.getEthnicGroupCode());
+		
 		ps.execute();
-
+		con.commit();
+		
+		
+		 if(identifierUpdInd)
+			updateIdentifier(con,participant);
 	}
+
+	/**
+	 * Persists the identifier object into the database. The identifier is associated with the 
+	 * participant object.If the identifier object is already present, the method updates the identifier
+	 * else insert the identifier.
+	 * @param con
+	 * @param participant
+	 * @throws SQLException
+	 */
+	private void saveOrInsertIdentifier(Connection con, Participant participant)throws SQLException
+	{
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long id = null;
+		Long identifierId =null;
+		//check if the participant is associated with identifier
+		
+			if(participant.getIdentifier()!=null)
+			{
+			     ps = con.prepareStatement("select PARTICIPANT_ID from IDENTIFIER where EXTENSION = ?");
+			     ps.setString(1,participant.getIdentifier().getExtension());
+			     rs = ps.executeQuery();
+			    
+				//check if identifier is in DB
+				if(rs.next() && !rs.isBeforeFirst())
+				{
+					System.out.println("Inside if participantID "+ rs.getLong(1));
+					//already present;update the identifier table
+					id = rs.getLong(1);
+					participant.setId(id);
+				}
+				else
+				{
+					 //get the identifier id
+					 ps=con.prepareStatement("select IDENTIFIER_SEQ.nextval from dual");
+						rs=ps.executeQuery();
+						while(rs.next()){
+					        identifierId = rs.getLong(1); 
+					        System.out.println("Inside esle identifierID "+ rs.getLong(1));
+							break;
+							}
+					//insert new into identifier get the identifierid and insert into participant table
+					ps = con.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE) values (?,?,?)");
+					//need to set the participantid into the identifier table
+					 ps.setLong(1,identifierId);
+					 ps.setString(2,participant.getIdentifier().getExtension());
+					 ps.setString(3,participant.getIdentifier().getSource());
+					 ps.executeUpdate();
+					 con.commit();
+					
+					 participant.setId(id);
+					 participant.getIdentifier().setId(identifierId);	
+				}
+			}
+			
+		}	
+	
+	private void updateIdentifier (Connection con, Participant participant) throws SQLException
+	{
+
+		PreparedStatement ps = null;
+		
+		ps = con.prepareStatement("update IDENTIFIER set PARTICIPANT_ID = ? where ID= ?");
+		//need to set the participantid into the identifier table
+		 ps.setLong(1,participant.getId());
+		 ps.setLong(2,participant.getIdentifier().getId());
+		 ps.executeUpdate();
+		 con.commit();
+		
+	}
+	
 
 	private void updateParticipant(Connection con, Participant participant)
 			throws SQLException {
@@ -255,11 +342,9 @@ public class CTLabDAO extends BaseJDBCDAO {
 		Long personId = null;
 
 		Long genderCDId = insertOrsaveConceptDescriptor(con, participant
-				.getAdminGenderCode(), participant.getAdminGenderCodeSystem(),
-				participant.getAdminGenderCodeSystemName(), null, null);
+				.getAdminGenderCode(), null, null);
 		Long raceCDId = insertOrsaveConceptDescriptor(con, participant
-				.getRaceCode(), participant.getRaceCodeSystem(), participant
-				.getRaceCodeSystemName(), null, null);
+				.getRaceCode(), null, null);
 
 		Statement stmt = con.createStatement();
 		rs = stmt.executeQuery("select PERSON_SEQ.nextval from dual");
@@ -308,7 +393,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ps.setString(4, participant.getLastName());
 		ps.setString(5, participant.getFirstName());
 		ps.setString(6, participant.getMaritalStatusCode());
-		ps.setString(7, participant.getPostalCode());
+		ps.setString(7, participant.getZipCode());
 		ps.setString(8, participant.getCountryCode());
 		ps.execute();
 
@@ -412,11 +497,11 @@ public class CTLabDAO extends BaseJDBCDAO {
 		if (specimenCollection.getSpecimen() != null) {
 			specimenCollection.getSpecimen().setProcedureActivityId(
 					specimenCollection.getProcedureActivityId());
-			saveSpecimen(con, specimenCollection.getSpecimen());
+			//saveSpecimen(con, specimenCollection.getSpecimen());
 
 		}
 	}
-
+/*
 	private void saveSpecimen(Connection con, Specimen specimen)
 			throws SQLException {
 		PreparedStatement ps = null;
@@ -455,7 +540,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		ps.execute();
 
-	}
+	}*/
 
 	/**
 	 * Get the Participant Person Id of the Study Participant Assignment
@@ -542,12 +627,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 		if (observation.getClinicalResult() != null) {
 			observation.getClinicalResult().setObservationId(
 					observation.getId());
-			saveClinicalResult(con, observation.getClinicalResult());
+		//	saveClinicalResult(con, observation.getClinicalResult());
 		}
 
 	}
 
-	private void saveClinicalResult(Connection con,
+	/*private void saveClinicalResult(Connection con,
 			ClinicalResult clinicalResult) throws SQLException {
 
 		Long valUOMCdId = null;
@@ -605,18 +690,16 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ps.setString(6, clinicalResult.getValue());
 		ps.execute();
 
-	}
+	}*/
 
-	private Long insertOrsaveConceptDescriptor(Connection con, String code,
-			String codeSystem, String codeSystemName, Double codeSystemVersion,
-			String displayText) throws SQLException {
+	private Long insertOrsaveConceptDescriptor(Connection con, String code, Double codeSystemVersion,String displayText) throws SQLException {
 
 		if (code == null)
 			return null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
-
+        System.out.println("The code is --"+code);
 		ps = con
 				.prepareStatement("select id from concept_descriptor where code = ?");
 		ps.setString(1, code);
@@ -625,23 +708,26 @@ public class CTLabDAO extends BaseJDBCDAO {
 			return rs.getLong(1);
 		} else {
 			Statement stmt = con.createStatement();
+
 			rs = stmt
-					.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
+				.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
 			rs.next();
 			id = rs.getLong(1);
-
+			System.out.println("The concept descriptor id is --"+id);
 			ps = con
-					.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID, CODE, CODE_SYSTEM, CODE_SYSTEM_NAME, CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?,?,?)");
+					.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE, CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?)");
 			ps.setLong(1, id);
 			ps.setString(2, code);
-			ps.setString(3, codeSystem);
-			ps.setString(4, codeSystemName);
 			if (codeSystemVersion != null)
-				ps.setDouble(5, codeSystemVersion);
+				ps.setDouble(3, codeSystemVersion);
 			else
-				ps.setDouble(5, 0);
-			ps.setString(6, displayText);
+				ps.setDouble(3, 0);
+			ps.setString(4, displayText);
 			ps.execute();
+			con.commit();
+			
+			
+			
 			return id;
 		}
 
