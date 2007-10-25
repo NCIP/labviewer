@@ -17,9 +17,9 @@ public class CTLabDAOTest extends TestCase {
 			con = dao.getConnection();
 			con.setAutoCommit(false);
 			Protocol prot = new Protocol();
-			prot.setPrIdentifierAsgnAuth("EkagIdent");
-			prot.setPrLongTitle("This is the long title of the Protocol");
-			prot.setPrNCIIdentifier("90410");
+			prot.setIdAssigningAuth("EkagIdent");
+			prot.setLongTxtTitle("This is the long title of the Protocol");
+			prot.setNciIdentifier("90410");
 			dao.saveProtocol(con, prot);
 			
 			con.commit();
@@ -40,9 +40,9 @@ public class CTLabDAOTest extends TestCase {
 			con = dao.getConnection();
 			con.setAutoCommit(false);
 			Protocol prot = new Protocol();
-			prot.setPrIdentifierAsgnAuth("EkagIdent");
-			prot.setPrLongTitle("This is the long title of the Protocol");
-			prot.setPrNCIIdentifier("90410");
+			prot.setIdAssigningAuth("EkagIdent");
+			prot.setLongTxtTitle("This is the long title of the Protocol");
+			prot.setNciIdentifier("90410");
 			dao.saveProtocol(con, prot);
 			
 			con.commit();
