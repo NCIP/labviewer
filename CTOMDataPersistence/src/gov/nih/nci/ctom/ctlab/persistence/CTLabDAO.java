@@ -27,12 +27,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ResultSet rs = null;
 		Long id = null;
 
-		if (prot.getPrNCIIdentifier() == null)
+		if (prot.getNciIdentifier() == null)
 			throw new Exception(
 			"Invalid Data, Protocol Identifier Cannot Be Null");
 		ps = con
 		.prepareStatement("select ID from protocol where NCI_IDENTIFIER = ?");
-		ps.setString(1, prot.getPrNCIIdentifier());
+		ps.setString(1, prot.getNciIdentifier());
 		rs = ps.executeQuery();
 
 		if (rs.next()) {
@@ -47,9 +47,9 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps = con
 			.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT)  values(?,?,?,?)");
 			ps.setLong(1, id);
-			ps.setString(2, String.valueOf(prot.getPrNCIIdentifier()));
-			ps.setString(3, String.valueOf(prot.getPrIdentifierAsgnAuth()));
-			ps.setString(4, String.valueOf(prot.getPrLongTitle()));
+			ps.setString(2, String.valueOf(prot.getNciIdentifier()));
+			ps.setString(3, String.valueOf(prot.getIdAssigningAuth()));
+			ps.setString(4, String.valueOf(prot.getLongTxtTitle()));
 			ps.execute();
 
 		}
@@ -70,7 +70,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		Statement stmt = null;
 
 		ps = con
-		.prepareStatement("select organization_id from healthcare_site where NCI_INSTITUTE_CODE = ?");
+		.prepareStatement("select id from healthcare_site where NCI_INSTITUTE_CODE = ?");
 		ps.setString(1, hcSite.getNciInstituteCd());
 		rs = ps.executeQuery();
 		if (rs.next()) {
@@ -84,7 +84,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			// insert into HealthCare_Site
 			ps = con
-			.prepareStatement("insert into HEALTHCARE_SITE (ORGANIZATION_ID, NCI_INSTITUTE_CODE)  values(?,?)");
+			.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE)  values(?,?)");
 
 			ps.setLong(1, hsId);
 			ps.setString(2, hcSite.getNciInstituteCd());
@@ -93,7 +93,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		Long ssId = null;
 		ps = con
-		.prepareStatement("select id from study_site where HEALTHCARE_SITE_ORG_ID = ? and PROTOCOL_ID = ?");
+		.prepareStatement("select id from study_site where HEALTHCARE_SITE_ID = ? and PROTOCOL_ID = ?");
 		ps.setLong(1, hsId);
 		ps.setLong(2, protId);
 		rs = ps.executeQuery();
@@ -108,7 +108,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			// insert into Study_Investigator
 
 			ps = con
-			.prepareStatement("insert into study_site (ID, HEALTHCARE_SITE_ORG_ID, PROTOCOL_ID)  values(?,?,?)");
+			.prepareStatement("insert into study_site (ID, HEALTHCARE_SITE_ID, PROTOCOL_ID)  values(?,?,?)");
 
 			ps.setLong(1, ssId);
 			ps.setLong(2, hsId);
@@ -155,7 +155,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			// insert into STUDY_PARTICIPANT_ASSIGNMENT
 			ps = con
-			.prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_PERSON_ID)  values(?,?,?,?)");
+			.prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID)  values(?,?,?,?)");
 			ps.setLong(1, spaId);
 			ps.setString(2, spa.getStudyPartIdOrig());
 			ps.setLong(3, ssId);
@@ -502,7 +502,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps = con
 			.prepareStatement("insert into SPECIMEN_COLLECTION (PROCEDURE_ACTIVITY_ID, CENTRAL_LABORATORY_ORG_ID)  values(?,?)");
 			ps.setLong(1, specimenCollection.getProcedureActivityId());
-			ps.setLong(2, specimenCollection.getCentralLaboratory().getOrgId());
+			ps.setLong(2, specimenCollection.getCentralLaboratory().getId());
 			ps.execute();
 
 		}
@@ -593,18 +593,18 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ps.setString(1, centralLaboratory.getIdentifier());
 		rs = ps.executeQuery();
 		if (rs.next()) {
-			centralLaboratory.setOrgId(rs.getLong(1));
+			centralLaboratory.setId(rs.getLong(1));
 		} else {
 
 			// Get Id from sequence
 			Statement stmt = con.createStatement();
 			rs = stmt.executeQuery("select ORGANIZATION_SEQ.nextval from dual");
 			rs.next();
-			centralLaboratory.setOrgId(rs.getLong(1));
+			centralLaboratory.setId(rs.getLong(1));
 
 			ps = con
 			.prepareStatement("insert into CENTRAL_LABORATORY(ORGANIZATION_ID, IDENTIFIER, NAME)  values(?,?,?)");
-			ps.setLong(1, centralLaboratory.getOrgId());
+			ps.setLong(1, centralLaboratory.getId());
 			ps.setString(2, centralLaboratory.getIdentifier());
 			ps.setString(3, centralLaboratory.getName());
 			ps.execute();
@@ -786,7 +786,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		ps = con
 		.prepareStatement("select PERSON_ID from INVESTIGATOR  where NCI_IDENTIFIER = ?");
-		ps.setString(1, inv.getInvNCIId());
+		ps.setString(1, inv.getNciId());
 		rs = ps.executeQuery();
 
 		if (rs.next()) {
@@ -801,18 +801,18 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			// insert into Investigator
 			ps = con
-			.prepareStatement("insert into investigator (PERSON_ID, NCI_IDENTIFIER, LAST_NAME)  values(?,?,?)");
+			.prepareStatement("insert into investigator (ID, NCI_IDENTIFIER, LAST_NAME)  values(?,?,?)");
 
 			ps.setLong(1, id);
-			ps.setString(2, String.valueOf(inv.getInvNCIId()));
-			ps.setString(3, String.valueOf(inv.getInvLastName()));
+			ps.setString(2, String.valueOf(inv.getNciId()));
+			ps.setString(3, String.valueOf(inv.getLastName()));
 			ps.execute();
 
 		}
 		// insert into Study_Investigator
 
 		ps = con
-		.prepareStatement("select id from study_investigator where PROTOCOL_ID = ? AND INVESTIGATOR_PERSON_ID = ?");
+		.prepareStatement("select id from study_investigator where PROTOCOL_ID = ? AND INVESTIGATOR_ID = ?");
 		ps.setLong(1, protId);
 		ps.setLong(2, id);
 		rs = ps.executeQuery();
@@ -828,7 +828,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			siId = rs.getLong(1);
 
 			ps = con
-			.prepareStatement("insert into study_investigator (ID, PROTOCOL_ID, INVESTIGATOR_PERSON_ID)  values(?,?,?)");
+			.prepareStatement("insert into study_investigator (ID, PROTOCOL_ID, INVESTIGATOR_ID)  values(?,?,?)");
 
 			ps.setLong(1, siId);
 			ps.setLong(2, protId);

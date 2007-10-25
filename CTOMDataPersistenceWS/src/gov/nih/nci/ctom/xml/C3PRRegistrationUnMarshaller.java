@@ -45,8 +45,8 @@ public class C3PRRegistrationUnMarshaller implements UnMarshaller {
 			part.setAdminGenderCode(value);
 			
 			//These codes should be sent but must hard code for now, this needs to be refactored
-			part.setAdminGenderCodeSystem("C3PR");
-			part.setAdminGenderCodeSystemName("C3PR");
+			part.setAdminGenderCode("C3PR");
+			//part.setAdminGenderCodeSystemName("C3PR");
 		} catch (NullPointerException ex) {
 		}
 
@@ -59,8 +59,8 @@ public class C3PRRegistrationUnMarshaller implements UnMarshaller {
 			part.setRaceCode(value);
 			
 			//These codes should be sent but must hard code for now, this needs to be refactored
-			part.setRaceCodeSystem("C3PR");
-			part.setRaceCodeSystemName("C3PR");
+			part.setRaceCode("C3PR");
+			//part.setRaceCodeSystemName("C3PR");
 		} catch (NullPointerException ex) {
 		}
 
@@ -131,7 +131,7 @@ public class C3PRRegistrationUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			part.setPostalCode(value);
+			part.setZipCode(value);
 		} catch (NullPointerException ex) {
 		}
 
