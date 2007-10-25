@@ -58,7 +58,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "/ClinicalTrial/id/@extension";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
 			id = id + "." + xNode.getNodeValue();
-			prot.setPrNCIIdentifier(id);
+			prot.setNciIdentifier(id);
 
 		} catch (NullPointerException ex) {
 			try {
@@ -71,7 +71,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "/ClinicalTrial/id/@extension";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
 			id = id + "." + xNode.getNodeValue();
-			prot.setPrNCIIdentifier(id);
+			prot.setNciIdentifier(id);
 			} catch (NullPointerException e){}
 		}
 
@@ -79,13 +79,13 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "/ClinicalTrial/id/@assigningAuthorityName";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			prot.setPrIdentifierAsgnAuth(xNode.getNodeValue());
+			prot.setIdAssigningAuth(xNode.getNodeValue());
 		} catch (NullPointerException ex) {
 			try {
 			expression = "/ClinicalTrial/id/@assigningAuthorityName";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			prot.setPrIdentifierAsgnAuth(xNode.getNodeValue());
+			prot.setIdAssigningAuth(xNode.getNodeValue());
 			} catch (NullPointerException e){}
 		}
 
@@ -93,14 +93,14 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "/ClinicalTrial/title";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			prot.setPrLongTitle(xNode.getFirstChild().getNodeValue());
+			prot.setLongTxtTitle(xNode.getFirstChild().getNodeValue());
 
 		} catch (NullPointerException ex) {
 			try {
 			expression = "/ClinicalTrial/title";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			prot.setPrLongTitle(xNode.getFirstChild().getNodeValue());
+			prot.setLongTxtTitle(xNode.getFirstChild().getNodeValue());
 			} catch (NullPointerException e){}
 		}
 
@@ -133,7 +133,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
 			id = id + "." + xNode.getNodeValue();
 
-			inv.setInvNCIId(id);
+			inv.setNciId(id);
 
 		} catch (NullPointerException ex) {
 		}
@@ -143,7 +143,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "//investigatorNamedPerson/name";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			inv.setInvLastName(xNode.getFirstChild().getNodeValue());
+			inv.setLastName(xNode.getFirstChild().getNodeValue());
 
 		} catch (NullPointerException ex) {
 		}
@@ -181,11 +181,11 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 			expression = "//enrolledSubject/subjectPerson/raceCode/@codeSystem";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			participant.setRaceCodeSystem(xNode.getNodeValue());
+			participant.setRaceCode(xNode.getNodeValue());
 
 			expression = "//enrolledSubject/subjectPerson/raceCode/@codeSystemName";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			participant.setRaceCodeSystemName(xNode.getNodeValue());
+			//participant.setRaceCodeSystemName(xNode.getNodeValue());
 
 		} catch (NullPointerException ex) {
 		}
@@ -199,11 +199,11 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 			expression = "//enrolledSubject/subjectPerson/administrativeGenderCode/@codeSystem";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			participant.setAdminGenderCodeSystem(xNode.getNodeValue());
+			//participant.setAdminGenderCodeSystem(xNode.getNodeValue());
 
 			expression = "//enrolledSubject/subjectPerson/administrativeGenderCode/@codeSystemName";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			participant.setAdminGenderCodeSystemName(xNode.getNodeValue());
+			//participant.setAdminGenderCodeSystemName(xNode.getNodeValue());
 
 		} catch (NullPointerException ex) {
 		}
@@ -229,7 +229,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			expression = "//enrolledSubject/code/@code";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			spa.setStudytype(xNode.getNodeValue());
+			spa.setType(xNode.getNodeValue());
 
 		} catch (NullPointerException ex) {
 		}
