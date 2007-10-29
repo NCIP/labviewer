@@ -254,8 +254,6 @@ public class SearchAction extends Action
 			{
 				SubjectAssignment sa = (SubjectAssignment) resultsIterator.next();
 
-				//sa.getStudySite().getStudy().getIdentifier();
-
 				LabActivityResult labActivityResult = null;
 
 				larlist = printRecord(sa, lForm.getBeginDate(), lForm.getEndDate());
@@ -307,7 +305,7 @@ public class SearchAction extends Action
 		}
 		catch (Exception ex)
 		{
-			ex.printStackTrace();
+			logDB.error(ex.getMessage());
 		}
 		
 		SearchResult searchResult = new SearchResult();
@@ -319,6 +317,8 @@ public class SearchAction extends Action
 	}
 
 	/**
+	 * printRecord creates the view object that will properly display the results
+	 * <P>
 	 * @param sa
 	 * @param beginDate2
 	 * @param endDate2
@@ -346,8 +346,8 @@ public class SearchAction extends Action
 		String textResult = null;
 		Float numericResult = null;
 		String unitOfMeasure = null;
-		Double lowRange;
-		Double highRange;
+		Float lowRange;
+		Float highRange;
 		Collection<II> identifiers = null;
 
 		if (sa == null)
@@ -429,17 +429,16 @@ public class SearchAction extends Action
 											textResult = labResult.getTextResult();
 											labActivityResult.setTextResult(textResult);
 											
-											/*
 											CD units = labResult.getUnits();
 											if (units != null)
 											{
 												unitOfMeasure = units.getCode();
 												labActivityResult.setUnitOfMeasure(unitOfMeasure);
-											}*/
+											}
 
-											lowRange = labResult.getReferenceRangeLow().doubleValue();
+											lowRange = labResult.getReferenceRangeLow();
 											labActivityResult.setLowRange(String.valueOf(lowRange));
-											highRange = labResult.getReferenceRangeHigh().doubleValue();
+											highRange = labResult.getReferenceRangeHigh();
 
 											if (numericResult != null)
 											{
