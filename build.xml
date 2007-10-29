@@ -18,12 +18,10 @@
 		<property name="jboss.home"             value="D:\Jboss-4.0.5\jboss-4.0.5.GA"/>
 	</target>
 
-
 	<target name="clean" depends="init" description="Delete the Build and Dist directories">
 		<delete dir="${build.home}" />
 		<delete dir="${dist.home}" />
 	</target>
-
 
 	<target name="prepareDir" depends="init">
 		<mkdir dir="${build.home}" />
@@ -33,13 +31,10 @@
 		<mkdir dir="${build.home}/WEB-INF/lib" />
 		<mkdir dir="${build.home}/META-INF" />
 		<mkdir dir="${classes.home}" />
-
 		<mkdir dir="${dist.home}" />
 	</target>
 
-
 	<target name="prepareBuild" depends="prepareDir">
-
 		<copy todir="${build.home}">
 			<fileset dir="${web.home}"/>
 		</copy>
@@ -52,7 +47,6 @@
 			<fileset dir="${lib.home}" includes="**/*.jar"/>
 		</copy>
 	</target>
-
 
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
 
