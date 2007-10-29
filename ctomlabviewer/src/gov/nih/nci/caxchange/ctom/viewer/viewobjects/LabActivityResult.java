@@ -2,7 +2,7 @@ package gov.nih.nci.caxchange.ctom.viewer.viewobjects;
 
 import java.util.Date;
 
-import gov.nih.nci.labhub.domain.LabResult;
+import gov.nih.nci.labhub.domain.LaboratoryResult;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
 
 
@@ -10,7 +10,7 @@ public class LabActivityResult
 {
 
 	private SubjectAssignment subjectAssignment = null;
-	private LabResult labResult = null;
+	private LaboratoryResult labResult = null;
     private Date actualDate = null;
 	private String recordId = "";
 	private String patientId = "";
@@ -37,12 +37,12 @@ public class LabActivityResult
 		this.studyId = studyId;
 	}
 
-	public LabResult getLabResult()
+	public LaboratoryResult getLabResult()
 	{
 		return labResult;
 	}
 
-	public void setLabResult(LabResult labResult)
+	public void setLabResult(LaboratoryResult labResult)
 	{
 		this.labResult = labResult;
 	}

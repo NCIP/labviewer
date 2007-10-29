@@ -6,9 +6,6 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.ctom.messaging.loadlabactivities.LoadLabActivities;
 import gov.nih.nci.ctom.messaging.loadlabactivities.Study;
 import gov.nih.nci.ctom.messaging.loadlabactivities.StudySubjectAssignment;
-import gov.nih.nci.labhub.domain.ConceptDescriptorDataType;
-import gov.nih.nci.labhub.domain.LabResult;
-import gov.nih.nci.labhub.domain.LabTest;
 import gov.nih.nci.labhub.domain.Specimen;
 import gov.nih.nci.labhub.domain.SpecimenCollection;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
@@ -20,19 +17,15 @@ import org.exolab.castor.types.Date;
 public class LoadLabActivitiesMapper {
 
 	
-	public LoadLabActivities mapLabActivities(List<LabActivityResult>  results){
-		
+	public LoadLabActivities mapLabActivities(List<LabActivityResult>  results)
+	{
+		/*
 		if (results == null)
 			return null;
-		
-		
 		
 		LoadLabActivities las = new LoadLabActivities();
 		
 		for (LabActivityResult rslt: results){
-			
-		
-		
 		//for(SubjectAssignment sa : assignments) {
 			SubjectAssignment sa = rslt.getSubjectAssignment();
 			StudySubjectAssignment xmlSA = new StudySubjectAssignment();
@@ -160,8 +153,8 @@ public class LoadLabActivitiesMapper {
 		}
 		
 		return las;
+		*/
+		return null;
 	}
-	
-	
 	
 }

@@ -4,9 +4,6 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.ctom.messaging.adverseevent.*;
 import gov.nih.nci.ctom.messaging.adverseevent.Study;
 import gov.nih.nci.ctom.messaging.adverseevent.StudySubjectAssignment;
-import gov.nih.nci.labhub.domain.ConceptDescriptorDataType;
-import gov.nih.nci.labhub.domain.LabResult;
-import gov.nih.nci.labhub.domain.LabTest;
 import gov.nih.nci.labhub.domain.Specimen;
 import gov.nih.nci.labhub.domain.SpecimenCollection;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
@@ -24,25 +21,19 @@ public class AdverseEventMapper {
 		if (rslt == null)
 			return null;
 		
-		
-		
 		AdverseEvent ae = new AdverseEvent();
-		
-		
-			
-		
 		
 		//for(SubjectAssignment sa : assignments) {
 			SubjectAssignment sa = rslt.getSubjectAssignment();
 			StudySubjectAssignment xmlSA = new StudySubjectAssignment();
-			xmlSA.setStudySubjectIdentifier(sa.getStudySubjectIdentifier());
+			//xmlSA.setStudySubjectIdentifier(sa.getStudySubjectIdentifier());
 			ae.setStudySubjectAssignment(xmlSA);
 			
 			
 			Study study = new Study();
 			xmlSA.setStudy(study);
-			study.setAssigningAuthority(sa.getStudySite().getStudy().getAssigningAuthority());
-			study.setIdentifier(sa.getStudySite().getStudy().getIdentifier());
+			//study.setAssigningAuthority(sa.getStudySite().getStudy().getAssigningAuthority());
+			//study.setIdentifier(sa.getStudySite().getStudy().getIdentifier());
 			study.setName(sa.getStudySite().getStudy().getName());
 
 
@@ -67,7 +58,7 @@ public class AdverseEventMapper {
 						for(Iterator specimenIterator = specimenCollection.iterator();specimenIterator.hasNext();)
 						{
 							Specimen specimen = (Specimen)specimenIterator.next();
-							Collection labTestCollection = specimen.getLabTestCollection();
+							Collection labTestCollection = specimen.getLaboratoryTestCollection();
 					
 							if(labTestCollection!=null && labTestCollection.size()>0)
 							{
@@ -77,10 +68,10 @@ public class AdverseEventMapper {
 									if(labTest!=null)
 									{
 										gov.nih.nci.ctom.messaging.adverseevent.LabTest xmlLabTest = new gov.nih.nci.ctom.messaging.adverseevent.LabTest();
-										ConceptDescriptorDataType labTestIde = labTest.getLabTestId();
+										/*ConceptDescriptorDataType labTestIde = labTest.getLabTestId();
 										if(labTestIde!=null){
 											xmlLabTest.setCode(labTestIde.getCode());
-										}
+										}*/
 										
 										gov.nih.nci.ctom.messaging.adverseevent.LabResult xmlLabResult = new gov.nih.nci.ctom.messaging.adverseevent.LabResult();
 
@@ -88,16 +79,15 @@ public class AdverseEventMapper {
 										LabResult labResult = labTest.getLabResult();
 										if(labResult!=null)
 										{
+											/*
 											System.out.println("Before Lab Result comparison "+labResult.getId().intValue()+" to "+rslt.getLabResult().getId().intValue());
-											if(labResult.getId().intValue() == rslt.getLabResult().getId().intValue()){
+											if(labResult.getId().intValue() == rslt.getLabResult().getId().intValue())
+											{
 												//setting the activity
 												xmlSA.addActivity(xmlAct);
 												xmlAct.addLabTest(xmlLabTest);
-												xmlLabTest.setLabResult(xmlLabResult);												
-											
-										
-												
-											}
+												xmlLabTest.setLabResult(xmlLabResult);
+											}*/
 											
 											try {
 												xmlLabResult.setNumericResult(new Float(labResult.getNumericResult()));
@@ -110,14 +100,14 @@ public class AdverseEventMapper {
 											else 
 												xmlLabResult.setTextResult(String.valueOf(labResult.getNumericResult()));
 											
-										
+											/*
 											ConceptDescriptorDataType units = labResult.getUnits();
 										
 											if(units!=null) {
 												xmlLabResult.setUnitOfMeasureCode(units.getCode());
 											}else {
 												xmlLabResult.setUnitOfMeasureCode(" ");
-											}
+											}*/
 												
 											if(labResult.getReferenceRangeComments() != null)
 												xmlLabResult.setReferenceRangeComments(labResult.getReferenceRangeComments());

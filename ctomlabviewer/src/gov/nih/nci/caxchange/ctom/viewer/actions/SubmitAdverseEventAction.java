@@ -11,7 +11,6 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 import gov.nih.nci.security.exceptions.CSException;
-import gov.nih.nci.system.dao.impl.orm.ORMConnection;
 
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
@@ -119,6 +118,7 @@ public class SubmitAdverseEventAction extends Action {
 		LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm) form;
 		org.hibernate.Session session = null;
 		Connection connection = null;
+		/*
 		try {
 			session = ORMConnection
 					.openSession("gov.nih.nci.labhub.domain.SubjectAssignment");
@@ -128,6 +128,7 @@ public class SubmitAdverseEventAction extends Action {
 					"RESULT_SET");
 			LabActivityResult labActivityResult = (LabActivityResult) map
 					.get(lForm.getRecordId());
+					*/
 			/*String sql = "insert into LV_ADVERSE_EVENTS (CLINICAL_RESULT_ID, ADVERSE_EVENT_INDICATOR, UPDATE_DATE) values ( ? , '1' , sysdate )";
 			PreparedStatement stmt = connection.prepareStatement(sql);
 			stmt.setString(1, labActivityResult.getLabResultId());
@@ -151,6 +152,7 @@ public class SubmitAdverseEventAction extends Action {
 			// UPDATE_DATE) values (" + labActivityResult.getLabResultId() + " ,
 			// '1' , sysdate )");
 			// connection.commit();
+		/*
 			labActivityResult.setAdverseEventReported("1");
 			labActivityResult.setAdverseEventReportedDate(new SimpleDateFormat(
 					"MM/dd/yyyy").format(new Date()));
@@ -169,6 +171,7 @@ public class SubmitAdverseEventAction extends Action {
 			} catch (Exception ex) {
 			}
 		}
+		*/
 
 	}
 
