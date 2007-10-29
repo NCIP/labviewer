@@ -101,17 +101,13 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.FormElement;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResultComparator;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
-import gov.nih.nci.labhub.domain.ConceptDescriptorDataType;
-import gov.nih.nci.labhub.domain.LabResult;
-import gov.nih.nci.labhub.domain.LabTest;
 import gov.nih.nci.labhub.domain.Specimen;
 import gov.nih.nci.labhub.domain.SpecimenCollection;
 import gov.nih.nci.labhub.domain.Study;
 import gov.nih.nci.labhub.domain.StudySite;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
 import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
-import gov.nih.nci.system.dao.impl.orm.ORMConnection;
+import gov.nih.nci.system.client.ApplicationServiceProvider;
 import gov.nih.nci.system.query.cql.CQLAssociation;
 import gov.nih.nci.system.query.cql.CQLAttribute;
 import gov.nih.nci.system.query.cql.CQLGroup;
@@ -142,15 +138,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.validator.ValidatorForm;
 import org.hibernate.Session;
+
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class LabActivitiesForm extends ValidatorForm implements BaseAssociationForm
 {
-
 	private String recordId;
 	private String[] recordIds;
 	private String studyId;
@@ -335,6 +329,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 	 */
 	public void submitAdverseEvent(HttpServletRequest request) throws Exception
 	{
+		/*
 		Session session = null;
 		Connection connection = null;
 		try {
@@ -372,6 +367,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 			try{connection.setAutoCommit(true);} catch(Exception ex){}
 			try{session.close();} catch(Exception ex){}
 		}
+		*/
 
 	}
 
@@ -396,10 +392,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 
 		EventsManager mgr =  (EventsManager) ObjectFactory.getObject("eventsManager");
 		
-		//TODO send the user login object instead of the username
 		mgr.sendLabActivities(list, "TESTUSER");
-		
-	
 		
 		this.recordId = "";
 		this.recordIds = null;
@@ -416,6 +409,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.security.forms.BaseDBForm#searchObjects(javax.servlet.http.HttpServletRequest)
 	 */
+	/*
 	public SearchResult searchObjects(HttpServletRequest request, ActionErrors errors, ActionMessages messages) throws Exception 
 	{
 		HashMap map = new HashMap();
@@ -546,6 +540,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 		request.getSession().setAttribute("RESULT_SET", map);
 		return searchResult;
 	}
+	*/
 
 	
 	/* (non-Javadoc)
@@ -586,7 +581,6 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 	}
 
 	public String[] getAssociatedIds() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -598,7 +592,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
     	return str;
     }
 
-    
+    /*
     private static ArrayList printRecord(SubjectAssignment sa, String beginDate2, String endDate2) throws ParseException
     {
     	
@@ -723,7 +717,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 											labActivityResult = new LabActivityResult();
 											// Re set the values
 											
-										/*	SubjectAssignment sac = new SubjectAssignment();
+											SubjectAssignment sac = new SubjectAssignment();
 											sac.setId(sa.getId());
 											sac.setStudySite(sa.getStudySite());
 											sac.setStudySubjectIdentifier(sa.getStudySubjectIdentifier());
@@ -735,7 +729,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 											Specimen specClo = new Specimen;
 											actCol.add(activity);
 											sac.setActivityCollection(actCol);
-											*/
+											
 											labActivityResult.setSubjectAssignment(sa);
 											labActivityResult.setPatientId(sa.getStudySubjectIdentifier());
 											labActivityResult.setStudyId(sa.getStudySite().getStudy().getIdentifier());
@@ -753,6 +747,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 		}
 		return list;
     }
+    */
 
 	public String getStudyId() {
 		return studyId;
