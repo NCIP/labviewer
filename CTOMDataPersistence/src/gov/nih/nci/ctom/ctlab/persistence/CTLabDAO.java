@@ -10,6 +10,7 @@ import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.PerformingLaboratory;
 import gov.nih.nci.ctom.ctlab.domain.Procedure;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.domain.Specimen;
 import gov.nih.nci.ctom.ctlab.domain.SpecimenCollection;
 import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
 import gov.nih.nci.ctom.ctlab.domain.StudyTimePoint;
@@ -676,7 +677,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 		rs.next();
 		actId = rs.getLong(1);
 		act.setId(actId);
-
+		System.out.println("Activity id"+actId);
+		System.out.println("Activity id"+spaId);
 		// insert into Activity
 		ps = con
 				.prepareStatement("insert into ACTIVITY (ID, STUDY_PARTICIPANT_ASSIGNMNT_ID, START_DATE_ORIG, STOP_DATE_ORIG)  values(?,?,?,?)");
@@ -700,7 +702,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			act.getStudyTimePoint().setActivityId(act.getId());
 			saveStudyTimePoint(con, act.getStudyTimePoint());
 		}
-
 	}
 
 	/**
@@ -715,11 +716,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		// Get Id from sequence
 		Statement stmt = con.createStatement();
-		rs = stmt.executeQuery("select STUDY_TIME_POINT_SEQ.nextval from dual");
+		//rs = stmt.executeQuery("select STUDY_TIME_POINT_SEQ.nextval from dual");
+		rs = stmt.executeQuery("select ACTIVITY_SEQ.nextval from dual");
 		rs.next();
 		studyTimePoint.setId(rs.getLong(1));
 
-		// insert into Activity
+		// insert into STUDY_TIME_POINT
 		ps = con
 				.prepareStatement("insert into STUDY_TIME_POINT (ID, ACTIVITY_ID, VISIT_NAME)  values(?,?,?)");
 		ps.setLong(1, studyTimePoint.getId());
@@ -738,7 +740,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			throws SQLException {
 
 		PreparedStatement ps = null;
-
+        System.out.println("The procedure id is :"+ procedure.getId()); 
 		ps = con
 				.prepareStatement("insert into PROCEDURE (ID, FASTING_STATUS)  values(?,?)");
 		ps.setLong(1, procedure.getId());
@@ -774,53 +776,56 @@ public class CTLabDAO extends BaseJDBCDAO {
 			System.out.println("The clab id is"+ specimenCollection.getCentralLaboratory().getId());
 			//ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (PROCEDURE_ACTIVITY_ID, CENTRAL_LABORATORY_ORG_ID)  values(?,?)");
 			ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (ID,CENTRAL_LABORATORY_ID)  values(?,?)");
-			ps.setLong(1, id);
+			ps.setLong(1, specimenCollection.getProcedureActivityId());
 			ps.setLong(2, specimenCollection.getCentralLaboratory().getId());
 			ps.execute();
 
 		}
 
 		if (specimenCollection.getSpecimen() != null) {
-		//	specimenCollection.getSpecimen().setProcedureActivityId(
-       //		specimenCollection.getProcedureActivityId());
-			// saveSpecimen(con, specimenCollection.getSpecimen());
+			specimenCollection.getSpecimen().setProcedureActivityId(
+       		specimenCollection.getProcedureActivityId());
+			 saveSpecimen(con, specimenCollection.getSpecimen());
 
 		}
 	}
 
-	/*
-	 * private void saveSpecimen(Connection con, Specimen specimen) throws
-	 * SQLException { PreparedStatement ps = null; ResultSet rs = null;
-	 * 
-	 * Long sampleTypeCDId = insertOrsaveConceptDescriptor(con, specimen
-	 * .getSampleTypeCd(), specimen.getSampleTypeCdSystem(), specimen
-	 * .getSampleTypeCdSystemName(), null, null);
-	 *  // Get Id from sequence Statement stmt = con.createStatement(); rs =
-	 * stmt.executeQuery("select SPECIMEN_SEQ.nextval from dual"); rs.next();
-	 * specimen.setId(rs.getLong(1));
-	 * 
-	 * boolean sc = false; if (sampleTypeCDId != null) sc = true;
-	 * 
-	 * if (sc) { ps = con .prepareStatement("insert into SPECIMEN(ID,
-	 * ACCESSION_NUMBER, COMMENTS_FROM_LABORATORY, COMMENTS_FROM_INVESTIGATOR,
-	 * CONDITION, SPECIMN_CLLCTN_PRCDR_ACTVTY_ID, SAMPLE_IDENTIFIER_ORIG,
-	 * SMPLTYPE_CONCEPT_DESCRIPTOR_ID) values(?,?,?,?,?,?,?,?)"); ps.setLong(8,
-	 * sampleTypeCDId); } else { ps = con .prepareStatement("insert into
-	 * SPECIMEN(ID, ACCESSION_NUMBER, COMMENTS_FROM_LABORATORY,
-	 * COMMENTS_FROM_INVESTIGATOR, CONDITION, SPECIMN_CLLCTN_PRCDR_ACTVTY_ID,
-	 * SAMPLE_IDENTIFIER_ORIG) values(?,?,?,?,?,?,?)"); }
-	 * 
-	 * ps.setLong(1, specimen.getId()); ps.setString(2,
-	 * specimen.getAccessionNumber()); ps.setString(3,
-	 * specimen.getCommentsFromLaboratory()); ps.setString(4,
-	 * specimen.getCommentsFromInvestigator()); ps.setString(5,
-	 * specimen.getCondition()); ps.setLong(6,
-	 * specimen.getProcedureActivityId()); ps.setString(7,
-	 * specimen.getSampleIdentifierOrig());
-	 * 
-	 * ps.execute();
-	 *  }
-	 */
+	
+	 private void saveSpecimen(Connection con, Specimen specimen) throws
+	  SQLException { 
+		  PreparedStatement ps = null; 
+		  ResultSet rs = null;
+	  
+	    Long sampleTypeCDId = insertOrsaveConceptDescriptor(con, specimen.getVolumeUOMCd(), null, null);
+		  
+	     // Get Id from sequence 
+	  Statement stmt = con.createStatement(); 
+	  rs =  stmt.executeQuery("select ACTIVITY_SEQ.nextval from dual"); 
+	  rs.next();
+	  specimen.setId(rs.getLong(1));
+	  
+	  boolean sc = false; if (sampleTypeCDId != null) sc = true;
+	  
+	  if (sc)
+	  { 
+		  ps = con .prepareStatement("insert into SPECIMEN(ID, ACCESSION_NUMBER, COMMENTS_FROM_LABORATORY, COMMENTS_FROM_INVESTIGATOR, CONDITION,SPECIMEN_COLLECTION_ID, SAMPLE_IDENTIFIER_ORIG,SMPLTYPE_CONCEPT_DESCRIPTOR_ID) values(?,?,?,?,?,?,?,?)"); 
+		  ps.setLong(8, sampleTypeCDId); 
+	  }
+	  else 
+	  { 
+		  ps = con .prepareStatement("insert into SPECIMEN(ID, ACCESSION_NUMBER, COMMENTS_FROM_LABORATORY, COMMENTS_FROM_INVESTIGATOR, CONDITION,SPECIMEN_COLLECTION_ID,SAMPLE_IDENTIFIER_ORIG) values(?,?,?,?,?,?,?)"); 
+	    }
+	  
+	  ps.setLong(1, specimen.getId()); 
+	  ps.setString(2,specimen.getAccessionNumber()); 
+	  ps.setString(3,specimen.getCommentsFromLaboratory());
+	  ps.setString(4,specimen.getCommentsFromInvestigator());
+	  ps.setString(5,specimen.getCondition());
+	  ps.setLong(6,specimen.getProcedureActivityId());
+	  ps.setString(7,specimen.getSampleIdentifierOrig());
+	  ps.execute();
+	   }
+	
 
 	/**
 	 * Get the Participant Person Id of the Study Participant Assignment
@@ -1038,7 +1043,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		}
 
 	}
-
+	
 	/**
 	 * @param con
 	 * @param performingLaboratory
