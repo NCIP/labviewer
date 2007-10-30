@@ -21,7 +21,7 @@ public class Specimen {
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
 	private Date ctomUpdateDt;
-	
+	private Long procedureActivityId;
 	/**
 	 * @return the accessionNumber
 	 */
@@ -94,18 +94,18 @@ public class Specimen {
 	public void setSampleTypeCd(String sampleTypeCd) {
 		this.sampleTypeCd = sampleTypeCd;
 	}
-	*//**
+	/**
 	 * @return the procedureActivityId
-	 *//*
+	 */
 	public Long getProcedureActivityId() {
 		return procedureActivityId;
 	}
-	*//**
+	/**
 	 * @param procedureActivityId the procedureActivityId to set
-	 *//*
+	 */
 	public void setProcedureActivityId(Long procedureActivityId) {
 		this.procedureActivityId = procedureActivityId;
-	}*/
+	}
 	/**
 	 * @return the id
 	 */
