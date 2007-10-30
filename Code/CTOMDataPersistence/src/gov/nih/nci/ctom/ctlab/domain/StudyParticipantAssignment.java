@@ -28,8 +28,8 @@ public class StudyParticipantAssignment {
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
 	private Date ctomUpdateDt;
-	private Activity activity;
-	private Participant participant;
+	private Activity activity=null;
+	private Participant participant=null;
 	
 	
 	/**

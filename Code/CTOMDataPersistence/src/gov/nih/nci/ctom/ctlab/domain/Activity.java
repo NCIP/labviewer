@@ -30,9 +30,9 @@ public class Activity {
 	private Date ctomInsertDate=null;
 	private Date ctomUpdateDate=null;
 	
-	private Observation observation;
-	private Procedure procedure;
-	private StudyTimePoint studyTimePoint;
+	private Observation observation=null;
+	private Procedure procedure=null;
+	private StudyTimePoint studyTimePoint=null;
 	
 	/**
 	 * @return the ageAtVisit
