@@ -43,14 +43,14 @@ public class SpecimenCollection {
 	/**
 	 * @return the procedureActivityId
 	 */
-	/*public Long getProcedureActivityId() {
+	public Long getProcedureActivityId() {
 		return procedureActivityId;
-	}*/
+	}
 	/**
 	 * @param procedureActivityId the procedureActivityId to set
 	 */
-	/*public void setProcedureActivityId(Long procedureActivityId) {
+	public void setProcedureActivityId(Long procedureActivityId) {
 		this.procedureActivityId = procedureActivityId;
-	}*/
+	}
 
 }
