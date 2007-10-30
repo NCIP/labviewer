@@ -4,14 +4,105 @@ import java.util.Date;
 
 public class Observation {
 
-	Long id;
-	String statusCode = null;
-	Date reportingDate = null;
-	String reportingDateOrig = null;
-	String confidentialityCode = null;
-	String comments = null;
-	Long activityId;
-	ClinicalResult clinicalResult;
+	private Long id;
+	private String statusCode = null;
+	private Date reportingDate = null;
+	private String reportingDateOrig = null;
+	private String confidentialityCode = null;
+	private String comments = null;
+	private Long activityId;
+	private ClinicalResult clinicalResult= null;
+	private String uncertainityCode=null;
+	private String subtypeCode=null;
+	private int securityKey;
+	private String source;
+	private Date srcExtractDt=null;
+	private Date ctomInsertDt=null;
+	private Date ctomUpdateDt=null;
+	/**
+	 * @return the uncertainityCode
+	 */
+	public String getUncertainityCode() {
+		return uncertainityCode;
+	}
+	/**
+	 * @param uncertainityCode the uncertainityCode to set
+	 */
+	public void setUncertainityCode(String uncertainityCode) {
+		this.uncertainityCode = uncertainityCode;
+	}
+	/**
+	 * @return the subtypeCode
+	 */
+	public String getSubtypeCode() {
+		return subtypeCode;
+	}
+	/**
+	 * @param subtypeCode the subtypeCode to set
+	 */
+	public void setSubtypeCode(String subtypeCode) {
+		this.subtypeCode = subtypeCode;
+	}
+	/**
+	 * @return the securityKey
+	 */
+	public int getSecurityKey() {
+		return securityKey;
+	}
+	/**
+	 * @param securityKey the securityKey to set
+	 */
+	public void setSecurityKey(int securityKey) {
+		this.securityKey = securityKey;
+	}
+	/**
+	 * @return the source
+	 */
+	public String getSource() {
+		return source;
+	}
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+	/**
+	 * @return the srcExtractDt
+	 */
+	public Date getSrcExtractDt() {
+		return srcExtractDt;
+	}
+	/**
+	 * @param srcExtractDt the srcExtractDt to set
+	 */
+	public void setSrcExtractDt(Date srcExtractDt) {
+		this.srcExtractDt = srcExtractDt;
+	}
+	/**
+	 * @return the ctomInsertDt
+	 */
+	public Date getCtomInsertDt() {
+		return ctomInsertDt;
+	}
+	/**
+	 * @param ctomInsertDt the ctomInsertDt to set
+	 */
+	public void setCtomInsertDt(Date ctomInsertDt) {
+		this.ctomInsertDt = ctomInsertDt;
+	}
+	/**
+	 * @return the ctomUpdateDt
+	 */
+	public Date getCtomUpdateDt() {
+		return ctomUpdateDt;
+	}
+	/**
+	 * @param ctomUpdateDt the ctomUpdateDt to set
+	 */
+	public void setCtomUpdateDt(Date ctomUpdateDt) {
+		this.ctomUpdateDt = ctomUpdateDt;
+	}
 	/**
 	 * @return the comments
 	 */

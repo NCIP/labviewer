@@ -21,7 +21,7 @@ public class HealthCareSite {
     private Date srcExtractDt;
     private Date ctomInsertDt;
     private Date ctomUpdateDt;
-	private StudyParticipantAssignment studyParticipantAssignment; 
+	private StudyParticipantAssignment studyParticipantAssignment=null; 
 
 	/**
 	 * @return the name

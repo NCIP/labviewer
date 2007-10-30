@@ -1,9 +1,20 @@
 package gov.nih.nci.ctom.ctlab.domain;
 
+import java.util.Date;
+
 public class SpecimenCollection {
-	private CentralLaboratory centralLaboratory;
-	private Specimen specimen;
-	private Long procedureActivityId;
+	private Long id;
+	private String siteCondCd;
+	private String mtdCode;
+	private Long centralLabId;
+	private String source;
+	private Date srcExtractDt;
+	private Date ctomInsertDt;
+	private Date ctomUpdateDt;
+	
+	private CentralLaboratory centralLaboratory=null;
+	private Specimen specimen=null;
+	
 	
 	/**
 	 * @return the centralLaboratory
@@ -32,14 +43,14 @@ public class SpecimenCollection {
 	/**
 	 * @return the procedureActivityId
 	 */
-	public Long getProcedureActivityId() {
+	/*public Long getProcedureActivityId() {
 		return procedureActivityId;
-	}
+	}*/
 	/**
 	 * @param procedureActivityId the procedureActivityId to set
 	 */
-	public void setProcedureActivityId(Long procedureActivityId) {
+	/*public void setProcedureActivityId(Long procedureActivityId) {
 		this.procedureActivityId = procedureActivityId;
-	}
+	}*/
 
 }

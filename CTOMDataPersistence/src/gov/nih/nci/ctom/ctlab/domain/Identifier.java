@@ -14,7 +14,8 @@ public class Identifier
 	private Long studyParticipantAssignmentId;
 	private String source;
 	private Date ctomInsertDate=null;
-	private Date ctomUpdateDAte=null;
+	private Date ctomUpdateDate=null;
+	private HealthCareSite healthCareSite=null;
 	
 	public String getAssigningAuthorityName() {
 		return assigningAuthorityName;
@@ -85,13 +86,25 @@ public class Identifier
 	/**
 	 * @return the ctomUpdateDAte
 	 */
-	public Date getCtomUpdateDAte() {
-		return ctomUpdateDAte;
+	public Date getCtomUpdateDate() {
+		return ctomUpdateDate;
 	}
 	/**
 	 * @param ctomUpdateDAte the ctomUpdateDAte to set
 	 */
-	public void setCtomUpdateDAte(Date ctomUpdateDAte) {
-		this.ctomUpdateDAte = ctomUpdateDAte;
+	public void setCtomUpdateDate(Date ctomUpdateDate) {
+		this.ctomUpdateDate = ctomUpdateDate;
+	}
+	/**
+	 * @return the healthCareSite
+	 */
+	public HealthCareSite getHealthCareSite() {
+		return healthCareSite;
+	}
+	/**
+	 * @param healthCareSite the healthCareSite to set
+	 */
+	public void setHealthCareSite(HealthCareSite healthCareSite) {
+		this.healthCareSite = healthCareSite;
 	}
 }

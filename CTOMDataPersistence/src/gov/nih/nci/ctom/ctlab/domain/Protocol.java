@@ -35,8 +35,9 @@ public class Protocol {
 	private String ctomInsertUser;
 	private String ctomUpdateUser;
 	
-	HealthCareSite healthCareSite;
-	Investigator investigator;
+	HealthCareSite healthCareSite=null;
+	Investigator investigator=null;
+	Identifier identifier =null;
 	
 	/**
 	 * @return the healthCareSite
@@ -433,6 +434,18 @@ public class Protocol {
 	 */
 	public void setCtomUpdateUser(String ctomUpdateUser) {
 		this.ctomUpdateUser = ctomUpdateUser;
+	}
+	/**
+	 * @return the identifier
+	 */
+	public Identifier getIdentifier() {
+		return identifier;
+	}
+	/**
+	 * @param identifier the identifier to set
+	 */
+	public void setIdentifier(Identifier identifier) {
+		this.identifier = identifier;
 	}
 	
 }
