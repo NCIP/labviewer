@@ -386,11 +386,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 				// insert new into identifier get the identifierid and insert
 				// into participant table
 				ps = con
-						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE) values (?,?,?)");
+						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
 				// need to set the participantid into the identifier table
 				ps.setLong(1, identifierId);
 				ps.setString(2, participant.getIdentifier().getExtension());
 				ps.setString(3, participant.getIdentifier().getSource());
+				ps.setString(4,participant.getIdentifier().getRoot());
 				ps.executeUpdate();
 				con.commit();
 
@@ -445,11 +446,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 				// insert new into identifier get the identifierid and insert
 				// into participant table
 				ps = con
-						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE) values (?,?,?)");
+						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
 				// need to set the participantid into the identifier table
 				ps.setLong(1, identifierId);
 				ps.setString(2, protocol.getIdentifier().getExtension());
 				ps.setString(3, protocol.getIdentifier().getSource());
+				ps.setString(4, protocol.getIdentifier().getRoot());
 				ps.executeUpdate();
 				con.commit();
 
@@ -524,11 +526,12 @@ public class CTLabDAO extends BaseJDBCDAO {
 				// insert new into identifier get the identifierid and insert
 				// into participant table
 				ps = con
-						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE) values (?,?,?)");
+						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
 				// need to set the participantid into the identifier table
 				ps.setLong(1, identifierId);
 				ps.setString(2, spa.getParticipant().getIdentifier().getExtension());
 				ps.setString(3, spa.getParticipant().getIdentifier().getSource());
+				ps.setString(4, spa.getParticipant().getIdentifier().getRoot());
 				ps.executeUpdate();
 				con.commit();
 
@@ -752,22 +755,29 @@ public class CTLabDAO extends BaseJDBCDAO {
 	private void saveSpecimenCollection(Connection con,
 			SpecimenCollection specimenCollection) throws SQLException {
 		PreparedStatement ps = null;
+		ResultSet rs=null;
 
 		if (specimenCollection.getCentralLaboratory() != null) {
 			saveCentralLaboratory(con, specimenCollection
 					.getCentralLaboratory());
-
+			// Get Id from sequence
+			Statement stmt = con.createStatement();
+			rs = stmt.executeQuery("select ACTIVITY_SEQ.nextval from dual");
+			rs.next();
+			Long id = rs.getLong(1);
+			System.out.println("id is "+ id);
+			System.out.println("The clab id is"+ specimenCollection.getCentralLaboratory().getId());
 			//ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (PROCEDURE_ACTIVITY_ID, CENTRAL_LABORATORY_ORG_ID)  values(?,?)");
-			ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (CENTRAL_LABORATORY_ID)  values(?)");
-			//ps.setLong(1, specimenCollection.getProcedureActivityId());
-			ps.setLong(1, specimenCollection.getCentralLaboratory().getId());
+			ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (ID,CENTRAL_LABORATORY_ID)  values(?,?)");
+			ps.setLong(1, id);
+			ps.setLong(2, specimenCollection.getCentralLaboratory().getId());
 			ps.execute();
 
 		}
 
 		if (specimenCollection.getSpecimen() != null) {
-			//specimenCollection.getSpecimen().setProcedureActivityId(
-			//		specimenCollection.getProcedureActivityId());
+		//	specimenCollection.getSpecimen().setProcedureActivityId(
+       //		specimenCollection.getProcedureActivityId());
 			// saveSpecimen(con, specimenCollection.getSpecimen());
 
 		}
