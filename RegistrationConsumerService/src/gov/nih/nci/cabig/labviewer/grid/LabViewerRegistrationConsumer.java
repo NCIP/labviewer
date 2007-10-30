@@ -33,7 +33,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		logger.info("Registration message received");
 		System.out.println("LabViewerRegistrationConsumer.register called");
 		StudyRefType studyRef = registration.getStudyRef();
-		
+	
 		Protocol protocol = new Protocol();
 		//save the study data
 		protocol.setLongTxtTitle(studyRef.getLongTitleText());
@@ -47,6 +47,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 				Identifier id = new Identifier();
 				id.setExtension(ident.getValue());
 				id.setSource(ident.getSource());
+				id.setRoot(studyRef.getGridId());
 				protocol.setIdentifier(id);
 				protocol.setNciIdentifier(id.getExtension());
 			}
@@ -79,6 +80,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			Identifier ident = new Identifier();
 			ident.setExtension(id.getValue());
 			ident.setSource(id.getSource());
+			ident.setRoot(participant.getGridId());
 			part.setIdentifier(ident);
 		}
 			
