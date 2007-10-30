@@ -25,17 +25,15 @@
 	<target name="dist" depends="compile">
 		<delete dir="${build.dist.dir}" failonerror="false"/>
 		<mkdir dir="${build.dist.dir}"/>
-		<copy todir="${build.dist.dir}">
+		<jar destfile="${build.dist.dir}/ctomRegistrationConsumer.jar">
 			<fileset dir="${build.classes.dir}">
 				<include name="**/*.class"/>
 				<exclude name="**/test/*"/>
 			</fileset>
-		</copy>
-		<copy todir="${build.dist.dir}">
 			<fileset dir="${build.source.dir}">
 				<include name="application*.xml"/>
 			</fileset>
-		</copy>
+		</jar>
 		<copy todir="${build.dist.dir}">
 			<fileset dir="${artifacts.dir}">
 				<include name="*.jar"/>
