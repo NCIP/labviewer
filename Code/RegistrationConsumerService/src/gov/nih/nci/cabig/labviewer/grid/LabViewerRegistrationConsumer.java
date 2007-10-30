@@ -30,12 +30,11 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 	public Registration register(Registration registration)
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
-		logger.info("Registration message received");
-		System.out.println("LabViewerRegistrationConsumer.register called");
+		logger.info("Lab Viewer Registration message received");
 		StudyRefType studyRef = registration.getStudyRef();
 	
+		// save the study data
 		Protocol protocol = new Protocol();
-		//save the study data
 		protocol.setLongTxtTitle(studyRef.getLongTitleText());
 		protocol.setShortTxtTitle(studyRef.getShortTitleText());
 	   	IdentifierType identifiers[] = studyRef.getIdentifier();
@@ -52,14 +51,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 				protocol.setNciIdentifier(id.getExtension());
 			}
 		}
+		
 		// save the study site data
-		 StudySiteType studySite = registration.getStudySite();
-		 HealthcareSiteType hcsType = studySite.getHealthcareSite(0);
-		 HealthCareSite healthCare = new HealthCareSite();
-		 healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
+		StudySiteType studySite = registration.getStudySite();
+		HealthcareSiteType hcsType = studySite.getHealthcareSite(0);
+		HealthCareSite healthCare = new HealthCareSite();
+		healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
 		
-		
-		 //save participant data
+		//save participant data
 		ParticipantType participant = registration.getParticipant();
 		Participant part = new Participant();
 		part.setFirstName(participant.getFirstName());
@@ -88,17 +87,18 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		{
 			throw new InvalidRegistrationException();
 		}
+		
 		StudyParticipantAssignment studyPartAssig = new StudyParticipantAssignment();
 		studyPartAssig.setParticipant(part);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
-		System.out.println("Saving registration details");
+		
+		// Now create the DAO and save
 		CTLabDAO dao = new CTLabDAO();
 		Connection con = dao.getConnection();
 		
 		try
 		{
-			//dao.saveParticipant(con, part);
 			dao.saveProtocol(con, protocol);
 		}
 		catch (SQLException e)
@@ -109,7 +109,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		catch (Exception e)
 		{
 			logger.error("Error saving participant", e);
-			
+			throw new RegistrationConsumptionException();
 		}
 		
 		return registration;
