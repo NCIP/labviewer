@@ -164,7 +164,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		if (hcSite.getStudyParticipantAssignment() != null)
 		{
-			saveParticipant(con, hcSite.getStudyParticipantAssignment().getParticipant());
+			//saveParticipant(con, hcSite.getStudyParticipantAssignment().getParticipant());
 			saveStudyParticipantAssignment(con, ssId, hcSite.getStudyParticipantAssignment());
 		}
 
@@ -185,15 +185,15 @@ public class CTLabDAO extends BaseJDBCDAO {
 		Long partId = null;
 		boolean identifierUpdInd=false;
 		
-		partId = spa.getParticipant().getId();
+		//partId = spa.getParticipant().getId();
 		
+		//ps = con
+		//		.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND PARTICIPANT_ID = ?");
 		ps = con
-				.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND PARTICIPANT_ID = ?");
-	//	ps = con
-		//.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND STUDY_PARTICIPANT_IDENTFR_ORIG = ?");
+		.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND STUDY_PARTICIPANT_IDENTFR_ORIG = ?");
 		ps.setLong(1, ssId);
-		ps.setLong(2, partId);
-		//ps.setString(2, spa.getStudyPartIdOrig());
+		//ps.setLong(2, partId);
+		ps.setString(2, spa.getStudyPartIdOrig());
 		rs = ps.executeQuery();
 		if (rs.next()) {
 			spaId = rs.getLong(1);
@@ -210,10 +210,11 @@ public class CTLabDAO extends BaseJDBCDAO {
 			// Check study participant identifier, if it exists, then don't
 			// insert new SPA or Participant
 			System.out.println("The studyparticipantAssig id is " + spaId);
-			saveOrInsertIdentifier(con,spa);
+			Long identifierID = saveOrInsertIdentifier(con,spa);
 			if(spa.getId()==null)
 			{
-			//saveParticipant(con, spa.getParticipant());
+			identifierUpdInd= true;	
+			saveParticipant(con, spa.getParticipant());
 			System.out.println("The after saving participant spa id :SPA Insert " + spaId);
 			System.out.println("The after saving participant  id is " + spa.getParticipant().getId());
 			System.out.println("The after saving participant  studysite id is " + ssId);
@@ -226,10 +227,10 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps.setLong(4, spa.getParticipant().getId());
 			ps.execute();
 			con.commit();
-			if (spa.getParticipant().getIdentifier() != null) {
+			if (identifierUpdInd && spa.getParticipant().getIdentifier() != null) {
 				spa.setId(spaId);
 				System.out.println("Calling the update identifier");
-				updateIdentifier(con, spa);
+				updateIdentifier(con, spa,identifierID);
 			}
 		}
 	  }	    
@@ -502,7 +503,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @param protocol
 	 * @throws SQLException
 	 */
-	private void saveOrInsertIdentifier(Connection con, StudyParticipantAssignment spa)
+	private Long saveOrInsertIdentifier(Connection con, StudyParticipantAssignment spa)
 			throws SQLException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -524,6 +525,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 				id = rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID");
 				spa.setId(id);
 				spa.getParticipant().getIdentifier().setId(rs.getLong("ID"));
+				identifierId=rs.getLong("ID");
 			} else {
 				// get the identifier id
 				ps = con
@@ -549,8 +551,11 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 				spa.setId(id);
 				spa.getParticipant().getIdentifier().setId(identifierId);
+				
 			}
+		   	
 		}
+		return identifierId;
 
 	}
 	/**
@@ -558,7 +563,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @param participant
 	 * @throws SQLException
 	 */
-	private void updateIdentifier(Connection con, StudyParticipantAssignment studypartAssign)
+	private void updateIdentifier(Connection con, StudyParticipantAssignment studypartAssign,Long identifierId)
 			throws SQLException {
 
 		PreparedStatement ps = null;
@@ -568,7 +573,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 				.prepareStatement("update IDENTIFIER set STUDY_PARTICIPANT_ASSIGNMNT_ID = ? where ID= ?");
 		// need to set the participantid into the identifier table
 		ps.setLong(1, studypartAssign.getId());
-		ps.setLong(2, studypartAssign.getParticipant().getIdentifier().getId());
+		ps.setLong(2, identifierId);
 		ps.executeUpdate();
 		con.commit();
 
