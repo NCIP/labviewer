@@ -56,7 +56,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		StudySiteType studySite = registration.getStudySite();
 		HealthcareSiteType hcsType = studySite.getHealthcareSite(0);
 		HealthCareSite healthCare = new HealthCareSite();
-		healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
+		String tmpstr = studySite.getGridId()+"."+hcsType.getNciInstituteCode();
+		healthCare.setNciInstituteCd(tmpstr);
 		
 		//save participant data
 		ParticipantType participant = registration.getParticipant();
@@ -90,6 +91,9 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		
 		StudyParticipantAssignment studyPartAssig = new StudyParticipantAssignment();
 		studyPartAssig.setParticipant(part);
+		String tmp =participant.getGridId()+"."+id.getValue();
+		System.out.println(tmp);
+		studyPartAssig.setStudyPartIdOrig(tmp);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
 		
