@@ -20,6 +20,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class CTLabDAO extends BaseJDBCDAO {
 
@@ -175,7 +177,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void saveStudyParticipantAssignment(Connection con, Long ssId,
-			StudyParticipantAssignment spa) throws SQLException {
+			StudyParticipantAssignment spa) throws SQLException{
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -187,8 +189,11 @@ public class CTLabDAO extends BaseJDBCDAO {
 		
 		ps = con
 				.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND PARTICIPANT_ID = ?");
+	//	ps = con
+		//.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND STUDY_PARTICIPANT_IDENTFR_ORIG = ?");
 		ps.setLong(1, ssId);
 		ps.setLong(2, partId);
+		//ps.setString(2, spa.getStudyPartIdOrig());
 		rs = ps.executeQuery();
 		if (rs.next()) {
 			spaId = rs.getLong(1);
@@ -682,12 +687,24 @@ public class CTLabDAO extends BaseJDBCDAO {
 		System.out.println("Activity id"+spaId);
 		// insert into Activity
 		ps = con
-				.prepareStatement("insert into ACTIVITY (ID, STUDY_PARTICIPANT_ASSIGNMNT_ID, START_DATE_ORIG, STOP_DATE_ORIG)  values(?,?,?,?)");
+				.prepareStatement("insert into ACTIVITY (ID, STUDY_PARTICIPANT_ASSIGNMNT_ID, START_DATE_ORIG, STOP_DATE_ORIG,START_DATE,STOP_DATE)  values(?,?,?,?,?,?)");
 		ps.setLong(1, actId);
 		ps.setLong(2, spaId);
 		ps.setString(3, String.valueOf(act.getStartDateOrig()));
-		ps.setString(4, String.valueOf(act.getStopDateOrig()));
-		ps.execute();
+		ps.setString(4, String.valueOf(act.getStartDateOrig()));
+		java.util.Date startTmp;
+		java.util.Date stopTmp;
+		try {
+			startTmp = new SimpleDateFormat("yyyyMMddHHmm").parse(String.valueOf(act.getStartDateOrig()));
+			stopTmp = new SimpleDateFormat("yyyyMMddHHmm").parse(String.valueOf(act.getStartDateOrig()));
+			ps.setDate(5,new java.sql.Date(startTmp.getTime()));
+			ps.setDate(6, new java.sql.Date(stopTmp.getTime()));
+			ps.execute();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 		if (act.getObservation() != null) {
 			act.getObservation().setActivityId(act.getId());
