@@ -48,7 +48,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 				id.setSource(ident.getSource());
 				id.setRoot(studyRef.getGridId());
 				protocol.setIdentifier(id);
-				protocol.setNciIdentifier(id.getExtension());
+				protocol.setNciIdentifier(id.getRoot() + "." + id.getExtension());
 			}
 		}
 		
