@@ -63,7 +63,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			rs = stmt.executeQuery("select protocol_seq.nextval from dual");
 			rs.next();
 			id = rs.getLong(1);
-            System.out.println("The protocol id is "+ id);
+            System.out.println("The protocol id : insert "+ id);
 			ps = con
 					.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT)  values(?,?,?,?)");
 			ps.setLong(1, id);
@@ -79,6 +79,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		} // update into participant if there was a participant associated
 			// with identifier.
 		else {
+			System.out.println("Inside update protocol: protoid"+prot.getId());
 			ps = con
 					.prepareStatement("update PROTOCOL set NCI_IDENTIFIER = ?, IDENTIFIER_ASSIGNING_AUTHORITY = ?, LONG_TITLE_TEXT = ? where ID = ?");
 			ps.setString(1, String.valueOf(prot.getNciIdentifier()));
@@ -89,7 +90,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			con.commit();
 		  }
 		}
-		System.out.println("The protocol id is " + prot.getId());
 		if (prot.getInvestigator() != null)
 			saveInvestigator(con, id, prot.getInvestigator());
 
@@ -124,7 +124,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			rs = stmt.executeQuery("select ORGANIZATION_SEQ.nextval from dual");
 			rs.next();
 			hsId = rs.getLong(1);
-			System.out.println("The healthCare id is " + hsId);
+			System.out.println("The healthCare id : insert" + hsId);
 			// insert into HealthCare_Site
 			ps = con
 					.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE)  values(?,?)");
@@ -148,8 +148,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 			rs.next();
 			ssId = rs.getLong(1);
 
-			// insert into Study_Investigator
-			System.out.println("The study Inves id is " + ssId);
+			// insert into Study_Site
+			System.out.println("The study Site id : insert" + ssId);
 			ps = con
 					.prepareStatement("insert into study_site (ID, HEALTHCARE_SITE_ID, PROTOCOL_ID)  values(?,?,?)");
 
@@ -209,7 +209,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			if(spa.getId()==null)
 			{
 			//saveParticipant(con, spa.getParticipant());
-			System.out.println("The after saving participant spa id is " + spaId);
+			System.out.println("The after saving participant spa id :SPA Insert " + spaId);
 			System.out.println("The after saving participant  id is " + spa.getParticipant().getId());
 			System.out.println("The after saving participant  studysite id is " + ssId);
 			// insert into STUDY_PARTICIPANT_ASSIGNMENT
@@ -266,7 +266,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		// check if there exists a identifier with the same value; if yes-
 		// returns its participantID else return null
 		saveOrInsertIdentifier(con, participant);
-		System.out.println("The participantid=" + participant.getId());
+		
 		// insert into participant if there was no participant associated with
 		// identifier.
 		if (participant.getId() == null) {
@@ -276,7 +276,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			while (rs.next()) {
 				participant.setId(rs.getLong(1));
-				System.out.println("Get the participantid if null="
+				System.out.println("Get the participantid :Insert="
 						+ rs.getLong(1));
 				break;
 			}
@@ -503,9 +503,10 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ResultSet rs = null;
 		Long id = null;
 		Long identifierId = null;
-		// check if the participant is associated with identifier
+		// check if the StudyParticipantAssignment is associated with identifier
 
 		if (spa.getParticipant().getIdentifier() != null) {
+			System.out.println("The SPA --parti--indentifier is not null");
 			ps = con
 					.prepareStatement("select ID,STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where EXTENSION = ? AND STUDY_PARTICIPANT_ASSIGNMNT_ID IS NOT NULL");
 			ps.setString(1, spa.getParticipant().getIdentifier().getExtension());
