@@ -44,6 +44,10 @@ public class Participant {
 	private Date ctomUpdateDate=null;
 	
 	private Identifier identifier;
+	
+	public Participant(){
+		identifier = new Identifier();
+	}
 	/**
 	 * @return the id
 	 */
