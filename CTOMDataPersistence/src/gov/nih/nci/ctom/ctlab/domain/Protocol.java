@@ -35,9 +35,16 @@ public class Protocol {
 	private String ctomInsertUser;
 	private String ctomUpdateUser;
 	
-	HealthCareSite healthCareSite=null;
-	Investigator investigator=null;
-	Identifier identifier =null;
+	private HealthCareSite healthCareSite=null;
+	private Investigator investigator=null;
+	private Identifier identifier =null;
+	
+	public Protocol()
+	{
+		healthCareSite = new HealthCareSite();
+		investigator = new Investigator();
+		identifier = new Identifier();
+	}
 	
 	/**
 	 * @return the healthCareSite
