@@ -454,7 +454,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			//clinicalResult.setCrCode(value);
+			clinicalResult.setCrCode(value);
 
 		} catch (NullPointerException ex) {
 
@@ -466,7 +466,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			//clinicalResult.setCrCodeSystem(value);
+			clinicalResult.setCrCodeSystem(value);
 
 		} catch (NullPointerException ex) {
 
@@ -478,7 +478,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			//clinicalResult.setCrCodeSystemName(value);
+			clinicalResult.setCrCodeSystemName(value);
 
 		} catch (NullPointerException ex) {
 
@@ -493,7 +493,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			value = xNode.getNodeValue();
 			try {
 				version = Double.valueOf(value);
-			//	clinicalResult.setCrCodeSystemVersion(version);
+				clinicalResult.setCrCodeSystemVersion(version);
 			} catch (Exception ex) {
 
 			}
@@ -507,7 +507,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-		//	clinicalResult.setCrCodeDisplayText(value);
+			clinicalResult.setCrCodeDisplayText(value);
 
 		} catch (NullPointerException ex) {
 
