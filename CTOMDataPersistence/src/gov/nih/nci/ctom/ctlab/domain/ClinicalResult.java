@@ -3,7 +3,15 @@ package gov.nih.nci.ctom.ctlab.domain;
 import java.util.Date;
 
 public class ClinicalResult {
-
+	
+	private String crCode;
+	private String crCodeSystem;
+	private String crCodeSystemName;
+	private Double crCodeSystemVersion;
+	private String crCodeDisplayText;
+	private String valueUnitOfMeasureCdSystem = null;
+	private String valueUnitOfMeasureCdSystemName = null;
+	
 	private Long id;
 	private String panelName;
 	private String assayMtdCode;
@@ -422,6 +430,91 @@ public class ClinicalResult {
 	 */
 	public void setCtomUpdateDt(Date ctomUpdateDt) {
 		this.ctomUpdateDt = ctomUpdateDt;
+	}
+	/**
+	 * @return the crCode
+	 */
+	public String getCrCode() {
+		return crCode;
+	}
+	/**
+	 * @param crCode the crCode to set
+	 */
+	public void setCrCode(String crCode) {
+		this.crCode = crCode;
+	}
+	/**
+	 * @return the crCodeSystem
+	 */
+	public String getCrCodeSystem() {
+		return crCodeSystem;
+	}
+	/**
+	 * @param crCodeSystem the crCodeSystem to set
+	 */
+	public void setCrCodeSystem(String crCodeSystem) {
+		this.crCodeSystem = crCodeSystem;
+	}
+	/**
+	 * @return the crCodeSystemName
+	 */
+	public String getCrCodeSystemName() {
+		return crCodeSystemName;
+	}
+	/**
+	 * @param crCodeSystemName the crCodeSystemName to set
+	 */
+	public void setCrCodeSystemName(String crCodeSystemName) {
+		this.crCodeSystemName = crCodeSystemName;
+	}
+	/**
+	 * @return the crCodeSystemVersion
+	 */
+	public Double getCrCodeSystemVersion() {
+		return crCodeSystemVersion;
+	}
+	/**
+	 * @param crCodeSystemVersion the crCodeSystemVersion to set
+	 */
+	public void setCrCodeSystemVersion(Double crCodeSystemVersion) {
+		this.crCodeSystemVersion = crCodeSystemVersion;
+	}
+	/**
+	 * @return the crCodeDisplayText
+	 */
+	public String getCrCodeDisplayText() {
+		return crCodeDisplayText;
+	}
+	/**
+	 * @param crCodeDisplayText the crCodeDisplayText to set
+	 */
+	public void setCrCodeDisplayText(String crCodeDisplayText) {
+		this.crCodeDisplayText = crCodeDisplayText;
+	}
+	/**
+	 * @return the valueUnitOfMeasureCdSystem
+	 */
+	public String getValueUnitOfMeasureCdSystem() {
+		return valueUnitOfMeasureCdSystem;
+	}
+	/**
+	 * @param valueUnitOfMeasureCdSystem the valueUnitOfMeasureCdSystem to set
+	 */
+	public void setValueUnitOfMeasureCdSystem(String valueUnitOfMeasureCdSystem) {
+		this.valueUnitOfMeasureCdSystem = valueUnitOfMeasureCdSystem;
+	}
+	/**
+	 * @return the valueUnitOfMeasureCdSystemName
+	 */
+	public String getValueUnitOfMeasureCdSystemName() {
+		return valueUnitOfMeasureCdSystemName;
+	}
+	/**
+	 * @param valueUnitOfMeasureCdSystemName the valueUnitOfMeasureCdSystemName to set
+	 */
+	public void setValueUnitOfMeasureCdSystemName(
+			String valueUnitOfMeasureCdSystemName) {
+		this.valueUnitOfMeasureCdSystemName = valueUnitOfMeasureCdSystemName;
 	}
 	
 
