@@ -258,9 +258,9 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		// Get the concept descriptor ids for the race and gender
 		Long genderCDId = insertOrsaveConceptDescriptor(con, participant
-				.getAdminGenderCode(), null, null);
+				.getAdminGenderCode(),participant.getAdminGenderCodeSystem(),participant.getAdminGenderCodeSystemName(), null, null);
 		Long raceCDId = insertOrsaveConceptDescriptor(con, participant
-				.getRaceCode(), null, null);
+				.getRaceCode(),participant.getRaceCodeSystem(),participant.getRaceCodeSystemName(), null, null);
 
 		// Get the next person ID
 		// Statement stmt = con.createStatement();
@@ -924,7 +924,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		rs.next();
 		observation.setId(rs.getLong(1));
 
-		// insert into Activity
+		// insert into Observation
 		ps = con
 				.prepareStatement("insert into OBSERVATION (ID, REPORTING_DATE, REPORTING_DATE_ORIG, CONFIDENTIALITY_CODE, STATUS_CODE, COMMENTS, ACTIVITY_ID)  values(?,?,?,?,?,?,?)");
 		ps.setLong(1, observation.getId());
@@ -958,25 +958,28 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		Long valUOMCdId = null;
 		Long labTestCdId = null;
-
+	
 		if (clinicalResult.getPerformingLaboratory() != null) {
 			savePerformingLaboratory(con, clinicalResult
 					.getPerformingLaboratory());
-			// valUOMCdId = insertOrsaveConceptDescriptor(con,
-			// clinicalResult.getValueUnitOfMeasureCd(),
-			// clinicalResult.getValueUnitOfMeasureCdSystem(),
-			// clinicalResult.getValueUnitOfMeasureCdSystemName(), null, null);
-			// labTestCdId = insertOrsaveConceptDescriptor(con,
-			// clinicalResult.getCrCode(),
-			// clinicalResult.getCrCodeSystem(),clinicalResult.getCrCodeSystemName(),
-			// clinicalResult.getCrCodeSystemVersion(),
-			// clinicalResult.getCrCodeDisplayText());
-			valUOMCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-					.getValueUnitOfMeasureCd(), null, null);
-			labTestCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-					.getMeansVitStatObtCd(), null, null);
+			 valUOMCdId = insertOrsaveConceptDescriptor(con,
+			 clinicalResult.getValueUnitOfMeasureCd(),
+			 clinicalResult.getValueUnitOfMeasureCdSystem(),
+			 clinicalResult.getValueUnitOfMeasureCdSystemName(), null, null);
+			 labTestCdId = insertOrsaveConceptDescriptor(con,
+			 clinicalResult.getCrCode(),		 
+			 clinicalResult.getCrCodeSystem(),clinicalResult.getCrCodeSystemName(),
+			 clinicalResult.getCrCodeSystemVersion(),
+			 clinicalResult.getCrCodeDisplayText());
+			
+			//valUOMCdId = insertOrsaveConceptDescriptor(con, clinicalResult
+			//		.getValueUnitOfMeasureCd(), null, null);
+			
+			//labTestCdId = insertOrsaveConceptDescriptor(con, clinicalResult
+			//		.getMeansVitStatObtCd(), null, null);
+			
 		}
-
+        System.out.println("The labTestCdId"+ labTestCdId);
 		if (labTestCdId == null) // This is a required field in the database
 			return;
 		PreparedStatement ps = null;
@@ -990,19 +993,19 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		if (lt && val) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ORG_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?)");
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?)");
 			ps.setLong(7, valUOMCdId);
 			ps.setLong(8, labTestCdId);
 		} else if (!lt && !val) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ORG_ID, REFERENCE_FLAG, VALUE)  values(?,?,?,?,?,?)");
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE)  values(?,?,?,?,?,?)");
 		} else if (!lt) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ORG_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
 			ps.setLong(7, valUOMCdId);
 		} else if (!val) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ORG_ID, REFERENCE_FLAG, VALUE, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
 			ps.setLong(7, labTestCdId);
 		}
 
@@ -1016,7 +1019,55 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ps.execute();
 
 	}
+	/**
+	 * @param con
+	 * @param code
+	 * @param codeSystemVersion
+	 * @param displayText
+	 * @return
+	 * @throws SQLException
+	 */
+	private Long insertOrsaveConceptDescriptor(Connection con, String code,String codeSystem,String codeSystemName,
+			Double codeSystemVersion, String displayText) throws SQLException {
 
+		if (code == null)
+			return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long id = null;
+		System.out.println("The code is --" + code);
+		ps = con
+				.prepareStatement("select id from concept_descriptor where code = ?");
+		ps.setString(1, code);
+		rs = ps.executeQuery();
+		if (rs.next()) {
+			return rs.getLong(1);
+		} else {
+			Statement stmt = con.createStatement();
+
+			rs = stmt
+					.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
+			rs.next();
+			id = rs.getLong(1);
+			System.out.println("The concept descriptor id is --" + id);
+			ps = con
+					.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE,CODE_SYSTEM,CODE_SYSTEM_NAME,CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?,?,?)");
+			ps.setLong(1, id);
+			ps.setString(2, code);
+			ps.setString(3, codeSystem);
+			ps.setString(4, codeSystemName);
+			if (codeSystemVersion != null)
+				ps.setDouble(5, codeSystemVersion);
+			else
+				ps.setDouble(5, 0);
+			ps.setString(6, displayText);
+			ps.execute();
+			con.commit();
+
+			return id;
+		}
+
+	}
 	/**
 	 * @param con
 	 * @param code
@@ -1098,6 +1149,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps.setString(3, performingLaboratory.getPlName());
 			ps.execute();
 		}
+		System.out.println("The performing lab id"+ performingLaboratory.getOrganizationId());
 	}
 
 	/**
