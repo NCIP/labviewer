@@ -13,6 +13,8 @@ public class Participant {
 	private Date birthDate = null;
 	private String birthDateOrig = null;
 	private String adminGenderCode = null;
+	private String adminGenderCodeSystem = null;
+	private String adminGenderCodeSystemName = null;
 	
 	private String telecomAddress=null;
 	private String streetAddress = null;
@@ -28,6 +30,8 @@ public class Participant {
 	private String householdIncomeCode=null;
 	private String maritalStatusCode;
 	private String raceCode;
+	private String raceCodeSystem;
+	private String raceCodeSystemName;
 	private String employmentStatusCode = null;
 	private String employmentStatusOtherTxt = null;
 	
@@ -431,6 +435,54 @@ public class Participant {
 	 */
 	public void setIdentifier(Identifier identifier) {
 		this.identifier = identifier;
+	}
+	/**
+	 * @return the adminGenderCodeSystem
+	 */
+	public String getAdminGenderCodeSystem() {
+		return adminGenderCodeSystem;
+	}
+	/**
+	 * @param adminGenderCodeSystem the adminGenderCodeSystem to set
+	 */
+	public void setAdminGenderCodeSystem(String adminGenderCodeSystem) {
+		this.adminGenderCodeSystem = adminGenderCodeSystem;
+	}
+	/**
+	 * @return the adminGenderCodeSystemName
+	 */
+	public String getAdminGenderCodeSystemName() {
+		return adminGenderCodeSystemName;
+	}
+	/**
+	 * @param adminGenderCodeSystemName the adminGenderCodeSystemName to set
+	 */
+	public void setAdminGenderCodeSystemName(String adminGenderCodeSystemName) {
+		this.adminGenderCodeSystemName = adminGenderCodeSystemName;
+	}
+	/**
+	 * @return the raceCodeSystem
+	 */
+	public String getRaceCodeSystem() {
+		return raceCodeSystem;
+	}
+	/**
+	 * @param raceCodeSystem the raceCodeSystem to set
+	 */
+	public void setRaceCodeSystem(String raceCodeSystem) {
+		this.raceCodeSystem = raceCodeSystem;
+	}
+	/**
+	 * @return the raceCodeSystemName
+	 */
+	public String getRaceCodeSystemName() {
+		return raceCodeSystemName;
+	}
+	/**
+	 * @param raceCodeSystemName the raceCodeSystemName to set
+	 */
+	public void setRaceCodeSystemName(String raceCodeSystemName) {
+		this.raceCodeSystemName = raceCodeSystemName;
 	}
 	
 	
