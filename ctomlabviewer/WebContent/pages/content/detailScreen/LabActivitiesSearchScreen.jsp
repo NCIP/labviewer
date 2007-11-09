@@ -11,17 +11,29 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
 	prefix="nested"%>
 	
+<!-- laf box 1st half -->
+<p> </p>
+<div class="box">
+	<div class="pane" align=center>
+	    <!-- header -->
+	    <div class="header"><div class="background-L"><div class="background-R">
+	      <h2>Enter The Lab Activity Search Criteria</h2>
+	    </div></div></div>
+	    <!-- end header -->
+	    <!-- inner border -->
+	    <div class="border-T"><div class="border-L"><div class="border-R"><div class="border-B"><div class="border-TL"><div class="border-TR"><div class="border-BL"><div class="border-BR">
+	        <div class="interior"> <!-- interior -->
+	            <div class="content">
+<!-- laf box 1st half -->
 <div>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" width="100%" height="100%">
+		width="90%" height="50%">
 		<tr>
 			<td>
-				<h4>
-				<br>
+				<font size="2" face="verdana">
 					Search for an existing Lab Activity by entering the Study Id,
 					Patient Id, Begin Date, and End Date.
-				<br>	
-				</h4>
+				</font>
 			</td>
 		</tr>
 		<tr>
@@ -31,25 +43,24 @@
 		</tr> 
 		<tr>
 			<td valign="top">
-				<table cellpadding="0" cellspacing="0" border="0" width="100%"
-					class="contentBegins" height="100%">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 					<tr>
 						<td>
 							<table summary="" cellpadding="0" cellspacing="0" border="0"
 								width="100%" height="100%">
-								<tr>
-									<td class="dataTablePrimaryLabel" height="20">
-										<b>ENTER THE LAB ACTIVITY SEARCH CRITERIA</b>
-									</td>
-								</tr>
 								<tr>
 									<td>
 										<html:form action="search.do" method="post">
 											<table cellpadding="0" cellspacing="0" border="0"
 												width="100%" height="100%">
 												<tr>
-													<td class="formRequiredLabel">
+													<td align=right>
+													<font size="2" face="verdana">
+													<b>
 														* Study Identifier
+													</b>
+													</td>
+													<td width=10>
 													</td>
 													<td>
 														<html:text property="studyId"/>
@@ -57,8 +68,14 @@
 												
 												</tr>
 												<tr>
-													<td class="formRequiredLabel">
+													<td align=right>
+													<font size="2" face="verdana">
+													<b>
 														* Patient Identifier
+													</b>
+												    </font>
+													</td>
+													<td width=10>
 													</td>
 													<td>
 														<html:text property="patientId" />
@@ -66,8 +83,14 @@
 													
 												</tr>
 												<tr>
-													<td class="formRequiredLabel">
+													<td align=right>
+													<font size="2" face="verdana">
+													<b>
 														* Begin Date (MM/DD/YYYY)
+													</b>
+												    </font>
+													</td>
+													<td width=10>
 													</td>
 													<td>
 														<html:text property="beginDate" />
@@ -76,14 +99,20 @@
 												</tr>
 												
 												<tr>
-													<td class="formRequiredLabel">
+													<td align=right>
+													<font size="2" face="verdana">
+													<b>
 														* End Date (MM/DD/YYYY)
+													</b>
+												    </font>
+													</td>
+													<td width=10>
 													</td>
 													<td>
 														<html:text property="endDate" />
 													</td>
-													</tr>
-													<tr>
+												</tr>
+												<tr>
 													<td align="right" class="actionSection">
 														<!-- action buttons begins -->
 														<table cellpadding="4" cellspacing="0" border="0">
@@ -114,3 +143,11 @@
 					</tr>
 				</table>
 </div>
+<!-- laf box 2nd half -->
+	        </div>  <!-- content -->
+        </div><!-- interior -->
+    </div></div></div></div></div></div></div></div>
+    <!-- end inner border -->
+	</div>
+</div>
+<!-- laf box 2nd half -->
