@@ -8,11 +8,15 @@
 	<!-- Base layouts -->
 	<definition name="Base" page="/pages/layout/BaseLayout.jsp">
 		<put name="OrgHeader" value="/pages/header/OrgHeader.jsp" />
+<!-- 
 		<put name="AppHeader" value="/pages/header/AppHeader.jsp" />
+-->
 		<put name="AppMenu" value="/pages/menu/MainMenu.jsp"/>
 		<put name="AppAdminMenu" value="/pages/menu/SuperAdminMenu.jsp"/>		
+<!-- 
 		<put name="AppFooter" value="/pages/footer/AppFooter.jsp" />
 		<put name="OrgFooter" value="/pages/footer/OrgFooter.jsp" />
+-->
 		<put name="Title" type="string"	value="CTOM Lab Viewer" />
 	</definition>
 

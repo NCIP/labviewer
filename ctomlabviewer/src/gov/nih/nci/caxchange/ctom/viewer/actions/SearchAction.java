@@ -440,12 +440,11 @@ public class SearchAction extends Action
 											labActivityResult.setLowRange(String.valueOf(lowRange));
 											highRange = labResult.getReferenceRangeHigh();
 
-											if (numericResult != null)
+											if ((numericResult != null) && (lowRange != null) && (highRange != null))
 											{
 												if (numericResult < lowRange || numericResult > highRange)
 												{
 													labActivityResult.setIsAdverseEvent(DisplayConstants.YES);
-													System.out.println(DisplayConstants.YES);
 												}
 												else
 												{

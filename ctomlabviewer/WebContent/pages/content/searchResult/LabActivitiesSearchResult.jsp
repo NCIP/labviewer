@@ -73,8 +73,21 @@
 // -->
 </script>
 
+<!-- laf box 1st half -->
+<p> </p>
+<div class="box">
+	<div class="pane" align=center>
+    <!-- header -->
+	    <div class="header"><div class="background-L"><div class="background-R">
+	      <h2>Lab Activities - Search Results</h2>
+	    </div></div></div>
+	    <!-- inner border -->
+	    <div class="border-T"><div class="border-L"><div class="border-R"><div class="border-B"><div class="border-TL"><div class="border-TR"><div class="border-BL"><div class="border-BR">
+	        <div class="interior"> <!-- interior -->
+	            <div class="content">
+<!-- laf box 1st half -->
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="90%">
 	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self">
 		<html:hidden property="operation" value="read" />
 		<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
@@ -82,13 +95,6 @@
 		<html:hidden property="mrn" value="" />
 		<html:hidden property="nciIdentifier" value="" />
 		<html:hidden property="recordId" value="" />
-		<tr>
-			<td>
-				<h2>
-					Lab Activities
-				</h2>
-			</td>
-		</tr>
 		<tr>
 			<td colspan="3">
 				<html:errors />
@@ -107,11 +113,6 @@
 					<tr>
 						<td>
 							<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-								<tr>
-									<td class="dataTablePrimaryLabel" height="20">
-										SEARCH RESULTS
-									</td>
-								</tr>
 								<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 									<bean:define name="<%=DisplayConstants.SEARCH_RESULT%>" property="searchResultObjects" id="searchResultObjects" />
 									<bean:define id="oddRow" value="true" />
@@ -315,6 +316,14 @@
 	</html:form>
 </table>
 
+<!-- laf box 2nd half -->
+	        </div>  <!-- content -->
+        </div><!-- interior -->
+    </div></div></div></div></div></div></div></div>
+    <!-- end inner border -->
+	</div>
+</div>
+<!-- laf box 2nd half -->
 
 
 
