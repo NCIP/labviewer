@@ -1,0 +1,21 @@
+<!-- Note: although the syntax is the same, this file is interpreted by
+           gov.nih.nci.cabig.ctms.tools.sitemesh.PathInfoDecoratorMapper,
+           not SiteMesh's standard ConfigDecoratorMapper.
+-->
+
+<decorators defaultdir="/WEB-INF/decorators">
+    <decorator name="standard" page="standard.jsp">
+        <pattern>/</pattern>
+        <pattern>/index.jsp</pattern>
+        <pattern>/normal.jsp</pattern>
+    </decorator>
+
+    <decorator name="tabbedflow" page="tabbedflow.jsp">
+        <pattern>/tabbed.jsp</pattern>
+    </decorator>
+
+    <excludes>
+        <pattern>/*/image/*</pattern>
+        <pattern>/*/js/*</pattern>
+    </excludes>
+</decorators>
