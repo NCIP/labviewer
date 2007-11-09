@@ -1,0 +1,151 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ctms-commons-laf</artifactId>
+    <packaging>jar</packaging>
+    <name>ctms-commons-laf</name>
+    <description>
+        Includes common look-and-feel implementation for CTMS applications,
+        including a servlet for serving assets (images, stylesheets, etc.)
+        from the classpath.
+    </description>
+    <parent>
+        <groupId>gov.nih.nci.cabig.ctms</groupId>
+        <artifactId>ctms-commons</artifactId>
+        <version>0.5-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <demo-path>src/demo/webapp</demo-path>
+        <demo-base>${basedir}/${demo-path}</demo-base>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+                <configuration>
+                    <contextPath>/demo</contextPath>
+                    <connectors>
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                            <port>4040</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                    <useTestClasspath>true</useTestClasspath>
+                    <webAppSourceDirectory>${demo-base}</webAppSourceDirectory>
+                    <webXml>${demo-base}/WEB-INF/web.xml</webXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-to-demo-app</id>
+                        <phase>test-compile</phase>
+                        <goals> <goal>run</goal> </goals>
+                        <configuration>
+                            <tasks>
+                                <echo>Copy tagfiles to demo app</echo>
+                                <mkdir dir="${demo-base}/WEB-INF/tags" />
+                                <copy todir="${demo-base}/WEB-INF/tags">
+                                    <fileset dir="${basedir}/src/main/resources/META-INF/tags" />
+                                </copy>
+                                <copy file="${basedir}/src/main/resources/META-INF/laf.tld" tofile="${demo-base}/WEB-INF/laf.tld" overwrite="true">
+                                    <filterset begintoken="/META" endtoken="INF">
+                                        <filter token="-" value="/WEB-INF" />
+                                    </filterset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <!-- Clean files copied for demo app -->
+                        <fileset>
+                            <directory>${demo-path}/WEB-INF</directory>
+                            <includes>
+                                <include>tags</include>
+                                <include>laf.tld</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ctms-commons-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>ctms-commons-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring</artifactId>
+            <!-- version is in parent pom -->
+        </dependency>
+
+        <!-- BUILD-ONLY DEPS -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- RUNTIME-ONLY DEPS -->
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- TEST-ONLY DEPS -->
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-mock</artifactId>
+            <!-- version is in parent pom -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>2.2.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
