@@ -6,10 +6,6 @@
 	<display-name>CTOM Lab Viewer</display-name>
 	<description>CTOM Lab Viewer</description>
 
-
-
-
-
 	<filter>
 		<filter-name>GridProxyFilter</filter-name>
 		<filter-class>gov.nih.nci.cabig.ctms.web.sso.GridProxyFilter</filter-class>
@@ -42,13 +38,10 @@
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
-
 	<servlet>
 		<servlet-name>LabSearch</servlet-name>
 		<servlet-class>gov.nih.nci.ctom.labviewer.servlet.LabSearch</servlet-class>
 	</servlet>
-
-
 
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>
@@ -58,7 +51,6 @@
 		<servlet-name>LabSearch</servlet-name>
 		<url-pattern>/LabSearch</url-pattern>
 	</servlet-mapping>
-
 
 	<!--Application Configuration Parameters-->
 	<session-config>
@@ -85,7 +77,6 @@
 	</error-page>
 
 	<!-- JSTL Tag Library Descriptors -->
-
 	<taglib>
 		<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
 		<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
@@ -94,6 +85,11 @@
 	<taglib>
 		<taglib-uri>http://java.sun.com/jstl/xml</taglib-uri>
 		<taglib-location>/WEB-INF/tld/x.tld</taglib-location>
+	</taglib>
+
+	<taglib>
+		<taglib-uri>http://gforge.nci.nih.gov/projects/ctmscommons/taglibs/laf</taglib-uri>
+		<taglib-location>/WEB-INF/tld/laf.tld</taglib-location>
 	</taglib>
 
 	<!-- Struts Tag Library Descriptors -->
