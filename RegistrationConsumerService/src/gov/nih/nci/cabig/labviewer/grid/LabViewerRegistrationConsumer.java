@@ -31,6 +31,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
 		logger.info("Lab Viewer Registration message received");
+		System.out.println("Lab registration received");
 		StudyRefType studyRef = registration.getStudyRef();
 	
 		// save the study data
@@ -96,6 +97,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		studyPartAssig.setStudyPartIdOrig(tmp);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
+		
+		System.out.println("Data populated");
 		
 		// Now create the DAO and save
 		CTLabDAO dao = new CTLabDAO();
