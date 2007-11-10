@@ -87,7 +87,7 @@
 	            <div class="content">
 <!-- laf box 1st half -->
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="90%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="100%">
 	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self">
 		<html:hidden property="operation" value="read" />
 		<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
@@ -147,9 +147,11 @@
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Upper Limit
 													</th>
+													<!--
 													<th class="dataTableHeader" scope="col" align="center" width="13%">
 														Adverse Events
 													</th>
+													-->
 												</tr>
 												<logic:iterate name="searchResultObjects" id="searchResultObject" type="LabActivityResult">
 													<%if (oddRow.equals("true"))
@@ -203,6 +205,7 @@
 															<bean:write name="searchResultObject" property="highRange" />
 															&nbsp;
 														</td>
+														<!--
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="<%="0"%>">
 															<td class="dataCellText" width="15%">
 																<html:button style="actionButton" property="adverseEventReported" onclick="<%="submitAdverseEvent('"+searchResultObject.getRecordId()+"');"%>">Submit</html:button>
@@ -219,6 +222,7 @@
 																&nbsp;
 															</td>
 														</logic:notEqual>
+														-->
 													</tr>
 													<%}
 													else
@@ -268,6 +272,7 @@
 															<bean:write name="searchResultObject" property="highRange" />
 															&nbsp;
 														</td>
+														<!--
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="<%="0"%>">
 															<td class="dataCellText" width="15%">
 																<html:button style="actionButton" property="adverseEventReported" onclick="<%="submitAdverseEvent('"+searchResultObject.getRecordId()+"');"%>">Submit</html:button>
@@ -284,6 +289,7 @@
 																&nbsp;
 															</td>
 														</logic:notEqual>
+														-->
 													</tr>
 													<%}%>
 												</logic:iterate>
