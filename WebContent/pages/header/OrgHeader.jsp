@@ -71,8 +71,8 @@ function MM_swapImage() { //v3.0
 <!-- combination of laf header.tag and CTOM MainMenu.jsp -->
 <div id="header">
     <div class="background-R">
-        <img src="images/CTOM.gif" alt="UPT Home" id="logo" width="129" height="40">
-        <img src="images/ctom_txt.gif" alt="ctom txt" id="tagline" width="268" height="22">
+        <img src="images/CTOM.gif" alt="Lab Viewer Logo" id="logo" width="129" height="40">
+        <img src="images/ctom_txt.gif" alt="CTODS text" id="tagline" width="268" height="22">
     </div>
     <div id="login-action">
         <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')">Log out</a>

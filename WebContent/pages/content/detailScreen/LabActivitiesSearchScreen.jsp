@@ -27,7 +27,7 @@
 <!-- laf box 1st half -->
 <div>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		width="90%" height="50%">
+		width="90%" height="100%">
 		<tr>
 			<td>
 				<font size="2" face="verdana">

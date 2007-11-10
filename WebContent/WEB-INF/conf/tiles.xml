@@ -17,7 +17,7 @@
 		<put name="AppFooter" value="/pages/footer/AppFooter.jsp" />
 		<put name="OrgFooter" value="/pages/footer/OrgFooter.jsp" />
 -->
-		<put name="Title" type="string"	value="CTOM Lab Viewer" />
+		<put name="Title" type="string"	value="CTODS Lab Viewer" />
 	</definition>
 
 	<!-- Pages Begin -->
