@@ -9,15 +9,7 @@
 <table width="100%" height="50" border="0" cellspacing="0" cellpadding="0" class="subhdrBG">
 							<tr>
 							
-							<!-- new separate links depending on admin or super admin -->
-							
-							 <logic:present name="<%=DisplayConstants.ADMIN_USER%>">
-							 <td height="50" width="400" align="left"><html:link forward="AdminHome"><html:img src="images/appLogo.gif" alt="UPT Home" hspace="10" border="0"/></html:link></td>
-							 </logic:present>
-								
-							<logic:notPresent name="<%=DisplayConstants.ADMIN_USER%>">
-							<td height="50" width="400" align="left"><html:link forward="Home"><html:img src="images/appLogo.gif" alt="UPT Home" hspace="10" border="0"/></html:link></td>
-							</logic:notPresent>		
+							<td height="50" width="400" align="left"><html:link forward="Home"><html:img src="images/appLogo.gif" alt="Lab Viewer Logo" hspace="10" border="0"/></html:link></td>		
 								
 							<!-- end home links -->	
 								

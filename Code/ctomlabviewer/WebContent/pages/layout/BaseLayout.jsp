@@ -22,7 +22,7 @@
 	<!-- Page Title ends -->
 </head>
 <body>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="85%">
 
 	<!-- NCI hdr begins -->
   <tr>
@@ -32,7 +32,7 @@
   <!-- NCI hdr ends -->
   <tr>
     <td height="100%" align="center" valign="top">
-      <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" width="90%">
+      <table summary="" cellpadding="0" cellspacing="0" border="0" height="80%" width="90%">
 				<!-- application hdr begins -->
 <!-- 
 				<tr>
@@ -83,5 +83,8 @@
   </tr>
 -->
 </table>
+<br>
+<br>
+<br>
 </body>
 </html:html>

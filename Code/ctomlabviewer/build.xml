@@ -2,7 +2,7 @@
 	<description>UPT Project Build File</description>
 
 	<target name="init" >
-		<property name="app.name"				value="ctomlabviewer" />
+		<property name="app.name"				value="ctodslabviewer" />
 		<property name="app.path"				value="/${app.name}" />
 		<property name="src.home"				value="${basedir}/src" />
 		<property name="sdkclient.home"			value="${basedir}/sdkclient/conf" />
