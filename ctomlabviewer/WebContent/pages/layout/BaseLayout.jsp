@@ -22,7 +22,7 @@
 	<!-- Page Title ends -->
 </head>
 <body>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="85%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
 
 	<!-- NCI hdr begins -->
   <tr>
@@ -32,15 +32,7 @@
   <!-- NCI hdr ends -->
   <tr>
     <td height="100%" align="center" valign="top">
-      <table summary="" cellpadding="0" cellspacing="0" border="0" height="80%" width="90%">
-				<!-- application hdr begins -->
-<!-- 
-				<tr>
-					<td height="50"><tiles:get name="AppHeader"/>
-					</td>
-				</tr>
--->
-				<!-- application hdr ends -->
+      <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" width="90%">
     	            
 			  <!-- main content begins -->
               <tr>
@@ -50,40 +42,14 @@
                 </td>
               </tr>
 			  <!-- main content ends -->
-<!-- 
-              <tr>
-                <td height="20" width="100%" class="footerMenu">
--->              
-                  <!-- application ftr begins -->
-<!-- 
-                  <tiles:get name="AppFooter"/>
--->              
-                  <!-- application ftr ends -->
-<!-- 
-                </td>
-              </tr>
--->              
             </table>
           </td>
         </tr>
       </table>
     </td>
   </tr>
-<!-- 
-  <tr>
-    <td>
--->              
-      <!-- NCI footer begins -->
-<!-- 
-      <tiles:get name="OrgFooter"/>
--->              
-      <!-- NCI footer ends -->
-<!-- 
-    </td>
-  </tr>
--->
 </table>
-<br>
+<br>  <!-- 3 br to fix bottom border and caBIG footer overlay -->
 <br>
 <br>
 </body>
