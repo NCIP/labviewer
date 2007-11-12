@@ -12,7 +12,6 @@
 </script>
 
 <!-- laf box 1st half -->
-<p> </p>
 <div class="box">
 	<div class="pane" align=center>
 	    <!-- header -->
