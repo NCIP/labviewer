@@ -12,7 +12,6 @@
 	prefix="nested"%>
 	
 <!-- laf box 1st half -->
-<p> </p>
 <div class="box">
 	<div class="pane" align=center>
 	    <!-- header -->
@@ -27,7 +26,7 @@
 <!-- laf box 1st half -->
 <div>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		width="90%" height="100%">
+		width="90%" height="50%">
 		<tr>
 			<td>
 				<font size="2" face="verdana">
@@ -43,7 +42,7 @@
 		</tr> 
 		<tr>
 			<td valign="top">
-				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
 					<tr>
 						<td>
 							<table summary="" cellpadding="0" cellspacing="0" border="0"
@@ -65,7 +64,6 @@
 													<td>
 														<html:text property="studyId"/>
 													</td>
-												
 												</tr>
 												<tr>
 													<td align=right>
@@ -80,7 +78,6 @@
 													<td>
 														<html:text property="patientId" />
 													</td>
-													
 												</tr>
 												<tr>
 													<td align=right>
@@ -95,9 +92,7 @@
 													<td>
 														<html:text property="beginDate" />
 													</td>
-													
 												</tr>
-												
 												<tr>
 													<td align=right>
 													<font size="2" face="verdana">
@@ -117,7 +112,6 @@
 														<!-- action buttons begins -->
 														<table cellpadding="4" cellspacing="0" border="0">
 															<tr>
-
 																<td>
 																	<html:reset style="actionButton">Reset</html:reset>
 																</td>
@@ -131,14 +125,11 @@
 														<td align="left">
 														<h5> * indicates the fields required </h5>
 														</td></tr>
-													
 											</table>
 											</html:form>
-											
 									</td>
 								</tr>
 							</table>
-							
 						</td>
 					</tr>
 				</table>

@@ -70,20 +70,24 @@ function MM_swapImage() { //v3.0
 <!-- end copy from CTOM MainMenu.jsp -->
 <!-- combination of laf header.tag and CTOM MainMenu.jsp -->
 <div id="header">
+	<!-- Render logo, header background and logo text -->
     <div class="background-R">
-        <img src="images/CTOM.gif" alt="Lab Viewer Logo" id="logo" width="129" height="40">
-        <img src="images/ctom_txt.gif" alt="CTODS text" id="tagline" width="268" height="22">
+        <img src="images/CTOM.gif" alt="UPT Home" id="logo" width="129" height="40">
+        <img src="images/ctom_txt.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>
+    <!-- Add log out link -->
     <div id="login-action">
         <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')">Log out</a>
     </div>
 
+	<!-- if log in, enable menu and login id -->
 	<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
+	    <!-- display login id using smaller font below log out link -->
 	    <div id="login-id">
 			<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
 	        <font color=white>Login ID: <bean:write name="loginObject" property="loginId" /></font>
 	    </div>
-	
+		<!-- add menu items, 2 only here -->
 	    <ul id="sections" class="tabs" align=center>
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.HOME_ID)){%>
 		    	<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.HOME_ID%>')">Home</a></div></li>
@@ -98,6 +102,7 @@ function MM_swapImage() { //v3.0
 	    </ul>
 	</logic:present>
 
+	<!-- Add task bar, menu tips, under menu -->
     <div id="taskbar">
 		<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.HOME_ID)){%>
