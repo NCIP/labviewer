@@ -18,6 +18,7 @@ import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 public class LabViewerRegistrationTest
 {
 	String serviceUrl = "http://localhost:8080/wsrf/services/cagrid/RegistrationConsumer";
+	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
 	String sampleFile = "/SampleRegistrationMessage.xml";
 	
 	/**

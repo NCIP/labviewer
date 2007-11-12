@@ -12,7 +12,7 @@ public class LabLoaderTest
 	String sampleFile = "/SampleHL7v3.xml";
 	
 	/**
-	 * @param args
+	 * @param args 
 	 */
 	public static void main(String[] args)
 	{

@@ -74,7 +74,6 @@
 </script>
 
 <!-- laf box 1st half -->
-<p> </p>
 <div class="box">
 	<div class="pane" align=center>
     <!-- header -->
@@ -177,6 +176,7 @@
 															<bean:write name="searchResultObject" property="textResult" />
 															&nbsp;
 														</td>
+														
 														<logic:equal name="searchResultObject" property="isAdverseEvent" value="<%=DisplayConstants.YES%>">
 															<td class="dataCellText" width="9%" bgcolor="#ffiooo">
 																<bean:write name="searchResultObject" property="numericResult" />
@@ -194,8 +194,6 @@
 															<bean:write name="searchResultObject" property="unitOfMeasure" />
 															&nbsp;
 														</td>
-
-
 
 														<td class="dataCellText" width="9%">
 															<bean:write name="searchResultObject" property="lowRange" />

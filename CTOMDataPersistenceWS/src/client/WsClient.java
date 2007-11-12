@@ -79,6 +79,7 @@ public class WsClient {
         XFireProxyFactory factory = new XFireProxyFactory(xfire);      
         //String serviceUrl = "xfire.local://Banking" ;         
         String serviceUrl = "http://localhost:8080/CTOMDataPersistenceWebService/services/CTOMDataPersistenceService";
+        //String serviceUrl = "http://cbiovqa5010.nci.nih.gov:8080/CTOMDataPersistenceWebService/services/CTOMDataPersistenceService";
         //String serviceUrl = "http://localhost:9080/CTOMDataPersistenceWebService/services/CTOMDataPersistenceService";
        //String serviceUrl =  "http://cbiodev104.nci.nih.gov:59080/CTOMDataPersistenceWebService/services/CTOMDataPersistenceService";
         CTOMDataPersistenceService client = null;
