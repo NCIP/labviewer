@@ -16,8 +16,8 @@
 			xmlns:ns1="http://ccts.nci.nih.gov/RegistrationConsumer/types"
 			xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"
 			xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns:ns0="gme://c3pr.cabig/2.0/edu.duke.cabig.c3pr.domain"
-			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security">
+			xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"
+			xmlns:ns0="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
         <!-- Specifies that the index should refresh information
             every 300000 milliseconds (once every 5 minutes) -->
         <agg:PollIntervalMillis>30000</agg:PollIntervalMillis>

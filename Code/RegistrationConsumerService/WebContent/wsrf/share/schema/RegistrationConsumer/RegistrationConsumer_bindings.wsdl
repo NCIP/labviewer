@@ -18,6 +18,30 @@
         <soap:fault name="RegistrationConsumptionException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="rollback">
+      <soap:operation soapAction="http://ccts.nci.nih.gov/RegistrationConsumer/RollbackRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidRegistrationException">
+        <soap:fault name="InvalidRegistrationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="commit">
+      <soap:operation soapAction="http://ccts.nci.nih.gov/RegistrationConsumer/CommitRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidRegistrationException">
+        <soap:fault name="InvalidRegistrationException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="GetResourceProperty">
       <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
       <wsdl:input>
