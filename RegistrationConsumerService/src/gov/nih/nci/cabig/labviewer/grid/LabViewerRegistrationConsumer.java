@@ -27,6 +27,18 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 {
 	private static final Log logger = LogFactory.getLog(LabViewerRegistrationConsumer.class);
 	
+	public void commit(Registration registration) throws RemoteException, InvalidRegistrationException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void rollback(Registration registration) throws RemoteException, InvalidRegistrationException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public Registration register(Registration registration)
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
