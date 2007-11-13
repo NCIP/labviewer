@@ -43,7 +43,6 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
 		logger.info("Lab Viewer Registration message received");
-		System.out.println("Lab registration received");
 		StudyRefType studyRef = registration.getStudyRef();
 	
 		// save the study data
@@ -51,6 +50,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		protocol.setLongTxtTitle(studyRef.getLongTitleText());
 		protocol.setShortTxtTitle(studyRef.getShortTitleText());
 	   	IdentifierType identifiers[] = studyRef.getIdentifier();
+	   	
         // save the identifier data	
 		for(IdentifierType ident: identifiers)
 		{
@@ -99,18 +99,19 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			
 		else
 		{
-			throw new InvalidRegistrationException();
+			InvalidRegistrationException ire = new InvalidRegistrationException();
+			ire.setFaultString("Invalid patient registration message missing patient identifier");
+			throw ire;
 		}
 		
 		StudyParticipantAssignment studyPartAssig = new StudyParticipantAssignment();
 		studyPartAssig.setParticipant(part);
-		String tmp =participant.getGridId()+"."+id.getValue();
-		System.out.println(tmp);
+		String tmp = participant.getGridId()+"."+id.getValue();
 		studyPartAssig.setStudyPartIdOrig(tmp);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
 		
-		System.out.println("Data populated");
+		logger.info("Lab Viewer Registration message validated");
 		
 		// Now create the DAO and save
 		CTLabDAO dao = new CTLabDAO();
@@ -123,13 +124,19 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		catch (SQLException e)
 		{
 			logger.error("Error saving participant", e);
-			throw new RegistrationConsumptionException();
+			RegistrationConsumptionException rce = new RegistrationConsumptionException();
+			rce.setFaultString(e.getMessage());
+			throw rce;
 		}
 		catch (Exception e)
 		{
 			logger.error("Error saving participant", e);
-			throw new RegistrationConsumptionException();
+			RegistrationConsumptionException rce = new RegistrationConsumptionException();
+			rce.setFaultString(e.getMessage());
+			throw rce;
 		}
+		
+		logger.info("Lab Viewer Registration message stored");
 		
 		return registration;
 	}
