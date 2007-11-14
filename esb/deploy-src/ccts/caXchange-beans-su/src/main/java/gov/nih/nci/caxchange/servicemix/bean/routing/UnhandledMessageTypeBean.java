@@ -1,4 +1,4 @@
-package gov.nih.nci.caxchange.servicemix.bean;
+package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;

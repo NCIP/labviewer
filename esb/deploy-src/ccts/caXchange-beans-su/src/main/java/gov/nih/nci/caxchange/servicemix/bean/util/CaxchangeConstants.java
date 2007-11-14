@@ -1,4 +1,4 @@
-package gov.nih.nci.caxchange.servicemix.bean;
+package gov.nih.nci.caxchange.servicemix.bean.util;
 
 import java.util.HashSet;
 import java.util.Set;
