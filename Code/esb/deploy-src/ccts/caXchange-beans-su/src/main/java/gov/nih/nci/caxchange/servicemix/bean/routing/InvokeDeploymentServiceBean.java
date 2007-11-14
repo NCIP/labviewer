@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gov.nih.nci.caxchange.servicemix.bean;
+package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
