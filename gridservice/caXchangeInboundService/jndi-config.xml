@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
+  <service name="SERVICE-INSTANCE-PREFIX/CaXchangeResponseService">
+    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.ResourceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>performRegistration</name>
+          <!-- Set this to false to skip ServiceGroup registration -->
+          <value>PERFORM_REGISTRATION</value>
+        </parameter>
+        <parameter>
+          <name>registrationTemplateFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
+          <value>ETC-PATH/CaXchangeResponseService_registration.xml</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="home" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>resourceClass</name>
+          <value>gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResource</value>
+        </parameter>
+        <parameter>
+          <name>resourceKeyName</name>
+          <value>{http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context}CaXchangeResponseServiceResultsKey</value>
+        </parameter>
+        <parameter>
+          <name>resourceKeyType</name>
+          <value>java.lang.String</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resourceLink name="serviceconfiguration" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaXchangeRequestProcessor/serviceconfiguration" />
+    <resourceLink name="caXchangeRequestProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaXchangeRequestProcessor/home" />
+  </service>
+  <service name="SERVICE-INSTANCE-PREFIX/CaXchangeRequestProcessor">
+    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.ResourceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>performRegistration</name>
+          <!-- Set this to false to skip ServiceGroup registration -->
+          <value>PERFORM_REGISTRATION</value>
+        </parameter>
+        <parameter>
+          <name>registrationTemplateFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
+          <value>ETC-PATH/CaXchangeRequestProcessor_registration.xml</value>
+        </parameter>
+        <parameter>
+          <name>serviceMetadataFile</name>
+          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
+          <value>ETC-PATH/serviceMetadata.xml</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.caxchange.service.ServiceConfiguration">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>caXchangeInboundBrokerURL</name>
+          <value>@caXchangeInboundBrokerURL@</value>
+        </parameter>
+        <parameter>
+          <name>caXchangeInboundDestination</name>
+          <value>@caXchangeInboundDestination@</value>
+        </parameter>
+        <parameter>
+          <name>caXchangeResponseDestination</name>
+          <value>@caXchangeResponseDestination@</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resource name="home" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome">
+      <resourceParams>
+        <parameter>
+          <name>factory</name>
+          <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+      </resourceParams>
+    </resource>
+    <resourceLink name="caXchangeResponseServiceHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaXchangeResponseService/home" />
+  </service>
+</jndiConfig>
+
