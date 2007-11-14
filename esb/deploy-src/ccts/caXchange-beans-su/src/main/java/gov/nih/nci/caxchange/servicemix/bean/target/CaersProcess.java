@@ -1,4 +1,4 @@
-package gov.nih.nci.caxchange.servicemix.bean;
+package gov.nih.nci.caxchange.servicemix.bean.target;
 
 import java.io.StringReader;
 
