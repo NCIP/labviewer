@@ -1,0 +1,57 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+    <appender name="JDBC_MySql" class="gov.nih.nci.logging.api.appender.jdbc.JDBCAppender">
+      <param name="application" value="WS" />
+      <param name="server" value="WEB1" />
+      <param name="maxBufferSize" value="25" />
+      <param name="dbDriverClass" value="com.mysql.jdbc.Driver" />
+      <param name="dbUrl" value="jdbc:mysql://localhost:3306/log" />
+      <param name="dbUser" value="root" />
+      <param name="dbPwd" value="love" />
+	  <param name="useFilter" value="true" />
+      <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern"
+                       value=":: [%d{ISO8601}] %-5p %c{1}.%M() %x - %m%n" />
+      </layout>
+    </appender>
+
+     <appender name="JDBC_ORA" class="gov.nih.nci.logging.api.appender.jdbc.JDBCAppender">
+      <param name="application" value="WS" />
+      <param name="server" value="WEB1" />
+      <param name="maxBufferSize" value="25" />
+      <param name="dbDriverClass" value="oracle.jdbc.driver.OracleDriver" />
+      <param name="dbUrl" value="jdbc:oracle:thin:@localhost:1521:devdb" />
+      <param name="dbUser" value="logging" />
+      <param name="dbPwd" value="l0gg1ng" />
+      <param name="useFilter" value="true" />
+
+      <layout class="org.apache.log4j.PatternLayout">
+           <param name="ConversionPattern"
+                       value=":: [%d{ISO8601}] %-5p %c{1}.%M() %x - %m%n" />
+      </layout>
+    </appender>
+    
+    <appender name="asyncJDBC" class="org.apache.log4j.AsyncAppender">
+   		<param name="BufferSize" value="500"/>
+   		<appender-ref ref="rollingLogFile"/>
+ 	</appender>
+
+ 	 <appender name="rollingLogFile" class="org.apache.log4j.RollingFileAppender">
+            <!-- uncomment for local grants_gov tomcat environment -->
+            <param name="File" value="C:/tmp/jdbcTest.log"/>
+            <param name="MaxFileSize" value="5MB"/>
+            <param name="MaxBackupIndex" value="0"/>
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern"
+                       value="[%d{ISO8601}][%-5p][%c{1}.%M()%L]-%m%n" />
+            </layout>
+        </appender>
+
+
+   <logger name="gov.nih.nci.caxchange.servicemix.jbi.audit">
+       <level value="INFO" />
+       <appender-ref ref="JDBC_MySql" />
+    </logger>  
+
+</log4j:configuration>

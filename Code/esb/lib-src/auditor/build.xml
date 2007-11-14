@@ -1,0 +1,73 @@
+<!--
+   Build file for the Caxchange CLM Auditor
+-->
+<project name="CaxchangeCLMAuditor" default="dist" basedir=".">
+	<description>Build file for the Caxchange CLM Auditor</description>
+
+	<!-- set global properties for this build -->
+	<property file="build.properties" />
+	<property name="src" location="src" />
+	<property name="lib" location="lib" />
+	<property name="build" location="build" />
+	<property name="output" location="${build}/classes" />
+	<property name="dist" location="dist" />
+	<property name="resources" location="resources" />
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}" />
+		<mkdir dir="${build}" />
+		<mkdir dir="${output}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<path id="compile" >
+	   <fileset dir="${lib}/compile" >
+	       <include name="*.jar"/>
+	       <include name="*.zip"/>
+	   </fileset>
+	</path>
+	
+	<path id="runtime">
+	   <fileset dir="${lib}/runtime" >
+	       <include name="*.jar"/>
+	       <include name="*.zip"/>
+	   </fileset>	
+	</path>
+	
+	<path id="classpath" >
+	   <path refid="compile" />
+	   <path refid="runtime" />
+	</path>
+
+	<target name="compile" depends="init"
+		description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" 
+		       destdir="${output}" 
+		       debug="${javac.debug}" 
+		       deprecation="${javac.deprecation}"
+                       classpathref="classpath">
+		</javac>
+		<copy todir="${output}">
+        		<fileset dir="${src}" includes="**/*" excludes="**/*.java"/>		       		
+	   	</copy>   
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<jar jarfile="${dist}/${JAR_FILE}" basedir="${output}" manifest="${resources}/MANIFEST.MF"/>
+		<copy todir="${dist}">
+			<fileset dir="${lib}/runtime">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean" description="perform the clean up">
+		<delete dir="${build}" />
+	</target>
+
+</project>
