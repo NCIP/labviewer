@@ -22,5 +22,48 @@
     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" qname="ns:TreatmentEpochType" type="java:gov.nih.nci.ccts.grid.TreatmentEpochType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" qname="ns:ScheduledNonTreatmentEpochType" type="java:gov.nih.nci.ccts.grid.ScheduledNonTreatmentEpochType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" qname="ns:ScheduledTreatmentEpochType" type="java:gov.nih.nci.ccts.grid.ScheduledTreatmentEpochType" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" />
+<typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:OrganizationAssignedIdentifierType"
+                  type="java:gov.nih.nci.ccts.grid.OrganizationAssignedIdentifierType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                  encodingStyle=""/>
+ 
+     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:SystemAssignedIdentifierType"
+                  type="java:gov.nih.nci.ccts.grid.SystemAssignedIdentifierType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                  encodingStyle=""/>
+ 
+     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:NonTreatmentEpochType"
+                  type="java:gov.nih.nci.ccts.grid.NonTreatmentEpochType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                  encodingStyle=""/>
+ 
+     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:TreatmentEpochType"
+                  type="java:gov.nih.nci.ccts.grid.TreatmentEpochType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                  encodingStyle=""/>
+ 
+     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:ScheduledNonTreatmentEpochType"
+                  type="java:gov.nih.nci.ccts.grid.ScheduledNonTreatmentEpochType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                  encodingStyle=""/>
+ 
+     <typeMapping xmlns:ns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+                  qname="ns:ScheduledTreatmentEpochType"
+                  type="java:gov.nih.nci.ccts.grid.ScheduledTreatmentEpochType"
+                  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+                  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+                 encodingStyle=""/>
+
+
 </deployment>
 
