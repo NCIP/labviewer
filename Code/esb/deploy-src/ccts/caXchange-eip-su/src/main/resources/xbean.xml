@@ -72,7 +72,7 @@
         <eip:exchange-target service="caxchange:pscProcess" />
       </eip:transformer>
       <eip:target>
-        <eip:exchange-target service="caxchage:caxchangeResponseAggregator" />
+        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
       </eip:target>
   </eip:pipeline>  
   
@@ -104,14 +104,14 @@
         <eip:exchange-target service="caxchange:caersProcess" />
       </eip:transformer>
       <eip:target>
-        <eip:exchange-target service="caxchage:caxchangeResponseAggregator" />
+        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
       </eip:target>
   </eip:pipeline>  
   
   
   <!-- End EIP Components for invoking the caAERS -->  
   <!-- EIP Aggregator -->
-  <eip:caxchangeAggregator service="caxchage:caxchangeResponseAggregator" endpoint="endpoint" timeOut="60000">
+  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="endpoint" timeOut="60000">
          <eip:target>
            <eip:exchange-target service="caxchange:aggregatorListener"  />
         </eip:target>

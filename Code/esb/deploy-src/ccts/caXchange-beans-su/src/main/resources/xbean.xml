@@ -36,21 +36,21 @@
   
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="endpoint" bean="#aggregatorListener" />
   
-  <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.PscProcess"/>
+  <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
   
-  <bean id="caersProcess" class="gov.nih.nci.caxchange.servicemix.bean.CaersProcess"/>
+  <bean id="caersProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersProcess"/>
   
-  <bean id="pscRollback" class="gov.nih.nci.caxchange.servicemix.bean.PscRollback"/>
+  <bean id="pscRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.PscRollback"/>
   
-  <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.CaersRollback"/>  
+  <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersRollback"/>  
 
-  <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.InvokeDeploymentServiceBean"/>
+  <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
   
-  <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.GenerateResponseBean"/>
+  <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean"/>
 
-  <bean id="unhandledMessageType" class="gov.nih.nci.caxchange.servicemix.bean.UnhandledMessageTypeBean" />
+  <bean id="unhandledMessageType" class="gov.nih.nci.caxchange.servicemix.bean.routing.UnhandledMessageTypeBean" />
   
-  <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.CaxchangeAggregatorListener" >
+  <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" >
       <property name="messageTypesEligibleForRollback" >
             <list>
                 <value>SUBJECT_CREATION</value>
