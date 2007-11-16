@@ -75,6 +75,8 @@ import org.apache.servicemix.jbi.util.MessageUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import gov.nih.nci.caxchange.servicemix.bean.util.*;
+
 public class InvokeDeploymentServiceBean implements MessageExchangeListener {
 
     @Resource

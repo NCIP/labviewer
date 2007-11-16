@@ -40,6 +40,8 @@ import org.w3c.dom.Document;
 
 import org.xml.sax.InputSource;
 
+import gov.nih.nci.caxchange.servicemix.bean.util.*;
+
 public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 
     @Resource
