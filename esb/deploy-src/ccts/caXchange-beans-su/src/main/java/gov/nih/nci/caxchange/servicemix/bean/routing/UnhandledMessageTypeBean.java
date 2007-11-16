@@ -17,6 +17,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
+import gov.nih.nci.caxchange.servicemix.bean.util.*;
 
 public class UnhandledMessageTypeBean implements MessageExchangeListener {
     @Resource
