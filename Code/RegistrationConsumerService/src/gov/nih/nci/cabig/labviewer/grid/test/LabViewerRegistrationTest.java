@@ -1,14 +1,14 @@
 package gov.nih.nci.cabig.labviewer.grid.test;
 
-import java.io.InputStream;
-import java.io.InputStreamReader; 
-
-import org.globus.wsrf.encoding.DeserializationException;
-import org.xml.sax.SAXException;
-
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.ccts.grid.Registration;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.globus.wsrf.encoding.DeserializationException;
+import org.xml.sax.SAXException;
 
 /**
  * Test class to test the Registration Consumer for lab viewer
@@ -49,6 +49,7 @@ public class LabViewerRegistrationTest
 			
 			// Call the service
 			client.register(reg); 
+			client.rollback(reg);
 		}
 		catch (Exception e)
 		{
