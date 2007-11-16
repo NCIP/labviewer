@@ -19,13 +19,21 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class LabViewerRegistrationConsumer implements RegistrationConsumer
 {
+	static final int MILLIS_PER_MINUTE = 60 * 60 * 60 * 1000;
+	static final int THRESHOLD_MINUTE =2;
 	private static final Log logger = LogFactory.getLog(LabViewerRegistrationConsumer.class);
+	private HashMap<String,ParticipantPersistTime> map = new HashMap<String,ParticipantPersistTime>();
+	private CTLabDAO dao = new CTLabDAO();
+	private Connection con;
+	
 	
 	public void commit(Registration registration) throws RemoteException, InvalidRegistrationException
 	{
@@ -33,12 +41,59 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ccts.grid.common.RegistrationConsumer#rollback(gov.nih.nci.ccts.grid.Registration)
+	 */
 	public void rollback(Registration registration) throws RemoteException, InvalidRegistrationException
 	{
 		// TODO Auto-generated method stub
 		
+		ParticipantType participant = registration.getParticipant();
+		String participantGridId = participant.getGridId();
+		long epochPersistTime=0;
+		long epochcurrentTime=0;
+		//need to get the hashmap from the application context
+		con = dao.getConnection();
+		if(map.containsKey(participantGridId))
+		{
+		try{ 
+			ParticipantPersistTime ppt = map.get(participantGridId);
+			Calendar persistTime = ppt.getPersistTime();
+			epochPersistTime = persistTime.getTime().getTime();
+			Calendar currentTime = Calendar.getInstance();
+			epochcurrentTime=currentTime.getTime().getTime();
+			double minutes = (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
+			if(minutes < THRESHOLD_MINUTE)
+			{	
+			dao.rollbackParticipant(con, ppt.getParticipant());
+			}
+			}
+			catch(SQLException se)
+			{
+				logger.error("Error deleting participant", se);
+			}
+			finally
+			{
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					logger.error("Error closing connection",e);
+				}
+			}
+		}
+		else{
+			InvalidRegistrationException ire = new InvalidRegistrationException();
+			ire.setFaultString("Invalid patient rollback message- no patient found with given gridid");
+			throw ire;
+		}
+		logger.info("deleted participant");
+		cleanupHashMap(epochcurrentTime);
 	}
 	
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ccts.grid.common.RegistrationConsumer#register(gov.nih.nci.ccts.grid.Registration)
+	 */
 	public Registration register(Registration registration)
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
@@ -110,17 +165,23 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		studyPartAssig.setStudyPartIdOrig(tmp);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
-		
+		con = dao.getConnection();
 		logger.info("Lab Viewer Registration message validated");
-		
-		// Now create the DAO and save
-		CTLabDAO dao = new CTLabDAO();
-		Connection con = dao.getConnection();
-		
 		try
 		{
 			dao.saveProtocol(con, protocol);
-		}
+			logger.info("Persisted the study with patient information");
+			//After you persist the protocol, put the participant associated with the
+			//protocol into a HashMap. 
+			//In case of roll back, check if the participant was just persisted
+			//then call roll back on that object.
+			Calendar persistTime = Calendar.getInstance();
+			ParticipantPersistTime partPersistTime = new ParticipantPersistTime();
+			partPersistTime.setParticipant(part);
+			partPersistTime.setPersistTime(persistTime);
+		    map.put(participant.getGridId(),partPersistTime);
+			//need to store the map in the application context		
+		   	}
 		catch (SQLException e)
 		{
 			logger.error("Error saving participant", e);
@@ -135,10 +196,38 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			rce.setFaultString(e.getMessage());
 			throw rce;
 		}
+		finally
+		{
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				logger.error("Error closing connection",e);
+			}
+		}
 		
 		logger.info("Lab Viewer Registration message stored");
 		
 		return registration;
+	}
+	
+	/**
+	 * Cleans up the hash map - looks for the time stamp value in all the ParticipantPersistTime
+	 * if it is difference between the current time and persist time is greater than the threshold
+	 * value -then the ParticipantPersistTime is removed from the hash map.
+	 */
+	private void cleanupHashMap(long currentTime)
+	{
+		for(ParticipantPersistTime ppt: map.values())
+		{
+			
+			long persistTime = ppt.getPersistTime().getTime().getTime();
+			double diffTime = (double)(currentTime-persistTime)/MILLIS_PER_MINUTE;
+			if(diffTime > THRESHOLD_MINUTE )
+			{
+				map.remove(ppt.getParticipant().getIdentifier().getRoot());
+			}
+		}
 	}
 	
 }
