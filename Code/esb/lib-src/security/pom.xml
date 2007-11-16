@@ -24,7 +24,7 @@
 		<id>snapshots</id>
 		<name>Archiva Managed Snapshot Repository</name>
 		<url>dav:http://209.40.206.103:8080/archiva/repository/snapshots/</url>
-		<layout>legacy</layout>
+		<layout>default</layout>
 	</snapshotRepository>
 </distributionManagement>
   <build>
