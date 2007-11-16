@@ -6,7 +6,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.nih.nci.caxchange</groupId>
-  <artifactId>caxchange-common</artifactId>
+  <artifactId>caXchange-common-jar</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <description>Jar file for storing caxchange messages.</description>

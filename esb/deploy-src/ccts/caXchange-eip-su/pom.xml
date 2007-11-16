@@ -6,7 +6,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.nih.nci.caxchange</groupId>
-  <artifactId>caxchange-eip</artifactId>
+  <artifactId>caxchange-eip-su</artifactId>
   <packaging>jbi-service-unit</packaging>
   <name>A Service HTTP Service Engine Service Unit</name>
   <version>1.0-SNAPSHOT</version>

@@ -6,10 +6,10 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.nih.nci.caxchange</groupId>
-  <artifactId>caxchange-db-jar</artifactId>
+  <artifactId>caXchange-db-jar</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <description>Jar file for storing caxchange messages.</description>
+  <description>jar file containing supporting classes for database access</description>
    <dependencies>
 	<dependency>
 	    <groupId>commons-collections</groupId>
@@ -88,7 +88,7 @@
           <debug>true</debug>
         </configuration>
       </plugin>
-      <!--plugin>
+      <!-- <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <groupId>org.apache.maven.plugins</groupId>
           <configuration>
@@ -101,7 +101,7 @@
               </manifest>          
             </archive>
           </configuration>
-      </plugin-->
+      </plugin> -->
     </plugins>
   </build>
     
