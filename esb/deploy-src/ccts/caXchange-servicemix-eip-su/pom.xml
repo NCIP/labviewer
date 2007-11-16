@@ -26,9 +26,12 @@
     <version>3.1.2</version>
   </parent>
 
-  <artifactId>servicemix-eip</artifactId>
+  <groupId>gov.nih.nci.caxchange</groupId>
+  <artifactId>caxchange-servicemix-eip-su</artifactId>
   <packaging>jbi-component</packaging>
-  <name>ServiceMix :: EIP</name>
+  <name>ServiceMix :: EIP customized for CaXchange</name>
+  <version>1.0-SNAPSHOT</version>
+
   <description>EIP Service Engine</description>
   
   <dependencies>

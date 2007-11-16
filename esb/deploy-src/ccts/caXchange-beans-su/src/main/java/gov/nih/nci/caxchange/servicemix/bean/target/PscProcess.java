@@ -50,17 +50,17 @@ public class PscProcess implements MessageExchangeListener {
 
     @Resource
     private DeliveryChannel channel;
-    
+
     static Logger logger = LogManager.getLogger(PscProcess.class);
 
-    String businessResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-"            <targetResponse>\n" + 
-"                <targetServiceIdentifier>targetServiceIdentifier2</targetServiceIdentifier>\n" + 
-"                <targetServiceOperation>targetServiceOperation2</targetServiceOperation>\n" + 
-"                <targetMessageStatus>RESPONSE</targetMessageStatus>\n" + 
-"                    <targetBusinessMessage>\n" + 
-"                        <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" + 
-"                    </targetBusinessMessage>\n" + 
+    String businessResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+"            <targetResponse>\n" +
+"                <targetServiceIdentifier>targetServiceIdentifier2</targetServiceIdentifier>\n" +
+"                <targetServiceOperation>targetServiceOperation2</targetServiceOperation>\n" +
+"                <targetMessageStatus>RESPONSE</targetMessageStatus>\n" +
+"                    <targetBusinessMessage>\n" +
+"                        <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" +
+"                    </targetBusinessMessage>\n" +
 "            </targetResponse>";
 
     public void onMessageExchange(MessageExchange exchange) throws MessagingException {
@@ -80,7 +80,6 @@ public class PscProcess implements MessageExchangeListener {
         MessageUtil.transfer(message, out);
         Document document= null;
         try {
-           Thread.sleep(3*60*1000);
            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(businessResponse)));
         }catch(Exception e){
            e.printStackTrace();
