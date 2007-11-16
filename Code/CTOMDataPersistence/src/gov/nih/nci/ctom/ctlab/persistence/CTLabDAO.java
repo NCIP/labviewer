@@ -1236,4 +1236,34 @@ public class CTLabDAO extends BaseJDBCDAO {
 		part.setId(personId);
 		saveParticipant(con, part);
 	}
+	
+	/**
+	 * @param participant
+	 * @throws SQLException
+	 */
+	public void rollbackParticipant(Connection con,Participant participant)throws SQLException
+	{
+	   PreparedStatement ps=null;
+	   ResultSet rs=null;
+	   Long id=null;
+		if(participant==null)
+			return;
+		String participantGridId = participant.getIdentifier().getRoot();
+		ps = con
+		.prepareStatement("select ID,PARTICIPANT_ID from IDENTIFIER where ROOT = ? AND PARTICIPANT_ID IS NOT NULL");
+		ps.setString(1, participantGridId);
+		rs = ps.executeQuery();
+
+		// check if identifier is in DB
+		if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PARTICIPANT_ID")!=0) {
+			System.out.println("participantID " + rs.getLong("PARTICIPANT_ID"));
+			// already present;update the identifier table
+			 id = rs.getLong("PARTICIPANT_ID");
+		}
+		
+		ps = con.prepareStatement("delete from PARTICIPANT where ID=?");
+		ps.setLong(1,id);
+		ps.executeUpdate();
+		con.commit();
+	}	
 }
