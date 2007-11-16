@@ -28,15 +28,13 @@
     <packaging>pom</packaging>
     
     <modules>
-      <module>InboundQueue</module>
-      <module>QueueListener</module>
-      <module>ResponseQueue</module>
-      <module>caXchangeProcessRequest-sa</module>
-      <module>caxchange-eip</module>
-      <module>caxchangeTransformers</module>
-      <module>caxchange-db-jar</module>
-      <module>caxchange-common</module>
-    <module>caXchangeBeans</module>
+      <module>caXchange-inbound-jms-su</module>
+      <module>caXchange-outbound-jms-su</module>
+      <module>caXchange-ccts-sa</module>
+      <module>caxchange-eip-su</module>
+      <module>caXchange-db-jar</module>
+      <module>caxchange-common-jar</module>
+	  <module>caXchange-beans-su</module>
   </modules>
 
     <!-- Add ServiceMix repository -->
