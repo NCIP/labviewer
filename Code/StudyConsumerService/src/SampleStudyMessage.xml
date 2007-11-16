@@ -19,9 +19,8 @@
 		<type>Coordinating Center Identifier</type>
 		<value>CDR0000078234</value>
 		<primaryIndicator>true</primaryIndicator>
-		<systemName>Test</systemName>
 	</identifier>
-	<treatmentEpoch>
+<!-- <epoch>
 		<name>Drug Treatment</name>
 		<descriptionText>Test</descriptionText>
 		<arm gridId="de3a0ef0-1f02-4da6-afdc-cc9042cdb594">
@@ -41,7 +40,7 @@
 				<permissibleAnswer>Test</permissibleAnswer>
 			</permissibleAnswer>
 		</stratificationCriteria>
-	</treatmentEpoch>
+	</epoch>
 	<studyFundingSponsor>
 		<healthcareSite gridId="WF GRID ID">
 			<name>Test</name>
@@ -63,5 +62,5 @@
 			<ctepTerm>Test</ctepTerm>
 			<medraCode>Test</medraCode>
 		</diseaseTerm>
-	</studyDisease>
+	</studyDisease>-->
 </study>
