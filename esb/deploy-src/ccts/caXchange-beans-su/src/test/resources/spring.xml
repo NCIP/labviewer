@@ -1,0 +1,24 @@
+<beans xmlns:sm="http://servicemix.apache.org/config/1.0"
+  xmlns:bean="http://servicemix.apache.org/bean/1.0"
+  xmlns:caxchange="http://servicemix.apache.org/caXchange">
+
+  <sm:container id="jbi" embedded="true" createMBeanServer="false">
+    <sm:activationSpecs>
+      <sm:activationSpec>
+        <sm:component>
+          <bean:component>
+            <bean:endpoints>
+<!--                <bean:endpoint service="c3d:enrollPatient" endpoint="enrollPatient"
+                bean="#enrollPatient" /> -->
+  			<bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndPoint" bean="#invokeDeploymentServiceBean"/>                               
+            </bean:endpoints>
+          </bean:component>
+        </sm:component>
+      </sm:activationSpec>
+    </sm:activationSpecs>
+  </sm:container>
+
+ <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
+</beans>
+
+
