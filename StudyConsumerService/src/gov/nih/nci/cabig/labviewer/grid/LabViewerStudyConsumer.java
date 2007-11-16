@@ -54,12 +54,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		
 		// save the study site data
-		HealthcareSiteType hcsType = study.getStudyOrganization(0).getHealthcareSite(0);
+		/*HealthcareSiteType hcsType = study.getStudyOrganization(0).getHealthcareSite(0);
 		HealthCareSite healthCare = new HealthCareSite();
 		String tmpstr = hcsType.getGridId()+"."+hcsType.getNciInstituteCode();
-		healthCare.setNciInstituteCd(tmpstr);
+		healthCare.setNciInstituteCd(tmpstr);*/
 		
-		protocol.setHealthCareSite(healthCare);
+		protocol.setHealthCareSite(null);
+		protocol.setInvestigator(null);
 		con = dao.getConnection();
 		logger.info("Create Study message validated");
 		try
