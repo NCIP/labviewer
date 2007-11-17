@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caXchange:caXchangeRequestMessage
+	xmlns:caXchange="http://caXchange.nci.nih.gov/messaging"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://caXchange.nci.nih.gov/messaging ../../main/resources/schema/Caxchange/caXchange.xsd ">
+	<caXchange:metadata>
+		<caXchange:externalIdentifier>
+			1234567890
+		</caXchange:externalIdentifier>
+	</caXchange:metadata>
+	<caXchange:request>
+		<caXchange:businessMessagePayload>
+			<caXchange:xmlSchemaDefinition>
+				http://tempuri.org
+			</caXchange:xmlSchemaDefinition>
+			<caXchange:test>request</caXchange:test>
+		</caXchange:businessMessagePayload>
+	</caXchange:request>
+</caXchange:caXchangeRequestMessage>

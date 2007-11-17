@@ -1,0 +1,31 @@
+<beans xmlns:sm="http://servicemix.apache.org/config/1.0"
+	xmlns:bean="http://servicemix.apache.org/bean/1.0"
+	xmlns:caXchange="http://servicemix.apache.org/caXchange">
+
+	<sm:container id="jbi" embedded="true" createMBeanServer="false">
+		<sm:activationSpecs>
+			<sm:activationSpec>
+				<sm:component>
+					<bean:component>
+						<bean:endpoints>
+							<bean:endpoint service="caXchange:test"
+								endpoint="test" bean="#test" />
+						</bean:endpoints>
+					</bean:component>
+				</sm:component>
+			</sm:activationSpec>
+		</sm:activationSpecs>
+	</sm:container>
+
+	<bean id="test" class="gov.nih.nci.caXchange.outbound.GridSU">
+		<property name="strategy">
+			<ref bean="invocationStrategy" />
+		</property>
+        <property name="targetId" value="targetId"/>
+        <property name="targetOperation" value="targetOp"/>
+	</bean>
+
+	<bean id="invocationStrategy"
+		class="gov.nih.nci.caXchange.outbound.impl.GridInvocationStrategyImpl"/>
+
+</beans>
