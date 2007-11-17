@@ -15,8 +15,9 @@ public class CaxchangeConstants {
     public static final QName  RESPONSE_QUEUE =  new QName("http://nci.nih.gov/caXchange","ResponseQueueService");
     public static final QName  GENERATE_RESPONSE_SERVICE =  new QName("http://nci.nih.gov/caXchange","generateResponseService");
     public static final QName  MESSAGE_TYPE_ROUTER =  new QName("http://nci.nih.gov/caXchange","MessageTypeRouter");
+    
 
-
+    public static final String ORIGINAL_EXCHANGE_CORRELATIONID="caxchange.original.correlationId";
     public static final String EXCHANGE_CORRELATIONID="org.apache.servicemix.correlationId";
     public static final String ERROR_MESSAGE="caxchange.errormessage";
     public static final String ERROR_CODE="caxchange.errorcode";

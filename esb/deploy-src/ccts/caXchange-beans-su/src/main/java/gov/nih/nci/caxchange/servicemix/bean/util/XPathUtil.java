@@ -197,6 +197,7 @@ public class XPathUtil {
         XPathExpression tsoExp = xpath.compile("targetServiceOperation");
         XPathExpression msExp = xpath.compile("targetMessageStatus");
         XPathExpression mpExp = xpath.compile("targetBusinessMessage");
+        XPathExpression teExp = xpath.compile("targetError");
         XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
         NodeList nodes = (NodeList)expression.evaluate(node,XPathConstants.NODESET);
         Statuses.Enum responseStatus = Statuses.SUCCESS;
@@ -209,7 +210,11 @@ public class XPathUtil {
            if (MessageStatuses.FAULT.toString().equals(targetMessageStatus)) {
                brm.setTargetMessageStatus(MessageStatuses.FAULT);
                responseStatus = Statuses.FAILURE;
-           }else if (MessageStatuses.RESPONSE.toString().equals(targetMessageStatus)) {
+           }else if (MessageStatuses.ERROR.toString().equals(targetMessageStatus)) {
+               brm.setTargetMessageStatus(MessageStatuses.ERROR);
+               responseStatus = Statuses.FAILURE;
+           }
+           else if (MessageStatuses.RESPONSE.toString().equals(targetMessageStatus)) {
                brm.setTargetMessageStatus(MessageStatuses.RESPONSE);
            }
            Node mpNode =  (Node)mpExp.evaluate(brNode, XPathConstants.NODE);
@@ -226,6 +231,13 @@ public class XPathUtil {
                       payloadNode.appendChild(importedNode);
                    }
                }
+           }
+           Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
+           if (teNode!= null) {
+              Document doc = brm.getDomNode().getOwnerDocument();
+              Node importedTeNode = doc.importNode(teNode,true);
+              ErrorDetails targetError = ErrorDetails.Factory.parse(importedTeNode);
+              brm.setTargetError(targetError);
            }
         }
         response.setResponseStatus(responseStatus);

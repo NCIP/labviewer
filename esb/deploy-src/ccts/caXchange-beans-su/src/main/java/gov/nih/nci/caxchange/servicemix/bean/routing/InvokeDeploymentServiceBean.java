@@ -113,6 +113,7 @@ public class InvokeDeploymentServiceBean implements MessageExchangeListener {
             return;
         }
         try {
+           logger.debug("Storing original message");
             storeOriginalMessage(exchange);
         }catch(Exception e) {
             logger.error("Error occurred storing original message.", e);
@@ -238,6 +239,7 @@ public class InvokeDeploymentServiceBean implements MessageExchangeListener {
         util.setIn(in);
         util.initialize();
         String correlationId = (String)exchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
+        logger.debug("Correlation id is:"+correlationId);
         String message = sw.getBuffer().toString();
         CaxchangeMessage caxchangeMessage = new CaxchangeMessage();
         caxchangeMessage.setMessageId(correlationId);

@@ -19,6 +19,7 @@ public class CaxchangeStaticRecipientList extends StaticRecipientList {
          NormalizedMessage in = exchange.getMessage("in");
          int length= getRecipients().length;
          in.setProperty(CaxchangeEIPConstants.CAXCHANGE_RECIPIENT_COUNT, length+"");
+         in.setProperty(CaxchangeEIPConstants.ORIGINAL_EXCHANGE_CORRELATIONID, exchange.getProperty("org.apache.servicemix.correlationId"));
          super.process(exchange);
     }    
 }
