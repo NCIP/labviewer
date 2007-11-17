@@ -80,6 +80,7 @@ public class PscProcess implements MessageExchangeListener {
         MessageUtil.transfer(message, out);
         Document document= null;
         try {
+           Thread.sleep(3*60*1000);
            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(businessResponse)));
         }catch(Exception e){
            e.printStackTrace();

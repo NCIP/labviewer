@@ -61,16 +61,16 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             }
             if (messageExchange.getStatus().equals(ExchangeStatus.ERROR)) {
                 throw new MessagingException("An error occurred in the aggregator listener.",messageExchange.getError());
-            }        
-            Source originalSource = getOriginalMessage(messageExchange);
+            }            
+            NormalizedMessage in = messageExchange.getMessage("in");        
+            correlationID= (String)in.getProperty(CaxchangeConstants.ORIGINAL_EXCHANGE_CORRELATIONID);            
+            Source originalSource = getOriginalMessage(correlationID);
             XPathUtil originalUtil = new XPathUtil();
             NormalizedMessage original = messageExchange.createMessage();
             original.setContent(originalSource);
             originalUtil.setIn(original);
             originalUtil.initialize();
-            correlationID= (String)messageExchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
-            String messageType = originalUtil.getMessageType();
-            NormalizedMessage in = messageExchange.getMessage("in");
+             String messageType = originalUtil.getMessageType();
             Source aggregatedResponse = in.getContent();
             CaXchangeResponseMessageDocument responseDocument = originalUtil.generateResponseFromAggregatedResponse(aggregatedResponse);
             if (isRollbackRequired(messageType, responseDocument)) {
@@ -84,7 +84,9 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             sendResponse(response);
             messageExchange.setStatus(ExchangeStatus.DONE);
             channel.send(messageExchange);
-            deleteMessage(messageExchange);
+            if (!(messageExchange.getStatus().equals(ExchangeStatus.ERROR))) {
+               deleteMessage(messageExchange);
+            }
         }catch (Exception e) {
             logger.error("Error occurred sending response for "+correlationID, e);
             throw new MessagingException("Error occurred sending response for "+correlationID, e);
@@ -92,9 +94,8 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
     }
     
     
-    public Source getOriginalMessage(MessageExchange exchange) throws Exception {
+    public Source getOriginalMessage(String correlationID) throws Exception {
         CaxchangeMessageDAO caxchangeMessageDAO = DAOFactory.getCaxchangeMessageDAO();
-        String correlationID= (String)exchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
         CaxchangeMessage message =caxchangeMessageDAO.getMessage(correlationID);
         if (message == null) {
             throw new Exception("Original message not found for "+correlationID);
@@ -127,7 +128,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        robustInOnly.setService(CaxchangeConstants.MESSAGE_TYPE_ROUTER);
        channel.send(robustInOnly);
    }
-    
+     
     
     public void sendResponse(Source response) throws MessagingException {
        RobustInOnly robustInOnly =channel.createExchangeFactory().createRobustInOnlyExchange();
