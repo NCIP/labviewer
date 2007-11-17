@@ -27,8 +27,8 @@ public class InvokeDeploymentServiceBeanTest extends SpringTestSupport {
             InOut me = client.createInOutExchange();
             me.getInMessage().setProperty("Test", "TestProperty");
             me.getInMessage().setContent(new StreamSource(fis));
-            me.setService(new QName("http://servicemix.apache.org/caXchange/setSubjectService", "setSubjectEndPoint"));
-            me.setOperation(new QName("http://servicemix.apache.org/caXchange/setSubjectService", "setSubjectEndPoint"));
+            me.setService(new QName("http://servicemix.apache.org/caXchange", "setSubjectService"));
+            me.setOperation(new QName("http://servicemix.apache.org/caXchange", "setSubjectEndPoint"));
             client.sendSync(me);
             System.out.println(me);
             assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
