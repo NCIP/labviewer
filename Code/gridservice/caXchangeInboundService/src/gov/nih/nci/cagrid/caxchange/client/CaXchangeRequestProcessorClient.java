@@ -56,32 +56,32 @@ import org.xml.sax.InputSource;
  *
  * On construction the class instance will contact the remote service and retrieve it's security
  * metadata description which it will use to configure the Stub specifically for each method call.
- * 
+ *
  * @created by Introduce Toolkit version 1.1
  */
-public class CaXchangeRequestProcessorClient extends ServiceSecurityClient implements CaXchangeRequestProcessorI {	
+public class CaXchangeRequestProcessorClient extends ServiceSecurityClient implements CaXchangeRequestProcessorI {
 	protected CaXchangeRequestProcessorPortType portType;
 	private Object portTypeMutex;
          String testPayLoad ="<mytest1><first1>harsh</first1><last1>marwaha</last1></mytest1>";
 
 	public CaXchangeRequestProcessorClient(String url) throws MalformedURIException, RemoteException {
-		this(url,null);	
+		this(url,null);
 	}
 
 	public CaXchangeRequestProcessorClient(String url, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(url,proxy);
 	   	initialize();
 	}
-	
+
 	public CaXchangeRequestProcessorClient(EndpointReferenceType epr) throws MalformedURIException, RemoteException {
 	   	this(epr,null);
 	}
-	
+
 	public CaXchangeRequestProcessorClient(EndpointReferenceType epr, GlobusCredential proxy) throws MalformedURIException, RemoteException {
 	   	super(epr,proxy);
 		initialize();
 	}
-	
+
 	private void initialize() throws RemoteException {
 	    this.portTypeMutex = new Object();
 		this.portType = createPortType();
@@ -107,7 +107,7 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 
 		return port;
 	}
-	
+
 	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
 		return portType.getResourceProperty(resourcePropertyQName);
 	}
@@ -115,7 +115,7 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 	public static void usage(){
 		System.out.println(CaXchangeRequestProcessorClient.class.getName() + " -url <service url>");
 	}
-	
+
 	public static void main(String [] args){
 	    System.out.println("Running the Grid Service Client");
 		try{
@@ -138,28 +138,32 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
                                     mp.setXmlSchemaDefinition(uri);
                                     DocumentBuilder db= DocumentBuilderFactory.newInstance().newDocumentBuilder();
                                     Document document=db.parse(new InputSource(new StringReader(client.testPayLoad)));
-                            
+
 			            MessageElement me = new MessageElement(document.getDocumentElement());
-			
+
 			            mp.set_any(new MessageElement[]{me});
 			            request.setBusinessMessagePayload(mp);
 			            requestMessage.setRequest(request);
 			            CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
-                                    
+
                                     CaXchangeResponseServiceAddressingLocator locator = new CaXchangeResponseServiceAddressingLocator();
                                     CaXchangeResponseServicePortType respPort =locator.getCaXchangeResponseServicePortTypePort(crsr.getEndpointReference());
                                     int i=0;
                                     while(i==0) {
                                       System.out.println("Getting response");
-                                      GetResponseResponse grr = respPort.getResponse(new GetResponseRequest());
-                                      ResponseMessage rm = grr.getCaXchangeResponseMessage();
-                                      if (rm!=null) {
-                                          i=1;
-                                          System.out.println(rm.getResponse().getResponseStatus());
-                                      }else {
-                                          Thread.sleep(500);
-                                      }
-                                    }
+                                      try {
+                                        GetResponseResponse grr = respPort.getResponse(new GetResponseRequest());
+                                        ResponseMessage rm = grr.getCaXchangeResponseMessage();
+                                        if (rm!=null) {
+                                            i=1;
+                                            System.out.println(rm.getResponse().getResponseStatus());
+                                         }else {
+                                            Thread.sleep(500);
+                                         }
+								       }catch(Exception e) {
+									   System.out.println("Error occurred getting response."+e.getMessage());
+                                       }
+								  }
 			} else {
 				usage();
 				System.exit(1);
