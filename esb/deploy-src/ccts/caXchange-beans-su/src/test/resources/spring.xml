@@ -11,6 +11,8 @@
 <!--                <bean:endpoint service="c3d:enrollPatient" endpoint="enrollPatient"
                 bean="#enrollPatient" /> -->
   			<bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndPoint" bean="#invokeDeploymentServiceBean"/>                               
+  			<bean:endpoint service="caxchange:handleErrorResponse" endpoint="endPoint" bean="#handleErrorResponseBean"/>
+  			<bean:endpoint service="caxchange:storeOriginalMessage" endpoint="endPoint" bean="#storeOriginalMessageBean"/>  			
             </bean:endpoints>
           </bean:component>
         </sm:component>
@@ -19,6 +21,8 @@
   </sm:container>
 
  <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
+ <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
+ <bean id="storeOriginalMessageBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
 </beans>
 
 

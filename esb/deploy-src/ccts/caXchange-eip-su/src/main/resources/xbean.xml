@@ -19,8 +19,42 @@
 -->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
-
- 
+  <!-- Pipeline to invoke the delegation service -->
+  <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:setSubjectService" />
+      </eip:transformer>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+      </eip:faultsTarget>
+      <eip:target>
+        <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+      </eip:target>
+  </eip:pipeline>  
+  
+  <!-- Pipeline to store original message -->
+  <eip:pipeline service="caxchange:storeOriginalMessagePipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:storeOriginalMessageService" />
+      </eip:transformer>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+      </eip:faultsTarget>
+      <eip:target>
+        <eip:exchange-target service="caxchange:MessageTypeRouter" />
+      </eip:target>
+  </eip:pipeline>   
+  
+  <!-- Pipeline to create an error response and forward it to JMS outbound queue -->
+  <eip:pipeline service="caxchange:handleErrorResponsePipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:handleErrorResponseService" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:ResponseQueueService" />
+      </eip:target>
+  </eip:pipeline>  
+  
   <eip:content-based-router service="caxchange:MessageTypeRouter" endpoint="endpoint">
     <eip:rules>
       <eip:routing-rule>
@@ -124,7 +158,7 @@
         <eip:exchange-target service="caxchange:unhandledMessageType" />
       </eip:transformer>
       <eip:target>
-        <eip:exchange-target service="caxchange:generateResponseService" />
+        <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
       </eip:target>
   </eip:pipeline>
   

@@ -6,6 +6,12 @@ import org.springframework.context.support.AbstractXmlApplicationContext;
 
 public class CaxchangeAggregatorListenerTest extends SpringTestSupport {
 
+	public void testAggregation() throws Exception {
+		
+		assertTrue(true);
+	}
+
+	
 	@Override
 	protected AbstractXmlApplicationContext createBeanFactory() {
 		// TODO Auto-generated method stub

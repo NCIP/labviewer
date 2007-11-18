@@ -13,7 +13,6 @@ public class CaxchangeConstants {
     public static final String GROUPNAME_XPATH="/caXchangeRequestMessage/metaData/credentials/groupName";
     public static final String GRIDIDENTIFIER_XPATH="/caXchangeRequestMessage/metaData/credentials/gridIdentifier";
     public static final QName  RESPONSE_QUEUE =  new QName("http://nci.nih.gov/caXchange","ResponseQueueService");
-    public static final QName  GENERATE_RESPONSE_SERVICE =  new QName("http://nci.nih.gov/caXchange","generateResponseService");
     public static final QName  MESSAGE_TYPE_ROUTER =  new QName("http://nci.nih.gov/caXchange","MessageTypeRouter");
     
 
