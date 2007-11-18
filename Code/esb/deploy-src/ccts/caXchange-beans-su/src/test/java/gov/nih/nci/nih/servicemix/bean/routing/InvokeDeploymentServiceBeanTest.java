@@ -23,7 +23,8 @@ public class InvokeDeploymentServiceBeanTest extends SpringTestSupport {
 
     public void testSubmitValidCredentialsMessage() throws Exception {
     	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
-    	InputStream fis = getClass().getResourceAsStream("testmessage.xml");
+    	//InputStream fis = getClass().getResourceAsStream("testmessage.xml");    								
+    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
             InOut me = client.createInOutExchange();
             me.getInMessage().setProperty("Test", "TestProperty");
             me.getInMessage().setContent(new StreamSource(fis));
