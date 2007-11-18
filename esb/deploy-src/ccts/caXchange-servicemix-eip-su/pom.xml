@@ -27,7 +27,7 @@
   </parent>
 
   <groupId>gov.nih.nci.caxchange</groupId>
-  <artifactId>caxchange-servicemix-eip-su</artifactId>
+  <artifactId>caXchange-servicemix-eip-su</artifactId>
   <packaging>jbi-component</packaging>
   <name>ServiceMix :: EIP customized for CaXchange</name>
   <version>1.0-SNAPSHOT</version>

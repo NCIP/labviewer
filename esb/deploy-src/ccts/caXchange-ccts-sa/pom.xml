@@ -72,7 +72,7 @@
       <name>Apache Snapshots Repository</name>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
       <snapshots>
-        <enabled>true</enabled>
+        <enabled>false</enabled>
       </snapshots>
       <releases>
         <enabled>false</enabled>
@@ -94,17 +94,7 @@
           <artifactId>log4j</artifactId>
           <version>1.2.13</version>
           <scope>provided</scope>
-    </dependency>
-               <dependency>
-                        <groupId>gov.nih.nci.caxchange</groupId>
-                        <artifactId>caxchange-eip-su</artifactId>
-                        <version>1.0-SNAPSHOT</version>
-            </dependency>   
-               <!--dependency>
-                        <groupId>gov.nih.nci.caxchange</groupId>
-                        <artifactId>caxchangeTransformers</artifactId>
-                        <version>1.0-SNAPSHOT</version>
-            </dependency-->  
+    </dependency>   
                <dependency>
                         <groupId>gov.nih.nci.caxchange</groupId>
                         <artifactId>caXchange-inbound-jms-su</artifactId>
@@ -119,12 +109,12 @@
                     <groupId>gov.nih.nci.caxchange</groupId>
                     <artifactId>caXchange-outbound-jms-su</artifactId>
                     <version>1.0-SNAPSHOT</version>
-            </dependency>    
-             <!--dependency>
-                    <groupId>gov.nih.nci.caxchange</groupId>
-                    <artifactId>QueueListener</artifactId>
-                    <version>1.0-SNAPSHOT</version>
-            </dependency-->            
+            </dependency>            
+               <dependency>
+                        <groupId>gov.nih.nci.caxchange</groupId>
+                        <artifactId>caXchange-eip-su</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+            </dependency>            
   </dependencies>
   <build>
     <plugins>

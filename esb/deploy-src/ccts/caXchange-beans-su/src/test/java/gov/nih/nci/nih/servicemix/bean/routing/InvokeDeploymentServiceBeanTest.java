@@ -37,22 +37,23 @@ public class InvokeDeploymentServiceBeanTest extends SpringTestSupport {
             assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
         }
 
-    /* public void testSubmitInValidCredentialsMessage() throws Exception {
+    public void testSubmitInValidCredentialsMessage() throws Exception {
     	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
-    	InputStream fis = getClass().getResourceAsStream("EnrollPatient.xml");
+    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessageinvalidcredentials.xml");
             InOut me = client.createInOutExchange();
             me.getInMessage().setProperty("Test", "TestProperty");
             me.getInMessage().setContent(new StreamSource(fis));
-            me.setService(new QName("http://servicemix.apache.org/caXchange/c3d", "enrollPatient"));
-            me.setOperation(new QName("http://servicemix.apache.org/caXchange/c3d", "enrollPatient"));
+            me.setService(new QName("http://servicemix.apache.org/caXchange", "setSubjectService"));
+            me.setOperation(new QName("http://servicemix.apache.org/caXchange", "setSubjectEndPoint"));
             client.sendSync(me);
             System.out.println(me);
             assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
-            assertTrue(me.getMessage("out") != null);
-            assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
-        }
+            assertTrue(me.getMessage("out") == null);
+            assertEquals("TestProperty", me.getFault().getProperty("Test"));
+            assertEquals("DELEGATION_SERVICE_ERROR",me.getFault().getProperty("caxchange.errorcode"));
+     }
 
-    */
+    
 	
 	
 	/* (non-Javadoc)
