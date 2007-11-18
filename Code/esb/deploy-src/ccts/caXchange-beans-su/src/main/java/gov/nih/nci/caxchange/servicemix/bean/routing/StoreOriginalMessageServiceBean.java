@@ -78,18 +78,11 @@ import org.w3c.dom.NodeList;
 
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
 
-public class InvokeDeploymentServiceBean implements MessageExchangeListener {
+public class StoreOriginalMessageServiceBean implements MessageExchangeListener {
 
     @Resource
     private DeliveryChannel channel;
 
-    public static final String USERNAME_XPATH="/caxchange:caXchangeRequestMessage/metaData/credentials/userName";
-    public static final String GROUPNAME_XPATH="/caxchange:caXchangeRequestMessage/metaData/credentials/groupName";
-    public static final String GRIDIDENTIFIER_XPATH="/caxchange:caXchangeRequestMessage/metaData/credentials/gridIdentifier";
-
-    public static final String USERNAME="userName";
-    public static final String GROUPNAME="groupName";
-    public static final String GRIDIDENTIFIER="gridIdentifier";
 
     public static Logger logger= LogManager.getLogger(InvokeDeploymentServiceBean.class);
 
@@ -104,79 +97,52 @@ public class InvokeDeploymentServiceBean implements MessageExchangeListener {
         logger.debug("Received exchange: " + exchange);
         NormalizedMessage in = exchange.getMessage("in");
         NormalizedMessage out= exchange.createMessage();
+        MessageUtil.transfer(in, out);
         try {
-            invokeDelegationService(exchange);
-        }catch (Exception e) {
-            logger.error("Error calling delegation service.",e);
+            logger.debug("Storing original message");
+            storeOriginalMessage(exchange);
+        }catch(Exception e) {
+        	e.printStackTrace();
+            logger.error("Error occurred storing original message.", e);
             Fault fault = exchange.createFault();
             MessageUtil.transfer(in, fault);
-            fault.setProperty(CaxchangeConstants.ERROR_CODE, "DELEGATION_SERVICE_ERROR");
-            fault.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Error occurred calling  delegation service.");
+            fault.setProperty(CaxchangeConstants.ERROR_CODE, "ERROR_STORING_MESSAGE");
+            fault.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Error occurred storing original message.");
             exchange.setFault(fault);
             channel.send(exchange);
             return;
         }
-        MessageUtil.transfer(in, out);        
         exchange.setMessage(out, "out");
         channel.send(exchange);
     }
-    /**
-     * invokes the delegation service and sets the subject in the message.
-     *
+
+
+
+   /**
+     * Store the original message in the database to add with the exchange
+     * correlationID as the message id.
+     * 
      * @param exchange
      * @throws Exception
      */
-    public void invokeDelegationService(MessageExchange exchange) throws Exception {
-       try {
-         NormalizedMessage in = exchange.getMessage("in");
-         Map<String,String> credentials = getCredentials(exchange);
-         Subject subject = new Subject();
-          DelegationServiceCallbackHandler callbackHandler = new DelegationServiceCallbackHandler();
-          callbackHandler.setUserName(credentials.get(USERNAME));
-         LoginContext loginContext = new LoginContext("DelegationService", subject, new DelegationServiceCallbackHandler(), new DelegationServiceLoginConfiguration());
-         //loginContext.login();
-         subject = loginContext.getSubject();
-         CaXchangePrincipal principal = new CaXchangePrincipal();
-         principal.setName(credentials.get(USERNAME));
-         Set principals = subject.getPrincipals();
-         principals.add((Principal)principal);
-         in.setSecuritySubject(subject);
-         return;
-       }catch(Exception e) {
-           logger.error("Error authenticating", e);
-           throw e;
-       }
-
-
+    public void storeOriginalMessage(MessageExchange exchange) throws Exception {
+        NormalizedMessage in = exchange.getMessage("in");
+        Source source = in.getContent();
+        StringWriter sw = new StringWriter();
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        StreamResult stringResult= new StreamResult(sw);
+        transformer.transform(source, stringResult);
+        XPathUtil util = new XPathUtil();
+        util.setIn(in);
+        util.initialize();
+        String correlationId = (String)exchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
+        logger.debug("Correlation id is:"+correlationId);
+        String message = sw.getBuffer().toString();
+        CaxchangeMessage caxchangeMessage = new CaxchangeMessage();
+        caxchangeMessage.setMessageId(correlationId);
+        caxchangeMessage.setMessage(message);
+        CaxchangeMessageDAO caxchangeMessageDAO = DAOFactory.getCaxchangeMessageDAO();
+        caxchangeMessageDAO.storeMessage(caxchangeMessage);
     }
-    /**
-     * Gets the credentials from the message.
-     *
-     * @param exchange
-     * @return
-     * @throws Exception
-     */
-    public  Map<String, String> getCredentials(MessageExchange exchange) throws Exception {
-        try {
-            NormalizedMessage in = exchange.getMessage("in");
-            Map<String, String> credentials = new HashMap();
-            if (in != null) {
-               XPathUtil util = new XPathUtil();
-               util.setIn(in);
-               util.initialize();
-               String userName = util.getUserName();
-               credentials.put(USERNAME,userName);
-            }
-            if (credentials.get(USERNAME)== null) {
-                throw new Exception("Username not found in the credentials.");
-            }
-            return credentials;
-        }
-        catch(Exception e) {
-            logger.error("Error getting credentials from the message.");
-            throw e;
-        }
-    }
-
 
 }

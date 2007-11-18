@@ -22,7 +22,9 @@
 
   <bean:endpoint service="caxchange:setSubjectService" endpoint="endpoint" bean="#invokeDeploymentServiceBean"/>
   
-  <bean:endpoint service="caxchange:generateResponseService" endpoint="endpoint" bean="#generateResponseBean"/>
+  <bean:endpoint service="caxchange:storeOriginalMessageService" endpoint="endpoint" bean="#storeOriginalMessageServiceBean"/>
+  
+  <bean:endpoint service="caxchange:handleErrorResponseService" endpoint="endpoint" bean="#handleErrorResponseBean"/>
   
   <bean:endpoint service="caxchange:pscProcess" endpoint="endpoint" bean="#pscProcess" />
   
@@ -46,7 +48,9 @@
 
   <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
   
-  <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean"/>
+  <bean id="storeOriginalMessageServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
+  
+  <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
 
   <bean id="unhandledMessageType" class="gov.nih.nci.caxchange.servicemix.bean.routing.UnhandledMessageTypeBean" />
   

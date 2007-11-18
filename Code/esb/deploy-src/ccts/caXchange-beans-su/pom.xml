@@ -34,6 +34,20 @@
         <version>${servicemix-version}</version>
         <extensions>true</extensions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/StoreOriginalMessageServiceBeanDatabaseDownTest.*</exclude>
+            <exclude>**/StoreOriginalMessageServiceBeanTest.*</exclude>
+            <exclude>**/HandleErrorResponseBeanTest.*</exclude>
+            <exclude>**/GenerateResponseBeanTest.*</exclude>
+            <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
+            <exclude>**/InvokeDeploymentServiceBeanTest.*</exclude>
+          </excludes>
+        </configuration>
+      </plugin>      
     </plugins>
   </build>
   <repositories>

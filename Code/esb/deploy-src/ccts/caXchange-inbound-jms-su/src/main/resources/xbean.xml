@@ -23,7 +23,7 @@
 
     <jms:endpoint service="caxchange:CaXchangeRequestConsumer"
                   endpoint="jms"
-                  targetService="caxchange:setSubjectService"
+                  targetService="caxchange:invokeDelegationPipeline"
                   targetEndpoint="endpoint"
                   role="consumer" 
                   destinationStyle="queue"

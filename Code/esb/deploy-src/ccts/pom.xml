@@ -28,14 +28,14 @@
   <packaging>pom</packaging>
   <modules>
     <module>caXchange-db-jar</module>
-    <module>caxchange-common-jar</module>
+    <module>caXchange-common-jar</module>
     <module>caXchange-outbound-core</module>
     <module>caXchange-beans-su</module>
     <module>caXchange-inbound-jms-su</module>
     <module>caXchange-outbound-jms-su</module>
+    <module>caXchange-eip-su</module>    
     <module>caXchange-ccts-sa</module>
-    <module>caxchange-eip-su</module>
-    <module>caxchange-servicemix-eip-su</module>
+    <module>caXchange-servicemix-eip-su</module>
   </modules>
   <distributionManagement>
     <repository>
