@@ -1238,6 +1238,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 	}
 	
 	/**
+	 * @param con
 	 * @param participant
 	 * @throws SQLException
 	 */
@@ -1266,4 +1267,36 @@ public class CTLabDAO extends BaseJDBCDAO {
 		ps.executeUpdate();
 		con.commit();
 	}	
+	
+	/**
+	 * @param con
+	 * @param protocol
+	 * @throws SQLException
+	 */
+	public void rollbackStudy(Connection con,Protocol protocol)throws SQLException
+	{
+	   PreparedStatement ps=null;
+	   ResultSet rs=null;
+	   Long id=null;
+		if(protocol==null)
+			return;
+		String protocolGridId = protocol.getIdentifier().getRoot();
+		ps = con
+		.prepareStatement("select ID,PROTOCOL_ID from IDENTIFIER where ROOT = ? AND PROTOCOL_ID IS NOT NULL");
+		ps.setString(1, protocolGridId);
+		rs = ps.executeQuery();
+
+		// check if identifier is in DB
+		if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PROTOCOL_ID")!=0) {
+			System.out.println("protocolID " + rs.getLong("PROTOCOL_ID"));
+			// already present;update the identifier table
+			 id = rs.getLong("PROTOCOL_ID");
+		}
+		
+		ps = con.prepareStatement("delete from PROTOCOL where ID=?");
+		ps.setLong(1,id);
+		ps.executeUpdate();
+		con.commit();
+	}	
+	
 }
