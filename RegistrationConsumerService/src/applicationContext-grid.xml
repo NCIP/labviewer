@@ -5,5 +5,6 @@
 <beans>
 
 	<bean id="registrationConsumer" class="gov.nih.nci.cabig.labviewer.grid.LabViewerRegistrationConsumer"/>
+	<bean id="studyConsumer" class="gov.nih.nci.cabig.labviewer.grid.LabViewerStudyConsumer"/>
 
 </beans>

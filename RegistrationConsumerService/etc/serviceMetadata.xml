@@ -1,0 +1,59 @@
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+ <ns1:serviceDescription>
+  <ns2:Service description="" name="RegistrationConsumer" version="1.1" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role="" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   </ns2:pointOfContactCollection>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="RegistrationConsumer">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="getServiceSecurityMetadata">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="register">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns5:registration" dimensionality="1" index="0" isArray="false" isRequired="false" name="registration" xmlns:ns5="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns6:registration" dimensionality="1" isArray="false" xmlns:ns6="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidRegistrationException"/>
+        <ns2:Fault description="" name="RegistrationConsumptionException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="rollback">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns7:registration" dimensionality="1" index="0" isArray="false" isRequired="false" name="registration" xmlns:ns7="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidRegistrationException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="commit">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns8:registration" dimensionality="1" index="0" isArray="false" isRequired="false" name="registration" xmlns:ns8="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="InvalidRegistrationException"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+   <ns9:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns10:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns10="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter>
+  <ns11:ResearchCenter displayName="" shortName="" xmlns:ns11="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns11:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns11:pointOfContactCollection>
+    <ns11:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns11:pointOfContactCollection>
+  </ns11:ResearchCenter>
+ </ns1:hostingResearchCenter>
+</ns1:ServiceMetadata>

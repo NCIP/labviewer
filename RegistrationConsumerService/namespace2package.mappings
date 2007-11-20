@@ -1,0 +1,11 @@
+http\://ccts.nci.nih.gov/RegistrationConsumer=gov.nih.nci.ccts.grid.stubs
+http\://ccts.nci.nih.gov/RegistrationConsumer/bindings=gov.nih.nci.ccts.grid.stubs.bindings
+http\://ccts.nci.nih.gov/RegistrationConsumer/service=gov.nih.nci.ccts.grid.stubs.service
+http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
+
+http\://ccts.nci.nih.gov/RegistrationConsumer/types=gov.nih.nci.ccts.grid.stubs.types
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+gme\://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain=gov.nih.nci.ccts.grid
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common
