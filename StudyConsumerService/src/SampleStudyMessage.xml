@@ -20,7 +20,7 @@
 		<value>CDR0000078234</value>
 		<primaryIndicator>true</primaryIndicator>
 	</identifier>
-<!-- <epoch>
+ <!-- <epoch>
 		<name>Drug Treatment</name>
 		<descriptionText>Test</descriptionText>
 		<arm gridId="de3a0ef0-1f02-4da6-afdc-cc9042cdb594">
