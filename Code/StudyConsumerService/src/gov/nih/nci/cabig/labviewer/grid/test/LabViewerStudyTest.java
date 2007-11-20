@@ -49,6 +49,7 @@ public class LabViewerStudyTest
 			
 			// Call the service
 			client.createStudy(study);
+			client.rollback(study);
 		}
 		catch (Exception e)
 		{
