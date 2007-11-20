@@ -11,7 +11,6 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
-import gov.nih.nci.security.exceptions.CSException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -136,7 +135,8 @@ public class LoadToCTMSAction extends Action
 		}
 
 		// Then create the request
-		String url = "http://137.187.183.154:8080/wsrf/services/cagrid/C3DGridService";
+		//String url = "http://137.187.183.154:8080/wsrf/services/cagrid/C3DGridService";
+		String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
 		C3DGridServiceClient client = new C3DGridServiceClient(url);
 		LoadLabsRequest labRequest = new LoadLabsRequest();
 		
@@ -178,9 +178,10 @@ public class LoadToCTMSAction extends Action
 			
 			// Set the lab identifier
 			Laboratory laboratory= new Laboratory();
+			/*
 			String labIdentifier = lab.getLabResult().getPerformingLaboratory().getIdentifier();
 			if (labIdentifier != null)
-				laboratory.setIdentifier(labIdentifier);
+				laboratory.setIdentifier(labIdentifier);*/
 			labResult.setLaboratory(laboratory);
 			
 			// Set the activity name
@@ -219,7 +220,7 @@ public class LoadToCTMSAction extends Action
 		labRequest.setLabResult(labResults);
 		
 		// Now send the load labs request
-		Acknowledgement acknowledgement = client.loadLabs(labRequest);
+		webservices.Acknowledgement acknowledgement = client.loadLabs(labRequest);
 	
 		lForm.setRecordId("");
 		lForm.setRecordId(null);

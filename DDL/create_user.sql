@@ -4,6 +4,7 @@ GRANT CREATE TABLE TO caxchange;
 GRANT CREATE VIEW TO caxchange;
 GRANT CREATE SEQUENCE TO caxchange; 
 GRANT CREATE SYNONYM TO caxchange;
+GRANT CREATE TRIGGER TO caxchange;
 ALTER USER caxchange QUOTA unlimited ON USERS;
 exit
 
