@@ -10,7 +10,7 @@
 	<!-- ============================================================== -->
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
-	<property name="artifacts.dir" value="..\artifacts" />
+	<property name="artifacts.dir" value="../artifacts" />
 
 
 
