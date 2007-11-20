@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<study xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+ version="1">
+    <blindedIndicator>true</blindedIndicator>
+    <multiInstitutionIndicator>true</multiInstitutionIndicator>
+    <randomizedIndicator>true</randomizedIndicator>
+    <shortTitleText>short_title_text</shortTitleText>
+    <longTitleText>long_title_text</longTitleText>
+    <descriptionText>description</descriptionText>
+    <precisText>precis_text</precisText>
+    <phaseCode>Ph</phaseCode>
+    <dataEntryStatus>COMPLETE</dataEntryStatus>
+    <coordinatingCenterStudyStatus>ACTIVE</coordinatingCenterStudyStatus>
+    <type>ty</type>
+    <targetAccrualNumber>123</targetAccrualNumber>
+    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="SystemAssignedIdentifierType">
+        <type>local</type>
+        <value>nci</value>
+        <primaryIndicator>false</primaryIndicator>
+        <systemName>nci</systemName>
+    </identifier>
+    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="OrganizationAssignedIdentifierType">
+        <value>nci-id</value>
+        <primaryIndicator>true</primaryIndicator>
+        <healthcareSite>
+            <name>duke healthcare</name>
+            <descriptionText>duke healthcare</descriptionText>
+            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+            <nciInstituteCode>code</nciInstituteCode>
+        </healthcareSite>
+    </identifier>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
+        <name>Treatment1000</name>
+        <descriptionText>treatement desc</descriptionText>
+        <arm>
+            <name>Arm 1000</name>
+            <descriptionText>Arm 1000 desc</descriptionText>
+            <targetAccrualNumber>1000</targetAccrualNumber>
+        </arm>
+        <arm>
+            <name>Arm 1001</name>
+            <descriptionText>Arm 1001 desc</descriptionText>
+            <targetAccrualNumber>1001</targetAccrualNumber>
+        </arm>
+        <eligibilityCriteria xsi:type="InclusionEligibilityCriteriaType">
+            <questionNumber>1</questionNumber>
+            <questionText>inclusion question 1</questionText>
+        </eligibilityCriteria>
+        <eligibilityCriteria xsi:type="InclusionEligibilityCriteriaType">
+            <questionNumber>2</questionNumber>
+            <questionText>inclusion question 2</questionText>
+        </eligibilityCriteria>
+        <eligibilityCriteria xsi:type="ExclusionEligibilityCriteriaType">
+            <questionNumber>3</questionNumber>
+            <questionText>exclusion question 1</questionText>
+        </eligibilityCriteria>
+    </epoch>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="NonTreatmentEpochType">
+        <name>NonTreatment1004</name>
+        <descriptionText>non treatement desc</descriptionText>
+        <accrualCeiling>0</accrualCeiling>
+    </epoch>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
+        <name>Treatment1003</name>
+        <descriptionText>cancer desc</descriptionText>
+        <arm>
+            <name>Arm 1006</name>
+            <descriptionText>Arm 1006 desc</descriptionText>
+            <targetAccrualNumber>1006</targetAccrualNumber>
+        </arm>
+        <arm>
+            <name>Arm 1007</name>
+            <descriptionText>Arm 1007 desc</descriptionText>
+            <targetAccrualNumber>1007</targetAccrualNumber>
+        </arm>
+    </epoch>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="NonTreatmentEpochType">
+        <name>NonTreatment1005</name>
+        <descriptionText>non treatment cancer desc</descriptionText>
+        <accrualCeiling>0</accrualCeiling>
+    </epoch>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
+        <name>Treatment1001</name>
+        <descriptionText>cancer desc</descriptionText>
+        <arm>
+            <name>Arm 1002</name>
+            <descriptionText>Arm 1002 desc</descriptionText>
+            <targetAccrualNumber>1002</targetAccrualNumber>
+        </arm>
+        <arm>
+            <name>Arm 1003</name>
+            <descriptionText>Arm 1003 desc</descriptionText>
+            <targetAccrualNumber>1003</targetAccrualNumber>
+        </arm>
+    </epoch>
+    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
+        <name>Treatment1002</name>
+        <descriptionText>treatement desc</descriptionText>
+        <arm>
+            <name>Arm 1004</name>
+            <descriptionText>Arm 1004 desc</descriptionText>
+            <targetAccrualNumber>1004</targetAccrualNumber>
+        </arm>
+        <arm>
+            <name>Arm 1005</name>
+            <descriptionText>Arm 1005 desc</descriptionText>
+            <targetAccrualNumber>1005</targetAccrualNumber>
+        </arm>
+    </epoch>
+    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="StudySiteType">
+        <healthcareSite>
+            <name>duke healthcare</name>
+            <descriptionText>duke healthcare</descriptionText>
+            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+            <nciInstituteCode>code</nciInstituteCode>
+        </healthcareSite>
+        <studyInvestigator>
+            <roleCode>role1</roleCode>
+            <statusCode>Active</statusCode>
+            <startDate>0006-06-23</startDate>
+            <endDate>0006-06-23</endDate>
+            <healthcareSiteInvestigator>
+                <investigator>
+                    <fullName>Investigator Bill Staff1</fullName>
+                </investigator>
+            </healthcareSiteInvestigator>
+        </studyInvestigator>
+        <studyInvestigator>
+            <roleCode>role2</roleCode>
+            <statusCode>Active</statusCode>
+            <startDate>0006-06-23</startDate>
+            <endDate>0006-06-23</endDate>
+            <healthcareSiteInvestigator>
+                <investigator>
+                    <fullName>Investigator George Staff2</fullName>
+                </investigator>
+            </healthcareSiteInvestigator>
+        </studyInvestigator>
+        <irbApprovalDate>0006-06-23</irbApprovalDate>
+        <roleCode>role</roleCode>
+        <startDate>0006-06-24</startDate>
+        <endDate>0006-06-25</endDate>
+    </studyOrganization>
+    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="StudyFundingSponsorType">
+        <healthcareSite>
+            <name>National Cancer Institute</name>
+            <descriptionText>National Cancer Institute</descriptionText>
+            <address><streetAddress>Coppermine Dr</streetAddress><city>Herndon</city><stateCode>VA</stateCode><postalCode>20171</postalCode><countryCode>USA</countryCode></address>
+            <nciInstituteCode>code</nciInstituteCode>
+        </healthcareSite>
+    </studyOrganization>
+    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="StudyCoordinatingCenterType">
+        <healthcareSite>
+            <name>CALGB</name>
+            <descriptionText>CALGB</descriptionText>
+            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+            <nciInstituteCode>code</nciInstituteCode>
+        </healthcareSite>
+    </studyOrganization>
+</study>

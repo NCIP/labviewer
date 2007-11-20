@@ -67,7 +67,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		{
 			dao.saveProtocol(con, protocol);
 			logger.info("Persisted the study");
-		  	}
+		}
 		catch (SQLException e)
 		{
 			logger.error("Error creating study", e);
