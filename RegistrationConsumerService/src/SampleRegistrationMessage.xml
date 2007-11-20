@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<registration xmlns="gme://c3pr.cabig/2.0/edu.duke.cabig.c3pr.domain">
+<registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+        gridId="sampleRegistration">
 	<studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
 		<healthcareSite gridId="WF GRID ID">
-			<nciInstituteCode>Wake</nciInstituteCode>
+			<nciInstituteCode>duke healthcare nci</nciInstituteCode>
 		</healthcareSite>
 		<irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate>
 		<roleCode>Affiliate Site</roleCode>
@@ -18,7 +19,7 @@
 			<value>CDR000007829</value>
 			<primaryIndicator>true</primaryIndicator>
 			<healthcareSite gridId="WF GRID ID">
-				<nciInstituteCode>Wake</nciInstituteCode>
+				<nciInstituteCode>duke healthcare nci</nciInstituteCode>
 			</healthcareSite>
 		</identifier>
 		<identifier
@@ -33,7 +34,7 @@
 		</identifier>
 	</studyRef>
 	<participant
-		xmlns:ns1="gme://c3pr.cabig/2.0/edu.duke.cabig.c3pr.domain"
+		xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
 		ns1:gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
 		<ns1:gridId>50113a1a-4c3e-4418-8c37-7383cba1aaf8</ns1:gridId>
 		<ns1:firstName>Geoge</ns1:firstName>
@@ -41,9 +42,7 @@
 		<ns1:address />
 		<ns1:administrativeGenderCode>Male</ns1:administrativeGenderCode>
 		<ns1:birthDate>1971-01-01</ns1:birthDate>
-		<ns1:ethnicGroupCode>Hispanic or Latino</ns1:ethnicGroupCode>
-		<ns1:raceCode>Asian</ns1:raceCode>
-		<ns1:identifier
+            <ns1:identifier
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			type="MRN-1212332"
 			xsi:type="ns1:OrganizationAssignedIdentifierType">
@@ -54,6 +53,8 @@
 				<ns1:nciInstituteCode>Wake</ns1:nciInstituteCode>
 			</ns1:healthcareSite>
 		</ns1:identifier>
+		<ns1:ethnicGroupCode>Hispanic or Latino</ns1:ethnicGroupCode>
+		<ns1:raceCode>Asian</ns1:raceCode>
 	</participant>
 	<startDate>2007-10-01</startDate>
 	<informedConsentFormSignedDate>2007-10-09</informedConsentFormSignedDate>
@@ -75,6 +76,7 @@
 				<targetAccrualNumber>300</targetAccrualNumber>
 			</arm>
 		</scheduledArm>
+		<eligibilityIndicator>true</eligibilityIndicator>
 	</scheduledEpoch>
 	<stratumGroup>3:between 20 and 45 - &lt;120</stratumGroup>
 </registration>

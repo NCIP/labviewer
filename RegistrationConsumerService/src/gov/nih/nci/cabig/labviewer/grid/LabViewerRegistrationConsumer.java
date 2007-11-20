@@ -27,7 +27,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class LabViewerRegistrationConsumer implements RegistrationConsumer
 {
-	static final int MILLIS_PER_MINUTE = 60 * 1000;
+	static final int MILLIS_PER_MINUTE = 60 * 60 * 60 * 1000;
 	static final int THRESHOLD_MINUTE =2;
 	private static final Log logger = LogFactory.getLog(LabViewerRegistrationConsumer.class);
 	private HashMap<String,ParticipantPersistTime> map = new HashMap<String,ParticipantPersistTime>();
