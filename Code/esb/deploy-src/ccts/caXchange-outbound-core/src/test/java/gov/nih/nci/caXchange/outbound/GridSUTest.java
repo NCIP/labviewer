@@ -3,6 +3,7 @@ package gov.nih.nci.caXchange.outbound;
 import java.io.InputStream;
 
 import javax.jbi.messaging.ExchangeStatus;
+import javax.jbi.messaging.InOnly;
 import javax.jbi.messaging.InOut;
 import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamSource;
@@ -14,36 +15,117 @@ import org.springframework.context.support.AbstractXmlApplicationContext;
 
 public class GridSUTest extends SpringTestSupport {
 
-    public void testOkExchange() throws Exception {
-	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
-	InputStream fis = getClass().getResourceAsStream("request.xml");
-        InOut me = client.createInOutExchange();
-        me.getInMessage().setProperty("Test", "TestProperty");
-        me.getInMessage().setContent(new StreamSource(fis));
-        me.setService(new QName("http://servicemix.apache.org/caXchange", "test"));
-        me.setOperation(new QName("http://servicemix.apache.org/caXchange", "test"));
-        client.sendSync(me);
-        System.out.println(me);
-        assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
-        assertTrue(me.getMessage("out") != null);
-        assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
-    }
+	public void testCTOMExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"ctomRegistration"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"ctomRegistration"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
+	public void testCTOMRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"ctomRegistrationRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"ctomRegistrationRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
+	public void testCAAERSExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"caaersRegistration"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"caaersRegistration"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
+	public void testCAAERSStudyExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"caaersStudy"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"caaersStudy"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
+	public void testCAAERSRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"caaersRegistrationRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"caaersRegistrationRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
+	public void testCAAERSStudyRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"caaersStudyRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"caaersStudyRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
 
-    public void testRetryingExchange() throws Exception {
+	public void testRetryingExchange() throws Exception {
 
-    }
+	}
 
-    public void testFauldExchange() throws Exception {
+	public void testFaultExchange() throws Exception {
 
-    }
+	}
 
-    /*
-     * (non-Javadoc) *
-     * 
-     * @see org.apache.servicemix.tck.SpringTestSupport#createBeanFactory()
-     */
-    @Override
-    protected AbstractXmlApplicationContext createBeanFactory() {
-	return new ClassPathXmlApplicationContext("spring.xml");
-    }
+	/*
+	 * (non-Javadoc) *
+	 * 
+	 * @see org.apache.servicemix.tck.SpringTestSupport#createBeanFactory()
+	 */
+	@Override
+	protected AbstractXmlApplicationContext createBeanFactory() {
+		return new ClassPathXmlApplicationContext("spring.xml");
+	}
 }
