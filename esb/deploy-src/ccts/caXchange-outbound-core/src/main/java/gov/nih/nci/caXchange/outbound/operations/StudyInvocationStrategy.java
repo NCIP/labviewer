@@ -59,7 +59,7 @@ public class StudyInvocationStrategy implements GridInvocationStrategy {
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"client-config.wsdd");
+							"/study/client-config.wsdd");
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
 			Study request = (Study) Utils.deserializeObject(
