@@ -66,7 +66,7 @@ public class GridSUTest extends SpringTestSupport {
 	
 	public void testCAAERSStudyExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
-		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InputStream fis = getClass().getResourceAsStream("study-request.xml");
 		InOut me = client.createInOutExchange();
 		me.getInMessage().setProperty("Test", "TestProperty");
 		me.getInMessage().setContent(new StreamSource(fis));

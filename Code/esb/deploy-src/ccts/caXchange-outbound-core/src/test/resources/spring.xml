@@ -51,10 +51,10 @@
     </property>
     <property
       name="targetId"
-      value="ctom" />
+      value="PROCESS" />
     <property
       name="targetOperation"
-      value="registration" />
+      value="REGISTER_SUBJECT" />
   </bean>
 
   <bean
@@ -74,10 +74,10 @@
     </property>
     <property
       name="targetId"
-      value="ctom" />
+      value="ROLLBACK" />
     <property
       name="targetOperation"
-      value="rollback" />
+      value="REGISTER_SUBJECT" />
     <property name="rollback" value="true"/>
   </bean>
 
@@ -98,10 +98,10 @@
     </property>
     <property
       name="targetId"
-      value="caaers" />
+      value="PROCESS" />
     <property
       name="targetOperation"
-      value="registration" />
+      value="REGISTER_SUBJECT" />
   </bean>
 
   <bean
@@ -121,10 +121,10 @@
     </property>
     <property
       name="targetId"
-      value="caaers" />
+      value="PROCESS" />
     <property
       name="targetOperation"
-      value="study" />
+      value="STUDY_CREATION" />
   </bean>
 
   <bean
@@ -144,10 +144,10 @@
     </property>
     <property
       name="targetId"
-      value="caaers" />
+      value="ROLLBACK" />
     <property
       name="targetOperation"
-      value="rollback" />
+      value="REGISTER_SUBJECT" />
     <property name="rollback" value="true"/>
   </bean>
 
@@ -168,10 +168,10 @@
     </property>
     <property
       name="targetId"
-      value="caaers" />
+      value="ROLLBACK" />
     <property
       name="targetOperation"
-      value="rollback" />
+      value="STUDY_CREATION" />
     <property name="rollback" value="true"/>
   </bean>
 
