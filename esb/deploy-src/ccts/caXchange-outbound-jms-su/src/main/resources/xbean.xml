@@ -30,7 +30,7 @@
                    />
 
 
-    <amq:connectionFactory id="connectionFactory" brokerURL="tcp://localhost:61618" />
+    <amq:connectionFactory id="connectionFactory" brokerURL="tcp://localhost:62618" />
 
     <!-- JMS ConnectionFactory from JNDI -
     <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
