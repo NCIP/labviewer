@@ -36,9 +36,17 @@ public class GridSU implements MessageExchangeListener {
 
 	public static final String RESPONSE_ELEMENT = "targetResponseMessage";
 
+	public static final String ERROR_RESPONSE_ELEMENT = "targetError";
+
+	public static final String ERROR_CODE_ELEMENT = "errorCode";
+
+	public static final String ERROR_DESCRIPTION_ELEMENT = "errorDescription";
+
 	public static final String TARGET_SERVICE_ID_ELEMENT = "targetServiceIdentifier";
 
 	public static final String TARGET_SERVICE_OP_ELEMENT = "targetServiceOperation";
+
+	public static final String TARGET_STATUS_ELEMENT = "targetMessageStatus";
 
 	public static final String RESPONSE_PAYLOAD_ELEMENT = "messagePayload";
 
@@ -148,7 +156,14 @@ public class GridSU implements MessageExchangeListener {
 					log.debug("Retrying invocation");
 				} else {
 					log.debug("Exhausted retries. Returning error.");
-					exchange.setError(gie);
+					if(!isRollback()) {
+						NormalizedMessage out = exchange.createMessage();
+						Document output = createErrorDocument(gie);
+						out.setContent(new DOMSource(output));
+						exchange.setMessage(out, "out");
+					} else {
+						exchange.setError(gie);
+					}
 					break;
 				}
 			}
@@ -258,8 +273,7 @@ public class GridSU implements MessageExchangeListener {
 		this.rollback = rollback;
 	}
 
-	protected Document createOutputDocument(GridMessage gridMessage,
-			GridInvocationResult result) throws Exception {
+	protected Document createBaseOutputDocument() throws Exception {
 		Document output = new SourceTransformer().createDocument();
 		Element root = output.createElementNS(NS, RESPONSE_ELEMENT);
 		Element targetServiceId = output.createElementNS(NS,
@@ -270,13 +284,50 @@ public class GridSU implements MessageExchangeListener {
 		targetServiceOp.setTextContent(getTargetOperation());
 		root.appendChild(targetServiceId);
 		root.appendChild(targetServiceOp);
+		output.appendChild(root);
+		return output;
+	}
+
+	protected Document createOutputDocument(GridMessage gridMessage,
+			GridInvocationResult result) throws Exception {
+
+		Document output = createBaseOutputDocument();
+		Element root = output.getDocumentElement();
+		Element targetStatus = output
+				.createElementNS(NS, TARGET_STATUS_ELEMENT);
+		if (result.isFault()) {
+			targetStatus.setTextContent("FAULT");
+		} else {
+			targetStatus.setTextContent("RESULT");
+		}
+		root.appendChild(targetStatus);
+
 		Element payloadElement = output.createElementNS(NS,
 				RESPONSE_PAYLOAD_ELEMENT);
 		payloadElement.appendChild(output.importNode(gridMessage
 				.getSchemaDefinition(), true));
 		payloadElement.appendChild(output.importNode(result.getResult(), true));
 		root.appendChild(payloadElement);
-		output.appendChild(root);
+		return output;
+	}
+
+	public Document createErrorDocument(Exception e) throws Exception {
+		Document output = createBaseOutputDocument();
+		Element root = output.getDocumentElement();
+		Element targetStatus = output
+				.createElementNS(NS, TARGET_STATUS_ELEMENT);
+		targetStatus.setTextContent("ERROR");
+		root.appendChild(targetStatus);
+		Element payloadElement = output.createElementNS(NS,
+				ERROR_RESPONSE_ELEMENT);
+		Element errorCode = output.createElementNS(NS, ERROR_CODE_ELEMENT);
+		Element errorDescription = output.createElementNS(NS,
+				ERROR_DESCRIPTION_ELEMENT);
+		errorCode.setTextContent("NA");
+		errorDescription.setTextContent(e.getMessage());
+		payloadElement.appendChild(errorCode);
+		payloadElement.appendChild(errorDescription);
+		root.appendChild(payloadElement);
 		return output;
 	}
 
