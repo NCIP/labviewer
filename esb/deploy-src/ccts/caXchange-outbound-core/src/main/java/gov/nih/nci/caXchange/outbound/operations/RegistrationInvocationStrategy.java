@@ -53,13 +53,13 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"client-config.wsdd");
+							"/registration/client-config.wsdd");
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
 			Registration request = (Registration) Utils.deserializeObject(
 					reader, Registration.class, deseralizeStream);
 			Registration reply = client.register(request);
-
+			
 			InputStream serializeStream = client.getClass().getResourceAsStream(
 							"client-config.wsdd");
 			StringWriter writer = new StringWriter();

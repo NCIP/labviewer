@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Date;
 
 import javax.xml.namespace.QName;
 
@@ -13,7 +14,9 @@ import org.xml.sax.InputSource;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.ccts.grid.HealthcareSiteType;
 import gov.nih.nci.ccts.grid.IdentifierType;
+import gov.nih.nci.ccts.grid.ParticipantType;
 import gov.nih.nci.ccts.grid.Registration;
+import gov.nih.nci.ccts.grid.ScheduledEpochType;
 import gov.nih.nci.ccts.grid.StudyRefType;
 import gov.nih.nci.ccts.grid.StudySiteType;
 import gov.nih.nci.ccts.grid.SystemAssignedIdentifierType;
@@ -81,6 +84,8 @@ public class RegistrationInvocationTest extends TestCase {
 		hcst.setNciInstituteCode("SITE_ON");
 		hcsts[0]=hcst;
 		ss.setHealthcareSite(hcsts);
+		ss.setStartDate(new Date());
+		ss.setIrbApprovalDate(new Date());
 		
 		registration.setStudySite(ss);
 		StringWriter writer = new StringWriter();
