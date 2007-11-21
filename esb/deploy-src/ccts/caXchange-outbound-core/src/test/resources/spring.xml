@@ -1,31 +1,187 @@
-<beans xmlns:sm="http://servicemix.apache.org/config/1.0"
-	xmlns:bean="http://servicemix.apache.org/bean/1.0"
-	xmlns:caXchange="http://servicemix.apache.org/caXchange">
+<beans
+  xmlns:sm="http://servicemix.apache.org/config/1.0"
+  xmlns:bean="http://servicemix.apache.org/bean/1.0"
+  xmlns:caXchange="http://nci.nih.gov/caXchange">
 
-	<sm:container id="jbi" embedded="true" createMBeanServer="false">
-		<sm:activationSpecs>
-			<sm:activationSpec>
-				<sm:component>
-					<bean:component>
-						<bean:endpoints>
-							<bean:endpoint service="caXchange:test"
-								endpoint="test" bean="#test" />
-						</bean:endpoints>
-					</bean:component>
-				</sm:component>
-			</sm:activationSpec>
-		</sm:activationSpecs>
-	</sm:container>
+  <sm:container
+    id="jbi"
+    embedded="true"
+    createMBeanServer="false">
+    <sm:activationSpecs>
+      <sm:activationSpec>
+        <sm:component>
+          <bean:component>
+            <bean:endpoints>
+              <bean:endpoint
+                service="caXchange:ctomRegistration"
+                endpoint="ctomRegistration"
+                bean="#ctomRegistration" />
+              <bean:endpoint
+                service="caXchange:ctomRegistrationRollback"
+                endpoint="ctomRegistrationRollback"
+                bean="#ctomRegistrationRollback" />
+              <bean:endpoint
+                service="caXchange:caaersRegistration"
+                endpoint="caaersRegistration"
+                bean="#caaersRegistration" />
+              <bean:endpoint
+                service="caXchange:caaersStudy"
+                endpoint="caaersStudy"
+                bean="#caaersStudy" />
+              <bean:endpoint
+                service="caXchange:caaersRegistrationRollback"
+                endpoint="caaersRegistrationRollback"
+                bean="#caaersRegistrationRollback" />  
+              <bean:endpoint
+                service="caXchange:caaersStudyRollback"
+                endpoint="caaersStudyRollback"
+                bean="#caaersStudyRollback" />              
+            </bean:endpoints>
+          </bean:component>
+        </sm:component>
+      </sm:activationSpec>
+    </sm:activationSpecs>
+  </sm:container>
 
-	<bean id="test" class="gov.nih.nci.caXchange.outbound.GridSU">
-		<property name="strategy">
-			<ref bean="invocationStrategy" />
-		</property>
-        <property name="targetId" value="targetId"/>
-        <property name="targetOperation" value="targetOp"/>
-	</bean>
+  <bean
+    id="ctomRegistration"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomRegistrationInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ctom" />
+    <property
+      name="targetOperation"
+      value="registration" />
+  </bean>
 
-	<bean id="invocationStrategy"
-		class="gov.nih.nci.caXchange.outbound.impl.GridInvocationStrategyImpl"/>
+  <bean
+    id="ctomRegistrationInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="ctomRegistrationRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomRegistrationRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ctom" />
+    <property
+      name="targetOperation"
+      value="rollback" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="ctomRegistrationRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersRegistration"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersRegistrationInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="caaers" />
+    <property
+      name="targetOperation"
+      value="registration" />
+  </bean>
+
+  <bean
+    id="caaersRegistrationInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersStudy"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersStudyInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="caaers" />
+    <property
+      name="targetOperation"
+      value="study" />
+  </bean>
+
+  <bean
+    id="caaersStudyInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersRegistrationRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersRegistrationRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="caaers" />
+    <property
+      name="targetOperation"
+      value="rollback" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="caaersRegistrationRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersStudyRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersStudyRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="caaers" />
+    <property
+      name="targetOperation"
+      value="rollback" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="caaersStudyRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
 
 </beans>

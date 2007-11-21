@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caXchange:caXchangeRequestMessage
+  xmlns:caXchange="http://caXchange.nci.nih.gov/messaging"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://caXchange.nci.nih.gov/messaging ../../main/resources/schema/Caxchange/caXchange.xsd ">
+  <caXchange:metadata>
+    <caXchange:externalIdentifier>
+      1234567890
+    </caXchange:externalIdentifier>
+  </caXchange:metadata>
+  <caXchange:request>
+    <caXchange:businessMessagePayload>
+      <caXchange:xmlSchemaDefinition>
+        http://tempuri.org
+      </caXchange:xmlSchemaDefinition>
+      <registration>
+        <ns1:studySite
+          xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+          <ns1:healthcareSite>
+            <ns1:nciInstituteCode>SITE_ON</ns1:nciInstituteCode>
+          </ns1:healthcareSite>
+        </ns1:studySite>
+        <ns2:studyRef
+          xmlns:ns2="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+          <ns2:identifier
+            xsi:type="ns2:SystemAssignedIdentifierType"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <ns2:value>C3PR_00C0092</ns2:value>
+            <ns2:primaryIndicator>true</ns2:primaryIndicator>
+          </ns2:identifier>
+        </ns2:studyRef>
+        <ns3:scheduledEpoch
+          xsi:nil="true"
+          xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+      </registration>
+    </caXchange:businessMessagePayload>
+  </caXchange:request>
+</caXchange:caXchangeRequestMessage>

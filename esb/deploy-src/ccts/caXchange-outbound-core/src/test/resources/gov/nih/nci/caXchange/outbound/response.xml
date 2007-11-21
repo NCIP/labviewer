@@ -1,0 +1,18 @@
+<RegisterResponse
+  xmlns="http://ccts.nci.nih.gov/RegistrationConsumer">
+  <ns1:registration
+    xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+    <ns1:studySite>
+      <ns1:healthcareSite>
+        <ns1:nciInstituteCode>SITE_ON</ns1:nciInstituteCode>
+      </ns1:healthcareSite>
+    </ns1:studySite>
+    <ns1:studyRef>
+      <ns1:identifier xsi:type="ns1:SystemAssignedIdentifierType">
+        <ns1:value>C3PR_00C0092</ns1:value>
+        <ns1:primaryIndicator>true</ns1:primaryIndicator>
+      </ns1:identifier>
+    </ns1:studyRef>
+    <ns1:scheduledEpoch xsi:nil="true" />
+  </ns1:registration>
+</RegisterResponse>
