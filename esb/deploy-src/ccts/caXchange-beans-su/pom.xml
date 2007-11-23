@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
   <parent>
     <artifactId>caxchange</artifactId>
     <groupId>gov.nih.nci.caxchange</groupId>
@@ -91,30 +92,35 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
-      <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.13</version>
-            <scope>provided</scope>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.13</version>
+      <scope>provided</scope>
     </dependency>
-	<dependency>
-		  <groupId>gov.nih.nci.caxchange</groupId>
-		  <artifactId>security</artifactId>
-          <version>1.0-SNAPSHOT</version>
-          <scope>compile</scope>
-	</dependency>   
-	<dependency>
-          <groupId>gov.nih.nci.caxchange</groupId>
-          <artifactId>caXchange-db-jar</artifactId>
-          <version>1.0-SNAPSHOT</version>
-          <scope>compile</scope>
-	</dependency>   
-	<dependency>
-          <groupId>gov.nih.nci.caxchange</groupId>
-          <artifactId>caXchange-common-jar</artifactId>
-          <version>1.0-SNAPSHOT</version>
-          <scope>compile</scope>
-	</dependency>	
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>security</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-db-jar</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-common-jar</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-outbound-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-bean</artifactId>

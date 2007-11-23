@@ -38,6 +38,20 @@
   
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="endpoint" bean="#aggregatorListener" />
   
+  <bean:endpoint service="caXchange:ctomRegistration" endpoint="ctomRegistration" bean="#ctomRegistration" />
+              
+  <bean:endpoint service="caXchange:ctomStudy" endpoint="ctomStudy" bean="#ctomStudy" />
+              
+  <bean:endpoint service="caXchange:ctomRegistrationRollback" endpoint="ctomRegistrationRollback" bean="#ctomRegistrationRollback" />
+  
+  <bean:endpoint service="caXchange:caaersRegistration" endpoint="caaersRegistration" bean="#caaersRegistration" />
+
+  <bean:endpoint service="caXchange:caaersStudy" endpoint="caaersStudy" bean="#caaersStudy" />
+  
+  <bean:endpoint service="caXchange:caaersRegistrationRollback" endpoint="caaersRegistrationRollback" bean="#caaersRegistrationRollback" />  
+              
+  <bean:endpoint service="caXchange:caaersStudyRollback" endpoint="caaersStudyRollback" bean="#caaersStudyRollback" />
+  
   <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
   
   <bean id="caersProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersProcess"/>
@@ -62,5 +76,170 @@
             </list>
       </property>
   </bean>
+  
+    <bean
+    id="ctomRegistration"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomRegistrationInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="PROCESS" />
+    <property
+      name="targetOperation"
+      value="REGISTER_SUBJECT" />
+  </bean>
+
+  <bean
+    id="ctomRegistrationInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="ctomStudy"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomStudyInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="PROCESS" />
+    <property
+      name="targetOperation"
+      value="STUDY_CREATION" />
+  </bean>
+
+  <bean
+    id="ctomStudyInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+  
+  <bean
+    id="ctomRegistrationRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomRegistrationRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ROLLBACK" />
+    <property
+      name="targetOperation"
+      value="REGISTER_SUBJECT" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="ctomRegistrationRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersRegistration"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersRegistrationInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="PROCESS" />
+    <property
+      name="targetOperation"
+      value="REGISTER_SUBJECT" />
+  </bean>
+
+  <bean
+    id="caaersRegistrationInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersStudy"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersStudyInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="PROCESS" />
+    <property
+      name="targetOperation"
+      value="STUDY_CREATION" />
+  </bean>
+
+  <bean
+    id="caaersStudyInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersRegistrationRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersRegistrationRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ROLLBACK" />
+    <property
+      name="targetOperation"
+      value="REGISTER_SUBJECT" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="caaersRegistrationRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.RegistrationRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="caaersStudyRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caaersStudyRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ROLLBACK" />
+    <property
+      name="targetOperation"
+      value="STUDY_CREATION" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="caaersStudyRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+  
 
 </beans>
