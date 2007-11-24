@@ -38,19 +38,19 @@
   
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="endpoint" bean="#aggregatorListener" />
   
-  <bean:endpoint service="caXchange:ctomRegistration" endpoint="ctomRegistration" bean="#ctomRegistration" />
+  <bean:endpoint service="caxchange:ctomRegistration" endpoint="ctomRegistration" bean="#ctomRegistration" />
               
-  <bean:endpoint service="caXchange:ctomStudy" endpoint="ctomStudy" bean="#ctomStudy" />
+  <bean:endpoint service="caxchange:ctomStudy" endpoint="ctomStudy" bean="#ctomStudy" />
               
-  <bean:endpoint service="caXchange:ctomRegistrationRollback" endpoint="ctomRegistrationRollback" bean="#ctomRegistrationRollback" />
+  <bean:endpoint service="caxchange:ctomRegistrationRollback" endpoint="ctomRegistrationRollback" bean="#ctomRegistrationRollback" />
   
-  <bean:endpoint service="caXchange:caaersRegistration" endpoint="caaersRegistration" bean="#caaersRegistration" />
+  <bean:endpoint service="caxchange:caaersRegistration" endpoint="caaersRegistration" bean="#caaersRegistration" />
 
-  <bean:endpoint service="caXchange:caaersStudy" endpoint="caaersStudy" bean="#caaersStudy" />
+  <bean:endpoint service="caxchange:caaersStudy" endpoint="caaersStudy" bean="#caaersStudy" />
   
-  <bean:endpoint service="caXchange:caaersRegistrationRollback" endpoint="caaersRegistrationRollback" bean="#caaersRegistrationRollback" />  
+  <bean:endpoint service="caxchange:caaersRegistrationRollback" endpoint="caaersRegistrationRollback" bean="#caaersRegistrationRollback" />  
               
-  <bean:endpoint service="caXchange:caaersStudyRollback" endpoint="caaersStudyRollback" bean="#caaersStudyRollback" />
+  <bean:endpoint service="caxchange:caaersStudyRollback" endpoint="caaersStudyRollback" bean="#caaersStudyRollback" />
   
   <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
   
