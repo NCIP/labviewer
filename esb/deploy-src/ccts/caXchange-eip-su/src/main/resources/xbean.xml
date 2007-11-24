@@ -66,6 +66,14 @@
         </eip:target>
       </eip:routing-rule>
       <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='STUDY_CREATION']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:studyCreationRecipients" />
+        </eip:target>
+      </eip:routing-rule>      
+      <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
         </eip:target>
@@ -74,12 +82,22 @@
   </eip:content-based-router>
   
   <!-- Static recipient lists for each type of message -->
+  <!-- static recipient list for register subject -->
     <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="endpoint">
       <eip:recipients>
-        <eip:exchange-target service="caxchange:pscRouter" />
-        <eip:exchange-target service="caxchange:caaersRouter" />
+        <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter" />
+        <eip:exchange-target service="caxchange:ctomRegisterSubjectRouter" />
       </eip:recipients>
   </eip:caxchange-static-recipient-list>
+  
+  <!-- static recipient list for study creation -->
+    <eip:caxchange-static-recipient-list service="caxchange:studyCreationRecipients" endpoint="endpoint">
+      <eip:recipients>
+        <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
+        <eip:exchange-target service="caxchange:ctomStudyRouter" />
+      </eip:recipients>
+  </eip:caxchange-static-recipient-list>  
+  
   
   <!--- EIP components for invoking the PSC  -->
   
@@ -115,35 +133,122 @@
   
   <!--- EIP components for invoking the caAERS  -->
   
-    <eip:content-based-router service="caxchange:caaersRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:caaersRegisterSubjectRouter" endpoint="endpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
             <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
           </eip:predicate>
           <eip:target>
-            <eip:exchange-target service="caxchange:caersRollback" />
+            <eip:exchange-target service="caxchange:caaersRegistrationRollback" />
           </eip:target>
         </eip:routing-rule>
         <eip:routing-rule>
           <eip:target>
-            <eip:exchange-target service="caxchange:callcaAERSPipeline" />
+            <eip:exchange-target service="caxchange:callcaAERSRegistrationPipeline" />
           </eip:target>
         </eip:routing-rule>
       </eip:rules>
   </eip:content-based-router>
   
-  <eip:pipeline service="caxchange:callcaAERSPipeline" endpoint="endpoint">
+
+    <eip:content-based-router service="caxchange:caaersStudyCreationRouter" endpoint="endpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:caaersStudyRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="ccaxchange:callcaAERSStudyPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+  </eip:content-based-router>  
+  
+  <eip:pipeline service="caxchange:callcaAERSRegistrationPipeline" endpoint="endpoint">
       <eip:transformer>
-        <eip:exchange-target service="caxchange:caersProcess" />
+        <eip:exchange-target service="caxchange:caaersRegistration" />
       </eip:transformer>
       <eip:target>
         <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
       </eip:target>
   </eip:pipeline>  
   
+  <eip:pipeline service="caxchange:callcaAERSStudyPipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:caaersStudy" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+      </eip:target>
+  </eip:pipeline>   
+  
   
   <!-- End EIP Components for invoking the caAERS -->  
+  
+  <!--- EIP components for invoking the cTOM  -->
+  
+    <eip:content-based-router service="caxchange:ctomRegisterSubjectRouter" endpoint="endpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:ctomRegistrationRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="caxchange:callCtomRegistrationPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+  </eip:content-based-router>
+  
+    <eip:content-based-router service="caxchange:ctomStudyRouter" endpoint="endpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:ctomStudyRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="caxchange:callCtomStudyPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+  </eip:content-based-router>  
+  
+  <eip:pipeline service="caxchange:callCtomRegistrationPipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:ctomRegistration" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+      </eip:target>
+  </eip:pipeline>  
+  
+    <eip:pipeline service="caxchange:callCtomStudyPipeline" endpoint="endpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:ctomStudy" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+        </eip:target>
+  </eip:pipeline> 
+  
+  <!-- End EIP Components for invoking the cTOM -->  
+  
   <!-- EIP Aggregator -->
   <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="endpoint" timeOut="60000">
          <eip:target>
