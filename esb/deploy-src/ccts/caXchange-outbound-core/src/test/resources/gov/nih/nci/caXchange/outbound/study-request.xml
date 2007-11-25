@@ -1,225 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<caXchange:caXchangeRequestMessage
-  xmlns:caXchange="http://caXchange.nci.nih.gov/messaging"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <caXchange:metadata>
-    <caXchange:externalIdentifier>1234567890</caXchange:externalIdentifier>
-  </caXchange:metadata>
-  <caXchange:request>
-    <caXchange:businessMessagePayload>
-      <caXchange:xmlSchemaDefinition>http://tempuri.org</caXchange:xmlSchemaDefinition>
-      <study
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
-        version="1">
-        <blindedIndicator>true</blindedIndicator>
-        <multiInstitutionIndicator>true</multiInstitutionIndicator>
-        <randomizedIndicator>true</randomizedIndicator>
-        <shortTitleText>short_title_text</shortTitleText>
-        <longTitleText>long_title_text</longTitleText>
-        <descriptionText>description</descriptionText>
-        <precisText>precis_text</precisText>
-        <phaseCode>Ph</phaseCode>
-        <dataEntryStatus>COMPLETE</dataEntryStatus>
-        <coordinatingCenterStudyStatus>ACTIVE</coordinatingCenterStudyStatus>
-        <type>ty</type>
-        <targetAccrualNumber>123</targetAccrualNumber>
-        <identifier
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="SystemAssignedIdentifierType">
-          <type>local</type>
-          <value>nci</value>
-          <primaryIndicator>false</primaryIndicator>
-          <systemName>nci</systemName>
-        </identifier>
-        <identifier
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="OrganizationAssignedIdentifierType">
-          <value>nci-id</value>
-          <primaryIndicator>true</primaryIndicator>
-          <healthcareSite>
-            <name>duke healthcare</name>
-            <descriptionText>duke healthcare</descriptionText>
-            <address>
-              <streetAddress>12359 sunrise valley drive</streetAddress>
-              <city>Reston</city>
-              <stateCode>VA</stateCode>
-              <postalCode>20191</postalCode>
-              <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>code</nciInstituteCode>
-          </healthcareSite>
-        </identifier>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="TreatmentEpochType">
-          <name>Treatment1000</name>
-          <descriptionText>treatement desc</descriptionText>
-          <arm>
-            <name>Arm 1000</name>
-            <descriptionText>Arm 1000 desc</descriptionText>
-            <targetAccrualNumber>1000</targetAccrualNumber>
-          </arm>
-          <arm>
-            <name>Arm 1001</name>
-            <descriptionText>Arm 1001 desc</descriptionText>
-            <targetAccrualNumber>1001</targetAccrualNumber>
-          </arm>
-          <eligibilityCriteria
-            xsi:type="InclusionEligibilityCriteriaType">
-            <questionNumber>1</questionNumber>
-            <questionText>inclusion question 1</questionText>
-          </eligibilityCriteria>
-          <eligibilityCriteria
-            xsi:type="InclusionEligibilityCriteriaType">
-            <questionNumber>2</questionNumber>
-            <questionText>inclusion question 2</questionText>
-          </eligibilityCriteria>
-          <eligibilityCriteria
-            xsi:type="ExclusionEligibilityCriteriaType">
-            <questionNumber>3</questionNumber>
-            <questionText>exclusion question 1</questionText>
-          </eligibilityCriteria>
-        </epoch>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="NonTreatmentEpochType">
-          <name>NonTreatment1004</name>
-          <descriptionText>non treatement desc</descriptionText>
-          <accrualCeiling>0</accrualCeiling>
-        </epoch>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="TreatmentEpochType">
-          <name>Treatment1003</name>
-          <descriptionText>cancer desc</descriptionText>
-          <arm>
-            <name>Arm 1006</name>
-            <descriptionText>Arm 1006 desc</descriptionText>
-            <targetAccrualNumber>1006</targetAccrualNumber>
-          </arm>
-          <arm>
-            <name>Arm 1007</name>
-            <descriptionText>Arm 1007 desc</descriptionText>
-            <targetAccrualNumber>1007</targetAccrualNumber>
-          </arm>
-        </epoch>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="NonTreatmentEpochType">
-          <name>NonTreatment1005</name>
-          <descriptionText>non treatment cancer desc</descriptionText>
-          <accrualCeiling>0</accrualCeiling>
-        </epoch>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="TreatmentEpochType">
-          <name>Treatment1001</name>
-          <descriptionText>cancer desc</descriptionText>
-          <arm>
-            <name>Arm 1002</name>
-            <descriptionText>Arm 1002 desc</descriptionText>
-            <targetAccrualNumber>1002</targetAccrualNumber>
-          </arm>
-          <arm>
-            <name>Arm 1003</name>
-            <descriptionText>Arm 1003 desc</descriptionText>
-            <targetAccrualNumber>1003</targetAccrualNumber>
-          </arm>
-        </epoch>
-        <epoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="TreatmentEpochType">
-          <name>Treatment1002</name>
-          <descriptionText>treatement desc</descriptionText>
-          <arm>
-            <name>Arm 1004</name>
-            <descriptionText>Arm 1004 desc</descriptionText>
-            <targetAccrualNumber>1004</targetAccrualNumber>
-          </arm>
-          <arm>
-            <name>Arm 1005</name>
-            <descriptionText>Arm 1005 desc</descriptionText>
-            <targetAccrualNumber>1005</targetAccrualNumber>
-          </arm>
-        </epoch>
-        <studyOrganization
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="StudySiteType">
-          <healthcareSite>
-            <name>duke healthcare</name>
-            <descriptionText>duke healthcare</descriptionText>
-            <address>
-              <streetAddress>12359 sunrise valley drive</streetAddress>
-              <city>Reston</city>
-              <stateCode>VA</stateCode>
-              <postalCode>20191</postalCode>
-              <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>code</nciInstituteCode>
-          </healthcareSite>
-          <!--
-          <studyInvestigator>
-            <roleCode>role1</roleCode>
-            <statusCode>Active</statusCode>
-            <startDate>0006-06-23</startDate>
-            <endDate>0006-06-23</endDate>
-            <healthcareSiteInvestigator>
-              <investigator>
-                <fullName>Investigator Bill Staff1</fullName>
-              </investigator>
-            </healthcareSiteInvestigator>
-          </studyInvestigator>
-          <studyInvestigator>
-            <roleCode>role2</roleCode>
-            <statusCode>Active</statusCode>
-            <startDate>0006-06-23</startDate>
-            <endDate>0006-06-23</endDate>
-            <healthcareSiteInvestigator>
-              <investigator>
-                <fullName>Investigator George Staff2</fullName>
-              </investigator>
-            </healthcareSiteInvestigator>
-          </studyInvestigator>
-          -->
-          <irbApprovalDate>0006-06-23</irbApprovalDate>
-          <roleCode>role</roleCode>
-          <startDate>0006-06-24</startDate>
-          <endDate>0006-06-25</endDate>
-        </studyOrganization>
-        <studyOrganization
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="StudyFundingSponsorType">
-          <healthcareSite>
-            <name>National Cancer Institute</name>
-            <descriptionText>National Cancer Institute</descriptionText>
-            <address>
-              <streetAddress>Coppermine Dr</streetAddress>
-              <city>Herndon</city>
-              <stateCode>VA</stateCode>
-              <postalCode>20171</postalCode>
-              <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>code</nciInstituteCode>
-          </healthcareSite>
-        </studyOrganization>
-        <studyOrganization
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="StudyCoordinatingCenterType">
-          <healthcareSite>
-            <name>CALGB</name>
-            <descriptionText>CALGB</descriptionText>
-            <address>
-              <streetAddress>12359 sunrise valley drive</streetAddress>
-              <city>Reston</city>
-              <stateCode>VA</stateCode>
-              <postalCode>20191</postalCode>
-              <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>code</nciInstituteCode>
-          </healthcareSite>
-        </studyOrganization>
-      </study>
-    </caXchange:businessMessagePayload>
-  </caXchange:request>
-</caXchange:caXchangeRequestMessage>
+<caXchangeRequestMessage xmlns="http://caXchange.nci.nih.gov/messaging" xmlns:gov="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata>
+    <messageType>STUDY_CREATION</messageType>
+    <externalIdentifier>myExternalIdentifier</externalIdentifier>
+    <caXchangeIdentifier>2319a1b0-9b7a-11dc-8b10-c2ed0a64d6d3</caXchangeIdentifier>
+    <credentials>
+      <userName>hmarwaha</userName>
+      <groupName xsi:nil="true"/>
+      <gridIdentifier xsi:nil="true"/>
+      <password>password</password>
+    </credentials>
+  </metadata>
+  <request>
+    <businessMessagePayload>
+      <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
+      <gov:study version="1">
+        <gov:blindedIndicator>1</gov:blindedIndicator>
+        <gov:multiInstitutionIndicator>1</gov:multiInstitutionIndicator>
+        <gov:randomizedIndicator>1</gov:randomizedIndicator>
+        <gov:shortTitleText>short_title_text</gov:shortTitleText>
+        <gov:longTitleText>long_title_text</gov:longTitleText>
+        <gov:descriptionText>description</gov:descriptionText>
+        <gov:precisText>precis_text</gov:precisText>
+        <gov:phaseCode>Ph</gov:phaseCode>
+        <gov:dataEntryStatus>COMPLETE</gov:dataEntryStatus>
+        <gov:coordinatingCenterStudyStatus>ACTIVE</gov:coordinatingCenterStudyStatus>
+        <gov:type>ty</gov:type>
+        <gov:targetAccrualNumber>123</gov:targetAccrualNumber>
+        <gov:systemAssignedIdentifier>
+          <gov:type>local</gov:type>
+          <gov:value>nci</gov:value>
+          <gov:primaryIndicator>false</gov:primaryIndicator>
+          <gov:systemName>nci</gov:systemName>
+        </gov:systemAssignedIdentifier>
+        <gov:nonTreatmentEpoch>
+          <gov:name>NonTreatment1004</gov:name>
+          <gov:descriptionText>non treatement desc</gov:descriptionText>
+          <gov:accrualCeiling>0</gov:accrualCeiling>
+        </gov:nonTreatmentEpoch>
+        <gov:nonTreatmentEpoch>
+          <gov:name>NonTreatment1005</gov:name>
+          <gov:descriptionText>non treatment cancer desc</gov:descriptionText>
+          <gov:accrualCeiling>0</gov:accrualCeiling>
+        </gov:nonTreatmentEpoch>
+        <gov:treatmentEpoch>
+          <gov:name>Treatment1000</gov:name>
+          <gov:descriptionText>treatement desc</gov:descriptionText>
+          <gov:arm>
+            <gov:name>Arm 1000</gov:name>
+            <gov:descriptionText>Arm 1000 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1000</gov:targetAccrualNumber>
+          </gov:arm>
+          <gov:arm>
+            <gov:name>Arm 1001</gov:name>
+            <gov:descriptionText>Arm 1001 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1001</gov:targetAccrualNumber>
+          </gov:arm>
+          <gov:incCriteria>
+            <gov:questionNumber>1</gov:questionNumber>
+            <gov:questionText>inclusion question 1</gov:questionText>
+          </gov:incCriteria>
+          <gov:incCriteria>
+            <gov:questionNumber>2</gov:questionNumber>
+            <gov:questionText>inclusion question 2</gov:questionText>
+          </gov:incCriteria>
+          <gov:excCriteria>
+            <gov:questionNumber>3</gov:questionNumber>
+            <gov:questionText>exclusion question 1</gov:questionText>
+          </gov:excCriteria>
+        </gov:treatmentEpoch>
+        <gov:treatmentEpoch>
+          <gov:name>Treatment1001</gov:name>
+          <gov:descriptionText>cancer desc</gov:descriptionText>
+          <gov:arm>
+            <gov:name>Arm 1002</gov:name>
+            <gov:descriptionText>Arm 1002 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1002</gov:targetAccrualNumber>
+          </gov:arm>
+          <gov:arm>
+            <gov:name>Arm 1003</gov:name>
+            <gov:descriptionText>Arm 1003 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1003</gov:targetAccrualNumber>
+          </gov:arm>
+        </gov:treatmentEpoch>
+        <gov:treatmentEpoch>
+          <gov:name>Treatment1002</gov:name>
+          <gov:descriptionText>treatement desc</gov:descriptionText>
+          <gov:arm>
+            <gov:name>Arm 1004</gov:name>
+            <gov:descriptionText>Arm 1004 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1004</gov:targetAccrualNumber>
+          </gov:arm>
+          <gov:arm>
+            <gov:name>Arm 1005</gov:name>
+            <gov:descriptionText>Arm 1005 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1005</gov:targetAccrualNumber>
+          </gov:arm>
+        </gov:treatmentEpoch>
+        <gov:treatmentEpoch>
+          <gov:name>Treatment1003</gov:name>
+          <gov:descriptionText>cancer desc</gov:descriptionText>
+          <gov:arm>
+            <gov:name>Arm 1006</gov:name>
+            <gov:descriptionText>Arm 1006 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1006</gov:targetAccrualNumber>
+          </gov:arm>
+          <gov:arm>
+            <gov:name>Arm 1007</gov:name>
+            <gov:descriptionText>Arm 1007 desc</gov:descriptionText>
+            <gov:targetAccrualNumber>1007</gov:targetAccrualNumber>
+          </gov:arm>
+        </gov:treatmentEpoch>
+        <gov:studySite>
+          <gov:healthcareSite>
+            <gov:name>duke healthcare</gov:name>
+            <gov:descriptionText>duke healthcare</gov:descriptionText>
+            <gov:address>
+              <gov:streetAddress>12359 sunrise valley drive</gov:streetAddress>
+              <gov:city>Reston</gov:city>
+              <gov:stateCode>VA</gov:stateCode>
+              <gov:postalCode>20191</gov:postalCode>
+              <gov:countryCode>USA</gov:countryCode>
+            </gov:address>
+            <gov:nciInstituteCode>code</gov:nciInstituteCode>
+          </gov:healthcareSite>
+          <gov:irbApprovalDate>0006-06-23</gov:irbApprovalDate>
+          <gov:roleCode>role</gov:roleCode>
+          <gov:startDate>0006-06-24</gov:startDate>
+          <gov:endDate>0006-06-25</gov:endDate>
+        </gov:studySite>
+        <gov:studyFundingSponsor>
+          <gov:healthcareSite>
+            <gov:name>National Cancer Institute</gov:name>
+            <gov:descriptionText>National Cancer Institute</gov:descriptionText>
+            <gov:address>
+              <gov:streetAddress>Coppermine Dr</gov:streetAddress>
+              <gov:city>Herndon</gov:city>
+              <gov:stateCode>VA</gov:stateCode>
+              <gov:postalCode>20171</gov:postalCode>
+              <gov:countryCode>USA</gov:countryCode>
+            </gov:address>
+            <gov:nciInstituteCode>code</gov:nciInstituteCode>
+          </gov:healthcareSite>
+        </gov:studyFundingSponsor>
+        <gov:studyCoordinatingCenter>
+          <gov:healthcareSite>
+            <gov:name>CALGB</gov:name>
+            <gov:descriptionText>CALGB</gov:descriptionText>
+            <gov:address>
+              <gov:streetAddress>12359 sunrise valley drive</gov:streetAddress>
+              <gov:city>Reston</gov:city>
+              <gov:stateCode>VA</gov:stateCode>
+              <gov:postalCode>20191</gov:postalCode>
+              <gov:countryCode>USA</gov:countryCode>
+            </gov:address>
+            <gov:nciInstituteCode>code</gov:nciInstituteCode>
+          </gov:healthcareSite>
+        </gov:studyCoordinatingCenter>
+      </gov:study>
+    </businessMessagePayload>
+  </request>
+</caXchangeRequestMessage>

@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<caXchange:caXchangeRequestMessage
-  xmlns:caXchange="http://caXchange.nci.nih.gov/messaging"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <caXchange:metadata>
-    <caXchange:externalIdentifier>1234567890</caXchange:externalIdentifier>
-  </caXchange:metadata>
-  <caXchange:request>
-    <caXchange:businessMessagePayload>
-      <caXchange:xmlSchemaDefinition>http://tempuri.org</caXchange:xmlSchemaDefinition>
+<caXchangeRequestMessage xmlns="http://caXchange.nci.nih.gov/messaging" xmlns:gov="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata>
+    <messageType>STUDY_CREATION</messageType>
+    <externalIdentifier>myExternalIdentifier</externalIdentifier>
+    <caXchangeIdentifier>2319a1b0-9b7a-11dc-8b10-c2ed0a64d6d3</caXchangeIdentifier>
+    <credentials>
+      <userName>hmarwaha</userName>
+      <groupName xsi:nil="true"/>
+      <gridIdentifier xsi:nil="true"/>
+      <password>password</password>
+    </credentials>
+  </metadata>
+  <request>
+    <businessMessagePayload>
+      <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
+      
       <registration
         xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         gridId="sampleRegistration">
@@ -93,6 +99,6 @@
         </scheduledEpoch>
         <stratumGroup>3:between 20 and 45 - &lt;120</stratumGroup>
       </registration>
-    </caXchange:businessMessagePayload>
-  </caXchange:request>
-</caXchange:caXchangeRequestMessage>
+    </businessMessagePayload>
+  </request>
+</caXchangeRequestMessage>
