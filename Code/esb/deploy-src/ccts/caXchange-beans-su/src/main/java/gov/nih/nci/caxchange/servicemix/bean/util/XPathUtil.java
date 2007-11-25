@@ -207,6 +207,7 @@ public class XPathUtil {
            brm.setTargetServiceIdentifier((String)tsiExp.evaluate(brNode, XPathConstants.STRING));
            brm.setTargetServiceOperation((String)tsoExp.evaluate(brNode, XPathConstants.STRING));
            String targetMessageStatus = (String)msExp.evaluate(brNode, XPathConstants.STRING);
+		   logger.debug("TargetMessageStatus is :"+targetMessageStatus);
            if (MessageStatuses.FAULT.toString().equals(targetMessageStatus)) {
                brm.setTargetMessageStatus(MessageStatuses.FAULT);
                responseStatus = Statuses.FAILURE;

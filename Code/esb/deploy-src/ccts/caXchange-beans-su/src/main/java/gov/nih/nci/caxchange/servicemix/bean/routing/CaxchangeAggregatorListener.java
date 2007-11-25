@@ -62,7 +62,8 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             if (messageExchange.getStatus().equals(ExchangeStatus.ERROR)) {
                 throw new MessagingException("An error occurred in the aggregator listener.",messageExchange.getError());
             }            
-            NormalizedMessage in = messageExchange.getMessage("in");        
+            NormalizedMessage in = messageExchange.getMessage("in");  
+			logger.debug("Aggregated message :" +messageExchange);
             correlationID= (String)in.getProperty(CaxchangeConstants.ORIGINAL_EXCHANGE_CORRELATIONID);            
             Source originalSource = getOriginalMessage(correlationID);
             XPathUtil originalUtil = new XPathUtil();
@@ -117,6 +118,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
                return true;
            }
        }
+	   logger.debug("No rollback required");
        return rollbackRequired;
     }
     
@@ -136,6 +138,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        resp.setContent(response);
        robustInOnly.setInMessage(resp);
        robustInOnly.setService(CaxchangeConstants.RESPONSE_QUEUE);
+	   logger.info("Sending response:"+robustInOnly);
        channel.sendSync(robustInOnly, 1000);    
     }
     
