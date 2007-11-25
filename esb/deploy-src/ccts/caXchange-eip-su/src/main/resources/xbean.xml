@@ -164,7 +164,7 @@
         </eip:routing-rule>
         <eip:routing-rule>
           <eip:target>
-            <eip:exchange-target service="ccaxchange:callcaAERSStudyPipeline" />
+            <eip:exchange-target service="caxchange:callcaAERSStudyPipeline" />
           </eip:target>
         </eip:routing-rule>
       </eip:rules>
@@ -218,7 +218,7 @@
             <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
           </eip:predicate>
           <eip:target>
-            <eip:exchange-target service="caxchange:ctomStudyRollback" />
+            <eip:exchange-target service="caxchange:caaersStudyRollback" />
           </eip:target>
         </eip:routing-rule>
         <eip:routing-rule>
