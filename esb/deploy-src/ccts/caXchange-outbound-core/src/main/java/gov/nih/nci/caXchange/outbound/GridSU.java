@@ -34,7 +34,7 @@ public class GridSU implements MessageExchangeListener {
 
 	public static final String META_DATA_ELEMENT = "metadata";
 
-	public static final String RESPONSE_ELEMENT = "targetResponseMessage";
+	public static final String RESPONSE_ELEMENT = "targetResponse";
 
 	public static final String ERROR_RESPONSE_ELEMENT = "targetError";
 

@@ -25,6 +25,10 @@
                 endpoint="ctomRegistrationRollback"
                 bean="#ctomRegistrationRollback" />
               <bean:endpoint
+                service="caXchange:ctomStudyRollback"
+                endpoint="ctomStudyRollback"
+                bean="#ctomStudyRollback" />
+              <bean:endpoint
                 service="caXchange:caaersRegistration"
                 endpoint="caaersRegistration"
                 bean="#caaersRegistration" />
@@ -115,6 +119,30 @@
     <property
       name="serviceUrl"
       value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+  </bean>
+  
+  <bean
+    id="ctomStudyRollback"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="ctomStudyRollbackStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="ROLLBACK" />
+    <property
+      name="targetOperation"
+      value="STUDY_CREATION" />
+    <property name="rollback" value="true"/>
+  </bean>
+
+  <bean
+    id="ctomStudyRollbackStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.StudyRollbackStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer" />
   </bean>
   
   <bean
