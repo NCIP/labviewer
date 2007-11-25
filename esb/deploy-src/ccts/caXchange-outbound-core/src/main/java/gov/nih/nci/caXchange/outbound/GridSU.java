@@ -26,7 +26,7 @@ public class GridSU implements MessageExchangeListener {
 
 	private static final Category log = Category.getInstance(GridSU.class);
 
-	public static final String NS = "http://caXchange.nci.nih.gov/messaging";
+	// public static final String NS = "http://caXchange.nci.nih.gov/messaging";
 
 	public static final String REQUEST_ELEMENT = "request";
 
@@ -275,12 +275,10 @@ public class GridSU implements MessageExchangeListener {
 
 	protected Document createBaseOutputDocument() throws Exception {
 		Document output = new SourceTransformer().createDocument();
-		Element root = output.createElementNS(NS, RESPONSE_ELEMENT);
-		Element targetServiceId = output.createElementNS(NS,
-				TARGET_SERVICE_ID_ELEMENT);
+		Element root = output.createElement(RESPONSE_ELEMENT);
+		Element targetServiceId = output.createElement(TARGET_SERVICE_ID_ELEMENT);
 		targetServiceId.setTextContent(getTargetId());
-		Element targetServiceOp = output.createElementNS(NS,
-				TARGET_SERVICE_OP_ELEMENT);
+		Element targetServiceOp = output.createElement(TARGET_SERVICE_OP_ELEMENT);
 		targetServiceOp.setTextContent(getTargetOperation());
 		root.appendChild(targetServiceId);
 		root.appendChild(targetServiceOp);
@@ -293,8 +291,7 @@ public class GridSU implements MessageExchangeListener {
 
 		Document output = createBaseOutputDocument();
 		Element root = output.getDocumentElement();
-		Element targetStatus = output
-				.createElementNS(NS, TARGET_STATUS_ELEMENT);
+		Element targetStatus = output.createElement(TARGET_STATUS_ELEMENT);
 		if (result.isFault()) {
 			targetStatus.setTextContent("FAULT");
 		} else {
@@ -302,8 +299,7 @@ public class GridSU implements MessageExchangeListener {
 		}
 		root.appendChild(targetStatus);
 
-		Element payloadElement = output.createElementNS(NS,
-				RESPONSE_PAYLOAD_ELEMENT);
+		Element payloadElement = output.createElement(RESPONSE_PAYLOAD_ELEMENT);
 		payloadElement.appendChild(output.importNode(gridMessage
 				.getSchemaDefinition(), true));
 		payloadElement.appendChild(output.importNode(result.getResult(), true));
@@ -314,15 +310,12 @@ public class GridSU implements MessageExchangeListener {
 	public Document createErrorDocument(Exception e) throws Exception {
 		Document output = createBaseOutputDocument();
 		Element root = output.getDocumentElement();
-		Element targetStatus = output
-				.createElementNS(NS, TARGET_STATUS_ELEMENT);
+		Element targetStatus = output.createElement(TARGET_STATUS_ELEMENT);
 		targetStatus.setTextContent("ERROR");
 		root.appendChild(targetStatus);
-		Element payloadElement = output.createElementNS(NS,
-				ERROR_RESPONSE_ELEMENT);
-		Element errorCode = output.createElementNS(NS, ERROR_CODE_ELEMENT);
-		Element errorDescription = output.createElementNS(NS,
-				ERROR_DESCRIPTION_ELEMENT);
+		Element payloadElement = output.createElement(ERROR_RESPONSE_ELEMENT);
+		Element errorCode = output.createElement(ERROR_CODE_ELEMENT);
+		Element errorDescription = output.createElement(ERROR_DESCRIPTION_ELEMENT);
 		errorCode.setTextContent("NA");
 		errorDescription.setTextContent(e.getMessage());
 		payloadElement.appendChild(errorCode);

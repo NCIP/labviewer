@@ -13,8 +13,8 @@ import junit.framework.TestCase;
 
 public class GridMessageImplTest extends TestCase {
     
-    public void testBasicFunctionality() throws Exception {
-	InputStream fis = GridSUTest.class.getResourceAsStream("request.xml");
+    public void testRegistrationMessage() throws Exception {
+	InputStream fis = GridSUTest.class.getResourceAsStream("registration-request.xml");
 	Document document = new SourceTransformer().toDOMDocument(new StreamSource(fis));
 	GridMessageImpl message = new GridMessageImpl(document);
 	assertNotNull(message.getMetaData());
@@ -31,5 +31,24 @@ public class GridMessageImplTest extends TestCase {
 	
 	assertNotNull(message.getSchemaDefinition());
     }
+    
+    public void testStudyMessage() throws Exception {
+    	InputStream fis = GridSUTest.class.getResourceAsStream("study-request.xml");
+    	Document document = new SourceTransformer().toDOMDocument(new StreamSource(fis));
+    	GridMessageImpl message = new GridMessageImpl(document);
+    	assertNotNull(message.getMetaData());
+    	Document metaData =
+    	    new SourceTransformer().toDOMDocument(message.getMetaData());
+    	
+    	System.out.println(new SourceTransformer().toString(metaData));
+    	assertNotNull(message.getPayload());
+    	
+    	Document payload =
+    	    new SourceTransformer().toDOMDocument(message.getPayload());
+    	
+    	System.out.println(new SourceTransformer().toString(payload));
+    	
+    	assertNotNull(message.getSchemaDefinition());
+        }
 
 }
