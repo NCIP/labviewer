@@ -64,6 +64,21 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	public void testCTOMStudyRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("study-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"ctomStudyRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"ctomStudyRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
 	public void testCAAERSExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
