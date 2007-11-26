@@ -62,7 +62,133 @@ import org.xml.sax.InputSource;
 public class CaXchangeRequestProcessorClient extends ServiceSecurityClient implements CaXchangeRequestProcessorI {
 	protected CaXchangeRequestProcessorPortType portType;
 	private Object portTypeMutex;
-         String testPayLoad ="<mytest1><first1>harsh</first1><last1>marwaha</last1></mytest1>";
+         String testPayLoad ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+         "<study xmlns=\"gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain\" version=\"1\">\n" + 
+         "    <blindedIndicator>1</blindedIndicator>\n" + 
+         "    <multiInstitutionIndicator>1</multiInstitutionIndicator>\n" + 
+         "    <randomizedIndicator>1</randomizedIndicator>\n" + 
+         "    <shortTitleText>short_title_text</shortTitleText>\n" + 
+         "    <longTitleText>long_title_text</longTitleText>\n" + 
+         "    <descriptionText>description</descriptionText>\n" + 
+         "    <precisText>precis_text</precisText>\n" + 
+         "    <phaseCode>Ph</phaseCode>\n" + 
+         "    <dataEntryStatus>COMPLETE</dataEntryStatus>\n" + 
+         "    <coordinatingCenterStudyStatus>ACTIVE</coordinatingCenterStudyStatus>\n" + 
+         "    <type>ty</type>\n" + 
+         "    <targetAccrualNumber>123</targetAccrualNumber>\n" + 
+         "    <systemAssignedIdentifier>\n" + 
+         "        <type>local</type>\n" + 
+         "        <value>nci</value>\n" + 
+         "        <primaryIndicator>false</primaryIndicator>\n" + 
+         "        <systemName>nci</systemName>\n" + 
+         "    </systemAssignedIdentifier>\n" + 
+         "    <nonTreatmentEpoch>\n" + 
+         "        <name>NonTreatment1004</name>\n" + 
+         "        <descriptionText>non treatement desc</descriptionText>\n" + 
+         "        <accrualCeiling>0</accrualCeiling>\n" + 
+         "    </nonTreatmentEpoch>\n" + 
+         "    <nonTreatmentEpoch>\n" + 
+         "        <name>NonTreatment1005</name>\n" + 
+         "        <descriptionText>non treatment cancer desc</descriptionText>\n" + 
+         "        <accrualCeiling>0</accrualCeiling>\n" + 
+         "    </nonTreatmentEpoch>\n" + 
+         "    <treatmentEpoch>\n" + 
+         "        <name>Treatment1000</name>\n" + 
+         "        <descriptionText>treatement desc</descriptionText>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1000</name>\n" + 
+         "            <descriptionText>Arm 1000 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1000</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1001</name>\n" + 
+         "            <descriptionText>Arm 1001 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1001</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "        <incCriteria>\n" + 
+         "            <questionNumber>1</questionNumber>\n" + 
+         "            <questionText>inclusion question 1</questionText>\n" + 
+         "        </incCriteria>\n" + 
+         "        <incCriteria>\n" + 
+         "            <questionNumber>2</questionNumber>\n" + 
+         "            <questionText>inclusion question 2</questionText>\n" + 
+         "        </incCriteria>\n" + 
+         "        <excCriteria>\n" + 
+         "            <questionNumber>3</questionNumber>\n" + 
+         "            <questionText>exclusion question 1</questionText>\n" + 
+         "        </excCriteria>\n" + 
+         "    </treatmentEpoch>\n" + 
+         "    <treatmentEpoch>\n" + 
+         "        <name>Treatment1001</name>\n" + 
+         "        <descriptionText>cancer desc</descriptionText>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1002</name>\n" + 
+         "            <descriptionText>Arm 1002 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1002</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1003</name>\n" + 
+         "            <descriptionText>Arm 1003 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1003</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "    </treatmentEpoch>\n" + 
+         "    <treatmentEpoch>\n" + 
+         "        <name>Treatment1002</name>\n" + 
+         "        <descriptionText>treatement desc</descriptionText>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1004</name>\n" + 
+         "            <descriptionText>Arm 1004 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1004</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1005</name>\n" + 
+         "            <descriptionText>Arm 1005 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1005</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "    </treatmentEpoch>\n" + 
+         "    <treatmentEpoch>\n" + 
+         "        <name>Treatment1003</name>\n" + 
+         "        <descriptionText>cancer desc</descriptionText>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1006</name>\n" + 
+         "            <descriptionText>Arm 1006 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1006</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "        <arm>\n" + 
+         "            <name>Arm 1007</name>\n" + 
+         "            <descriptionText>Arm 1007 desc</descriptionText>\n" + 
+         "            <targetAccrualNumber>1007</targetAccrualNumber>\n" + 
+         "        </arm>\n" + 
+         "    </treatmentEpoch>\n" + 
+         "    <studySite>\n" + 
+         "        <healthcareSite>\n" + 
+         "            <name>duke healthcare</name>\n" + 
+         "            <descriptionText>duke healthcare</descriptionText>\n" + 
+         "            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>\n" + 
+         "            <nciInstituteCode>code</nciInstituteCode>\n" + 
+         "        </healthcareSite>\n" + 
+         "        <irbApprovalDate>0006-06-23</irbApprovalDate>\n" + 
+         "        <roleCode>role</roleCode>\n" + 
+         "        <startDate>0006-06-24</startDate>\n" + 
+         "        <endDate>0006-06-25</endDate>\n" + 
+         "    </studySite>\n" + 
+         "    <studyFundingSponsor>\n" + 
+         "        <healthcareSite>\n" + 
+         "            <name>National Cancer Institute</name>\n" + 
+         "            <descriptionText>National Cancer Institute</descriptionText>\n" + 
+         "            <address><streetAddress>Coppermine Dr</streetAddress><city>Herndon</city><stateCode>VA</stateCode><postalCode>20171</postalCode><countryCode>USA</countryCode></address>\n" + 
+         "            <nciInstituteCode>code</nciInstituteCode>\n" + 
+         "        </healthcareSite>\n" + 
+         "    </studyFundingSponsor>\n" + 
+         "    <studyCoordinatingCenter>\n" + 
+         "        <healthcareSite>\n" + 
+         "            <name>CALGB</name>\n" + 
+         "            <descriptionText>CALGB</descriptionText>\n" + 
+         "            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>\n" + 
+         "            <nciInstituteCode>code</nciInstituteCode>\n" + 
+         "        </healthcareSite>\n" + 
+         "    </studyCoordinatingCenter>\n" + 
+         "</study>\n";
 
 	public CaXchangeRequestProcessorClient(String url) throws MalformedURIException, RemoteException {
 		this(url,null);
@@ -125,16 +251,16 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 			            Message requestMessage = new Message();
 			            Metadata metaData = new Metadata();
 			            metaData.setExternalIdentifier("myExternalIdentifier");
-			            metaData.setMessageType(MessageTypes.REGISTER_SUBJECT);
+			            metaData.setMessageType(MessageTypes.STUDY_CREATION);
 			            Credentials creds = new Credentials();
 			            creds.setUserName("hmarwaha");
 			            creds.setPassword("password");
-			            metaData.setCredentials(creds);
+			            metaData.setCredentials(creds); 
 			            requestMessage.setMetadata(metaData);
 			            Request request = new Request();
 			            MessagePayload mp= new MessagePayload();
                                     URI uri = new URI();
-                                    uri.setPath("http://test");
+                                    uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
                                     mp.setXmlSchemaDefinition(uri);
                                     DocumentBuilder db= DocumentBuilderFactory.newInstance().newDocumentBuilder();
                                     Document document=db.parse(new InputSource(new StringReader(client.testPayLoad)));
