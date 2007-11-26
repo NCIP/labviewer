@@ -27,6 +27,7 @@
 		<path id="test.build.extended.classpath">
 		</path>
 		<path id="test.run.extended.classpath">
+
 		</path>
 		<path id="run.extended.classpath">	
 		</path>
@@ -129,6 +130,11 @@
 	<!-- Post Compile Tests Build Target                                -->
 	<!-- ============================================================== -->
 	<target name="postCompileTests">
+	    <copy todir="./build/test/classes">
+	           <fileset dir="./test/resources" >
+		           <include name="*.xml" />
+                   </fileset>
+	    </copy>
 
 	</target>
 
@@ -168,6 +174,9 @@
         <echo message="Test results dir: ${junit.results.dir}" />
         <mkdir dir="${junit.results.dir}" />
         <junit dir="${basedir}" printsummary="yes" showoutput="true">
+            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
             <classpath refid="test.run.classpath" />
             <formatter type="xml" />
             <batchtest fork="yes" todir="${junit.results.dir}">

@@ -28,6 +28,7 @@ public class CaxchangeResponseExceptionListener implements ExceptionListener{
          CaXchangeRequestProcessorImpl.responseListeners.remove(this);
        }catch(Exception e) {
            logger.error("Error handling jms exception,",jmsException);
+           throw new RuntimeException("Error handling jms exception,",jmsException);
        }
     }
 }

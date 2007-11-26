@@ -1,6 +1,7 @@
 package gov.nih.nci.cagrid.caxchange.listener;
 
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.ErrorDetails;
 import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.MessageStatuses;
@@ -13,6 +14,7 @@ import gov.nih.nci.caxchange.Statuses;
 
 import gov.nih.nci.caxchange.TargetResponseMessage;
 
+import java.io.Reader;
 import java.io.StringReader;
 
 import java.util.ArrayList;
@@ -85,7 +87,36 @@ public class ResponseHandler {
     "      </messagePayload> "+
     "    </businessResponseMessage>\n" +     
     "  </response>\n" + 
-    "</caXchangeResponseMessage>";    
+    "</caXchangeResponseMessage>";   
+    
+    
+    static String testResponse2="<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+    "<caXchangeResponseMessage xmlns=\"http://caXchange.nci.nih.gov/messaging\">" +
+        "<responseMetadata>" +
+        "   <externalIdentifier>myExternalIdentifier</externalIdentifier>" +
+        "  <caXchangeIdentifier>c87a1fa0-9b83-11dc-8b10-c2ed0a64d6d3</caXchangeIdentifier>" +
+        "</responseMetadata>" +
+        "<response>" +
+        "<responseStatus>FAILURE</responseStatus>" +
+        "<targetResponse>" +
+        "<targetServiceIdentifier>PROCESS</targetServiceIdentifier>" +
+        "<targetServiceOperation>STUDY_CREATION</targetServiceOperation>" +
+        "<targetMessageStatus>ERROR</targetMessageStatus>" +
+        "<targetError>" +
+        "<errorCode>NA</errorCode>" +
+        "<errorDescription>Invalid element in gov.nih.nci.ccts.grid.Study - systemAssignedIdentifier</errorDescription>" +
+        "</targetError>" +
+        "</targetResponse>" +
+        "<targetResponse>" +
+        "<targetServiceIdentifier>PROCESS</targetServiceIdentifier>" +
+        "<targetServiceOperation>STUDY_CREATION</targetServiceOperation>" +
+        "<targetMessageStatus>ERROR</targetMessageStatus>" +
+        "<targetError><errorCode>NA</errorCode>" +
+        "<errorDescription>Invalid element in gov.nih.nci.ccts.grid.Study - systemAssignedIdentifier</errorDescription>" +
+        "</targetError>" +
+        "</targetResponse>" +
+        "</response>" +
+        "</caXchangeResponseMessage>";
     
     String responseText;
     CaXchangeResponseMessageDocument responseMessageDocument=null;
@@ -179,6 +210,10 @@ public class ResponseHandler {
     }
     
     public ResponseMessage getResponse() throws Exception {
+        Reader reader = new StringReader(responseText);
+        ResponseMessage rm =(ResponseMessage)Utils.deserializeObject(reader,ResponseMessage.class);
+        return rm;
+    /*
         ResponseMessage rm = new ResponseMessage();
         rm.setResponseMetadata(new ResponseMetadata());
         gov.nih.nci.caXchange.messaging.ResponseMetadata sourceMetadata=responseMessageDocument.getCaXchangeResponseMessage().getResponseMetadata();
@@ -203,7 +238,7 @@ public class ResponseHandler {
         rm.getResponse().setTargetResponse(getTargetResponseMessages());
         
         return rm;
-
+*/
     }
     
     /**
@@ -251,7 +286,7 @@ public class ResponseHandler {
     public static void main(String[] args) {
         try  {
             ResponseHandler rh = new ResponseHandler();
-            rh.setResponseText(testResponse1);
+            rh.setResponseText(testResponse2);
             ResponseMessage rm = rh.getResponse();
         } catch (Exception ex)  {
             ex.printStackTrace();
