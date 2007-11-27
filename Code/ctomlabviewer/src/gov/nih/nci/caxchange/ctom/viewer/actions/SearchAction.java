@@ -81,7 +81,7 @@ public class SearchAction extends Action
 		HttpSession session = request.getSession();
 		
         //search form
-		LabActivitiesSearchForm lForm = (LabActivitiesSearchForm) form;
+		LabActivitiesSearchForm lForm =(LabActivitiesSearchForm) form;
        
 		UserInfoHelper.setUserInfo(((LoginForm) session
 				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
@@ -256,7 +256,7 @@ public class SearchAction extends Action
 
 				LabActivityResult labActivityResult = null;
 
-				larlist = printRecord(sa, lForm.getBeginDate(), lForm.getEndDate());
+				larlist = printRecord(sa, lForm.getBeginDate(), lForm.getEndDate(),request);
 
 				for (int j = 0; j < larlist.size(); j++)
 				{
@@ -325,7 +325,7 @@ public class SearchAction extends Action
 	 * @return
 	 * @throws ParseException
 	 */
-	private ArrayList printRecord(SubjectAssignment sa, String beginDate2, String endDate2)
+	private ArrayList printRecord(SubjectAssignment sa, String beginDate2, String endDate2,HttpServletRequest request)
 		throws ParseException
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
@@ -349,6 +349,7 @@ public class SearchAction extends Action
 		Float lowRange;
 		Float highRange;
 		Collection<II> identifiers = null;
+		String studyGridId=null;
 
 		if (sa == null)
 			return null;
@@ -363,6 +364,9 @@ public class SearchAction extends Action
 			identifiers = sa.getStudySubjectIdentifier();
 			patientId = retrieveIdentifier(identifiers);
 			labActivityResult.setPatientId(patientId);
+			identifiers = sa.getStudySubjectIdentifier();
+			studyGridId=retriveGridId(identifiers);
+			request.getSession().setAttribute("studySubjectGridId", studyGridId);
 
 			// Set the study ID
 			StudySite site = sa.getStudySite();
@@ -436,9 +440,9 @@ public class SearchAction extends Action
 												labActivityResult.setUnitOfMeasure(unitOfMeasure);
 											}
 
-											lowRange = labResult.getReferenceRangeLow();
+											lowRange = new Float ( labResult.getReferenceRangeLow());
 											labActivityResult.setLowRange(String.valueOf(lowRange));
-											highRange = labResult.getReferenceRangeHigh();
+											highRange = new Float (labResult.getReferenceRangeHigh());
 
 											if ((numericResult != null) && (lowRange != null) && (highRange != null))
 											{
@@ -498,4 +502,14 @@ public class SearchAction extends Action
 		String str = formatter.format(date);
 		return str;
 	}
+	private String retriveGridId(Collection<II> identifiers)
+	{
+		String identifier = null;
+		
+		Iterator<II> idIterator = identifiers.iterator();
+		identifier = idIterator.next().getRoot();
+		
+		return identifier;
+	}
 }
+
