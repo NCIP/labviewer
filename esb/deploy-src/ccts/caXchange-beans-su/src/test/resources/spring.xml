@@ -23,6 +23,7 @@
  <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
  <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
  <bean id="storeOriginalMessageBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
+ <bean id="xpathUtil" class="gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil" />
 </beans>
 
 
