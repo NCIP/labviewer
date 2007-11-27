@@ -118,6 +118,7 @@ public interface ForwardConstants
 	public static final String DELETE_SUCCESS="DeleteSuccess";
 	public static final String SEARCH_SUCCESS="SearchSuccess";	
 	public static final String LOGIN_SUCCESS="LoginSuccess";
+	public static final String LOGIN_SUCCESS_HOTLINK="LoginSuccessHotLink";
 	public static final String ADMIN_LOGIN_SUCCESS = "AdminLoginSuccess";
 	public static final String LOGIN_FAILURE="LoginFailure";	
 	public static final String LOAD_ASSOCIATION_SUCCESS="LoadAssociationSuccess";
@@ -146,7 +147,8 @@ public interface ForwardConstants
 	public static final String HOME_PAGE="HomePage";
 	public static final String ADMIN_HOME_PAGE="AdminHomePage";	
 	public static final String LOGIN_PAGE="LoginPage";
-
+	
+	
 	public static final String TABLE_HOME_PAGE="TableHomePage";
 	public static final String LABACTIVITIES_HOME_PAGE="LabActivitiesHomePage";
 	
