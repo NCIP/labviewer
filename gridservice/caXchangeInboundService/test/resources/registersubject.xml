@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+        gridId="sampleRegistration">
+	<studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
+		<healthcareSite gridId="WF GRID ID">
+			<nciInstituteCode>duke code</nciInstituteCode>
+		</healthcareSite>
+		<irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate>
+		<roleCode>Affiliate Site</roleCode>
+		<startDate>2007-10-01T00:00:00.000-04:00</startDate>
+	</studySite>
+	<studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e2">
+	    <shortTitleText>short_title_text</shortTitleText>
+	    <longTitleText>long_title_text</longTitleText>
+	    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	        xsi:type="OrganizationAssignedIdentifierType">
+	        <value>nci-id</value>
+	        <primaryIndicator>true</primaryIndicator>
+	        <healthcareSite>
+	            <name>duke healthcare</name>
+	            <descriptionText>duke healthcare</descriptionText>
+	            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+	            <nciInstituteCode>duke code</nciInstituteCode>
+	        </healthcareSite>
+	    </identifier>
+	</studyRef>
+	<participant
+		gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
+		<gridId>50113a1a-4c3e-4418-8c37-7383cba1aaf8</gridId>
+		<firstName>Geoge</firstName>
+		<lastName>Elliot</lastName>
+		<address />
+		<administrativeGenderCode>Male</administrativeGenderCode>
+		<birthDate>1971-01-01</birthDate>
+		<ethnicGroupCode>Hispanic or Latino</ethnicGroupCode>
+		<raceCode>Asian</raceCode>
+	</participant>
+	<startDate>2007-10-01</startDate>
+	<informedConsentFormSignedDate>2007-10-09</informedConsentFormSignedDate>
+	<informedConsentVersion>1.0</informedConsentVersion>
+	<regDataEntryStatus>COMPLETE</regDataEntryStatus>
+	<regWorkflowStatus>REGISTERED</regWorkflowStatus>
+	<scheduledEpoch
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:type="ScheduledTreatmentEpochType">
+		<startDate>2007-10-01</startDate>
+		<epoch gridId="3ad38cfd-bfbe-4af2-9783-c69169f8f241"
+			xsi:type="TreatmentEpochType">
+			<name>Treatment1000</name>
+			<descriptionText></descriptionText>
+		</epoch>
+		<scheduledArm>
+			<arm gridId="de3a0ef0-1f02-4da6-afdc-cc9042cdb594">
+				<name>Arm 1000</name>
+				<targetAccrualNumber>1000</targetAccrualNumber>
+			</arm>
+		</scheduledArm>
+		<eligibilityIndicator>true</eligibilityIndicator>
+	</scheduledEpoch>
+</registration>
