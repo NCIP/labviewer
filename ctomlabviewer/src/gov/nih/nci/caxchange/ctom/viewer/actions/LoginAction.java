@@ -14,6 +14,7 @@ import gov.nih.nci.cagrid.authentication.stubs.types.InvalidCredentialFault;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.caxchange.ctom.viewer.util.ObjectFactory;
 import gov.nih.nci.ctms.interoperability.GridProxyTransformer;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
@@ -73,10 +74,6 @@ public class LoginAction extends Action
 		String password = loginForm.getPassword();
 
 		AuthenticationManager authenticationManager = null;
-		AuthorizationManager authorizationManager = null;
-		UserProvisioningManager userProvisioningManager = null;
-		Set<ProtectionElementPrivilegeContext> protectionElementPrivilegeContextSet = null;
-		Set<ProtectionElement> pes;
 		boolean loggedIn = false;
 		
 		try
@@ -85,51 +82,17 @@ public class LoginAction extends Action
 			authenticationManager = SecurityServiceProvider.getAuthenticationManager(APPLICATION_CONTEXT);
 			loggedIn = authenticationManager.login(username, password);
 			
-			// Then get their authorizations
-			authorizationManager = SecurityServiceProvider.getAuthorizationManager(APPLICATION_CONTEXT);
-			User user = authorizationManager.getUser(username);
-			
-			userProvisioningManager = SecurityServiceProvider.getUserProvisioningManager(APPLICATION_CONTEXT);
-			
-			// If we could not get the user object then force an error
-			if (user == null)
+			// Then check their authorization
+			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
+			boolean authorized = lvaHelper.isAuthorized(username);
+				
+			if (!authorized)
 			{
-				log.error("Error finding user");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "No such user"));
+				log.error("User authenticated but not authorized");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID,
+							"User does not have permissions for this application"));
 				saveErrors(request, errors);
 				loggedIn = false;
-			}
-			else
-			{
-				log.debug("Got user");
-				
-				// Now check if they have the proper protection element
-				if (userProvisioningManager != null)
-					protectionElementPrivilegeContextSet =
-						userProvisioningManager.getProtectionElementPrivilegeContextForUser(user.getUserId().toString());
-				
-				boolean authorized = false;
-				
-				if(protectionElementPrivilegeContextSet != null)
-				{
-					for(ProtectionElementPrivilegeContext pepc: protectionElementPrivilegeContextSet)
-					{
-						ProtectionElement pe = pepc.getProtectionElement();
-						log.debug("Protection Element: " + pe.getProtectionElementName());
-						if (pe.getProtectionElementName().equalsIgnoreCase("labviewer"))
-							authorized = true;
-					}
-				}
-				
-				if (!authorized)
-				{
-					log.error("User authenticated but not authorized");
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID,
-							"User does not have permissions for this application"));
-					saveErrors(request, errors);
-					loggedIn = false;
-				}
-				
 			}
 		}
 		catch (CSConfigurationException e)
@@ -137,12 +100,14 @@ public class LoginAction extends Action
 			log.error("Error authenticating user", e);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, e.getMessage()));			
 			saveErrors(request, errors);
+			loggedIn=false;
 		}
 		catch (CSException e)
 		{
 			log.error("Error authenticating user", e);
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, e.getMessage()));			
 			saveErrors(request, errors);
+			loggedIn=false;
 		}
 		
 		if (loggedIn)
