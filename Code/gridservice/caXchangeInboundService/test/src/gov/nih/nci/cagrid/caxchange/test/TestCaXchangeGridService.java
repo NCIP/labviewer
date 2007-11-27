@@ -152,7 +152,7 @@ public class TestCaXchangeGridService extends TestCase {
      */
     public void testRegisterSubject() {
       try {
-        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("studycreation.xml");
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("registersubject.xml");
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
