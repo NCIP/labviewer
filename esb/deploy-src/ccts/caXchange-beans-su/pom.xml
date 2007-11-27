@@ -46,6 +46,7 @@
             <exclude>**/GenerateResponseBeanTest.*</exclude>
             <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
             <exclude>**/InvokeDeploymentServiceBeanTest.*</exclude>
+            <exclude>**/XPathUtilTest.*</exclude>
           </excludes>
         </configuration>
       </plugin>      

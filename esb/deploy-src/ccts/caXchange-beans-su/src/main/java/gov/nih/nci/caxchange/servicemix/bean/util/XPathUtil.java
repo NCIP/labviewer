@@ -35,6 +35,7 @@ import javax.xml.transform.Source;
 
 import javax.xml.transform.dom.DOMSource;
 
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 
 import javax.xml.xpath.XPathConstants;
@@ -91,10 +92,10 @@ public class XPathUtil {
     "</caXchangeRequestMessage>";
     
     String myDocumentAgg = "<aggregateResponse>"+
-    " <businessResponse>\n" + 
+    " <targetResponse xmlns=\"http://caXchange.nci.nih.gov/messaging\">\n" + 
     "                <targetServiceIdentifier>targetServiceIdentifier0</targetServiceIdentifier>\n" + 
     "                <targetServiceOperation>targetServiceOperation0</targetServiceOperation>\n" + 
-    "                <messageStatus>RESPONSE</messageStatus>\n" + 
+    "                <targetMessageStatus>RESPONSE</targetMessageStatus>\n" + 
     "                <messagePayload>\n" + 
     "                    <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" + 
     "<mytest1>\n" + 
@@ -102,23 +103,13 @@ public class XPathUtil {
     "   <last>Marwaha</last>\n" + 
     "</mytest1> "+
     "                </messagePayload>\n" + 
-    "            </businessResponse>\n" + 
-    "            <businessResponse>\n" + 
-    "                <targetServiceIdentifier>targetServiceIdentifier1</targetServiceIdentifier>\n" + 
-    "                <targetServiceOperation>targetServiceOperation1</targetServiceOperation>\n" + 
-    "                <messageStatus>RESPONSE</messageStatus>\n" + 
-    "                <messagePayload>\n" + 
-    "                    <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" + 
-    "                </messagePayload>\n" + 
-    "            </businessResponse>\n" + 
-    "            <businessResponse>\n" + 
-    "                <targetServiceIdentifier>targetServiceIdentifier2</targetServiceIdentifier>\n" + 
-    "                <targetServiceOperation>targetServiceOperation2</targetServiceOperation>\n" + 
-    "                <messageStatus>RESPONSE</messageStatus>\n" + 
-    "                <messagePayload>\n" + 
-    "                    <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" + 
-    "                </messagePayload>\n" + 
-    "            </businessResponse> \n"+
+    "            </targetResponse>\n" + 
+    "<targetResponse> " + 
+    " <targetServiceIdentifier>PROCESS</targetServiceIdentifier> " + 
+    " <targetServiceOperation>STUDY_CREATION</targetServiceOperation> " + 
+    " <targetMessageStatus>ERROR</targetMessageStatus> " + 
+    " <targetError><errorCode>NA</errorCode><errorDescription>Invalid element in gov.nih.nci.ccts.grid.Study - systemAssignedIdentifier</errorDescription></targetError> " + 
+    " </targetResponse>"+
     "    </aggregateResponse>";    
     
     NormalizedMessage in;
@@ -132,6 +123,10 @@ public class XPathUtil {
             DOMSource ds= (DOMSource)in.getContent();
             logger.debug("ds.node is "+ds.getNode().getNamespaceURI()+" "+ds.getNode().getNodeName());
             requestDocument =CaXchangeRequestMessageDocument.Factory.parse(((DOMSource)in.getContent()).getNode());
+        }
+        else if (in.getContent() instanceof StreamSource) {
+            StreamSource ss = (StreamSource)in.getContent();
+            requestDocument = CaXchangeRequestMessageDocument.Factory.parse(ss.getInputStream());
         }
     }
     
@@ -191,12 +186,14 @@ public class XPathUtil {
     
     public Response buildResponse(Source aggregatedResponse, Response response) throws Exception{
         XPath xpath = XPathFactory.newInstance().newXPath();
+        CaXchangeNamespaceContext cnc = new CaXchangeNamespaceContext();
+        cnc.addNameSpace("caxchange","http://caXchange.nci.nih.gov/messaging");
         Node node = ((DOMSource)aggregatedResponse).getNode();
         XPathExpression expression = xpath.compile("/aggregateResponse/targetResponse");
         XPathExpression tsiExp = xpath.compile("targetServiceIdentifier");
         XPathExpression tsoExp = xpath.compile("targetServiceOperation");
         XPathExpression msExp = xpath.compile("targetMessageStatus");
-        XPathExpression mpExp = xpath.compile("targetBusinessMessage");
+        XPathExpression mpExp = xpath.compile("messagePayload");
         XPathExpression teExp = xpath.compile("targetError");
         XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
         NodeList nodes = (NodeList)expression.evaluate(node,XPathConstants.NODESET);
@@ -207,7 +204,6 @@ public class XPathUtil {
            brm.setTargetServiceIdentifier((String)tsiExp.evaluate(brNode, XPathConstants.STRING));
            brm.setTargetServiceOperation((String)tsoExp.evaluate(brNode, XPathConstants.STRING));
            String targetMessageStatus = (String)msExp.evaluate(brNode, XPathConstants.STRING);
-		   logger.debug("TargetMessageStatus is :"+targetMessageStatus);
            if (MessageStatuses.FAULT.toString().equals(targetMessageStatus)) {
                brm.setTargetMessageStatus(MessageStatuses.FAULT);
                responseStatus = Statuses.FAILURE;
@@ -235,9 +231,17 @@ public class XPathUtil {
            }
            Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
            if (teNode!= null) {
-              Document doc = brm.getDomNode().getOwnerDocument();
-              Node importedTeNode = doc.importNode(teNode,true);
-              ErrorDetails targetError = ErrorDetails.Factory.parse(importedTeNode);
+              ErrorDetails targetError = ErrorDetails.Factory.newInstance();
+              NodeList teNodes=teNode.getChildNodes();              
+              for (int k=0;k<teNodes.getLength();k++) {
+                  Node teChildNode = teNodes.item(k);
+                  if ("errorCode".equals(teChildNode.getNodeName())) {
+                      targetError.setErrorCode(teChildNode.getTextContent());
+                  }
+                  if ("errorDescription".equals(teChildNode.getNodeName())) {
+                      targetError.setErrorDescription(teChildNode.getTextContent());
+                  }                  
+              }
               brm.setTargetError(targetError);
            }
         }
@@ -285,6 +289,7 @@ public class XPathUtil {
             //util.isRollbackRequired(ds);
             Response response = Response.Factory.newInstance();
             util.buildResponse(ds, response);
+            System.out.println(response);
             /*util.st= new SourceTransformer();
             util.document= util.st.toDOMDocument(new StringSource(util.myDocument));
             util.expression = new JAXPNodeSetXPathExpression();
