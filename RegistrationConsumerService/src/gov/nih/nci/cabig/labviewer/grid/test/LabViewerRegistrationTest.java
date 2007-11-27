@@ -3,6 +3,7 @@ package gov.nih.nci.cabig.labviewer.grid.test;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.ccts.grid.Registration;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
+import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -48,7 +49,7 @@ public class LabViewerRegistrationTest
 			Registration reg = getRegistration();
 			
 			// Call the service
-			client.register(reg); 
+			client.register(reg);
 			client.rollback(reg);
 		}
 		catch (Exception e)
