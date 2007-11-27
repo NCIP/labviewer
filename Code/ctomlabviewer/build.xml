@@ -94,7 +94,24 @@
 	</target>
 
 	<target name="all" depends="init,clean,prepare,compile,configure,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
-	<target name="deploy" depends="all">
+	
+	<target name="deployTomcat" depends="all">
+		<copy todir="${env.CATALINA_HOME}/webapps" >
+			<fileset file ="${war.file}" />
+		</copy>
+		<copy todir="${env.CATALINA_HOME}/conf" >
+			<fileset file ="${dist.home}/login.config" />
+			<fileset file ="${dist.home}/*.xml" />
+		</copy>
+		<echo message="================================================================================" />
+		<echo message="Edit your Tomcat startup or set your CATALINA_OPTS environment variable with the" />
+		<echo message="following." />
+		<echo message="-Djava.security.auth.login.config=%CATALINA_HOME%\conf\login.config" />
+		<echo message="-Dgov.nih.nci.security.configFile=%CATALINA_HOME%\conf\ApplicationSecurityConfig.xml" />
+		<echo message="================================================================================" />
+	</target>
+	
+	<target name="deployJBoss" depends="all">
 		<copy todir="${jboss.home}/server/default/deploy" >
 			<fileset file ="${war.file}" />
 		</copy>
