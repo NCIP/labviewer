@@ -47,12 +47,14 @@
 		</action>
 		<action path="/Login"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoginAction"
-			name="LoginForm" scope="session" 
+			name="LoginForm" scope="session" parameter="operation"
 			input="Tiles.Login.Page">
 			<forward name="LoginSuccess" path="Tiles.Home.Page" />
 			<forward name="AdminLoginSuccess"
 				path="Tiles.SuperAdmin.Home.Page" />
 			<forward name="LoginFailure" path="Tiles.Login.Page" />
+			<forward name="LoginSuccessHotLink" 
+					path="/LabActivitiesDBOperation.do" />
 		</action>
 		<action path="/Logout"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LogoutAction">
@@ -75,6 +77,7 @@
 		<action path="/LabActivitiesDBOperation"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadSearchSetupAction"
 			name="LabActivitiesForm" scope="session" 
+			validate="false"
 			parameter="operation" input="Tiles.LabActivities.Detail.Screen">
 			<forward name="LoadHomeSuccess"
 				path="Tiles.LabActivities.Home" />
@@ -163,7 +166,11 @@
 			<forward name="LoadToCTMSSuccess"
 				path="Tiles.LabActivities.Search.Result" />
 		</action>
-
+        <action path="/studysubject"
+        type="gov.nih.nci.caxchange.ctom.viewer.actions.StudySubjectAction"
+	    scope="session" parameter="operation" >
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			 </action>
 	</action-mappings>
 
 	<controller bufferSize="4096" debug="0" />
