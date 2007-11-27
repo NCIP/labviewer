@@ -16,6 +16,7 @@
 		<property name="classes.home"			value="${webinf.home}/classes" />
 		<property name="war.file"				value="${dist.home}/${app.name}.war" />
 		<property name="jboss.home"             value="D:\Jboss-4.0.5\jboss-4.0.5.GA"/>
+		<property name="artifacts.dir"          value="../artifacts"/>
 	</target>
 
 	<target name="clean" depends="init" description="Delete the Build and Dist directories">
@@ -63,11 +64,15 @@
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties"/>
 			<fileset file="${src.home}/applicationContext.xml"/>
 		</copy>
-
 	</target>
 
 	<target name="dist" depends="init,compile" description="Creates war file">
 		<jar jarfile="${war.file}" basedir="${build.home}" />
+		<jar jarfile="${artifacts.dir}/labviewerauth.jar">
+			<fileset dir="${build.home}/WEB-INF/classes">
+				<include name="**/LabViewerAuthorizationHelper.class"/>
+			</fileset>
+		</jar>
 	</target>
 
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
