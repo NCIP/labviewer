@@ -120,10 +120,21 @@ public class LabActivitiesSearchForm extends ActionForm implements
 	 * @param request The HttpServletRequest for this post
 	 */
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		if(request.getSession().getAttribute("HOT_LINK")=="true")
+		{
+			LabActivitiesSearchForm lForm = (LabActivitiesSearchForm)request.getSession().getAttribute("CURRENT_FORM"); 
+			this.patientId = lForm.patientId;
+			this.beginDate = "";
+			this.endDate = "";
+			this.studyId = lForm.studyId;
+			request.getSession().setAttribute("HOT_LINK", "false");
+		}
+		else{
 		this.patientId = "";
 		this.beginDate = "";
 		this.endDate = "";
 		this.studyId = "";
+		}
 	}
 
 	public void resetForm() {
@@ -158,7 +169,7 @@ public class LabActivitiesSearchForm extends ActionForm implements
 			if ((getEndDate() == null) || (getEndDate().length() < 1))
 				//errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "StudyId is required"));
 				errors.add("endDate", new ActionError("error.endDate.value"));
-		try {
+			try {
 
 			if (new SimpleDateFormat("MM/dd/yyyy").parse(getBeginDate()).after(
 					new SimpleDateFormat("MM/dd/yyyy").parse(getEndDate()))) {
@@ -171,6 +182,7 @@ public class LabActivitiesSearchForm extends ActionForm implements
 			errors.add("dateFormat",
 					new ActionError("error.dateFormat.value"));
 		}
-       	return errors;
+		return errors;
+	  
 	}
 }
