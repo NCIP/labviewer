@@ -1,22 +1,14 @@
 <project name="UPT Project" basedir="." default="all">
 	<description>UPT Project Build File</description>
 
+	<property environment="env" />
+	<property file="build.properties"/>
+	
 	<target name="init" >
-		<property name="app.name"				value="ctodslabviewer" />
-		<property name="app.path"				value="/${app.name}" />
-		<property name="src.home"				value="${basedir}/src" />
-		<property name="sdkclient.home"			value="${basedir}/sdkclient/conf" />
-		<property name="web.home"				value="${basedir}/WebContent" />
 		<property name="webinf.home"			value="${web.home}/WEB-INF" />
 		<property name="lib.home"				value="${webinf.home}/lib" />
-		<property name="otherlib.home"			value="${basedir}/otherlib" />
-		<property name="libext.home"			value="${basedir}/lib-ext" />
-		<property name="build.home"				value="${basedir}/build" />
-		<property name="dist.home"				value="${basedir}/dist" />
 		<property name="classes.home"			value="${webinf.home}/classes" />
 		<property name="war.file"				value="${dist.home}/${app.name}.war" />
-		<property name="jboss.home"             value="D:\Jboss-4.0.5\jboss-4.0.5.GA"/>
-		<property name="artifacts.dir"          value="../artifacts"/>
 	</target>
 
 	<target name="clean" depends="init" description="Delete the Build and Dist directories">
@@ -50,6 +42,28 @@
 	</target>
 
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
+	
+	<target name="configure" depends="init,prepareDir">
+		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="database_url" value="${database.url}" />
+				<filter token="database_user" value="${database.username}" />
+				<filter token="database_passwd" value="${database.password}" />
+			</filterset>
+		</copy>
+		<copy file="conf/labviewer.hibernate.cfg.xml.template" toFile="${dist.home}/labviewer.hibernate.cfg.xml" filtering="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="database_url" value="${database.url}" />
+				<filter token="database_user" value="${database.username}" />
+				<filter token="database_passwd" value="${database.password}" />
+			</filterset>
+		</copy>
+		<copy file="conf/ApplicationSecurityConfig.xml.template" toFile="${dist.home}/ApplicationSecurityConfig.xml" filtering="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
+			</filterset>
+		</copy>
+	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
@@ -79,7 +93,7 @@
 		<delete dir="${build.home}" />
 	</target>
 
-	<target name="all" depends="init,clean,prepare,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+	<target name="all" depends="init,clean,prepare,compile,configure,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 	<target name="deploy" depends="all">
 		<copy todir="${jboss.home}/server/default/deploy" >
 			<fileset file ="${war.file}" />
