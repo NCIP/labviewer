@@ -10,7 +10,7 @@
 	prefix="template"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
 	prefix="nested"%>
-	
+<%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
 <!-- laf box 1st half -->
 <div class="box">
 	<div class="pane" align=center>
@@ -41,7 +41,7 @@
 		</td>
 		</tr> 
 		<tr>
-			<td valign="top">
+		<td valign="top">
 				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
 					<tr>
 						<td>
@@ -107,7 +107,7 @@
 														<html:text property="endDate" />
 													</td>
 												</tr>
-												<tr>
+						     								<tr>
 													<td align="right" class="actionSection">
 														<!-- action buttons begins -->
 														<table cellpadding="4" cellspacing="0" border="0">
@@ -132,7 +132,7 @@
 							</table>
 						</td>
 					</tr>
-				</table>
+					</table>
 </div>
 <!-- laf box 2nd half -->
 	        </div>  <!-- content -->
