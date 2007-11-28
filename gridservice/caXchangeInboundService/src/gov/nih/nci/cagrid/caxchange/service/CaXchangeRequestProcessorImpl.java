@@ -171,7 +171,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
             Connection connection = connectionFactory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            if (responseListeners == null ){
+            if ((responseListeners == null)||(responseListeners.entrySet().size()==0)){
                 logger.info("Listener initiated.");
                 responseListeners = new HashMap(1);
                MessageConsumer consumer = session.createConsumer(replyDestination);
