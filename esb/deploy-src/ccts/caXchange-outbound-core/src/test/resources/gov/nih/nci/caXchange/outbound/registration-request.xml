@@ -15,29 +15,17 @@
    <ns1:xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</ns1:xmlSchemaDefinition>
       <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         gridId="sampleRegistration">
-    <studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
-        <healthcareSite gridId="WF GRID ID">
-            <nciInstituteCode>duke code</nciInstituteCode>
-        </healthcareSite>
-        <irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate>
-        <roleCode>Affiliate Site</roleCode>
-        <startDate>2007-10-01T00:00:00.000-04:00</startDate>
-    </studySite>
-    <studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e2">
-        <shortTitleText>short_title_text</shortTitleText>
-        <longTitleText>long_title_text</longTitleText>
-        <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:type="OrganizationAssignedIdentifierType">
-            <value>nci-id</value>
-            <primaryIndicator>true</primaryIndicator>
-            <healthcareSite>
-                <name>duke healthcare</name>
-                <descriptionText>duke healthcare</descriptionText>
-                <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
-                <nciInstituteCode>duke code</nciInstituteCode>
-            </healthcareSite>
-        </identifier>
-    </studyRef>
+    <studySite xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+  <healthcareSite>
+   <nciInstituteCode>NCI</nciInstituteCode>
+  </healthcareSite>
+ </studySite>
+ <studyRef xmlns:ns2="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+  <identifier xsi:type="ns2:SystemAssignedIdentifierType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <value>00_C_0092</value>
+   <primaryIndicator>true</primaryIndicator>
+  </identifier>
+ </studyRef>
     <participant
         xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         ns1:gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
