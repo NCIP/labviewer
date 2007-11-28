@@ -13,6 +13,7 @@ import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,16 +34,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import webservices.Acknowledgement;
-import webservices.Activity;
 import webservices.Documentation;
 import webservices.LabResult;
-import webservices.Laboratory;
 import webservices.LoadLabsRequest;
-import webservices.ObservationResult;
-import webservices.Organization;
 import webservices.Participant;
-import webservices.StudyProtocol;
+import webservices.PerformedActivity;
+import webservices.PerformedStudy;
 import webservices.StudySubject;
 
 /**
@@ -68,11 +65,11 @@ public class LoadToCTMSAction extends Action
 		
 		HttpSession session = request.getSession();
 		LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm) form;
-		  //if the session is new or the login object is null; redirects the user to login page  
+		
+		//if the session is new or the login object is null; redirects the user to login page  
 		if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null))
 		{
-			if (logDB.isDebugEnabled())
-				logDB.debug("||"+lForm.getFormName()+"|create|Failure|No Session or User Object Forwarding to the Login Page||");
+			logDB.error("No Session or User Object Forwarding to the Login Page");
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 		
@@ -88,20 +85,12 @@ public class LoadToCTMSAction extends Action
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "Error in Submitting Messages to CTMS"));
 			saveErrors( request,errors );
-			if (logDB.isDebugEnabled())
-				logDB.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
-					"|"+lForm.getFormName()+"|create|Failure|Error Adding the "+lForm.getFormName()+" object|"
-					+form.toString()+"|"+ cse.getMessage());
+			logDB.error("Error sending labs to CTMS", cse);
 		}
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
 		
 		//if the login is valid and the selected form data is successfully loaded to CTMS; 
-		//it returns to the search results page and displays the load successful message
-		if (logDB.isDebugEnabled())
-			logDB.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
-				"|"+lForm.getFormName()+"|create|Success|Adding a  new "+lForm.getFormName()+" object|"
-				+form.toString()+"|");	
-		
+		//it returns to the search results page and displays the load successful message	
 		return (mapping.findForward(ForwardConstants.LOAD_TO_CTMS_EVENT_SUCCESS));
 	}
 	
@@ -149,15 +138,22 @@ public class LoadToCTMSAction extends Action
 			LabActivityResult lab = (LabActivityResult)labs.next();
 			
 			// Populate the study information
-			StudyProtocol studyProtocol= new StudyProtocol();
-			Documentation documentation=new Documentation();
-			Organization organization= new Organization();
+			Documentation documentation = new Documentation();
+			PerformedStudy performedStudy = new PerformedStudy();
 			
 			String studyId = lab.getStudyId();
 			if (studyId != null)
-				documentation.setIdentifier(studyId);
-			studyProtocol.setDocumentation(documentation);
-			organization.setStudyProtocol(studyProtocol);
+			{
+				// Set the study identifier on the document
+				webservices.II ii = new webservices.II();
+				ii.setExtension(studyId);
+				webservices.II[] iis = new webservices.II[1];
+				iis[0] = ii;
+				documentation.setII(iis);
+			}
+			Documentation[] docs = new Documentation[1];
+			docs[0] = documentation;
+			performedStudy.setDocumentation(docs);
 			
 			// Then set the participant and study subject assignment identifiers
 			Participant participant= new Participant();
@@ -167,51 +163,51 @@ public class LoadToCTMSAction extends Action
 			if (studySubjectIds != null && studySubjectIds.size() > 0)
 			{
 				Iterator<II> idIterator = studySubjectIds.iterator();
-				studySubject.setIdentifier(idIterator.next().getExtension());
+				II ssII = idIterator.next();
+				webservices.II ii = new webservices.II();
+				ii.setRoot(ssII.getRoot());
+				ii.setExtension(ssII.getExtension());
+				webservices.II[] iis = new webservices.II[1];
+				iis[0] = ii;
+				studySubject.setII(iis);
+				participant.setII(iis);
 			}
-			studySubject.setOrganization(organization);
 			studySubject.setParticipant(participant);
 			
-			LabResult labResult = new LabResult();
+			// Set the activity name
+			PerformedActivity performedActivity= new PerformedActivity();
+			String testName = lab.getLabTestId();
+			performedActivity.setName(testName);
+			PerformedActivity[] performedActivitys = new PerformedActivity[1];
+			performedActivitys[0] = performedActivity;
+			studySubject.setPerformedActivity(performedActivitys);
 			
+			// Then set the lab result
+			LabResult labResult = new LabResult();
 			labResult.setStudySubject(studySubject);
 			
-			// Set the lab identifier
-			Laboratory laboratory= new Laboratory();
-			/*
-			String labIdentifier = lab.getLabResult().getPerformingLaboratory().getIdentifier();
-			if (labIdentifier != null)
-				laboratory.setIdentifier(labIdentifier);*/
-			labResult.setLaboratory(laboratory);
-			
-			// Set the activity name
-			Activity activity= new Activity();
-			//activity.setName(testName);
-			labResult.setActivity(activity);
-			
-			// Set the observation result
-			ObservationResult observationResult= new ObservationResult();
+			// Set the reported date
 			Date labDate = lab.getActualDate();
 			if (labDate != null)
-				observationResult.setReportedDateTime(labDate);
-			labResult.setObservationResult(observationResult);
+			{
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(labDate);
+				labResult.setReportedDateTime(cal);
+			}
 			
 			// Set the lab result details
-			String testName = lab.getLabTestId();
-			if (testName != null)
-				labResult.setName(testName);
 			String result = lab.getNumericResult();
 			if (result != null)
-				labResult.setTextResult(result);
+				labResult.setNumericResult(Float.parseFloat(result));
 			String labUom = lab.getUnitOfMeasure();
 			if (labUom != null)
-				labResult.setUnitOfMeasureCodingSchema(labUom);
+				labResult.setNumericUnit(labUom);
 			String lowRange = lab.getLowRange();
 			if (lowRange != null)
-				labResult.setReferenceRangeLow(lowRange);
+				labResult.setReferenceRangeLow(Float.parseFloat(lowRange));
 			String highRange = lab.getHighRange();
 			if (highRange != null)
-				labResult.setReferenceRangeHigh(highRange);
+				labResult.setReferenceRangeHigh(Float.parseFloat(highRange));
 			
 			labResults[i] = labResult;
 			i++;
@@ -221,6 +217,7 @@ public class LoadToCTMSAction extends Action
 		
 		// Now send the load labs request
 		webservices.Acknowledgement acknowledgement = client.loadLabs(labRequest);
+		logDB.info("Load acknowledgement was " + acknowledgement);
 	
 		lForm.setRecordId("");
 		lForm.setRecordId(null);
