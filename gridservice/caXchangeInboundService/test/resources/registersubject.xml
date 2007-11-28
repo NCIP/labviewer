@@ -6,7 +6,7 @@
    <nciInstituteCode>NCI</nciInstituteCode>
   </healthcareSite>
  </studySite>
- <studyRef>
+ <studyRef xmlns:ns2="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
   <identifier xsi:type="ns2:SystemAssignedIdentifierType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <value>00_C_0092</value>
    <primaryIndicator>true</primaryIndicator>
