@@ -52,7 +52,11 @@
               
   <bean:endpoint service="caxchange:caaersStudyRollback" endpoint="caaersStudyRollback" bean="#caaersStudyRollback" />
   
-  <bean:endpoint service="caXchange:loadLab" endpoint="loadLab" bean="#loadLab" />
+  <bean:endpoint service="caxchange:c3dRegistration" endpoint="c3dRegistration" bean="#c3dRegistration" />
+
+  <bean:endpoint service="caxchange:c3dRegistrationRollback" endpoint="c3dRegistrationRollback" bean="#c3dRegistrationRollback" />  
+
+  <bean:endpoint service="caxchange:loadLab" endpoint="loadLab" bean="#loadLab" />
   
   <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
   
