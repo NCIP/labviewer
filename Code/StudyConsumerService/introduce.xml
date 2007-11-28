@@ -66,7 +66,7 @@
    <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./StudyConsumerTypes.xsd" namespace="http://ccts.nci.nih.gov/StudyConsumer/types" packageName="gov.nih.nci.ccts.grid.stubs.types" xsi:type="ns2:NamespaceType">
+  <ns2:Namespace location="./StudyConsumerTypes.xsd" namespace="http://ccts.nci.nih.gov/StudyConsumer/types" packageName="gov.nih.nci.ccts.grid.studyconsumer.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="StudyConsumerReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="InvalidStudyException" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StudyCreationException" xsi:type="ns2:SchemaElementType"/>
@@ -86,7 +86,7 @@
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns3:Service name="StudyConsumer" namespace="http://ccts.nci.nih.gov/StudyConsumer" packageName="gov.nih.nci.ccts.grid" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
+  <ns3:Service name="StudyConsumer" namespace="http://ccts.nci.nih.gov/StudyConsumer" packageName="gov.nih.nci.ccts.grid.studyconsumer" resourceFrameworkType="main" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
      <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
