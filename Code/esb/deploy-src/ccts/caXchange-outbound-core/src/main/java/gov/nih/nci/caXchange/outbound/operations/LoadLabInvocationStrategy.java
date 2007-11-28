@@ -6,6 +6,7 @@ package gov.nih.nci.caXchange.outbound.operations;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.ConnectException;
 
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.MessageExchange;
@@ -84,8 +85,12 @@ public class LoadLabInvocationStrategy implements GridInvocationStrategy {
 			};
 		} catch (AxisFault af) {
 			log.error("Failed to invoke load lab service.", af);
-
-			throw new GridInvocationException(af.getFaultString(), af);
+			GridInvocationException gie =
+				new GridInvocationException(af.getFaultString(), af);
+			if(af.getCause() instanceof ConnectException) {
+				gie.setCanRetry(true);
+			}
+			throw gie;
 		} catch (Exception e) {
 			log.error("Failed to invoke loab lab service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
