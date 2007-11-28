@@ -32,6 +32,23 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	public void testLoadLabExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("loadlab-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"loadLab"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"loadLab"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
 	public void testCTOMSStudyExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("study-request.xml");

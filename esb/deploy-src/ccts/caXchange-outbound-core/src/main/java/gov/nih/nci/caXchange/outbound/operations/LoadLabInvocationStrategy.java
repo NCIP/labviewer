@@ -18,27 +18,23 @@ import org.apache.servicemix.jbi.jaxp.StringSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
+import webservices.Acknowledgement;
+import webservices.LoadLabsRequest;
+
+import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.ccts.grid.CoordinatingCenterStudyStatusType;
-import gov.nih.nci.ccts.grid.HealthcareSiteType;
-import gov.nih.nci.ccts.grid.IdentifierType;
-import gov.nih.nci.ccts.grid.Study;
-import gov.nih.nci.ccts.grid.StudyRefType;
-import gov.nih.nci.ccts.grid.StudySiteType;
-import gov.nih.nci.ccts.grid.SystemAssignedIdentifierType;
-import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
 
 /**
  * @author stevec
  */
-public class StudyInvocationStrategy implements GridInvocationStrategy {
+public class LoadLabInvocationStrategy implements GridInvocationStrategy {
 
 	private static final Category log = Category
-			.getInstance(StudyInvocationStrategy.class);
+			.getInstance(LoadLabInvocationStrategy.class);
 
 	private String serviceUrl;
 
@@ -54,22 +50,27 @@ public class StudyInvocationStrategy implements GridInvocationStrategy {
 			throws GridInvocationException {
 
 		try {
-			StudyConsumerClient client = new StudyConsumerClient(
-					serviceUrl);
+			C3DGridServiceClient client = new C3DGridServiceClient(serviceUrl);
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"/study/client-config.wsdd");
+							"/loadlab/client-config.wsdd");
+			
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
-			Study request = (Study) Utils.deserializeObject(
-					reader, Study.class, deseralizeStream);
-
-			client.createStudy(request);
-			client.commit(request);
-
+			LoadLabsRequest request = (LoadLabsRequest) Utils.deserializeObject(
+					reader, LoadLabsRequest.class, deseralizeStream);
+			Acknowledgement reply = client.loadLabs(request);
+			
+			InputStream serializeStream = client.getClass().getResourceAsStream(
+							"/loadlab/client-config.wsdd");
+			StringWriter writer = new StringWriter();
+			Utils.serializeObject(reply, new QName(
+					"http://ccts.nci.nih.gov/LoadLab",
+					"LoadLab"), writer, serializeStream);
+			String response = writer.getBuffer().toString();
 			final Document resp = new SourceTransformer()
-					.toDOMDocument(new StringSource("<result>success</result>"));
+					.toDOMDocument(new StringSource(response));
 			return new GridInvocationResult() {
 
 				public Node getResult() {
@@ -82,11 +83,11 @@ public class StudyInvocationStrategy implements GridInvocationStrategy {
 
 			};
 		} catch (AxisFault af) {
-			log.error("Failed to invoke study service.", af);
+			log.error("Failed to invoke load lab service.", af);
 
 			throw new GridInvocationException(af.getFaultString(), af);
 		} catch (Exception e) {
-			log.error("Failed to invoke study service.", e);
+			log.error("Failed to invoke loab lab service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
 	}

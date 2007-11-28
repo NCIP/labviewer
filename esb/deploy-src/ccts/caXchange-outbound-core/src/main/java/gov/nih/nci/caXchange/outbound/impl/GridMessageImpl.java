@@ -30,7 +30,7 @@ public class GridMessageImpl implements GridMessage {
 
 	public Element getMetaData() {
 		NodeList elements = message.getDocumentElement()
-				.getElementsByTagName(GridSU.META_DATA_ELEMENT);
+				.getElementsByTagNameNS(GridSU.NS, GridSU.META_DATA_ELEMENT);
 
 		if (elements.getLength() == 1) {
 			return (Element) elements.item(0);
@@ -57,8 +57,8 @@ public class GridMessageImpl implements GridMessage {
 	}
 
 	public Element getSchemaDefinition() {
-		NodeList nodes = getBusinessPayload().getElementsByTagName(
-				GridSU.SCHEMA_DEFINITION_ELEMENT);
+		NodeList nodes = getBusinessPayload().getElementsByTagNameNS(
+				GridSU.NS, GridSU.SCHEMA_DEFINITION_ELEMENT);
 
 		if (nodes.getLength() == 1) {
 			return (Element) nodes.item(0);
@@ -70,7 +70,7 @@ public class GridMessageImpl implements GridMessage {
 	}
 
 	protected Element getBusinessPayload() {
-		NodeList nodes = getRequest().getElementsByTagName(GridSU.REQUEST_PAYLOAD_ELEMENT);
+		NodeList nodes = getRequest().getElementsByTagNameNS(GridSU.NS, GridSU.REQUEST_PAYLOAD_ELEMENT);
 
 		if (nodes.getLength() == 1) {
 			return (Element) nodes.item(0);
@@ -81,7 +81,7 @@ public class GridMessageImpl implements GridMessage {
 	}
 
 	protected Element getRequest() {
-		NodeList nodes = message.getElementsByTagName(GridSU.REQUEST_ELEMENT);
+		NodeList nodes = message.getElementsByTagNameNS(GridSU.NS, GridSU.REQUEST_ELEMENT);
 		if (nodes.getLength() == 1) {
 			return (Element) nodes.item(0);
 		} else {
