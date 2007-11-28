@@ -66,6 +66,9 @@
 	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
+		<copy todir="${lib.home}">
+			<fileset dir="${artifacts.dir}" includes="ctomlabapi*.jar"/>
+		</copy>
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
 			<classpath>
 				<fileset dir="${lib.home}" includes="*.jar" />
