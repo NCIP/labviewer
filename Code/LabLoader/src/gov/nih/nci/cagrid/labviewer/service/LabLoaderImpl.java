@@ -25,7 +25,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 	
   public void loadLab(java.lang.String string) throws RemoteException
   {
-	  System.out.println("LabLoader loadLab method called.");
+	  logger.info("LabLoader loadLab method called.");
 	  
 	  // Now unmarshall the HL7v3 message
 	  HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
