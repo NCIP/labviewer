@@ -295,7 +295,7 @@ public class GridSU implements MessageExchangeListener {
 		if (result.isFault()) {
 			targetStatus.setTextContent("FAULT");
 		} else {
-			targetStatus.setTextContent("RESULT");
+			targetStatus.setTextContent("RESPONSE");
 		}
 		root.appendChild(targetStatus);
 
