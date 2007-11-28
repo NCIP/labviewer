@@ -13,6 +13,26 @@ Globus 4.0.3 installed and GLOBUS_LOCATION env defined
 (optional)Tomcat 5.0.28 installed and "CATALINA_HOME" env defined with globus deployed to it
 Note: The globus webapp can be named something besides wsrf(default). See below for details
 
+To Implement
+======================================
+The StudyConsumer grid service expects an application specific implementation and
+ delegates calls to the implementation. The application specific implementation
+  is expected to implement the
+
+  gov.nih.nci.ccts.grid.common.StudyConsumerI interface
+
+The StudyConsumer grid service will try and load a spring configuration file called
+applicationContext-studyConsumerGrid.xml
+
+This spring config file should have a bean declearation like
+
+    <bean id="studyConsumer" class="gov.nih.nci.cabig.c3pr.grid.EchoStudyConsumer" autowire="byName" />
+
+The spring config file and application specific implementation (studyConsumer bean which implements the
+StudyConsumerI interface) should
+be packaged and put in the $CATALINA_HOME/<globus_webapp_name>/WEB-INF/lib
+directory
+
 
 To Build:
 =======================================

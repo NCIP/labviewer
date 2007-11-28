@@ -2,7 +2,7 @@
            targetNamespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
            xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" elementFormDefault="qualified">
     <xs:annotation>
-        <xs:documentation xml:lang="en"> Registartion schema
+        <xs:documentation xml:lang="en">Registartion schema
         </xs:documentation>
     </xs:annotation>
 
@@ -16,9 +16,11 @@
     <xs:element name="registration" type="Registration"/>
     <xs:element name="study" type="Study"/>
 
-    <xs:element name="eligibilityCriteria"  type="EligibilityCriteriaType"/>
-    <xs:element name="exclusionCriteria"  substitutionGroup="eligibilityCriteria" type="ExclusionEligibilityCriteriaType"/>
-    <xs:element name="inclusionCriteria"  substitutionGroup="eligibilityCriteria" type="InclusionEligibilityCriteriaType"/>
+    <xs:element name="eligibilityCriteria" type="EligibilityCriteriaType"/>
+    <xs:element name="exclusionCriteria" substitutionGroup="eligibilityCriteria"
+                type="ExclusionEligibilityCriteriaType"/>
+    <xs:element name="inclusionCriteria" substitutionGroup="eligibilityCriteria"
+                type="InclusionEligibilityCriteriaType"/>
 
 
     <xs:element name="epoch" type="EpochType"/>
@@ -86,7 +88,7 @@
 
     <xs:complexType name="ExclusionEligibilityCriteriaType">
         <xs:complexContent>
-            <xs:extension base="EligibilityCriteriaType"> </xs:extension>
+            <xs:extension base="EligibilityCriteriaType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
@@ -102,20 +104,20 @@
 
     <xs:complexType name="HealthcareSiteInvestigatorType">
         <xs:sequence>
-            <xs:element name="investigator" type="InvestigatorType"  minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="investigator" type="InvestigatorType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="InvestigatorType">
         <xs:sequence>
-            <xs:element name="nciIdentifier" type="xs:string"  minOccurs="0" maxOccurs="1"/>
-            <xs:element name="fullName" type="xs:string"  minOccurs="0" maxOccurs="1"/>
+            <xs:element name="nciIdentifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="fullName" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="InclusionEligibilityCriteriaType">
         <xs:complexContent>
-            <xs:extension base="EligibilityCriteriaType"> </xs:extension>
+            <xs:extension base="EligibilityCriteriaType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
@@ -228,7 +230,7 @@
 
     <xs:complexType name="ScheduledNonTreatmentEpochType">
         <xs:complexContent>
-            <xs:extension base="ScheduledEpochType"> </xs:extension>
+            <xs:extension base="ScheduledEpochType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
@@ -237,6 +239,7 @@
             <xs:extension base="ScheduledEpochType">
                 <xs:sequence>
                     <xs:element name="scheduledArm" type="ScheduledArmType" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="eligibilityIndicator" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -320,7 +323,8 @@
             <xs:element name="statusCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
             <xs:element name="startDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
             <xs:element name="endDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="healthcareSiteInvestigator" type="HealthcareSiteInvestigatorType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="healthcareSiteInvestigator" type="HealthcareSiteInvestigatorType" minOccurs="0"
+                        maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -353,13 +357,13 @@
 
     <xs:complexType name="StudyFundingSponsorType">
         <xs:complexContent>
-            <xs:extension base="StudyOrganizationType"> </xs:extension>
+            <xs:extension base="StudyOrganizationType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="StudyCoordinatingCenterType">
         <xs:complexContent>
-            <xs:extension base="StudyOrganizationType"> </xs:extension>
+            <xs:extension base="StudyOrganizationType"></xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
