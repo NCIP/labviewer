@@ -1,19 +1,18 @@
-<caXchangeRequestMessage xmlns="http://caXchange.nci.nih.gov/messaging" xmlns:gov="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <metadata>
-    <messageType>STUDY_CREATION</messageType>
-    <externalIdentifier>myExternalIdentifier</externalIdentifier>
-    <caXchangeIdentifier>2319a1b0-9b7a-11dc-8b10-c2ed0a64d6d3</caXchangeIdentifier>
-    <credentials>
-      <userName>hmarwaha</userName>
-      <groupName xsi:nil="true"/>
-      <gridIdentifier xsi:nil="true"/>
-      <password>password</password>
-    </credentials>
-  </metadata>
-  <request>
-    <businessMessagePayload>
-      <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
-      
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:caXchangeRequestMessage xmlns:ns1="http://caXchange.nci.nih.gov/messaging">
+ <ns1:metadata>
+  <ns1:operation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+  <ns1:messageType>REGISTER_SUBJECT</ns1:messageType>
+  <ns1:externalIdentifier>myExternalIdentifier</ns1:externalIdentifier>
+  <ns1:caXchangeIdentifier>82bb15d0-9d47-11dc-a6e7-fbc72c1213b2</ns1:caXchangeIdentifier>
+  <ns1:credentials>
+   <ns1:userName>hmarwaha</ns1:userName>
+   <ns1:password>password</ns1:password>
+  </ns1:credentials>
+ </ns1:metadata>
+ <ns1:request>
+  <ns1:businessMessagePayload>
+   <ns1:xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</ns1:xmlSchemaDefinition>
       <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         gridId="sampleRegistration">
     <studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
@@ -74,6 +73,6 @@
         <eligibilityIndicator>true</eligibilityIndicator>
     </scheduledEpoch>
 </registration>
-    </businessMessagePayload>
-  </request>
-</caXchangeRequestMessage>
+    </ns1:businessMessagePayload>
+  </ns1:request>
+</ns1:caXchangeRequestMessage>

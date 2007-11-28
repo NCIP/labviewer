@@ -59,9 +59,10 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 			Registration request = (Registration) Utils.deserializeObject(
 					reader, Registration.class, deseralizeStream);
 			Registration reply = client.register(request);
+			client.commit(request);
 			
 			InputStream serializeStream = client.getClass().getResourceAsStream(
-							"client-config.wsdd");
+							"/registration/client-config.wsdd");
 			StringWriter writer = new StringWriter();
 			Utils.serializeObject(reply, new QName(
 					"http://ccts.nci.nih.gov/RegistrationConsumer",

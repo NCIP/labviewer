@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.namespace.QName;
@@ -24,46 +25,51 @@ import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 import junit.framework.TestCase;
 
 public class RegistrationInvocationTest extends TestCase {
-	
+
 	public void testClient() throws Exception {
-		System.out.println("Running the RegistrationConsumer Grid Service Client");
+		System.out
+				.println("Running the RegistrationConsumer Grid Service Client");
 		try {
 
 			String url = "http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer";
 			RegistrationConsumerClient client = new RegistrationConsumerClient(
 					url);
 
-			System.out.println("Call the RegistrationConsumer.Register operation");
+			System.out
+					.println("Call the RegistrationConsumer.Register operation");
 			Registration reg = client.register(getPopulatedRegistration());
-			System.out.println("Got a Registration Response back from Registration Consumer Grid Service..");
+			System.out
+					.println("Got a Registration Response back from Registration Consumer Grid Service..");
 			System.out.println(reg.toString());
-			
-			InputStream resourceAsStream = Thread.currentThread()
-			.getContextClassLoader().getResourceAsStream(
-					"gov/nih/nci/ccts/grid/client/client-config.wsdd");
 
-	StringWriter writer = new StringWriter();
-	Utils.serializeObject(reg, new QName(
-			"http://ccts.nci.nih.gov/RegistrationConsumer",
-			"RegisterResponse"), writer, resourceAsStream);
-			
-	System.out.println("HERE: " + writer.getBuffer().toString());
-			
-			System.out.println("Call the RegistrationConsumer.commit operation");
+			InputStream resourceAsStream = Thread.currentThread()
+					.getContextClassLoader().getResourceAsStream(
+							"gov/nih/nci/ccts/grid/client/client-config.wsdd");
+
+			StringWriter writer = new StringWriter();
+			Utils.serializeObject(reg, new QName(
+					"http://ccts.nci.nih.gov/RegistrationConsumer",
+					"RegisterResponse"), writer, resourceAsStream);
+
+			System.out.println("HERE: " + writer.getBuffer().toString());
+
+			System.out
+					.println("Call the RegistrationConsumer.commit operation");
 			client.commit(getPopulatedRegistration());
-			System.out.println("commit operation successful from Registration Consumer Grid Service..");
-			
-			
-			System.out.println("Call the RegistrationConsumer.rollback operation");
+			System.out
+					.println("commit operation successful from Registration Consumer Grid Service..");
+
+			System.out
+					.println("Call the RegistrationConsumer.rollback operation");
 			client.rollback(getPopulatedRegistration());
-			System.out.println("Rollback operation successful from Registration Consumer Grid Service..");
-			
+			System.out
+					.println("Rollback operation successful from Registration Consumer Grid Service..");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Registration getPopulatedRegistration() {
 
 		Registration registration = new Registration();
@@ -71,32 +77,31 @@ public class RegistrationInvocationTest extends TestCase {
 		SystemAssignedIdentifierType sait = new SystemAssignedIdentifierType();
 		sait.setPrimaryIndicator(true);
 		sait.setValue("C3PR_00C0092");
-		
+
 		IdentifierType[] idType = new IdentifierType[1];
-		idType[0] =sait;
+		idType[0] = sait;
 		sr.setIdentifier(idType);
 		registration.setStudyRef(sr);
-		
-		
-    	StudySiteType ss = new StudySiteType();
-    	HealthcareSiteType[] hcsts = new HealthcareSiteType[1];
+
+		StudySiteType ss = new StudySiteType();
+		HealthcareSiteType[] hcsts = new HealthcareSiteType[1];
 		HealthcareSiteType hcst = new HealthcareSiteType();
 		hcst.setNciInstituteCode("SITE_ON");
-		hcsts[0]=hcst;
+		hcsts[0] = hcst;
 		ss.setHealthcareSite(hcsts);
 		ss.setStartDate(new Date());
 		ss.setIrbApprovalDate(new Date());
-		
+
 		registration.setStudySite(ss);
 		StringWriter writer = new StringWriter();
 		try {
-			Utils.serializeObject(registration, new QName("registration"), writer);
-		} catch(Exception e) {
+			Utils.serializeObject(registration, new QName("registration"),
+					writer);
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		System.out.println(writer.getBuffer().toString());
 		return registration;
 	}
-
 }

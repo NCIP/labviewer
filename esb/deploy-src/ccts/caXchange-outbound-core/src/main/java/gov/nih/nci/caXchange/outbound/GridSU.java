@@ -26,7 +26,7 @@ public class GridSU implements MessageExchangeListener {
 
 	private static final Category log = Category.getInstance(GridSU.class);
 
-	// public static final String NS = "http://caXchange.nci.nih.gov/messaging";
+	public static final String NS = "http://caXchange.nci.nih.gov/messaging";
 
 	public static final String REQUEST_ELEMENT = "request";
 

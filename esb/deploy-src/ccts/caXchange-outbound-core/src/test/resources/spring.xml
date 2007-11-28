@@ -51,7 +51,11 @@
               <bean:endpoint
                 service="caXchange:caaersStudyRollback"
                 endpoint="caaersStudyRollback"
-                bean="#caaersStudyRollback" />              
+                bean="#caaersStudyRollback" />
+              <bean:endpoint
+                service="caXchange:loadLab"
+                endpoint="loadLab"
+                bean="#loadLab" />              
             </bean:endpoints>
           </bean:component>
         </sm:component>
@@ -292,6 +296,29 @@
     <property
       name="serviceUrl"
       value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+  
+  <bean
+    id="loadLab"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="loadLabInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="C3D" />
+    <property
+      name="targetOperation"
+      value="LOAD_LAB" />
+  </bean>
+
+  <bean
+    id="loadLabInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.LoadLabInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService" />
   </bean>
 
 </beans>
