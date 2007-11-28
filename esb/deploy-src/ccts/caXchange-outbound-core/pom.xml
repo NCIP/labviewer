@@ -421,43 +421,23 @@
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
-      <artifactId>study-service</artifactId> 
-      <version>1.1</version> 
-    </dependency>
-    <dependency>
-      <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-stubs</artifactId> 
       <version>1.1</version> 
     </dependency>
     <dependency>
-      <groupId>cagrid.outbound.study-consumer</groupId> 
-      <artifactId>study-tests</artifactId> 
-      <version>1.0</version> 
-    </dependency>
-    <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-client</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-common</artifactId> 
-      <version>1.1</version> 
-    </dependency>
-    <dependency>
-      <groupId>cagrid.outbound.registration-consumer</groupId> 
-      <artifactId>registration-service</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-stubs</artifactId> 
-      <version>1.1</version> 
-    </dependency>
-    <dependency>
-      <groupId>cagrid.outbound.registration-consumer</groupId> 
-      <artifactId>registration-tests</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
     </dependency>
   </dependencies>
 </project>

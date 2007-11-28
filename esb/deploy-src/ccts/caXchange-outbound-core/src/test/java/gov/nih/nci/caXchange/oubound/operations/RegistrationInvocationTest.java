@@ -50,7 +50,7 @@ public class RegistrationInvocationTest extends TestCase {
 	System.out.println("HERE: " + writer.getBuffer().toString());
 			
 			System.out.println("Call the RegistrationConsumer.commit operation");
-			// client.commit(getPopulatedRegistration());
+			client.commit(getPopulatedRegistration());
 			System.out.println("commit operation successful from Registration Consumer Grid Service..");
 			
 			
