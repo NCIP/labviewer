@@ -15,17 +15,22 @@ public class CaxchangeResponseExceptionListener implements ExceptionListener{
     Logger logger = LogManager.getLogger(CaxchangeResponseExceptionListener.class);
     public CaxchangeResponseExceptionListener() {
     }
-
+   /**
+     * Remove the current connection from the registered response listeners so that
+     * a new response listener is registered at the next request.
+     * 
+     * @param jmsException
+     */
     public void onException(JMSException jmsException) {
        try {
          logger.error("Error in jms connection.", jmsException);
          logger.info("Stopping the faulty connection.");
          Connection conn=CaXchangeRequestProcessorImpl.responseListeners.get(this);
+         CaXchangeRequestProcessorImpl.responseListeners.remove(this);         
          if (conn!=null) {
              conn.stop();
              conn.close();
          }
-         CaXchangeRequestProcessorImpl.responseListeners.remove(this);
        }catch(Exception e) {
            logger.error("Error handling jms exception,",jmsException);
            throw new RuntimeException("Error handling jms exception,",jmsException);
