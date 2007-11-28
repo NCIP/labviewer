@@ -14,150 +14,150 @@
   <ns1:businessMessagePayload>
    <ns1:xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</ns1:xmlSchemaDefinition>
 <LoadLabsRequest>
-<LabResult xmlns="http://c3d.nci.nih.gov/webservices">
-  <comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <reportedDateTime>2007-11-28T02:48:30.562Z</reportedDateTime>
-  <uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <asCollectedIndicator>false</asCollectedIndicator>
-  <numericPrecision>0</numericPrecision>
-  <numericResult>0.0</numericResult>
-  <numericUnit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <referenceRangeComment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <referenceRangeHigh>3.0</referenceRangeHigh>
-  <referenceRangeLow>2.0</referenceRangeLow>
-  <referenceTextList xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <reportedResultStatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <textResult>Result</textResult>
-  <StudySubject>
-   <informedConsentSignatureText xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <studySubjectState xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <studySubjectStateDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <subgroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <PerformedActivity>
-    <category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <name>TestEvent</name>
-    <status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedEndDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedReason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedStartDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <ScheduledActivity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <scheduledActivity2 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   </PerformedActivity>
-   <PerformedStudy>
-    <documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <Documentation>
-     <documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <II>
-      <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <displayble>false</displayble>
-      <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <root>00_C_0092</root>
-     </II>
-    </Documentation>
-    <actualAccrualNumber>0</actualAccrualNumber>
-    <PlannedStudy xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   </PerformedStudy>
-   <StudySite xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <Participant>
-    <confidentialityIndicator>false</confidentialityIndicator>
-    <paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <II>
-     <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <displayble>false</displayble>
-     <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <root>patientId</root>
-    </II>
-   </Participant>
-   <II>
-    <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <displayble>false</displayble>
-    <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <root>patientPos</root>
-   </II>
-  </StudySubject>
- </LabResult>
- <LabResult xmlns:ns3="http://c3d.nci.nih.gov/webservices">
-  <comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <reportedDateTime>2007-11-28T02:48:30.562Z</reportedDateTime>
-  <uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <asCollectedIndicator>false</asCollectedIndicator>
-  <numericPrecision>0</numericPrecision>
-  <numericResult>0.0</numericResult>
-  <numericUnit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <referenceRangeComment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <referenceRangeHigh>3.0</referenceRangeHigh>
-  <referenceRangeLow>2.0</referenceRangeLow>
-  <referenceTextList xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <reportedResultStatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <textResult>Result</textResult>
-  <StudySubject>
-   <informedConsentSignatureText xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <studySubjectState xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <studySubjectStateDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <subgroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <PerformedActivity>
-    <category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <name>TestEvent</name>
-    <status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedEndDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedReason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <performedStartDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <ScheduledActivity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <scheduledActivity2 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   </PerformedActivity>
-   <PerformedStudy>
-    <documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <Documentation>
-     <documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <II>
-      <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <displayble>false</displayble>
-      <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <root>00_C_0092</root>
-     </II>
-    </Documentation>
-    <actualAccrualNumber>0</actualAccrualNumber>
-    <PlannedStudy xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   </PerformedStudy>
-   <StudySite xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-   <Participant>
-    <confidentialityIndicator>false</confidentialityIndicator>
-    <paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <II>
-     <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <displayble>false</displayble>
-     <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <root>patientId</root>
-    </II>
-   </Participant>
-   <II>
-    <assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <displayble>false</displayble>
-    <extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <root>patientPos</root>
-   </II>
-  </StudySubject>
- </LabResult>
+ <ns1:LabResult xmlns:ns1="http://c3d.nci.nih.gov/webservices">
+  <ns1:comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:reportedDateTime>2007-11-28T04:45:16.440Z</ns1:reportedDateTime>
+  <ns1:uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:asCollectedIndicator>false</ns1:asCollectedIndicator>
+  <ns1:numericPrecision>0</ns1:numericPrecision>
+  <ns1:numericResult>0.0</ns1:numericResult>
+  <ns1:numericUnit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:referenceRangeComment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:referenceRangeHigh>3.0</ns1:referenceRangeHigh>
+  <ns1:referenceRangeLow>2.0</ns1:referenceRangeLow>
+  <ns1:referenceTextList xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:reportedResultStatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns1:textResult>Result</ns1:textResult>
+  <ns1:StudySubject>
+   <ns1:informedConsentSignatureText xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:studySubjectState xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:studySubjectStateDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:subgroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:PerformedActivity>
+    <ns1:category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:name>TestEvent</ns1:name>
+    <ns1:status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:performedEndDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:performedReason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:performedStartDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:ScheduledActivity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:scheduledActivity2 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </ns1:PerformedActivity>
+   <ns1:PerformedStudy>
+    <ns1:documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:Documentation>
+     <ns1:documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:II>
+      <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns1:displayble>false</ns1:displayble>
+      <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns1:root>00_C_0092</ns1:root>
+     </ns1:II>
+    </ns1:Documentation>
+    <ns1:actualAccrualNumber>0</ns1:actualAccrualNumber>
+    <ns1:PlannedStudy xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </ns1:PerformedStudy>
+   <ns1:StudySite xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns1:Participant>
+    <ns1:confidentialityIndicator>false</ns1:confidentialityIndicator>
+    <ns1:paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:II>
+     <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:displayble>false</ns1:displayble>
+     <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:root>patientId</ns1:root>
+    </ns1:II>
+   </ns1:Participant>
+   <ns1:II>
+    <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:displayble>false</ns1:displayble>
+    <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:root>patientPos</ns1:root>
+   </ns1:II>
+  </ns1:StudySubject>
+ </ns1:LabResult>
+ <ns2:LabResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+  <ns2:comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:reportedDateTime>2007-11-28T04:45:16.440Z</ns2:reportedDateTime>
+  <ns2:uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:asCollectedIndicator>false</ns2:asCollectedIndicator>
+  <ns2:numericPrecision>0</ns2:numericPrecision>
+  <ns2:numericResult>0.0</ns2:numericResult>
+  <ns2:numericUnit xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:referenceRangeComment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:referenceRangeHigh>3.0</ns2:referenceRangeHigh>
+  <ns2:referenceRangeLow>2.0</ns2:referenceRangeLow>
+  <ns2:referenceTextList xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:reportedResultStatus xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+  <ns2:textResult>Result</ns2:textResult>
+  <ns2:StudySubject>
+   <ns2:informedConsentSignatureText xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:studySubjectState xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:studySubjectStateDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:subgroup xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:PerformedActivity>
+    <ns2:category xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:name>TestEvent</ns2:name>
+    <ns2:status xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:statusEndDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:statusStartDate xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:performedEndDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:performedReason xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:performedStartDateTime xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:ScheduledActivity xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:scheduledActivity2 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </ns2:PerformedActivity>
+   <ns2:PerformedStudy>
+    <ns2:documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:Documentation>
+     <ns2:documentationType xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:II>
+      <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns2:displayble>false</ns2:displayble>
+      <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns2:root>00_C_0092</ns2:root>
+     </ns2:II>
+    </ns2:Documentation>
+    <ns2:actualAccrualNumber>0</ns2:actualAccrualNumber>
+    <ns2:PlannedStudy xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   </ns2:PerformedStudy>
+   <ns2:StudySite xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+   <ns2:Participant>
+    <ns2:confidentialityIndicator>false</ns2:confidentialityIndicator>
+    <ns2:paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:II>
+     <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:displayble>false</ns2:displayble>
+     <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:root>patientId</ns2:root>
+    </ns2:II>
+   </ns2:Participant>
+   <ns2:II>
+    <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:displayble>false</ns2:displayble>
+    <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:root>patientPos</ns2:root>
+   </ns2:II>
+  </ns2:StudySubject>
+ </ns2:LabResult>
 </LoadLabsRequest>
 </ns1:businessMessagePayload>
 </ns1:request>
