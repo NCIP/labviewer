@@ -5,7 +5,11 @@
 	<target name="compile">
 		<delete dir="${build.classes.dir}" failonerror="false"/>
 		<mkdir dir="${build.classes.dir}"/>
-		<javac srcdir="${build.source.dir}" destdir="${build.classes.dir}" source="1.5" debug="true" debuglevel="lines,vars,source"/>
+		<javac srcdir="${build.source.dir}" destdir="${build.classes.dir}" source="1.5" debug="true" debuglevel="lines,vars,source">
+			<classpath>
+				<fileset dir="${lib.home}" includes="*.jar" />
+			</classpath>
+		</javac>
 	</target>
 	
 	<target name="dist" depends="compile">
@@ -13,6 +17,9 @@
 		<jar destfile="${artifacts.dir}/ctomdatapersistence.jar">
 			<fileset dir="${build.classes.dir}">
 				<include name="**/*.class"/>
+			</fileset>
+			<fileset dir="${build.source.dir}">
+				<include name="**/*.xml"/>
 			</fileset>
 		</jar>
 	</target>
