@@ -62,8 +62,8 @@ public class GridSU implements MessageExchangeListener {
 	private boolean copyProperties = true;
 	private boolean copyAttachments = true;
 	private boolean copySubject = true;
-	private int retries;
-	private int waitBetweenRetries;
+	private int retries = 3;
+	private int waitBetweenRetries = 3000;
 
 	public void onMessageExchange(MessageExchange exchange)
 			throws MessagingException {
@@ -150,6 +150,7 @@ public class GridSU implements MessageExchangeListener {
 				} else {
 					exchange.setStatus(ExchangeStatus.DONE);
 				}
+				break;
 			} catch (GridInvocationException gie) {
 				log.error("Failed to invoke grid service.", gie);
 				if (gie.getCanRetry()) {
