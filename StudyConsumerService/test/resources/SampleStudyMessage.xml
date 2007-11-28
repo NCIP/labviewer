@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <study xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
- version="1">
+       xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+       version="1">
     <blindedIndicator>true</blindedIndicator>
     <multiInstitutionIndicator>true</multiInstitutionIndicator>
     <randomizedIndicator>true</randomizedIndicator>
@@ -9,27 +9,33 @@
     <longTitleText>long_title_text</longTitleText>
     <descriptionText>description</descriptionText>
     <precisText>precis_text</precisText>
-    <phaseCode>Ph</phaseCode>
+    <phaseCode>0</phaseCode>
     <dataEntryStatus>COMPLETE</dataEntryStatus>
     <coordinatingCenterStudyStatus>ACTIVE</coordinatingCenterStudyStatus>
     <type>ty</type>
     <targetAccrualNumber>123</targetAccrualNumber>
     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:type="SystemAssignedIdentifierType">
+                xsi:type="SystemAssignedIdentifierType">
         <type>local</type>
         <value>nci</value>
         <primaryIndicator>false</primaryIndicator>
         <systemName>nci</systemName>
     </identifier>
     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:type="OrganizationAssignedIdentifierType">
+                xsi:type="OrganizationAssignedIdentifierType">
         <value>nci-id</value>
         <primaryIndicator>true</primaryIndicator>
         <healthcareSite>
             <name>duke healthcare</name>
             <descriptionText>duke healthcare</descriptionText>
-            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
-            <nciInstituteCode>code</nciInstituteCode>
+            <address>
+                <streetAddress>12359 sunrise valley drive</streetAddress>
+                <city>Reston</city>
+                <stateCode>VA</stateCode>
+                <postalCode>20191</postalCode>
+                <countryCode>USA</countryCode>
+            </address>
+            <nciInstituteCode>Duke</nciInstituteCode>
         </healthcareSite>
     </identifier>
     <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
@@ -111,12 +117,18 @@
         </arm>
     </epoch>
     <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:type="StudySiteType">
+                       xsi:type="StudySiteType">
         <healthcareSite>
             <name>duke healthcare</name>
             <descriptionText>duke healthcare</descriptionText>
-            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
-            <nciInstituteCode>code</nciInstituteCode>
+            <address>
+                <streetAddress>12359 sunrise valley drive</streetAddress>
+                <city>Reston</city>
+                <stateCode>VA</stateCode>
+                <postalCode>20191</postalCode>
+                <countryCode>USA</countryCode>
+            </address>
+            <nciInstituteCode>Duke</nciInstituteCode>
         </healthcareSite>
         <studyInvestigator>
             <roleCode>role1</roleCode>
@@ -146,21 +158,33 @@
         <endDate>0006-06-25</endDate>
     </studyOrganization>
     <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:type="StudyFundingSponsorType">
+                       xsi:type="StudyFundingSponsorType">
         <healthcareSite>
             <name>National Cancer Institute</name>
             <descriptionText>National Cancer Institute</descriptionText>
-            <address><streetAddress>Coppermine Dr</streetAddress><city>Herndon</city><stateCode>VA</stateCode><postalCode>20171</postalCode><countryCode>USA</countryCode></address>
-            <nciInstituteCode>code</nciInstituteCode>
+            <address>
+                <streetAddress>Coppermine Dr</streetAddress>
+                <city>Herndon</city>
+                <stateCode>VA</stateCode>
+                <postalCode>20171</postalCode>
+                <countryCode>USA</countryCode>
+            </address>
+            <nciInstituteCode>NCI</nciInstituteCode>
         </healthcareSite>
     </studyOrganization>
     <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:type="StudyCoordinatingCenterType">
+                       xsi:type="StudyCoordinatingCenterType">
         <healthcareSite>
             <name>CALGB</name>
             <descriptionText>CALGB</descriptionText>
-            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
-            <nciInstituteCode>code</nciInstituteCode>
+            <address>
+                <streetAddress>12359 sunrise valley drive</streetAddress>
+                <city>Reston</city>
+                <stateCode>VA</stateCode>
+                <postalCode>20191</postalCode>
+                <countryCode>USA</countryCode>
+            </address>
+            <nciInstituteCode>CALGB</nciInstituteCode>
         </healthcareSite>
     </studyOrganization>
 </study>

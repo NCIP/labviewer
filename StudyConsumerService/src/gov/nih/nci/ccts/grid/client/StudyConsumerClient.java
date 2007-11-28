@@ -17,8 +17,8 @@ import org.oasis.wsrf.properties.GetResourcePropertyResponse;
 
 import org.globus.gsi.GlobusCredential;
 
-import gov.nih.nci.ccts.grid.stubs.StudyConsumerPortType;
-import gov.nih.nci.ccts.grid.stubs.service.StudyConsumerServiceAddressingLocator;
+import gov.nih.nci.ccts.grid.studyconsumer.stubs.StudyConsumerPortType;
+import gov.nih.nci.ccts.grid.studyconsumer.stubs.service.StudyConsumerServiceAddressingLocator;
 import gov.nih.nci.ccts.grid.common.StudyConsumerI;
 import gov.nih.nci.cagrid.introduce.security.client.ServiceSecurityClient;
 import gov.nih.nci.cagrid.common.Utils;
@@ -126,36 +126,36 @@ public class StudyConsumerClient extends ServiceSecurityClient implements StudyC
     }
 
 
-    public void createStudy(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException, gov.nih.nci.ccts.grid.stubs.types.StudyCreationException {
+    public void createStudy(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.StudyCreationException {
         synchronized(portTypeMutex){
             configureStubSecurity((Stub)portType,"createStudy");
-            gov.nih.nci.ccts.grid.stubs.CreateStudyRequest params = new gov.nih.nci.ccts.grid.stubs.CreateStudyRequest();
-            gov.nih.nci.ccts.grid.stubs.CreateStudyRequestStudy studyContainer = new gov.nih.nci.ccts.grid.stubs.CreateStudyRequestStudy();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyRequest params = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyRequest();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyRequestStudy studyContainer = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyRequestStudy();
             studyContainer.setStudy(study);
             params.setStudy(studyContainer);
-            gov.nih.nci.ccts.grid.stubs.CreateStudyResponse boxedResult = portType.createStudy(params);
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyResponse boxedResult = portType.createStudy(params);
         }
     }
 
-    public void commit(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException {
+    public void commit(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException {
         synchronized(portTypeMutex){
             configureStubSecurity((Stub)portType,"commit");
-            gov.nih.nci.ccts.grid.stubs.CommitRequest params = new gov.nih.nci.ccts.grid.stubs.CommitRequest();
-            gov.nih.nci.ccts.grid.stubs.CommitRequestStudy studyContainer = new gov.nih.nci.ccts.grid.stubs.CommitRequestStudy();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitRequest params = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitRequest();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitRequestStudy studyContainer = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitRequestStudy();
             studyContainer.setStudy(study);
             params.setStudy(studyContainer);
-            gov.nih.nci.ccts.grid.stubs.CommitResponse boxedResult = portType.commit(params);
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitResponse boxedResult = portType.commit(params);
         }
     }
 
-    public void rollback(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException {
+    public void rollback(gov.nih.nci.ccts.grid.Study study) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException {
         synchronized(portTypeMutex){
             configureStubSecurity((Stub)portType,"rollback");
-            gov.nih.nci.ccts.grid.stubs.RollbackRequest params = new gov.nih.nci.ccts.grid.stubs.RollbackRequest();
-            gov.nih.nci.ccts.grid.stubs.RollbackRequestStudy studyContainer = new gov.nih.nci.ccts.grid.stubs.RollbackRequestStudy();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackRequest params = new gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackRequest();
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackRequestStudy studyContainer = new gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackRequestStudy();
             studyContainer.setStudy(study);
             params.setStudy(studyContainer);
-            gov.nih.nci.ccts.grid.stubs.RollbackResponse boxedResult = portType.rollback(params);
+            gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackResponse boxedResult = portType.rollback(params);
         }
     }
 

@@ -26,20 +26,20 @@ public class StudyConsumerProviderImpl{
 	}
 	
 
-    public gov.nih.nci.ccts.grid.stubs.CreateStudyResponse createStudy(gov.nih.nci.ccts.grid.stubs.CreateStudyRequest params) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException, gov.nih.nci.ccts.grid.stubs.types.StudyCreationException {
-    gov.nih.nci.ccts.grid.stubs.CreateStudyResponse boxedResult = new gov.nih.nci.ccts.grid.stubs.CreateStudyResponse();
+    public gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyResponse createStudy(gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyRequest params) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.StudyCreationException {
+    gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyResponse boxedResult = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CreateStudyResponse();
     impl.createStudy(params.getStudy().getStudy());
     return boxedResult;
   }
 
-    public gov.nih.nci.ccts.grid.stubs.CommitResponse commit(gov.nih.nci.ccts.grid.stubs.CommitRequest params) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException {
-    gov.nih.nci.ccts.grid.stubs.CommitResponse boxedResult = new gov.nih.nci.ccts.grid.stubs.CommitResponse();
+    public gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitResponse commit(gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitRequest params) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException {
+    gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitResponse boxedResult = new gov.nih.nci.ccts.grid.studyconsumer.stubs.CommitResponse();
     impl.commit(params.getStudy().getStudy());
     return boxedResult;
   }
 
-    public gov.nih.nci.ccts.grid.stubs.RollbackResponse rollback(gov.nih.nci.ccts.grid.stubs.RollbackRequest params) throws RemoteException, gov.nih.nci.ccts.grid.stubs.types.InvalidStudyException {
-    gov.nih.nci.ccts.grid.stubs.RollbackResponse boxedResult = new gov.nih.nci.ccts.grid.stubs.RollbackResponse();
+    public gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackResponse rollback(gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackRequest params) throws RemoteException, gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException {
+    gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackResponse boxedResult = new gov.nih.nci.ccts.grid.studyconsumer.stubs.RollbackResponse();
     impl.rollback(params.getStudy().getStudy());
     return boxedResult;
   }
