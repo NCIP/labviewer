@@ -598,6 +598,30 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 		} catch (NullPointerException ex) {
 
 		}
+		
+		try {
+			String value = null;
+			expression = "//studyEvent/component/accession/component/baseSpecimenDefinition/component/baseBattery/component/baseUnitaryResult/referenceRange/range/value/low/@value";
+			Node xNode = (Node) xpath.evaluate(expression, doc,
+					XPathConstants.NODE);
+			value = xNode.getNodeValue();
+			clinicalResult.setRefRangeLow(new Long(value));
+
+		} catch (NullPointerException ex) {
+
+		}
+		
+		try {
+			String value = null;
+			expression = "//studyEvent/component/accession/component/baseSpecimenDefinition/component/baseBattery/component/baseUnitaryResult/referenceRange/range/value/high/@value";
+			Node xNode = (Node) xpath.evaluate(expression, doc,
+					XPathConstants.NODE);
+			value = xNode.getNodeValue();
+			clinicalResult.setRefRangeHigh(new Long(value));
+
+		} catch (NullPointerException ex) {
+
+		}
 
 		try {
 			String value = null;

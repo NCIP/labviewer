@@ -224,7 +224,6 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			ident.setRoot(participant.getGridId());
 			part.setIdentifier(ident);
 		}
-			
 		else
 		{
 			InvalidRegistrationException ire = new InvalidRegistrationException();
