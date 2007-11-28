@@ -148,7 +148,7 @@ public class TestCaXchangeGridService extends TestCase {
     /**
      * Test messagess of type REGISTER_SUBJECT.
      *
-     * @todo set the right message type and the uri path.
+     * .
      */
     public void testRegisterSubject() {
       try {
@@ -176,11 +176,140 @@ public class TestCaXchangeGridService extends TestCase {
 
     }
 
+    /**
+     * Test messagess of type LAB_BASED_AE.
+     *
+     * .
+     */
+    public void testAENotification() {
+      try {
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("labbasedae.xml");
+        if (testMessage == null) {
+            throw new RuntimeException("Test message does not exist.");
+        }
+        message.getMetadata().setMessageType(MessageTypes.LAB_BASED_AE);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilder db =dbf.newDocumentBuilder();
+        Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        message.getRequest().setBusinessMessagePayload(messagePayload);
+        ResponseMessage responseMessage = invokeService();
+        assertNotNull(responseMessage);
+      }
+      catch(Exception e) {
+          System.out.println("Error sending message .");
+          throw new RuntimeException(e);
+      }
+
+    }
+
+
+    /**
+     * Test messagess of type LOAD_LAB_TO_CDMS.
+     *
+     * .
+     */
+    public void testLoadLab() {
+      try {
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("loadlabcdms.xml");
+        if (testMessage == null) {
+            throw new RuntimeException("Test message does not exist.");
+        }
+        message.getMetadata().setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilder db =dbf.newDocumentBuilder();
+        Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        message.getRequest().setBusinessMessagePayload(messagePayload);
+        ResponseMessage responseMessage = invokeService();
+        assertNotNull(responseMessage);
+      }
+      catch(Exception e) {
+          System.out.println("Error sending message .");
+          throw new RuntimeException(e);
+      }
+
+    }
+
+    /**
+     * Test messagess of type CT_LAB_DATA .
+     *
+     * .
+     */
+    public void testCtLabData() {
+      try {
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("ctlabdata.xml");
+        if (testMessage == null) {
+            throw new RuntimeException("Test message does not exist.");
+        }
+        message.getMetadata().setMessageType(MessageTypes.CT_LAB_DATA);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilder db =dbf.newDocumentBuilder();
+        Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        message.getRequest().setBusinessMessagePayload(messagePayload);
+        ResponseMessage responseMessage = invokeService();
+        assertNotNull(responseMessage);
+      }
+      catch(Exception e) {
+          System.out.println("Error sending message .");
+          throw new RuntimeException(e);
+      }
+
+    }
+
+    /**
+     * Test messagess of type SCHEDULE_MODIFICATION .
+     *
+     * .
+     */
+    public void testScheduleModification() {
+      try {
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("schedulemodification.xml");
+        if (testMessage == null) {
+            throw new RuntimeException("Test message does not exist.");
+        }
+        message.getMetadata().setMessageType(MessageTypes.SCHEDULE_MODIFICATION);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilder db =dbf.newDocumentBuilder();
+        Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        message.getRequest().setBusinessMessagePayload(messagePayload);
+        ResponseMessage responseMessage = invokeService();
+        assertNotNull(responseMessage);
+      }
+      catch(Exception e) {
+          System.out.println("Error sending message .");
+          throw new RuntimeException(e);
+      }
+
+    }
+
     public static Test suite() {
        TestSuite suite = new TestSuite();
+
        suite.addTest(new TestCaXchangeGridService("testStudyCreation"));
        suite.addTest(new TestCaXchangeGridService("testRegisterSubject"));
-
+       suite.addTest(new TestCaXchangeGridService("testScheduleModification"));
+       suite.addTest(new TestCaXchangeGridService("testCtLabData"));
+       suite.addTest(new TestCaXchangeGridService("testLoadLab"));
+       suite.addTest(new TestCaXchangeGridService("testAENotification"));
        return suite;
     }
 
