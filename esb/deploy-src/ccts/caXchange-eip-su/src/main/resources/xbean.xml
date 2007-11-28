@@ -87,6 +87,7 @@
       <eip:recipients>
         <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:ctomRegisterSubjectRouter" />
+        <eip:exchange-target service="caxchange:c3DRegisterSubjectRouter" />
       </eip:recipients>
   </eip:caxchange-static-recipient-list>
   
@@ -130,6 +131,37 @@
   
   
   <!-- End EIP Components for invoking the PSC -->
+  
+  <!--- EIP components for invoking the C3D  -->
+    <eip:content-based-router service="caxchange:c3DRegisterSubjectRouter" endpoint="endpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:c3dRegistrationRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="caxchange:callc3DRegistrationPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+  </eip:content-based-router>
+  
+    <eip:pipeline service="caxchange:callc3DRegistrationPipeline" endpoint="endpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:c3dRegistration" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+        </eip:target>
+  </eip:pipeline>  
+  
+    <!-- End EIP Components for invoking the C3D -->
+
   
   <!--- EIP components for invoking the caAERS  -->
   
