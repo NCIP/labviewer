@@ -14,91 +14,66 @@
     <businessMessagePayload>
       <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
       
-      <registration
-        xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+      <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         gridId="sampleRegistration">
-        <studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
-          <healthcareSite gridId="WF GRID ID">
-            <nciInstituteCode>duke healthcare nci</nciInstituteCode>
-          </healthcareSite>
-          <irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate> 
-          <roleCode>Affiliate Site</roleCode>
-          <startDate>2007-10-01T00:00:00.000-04:00</startDate>
-        </studySite>
-        <studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e2">
-          <shortTitleText>Combination Chemotherapy NHL</shortTitleText>
-          <longTitleText>Infusional Chemotherapy in Previously Untreated Patients With Intermediate Or Aggressive Non-Hodgkin's Lymphoma: A Study of Dose-Intense Therapy With Cytokines.</longTitleText>
-          <identifier
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            type="CDR000007829"
+    <studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
+        <healthcareSite gridId="WF GRID ID">
+            <nciInstituteCode>duke code</nciInstituteCode>
+        </healthcareSite>
+        <irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate>
+        <roleCode>Affiliate Site</roleCode>
+        <startDate>2007-10-01T00:00:00.000-04:00</startDate>
+    </studySite>
+    <studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e2">
+        <shortTitleText>short_title_text</shortTitleText>
+        <longTitleText>long_title_text</longTitleText>
+        <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:type="OrganizationAssignedIdentifierType">
-            <type>Coordinating Center Identifier</type>
-            <value>CDR000007829</value>
+            <value>nci-id</value>
             <primaryIndicator>true</primaryIndicator>
-            <healthcareSite gridId="WF GRID ID">
-              <nciInstituteCode>duke healthcare nci</nciInstituteCode>
-            </healthcareSite>
-          </identifier>
-          <identifier
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            type="NCT00018980"
-            xsi:type="OrganizationAssignedIdentifierType">
-            <type>Protocol Authority Identifier</type>
-            <value>NCT00018980</value>
-            <primaryIndicator>false</primaryIndicator>
             <healthcareSite>
-              <nciInstituteCode>NCCTG</nciInstituteCode>
+                <name>duke healthcare</name>
+                <descriptionText>duke healthcare</descriptionText>
+                <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+                <nciInstituteCode>duke code</nciInstituteCode>
             </healthcareSite>
-          </identifier>
-        </studyRef>
-        <participant
-          xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
-          ns1:gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
-          <ns1:gridId>50113a1a-4c3e-4418-8c37-7383cba1aaf8</ns1:gridId>
-          <ns1:firstName>Geoge</ns1:firstName>
-          <ns1:lastName>Elliot</ns1:lastName>
-          <ns1:address />
-          <ns1:administrativeGenderCode>Male</ns1:administrativeGenderCode>
-          <ns1:birthDate>1971-01-01</ns1:birthDate>
-          <ns1:identifier
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            type="MRN-1212332"
-            xsi:type="ns1:OrganizationAssignedIdentifierType">
-            <ns1:type>MRN</ns1:type>
-            <ns1:value>MRN-1212332</ns1:value>
-            <ns1:primaryIndicator>true</ns1:primaryIndicator>
-            <ns1:healthcareSite gridId="WF GRID ID">
-              <ns1:nciInstituteCode>Wake</ns1:nciInstituteCode>
-            </ns1:healthcareSite>
-          </ns1:identifier>
-          <ns1:ethnicGroupCode>Hispanic or Latino</ns1:ethnicGroupCode>
-          <ns1:raceCode>Asian</ns1:raceCode>
-        </participant>
+        </identifier>
+    </studyRef>
+    <participant
+        xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+        ns1:gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
+        <ns1:gridId>50113a1a-4c3e-4418-8c37-7383cba1aaf8</ns1:gridId>
+        <ns1:firstName>Geoge</ns1:firstName>
+        <ns1:lastName>Elliot</ns1:lastName>
+        <ns1:address />
+        <ns1:administrativeGenderCode>Male</ns1:administrativeGenderCode>
+        <ns1:birthDate>1971-01-01</ns1:birthDate>
+        <ns1:ethnicGroupCode>Hispanic or Latino</ns1:ethnicGroupCode>
+        <ns1:raceCode>Asian</ns1:raceCode>
+    </participant>
+    <startDate>2007-10-01</startDate>
+    <informedConsentFormSignedDate>2007-10-09</informedConsentFormSignedDate>
+    <informedConsentVersion>1.0</informedConsentVersion>
+    <regDataEntryStatus>COMPLETE</regDataEntryStatus>
+    <regWorkflowStatus>REGISTERED</regWorkflowStatus>
+    <scheduledEpoch
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:type="ScheduledTreatmentEpochType">
         <startDate>2007-10-01</startDate>
-        <informedConsentFormSignedDate>2007-10-09</informedConsentFormSignedDate>
-        <informedConsentVersion>1.0</informedConsentVersion>
-        <regDataEntryStatus>COMPLETE</regDataEntryStatus>
-        <regWorkflowStatus>REGISTERED</regWorkflowStatus>
-        <scheduledEpoch
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:type="ScheduledTreatmentEpochType">
-          <startDate>2007-10-01</startDate>
-          <epoch
-            gridId="3ad38cfd-bfbe-4af2-9783-c69169f8f241"
+        <epoch gridId="3ad38cfd-bfbe-4af2-9783-c69169f8f241"
             xsi:type="TreatmentEpochType">
-            <name>Drug Treatment</name>
+            <name>Treatment1000</name>
             <descriptionText></descriptionText>
-          </epoch>
-          <scheduledArm>
+        </epoch>
+        <scheduledArm>
             <arm gridId="de3a0ef0-1f02-4da6-afdc-cc9042cdb594">
-              <name>Arm A</name>
-              <targetAccrualNumber>300</targetAccrualNumber>
+                <name>Arm 1000</name>
+                <targetAccrualNumber>1000</targetAccrualNumber>
             </arm>
-          </scheduledArm>
-          <eligibilityIndicator>true</eligibilityIndicator>
-        </scheduledEpoch>
-        <stratumGroup>3:between 20 and 45 - &lt;120</stratumGroup>
-      </registration>
+        </scheduledArm>
+        <eligibilityIndicator>true</eligibilityIndicator>
+    </scheduledEpoch>
+</registration>
     </businessMessagePayload>
   </request>
 </caXchangeRequestMessage>
