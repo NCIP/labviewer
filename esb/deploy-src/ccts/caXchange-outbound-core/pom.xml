@@ -446,17 +446,17 @@
     <dependency>
       <groupId>cagrid.outbound.loadlab-consumer</groupId> 
       <artifactId>loadlab-client</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.loadlab-consumer</groupId> 
       <artifactId>loadlab-common</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.loadlab-consumer</groupId> 
       <artifactId>loadlab-stubs</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
   </dependencies>
 </project>
