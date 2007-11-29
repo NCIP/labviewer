@@ -17,7 +17,7 @@
  <ns1:LabResult xmlns:ns1="http://c3d.nci.nih.gov/webservices">
   <ns1:comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
   <ns1:confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <ns1:reportedDateTime>2007-11-28T04:45:16.440Z</ns1:reportedDateTime>
+  <ns1:reportedDateTime>2007-11-28T23:26:08.178Z</ns1:reportedDateTime>
   <ns1:uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
   <ns1:asCollectedIndicator>false</ns1:asCollectedIndicator>
   <ns1:numericPrecision>0</ns1:numericPrecision>
@@ -58,10 +58,10 @@
      <ns1:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
      <ns1:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
      <ns1:II>
-      <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns1:assigningAuthorityName>CTODS</ns1:assigningAuthorityName>
       <ns1:displayble>false</ns1:displayble>
-      <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <ns1:root>00_C_0092</ns1:root>
+      <ns1:extension>STUDY:00_C_0092</ns1:extension>
+      <ns1:root>C3D</ns1:root>
      </ns1:II>
     </ns1:Documentation>
     <ns1:actualAccrualNumber>0</ns1:actualAccrualNumber>
@@ -72,24 +72,24 @@
     <ns1:confidentialityIndicator>false</ns1:confidentialityIndicator>
     <ns1:paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
     <ns1:II>
-     <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns1:assigningAuthorityName>CTODS</ns1:assigningAuthorityName>
      <ns1:displayble>false</ns1:displayble>
-     <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <ns1:root>patientId</ns1:root>
+     <ns1:extension>MRN:patientId</ns1:extension>
+     <ns1:root>C3D</ns1:root>
     </ns1:II>
    </ns1:Participant>
    <ns1:II>
-    <ns1:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns1:assigningAuthorityName>CTODS</ns1:assigningAuthorityName>
     <ns1:displayble>false</ns1:displayble>
-    <ns1:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <ns1:root>patientPos</ns1:root>
+    <ns1:extension>PATIENTPOSITION:patientPos</ns1:extension>
+    <ns1:root>C3D</ns1:root>
    </ns1:II>
   </ns1:StudySubject>
  </ns1:LabResult>
  <ns2:LabResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">
   <ns2:comment xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
   <ns2:confidentiality xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-  <ns2:reportedDateTime>2007-11-28T04:45:16.440Z</ns2:reportedDateTime>
+  <ns2:reportedDateTime>2007-11-28T23:26:08.178Z</ns2:reportedDateTime>
   <ns2:uncertainty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
   <ns2:asCollectedIndicator>false</ns2:asCollectedIndicator>
   <ns2:numericPrecision>0</ns2:numericPrecision>
@@ -130,10 +130,10 @@
      <ns2:revision xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
      <ns2:title xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
      <ns2:II>
-      <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+      <ns2:assigningAuthorityName>CTODS</ns2:assigningAuthorityName>
       <ns2:displayble>false</ns2:displayble>
-      <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-      <ns2:root>00_C_0092</ns2:root>
+      <ns2:extension>STUDY:00_C_0092</ns2:extension>
+      <ns2:root>C3D</ns2:root>
      </ns2:II>
     </ns2:Documentation>
     <ns2:actualAccrualNumber>0</ns2:actualAccrualNumber>
@@ -144,17 +144,17 @@
     <ns2:confidentialityIndicator>false</ns2:confidentialityIndicator>
     <ns2:paymentMethod xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
     <ns2:II>
-     <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+     <ns2:assigningAuthorityName>CTODS</ns2:assigningAuthorityName>
      <ns2:displayble>false</ns2:displayble>
-     <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-     <ns2:root>patientId</ns2:root>
+     <ns2:extension>MRN:patientId</ns2:extension>
+     <ns2:root>C3D</ns2:root>
     </ns2:II>
    </ns2:Participant>
    <ns2:II>
-    <ns2:assigningAuthorityName xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    <ns2:assigningAuthorityName>CTODS</ns2:assigningAuthorityName>
     <ns2:displayble>false</ns2:displayble>
-    <ns2:extension xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-    <ns2:root>patientPos</ns2:root>
+    <ns2:extension>PATIENTPOSITION:patientPos</ns2:extension>
+    <ns2:root>C3D</ns2:root>
    </ns2:II>
   </ns2:StudySubject>
  </ns2:LabResult>
