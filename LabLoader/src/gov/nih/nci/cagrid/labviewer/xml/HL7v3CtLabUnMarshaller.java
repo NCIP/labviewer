@@ -6,6 +6,7 @@ import gov.nih.nci.ctom.ctlab.domain.AdverseEvent;
 import gov.nih.nci.ctom.ctlab.domain.CentralLaboratory;
 import gov.nih.nci.ctom.ctlab.domain.ClinicalResult;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
+import gov.nih.nci.ctom.ctlab.domain.Identifier;
 import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Observation;
 import gov.nih.nci.ctom.ctlab.domain.Participant;
@@ -48,31 +49,40 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 		String expression = null;
 		Protocol prot = new Protocol();
-		try {
-			String id = new String();
+		try
+		{
+			Identifier id = new Identifier();
+			
 			expression = "/ClinicalTrial/id/@root";
-			Node xNode = (Node) xpath.evaluate(expression, doc,
-					XPathConstants.NODE);
-			id = xNode.getNodeValue();
+			Node xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
+			id.setRoot(xNode.getNodeValue());
 
 			expression = "/ClinicalTrial/id/@extension";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			id = id + "." + xNode.getNodeValue();
-			prot.setNciIdentifier(id);
+			id.setExtension(xNode.getNodeValue());
+			
+			prot.setIdentifier(id);
+			prot.setNciIdentifier(id.getRoot() + "." + id.getExtension());
 
-		} catch (NullPointerException ex) {
-			try {
-			String id = new String();
-			expression = "/ClinicalTrial/id/@root";
-			Node xNode = (Node) xpath.evaluate(expression, doc,
-					XPathConstants.NODE);
-			id = xNode.getNodeValue();
+		}
+		catch (NullPointerException ex)
+		{
+			try
+			{
+				Identifier id = new Identifier();
+				expression = "/ClinicalTrial/id/@root";
+				Node xNode = (Node) xpath.evaluate(expression, doc,
+						XPathConstants.NODE);
+				id.setRoot(xNode.getNodeValue());
 
-			expression = "/ClinicalTrial/id/@extension";
-			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			id = id + "." + xNode.getNodeValue();
-			prot.setNciIdentifier(id);
-			} catch (NullPointerException e){}
+				expression = "/ClinicalTrial/id/@extension";
+				xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
+				id.setExtension(xNode.getNodeValue());
+				
+				prot.setIdentifier(id);
+				prot.setNciIdentifier(id.getRoot() + "." + id.getExtension());
+			}
+			catch (NullPointerException e){}
 		}
 
 		try {
@@ -105,21 +115,24 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 		}
 
 		HealthCareSite hcs = new HealthCareSite();
-		try {
+		try
+		{
 			String id = null;
+			/*
 			expression = "//trialSite/id/@root";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			id = xNode.getNodeValue();
+			*/
 
 			expression = "//trialSite/id/@extension";
-			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			id = id + "." + xNode.getNodeValue();
+			Node xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
+			id = xNode.getNodeValue();
 
 			hcs.setNciInstituteCd(id);
 
-		} catch (NullPointerException ex) {
 		}
+		catch (NullPointerException ex) {}
 
 		Investigator inv = new Investigator();
 		try {
@@ -181,7 +194,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 			expression = "//enrolledSubject/subjectPerson/raceCode/@codeSystem";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			participant.setRaceCode(xNode.getNodeValue());
+			//participant.setRaceCode(xNode.getNodeValue());
 
 			expression = "//enrolledSubject/subjectPerson/raceCode/@codeSystemName";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
@@ -209,21 +222,25 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 		}
 
 		StudyParticipantAssignment spa = new StudyParticipantAssignment();
-		try {
-
-			String id = null;
+		try
+		{
+			Identifier id = new Identifier();
 			expression = "//enrolledSubject/id/@root";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
-			id = xNode.getNodeValue();
+			id.setRoot(xNode.getNodeValue());
 
 			expression = "//enrolledSubject/id/@extension";
 			xNode = (Node) xpath.evaluate(expression, doc, XPathConstants.NODE);
-			id = id + "." + xNode.getNodeValue();
+			id.setExtension(xNode.getNodeValue());
 
-			spa.setStudyPartIdOrig(id);
-		} catch (NullPointerException ex) {
+			spa.setIdentifier(id);
+			String tmp = id.getRoot() + "." + id.getExtension();
+			spa.setStudyPartIdOrig(tmp);
+			
+			participant.setIdentifier(id);
 		}
+		catch (NullPointerException ex) {}
 
 		try {
 			expression = "//enrolledSubject/code/@code";
