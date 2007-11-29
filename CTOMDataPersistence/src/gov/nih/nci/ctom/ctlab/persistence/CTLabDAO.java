@@ -23,16 +23,26 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class CTLabDAO extends BaseJDBCDAO {
+import org.apache.log4j.Logger;
 
+/**
+ * CTLabDAO persist all clinical trial data to the CTODS database for labviewer
+ * <P>
+ * @author Anupama Sharma
+ */
+public class CTLabDAO extends BaseJDBCDAO
+{
+	Logger logger = Logger.getLogger(getClass());
+	
 	/**
 	 * Persists the Protocol object to the database
 	 * @param con  Connection 
 	 * @param prot Protocol
 	 * @throws Exception
 	 */
-	public void saveProtocol(Connection con, Protocol prot) throws Exception {
-
+	public void saveProtocol(Connection con, Protocol prot) throws Exception
+	{
+		logger.info("Saving Protocol");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
@@ -41,64 +51,73 @@ public class CTLabDAO extends BaseJDBCDAO {
 		if (prot.getNciIdentifier() == null)
 			throw new Exception(
 					"Invalid Data, Protocol Identifier Cannot Be Null");
-		ps = con
-				.prepareStatement("select ID from protocol where NCI_IDENTIFIER = ?");
-		ps.setString(1, prot.getNciIdentifier());
+		
+		// Check if the protocol already exists using identifier
+		ps = con.prepareStatement("select p.ID from protocol p, identifier ii where p.ID = ii.PROTOCOL_ID and ii.extension=?");
+		ps.setString(1, prot.getIdentifier().getExtension());
+		
 		rs = ps.executeQuery();
 
-		if (rs.next()) {
+		// If it exists get the ID
+		if (rs.next())
+		{
 			id = rs.getLong(1);
 			prot.setId(id);
 			ps = con
 			.prepareStatement("select ID from IDENTIFIER where PROTOCOL_ID = ?");
 			ps.setLong(1, id);
 			rs = ps.executeQuery();
-			if(rs.next())
-				prot.getIdentifier().setId(rs.getLong(1));
-			} else {
 			
+			if(rs.next())
+			{
+				prot.getIdentifier().setId(rs.getLong(1));
+			}
+			logger.info("Protocol existed");
+		}
+		else
+		{
+			// If not then insert it
 			saveOrInsertIdentifier(con,prot);
 			if(prot.getId()==null)
 			{	
-			identifierUpdInd = true;
-			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery("select protocol_seq.nextval from dual");
-			rs.next();
-			id = rs.getLong(1);
-            System.out.println("The protocol id : insert "+ id);
-			ps = con
-					.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT)  values(?,?,?,?)");
-			ps.setLong(1, id);
-			ps.setString(2, String.valueOf(prot.getNciIdentifier()));
-			ps.setString(3, String.valueOf(prot.getIdAssigningAuth()));
-			ps.setString(4, String.valueOf(prot.getLongTxtTitle()));
-			ps.execute();
-			if (identifierUpdInd && prot.getIdentifier() != null) {
-				prot.setId(id);
-				System.out.println("Calling the update identifier");
-				updateIdentifier(con, prot);
+				identifierUpdInd = true;
+				Statement stmt = con.createStatement();
+				rs = stmt.executeQuery("select protocol_seq.nextval from dual");
+				rs.next();
+				id = rs.getLong(1);
+				ps = con.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT)  values(?,?,?,?)");
+				ps.setLong(1, id);
+				ps.setString(2, String.valueOf(prot.getNciIdentifier()));
+				ps.setString(3, String.valueOf(prot.getIdAssigningAuth()));
+				ps.setString(4, String.valueOf(prot.getLongTxtTitle()));
+				ps.execute();
+				if (identifierUpdInd && prot.getIdentifier() != null)
+				{
+					prot.setId(id);
+					updateIdentifier(con, prot);
+				}
+			} // update into participant if there was a participant associated
+			  // with identifier.
+			else
+			{
+				ps = con
+						.prepareStatement("update PROTOCOL set NCI_IDENTIFIER = ?, IDENTIFIER_ASSIGNING_AUTHORITY = ?, LONG_TITLE_TEXT = ? where ID = ?");
+				ps.setString(1, String.valueOf(prot.getNciIdentifier()));
+				ps.setString(2, String.valueOf(prot.getIdAssigningAuth()));
+				ps.setString(3, String.valueOf(prot.getLongTxtTitle()));
+				ps.setLong(4, prot.getId());
+				ps.executeUpdate();
+				con.commit();
 			}
-		} // update into participant if there was a participant associated
-			// with identifier.
-		else {
-			System.out.println("Inside update protocol: protoid"+prot.getId());
-			ps = con
-					.prepareStatement("update PROTOCOL set NCI_IDENTIFIER = ?, IDENTIFIER_ASSIGNING_AUTHORITY = ?, LONG_TITLE_TEXT = ? where ID = ?");
-			ps.setString(1, String.valueOf(prot.getNciIdentifier()));
-			ps.setString(2, String.valueOf(prot.getIdAssigningAuth()));
-			ps.setString(3, String.valueOf(prot.getLongTxtTitle()));
-			ps.setLong(4, prot.getId());
-			ps.executeUpdate();
-			con.commit();
-		  }
 		}
+			
 		if (prot.getInvestigator() != null)
 			saveInvestigator(con, id, prot.getInvestigator());
 
 		if (prot.getHealthCareSite() != null)
 			saveHealthCareSite(con, id, prot.getHealthCareSite());
 		
-		}
+	}
 
 	/**
 	 * 
@@ -114,19 +133,21 @@ public class CTLabDAO extends BaseJDBCDAO {
 		Long hsId = null;
 		Statement stmt = null;
 
-		ps = con
-				.prepareStatement("select id from healthcare_site where NCI_INSTITUTE_CODE = ?");
+		ps = con.prepareStatement("select id from healthcare_site where NCI_INSTITUTE_CODE = ?");
 		ps.setString(1, hcSite.getNciInstituteCd());
+		
 		rs = ps.executeQuery();
-		if (rs.next()) {
+		if (rs.next())
+		{
 			hsId = rs.getLong(1);
-		} else {
+		}
+		else
+		{
 			// Get Id from sequence
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("select ORGANIZATION_SEQ.nextval from dual");
 			rs.next();
 			hsId = rs.getLong(1);
-			System.out.println("The healthCare id : insert" + hsId);
 			// insert into HealthCare_Site
 			ps = con
 					.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE)  values(?,?)");
@@ -151,7 +172,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ssId = rs.getLong(1);
 
 			// insert into Study_Site
-			System.out.println("The study Site id : insert" + ssId);
 			ps = con
 					.prepareStatement("insert into study_site (ID, HEALTHCARE_SITE_ID, PROTOCOL_ID)  values(?,?,?)");
 
@@ -177,59 +197,49 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void saveStudyParticipantAssignment(Connection con, Long ssId,
-			StudyParticipantAssignment spa) throws SQLException{
-
+			StudyParticipantAssignment spa) throws SQLException
+	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long spaId = null;
-		Long partId = null;
 		boolean identifierUpdInd=false;
 		
-		//partId = spa.getParticipant().getId();
-		
-		//ps = con
-		//		.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND PARTICIPANT_ID = ?");
-		ps = con
-		.prepareStatement("select id from STUDY_PARTICIPANT_ASSIGNMENT where STUDY_SITE_ID = ? AND STUDY_PARTICIPANT_IDENTFR_ORIG = ?");
+		ps = con.prepareStatement("select spa.id from STUDY_PARTICIPANT_ASSIGNMENT spa, identifier ii where ii.STUDY_PARTICIPANT_ASSIGNMNT_ID = spa.id AND spa.STUDY_SITE_ID = ? AND ii.extension=?");
 		ps.setLong(1, ssId);
-		//ps.setLong(2, partId);
-		ps.setString(2, spa.getStudyPartIdOrig());
+		ps.setString(2, spa.getIdentifier().getExtension());
+		
 		rs = ps.executeQuery();
-		if (rs.next()) {
+		if (rs.next())
+		{
 			spaId = rs.getLong(1);
-			System.out.println("SPA_ID is " + spaId);
-		} else {
-
+		}
+		else
+		{
 			// Get Id from sequence
 			Statement stmt = con.createStatement();
-			rs = stmt
-					.executeQuery("select STUDY_PARTICIPANT_ASSGNMNT_SEQ.nextval from dual");
+			rs = stmt.executeQuery("select STUDY_PARTICIPANT_ASSGNMNT_SEQ.nextval from dual");
 			rs.next();
 			spaId = rs.getLong(1);
 
 			// Check study participant identifier, if it exists, then don't
 			// insert new SPA or Participant
-			System.out.println("The studyparticipantAssig id is " + spaId);
 			Long identifierID = saveOrInsertIdentifier(con,spa);
+			
 			if(spa.getId()==null)
 			{
 			identifierUpdInd= true;	
 			saveParticipant(con, spa.getParticipant());
-			System.out.println("The after saving participant spa id :SPA Insert " + spaId);
-			System.out.println("The after saving participant  id is " + spa.getParticipant().getId());
-			System.out.println("The after saving participant  studysite id is " + ssId);
 			// insert into STUDY_PARTICIPANT_ASSIGNMENT
-			ps = con
-					.prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID)  values(?,?,?,?)");
+			ps = con.prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID)  values(?,?,?,?)");
 			ps.setLong(1, spaId);
 			ps.setString(2, spa.getStudyPartIdOrig());
 			ps.setLong(3, ssId);
 			ps.setLong(4, spa.getParticipant().getId());
 			ps.execute();
 			con.commit();
-			if (identifierUpdInd && spa.getParticipant().getIdentifier() != null) {
+			if (identifierUpdInd && spa.getParticipant().getIdentifier() != null)
+			{
 				spa.setId(spaId);
-				System.out.println("Calling the update identifier");
 				updateIdentifier(con, spa,identifierID);
 			}
 		}
@@ -250,7 +260,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	public void saveParticipant(Connection con, Participant participant)
-			throws SQLException {
+			throws SQLException
+	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		boolean identifierUpdInd = false;
@@ -282,8 +293,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			while (rs.next()) {
 				participant.setId(rs.getLong(1));
-				System.out.println("Get the participantid :Insert="
-						+ rs.getLong(1));
 				break;
 			}
 
@@ -364,22 +373,22 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void saveOrInsertIdentifier(Connection con, Participant participant)
-			throws SQLException {
+			throws SQLException
+	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
 		Long identifierId = null;
 		// check if the participant is associated with identifier
 
-		if (participant.getIdentifier() != null) {
-			ps = con
-					.prepareStatement("select ID,PARTICIPANT_ID from IDENTIFIER where EXTENSION = ? AND PARTICIPANT_ID IS NOT NULL");
+		if (participant.getIdentifier() != null)
+		{
+			ps = con.prepareStatement("select ID,PARTICIPANT_ID from IDENTIFIER where EXTENSION = ? AND PARTICIPANT_ID IS NOT NULL");
 			ps.setString(1, participant.getIdentifier().getExtension());
 			rs = ps.executeQuery();
 
 			// check if identifier is in DB
 			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PARTICIPANT_ID")!=0) {
-				System.out.println("Inside if participantID " + rs.getLong("PARTICIPANT_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("PARTICIPANT_ID");
 				participant.setId(id);
@@ -391,8 +400,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					identifierId = rs.getLong(1);
-					System.out.println("Inside esle identifierID "
-							+ rs.getLong(1));
 					break;
 				}
 				// insert new into identifier get the identifierid and insert
@@ -439,7 +446,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			// check if identifier is in DB
 			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PROTOCOL_ID")!=0) {
-				System.out.println("Inside if protocolID " + rs.getLong("PROTOCOL_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("PROTOCOL_ID");
 				protocol.setId(id);
@@ -451,8 +457,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					identifierId = rs.getLong(1);
-					System.out.println("Inside esle identifierID "
-							+ rs.getLong(1));
 					break;
 				}
 				// insert new into identifier get the identifierid and insert
@@ -482,8 +486,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			throws SQLException {
 
 		PreparedStatement ps = null;
-		System.out.println("The identifier id is :"
-				+ participant.getIdentifier().getId());
 		ps = con
 				.prepareStatement("update IDENTIFIER set PARTICIPANT_ID = ? where ID= ?");
 		// need to set the participantid into the identifier table
@@ -520,7 +522,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 			// check if identifier is in DB
 			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID")!=0) {
-				System.out.println("Inside if spaID " + rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID");
 				spa.setId(id);
@@ -533,8 +534,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					identifierId = rs.getLong(1);
-					System.out.println("Inside esle identifierID "
-							+ rs.getLong(1));
 					break;
 				}
 				// insert new into identifier get the identifierid and insert
@@ -567,8 +566,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			throws SQLException {
 
 		PreparedStatement ps = null;
-		System.out.println("The identifier id while updating spaid is :"
-				+ studypartAssign.getParticipant().getIdentifier().getId());
 		ps = con
 				.prepareStatement("update IDENTIFIER set STUDY_PARTICIPANT_ASSIGNMNT_ID = ? where ID= ?");
 		// need to set the participantid into the identifier table
@@ -588,8 +585,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			throws SQLException {
 
 		PreparedStatement ps = null;
-		System.out.println("The identifier id for updating protocolid is :"
-				+ protocol.getIdentifier().getId());
 		ps = con
 				.prepareStatement("update IDENTIFIER set PROTOCOL_ID = ? where ID= ?");
 		// need to set the protocolid into the identifier table
@@ -606,8 +601,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void updateParticipant(Connection con, Participant participant)
-			throws SQLException {
-
+			throws SQLException
+	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long personId = null;
@@ -688,11 +683,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 		rs.next();
 		actId = rs.getLong(1);
 		act.setId(actId);
-		System.out.println("Activity id"+actId);
-		System.out.println("Activity id"+spaId);
 		// insert into Activity
-		ps = con
-				.prepareStatement("insert into ACTIVITY (ID, STUDY_PARTICIPANT_ASSIGNMNT_ID, START_DATE_ORIG, STOP_DATE_ORIG,START_DATE,STOP_DATE)  values(?,?,?,?,?,?)");
+		ps = con.prepareStatement("insert into ACTIVITY (ID, STUDY_PARTICIPANT_ASSIGNMNT_ID, START_DATE_ORIG, STOP_DATE_ORIG,START_DATE,STOP_DATE)  values(?,?,?,?,?,?)");
 		ps.setLong(1, actId);
 		ps.setLong(2, spaId);
 		ps.setString(3, String.valueOf(act.getStartDateOrig()));
@@ -704,10 +696,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps.setTimestamp(6, new java.sql.Timestamp(stopTmp.getTime()));
 			ps.execute();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("error creating activity", e);
 		}
-		
 
 		if (act.getObservation() != null) {
 			act.getObservation().setActivityId(act.getId());
@@ -761,7 +751,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			throws SQLException {
 
 		PreparedStatement ps = null;
-        System.out.println("The procedure id is :"+ procedure.getId()); 
 		ps = con
 				.prepareStatement("insert into PROCEDURE (ID, FASTING_STATUS)  values(?,?)");
 		ps.setLong(1, procedure.getId());
@@ -793,8 +782,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			rs = stmt.executeQuery("select ACTIVITY_SEQ.nextval from dual");
 			rs.next();
 			Long id = rs.getLong(1);
-			System.out.println("id is "+ id);
-			System.out.println("The clab id is"+ specimenCollection.getCentralLaboratory().getId());
 			//ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (PROCEDURE_ACTIVITY_ID, CENTRAL_LABORATORY_ORG_ID)  values(?,?)");
 			ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (ID,CENTRAL_LABORATORY_ID)  values(?,?)");
 			ps.setLong(1, specimenCollection.getProcedureActivityId());
@@ -954,12 +941,13 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void saveClinicalResult(Connection con,
-			ClinicalResult clinicalResult) throws SQLException {
-
+			ClinicalResult clinicalResult) throws SQLException
+	{
 		Long valUOMCdId = null;
 		Long labTestCdId = null;
 	
-		if (clinicalResult.getPerformingLaboratory() != null) {
+		if (clinicalResult.getPerformingLaboratory() != null)
+		{
 			savePerformingLaboratory(con, clinicalResult
 					.getPerformingLaboratory());
 			 valUOMCdId = insertOrsaveConceptDescriptor(con,
@@ -979,43 +967,47 @@ public class CTLabDAO extends BaseJDBCDAO {
 			//		.getMeansVitStatObtCd(), null, null);
 			
 		}
-        System.out.println("The labTestCdId"+ labTestCdId);
+
 		if (labTestCdId == null) // This is a required field in the database
 			return;
 		PreparedStatement ps = null;
 
 		boolean val = false;
 		boolean lt = false;
+		
 		if (valUOMCdId != null)
 			val = true;
+		
 		if (labTestCdId != null)
 			lt = true;
 
-		if (lt && val) {
+		if (lt && val)
+		{
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?)");
-			ps.setLong(7, valUOMCdId);
-			ps.setLong(8, labTestCdId);
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, VALUEUOM_CONCEPT_DESCRIPTOR_ID, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?,?)");
+			ps.setLong(9, valUOMCdId);
+			ps.setLong(10, labTestCdId);
 		} else if (!lt && !val) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE)  values(?,?,?,?,?,?)");
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH)  values(?,?,?,?,?,?,?,?)");
 		} else if (!lt) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, VALUEUOM_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
-			ps.setLong(7, valUOMCdId);
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, VALUEUOM_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?)");
+			ps.setLong(9, valUOMCdId);
 		} else if (!val) {
 			ps = con
-					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?)");
-			ps.setLong(7, labTestCdId);
+					.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?)");
+			ps.setLong(9, labTestCdId);
 		}
 
 		ps.setLong(1, clinicalResult.getObservationId());
 		ps.setString(2, clinicalResult.getLabTechCd());
 		ps.setString(3, clinicalResult.getPanelName());
-		ps.setLong(4, clinicalResult.getPerformingLaboratory()
-				.getOrganizationId());
+		ps.setLong(4, clinicalResult.getPerformingLaboratory().getOrganizationId());
 		ps.setString(5, clinicalResult.getRefFlag());
 		ps.setString(6, clinicalResult.getValue());
+		ps.setFloat(7, clinicalResult.getRefRangeLow());
+		ps.setFloat(8, clinicalResult.getRefRangeHigh());
 		ps.execute();
 
 	}
@@ -1035,9 +1027,7 @@ public class CTLabDAO extends BaseJDBCDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
-		System.out.println("The code is --" + code);
-		ps = con
-				.prepareStatement("select id from concept_descriptor where code = ?");
+		ps = con.prepareStatement("select id from concept_descriptor where code = ?");
 		ps.setString(1, code);
 		rs = ps.executeQuery();
 		if (rs.next()) {
@@ -1045,13 +1035,10 @@ public class CTLabDAO extends BaseJDBCDAO {
 		} else {
 			Statement stmt = con.createStatement();
 
-			rs = stmt
-					.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
+			rs = stmt.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
 			rs.next();
 			id = rs.getLong(1);
-			System.out.println("The concept descriptor id is --" + id);
-			ps = con
-					.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE,CODE_SYSTEM,CODE_SYSTEM_NAME,CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?,?,?)");
+			ps = con.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE,CODE_SYSTEM,CODE_SYSTEM_NAME,CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?,?,?)");
 			ps.setLong(1, id);
 			ps.setString(2, code);
 			ps.setString(3, codeSystem);
@@ -1084,7 +1071,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
-		System.out.println("The code is --" + code);
 		ps = con
 				.prepareStatement("select id from concept_descriptor where code = ?");
 		ps.setString(1, code);
@@ -1098,7 +1084,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 					.executeQuery("select CONCEPT_DESCRIPTOR_SEQ.nextval from dual");
 			rs.next();
 			id = rs.getLong(1);
-			System.out.println("The concept descriptor id is --" + id);
 			ps = con
 					.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE, CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?)");
 			ps.setLong(1, id);
@@ -1149,7 +1134,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			ps.setString(3, performingLaboratory.getPlName());
 			ps.execute();
 		}
-		System.out.println("The performing lab id"+ performingLaboratory.getOrganizationId());
 	}
 
 	/**
@@ -1159,9 +1143,8 @@ public class CTLabDAO extends BaseJDBCDAO {
 	 * @throws SQLException
 	 */
 	private void saveInvestigator(Connection con, Long protId, Investigator inv)
-			throws SQLException {
-		// TODO Auto-generated method stub
-
+			throws SQLException
+	{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
@@ -1180,7 +1163,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 			rs = stmt.executeQuery("select PERSON_SEQ.nextval from dual");
 			rs.next();
 			id = rs.getLong(1);
-			System.out.println("The investigator id is " + id);
 			// insert into Investigator
 			ps = con
 					.prepareStatement("insert into investigator (ID, NCI_IDENTIFIER, LAST_NAME)  values(?,?,?)");
@@ -1257,7 +1239,6 @@ public class CTLabDAO extends BaseJDBCDAO {
 
 		// check if identifier is in DB
 		if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PARTICIPANT_ID")!=0) {
-			System.out.println("participantID " + rs.getLong("PARTICIPANT_ID"));
 			// already present;update the identifier table
 			 id = rs.getLong("PARTICIPANT_ID");
 		}

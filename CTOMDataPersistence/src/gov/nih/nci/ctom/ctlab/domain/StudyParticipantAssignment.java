@@ -30,7 +30,12 @@ public class StudyParticipantAssignment {
 	private Date ctomUpdateDt;
 	private Activity activity=null;
 	private Participant participant=null;
+	private Identifier identifier;
 	
+	public StudyParticipantAssignment()
+	{
+		identifier = new Identifier();
+	}
 	
 	/**
 	 * @return the studyPartId
@@ -345,5 +350,16 @@ public class StudyParticipantAssignment {
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
 	}
-
+	/**
+	 * @return the identifier
+	 */
+	public Identifier getIdentifier() {
+		return identifier;
+	}
+	/**
+	 * @param identifier the identifier to set
+	 */
+	public void setIdentifier(Identifier identifier) {
+		this.identifier = identifier;
+	}
 }
