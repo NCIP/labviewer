@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClinicalTrial xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="CLNTRL" moodCode="EVN">
-   <id root="db762d64-e213-4bf9-9f9b-bccd36be56e2" extension="04_C_0121" assigningAuthorityName="NCI"/>
+   <id root="db762d64-e213-4bf9-9f9b-bccd36be56e2" extension="CDR0000078234" assigningAuthorityName="NCI"/>
    <title representation="TXT" mediaType="text/plain">Test Study</title>
    <component typeCode="COMP" contextConductionInd="true">
       <trialAtSite classCode="CLNTRL" moodCode="EVN">
          <location typeCode="LOC" contextControlCode="OP">
             <trialSite classCode="SDLOC">
-               <id root="26eea1eb-e603-4cce-9b41-0edaa23b79c7" extension="Wake" assigningAuthorityName="placeholder"/>
+               <id root="26eea1eb-e603-4cce-9b41-0edaa23b79c7" extension="duke healthcare nci" assigningAuthorityName="placeholder"/>
             </trialSite>
          </location>
          <component typeCode="COMP" contextConductionInd="true">
@@ -23,10 +23,10 @@
                   <subjectAssignment classCode="CLNTRL" moodCode="EVN">
                      <recordTarget typeCode="RCT" contextControlCode="OP">
                         <enrolledSubject classCode="RESBJ">
-                           <id root="50113a1a-4c3e-4418-8c37-7383cba1aaf8" extension="59-60-00-3" assigningAuthorityName="Georgetown University Hospital"/>
+                           <id root="50113a1a-4c3e-4418-8c37-7383cba1aaf8" extension="MRN-1212332" assigningAuthorityName="Georgetown University Hospital"/>
                            <subjectPerson classCode="PSN" determinerCode="INSTANCE">
                               <asSpareSubject classCode="RESBJ">
-                                 <id root="50113a1a-4c3e-4418-8c37-7383cba1aaf8" extension="59-60-00-3"/>
+                                 <id root="50113a1a-4c3e-4418-8c37-7383cba1aaf8" extension="MRN-1212332"/>
                               </asSpareSubject>
                            </subjectPerson>
                         </enrolledSubject>
@@ -50,8 +50,8 @@
                                              <productOf typeCode="PRD" contextControlCode="OP">
                                                 <specimenCollectionProcedure classCode="PROC" moodCode="EVN">
                                                    <effectiveTime xsi:type="IVL_TS">
-                                                      <low value="20070922115500"/>
-                                                      <high value="20070922115500"/>
+                                                      <low value="200709221155"/>
+                                                      <high value="200709221155"/>
                                                    </effectiveTime>
                                                 </specimenCollectionProcedure>
                                              </productOf>

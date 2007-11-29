@@ -50,7 +50,7 @@ public class LabViewerRegistrationTest
 			
 			// Call the service
 			client.register(reg);
-			client.rollback(reg);
+			//client.rollback(reg);
 		}
 		catch (Exception e)
 		{

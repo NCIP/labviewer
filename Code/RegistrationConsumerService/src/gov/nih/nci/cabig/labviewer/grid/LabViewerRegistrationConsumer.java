@@ -197,7 +197,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		StudySiteType studySite = registration.getStudySite();
 		HealthcareSiteType hcsType = studySite.getHealthcareSite(0);
 		HealthCareSite healthCare = new HealthCareSite();
-		String tmpstr = studySite.getGridId()+"."+hcsType.getNciInstituteCode();
+		//String tmpstr = studySite.getGridId()+"."+hcsType.getNciInstituteCode();
+		String tmpstr = hcsType.getNciInstituteCode();
 		healthCare.setNciInstituteCd(tmpstr);
 		
 		//save participant data
@@ -215,14 +216,16 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		part.setRaceCode(participant.getRaceCode());
 		 
 		// Assume that only one identifier was sent and use that
-		IdentifierType id = participant.getIdentifier(0);
-		if (id != null)
+		IdentifierType[] ids = participant.getIdentifier();
+		IdentifierType id = null;
+		Identifier partIdent = new Identifier();
+		if (ids != null && ids.length > 0)
 		{
-			Identifier ident = new Identifier();
-			ident.setExtension(id.getValue());
-			ident.setSource(id.getSource());
-			ident.setRoot(participant.getGridId());
-			part.setIdentifier(ident);
+			id = ids[0];
+			partIdent.setExtension(id.getValue());
+			partIdent.setSource(id.getSource());
+			partIdent.setRoot(participant.getGridId());
+			part.setIdentifier(partIdent);
 		}
 		else
 		{
@@ -235,6 +238,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		studyPartAssig.setParticipant(part);
 		String tmp = participant.getGridId()+"."+id.getValue();
 		studyPartAssig.setStudyPartIdOrig(tmp);
+		studyPartAssig.setIdentifier(partIdent);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
 		

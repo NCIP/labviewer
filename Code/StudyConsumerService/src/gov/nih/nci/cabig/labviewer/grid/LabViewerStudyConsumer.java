@@ -21,7 +21,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 {
 	Logger logger = Logger.getLogger(getClass());
 	static final int MILLIS_PER_MINUTE = 60 * 1000;
-	static final int THRESHOLD_MINUTE =2;
+	static final int THRESHOLD_MINUTE = 2;
 	private HashMap<String,StudyPersistTime> map = new HashMap<String,StudyPersistTime>();
 	private CTLabDAO dao = new CTLabDAO();
 	private Connection con;
@@ -90,7 +90,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		catch (Exception e)
 		{
-			logger.error("Error craeting study", e);
+			logger.error("Error creating study", e);
 			StudyCreationException rce = new StudyCreationException();
 			rce.setFaultString(e.getMessage());
 			throw rce;
@@ -100,15 +100,11 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			try {
 				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				logger.error("Error closing connection",e);
 			}
 		}
 		
 		logger.info("Study created");
-		
-		//return study;
-	
 		
 	}
 

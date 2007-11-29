@@ -14,9 +14,9 @@
 		<longTitleText>Infusional Chemotherapy in Previously Untreated Patients With Intermediate Or Aggressive Non-Hodgkin's Lymphoma: A Study of Dose-Intense Therapy With Cytokines.</longTitleText>
 		<identifier
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			type="CDR000007829" xsi:type="OrganizationAssignedIdentifierType">
+			type="CDR0000078234" xsi:type="OrganizationAssignedIdentifierType">
 			<type>Coordinating Center Identifier</type>
-			<value>CDR000007829</value>
+			<value>CDR0000078234</value>
 			<primaryIndicator>true</primaryIndicator>
 			<healthcareSite gridId="WF GRID ID">
 				<nciInstituteCode>duke healthcare nci</nciInstituteCode>
