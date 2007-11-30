@@ -12,17 +12,47 @@
    <primaryIndicator>true</primaryIndicator>
   </identifier>
  </studyRef>
-    <participant
-        gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
-        <gridId>50113a1a-4c3e-4418-8c37-7383cba1aaf8</gridId>
-        <firstName>Geoge</firstName>
-        <lastName>Elliot</lastName>
-        <address />
-        <administrativeGenderCode>Male</administrativeGenderCode>
-        <birthDate>1971-01-01</birthDate>
-        <ethnicGroupCode>Hispanic or Latino</ethnicGroupCode>
-        <raceCode>Asian</raceCode>
-    </participant>
+<participant xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+
+ns1:gridId="50113a1a-4c3e-4418-8c37-7383cba1aaf8">
+
+<ns1:gridId xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">50113a1a-4c3e-4418-8c37-7383cba1aaf8</ns1:gridId>
+
+<ns1:firstName xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Geoge</ns1:firstName>
+
+<ns1:lastName xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Elliot</ns1:lastName>
+
+<ns1:address xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+
+<ns1:administrativeGenderCode xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Male</ns1:administrativeGenderCode>
+
+<ns1:birthDate xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">1971-01-01</ns1:birthDate>
+
+<ns1:identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+type="MRN-1212332"
+
+xsi:type="ns1:OrganizationAssignedIdentifierType" xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+
+<ns1:type xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">MRN</ns1:type>
+
+<ns1:value xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">MRN-1212332</ns1:value>
+
+<ns1:primaryIndicator xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">true</ns1:primaryIndicator>
+
+<ns1:healthcareSite gridId="WF GRID ID" xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
+
+<ns1:nciInstituteCode xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Wake</ns1:nciInstituteCode>
+
+</ns1:healthcareSite>
+
+</ns1:identifier>
+
+<ns1:ethnicGroupCode xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Hispanic or Latino</ns1:ethnicGroupCode>
+
+<ns1:raceCode xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">Asian</ns1:raceCode>
+
+</participant>
     <startDate>2007-10-01</startDate>
     <informedConsentFormSignedDate>2007-10-09</informedConsentFormSignedDate>
     <informedConsentVersion>1.0</informedConsentVersion>
