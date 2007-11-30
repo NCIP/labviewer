@@ -19,6 +19,7 @@ public class LabViewerStudyTest
 {
 	String serviceUrl = "http://localhost:8080/wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/StudyConsumer";
+	//String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer";
 	String sampleFile = "/SampleStudyMessage.xml";
 	
 	/**
