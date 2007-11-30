@@ -17,7 +17,12 @@
 	<!-- Important directories and files -->
 	<property name="src.dir" value="src" />
 	<property name="lib.dir" value="lib" />
-	<property name="etc.dir" value="etc" />
+
+    <!--added by ccts-->
+    <property name="ext.dir" value="ext" />
+    <property name="ext.lib.dir" value="${ext.dir}/lib" />
+
+    <property name="etc.dir" value="etc" />
 	<property name="tools.dir" value="tools" />
 	<property name="tools.lib.dir" value="tools/lib" />
 	<property name="schema.dir" value="schema" />
@@ -145,7 +150,10 @@
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<fileset dir="${ext.globus.dir}/lib">
+            <fileset dir="${ext.lib.dir}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${ext.globus.dir}/lib">
 				<include name="*.jar" />
 				<exclude name="${stubs.jar.name}" />
 				<exclude name="${common.jar.name}" />
