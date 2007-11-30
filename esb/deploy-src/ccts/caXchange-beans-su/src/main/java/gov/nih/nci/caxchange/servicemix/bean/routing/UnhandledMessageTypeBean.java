@@ -18,7 +18,15 @@ import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
-
+/**
+ * CaXchange received a message for a message type for which routing 
+ * has not yet been defined. This bean handles such messages. It sets 
+ * appropriate error properties and sends the exchange back for the 
+ * error response to be generated.
+ * 
+ * @author Ekagra
+ *
+ */
 public class UnhandledMessageTypeBean implements MessageExchangeListener {
     @Resource
     private DeliveryChannel channel;
@@ -27,7 +35,13 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
     
     public UnhandledMessageTypeBean() {
     }
-    
+    /**
+     * Handles the exchange with the Message type for which 
+     * routing has not been defined.
+     * 
+     * @param exchange
+     * @throws MessagingException
+     */
     public void onMessageExchange(MessageExchange exchange) throws MessagingException {
         if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
             return;
@@ -35,11 +49,20 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
         if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
             throw new MessagingException("Error sending unhandled message type error.", exchange.getError());
         }
-        logger.debug("Received exchange: " + exchange);  
+        logger.debug("Received exchange: " + exchange); 
         NormalizedMessage out = exchange.createMessage();
         MessageUtil.transfer(exchange.getMessage("in"), out);
-        out.setProperty(CaxchangeConstants.ERROR_CODE, "UNHANDLED_MESSAGE_TYPE");
-        out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxhange does not handle this message type.");
+        try {
+           XPathUtil xpathUtil = new XPathUtil();
+           xpathUtil.setIn(exchange.getMessage("in"));
+           xpathUtil.initialize();
+           String messageType = xpathUtil.getMessageType();
+           out.setProperty(CaxchangeConstants.ERROR_CODE, "UNHANDLED_MESSAGE_TYPE");
+           out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxchange does not handle this message type :"+messageType);
+        }catch(Exception e) {
+            out.setProperty(CaxchangeConstants.ERROR_CODE, "UNHANDLED_MESSAGE_TYPE");
+            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxhange does not handle this message type.");        	
+        }
         exchange.setMessage(out,"out");
         channel.send(exchange);
     }

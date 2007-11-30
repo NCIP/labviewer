@@ -54,7 +54,7 @@
         <eip:exchange-target service="caxchange:ResponseQueueService" />
       </eip:target>
   </eip:pipeline>  
-  
+  <!-- content based router to route different caXchange message types -->
   <eip:content-based-router service="caxchange:MessageTypeRouter" endpoint="endpoint">
     <eip:rules>
       <eip:routing-rule>
@@ -73,6 +73,14 @@
           <eip:exchange-target service="caxchange:studyCreationRecipients" />
         </eip:target>
       </eip:routing-rule>      
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='LOAD_LAB_TO_CDMS']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:loadLabToCDMS" />
+        </eip:target>
+      </eip:routing-rule>         
       <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
@@ -96,6 +104,13 @@
       <eip:recipients>
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
         <eip:exchange-target service="caxchange:ctomStudyRouter" />
+      </eip:recipients>
+  </eip:caxchange-static-recipient-list>  
+  
+  <!-- static recipient list for load lab to CDMS -->
+  <eip:caxchange-static-recipient-list service="caxchange:loadLabToCDMS" endpoint="endpoint">
+      <eip:recipients>
+        <eip:exchange-target service="caxchange:callLoadLabPipeline" />
       </eip:recipients>
   </eip:caxchange-static-recipient-list>  
   
@@ -131,6 +146,17 @@
   
   
   <!-- End EIP Components for invoking the PSC -->
+  
+  <!--- EIP components for invoking the load lab to CDMS  -->
+    <eip:pipeline service="caxchange:callLoadLabPipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:loadLab" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+      </eip:target>
+     </eip:pipeline> 
+  <!-- End EIP Components for invoking the load lab to CDMS  -->
   
   <!--- EIP components for invoking the C3D  -->
     <eip:content-based-router service="caxchange:c3DRegisterSubjectRouter" endpoint="endpoint">
