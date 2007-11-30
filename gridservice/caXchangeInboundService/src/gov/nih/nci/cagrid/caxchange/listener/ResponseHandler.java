@@ -1,6 +1,5 @@
 package gov.nih.nci.cagrid.caxchange.listener;
 
-import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.ErrorDetails;
 import gov.nih.nci.caxchange.MessagePayload;
@@ -40,7 +39,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import org.xml.sax.InputSource;
-
+/**
+ * Serializes the response obtained from caXchange to a {@ResponseMessage} object
+ * 
+ * @author ekagra
+ *
+ */
 public class ResponseHandler {
 
     static String testResponse ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
@@ -119,126 +123,25 @@ public class ResponseHandler {
         "</caXchangeResponseMessage>";
     
     String responseText;
-    CaXchangeResponseMessageDocument responseMessageDocument=null;
-    
-    static final String FAILURE = "FAILURE";
-    static final String SUCCESS = "SUCCESS";
-    static final String CAXCHANGEIDENTIFIER = "/caXchangeResponseMessage/responseMetaData/caXchangeIdentifier";
-    static final String EXTERNALIDENTIFIER = "/caXchangeResponseMessage/responseMetaData/externalIdentifier";
-    static final String RESPONSESTATUS = "/caXchangeResponseMessage/response/responseStatus";
-    static final String ERRORDETAILS = "/caXchangeResponseMessage/response/caXchangeError";
-    static final String ERRORCODE = "/caXchangeResponseMessage/response/caXchangeError/errorCode";
-    static final String ERRORDESC = "/caXchangeResponseMessage/response/caXchangeError/errorDescription";
-    static final String XMLSCHEMADEF = "xmlSchemaDefinition";
-    static final String MESSAGEPAYLOAD = "/messagePayload/*";
-    static final String TARGETRESPONSEMESSAGE = "/caXchangeResponseMessage/response/targetResponse";
-    static final String TARGETSERVICEID = "/targetServiceIdentifier";
-    static final String TARGETSERVICEOP = "/targetServiceOperation";
-    static final String TARGETSERVICEMS = "/targetMessageStatus";
-
-
-    
-
-    XPath xpath = XPathFactory.newInstance().newXPath();
-
     
     
+
     public ResponseHandler() {
        
     }
     
     
-    public TargetResponseMessage[] getTargetResponseMessages() throws Exception {
-        gov.nih.nci.caXchange.messaging.TargetResponseMessage[] sourceTargetResponseMessages =
-                           responseMessageDocument.getCaXchangeResponseMessage().getResponse().getTargetResponseArray();
-        if ((sourceTargetResponseMessages!=null)&&(sourceTargetResponseMessages.length>0)) {
-            TargetResponseMessage[] targetResponseMessages= new TargetResponseMessage[sourceTargetResponseMessages.length];
-            int i=0;
-            for(gov.nih.nci.caXchange.messaging.TargetResponseMessage sourceTRM:sourceTargetResponseMessages ) {
-                TargetResponseMessage trm = new TargetResponseMessage();
-                trm.setTargetServiceOperation(sourceTRM.getTargetServiceOperation());
-                trm.setTargetServiceIdentifier(sourceTRM.getTargetServiceIdentifier());
-                gov.nih.nci.caXchange.messaging.MessageStatuses.Enum sourceMS= sourceTRM.getTargetMessageStatus();
-                if (sourceMS.equals(gov.nih.nci.caXchange.messaging.MessageStatuses.FAULT)) {
-                    trm.setTargetMessageStatus(MessageStatuses.FAULT);
-                }else if (sourceMS.equals(gov.nih.nci.caXchange.messaging.MessageStatuses.ERROR)) {
-                    trm.setTargetMessageStatus(MessageStatuses.ERROR);
-                }else if (sourceMS.equals(gov.nih.nci.caXchange.messaging.MessageStatuses.RESPONSE)) {
-                    trm.setTargetMessageStatus(MessageStatuses.RESPONSE);
-                }
-                if (sourceTRM.getTargetError()!=null) {
-                    ErrorDetails targetError = new ErrorDetails();
-                    gov.nih.nci.caXchange.messaging.ErrorDetails sourceTargetError = sourceTRM.getTargetError();
-                    targetError.setErrorCode(sourceTargetError.getErrorCode());
-                    targetError.setErrorDescription(sourceTargetError.getErrorDescription());
-                    trm.setTargetError(targetError);
-                }
-                if (sourceTRM.getTargetBusinessMessage()!=null) {
-                    MessagePayload mp = new MessagePayload();
-                    gov.nih.nci.caXchange.messaging.MessagePayload sourceMP = sourceTRM.getTargetBusinessMessage();
-                    mp.setXmlSchemaDefinition(new URI(sourceMP.getXmlSchemaDefinition()));
-                    Node node = sourceMP.getDomNode();
-                    XPathExpression exp = xpath.compile("*");
-                    NodeList sourceNodes = (NodeList)exp.evaluate(node, XPathConstants.NODESET);
-                    if ((sourceNodes != null)&&(sourceNodes.getLength()>0)) {
-                        List mes = new ArrayList();
-                        for(int k=0;k<sourceNodes.getLength();k++) {
-                            Node sourceNode = sourceNodes.item(k);
-                            if (!(XMLSCHEMADEF.equals(sourceNode.getNodeName()))) {
-                                MessageElement me = new MessageElement((Element)sourceNode);
-                                mes.add(me);
-                            }
-                        }
-                        MessageElement[] meArr = null;
-                        if (!(mes.isEmpty())) {
-                           meArr = new MessageElement[mes.size()];
-                           Iterator mesIterator = mes.iterator();
-                           int j=0;
-                           while(mesIterator.hasNext()) {
-                               meArr[j++]= (MessageElement)mesIterator.next();
-                           }
-                        }
-                        mp.set_any(meArr);
-                    }
-                    trm.setTargetBusinessMessage(mp);
-                }
-                targetResponseMessages[i++]=trm;
-            }
-            return targetResponseMessages;
-        }
-       return null;
-    }
-    
+ 
+    /**
+     * Parse the response text from caXchange.
+     * 
+     * @return parsed ResponseMessage object
+     * @throws Exception
+     */
     public ResponseMessage getResponse() throws Exception {
         Reader reader = new StringReader(responseText);
         ResponseMessage rm =(ResponseMessage)Utils.deserializeObject(reader,ResponseMessage.class);
         return rm;
-    /*
-        ResponseMessage rm = new ResponseMessage();
-        rm.setResponseMetadata(new ResponseMetadata());
-        gov.nih.nci.caXchange.messaging.ResponseMetadata sourceMetadata=responseMessageDocument.getCaXchangeResponseMessage().getResponseMetadata();
-        rm.getResponseMetadata().setCaXchangeIdentifier(sourceMetadata.getCaXchangeIdentifier());
-        rm.getResponseMetadata().setExternalIdentifier(sourceMetadata.getExternalIdentifier());
-        rm.setResponse(new Response());
-        gov.nih.nci.caXchange.messaging.Response sourceResponse = responseMessageDocument.getCaXchangeResponseMessage().getResponse();
-        if (sourceResponse.getResponseStatus().equals(gov.nih.nci.caXchange.messaging.Statuses.FAILURE)) {
-           rm.getResponse().setResponseStatus(Statuses.FAILURE);
-        }else if (sourceResponse.getResponseStatus().equals(gov.nih.nci.caXchange.messaging.Statuses.SUCCESS)) {
-           rm.getResponse().setResponseStatus(Statuses.SUCCESS);
-        }
-        if (sourceResponse.getCaXchangeError() != null) {
-           ErrorDetails errorDetails = new ErrorDetails();
-           gov.nih.nci.caXchange.messaging.ErrorDetails sourceErrorDetails = sourceResponse.getCaXchangeError();
-           errorDetails.setErrorCode(sourceErrorDetails.getErrorCode());
-           errorDetails.setErrorDescription(sourceErrorDetails.getErrorDescription());
-            rm.getResponse().setCaXchangeError(errorDetails);
-        }
-        if (sourceResponse.getTargetResponseArray()!= null) {
-        }
-        rm.getResponse().setTargetResponse(getTargetResponseMessages());
-        
-        return rm;
-*/
     }
     
     /**
@@ -273,10 +176,11 @@ public class ResponseHandler {
     }
 
 
-
+    /*
+     * Set the responseText from caXchange.
+     */ 
     public void setResponseText(String responseText) throws Exception{
         this.responseText = responseText;
-        responseMessageDocument = CaXchangeResponseMessageDocument.Factory.parse(responseText);
     }
 
     public String getResponseText() throws Exception{
