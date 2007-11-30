@@ -77,7 +77,7 @@
   <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" >
       <property name="messageTypesEligibleForRollback" >
             <list>
-                <value>SUBJECT_CREATION</value>
+                <value>STUDY_CREATION</value>
                 <value>REGISTER_SUBJECT</value>
             </list>
       </property>
