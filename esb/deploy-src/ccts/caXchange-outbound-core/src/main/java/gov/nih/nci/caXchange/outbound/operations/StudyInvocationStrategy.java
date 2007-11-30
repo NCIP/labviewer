@@ -67,7 +67,8 @@ public class StudyInvocationStrategy implements GridInvocationStrategy {
 					reader, Study.class, deseralizeStream);
 
 			client.createStudy(request);
-			client.commit(request);
+			//commented to remove commit
+			//client.commit(request);
 
 			final Document resp = new SourceTransformer()
 					.toDOMDocument(new StringSource("<result>success</result>"));

@@ -60,7 +60,9 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 			Registration request = (Registration) Utils.deserializeObject(
 					reader, Registration.class, deseralizeStream);
 			Registration reply = client.register(request);
-			client.commit(request);
+			
+			//commented to remove commit
+			//client.commit(request);
 			
 			InputStream serializeStream = client.getClass().getResourceAsStream(
 							"/registration/client-config.wsdd");
