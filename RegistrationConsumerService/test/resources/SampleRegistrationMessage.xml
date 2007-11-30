@@ -3,35 +3,26 @@
         gridId="sampleRegistration">
 	<studySite gridId="26eea1eb-e603-4cce-9b41-0edaa23b79c7">
 		<healthcareSite gridId="WF GRID ID">
-			<nciInstituteCode>duke healthcare nci</nciInstituteCode>
+			<nciInstituteCode>duke code</nciInstituteCode>
 		</healthcareSite>
 		<irbApprovalDate>2007-10-01T00:00:00.000-04:00</irbApprovalDate>
 		<roleCode>Affiliate Site</roleCode>
 		<startDate>2007-10-01T00:00:00.000-04:00</startDate>
 	</studySite>
 	<studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e2">
-		<shortTitleText>Combination Chemotherapy NHL</shortTitleText>
-		<longTitleText>Infusional Chemotherapy in Previously Untreated Patients With Intermediate Or Aggressive Non-Hodgkin's Lymphoma: A Study of Dose-Intense Therapy With Cytokines.</longTitleText>
-		<identifier
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			type="CDR000007829" xsi:type="OrganizationAssignedIdentifierType">
-			<type>Coordinating Center Identifier</type>
-			<value>CDR000007829</value>
-			<primaryIndicator>true</primaryIndicator>
-			<healthcareSite gridId="WF GRID ID">
-				<nciInstituteCode>duke healthcare nci</nciInstituteCode>
-			</healthcareSite>
-		</identifier>
-		<identifier
-			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			type="NCT00018980" xsi:type="OrganizationAssignedIdentifierType">
-			<type>Protocol Authority Identifier</type>
-			<value>NCT00018980</value>
-			<primaryIndicator>false</primaryIndicator>
-			<healthcareSite>
-				<nciInstituteCode>NCCTG</nciInstituteCode>
-			</healthcareSite>
-		</identifier>
+	    <shortTitleText>short_title_text</shortTitleText>
+	    <longTitleText>long_title_text</longTitleText>
+	    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	        xsi:type="OrganizationAssignedIdentifierType">
+	        <value>nci-id</value>
+	        <primaryIndicator>true</primaryIndicator>
+	        <healthcareSite>
+	            <name>duke healthcare</name>
+	            <descriptionText>duke healthcare</descriptionText>
+	            <address><streetAddress>12359 sunrise valley drive</streetAddress><city>Reston</city><stateCode>VA</stateCode><postalCode>20191</postalCode><countryCode>USA</countryCode></address>
+	            <nciInstituteCode>duke code</nciInstituteCode>
+	        </healthcareSite>
+	    </identifier>
 	</studyRef>
 	<participant
 		xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
@@ -56,16 +47,15 @@
 		<startDate>2007-10-01</startDate>
 		<epoch gridId="3ad38cfd-bfbe-4af2-9783-c69169f8f241"
 			xsi:type="TreatmentEpochType">
-			<name>Drug Treatment</name>
+			<name>Treatment1000</name>
 			<descriptionText></descriptionText>
 		</epoch>
 		<scheduledArm>
 			<arm gridId="de3a0ef0-1f02-4da6-afdc-cc9042cdb594">
-				<name>Arm A</name>
-				<targetAccrualNumber>300</targetAccrualNumber>
+				<name>Arm 1000</name>
+				<targetAccrualNumber>1000</targetAccrualNumber>
 			</arm>
 		</scheduledArm>
 		<eligibilityIndicator>true</eligibilityIndicator>
 	</scheduledEpoch>
-	<stratumGroup>3:between 20 and 45 - &lt;120</stratumGroup>
 </registration>
