@@ -1,190 +1,264 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<study xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
-       version="1">
-    <blindedIndicator>true</blindedIndicator>
-    <multiInstitutionIndicator>true</multiInstitutionIndicator>
-    <randomizedIndicator>true</randomizedIndicator>
-    <shortTitleText>short_title_text</shortTitleText>
-    <longTitleText>long_title_text</longTitleText>
-    <descriptionText>description</descriptionText>
-    <precisText>precis_text</precisText>
-    <phaseCode>0</phaseCode>
-    <dataEntryStatus>COMPLETE</dataEntryStatus>
-    <coordinatingCenterStudyStatus>ACTIVE</coordinatingCenterStudyStatus>
-    <type>ty</type>
-    <targetAccrualNumber>123</targetAccrualNumber>
-    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:type="SystemAssignedIdentifierType">
-        <type>local</type>
-        <value>nci</value>
-        <primaryIndicator>false</primaryIndicator>
-        <systemName>nci</systemName>
-    </identifier>
-    <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:type="OrganizationAssignedIdentifierType">
-        <value>nci-id</value>
-        <primaryIndicator>true</primaryIndicator>
-        <healthcareSite>
-            <name>duke healthcare</name>
-            <descriptionText>duke healthcare</descriptionText>
-            <address>
-                <streetAddress>12359 sunrise valley drive</streetAddress>
-                <city>Reston</city>
-                <stateCode>VA</stateCode>
-                <postalCode>20191</postalCode>
-                <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>Duke</nciInstituteCode>
-        </healthcareSite>
-    </identifier>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
-        <name>Treatment1000</name>
-        <descriptionText>treatement desc</descriptionText>
-        <arm>
-            <name>Arm 1000</name>
-            <descriptionText>Arm 1000 desc</descriptionText>
-            <targetAccrualNumber>1000</targetAccrualNumber>
-        </arm>
-        <arm>
-            <name>Arm 1001</name>
-            <descriptionText>Arm 1001 desc</descriptionText>
-            <targetAccrualNumber>1001</targetAccrualNumber>
-        </arm>
-        <eligibilityCriteria xsi:type="InclusionEligibilityCriteriaType">
-            <questionNumber>1</questionNumber>
-            <questionText>inclusion question 1</questionText>
-        </eligibilityCriteria>
-        <eligibilityCriteria xsi:type="InclusionEligibilityCriteriaType">
-            <questionNumber>2</questionNumber>
-            <questionText>inclusion question 2</questionText>
-        </eligibilityCriteria>
-        <eligibilityCriteria xsi:type="ExclusionEligibilityCriteriaType">
-            <questionNumber>3</questionNumber>
-            <questionText>exclusion question 1</questionText>
-        </eligibilityCriteria>
-    </epoch>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="NonTreatmentEpochType">
-        <name>NonTreatment1004</name>
-        <descriptionText>non treatement desc</descriptionText>
-        <accrualCeiling>0</accrualCeiling>
-    </epoch>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
-        <name>Treatment1003</name>
-        <descriptionText>cancer desc</descriptionText>
-        <arm>
-            <name>Arm 1006</name>
-            <descriptionText>Arm 1006 desc</descriptionText>
-            <targetAccrualNumber>1006</targetAccrualNumber>
-        </arm>
-        <arm>
-            <name>Arm 1007</name>
-            <descriptionText>Arm 1007 desc</descriptionText>
-            <targetAccrualNumber>1007</targetAccrualNumber>
-        </arm>
-    </epoch>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="NonTreatmentEpochType">
-        <name>NonTreatment1005</name>
-        <descriptionText>non treatment cancer desc</descriptionText>
-        <accrualCeiling>0</accrualCeiling>
-    </epoch>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
-        <name>Treatment1001</name>
-        <descriptionText>cancer desc</descriptionText>
-        <arm>
-            <name>Arm 1002</name>
-            <descriptionText>Arm 1002 desc</descriptionText>
-            <targetAccrualNumber>1002</targetAccrualNumber>
-        </arm>
-        <arm>
-            <name>Arm 1003</name>
-            <descriptionText>Arm 1003 desc</descriptionText>
-            <targetAccrualNumber>1003</targetAccrualNumber>
-        </arm>
-    </epoch>
-    <epoch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TreatmentEpochType">
-        <name>Treatment1002</name>
-        <descriptionText>treatement desc</descriptionText>
-        <arm>
-            <name>Arm 1004</name>
-            <descriptionText>Arm 1004 desc</descriptionText>
-            <targetAccrualNumber>1004</targetAccrualNumber>
-        </arm>
-        <arm>
-            <name>Arm 1005</name>
-            <descriptionText>Arm 1005 desc</descriptionText>
-            <targetAccrualNumber>1005</targetAccrualNumber>
-        </arm>
-    </epoch>
-    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                       xsi:type="StudySiteType">
-        <healthcareSite>
-            <name>duke healthcare</name>
-            <descriptionText>duke healthcare</descriptionText>
-            <address>
-                <streetAddress>12359 sunrise valley drive</streetAddress>
-                <city>Reston</city>
-                <stateCode>VA</stateCode>
-                <postalCode>20191</postalCode>
-                <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>Duke</nciInstituteCode>
-        </healthcareSite>
-        <studyInvestigator>
-            <roleCode>role1</roleCode>
-            <statusCode>Active</statusCode>
-            <startDate>0006-06-23</startDate>
-            <endDate>0006-06-23</endDate>
-            <healthcareSiteInvestigator>
-                <investigator>
-                    <fullName>Investigator Bill Staff1</fullName>
-                </investigator>
-            </healthcareSiteInvestigator>
-        </studyInvestigator>
-        <studyInvestigator>
-            <roleCode>role2</roleCode>
-            <statusCode>Active</statusCode>
-            <startDate>0006-06-23</startDate>
-            <endDate>0006-06-23</endDate>
-            <healthcareSiteInvestigator>
-                <investigator>
-                    <fullName>Investigator George Staff2</fullName>
-                </investigator>
-            </healthcareSiteInvestigator>
-        </studyInvestigator>
-        <irbApprovalDate>0006-06-23</irbApprovalDate>
-        <roleCode>role</roleCode>
-        <startDate>0006-06-24</startDate>
-        <endDate>0006-06-25</endDate>
-    </studyOrganization>
-    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                       xsi:type="StudyFundingSponsorType">
-        <healthcareSite>
-            <name>National Cancer Institute</name>
-            <descriptionText>National Cancer Institute</descriptionText>
-            <address>
-                <streetAddress>Coppermine Dr</streetAddress>
-                <city>Herndon</city>
-                <stateCode>VA</stateCode>
-                <postalCode>20171</postalCode>
-                <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>NCI</nciInstituteCode>
-        </healthcareSite>
-    </studyOrganization>
-    <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                       xsi:type="StudyCoordinatingCenterType">
-        <healthcareSite>
-            <name>CALGB</name>
-            <descriptionText>CALGB</descriptionText>
-            <address>
-                <streetAddress>12359 sunrise valley drive</streetAddress>
-                <city>Reston</city>
-                <stateCode>VA</stateCode>
-                <postalCode>20191</postalCode>
-                <countryCode>USA</countryCode>
-            </address>
-            <nciInstituteCode>CALGB</nciInstituteCode>
-        </healthcareSite>
-    </studyOrganization>
-</study>
+   <LoadLabsRequest>
+    <ns2:LabResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+     <ns2:comment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+     <ns2:confidentiality xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+     <ns2:reportedDateTime xmlns:ns2="http://c3d.nci.nih.gov/webservices">2007-11-28T04:45:16.440Z</ns2:reportedDateTime>
+     <ns2:uncertainty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+     <ns2:asCollectedIndicator xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:asCollectedIndicator>
+     <ns2:numericPrecision xmlns:ns2="http://c3d.nci.nih.gov/webservices">0</ns2:numericPrecision>
+     <ns2:numericResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">0.0</ns2:numericResult>
+     <ns2:numericUnit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+     <ns2:referenceRangeComment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+     <ns2:referenceRangeHigh xmlns:ns2="http://c3d.nci.nih.gov/webservices">3.0</ns2:referenceRangeHigh>
+
+     <ns2:referenceRangeLow xmlns:ns2="http://c3d.nci.nih.gov/webservices">2.0</ns2:referenceRangeLow>
+
+     <ns2:referenceTextList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:reportedResultStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:textResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">Result</ns2:textResult>
+
+     <ns2:StudySubject xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+      <ns2:informedConsentSignatureText xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:status xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:statusEndDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:statusStartDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:studySubjectState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:studySubjectStateDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:subgroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:PerformedActivity xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:category xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:name xmlns:ns2="http://c3d.nci.nih.gov/webservices">TestEvent</ns2:name>
+
+       <ns2:status xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:statusEndDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:statusStartDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedEndDateTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedReason xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedStartDateTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:ScheduledActivity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:scheduledActivity2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+   </ns2:PerformedActivity>
+
+      <ns2:PerformedStudy xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:documentationType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:revision xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:Documentation xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+        <ns2:documentationType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:revision xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+         <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+         <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+         <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+         <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">00_C_0092</ns2:root>
+
+     </ns2:II>
+
+    </ns2:Documentation>
+
+       <ns2:actualAccrualNumber xmlns:ns2="http://c3d.nci.nih.gov/webservices">0</ns2:actualAccrualNumber>
+
+       <ns2:PlannedStudy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+   </ns2:PerformedStudy>
+
+      <ns2:StudySite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:Participant xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:confidentialityIndicator xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:confidentialityIndicator>
+
+       <ns2:paymentMethod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+        <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+        <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">patientId</ns2:root>
+
+    </ns2:II>
+
+   </ns2:Participant>
+
+      <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+       <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">patientPos</ns2:root>
+
+   </ns2:II>
+
+  </ns2:StudySubject>
+
+ </ns2:LabResult>
+
+    <ns2:LabResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+     <ns2:comment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:confidentiality xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:reportedDateTime xmlns:ns2="http://c3d.nci.nih.gov/webservices">2007-11-28T04:45:16.440Z</ns2:reportedDateTime>
+
+     <ns2:uncertainty xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:asCollectedIndicator xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:asCollectedIndicator>
+
+     <ns2:numericPrecision xmlns:ns2="http://c3d.nci.nih.gov/webservices">0</ns2:numericPrecision>
+
+     <ns2:numericResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">0.0</ns2:numericResult>
+
+     <ns2:numericUnit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:referenceRangeComment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:referenceRangeHigh xmlns:ns2="http://c3d.nci.nih.gov/webservices">3.0</ns2:referenceRangeHigh>
+
+     <ns2:referenceRangeLow xmlns:ns2="http://c3d.nci.nih.gov/webservices">2.0</ns2:referenceRangeLow>
+
+     <ns2:referenceTextList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:reportedResultStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+     <ns2:textResult xmlns:ns2="http://c3d.nci.nih.gov/webservices">Result</ns2:textResult>
+
+     <ns2:StudySubject xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+      <ns2:informedConsentSignatureText xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:status xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:statusEndDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:statusStartDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:studySubjectState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:studySubjectStateDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:subgroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:PerformedActivity xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:category xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:name xmlns:ns2="http://c3d.nci.nih.gov/webservices">TestEvent</ns2:name>
+
+       <ns2:status xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:statusEndDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:statusStartDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedEndDateTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedReason xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:performedStartDateTime xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:ScheduledActivity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:scheduledActivity2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+   </ns2:PerformedActivity>
+
+      <ns2:PerformedStudy xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:documentationType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:revision xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:Documentation xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+        <ns2:documentationType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:revision xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:title xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+         <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+         <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+         <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+         <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">00_C_0092</ns2:root>
+
+     </ns2:II>
+
+    </ns2:Documentation>
+
+       <ns2:actualAccrualNumber xmlns:ns2="http://c3d.nci.nih.gov/webservices">0</ns2:actualAccrualNumber>
+
+       <ns2:PlannedStudy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+   </ns2:PerformedStudy>
+
+      <ns2:StudySite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+      <ns2:Participant xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:confidentialityIndicator xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:confidentialityIndicator>
+
+       <ns2:paymentMethod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+        <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+        <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+        <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">patientId</ns2:root>
+
+    </ns2:II>
+
+   </ns2:Participant>
+
+      <ns2:II xmlns:ns2="http://c3d.nci.nih.gov/webservices">
+       <ns2:assigningAuthorityName xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:displayble xmlns:ns2="http://c3d.nci.nih.gov/webservices">false</ns2:displayble>
+
+       <ns2:extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" xmlns:ns2="http://c3d.nci.nih.gov/webservices"/>
+
+       <ns2:root xmlns:ns2="http://c3d.nci.nih.gov/webservices">patientPos</ns2:root>
+
+   </ns2:II>
+
+  </ns2:StudySubject>
+
+ </ns2:LabResult>
+
+</LoadLabsRequest>

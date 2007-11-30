@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.Reader;
 
 import java.io.StringWriter;
+import java.net.URL;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -229,11 +230,15 @@ public class TestCaXchangeGridService extends TestCase {
         MessageElement messageElement = new MessageElement(payload.getDocumentElement());
         messagePayload.set_any(new MessageElement[]{messageElement});
         message.getRequest().setBusinessMessagePayload(messagePayload);
+        StringWriter sw = new StringWriter();
+        //Utils.serializeObject(message, new QName("http://caXchange.nci.nih.gov/messaging","caXchangeRequestMessage"), sw);
+        //System.out.println(sw);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
+          e.printStackTrace();
           throw new RuntimeException(e);
       }
 
@@ -310,6 +315,7 @@ public class TestCaXchangeGridService extends TestCase {
        suite.addTest(new TestCaXchangeGridService("testCtLabData"));
        suite.addTest(new TestCaXchangeGridService("testLoadLab"));
        suite.addTest(new TestCaXchangeGridService("testAENotification"));
+
        return suite;
     }
 
