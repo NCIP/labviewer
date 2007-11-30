@@ -5,6 +5,11 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
+import gov.nih.nci.cagrid.caxchange.context.stubs.CaXchangeResponseServicePortType;
+import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest;
+import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
+import gov.nih.nci.cagrid.caxchange.context.stubs.service.CaXchangeResponseServiceAddressingLocator;
+import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
@@ -12,6 +17,7 @@ import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
+import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
@@ -38,6 +44,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -89,11 +96,13 @@ public class LoadToCTMSAction extends Action
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 		
-		UserInfoHelper.setUserInfo(((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(), session.getId());		
+		String username = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
+		
+		UserInfoHelper.setUserInfo(username, session.getId());		
 		
 		try
 		{  //calls the loadToCTMS method
-			loadToCTMS(request, lForm);
+			loadToCTMS(request, lForm, username);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, "Messages Submitted to CTMS Successfully"));
 			saveMessages( request, messages );
 		}
@@ -117,7 +126,7 @@ public class LoadToCTMSAction extends Action
 	 * @param form
 	 * @throws Exception
 	 */
-	private void loadToCTMS(HttpServletRequest request,ActionForm form) throws Exception
+	private void loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
 	{
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
 		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
@@ -140,9 +149,10 @@ public class LoadToCTMSAction extends Action
 		}
 
 		// Then create the request
-		String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
-		C3DGridServiceClient client = new C3DGridServiceClient(url);
-		//CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
+		//String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
+		//C3DGridServiceClient client = new C3DGridServiceClient(url);
+		String url = "http://cbvapp-d1017.nci.nih.gov:18080/wsrf/services/cagrid/CaXchangeRequestProcessor";
+		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
 		
 		LoadLabsRequest labRequest = new LoadLabsRequest();
 		
@@ -242,31 +252,64 @@ public class LoadToCTMSAction extends Action
 		
 		labRequest.setLabResult(labResults);
 		
-		
 		PrintWriter writer = new PrintWriter("c3dmessage.xml");
 		QName lab = new QName("LoadLabsRequest");
         Utils.serializeObject(labRequest, lab, writer);
         
-        /*
 		// Create the caxchange message
 		Message requestMessage = new Message();
-		requestMessage.getMetadata().setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+		Metadata metadata = new Metadata();
+	    metadata.setExternalIdentifier("CTODS");
+	    Credentials creds = new Credentials();
+	    creds.setUserName(username);
+	    metadata.setCredentials(creds);
+	    metadata.setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+	    requestMessage.setMetadata(metadata);
+	    Request caxchangeRequest = new Request();
+	    requestMessage.setRequest(caxchangeRequest);
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
         messagePayload.setXmlSchemaDefinition(uri);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
         
-        //Document payload = db.parse(testMessage);
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
-        */
 		
+        CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
+        EndpointReferenceType endPointReference = crsr.getEndpointReference();
+        CaXchangeResponseServiceAddressingLocator locator = new CaXchangeResponseServiceAddressingLocator();
+        CaXchangeResponseServicePortType responsePort = locator.getCaXchangeResponseServicePortTypePort(endPointReference);
+        boolean gotResponse=false;
+        GetResponseResponse getResponse=null;
+        
+        int responseCount = 0;
+        ResponseMessage responseMessage = null;
+        while(!gotResponse)
+        {
+	        try
+	        {
+	            getResponse = responsePort.getResponse(new GetResponseRequest());
+	            gotResponse = true;
+	            responseMessage = getResponse.getCaXchangeResponseMessage();
+	        }
+	        catch (Exception e)
+	        {
+	        	logDB.info("No response from caxchange", e);
+	        	responseCount++;
+	        	if (responseCount > 50)
+	        	{
+	        		logDB.error("Never got a response from caxchange hub");
+	        		break;
+	        	}
+	        	Thread.sleep(1000);
+	        }
+        }
+        
 		// Now send the load labs request
+        /*
 		webservices.Acknowledgement acknowledgement = client.loadLabs(labRequest);
-		logDB.info("Load acknowledgement was " + acknowledgement);
+		logDB.info("Load acknowledgement was " + acknowledgement);*/
 	
 		lForm.setRecordId("");
 		lForm.setRecordId(null);
