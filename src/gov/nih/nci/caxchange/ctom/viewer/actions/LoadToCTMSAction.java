@@ -4,6 +4,14 @@
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
+import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.caxchange.Credentials;
+import gov.nih.nci.caxchange.Message;
+import gov.nih.nci.caxchange.MessagePayload;
+import gov.nih.nci.caxchange.MessageTypes;
+import gov.nih.nci.caxchange.Metadata;
+import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
@@ -12,6 +20,8 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,7 +33,12 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.axis.message.MessageElement;
+import org.apache.axis.types.URI;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -33,6 +48,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.w3c.dom.Document;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -124,9 +140,10 @@ public class LoadToCTMSAction extends Action
 		}
 
 		// Then create the request
-		//String url = "http://137.187.183.154:8080/wsrf/services/cagrid/C3DGridService";
 		String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
 		C3DGridServiceClient client = new C3DGridServiceClient(url);
+		//CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
+		
 		LoadLabsRequest labRequest = new LoadLabsRequest();
 		
 		// Then for each lab selected set the lab information
@@ -146,7 +163,9 @@ public class LoadToCTMSAction extends Action
 			{
 				// Set the study identifier on the document
 				webservices.II ii = new webservices.II();
-				ii.setExtension(studyId);
+				ii.setExtension("STUDY:" + studyId);
+				ii.setAssigningAuthorityName("CTODS");
+				ii.setRoot("C3D");
 				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
 				documentation.setII(iis);
@@ -165,14 +184,22 @@ public class LoadToCTMSAction extends Action
 				Iterator<II> idIterator = studySubjectIds.iterator();
 				II ssII = idIterator.next();
 				webservices.II ii = new webservices.II();
-				ii.setRoot(ssII.getRoot());
-				ii.setExtension(ssII.getExtension());
+				ii.setAssigningAuthorityName("CTODS");
+				ii.setRoot("C3D");
+				ii.setExtension("MRN:" + ssII.getExtension());
 				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
-				studySubject.setII(iis);
 				participant.setII(iis);
+				webservices.II ii2 = new webservices.II();
+				ii2.setAssigningAuthorityName("CTODS");
+				ii2.setRoot("C3D");
+				ii2.setExtension("PATIENTPOSITION:" + ssII.getExtension());
+				webservices.II[] iis2 = new webservices.II[1];
+				iis2[0] = ii2;
+				studySubject.setII(iis2);
 			}
 			studySubject.setParticipant(participant);
+			studySubject.setPerformedStudy(performedStudy);
 			
 			// Set the activity name
 			PerformedActivity performedActivity= new PerformedActivity();
@@ -214,6 +241,28 @@ public class LoadToCTMSAction extends Action
 		}
 		
 		labRequest.setLabResult(labResults);
+		
+		
+		PrintWriter writer = new PrintWriter("c3dmessage.xml");
+		QName lab = new QName("LoadLabsRequest");
+        Utils.serializeObject(labRequest, lab, writer);
+        
+        /*
+		// Create the caxchange message
+		Message requestMessage = new Message();
+		requestMessage.getMetadata().setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        
+        //Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(lab, labRequest);
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
+        */
 		
 		// Now send the load labs request
 		webservices.Acknowledgement acknowledgement = client.loadLabs(labRequest);
