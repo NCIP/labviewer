@@ -42,6 +42,8 @@ public class LabViewerStudyTest
 	{
 		try
 		{
+			System.out.println("Calling study service at " + serviceUrl);
+			
 			// Create the client
 			StudyConsumerClient client = new StudyConsumerClient(this.serviceUrl);
 			
@@ -51,6 +53,8 @@ public class LabViewerStudyTest
 			// Call the service
 			client.createStudy(study);
 			//client.rollback(study);
+			
+			System.out.println("Returned from calling service");
 		}
 		catch (Exception e)
 		{

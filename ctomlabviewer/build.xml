@@ -43,7 +43,7 @@
 
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
 	
-	<target name="configure" depends="init,prepareDir">
+	<target name="configure" depends="prepareDir">
 		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="database_url" value="${database.url}" />
@@ -61,6 +61,11 @@
 		<copy file="conf/ApplicationSecurityConfig.xml.template" toFile="${dist.home}/ApplicationSecurityConfig.xml" filtering="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
+			</filterset>
+		</copy>
+		<copy file="conf/log4j.properties.template" toFile="${build.home}/WEB-INF/classes/log4j.properties" filtering="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="log_dir" value="${log.dir}" />
 			</filterset>
 		</copy>
 	</target>
@@ -96,7 +101,7 @@
 		<delete dir="${build.home}" />
 	</target>
 
-	<target name="all" depends="init,clean,prepare,compile,configure,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 	
 	<target name="deployTomcat" depends="all">
 		<copy todir="${env.CATALINA_HOME}/webapps" >

@@ -21,7 +21,8 @@ public abstract class BaseJDBCDAO
 	    Connection result = null;
 	    
 		String fDriverName="oracle.jdbc.driver.OracleDriver";
-		String fDbName="jdbc:oracle:thin:@cbiodb30.nci.nih.gov:1521:cccqa";
+		//String fDbName="jdbc:oracle:thin:@cbiodb30.nci.nih.gov:1521:cccqa";
+		String fDbName="jdbc:oracle:thin:@localhost:1521:xe";
 		String fUserName="caxchange";
 		String fPassword="caxchange";
 
