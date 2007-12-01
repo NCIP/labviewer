@@ -276,7 +276,7 @@
             <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
           </eip:predicate>
           <eip:target>
-            <eip:exchange-target service="caxchange:caaersStudyRollback" />
+            <eip:exchange-target service="caxchange:ctomStudyRollback" />
           </eip:target>
         </eip:routing-rule>
         <eip:routing-rule>
