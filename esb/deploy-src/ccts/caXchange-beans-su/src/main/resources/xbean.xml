@@ -44,6 +44,8 @@
               
   <bean:endpoint service="caxchange:ctomRegistrationRollback" endpoint="ctomRegistrationRollback" bean="#ctomRegistrationRollback" />
   
+  <bean:endpoint service="caxchange:ctomStudyRollback" endpoint="ctomStudyRollback" bean="#ctomStudyRollback" />
+  
   <bean:endpoint service="caxchange:caaersRegistration" endpoint="caaersRegistration" bean="#caaersRegistration" />
 
   <bean:endpoint service="caxchange:caaersStudy" endpoint="caaersStudy" bean="#caaersStudy" />

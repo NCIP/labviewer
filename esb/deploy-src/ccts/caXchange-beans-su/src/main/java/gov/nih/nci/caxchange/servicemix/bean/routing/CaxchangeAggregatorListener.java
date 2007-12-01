@@ -41,15 +41,24 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
-
+/**
+ * Listens to the aggregated response from EIP aggregator and creates 
+ * a response message for the response queue. optionally if one of the 
+ * requests have failed it sends a rollback if the input message type is
+ * eligible for rollback.
+ * 
+ *  
+ * @author hmarwaha
+ *
+ */
 public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 
     @Resource
     private DeliveryChannel channel;
-    
+
     static Logger logger = LogManager.getLogger(CaxchangeAggregatorListener.class);
     List messageTypesEligibleForRollback = new ArrayList();
-    
+
     public CaxchangeAggregatorListener() {
     }
 
@@ -61,10 +70,10 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             }
             if (messageExchange.getStatus().equals(ExchangeStatus.ERROR)) {
                 throw new MessagingException("An error occurred in the aggregator listener.",messageExchange.getError());
-            }            
-            NormalizedMessage in = messageExchange.getMessage("in");  
+            }
+            NormalizedMessage in = messageExchange.getMessage("in");
 			logger.debug("Aggregated message :" +messageExchange);
-            correlationID= (String)in.getProperty(CaxchangeConstants.ORIGINAL_EXCHANGE_CORRELATIONID);            
+            correlationID= (String)in.getProperty(CaxchangeConstants.ORIGINAL_EXCHANGE_CORRELATIONID);
             Source originalSource = getOriginalMessage(correlationID);
             XPathUtil originalUtil = new XPathUtil();
             NormalizedMessage original = messageExchange.createMessage();
@@ -93,8 +102,13 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             throw new MessagingException("Error occurred sending response for "+correlationID, e);
         }
     }
-    
-    
+    /**
+     * Get the original message stored in the database.
+     * 
+     * @param correlationID
+     * @return
+     * @throws Exception
+     */
     public Source getOriginalMessage(String correlationID) throws Exception {
         CaxchangeMessageDAO caxchangeMessageDAO = DAOFactory.getCaxchangeMessageDAO();
         CaxchangeMessage message =caxchangeMessageDAO.getMessage(correlationID);
@@ -107,9 +121,18 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 
         return new DOMSource(orgDoc.getDomNode());
     }
-    
+    /**
+     * Verify if a rollback is required. A rollback is required if the request has
+     * a FAILURE or ERROR response from one of the target services and the MESSAGE_TYPE
+     * is one of REGISTER_SUBJECT or STUDY_CREATION.
+     * 
+     * @param messageType
+     * @param responseDocument
+     * @return
+     * @throws Exception
+     */
     public boolean isRollbackRequired(String messageType, CaXchangeResponseMessageDocument responseDocument)throws Exception {
-       boolean rollbackRequired = false;        
+       boolean rollbackRequired = false;
        Statuses.Enum status= responseDocument.getCaXchangeResponseMessage().getResponse().getResponseStatus();
        if (Statuses.FAILURE.equals(status)) {
            logger.debug("Response has failed.");
@@ -121,17 +144,28 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 	   logger.debug("No rollback required");
        return rollbackRequired;
     }
-    
+   /**
+    * Send a rollback for the current request. set the operation to rollback and
+    * route the message.
+    * 
+    * @param rollback
+    * @throws MessagingException
+    */
    public void sendRollback(Source rollback) throws MessagingException {
-       RobustInOnly robustInOnly =channel.createExchangeFactory().createRobustInOnlyExchange();
-       NormalizedMessage rollbackMessage= robustInOnly.createMessage();
+       InOnly inOnly =channel.createExchangeFactory().createInOnlyExchange();
+       NormalizedMessage rollbackMessage= inOnly.createMessage();
        rollbackMessage.setContent(rollback);
-       robustInOnly.setInMessage(rollbackMessage);
-       robustInOnly.setService(CaxchangeConstants.MESSAGE_TYPE_ROUTER);
-       channel.send(robustInOnly);
+       inOnly.setInMessage(rollbackMessage);
+       inOnly.setService(CaxchangeConstants.MESSAGE_TYPE_ROUTER);
+       channel.send(inOnly);
    }
-     
-    
+
+    /**
+     * Send the caXchange response back to the response queue.
+     * 
+     * @param response
+     * @throws MessagingException
+     */
     public void sendResponse(Source response) throws MessagingException {
        RobustInOnly robustInOnly =channel.createExchangeFactory().createRobustInOnlyExchange();
        NormalizedMessage resp= robustInOnly.createMessage();
@@ -139,9 +173,13 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        robustInOnly.setInMessage(resp);
        robustInOnly.setService(CaxchangeConstants.RESPONSE_QUEUE);
 	   logger.info("Sending response:"+robustInOnly);
-       channel.sendSync(robustInOnly, 1000);    
+       channel.sendSync(robustInOnly, 1000);
     }
-    
+    /**
+     * delete the original message in the database.
+     * 
+     * @param exchange
+     */
     public void deleteMessage(MessageExchange exchange)  {
       try {
         CaxchangeMessageDAO caxchangeMessageDAO = DAOFactory.getCaxchangeMessageDAO();
@@ -152,7 +190,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
       }catch(Exception e) {
         logger.error("Error deleting original message.",e);
       }
-    }     
+    }
 
     public void setMessageTypesEligibleForRollback(List messageTypesEligibleForRollback) {
         this.messageTypesEligibleForRollback = messageTypesEligibleForRollback;
