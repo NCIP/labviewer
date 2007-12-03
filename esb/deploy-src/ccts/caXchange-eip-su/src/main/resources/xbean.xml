@@ -93,6 +93,7 @@
   <!-- static recipient list for register subject -->
     <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="endpoint">
       <eip:recipients>
+	    <eip:exchange-target service="caxchange:pscRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:ctomRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:c3DRegisterSubjectRouter" />
@@ -102,6 +103,7 @@
   <!-- static recipient list for study creation -->
     <eip:caxchange-static-recipient-list service="caxchange:studyCreationRecipients" endpoint="endpoint">
       <eip:recipients>
+	    <eip:exchange-target service="caxchange:pscStudyCreationRouter" />
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
         <eip:exchange-target service="caxchange:ctomStudyRouter" />
       </eip:recipients>
@@ -142,8 +144,61 @@
       <eip:target>
         <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
       </eip:target>
+  </eip:pipeline>
+
+  <eip:content-based-router service="caxchange:pscRegisterSubjectRouter" endpoint="endpoint">
+    <eip:rules>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:pscRegistrationRollback" />
+        </eip:target>
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:target>
+          <eip:exchange-target service="caxchange:callPSCRegistrationPipeline" />
+        </eip:target>
+      </eip:routing-rule>
+    </eip:rules>
+  </eip:content-based-router>
+
+  <eip:pipeline service="caxchange:callPSCRegistrationPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:pscRegistration" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
   </eip:pipeline>  
   
+  <eip:content-based-router service="caxchange:pscStudyCreationRouter" endpoint="endpoint">
+    <eip:rules>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:pscStudyRollback" />
+        </eip:target>
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:target>
+          <eip:exchange-target service="caxchange:callPSCStudyPipeline" />
+        </eip:target>
+      </eip:routing-rule>
+    </eip:rules>
+  </eip:content-based-router>
+
+  <eip:pipeline service="caxchange:callPSCStudyPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:pscStudy" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
+  </eip:pipeline>
   
   <!-- End EIP Components for invoking the PSC -->
   
