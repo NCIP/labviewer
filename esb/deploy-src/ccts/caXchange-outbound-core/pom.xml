@@ -458,5 +458,30 @@
       <artifactId>loadlab-stubs</artifactId> 
       <version>1.6</version> 
     </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
+      <artifactId>adverse-event-client</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
+      <artifactId>adverse-event-common</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
+      <artifactId>adverse-event-service</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
+      <artifactId>adverse-event-stubs</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
+      <artifactId>adverse-event-tests</artifactId> 
+      <version>1.0</version> 
+    </dependency>
   </dependencies>
 </project>
