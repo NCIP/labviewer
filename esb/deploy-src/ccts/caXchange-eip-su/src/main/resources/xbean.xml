@@ -80,7 +80,15 @@
         <eip:target>
           <eip:exchange-target service="caxchange:loadLabToCDMS" />
         </eip:target>
-      </eip:routing-rule>         
+      </eip:routing-rule> 
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='SCHEDULE_MODIFICATION']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:adverseEvent" />
+        </eip:target>
+      </eip:routing-rule> 
       <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
@@ -114,7 +122,14 @@
       <eip:recipients>
         <eip:exchange-target service="caxchange:callLoadLabPipeline" />
       </eip:recipients>
-  </eip:caxchange-static-recipient-list>  
+  </eip:caxchange-static-recipient-list>
+  
+  <!-- static recipient list for AdverseEvents -->
+  <eip:caxchange-static-recipient-list service="caxchange:adverseEvent" endpoint="endpoint">
+      <eip:recipients>
+        <eip:exchange-target service="caxchange:callAdverseEventPipeline" />
+      </eip:recipients>
+  </eip:caxchange-static-recipient-list>
   
   
   <!--- EIP components for invoking the PSC  -->
@@ -199,6 +214,15 @@
       <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
     </eip:target>
   </eip:pipeline>
+
+  <eip:pipeline service="caxchange:callAdverseEventPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:pscAdverseEvent" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
+  </eip:pipeline> 
   
   <!-- End EIP Components for invoking the PSC -->
   
