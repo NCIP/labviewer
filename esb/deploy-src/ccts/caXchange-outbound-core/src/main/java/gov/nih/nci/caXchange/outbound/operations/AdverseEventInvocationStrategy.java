@@ -50,7 +50,7 @@ public class AdverseEventInvocationStrategy implements GridInvocationStrategy {
 
 		try {
 			
-			AdverseEventConsumerClient client = new AdverseEventConsumerClient(
+		/*	AdverseEventConsumerClient client = new AdverseEventConsumerClient(
 					serviceUrl);
 
 			SourceTransformer transformer = new SourceTransformer();
@@ -63,7 +63,7 @@ public class AdverseEventInvocationStrategy implements GridInvocationStrategy {
 					reader, AENotificationType.class, deseralizeStream);
 
 
-			client.register(request);
+			client.register(request);*/
 
 			final Document resp = new SourceTransformer()
 					.toDOMDocument(new StringSource("<result>success</result>"));
