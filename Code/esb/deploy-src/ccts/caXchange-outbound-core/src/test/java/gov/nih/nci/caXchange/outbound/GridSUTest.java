@@ -177,6 +177,87 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 
+	
+	public void testPSCExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"pscRegistration"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"pscRegistration"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
+	public void testPSCStudyExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("study-request.xml");
+		InOut me = client.createInOutExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"pscStudy"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"pscStudy"));
+		client.sendSync(me);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.ACTIVE, me.getStatus());
+		assertTrue(me.getMessage("out") != null);
+		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
+	}
+	
+	public void testPSCRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"pscRegistrationRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"pscRegistrationRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
+	
+	public void testPSCStudyRollbackExchange() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"pscStudyRollback"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"pscStudyRollback"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
+	public void testPSCAdverseEvent() throws Exception {
+		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+		InputStream fis = getClass().getResourceAsStream("adverse-event-request.xml");
+		InOnly me = client.createInOnlyExchange();
+		me.getInMessage().setProperty("Test", "TestProperty");
+		me.getInMessage().setContent(new StreamSource(fis));
+		me.setService(new QName("http://nci.nih.gov/caXchange",
+				"pscAdverseEvent"));
+		me.setOperation(new QName("http://nci.nih.gov/caXchange",
+				"pscAdverseEvent"));
+		client.sendSync(me, 5000);
+		System.out.println(me);
+		assertEquals(ExchangeStatus.DONE, me.getStatus());
+	}
+	
 	public void testRetryingExchange() throws Exception {
 
 	}

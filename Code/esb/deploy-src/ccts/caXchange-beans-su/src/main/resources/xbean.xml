@@ -50,6 +50,8 @@
 
   <bean:endpoint service="caxchange:pscStudy" endpoint="pscStudy" bean="#pscStudy" />
 
+  <bean:endpoint service="caxchange:pscAdverseEvent" endpoint="pscAdverseEvent" bean="#pscAdverseEvent" />
+
   <bean:endpoint service="caxchange:pscRegistrationRollback" endpoint="pscRegistrationRollback" bean="#pscRegistrationRollback" />  
 
   <bean:endpoint service="caxchange:pscStudyRollback" endpoint="pscStudyRollback" bean="#pscStudyRollback" />
@@ -278,6 +280,29 @@
     <property
       name="serviceUrl"
       value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/StudyConsumer" />
+  </bean>
+
+  <bean
+    id="pscAdverseEvent"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="pscAdverseEventInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="psc" />
+    <property
+      name="targetOperation"
+      value="SCHEDULE_MODIFICATION" />
+  </bean>
+
+  <bean
+    id="pscAdverseEventInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.AdverseEventInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/AdverseEventConsumer" />
   </bean>
 
   <bean
