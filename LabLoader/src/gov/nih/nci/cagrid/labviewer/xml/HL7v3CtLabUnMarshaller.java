@@ -622,7 +622,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			clinicalResult.setRefRangeLow(new Long(value));
+			clinicalResult.setRefRangeLow(new Double(value));
 
 		} catch (NullPointerException ex) {
 
@@ -634,7 +634,7 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			Node xNode = (Node) xpath.evaluate(expression, doc,
 					XPathConstants.NODE);
 			value = xNode.getNodeValue();
-			clinicalResult.setRefRangeHigh(new Long(value));
+			clinicalResult.setRefRangeHigh(new Double(value));
 
 		} catch (NullPointerException ex) {
 
