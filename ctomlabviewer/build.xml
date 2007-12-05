@@ -44,26 +44,28 @@
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
 	
 	<target name="configure" depends="prepareDir">
-		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true">
+		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="database_url" value="${database.url}" />
 				<filter token="database_user" value="${database.username}" />
 				<filter token="database_passwd" value="${database.password}" />
 			</filterset>
 		</copy>
-		<copy file="conf/labviewer.hibernate.cfg.xml.template" toFile="${dist.home}/labviewer.hibernate.cfg.xml" filtering="true">
+		<copy file="conf/labviewer.hibernate.cfg.xml.template" toFile="${build.home}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="database_url" value="${database.url}" />
 				<filter token="database_user" value="${database.username}" />
 				<filter token="database_passwd" value="${database.password}" />
 			</filterset>
 		</copy>
-		<copy file="conf/ApplicationSecurityConfig.xml.template" toFile="${dist.home}/ApplicationSecurityConfig.xml" filtering="true">
+		<!--
+		<copy file="conf/ApplicationSecurityConfig.xml.template" toFile="${dist.home}/ApplicationSecurityConfig.xml" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
 			</filterset>
 		</copy>
-		<copy file="conf/log4j.properties.template" toFile="${build.home}/WEB-INF/classes/log4j.properties" filtering="true">
+		-->
+		<copy file="conf/log4j.properties.template" toFile="${build.home}/WEB-INF/classes/log4j.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="log_dir" value="${log.dir}" />
 			</filterset>
@@ -71,7 +73,7 @@
 	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
-		<copy todir="${lib.home}">
+		<copy todir="${lib.home}" overwrite="true">
 			<fileset dir="${artifacts.dir}" includes="ctomlabapi*.jar"/>
 		</copy>
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
@@ -81,7 +83,7 @@
 				<fileset dir="${libext.home}" includes="*.jar" />
 			</classpath>
 		</javac>
-		<copy todir="${build.home}/WEB-INF/classes" >
+		<copy todir="${build.home}/WEB-INF/classes" overwrite="true">
 			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties"/>
 			<fileset file="${src.home}/applicationContext.xml"/>
@@ -104,18 +106,17 @@
 	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 	
 	<target name="deployTomcat" depends="all">
-		<copy todir="${env.CATALINA_HOME}/webapps" >
+		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
 			<fileset file ="${war.file}" />
 		</copy>
-		<copy todir="${env.CATALINA_HOME}/conf" >
+		<copy todir="${env.CATALINA_HOME}/conf" overwrite="true">
 			<fileset file ="${dist.home}/login.config" />
-			<fileset file ="${dist.home}/*.xml" />
+			<!--<fileset file ="${dist.home}/*.xml" />-->
 		</copy>
 		<echo message="================================================================================" />
 		<echo message="Edit your Tomcat startup or set your CATALINA_OPTS environment variable with the" />
 		<echo message="following." />
 		<echo message="-Djava.security.auth.login.config=%CATALINA_HOME%\conf\login.config" />
-		<echo message="-Dgov.nih.nci.security.configFile=%CATALINA_HOME%\conf\ApplicationSecurityConfig.xml" />
 		<echo message="================================================================================" />
 	</target>
 	
