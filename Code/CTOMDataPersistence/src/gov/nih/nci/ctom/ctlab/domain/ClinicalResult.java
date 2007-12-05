@@ -26,9 +26,9 @@ public class ClinicalResult {
 	private String refFlag;
 	private Long numPrecision;
 	private String numPrecisionOrg;
-	private Long refRangeLow;
+	private Double refRangeLow;
 	private String refRangeLowOrg;
-	private Long refRangeHigh;
+	private Double refRangeHigh;
 	private String refRangeHighOrg;
 	private String refRangeComment;
 	private String refTxtList;
@@ -266,13 +266,13 @@ public class ClinicalResult {
 	/**
 	 * @return the refRangeLow
 	 */
-	public Long getRefRangeLow() {
+	public Double getRefRangeLow() {
 		return refRangeLow;
 	}
 	/**
 	 * @param refRangeLow the refRangeLow to set
 	 */
-	public void setRefRangeLow(Long refRangeLow) {
+	public void setRefRangeLow(Double refRangeLow) {
 		this.refRangeLow = refRangeLow;
 	}
 	/**
@@ -290,13 +290,13 @@ public class ClinicalResult {
 	/**
 	 * @return the refRangeHigh
 	 */
-	public Long getRefRangeHigh() {
+	public Double getRefRangeHigh() {
 		return refRangeHigh;
 	}
 	/**
 	 * @param refRangeHigh the refRangeHigh to set
 	 */
-	public void setRefRangeHigh(Long refRangeHigh) {
+	public void setRefRangeHigh(Double refRangeHigh) {
 		this.refRangeHigh = refRangeHigh;
 	}
 	/**

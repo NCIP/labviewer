@@ -1006,8 +1006,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		ps.setLong(4, clinicalResult.getPerformingLaboratory().getOrganizationId());
 		ps.setString(5, clinicalResult.getRefFlag());
 		ps.setString(6, clinicalResult.getValue());
-		ps.setFloat(7, clinicalResult.getRefRangeLow());
-		ps.setFloat(8, clinicalResult.getRefRangeHigh());
+		ps.setDouble(7, clinicalResult.getRefRangeLow());
+		ps.setDouble(8, clinicalResult.getRefRangeHigh());
 		ps.execute();
 
 	}
