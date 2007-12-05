@@ -233,9 +233,12 @@ public class LoadToCTMSAction extends Action
 			}
 			
 			// Set the lab result details
-			String result = lab.getNumericResult();
-			if (result != null)
-				labResult.setNumericResult(Float.parseFloat(result));
+			String numResult = lab.getNumericResult();
+			if ((numResult != null) && (!numResult.equals("")))
+				labResult.setNumericResult(Float.parseFloat(numResult));
+			String txtResult = lab.getTextResult();
+			if ((txtResult != null) && (!txtResult.equals("")))
+				labResult.setTextResult(txtResult);
 			String labUom = lab.getUnitOfMeasure();
 			if (labUom != null)
 				labResult.setNumericUnit(labUom);
@@ -300,7 +303,7 @@ public class LoadToCTMSAction extends Action
 	        	if (responseCount > 50)
 	        	{
 	        		logDB.error("Never got a response from caxchange hub");
-	        		break;
+	        		throw new Exception("Error sending to CTMS");
 	        	}
 	        	Thread.sleep(1000);
 	        }
