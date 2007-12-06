@@ -60,6 +60,7 @@
 				<xs:element name="gridIdentifier" type="xs:string"/>
 			</xs:choice>
 			<xs:element name="password" type="xs:string" minOccurs="0"/>
+			<xs:element name="delegatedCredentialReference" type="xs:string" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="targetResponseMessage">
