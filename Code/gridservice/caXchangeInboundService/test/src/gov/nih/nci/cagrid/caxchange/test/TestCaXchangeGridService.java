@@ -58,6 +58,7 @@ public class TestCaXchangeGridService extends TestCase {
     String externalIdentifier = "myExternalIdentifier";
     String userName="hmarwaha";
     String password="password";
+	String delegatedReference = "delegatedReference";
     Message message = null;
 
     static String url=System.getProperty("caxchange.url");
@@ -78,6 +79,7 @@ public class TestCaXchangeGridService extends TestCase {
        Credentials creds = new Credentials();
        creds.setUserName(userName);
        creds.setPassword(password);
+	   creds.setDelegatedCredentialReference(delegatedReference);
        metadata.setCredentials(creds);
        message.setMetadata(metadata);
        Request request = new Request();
