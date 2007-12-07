@@ -5,6 +5,7 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
+import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.CaXchangeResponseServicePortType;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
@@ -255,9 +256,9 @@ public class LoadToCTMSAction extends Action
 		
 		labRequest.setLabResult(labResults);
 		
-		PrintWriter writer = new PrintWriter("c3dmessage.xml");
+		//PrintWriter writer = new PrintWriter("c3dmessage.xml");
 		QName lab = new QName("LoadLabsRequest");
-        Utils.serializeObject(labRequest, lab, writer);
+        //Utils.serializeObject(labRequest, lab, writer);
         
 		// Create the caxchange message
 		Message requestMessage = new Message();
@@ -280,9 +281,8 @@ public class LoadToCTMSAction extends Action
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
 		
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
-        EndpointReferenceType endPointReference = crsr.getEndpointReference();
-        CaXchangeResponseServiceAddressingLocator locator = new CaXchangeResponseServiceAddressingLocator();
-        CaXchangeResponseServicePortType responsePort = locator.getCaXchangeResponseServicePortTypePort(endPointReference);
+        
+        CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
         boolean gotResponse=false;
         GetResponseResponse getResponse=null;
         
@@ -292,9 +292,8 @@ public class LoadToCTMSAction extends Action
         {
 	        try
 	        {
-	            getResponse = responsePort.getResponse(new GetResponseRequest());
+	        	responseMessage = responseService.getResponse();
 	            gotResponse = true;
-	            responseMessage = getResponse.getCaXchangeResponseMessage();
 	        }
 	        catch (Exception e)
 	        {
@@ -309,10 +308,10 @@ public class LoadToCTMSAction extends Action
 	        }
         }
         
-		// Now send the load labs request
-        /*
-		webservices.Acknowledgement acknowledgement = client.loadLabs(labRequest);
-		logDB.info("Load acknowledgement was " + acknowledgement);*/
+        if (responseMessage != null)
+        {
+        	logDB.info("caXchange response was " + responseMessage.getResponse().getResponseStatus().toString());
+        }
 	
 		lForm.setRecordId("");
 		lForm.setRecordId(null);
