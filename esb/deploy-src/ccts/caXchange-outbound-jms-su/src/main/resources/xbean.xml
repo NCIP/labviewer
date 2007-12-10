@@ -21,6 +21,13 @@
        xmlns:caxchange="http://nci.nih.gov/caXchange"
        xmlns:amq="http://activemq.org/config/1.0">
 
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:dev.properties</value>
+		</property>
+	</bean>
+
     <jms:endpoint service="caxchange:ResponseQueueService"
                   endpoint="myProvider"
                   role="provider" 
@@ -30,7 +37,7 @@
                    />
 
 
-    <amq:connectionFactory id="connectionFactory" brokerURL="tcp://cbvapp-d1017.nci.nih.gov:62618" />
+    <amq:connectionFactory id="connectionFactory" brokerURL="${outbound.jms.brokerURL}" />
 
     <!-- JMS ConnectionFactory from JNDI -
     <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">

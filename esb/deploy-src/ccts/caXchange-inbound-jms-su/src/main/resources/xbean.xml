@@ -18,26 +18,30 @@
 
 -->
 <beans xmlns:jms="http://servicemix.apache.org/jms/1.0"
-       xmlns:caxchange="http://nci.nih.gov/caXchange"
-       xmlns:amq="http://activemq.org/config/1.0">
+	xmlns:caxchange="http://nci.nih.gov/caXchange"
+	xmlns:amq="http://activemq.org/config/1.0">
 
-    <jms:endpoint service="caxchange:CaXchangeRequestConsumer"
-                  endpoint="jms"
-                  targetService="caxchange:invokeDelegationPipeline"
-                  targetEndpoint="endpoint"
-                  role="consumer" 
-                  destinationStyle="queue"
-                  jmsProviderDestinationName="queue/A"
-                  defaultMep="http://www.w3.org/2004/08/wsdl/in-only"
-                  defaultOperation="test:Echo"
-                  connectionFactory="#connectionFactory" />
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:dev.properties</value>
+		</property>
+	</bean>
 
-    <amq:connectionFactory id="connectionFactory" brokerURL="tcp://cbvapp-d1017.nci.nih.gov:62618" />
+	<jms:endpoint service="caxchange:CaXchangeRequestConsumer"
+		endpoint="jms" targetService="caxchange:invokeDelegationPipeline"
+		targetEndpoint="endpoint" role="consumer" destinationStyle="queue"
+		jmsProviderDestinationName="queue/A"
+		defaultMep="http://www.w3.org/2004/08/wsdl/in-only"
+		defaultOperation="test:Echo" connectionFactory="#connectionFactory" />
 
-    <!-- JMS ConnectionFactory from JNDI -
-    <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
-      <property name="jndiName" value="ConnectionFactory" />
-    </bean>
-    -->
+	<amq:connectionFactory id="connectionFactory"
+		brokerURL="${inbound.jms.brokerURL}" />
+
+	<!-- JMS ConnectionFactory from JNDI -
+		<bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="ConnectionFactory" />
+		</bean>
+	-->
 
 </beans>
