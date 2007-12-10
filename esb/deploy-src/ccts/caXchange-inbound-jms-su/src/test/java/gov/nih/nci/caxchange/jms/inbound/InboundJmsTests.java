@@ -44,7 +44,7 @@ public class InboundJmsTests extends TestCase {
 		/*try {
 			ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("tcp://localhost:61616");
 			Destination inQueue = new ActiveMQQueue("queueY");
-            Destination outQueue = new ActiveMQQueue("queue/A");
+            Destination outQueue = new ActiveMQQueue("caxchangeInboundQueue");
             Connection connection = factory.createConnection();
             Session session = connection.createSession(false,Session.CLIENT_ACKNOWLEDGE);
             MessageProducer producer = session.createProducer(inQueue);
