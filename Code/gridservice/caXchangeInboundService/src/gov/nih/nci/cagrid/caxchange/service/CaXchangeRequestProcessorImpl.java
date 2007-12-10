@@ -45,8 +45,8 @@ import org.globus.wsrf.ResourceKey;
  */
 public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImplBase {
     protected static String brokerURL=null; //"tcp://localhost:61618";
-    protected static String destinationName = null; //"queue/A";
-    protected static String replyDestinationName = null; //"queue/B";
+    protected static String destinationName = null; //"caxchangeInboundQueue";
+    protected static String replyDestinationName = null; //"caxchangeOutboundQueue";
     protected static Destination destination = null;
     protected static Destination replyDestination = null;
     protected static Logger logger = LogManager.getLogger(CaXchangeRequestProcessorImpl.class.getName());
