@@ -1,5 +1,7 @@
 package gov.nih.nci.caxchange.patterns;
 
+import gov.nih.nci.caXchange.CaxchangeErrors;
+
 import java.io.StringReader;
 
 import java.util.Iterator;
@@ -28,7 +30,7 @@ public class AggregatedResponseBuilder {
 "                <targetServiceOperation>aggregator</targetServiceOperation>\n" +
 "                <targetMessageStatus>ERROR</targetMessageStatus>\n" +
 "                   <targetError>  "+
-"                        <errorCode>TIMEOUT_OCCURRED</errorCode>  "+
+"                        <errorCode>"+CaxchangeErrors.TIMEOUT+"</errorCode>  "+
 "                        <errorDescription>A timeout occurred waiting for response.</errorDescription> "+
 "                    </targetError> "+
 "            </targetResponse>";

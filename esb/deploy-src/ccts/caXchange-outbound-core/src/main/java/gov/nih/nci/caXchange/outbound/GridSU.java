@@ -1,7 +1,11 @@
 package gov.nih.nci.caXchange.outbound;
 
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caXchange.outbound.impl.GridMessageImpl;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.rmi.RemoteException;
 import java.util.Iterator;
 
 import javax.annotation.Resource;
@@ -10,13 +14,19 @@ import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 
+import org.apache.axis.AxisFault;
+import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Category;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.globus.wsrf.encoding.DeserializationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 
 /**
  * Hello world!
@@ -317,12 +327,46 @@ public class GridSU implements MessageExchangeListener {
 		Element payloadElement = output.createElement(ERROR_RESPONSE_ELEMENT);
 		Element errorCode = output.createElement(ERROR_CODE_ELEMENT);
 		Element errorDescription = output.createElement(ERROR_DESCRIPTION_ELEMENT);
-		errorCode.setTextContent("NA");
+		errorCode.setTextContent(findErrorCodeForException(e));
 		errorDescription.setTextContent(e.getMessage());
 		payloadElement.appendChild(errorCode);
 		payloadElement.appendChild(errorDescription);
 		root.appendChild(payloadElement);
 		return output;
+	}
+
+	public static String findErrorCodeForException(Throwable e) {
+
+		String errorCode="";
+		if(e instanceof GridInvocationException){
+			errorCode= findErrorCodeForException(e.getCause());
+		}
+		if(e instanceof AxisFault){
+			errorCode= findErrorCodeForException(e.getCause());
+		}
+		if("".equals(errorCode) || CaxchangeErrors.UNKNOWN.equals(errorCode)){
+			if (e instanceof AxisFault) {
+				errorCode=CaxchangeErrors.AXIS_FAULT;
+			} else if (e instanceof MalformedURIException) {
+				errorCode=CaxchangeErrors.MALFORMED_URI;
+			} else if (e instanceof RemoteException) {
+				errorCode=CaxchangeErrors.REMOTE_EXCEPTION;
+			} else if (e instanceof TransformationException) {
+				errorCode=CaxchangeErrors.TRANSFORMER_EXCEPTION;
+			} else if (e instanceof DeserializationException) {
+				errorCode=CaxchangeErrors.DESERIALIZATION_EXCEPTION;
+			} else if (e instanceof SAXException) {
+				errorCode=CaxchangeErrors.SAX_EXCEPTION;
+			} else if (e instanceof ParserConfigurationException) {
+				errorCode=CaxchangeErrors.PARSER_CONFIGURATION_EXCEPTION;
+			} else if (e instanceof IOException) {
+				errorCode=CaxchangeErrors.IO_EXCEPTION;
+			} else if (e instanceof ConnectException) {
+				errorCode=CaxchangeErrors.CONNECT_EXCEPTION;
+			}
+		}
+			
+		return errorCode;
 	}
 
 	private void failInactiveExchange(MessageExchange exchange)
