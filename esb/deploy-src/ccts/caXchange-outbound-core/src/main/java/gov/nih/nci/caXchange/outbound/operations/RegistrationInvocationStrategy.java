@@ -68,8 +68,8 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 							"/registration/client-config.wsdd");
 			StringWriter writer = new StringWriter();
 			Utils.serializeObject(reply, new QName(
-					"http://ccts.nci.nih.gov/RegistrationConsumer",
-					"RegisterResponse"), writer, serializeStream);
+					"gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain",
+					"registration"), writer, serializeStream);
 			String response = writer.getBuffer().toString();
 			final Document resp = new SourceTransformer()
 					.toDOMDocument(new StringSource(response));
