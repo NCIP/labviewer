@@ -81,6 +81,12 @@
       <artifactId>spring</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-common-jar</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>

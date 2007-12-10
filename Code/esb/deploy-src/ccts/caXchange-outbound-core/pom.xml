@@ -483,5 +483,11 @@
       <artifactId>adverse-event-tests</artifactId> 
       <version>1.0</version> 
     </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-common-jar</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

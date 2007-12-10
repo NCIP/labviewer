@@ -31,8 +31,8 @@
 	</xs:complexType>	
 	<xs:complexType name="metadata">
 		<xs:sequence>
-		        <xs:element name="operation" type="caXchange:operations"/>
-			<xs:element name="messageType" type="caXchange:messageTypes"/>		        
+			<xs:element name="operation" type="caXchange:operations"/>
+			<xs:element name="messageType" type="caXchange:messageTypes"/>
 			<xs:element name="externalIdentifier" type="xs:string"/>
 			<xs:element name="caXchangeIdentifier" type="xs:string" minOccurs="0">
 				<xs:annotation>
@@ -51,7 +51,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-	</xs:complexType>	
+	</xs:complexType>
 	<xs:complexType name="credentials">
 		<xs:sequence>
 			<xs:choice>
@@ -69,11 +69,11 @@
 			<xs:element name="targetServiceOperation" type="xs:string"/>
 			<xs:element name="targetMessageStatus" type="caXchange:messageStatuses"/>
 			<xs:choice>
-			   <xs:element name="targetError" type="caXchange:errorDetails"/>
-			   <xs:element name="targetBusinessMessage" type="caXchange:messagePayload"/>
+				<xs:element name="targetError" type="caXchange:errorDetails"/>
+				<xs:element name="targetBusinessMessage" type="caXchange:messagePayload"/>
 			</xs:choice>
 		</xs:sequence>
-	</xs:complexType>	
+	</xs:complexType>
 	<xs:complexType name="messagePayload">
 		<xs:sequence>
 			<xs:element name="xmlSchemaDefinition" type="xs:anyURI"/>
@@ -87,12 +87,32 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:simpleType name="errorCodes">
+	    <xs:annotation>
+			<xs:documentation>
+			  000 OK
+			  
+			  001 Unknown
+			  
+			  101 AxisFault from the endpoint
+			  
+			  201 Malformed URI
+			  202 RemoteException
+			  203 ConnectException
+			  204 Rimeout
+			  
+			  301 TransformerException
+			  302 DeserializationException
+			  303 SAX Exception
+			  304 Paser Configuration Exception
+			  305 IO Exception
+			</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string"/>
 	</xs:simpleType>
 	<xs:simpleType name="messageStatuses">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="RESPONSE"/>
-			<xs:enumeration value="ERROR"/>			
+			<xs:enumeration value="ERROR"/>
 			<xs:enumeration value="FAULT"/>
 		</xs:restriction>
 	</xs:simpleType>
@@ -101,7 +121,7 @@
 			<xs:enumeration value="SUCCESS"/>
 			<xs:enumeration value="FAILURE"/>
 		</xs:restriction>
-	</xs:simpleType>	
+	</xs:simpleType>
 	<xs:simpleType name="operations">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="PROCESS"/>
@@ -118,6 +138,5 @@
 			<xs:enumeration value="LAB_BASED_AE"/>
 			<xs:enumeration value="SCHEDULE_MODIFICATION"/>
 		</xs:restriction>
-	</xs:simpleType>	
+	</xs:simpleType>
 </xs:schema>
-
