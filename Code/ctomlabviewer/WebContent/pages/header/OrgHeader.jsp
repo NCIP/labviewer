@@ -73,7 +73,7 @@ function MM_swapImage() { //v3.0
 	<!-- Render logo, header background and logo text -->
     <div class="background-R">
         <img src="images/CTOM.gif" alt="UPT Home" id="logo" width="129" height="40">
-        <img src="images/ctom_txt.gif" alt="ctom txt" id="tagline" width="268" height="22">
+        <img src="images/ctom_txt_1.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>
     <!-- Add log out link -->
     <div id="login-action">
