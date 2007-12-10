@@ -32,7 +32,7 @@
                   endpoint="myProvider"
                   role="provider" 
                   destinationStyle="queue"
-                  jmsProviderDestinationName="queue/B"
+                  jmsProviderDestinationName="caxchangeOutboundQueue"
                   connectionFactory="#connectionFactory"
                    />
 
