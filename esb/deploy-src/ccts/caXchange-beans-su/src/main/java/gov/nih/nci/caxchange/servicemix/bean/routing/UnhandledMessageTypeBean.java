@@ -1,5 +1,6 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
@@ -57,10 +58,10 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
            xpathUtil.setIn(exchange.getMessage("in"));
            xpathUtil.initialize();
            String messageType = xpathUtil.getMessageType();
-           out.setProperty(CaxchangeConstants.ERROR_CODE, "UNHANDLED_MESSAGE_TYPE");
+           out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxchange does not handle this message type :"+messageType);
         }catch(Exception e) {
-            out.setProperty(CaxchangeConstants.ERROR_CODE, "UNHANDLED_MESSAGE_TYPE");
+            out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
             out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxhange does not handle this message type.");        	
         }
         exchange.setMessage(out,"out");
