@@ -4,9 +4,9 @@
 
          <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"><value>org.gjt.mm.mysql.Driver</value></property>
-                <property name="url"><value>jdbc:mysql://cbiodb590:3637/caxchange</value></property>
-                <property name="username" value="cctsadmin" />
-                <property name="password" value="caX$499" />
+                <property name="url"><value>jdbc:mysql://cbiodb590.nci.nih.gov:3639/caxchange</value></property>
+                <property name="username" value="caxchange" />
+                <property name="password" value="ccts#X11" />
 	</bean> 
 	
       
