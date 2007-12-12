@@ -103,12 +103,6 @@
 			<version>3.8.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>maven-plugins</groupId>
-			<artifactId>maven-antrun-plugin</artifactId>
-			<version>1.1</version>
-			<type>plugin</type>
-		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -121,26 +115,6 @@
 		</resources>
 		<plugins>
 			<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<tasks>
-								<!-- <delete
-									file="${project.build.outputDirectory}/environment.properties" />-->
-								<copy
-									file="src/main/resources/${env}.properties"
-									tofile="${project.build.outputDirectory}/environment.properties" />
-							</tasks>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.servicemix.tooling</groupId>
 				<artifactId>jbi-maven-plugin</artifactId>
 				<version>${servicemix-version}</version>
@@ -150,6 +124,26 @@
 				</configuration>
 			</plugin>
 
-		</plugins>
-	</build>
+  </dependencies>
+  <build>
+  	<resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>    
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.servicemix.tooling</groupId>
+        <artifactId>jbi-maven-plugin</artifactId>
+        <version>${servicemix-version}</version>      
+        <extensions>true</extensions>
+        <configuration>
+          <type>service-unit</type>
+        </configuration>
+      </plugin>     
+    </plugins>
+  </build>
 </project>
