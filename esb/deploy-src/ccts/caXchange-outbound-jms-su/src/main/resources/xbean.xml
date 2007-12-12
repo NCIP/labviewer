@@ -24,7 +24,7 @@
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location">
-			<value>classpath:dev.properties</value>
+			<value>classpath:caxchange.properties</value>
 		</property>
 	</bean>
 
