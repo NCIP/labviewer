@@ -16,6 +16,7 @@
  */
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
@@ -106,7 +107,7 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
             logger.error("Error occurred storing original message.", e);
             Fault fault = exchange.createFault();
             MessageUtil.transfer(in, fault);
-            fault.setProperty(CaxchangeConstants.ERROR_CODE, "ERROR_STORING_MESSAGE");
+            fault.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.ERROR_STORING_MESSAGE);
             fault.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Error occurred storing original message.");
             exchange.setFault(fault);
             channel.send(exchange);
