@@ -105,27 +105,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.servicemix.tooling</groupId>
-				<artifactId>jbi-maven-plugin</artifactId>
-				<version>${servicemix-version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<type>service-unit</type>
-				</configuration>
-			</plugin>
-
-  </dependencies>
-  <build>
   	<resources>
       <resource>
         <directory>src/main/resources</directory>
