@@ -9,6 +9,7 @@ public interface CaxchangeErrors {
     public static final String SAX_EXCEPTION="303";
     public static final String PARSER_CONFIGURATION_EXCEPTION="304";
     public static final String IO_EXCEPTION="305";
+    public static final String ERROR_STORING_MESSAGE="306";
     public static final String OK="000";
     public static final String UNKNOWN="001";
 	public static final String UNHANDLED_MESSAGE_TYPE = "401";
