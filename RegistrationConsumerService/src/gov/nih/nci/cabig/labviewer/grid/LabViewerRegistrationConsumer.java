@@ -112,6 +112,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			catch(SQLException se)
 			{
 				logger.error("Error deleting participant", se);
+				String msg = "Lab Viewer unable to rollback participant" + se.getMessage();
+				throw new RemoteException(msg);
 			}
 			finally
 			{
@@ -128,7 +130,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		else
 		{
 			InvalidRegistrationException ire = new InvalidRegistrationException();
-			ire.setFaultString("Invalid patient rollback message- no patient found with given gridid");
+			ire.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
 			throw ire;
 		}
 		
