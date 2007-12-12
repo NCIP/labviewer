@@ -19,6 +19,13 @@
 -->
 <beans xmlns:bean="http://servicemix.apache.org/bean/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
+       
+    <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:caxchange.properties</value>
+		</property>
+	</bean>
 
   <bean:endpoint service="caxchange:setSubjectService" endpoint="endpoint" bean="#invokeDeploymentServiceBean"/>
   
@@ -115,7 +122,7 @@
 
     <property
       name="serviceUrl"
-      value="http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/RegistrationConsumer" />
+      value="${c3d.registration.url}" />
   </bean>
   
   <bean
@@ -139,7 +146,7 @@
 
     <property
       name="serviceUrl"
-      value="http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/RegistrationConsumer" />
+      value="${c3d.registration.url}" />
   </bean>
     
   <bean
@@ -162,7 +169,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${ctom.registration.url}" />
   </bean>
   
   <bean
@@ -185,7 +192,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer" />
+      value="${ctom.study.url}" />
   </bean>
   
   <bean
@@ -209,7 +216,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${ctom.registrationRollback.url}" />
   </bean>
   
   <bean
@@ -233,7 +240,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer" />
+      value="${ctom.studyRollback.url}" />
   </bean>
 
   <bean
@@ -256,7 +263,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${psc.registration.url}" />
   </bean>
 
   <bean
@@ -279,7 +286,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/StudyConsumer" />
+      value="${psc.study.url}" />
   </bean>
 
   <bean
@@ -302,7 +309,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/AdverseEventConsumer" />
+      value="${psc.adverseEvent.url}" />
   </bean>
 
   <bean
@@ -326,7 +333,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${psc.registrationRollback.url}" />
   </bean>
 
   <bean
@@ -350,7 +357,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/psc-wsrf/services/cagrid/StudyConsumer" />
+      value="${psc.studyRollback.url}" />
   </bean>
 
   <bean
@@ -373,7 +380,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${caaers.registration.url}" />
   </bean>
   
   <bean
@@ -396,7 +403,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+      value="${caaers.study.url}" />
   </bean>
   
   <bean
@@ -420,7 +427,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/RegistrationConsumer" />
+      value="${caaers.registrationRollback.url}" />
   </bean>
   
   <bean
@@ -444,7 +451,7 @@
 
     <property
       name="serviceUrl"
-      value="http://cbvapp-d1017.nci.nih.gov:18080/caaers-wsrf/services/cagrid/StudyConsumer" />
+      value="${caaers.studyRollback.url}" />
   </bean>
   
   <bean
@@ -467,7 +474,7 @@
 
     <property
       name="serviceUrl"
-      value="http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService" />
+      value="${loadLab.url}" />
   </bean>
   
 </beans>
