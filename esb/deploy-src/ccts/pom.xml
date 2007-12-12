@@ -91,6 +91,12 @@
       <version>2.0.6</version>
       <scope>provided</scope>
     </dependency>
+	<dependency>
+      <groupId>maven-plugins</groupId>
+      <artifactId>maven-antrun-plugin</artifactId>
+      <version>1.1</version>
+      <type>plugin</type>
+    </dependency>
   </dependencies>
   <build>
     <extensions>
@@ -100,6 +106,26 @@
       </extension>
     </extensions>
     <plugins>
+	  <plugin>
+  			<artifactId>maven-antrun-plugin</artifactId>
+			<inherited>false</inherited>
+  			<executions>
+  				<execution>
+  					<phase>install</phase>
+  					<goals>
+  						<goal>run</goal>
+  					</goals>
+  					<configuration>
+  						<tasks>
+  							<copy
+  								file="caXchange-common-jar/src/main/resources/${env}.properties"
+  								tofile="${project.build.outputDirectory}/caxchange.properties" />
+  						</tasks>
+  					</configuration>
+  				</execution>
+  			</executions>
+  		</plugin>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
