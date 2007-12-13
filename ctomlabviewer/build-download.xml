@@ -1,0 +1,22 @@
+<project name="cTomLabViewer" default="build_zip" basedir=".">
+	<property file="build-download.properties" />
+
+	<!--
+	TARGET: Zip
+		Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService
+	-->
+	
+	<target name="build_zip">
+		<mkdir dir="${dest.dir}" />
+			<zip destfile="${dest.dir}/${app.name}.zip">
+					<zipfileset dir="${artifacts.dir}" prefix="${app.name}/artifacts"/>
+					<zipfileset dir="${cTomData.dir}" prefix="${app.name}/cTOMDataPersistence"/>
+					<zipfileset dir="${cTomLab.dir}" prefix="${app.name}/cTomLabViewer"/>
+					<zipfileset dir="${labLoader.dir}" prefix="${app.name}/LabLoader"/>
+					<zipfileset dir="${regConsumerService.dir}" prefix="${app.name}/RegistrationconsumerService"/>
+					<zipfileset dir="${studyConsumerService.dir}" prefix="${app.name}/StudyConsumerService"/>
+					<zipfileset dir="${ddl.dir}" prefix="${app.name}/DDL"/>
+				</zip>
+	</target>	
+
+</project>
