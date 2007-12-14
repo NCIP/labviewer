@@ -1,6 +1,5 @@
 package gov.nih.nci.cabig.labviewer.grid;
 
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.HealthcareSiteType;
 import gov.nih.nci.ccts.grid.IdentifierType;
 import gov.nih.nci.ccts.grid.ParticipantType;
@@ -8,7 +7,6 @@ import gov.nih.nci.ccts.grid.Registration;
 import gov.nih.nci.ccts.grid.StudyRefType;
 import gov.nih.nci.ccts.grid.StudySiteType;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumer;
-import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 import gov.nih.nci.ccts.grid.stubs.types.InvalidRegistrationException;
 import gov.nih.nci.ccts.grid.stubs.types.RegistrationConsumptionException;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
@@ -22,6 +20,7 @@ import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
@@ -60,8 +59,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 	{
 		ParticipantType participant = registration.getParticipant();
 		String participantGridId = participant.getGridId();
-		long epochPersistTime=0;
-		long epochcurrentTime=0;
+		//long epochPersistTime=0;
+		//long epochcurrentTime=0;
 		
 		/* Authorization code currently disabled
 		String username = RegistrationConsumerAuthorization.getCallerIdentity();
@@ -91,22 +90,37 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		}
 		*/
 		
-		//need to get the hashmap from the application context
-		con = dao.getConnection();
-		
-		if(map.containsKey(participantGridId))
-		{
+		 //need to get the hashmap from the application context
+		 con = dao.getConnection();
+		 //method returns the ctominsertdate if the participantGridId is found in the database
+		  
+		  //if(map.containsKey(participantGridId))
+		  //{
 			try
 			{ 
-				ParticipantPersistTime ppt = map.get(participantGridId);
+				java.util.Date insertdate = dao.checkParticipantForRollback(con,participantGridId);
+				java.util.Date currdate = new Date();
+				long milis1 = insertdate.getTime();
+				long milis2 = currdate.getTime();
+				long diffInMin = (milis2-milis1)/MILLIS_PER_MINUTE;
+				
+				if(insertdate != null && insertdate.before(currdate) && diffInMin > THRESHOLD_MINUTE )
+				{	
+				/*ParticipantPersistTime ppt = map.get(participantGridId);
 				Calendar persistTime = ppt.getPersistTime();
 				epochPersistTime = persistTime.getTime().getTime();
 				Calendar currentTime = Calendar.getInstance();
 				epochcurrentTime=currentTime.getTime().getTime();
 				double minutes = (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
 				if(minutes < THRESHOLD_MINUTE)
-				{	
-					dao.rollbackParticipant(con, ppt.getParticipant());
+				{	*/
+					dao.rollbackParticipant(con, participantGridId);
+				}
+				else
+				{
+					InvalidRegistrationException ire = new InvalidRegistrationException();
+					ire.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
+					throw ire;
 				}
 			}
 			catch(SQLException se)
@@ -126,17 +140,13 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 					logger.error("Error closing connection",e);
 				}
 			}
-		}
-		else
-		{
-			InvalidRegistrationException ire = new InvalidRegistrationException();
-			ire.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
-			throw ire;
+			logger.info("deleted participant");
 		}
 		
-		logger.info("deleted participant");
-		cleanupHashMap(epochcurrentTime);
-	}
+		
+		
+		//cleanupHashMap(epochcurrentTime);
+	//}
 	
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.ccts.grid.common.RegistrationConsumer#register(gov.nih.nci.ccts.grid.Registration)
@@ -145,6 +155,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
 		logger.info("Lab Viewer Registration message received");
+		java.util.Date now = new Date();
 		StudyRefType studyRef = registration.getStudyRef();
 		
 		/* Authorization code currently disabled
@@ -216,7 +227,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		part.setBirthDate(participant.getBirthDate());
 		part.setEthnicGroupCode(participant.getEthnicGroupCode());
 		part.setRaceCode(participant.getRaceCode());
-		 
+		part.setCtomInsertDate(now); 
 		// Assume that only one identifier was sent and use that
 		IdentifierType[] ids = participant.getIdentifier();
 		IdentifierType id = null;
@@ -243,14 +254,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		studyPartAssig.setIdentifier(partIdent);
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
-		
+		protocol.setCtomInsertDt(now);
 		con = dao.getConnection();
 		logger.info("Lab Viewer Registration message validated");
 		
 		try
 		{
 			dao.saveProtocol(con, protocol);
-			logger.info("Persisted the study with patient information");
+		/*	logger.info("Persisted the study with patient information");
 			//After you persist the protocol, put the participant associated with the
 			//protocol into a HashMap. 
 			//In case of roll back, check if the participant was just persisted
@@ -261,7 +272,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			partPersistTime.setPersistTime(persistTime);
 		    map.put(participant.getGridId(),partPersistTime);
 			//need to store the map in the application context		
-		}
+		*/}
 		catch (SQLException e)
 		{
 			logger.error("Error saving participant", e);
