@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -85,11 +86,12 @@ public class CTLabDAO extends BaseJDBCDAO
 				rs = stmt.executeQuery("select protocol_seq.nextval from dual");
 				rs.next();
 				id = rs.getLong(1);
-				ps = con.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT)  values(?,?,?,?)");
+				ps = con.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT,CTOM_INSERT_DATE)  values(?,?,?,?,?)");
 				ps.setLong(1, id);
 				ps.setString(2, String.valueOf(prot.getNciIdentifier()));
 				ps.setString(3, String.valueOf(prot.getIdAssigningAuth()));
 				ps.setString(4, String.valueOf(prot.getLongTxtTitle()));
+				ps.setTimestamp(5,new java.sql.Timestamp(prot.getCtomInsertDt().getTime()));
 				ps.execute();
 				if (identifierUpdInd && prot.getIdentifier() != null)
 				{
@@ -305,21 +307,21 @@ public class CTLabDAO extends BaseJDBCDAO
 
 			if (rc && gc) {
 				ps = con
-						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID,RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?)");
-				ps.setLong(7, genderCDId);
-				ps.setLong(8, raceCDId);
+						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, CTOM_INSERT_DATE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID,RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?,?)");
+				ps.setLong(8, genderCDId);
+				ps.setLong(9, raceCDId);
 			} else if (!rc && !gc) {
 				ps = con
-						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE)  values(?,?,?,?,?,?)");
+						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, CTOM_INSERT_DATE)  values(?,?,?,?,?,?,?)");
 
 			} else if (!rc) {
 				ps = con
-						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?)");
-				ps.setLong(7, genderCDId);
+						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, CTOM_INSERT_DATE, ADM_GNDR_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?)");
+				ps.setLong(8, genderCDId);
 			} else if (!gc) {
 				ps = con
-						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?)");
-				ps.setLong(7, raceCDId);
+						.prepareStatement("insert into PARTICIPANT (ID, BIRTH_DATE, INITIALS, LAST_NAME, FIRST_NAME, ETHNIC_GROUP_CODE, CTOM_INSERT_DATE, RACE_CONCEPT_DESCRIPTOR_ID )  values(?,?,?,?,?,?,?,?)");
+				ps.setLong(8, raceCDId);
 			}
 
 			ps.setLong(1, participant.getId());
@@ -333,7 +335,7 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(4, participant.getLastName());
 			ps.setString(5, participant.getFirstName());
 			ps.setString(6, participant.getEthnicGroupCode());
-
+			ps.setTimestamp(7,new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
 			ps.execute();
 			con.commit();
 
@@ -344,7 +346,7 @@ public class CTLabDAO extends BaseJDBCDAO
 			// with identifier.
 		else {
 			ps = con
-					.prepareStatement("update PARTICIPANT set BIRTH_DATE = ?, INITIALS = ?, LAST_NAME = ?, FIRST_NAME = ?, ETHNIC_GROUP_CODE=?, ADM_GNDR_CONCEPT_DESCRIPTOR_ID=?,RACE_CONCEPT_DESCRIPTOR_ID=? where ID = ?");
+					.prepareStatement("update PARTICIPANT set BIRTH_DATE = ?, INITIALS = ?, LAST_NAME = ?, FIRST_NAME = ?, ETHNIC_GROUP_CODE=?, ADM_GNDR_CONCEPT_DESCRIPTOR_ID=?,RACE_CONCEPT_DESCRIPTOR_ID=?,CTOM_UPDATE_DATE=? where ID = ?");
 			if (participant.getBirthDate() != null)
 				ps.setDate(1, new java.sql.Date(participant.getBirthDate()
 						.getTime()));
@@ -356,7 +358,8 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(5, participant.getEthnicGroupCode());
 			ps.setLong(6, genderCDId);
 			ps.setLong(7, raceCDId);
-			ps.setLong(8, participant.getId());
+			ps.setTimestamp(8, new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
+			ps.setLong(9, participant.getId());
 			ps.executeUpdate();
 			con.commit();
 		}
@@ -1224,14 +1227,14 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @param participant
 	 * @throws SQLException
 	 */
-	public void rollbackParticipant(Connection con,Participant participant)throws SQLException
+	public void rollbackParticipant(Connection con,String participantGridId)throws SQLException
 	{
 	   PreparedStatement ps=null;
 	   ResultSet rs=null;
 	   Long id=null;
-		if(participant==null)
+		if(participantGridId==null)
 			return;
-		String participantGridId = participant.getIdentifier().getRoot();
+		//String participantGridId = participant.getIdentifier().getRoot();
 		ps = con
 		.prepareStatement("select ID,PARTICIPANT_ID from IDENTIFIER where ROOT = ? AND PARTICIPANT_ID IS NOT NULL");
 		ps.setString(1, participantGridId);
@@ -1254,17 +1257,17 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @param protocol
 	 * @throws SQLException
 	 */
-	public void rollbackStudy(Connection con,Protocol protocol)throws SQLException
+	public void rollbackStudy(Connection con,String studyGridId)throws SQLException
 	{
 	   PreparedStatement ps=null;
 	   ResultSet rs=null;
 	   Long id=null;
-		if(protocol==null)
+		if(studyGridId==null)
 			return;
-		String protocolGridId = protocol.getIdentifier().getRoot();
+		//String protocolGridId = protocol.getIdentifier().getRoot();
 		ps = con
 		.prepareStatement("select ID,PROTOCOL_ID from IDENTIFIER where ROOT = ? AND PROTOCOL_ID IS NOT NULL");
-		ps.setString(1, protocolGridId);
+		ps.setString(1, studyGridId);
 		rs = ps.executeQuery();
 
 		// check if identifier is in DB
@@ -1280,4 +1283,78 @@ public class CTLabDAO extends BaseJDBCDAO
 		con.commit();
 	}	
 	
+	/**
+	 * Checks if the participant is persisted in the database and returns the insert date.
+	 * @param con
+	 * @param participantGridId
+	 * @return
+	 * @throws SQLException
+	 */
+	public Date checkParticipantForRollback(Connection con, String participantGridId)throws SQLException
+	{
+		Date insertDate =null;
+		PreparedStatement ps=null;
+		   ResultSet rs=null;
+		   ResultSet rs1 =null;
+		   Long id=null;
+			if(participantGridId==null)
+				return insertDate;
+			ps = con
+			.prepareStatement("select ID,PARTICIPANT_ID from IDENTIFIER where ROOT = ? AND PARTICIPANT_ID IS NOT NULL");
+			ps.setString(1, participantGridId);
+			rs = ps.executeQuery();
+
+			// check if identifier is in DB
+			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PARTICIPANT_ID")!=0) {
+				System.out.println("protocolID " + rs.getLong("PARTICIPANT_ID"));
+				// already present;update the identifier table
+				 id = rs.getLong("PARTICIPANT_ID");
+			}
+			
+			ps = con.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
+			ps.setLong(1,id);
+			rs1 = ps.executeQuery();
+			if (rs.next()&& !rs.isBeforeFirst())
+			{
+			  insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
+			}
+			return insertDate;
+		}
+	/**
+	 * Checks if the study is persisted in the database and returns the insert date.
+	 * @param con
+	 * @param studyGridId
+	 * @return
+	 * @throws SQLException
+	 */
+	public Date checkStudyForRollback(Connection con, String studyGridId)throws SQLException
+	{
+		Date insertDate =null;
+		PreparedStatement ps=null;
+		   ResultSet rs=null;
+		   ResultSet rs1 =null;
+		   Long id=null;
+			if(studyGridId==null)
+				return insertDate;
+			ps = con
+			.prepareStatement("select ID,PROTOCOL_ID from IDENTIFIER where ROOT = ? AND PROTOCOL_ID IS NOT NULL");
+			ps.setString(1, studyGridId);
+			rs = ps.executeQuery();
+
+			// check if identifier is in DB
+			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PROTOCOL_ID")!=0) {
+				System.out.println("protocolID " + rs.getLong("PROTOCOL_ID"));
+				// already present;update the identifier table
+				 id = rs.getLong("PROTOCOL_ID");
+			}
+			
+			ps = con.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
+			ps.setLong(1,id);
+			rs1 = ps.executeQuery();
+			if (rs.next()&& !rs.isBeforeFirst())
+			{
+			  insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
+			}
+			return insertDate;
+		}
 }
