@@ -43,14 +43,7 @@
 
 	<target name="prepare" depends="prepareDir,prepareBuild"/>
 	
-	<target name="configure" depends="prepareDir">
-		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true" overwrite="true">
-			<filterset begintoken="@" endtoken="@">
-				<filter token="database_url" value="${database.url}" />
-				<filter token="database_user" value="${database.username}" />
-				<filter token="database_passwd" value="${database.password}" />
-			</filterset>
-		</copy>
+	<target name="configure" depends="prepareDir, configureCSMAuthentication, configureWebSSOAuthentication">
 		<copy file="conf/labviewer.hibernate.cfg.xml.template" toFile="${build.home}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="database_url" value="${database.url}" />
@@ -58,18 +51,33 @@
 				<filter token="database_passwd" value="${database.password}" />
 			</filterset>
 		</copy>
-		<!--
-		<copy file="conf/ApplicationSecurityConfig.xml.template" toFile="${dist.home}/ApplicationSecurityConfig.xml" filtering="true" overwrite="true">
-			<filterset begintoken="@" endtoken="@">
-				<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
-			</filterset>
-		</copy>
-		-->
 		<copy file="conf/log4j.properties.template" toFile="${build.home}/WEB-INF/classes/log4j.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="log_dir" value="${log.dir}" />
 			</filterset>
 		</copy>
+	</target>
+	
+	<target name="configureCSMAuthentication" unless="websso.enabled">
+		<copy file="conf/web.xml.csm.template" toFile="${build.home}/WEB-INF/web.xml" overwrite="true"/>
+		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="database_url" value="${database.url}" />
+				<filter token="database_user" value="${database.username}" />
+				<filter token="database_passwd" value="${database.password}" />
+			</filterset>
+		</copy>
+	</target>
+	
+	<target name="configureWebSSOAuthentication" if="websso.enabled">
+		<copy file="conf/web.xml.sso.template" toFile="${build.home}/WEB-INF/web.xml" overwrite="true"/>
+		<copy file="conf/cas-client.properties.template" toFile="${build.home}/WEB-INF/cas-client.properties" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="cas_server" value="${websso.cas.server}" />
+				<filter token="client_server" value="${websso.client.server}" />
+			</filterset>
+		</copy>
+		<copy file="conf/client-config.wsdd" toFile="${build.home}/WEB-INF/classes/client-config.wsdd" overwrite="true"/>
 	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
@@ -109,9 +117,12 @@
 		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
 			<fileset file ="${war.file}" />
 		</copy>
+		<antcall target="deployTomcatCSM"/>
+	</target>
+	
+	<target name="deployTomcatCSM" unless="websso.enabled">
 		<copy todir="${env.CATALINA_HOME}/conf" overwrite="true">
 			<fileset file ="${dist.home}/login.config" />
-			<!--<fileset file ="${dist.home}/*.xml" />-->
 		</copy>
 		<echo message="================================================================================" />
 		<echo message="Edit your Tomcat startup or set your CATALINA_OPTS environment variable with the" />
