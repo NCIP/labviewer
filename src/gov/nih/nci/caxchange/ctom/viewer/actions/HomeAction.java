@@ -128,11 +128,15 @@ public class HomeAction extends Action
 			throws Exception 
 	{
 		HttpSession session = request.getSession();
-		if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)) {
-			if (log.isDebugEnabled())
-				log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
+		Object credentials = session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+		LoginForm loginForm = (LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT);
+		
+		if ((loginForm == null) && (credentials == null))
+		{
+			log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
+		
 		/*
 		 * clear the junk in the session here
 		 */
@@ -141,9 +145,14 @@ public class HomeAction extends Action
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
-
-		if (log.isDebugEnabled())
-			log.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
+		
+		// If they got here by WebSSO then check authorization and set things up
+		if (credentials != null)
+		{
+			log.debug(credentials.toString());
+		}
+		
+		log.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
 					"|Home|Redirect|Success|Already Logged In and Forwarding to the Home Page||");
 		
 		return mapping.findForward(ForwardConstants.HOME_PAGE);
