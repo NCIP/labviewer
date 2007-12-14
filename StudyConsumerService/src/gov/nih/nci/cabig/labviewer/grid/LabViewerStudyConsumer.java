@@ -36,11 +36,12 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	public void createStudy(Study study) throws RemoteException, InvalidStudyException, StudyCreationException
 	{
 		logger.info("Create Study message received");
-			
+		java.util.Date now = new Date();	
 		// save the study data
 		Protocol protocol = new Protocol();
 		protocol.setLongTxtTitle(study.getLongTitleText());
 		protocol.setShortTxtTitle(study.getShortTitleText());
+		protocol.setCtomInsertDt(now);
 	   	IdentifierType identifiers[] = study.getIdentifier();
 	   	
         // save the identifier data	
@@ -75,11 +76,11 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			//protocol into a HashMap. 
 			//In case of roll back, check if the participant was just persisted
 			//then call roll back on that object.
-			Calendar persistTime = Calendar.getInstance();
+			/*Calendar persistTime = Calendar.getInstance();
 			StudyPersistTime studyPersistTime = new StudyPersistTime();
 			studyPersistTime.setProtocol(protocol);
 			studyPersistTime.setPersistTime(persistTime);
-		    map.put(protocol.getIdentifier().getRoot(),studyPersistTime);
+		    map.put(protocol.getIdentifier().getRoot(),studyPersistTime);*/
 			//need to store the map in the application context		
 		  	}
 		catch (SQLException e)
@@ -112,55 +113,57 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.ccts.grid.common.StudyConsumerI#rollback(gov.nih.nci.ccts.grid.Study)
 	 */
-	public void rollback(Study study) throws RemoteException, InvalidStudyException
-	{
+	public void rollback(Study study) throws RemoteException,
+			InvalidStudyException {
 		String studyGridId = study.getGridId();
-		//long epochPersistTime=0;
-		//long epochcurrentTime=0;
-		//need to get the hashmap from the application context
+		System.out.println("StudyGridId" + studyGridId);
+		// long epochPersistTime=0;
+		// long epochcurrentTime=0;
+		// need to get the hashmap from the application context
 		con = dao.getConnection();
-		//if(map.containsKey(studyGridId))
-		//{
-		try{ 
-			/*StudyPersistTime ppt = map.get(studyGridId);
-			Calendar persistTime = ppt.getPersistTime();
-			epochPersistTime = persistTime.getTime().getTime();
-			Calendar currentTime = Calendar.getInstance();
-			epochcurrentTime=currentTime.getTime().getTime();
-			double minutes = (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
-			if(minutes < THRESHOLD_MINUTE)*/
-			java.util.Date insertdate = dao.checkStudyForRollback(con,studyGridId);
-			java.util.Date currdate = new Date();
-			long milis1 = insertdate.getTime();
-			long milis2 = currdate.getTime();
-			long diffInMin = (milis2-milis1)/MILLIS_PER_MINUTE;
-			
-			if(insertdate != null && insertdate.before(currdate) && diffInMin > THRESHOLD_MINUTE )
-			{		
-			
-				dao.rollbackStudy(con, studyGridId);
-			}
-			else{
+		// if(map.containsKey(studyGridId))
+		// {
+		try {
+			/*
+			 * StudyPersistTime ppt = map.get(studyGridId); Calendar persistTime =
+			 * ppt.getPersistTime(); epochPersistTime =
+			 * persistTime.getTime().getTime(); Calendar currentTime =
+			 * Calendar.getInstance();
+			 * epochcurrentTime=currentTime.getTime().getTime(); double minutes =
+			 * (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
+			 * if(minutes < THRESHOLD_MINUTE)
+			 */
+			java.util.Date insertdate = dao.checkStudyForRollback(con,
+					studyGridId);
+			if (insertdate != null) {
+				java.util.Date currdate = new Date();
+				long milis1 = insertdate.getTime();
+				long milis2 = currdate.getTime();
+				long diffInMin = (milis2 - milis1) / MILLIS_PER_MINUTE;
+
+				if (insertdate.before(currdate) && diffInMin < THRESHOLD_MINUTE) {
+					dao.rollbackStudy(con, studyGridId);
+				} 
+				else {
+					logger.info("There is no study with in the threshold time for rollback");
+				}
+			} else {
 				StudyCreationException ire = new StudyCreationException();
 				ire.setFaultString("Invalid study rollback message- no study found with given gridid");
-				throw ire;
+				logger.fatal(ire);
+			}
+		} catch (SQLException se) {
+			logger.error("Error deleting study", se);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				logger.error("Error closing connection", e);
 			}
 		}
-			catch(SQLException se)
-			{
-				logger.error("Error deleting study", se);
-			}
-			finally
-			{
-				try {
-					con.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					logger.error("Error closing connection",e);
-				}
-			}
-			logger.info("deleted study");
-		}
+		logger.info("deleted study");
+	}
 		
 		
 		//cleanupHashMap(epochcurrentTime);
