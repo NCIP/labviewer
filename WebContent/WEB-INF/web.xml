@@ -3,22 +3,15 @@
 
 <web-app>
 
+	<context-param>
+    	<param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/securityConfiguration.xml
+        </param-value>
+    </context-param>
+	
 	<display-name>CTOM Lab Viewer</display-name>
 	<description>CTOM Lab Viewer</description>
-
-	<filter>
-		<filter-name>GridProxyFilter</filter-name>
-		<filter-class>gov.nih.nci.cabig.ctms.web.sso.GridProxyFilter</filter-class>
-		<init-param>
-			<param-name>gridProxyRetrievalStrategyBeanName</param-name>
-			<param-value>gridProxyRetrievalStrategy</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>GridProxyFilter</filter-name>
-		<servlet-name>LabSearch</servlet-name>
-	</filter-mapping>
 
 	<servlet>
 		<servlet-name>action</servlet-name>
@@ -52,6 +45,70 @@
 		<url-pattern>/LabSearch</url-pattern>
 	</servlet-mapping>
 
+    <filter>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>casAuthenticationFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>casValidationFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>caGRID WebSSO Attribute Loader Filter</filter-name>
+        <filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSOAttributeLoaderFilter</filter-class>
+    </filter>
+
+	<!-- Currently there are trust fabric issues so this step in the filtering is disabled
+    <filter>
+        <filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
+        <filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
+        <init-param>
+            <param-name>certificate-file-path</param-name>
+            <param-value>D:/Tomcat 5.0/conf/manav.local-cert.pem</param-value>
+        </init-param>
+        <init-param>
+            <param-name>key-file-path</param-name>
+            <param-value>D:/Tomcat 5.0/conf/manav.local-key.pem</param-value>
+        </init-param>
+    </filter>
+    -->
+
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>caGRID WebSSO Attribute Loader Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+	<!--
+    <filter-mapping>
+        <filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    -->
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
 	<!--Application Configuration Parameters-->
 	<session-config>
 		<session-timeout>30</session-timeout>
