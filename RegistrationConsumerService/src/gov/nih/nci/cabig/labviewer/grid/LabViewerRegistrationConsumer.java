@@ -59,68 +59,30 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 	{
 		ParticipantType participant = registration.getParticipant();
 		String participantGridId = participant.getGridId();
-		//long epochPersistTime=0;
-		//long epochcurrentTime=0;
-		
-		/* Authorization code currently disabled
-		String username = RegistrationConsumerAuthorization.getCallerIdentity();
-		
-		if (username == null)
-		{
-			logger.error("Error saving participant no username provided");
-			RegistrationConsumptionException rce = new RegistrationConsumptionException();
-			rce.setFaultString("No user credentials provided");
-			throw rce;
-		}
-		else
-		{
-			System.out.println("User who called was " + username);
-			
-			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
-			
-			boolean authorized = lvaHelper.isAuthorized(username);
-			
-			if (!authorized)
-			{
-				logger.error("Error saving participant");
-				RegistrationConsumptionException rce = new RegistrationConsumptionException();
-				rce.setFaultString("User not authorized for this operation");
-				throw rce;
-			}
-		}
-		*/
-		
-		 //need to get the hashmap from the application context
 		 con = dao.getConnection();
 		 //method returns the ctominsertdate if the participantGridId is found in the database
-		  
-		  //if(map.containsKey(participantGridId))
-		  //{
-			try
+		 try
 			{ 
 				java.util.Date insertdate = dao.checkParticipantForRollback(con,participantGridId);
-				java.util.Date currdate = new Date();
-				long milis1 = insertdate.getTime();
-				long milis2 = currdate.getTime();
-				long diffInMin = (milis2-milis1)/MILLIS_PER_MINUTE;
-				
-				if(insertdate != null && insertdate.before(currdate) && diffInMin > THRESHOLD_MINUTE )
+				if(insertdate!=null)
 				{	
-				/*ParticipantPersistTime ppt = map.get(participantGridId);
-				Calendar persistTime = ppt.getPersistTime();
-				epochPersistTime = persistTime.getTime().getTime();
-				Calendar currentTime = Calendar.getInstance();
-				epochcurrentTime=currentTime.getTime().getTime();
-				double minutes = (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
-				if(minutes < THRESHOLD_MINUTE)
-				{	*/
-					dao.rollbackParticipant(con, participantGridId);
-				}
+					java.util.Date currdate = new Date();
+					long milis1 = insertdate.getTime();
+					long milis2 = currdate.getTime();
+					long diffInMin = (milis2-milis1)/MILLIS_PER_MINUTE;
+				
+					if( insertdate.before(currdate) && diffInMin < THRESHOLD_MINUTE )
+					{	
+						dao.rollbackParticipant(con, participantGridId);
+					}else {
+						logger.info("There is no participant within the threshold time for rollback");
+					}
+				}	
 				else
 				{
 					InvalidRegistrationException ire = new InvalidRegistrationException();
 					ire.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
-					throw ire;
+					logger.fatal(ire);
 				}
 			}
 			catch(SQLException se)
