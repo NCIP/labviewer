@@ -1245,11 +1245,13 @@ public class CTLabDAO extends BaseJDBCDAO
 			// already present;update the identifier table
 			 id = rs.getLong("PARTICIPANT_ID");
 		}
-		
-		ps = con.prepareStatement("delete from PARTICIPANT where ID=?");
-		ps.setLong(1,id);
-		ps.executeUpdate();
-		con.commit();
+		if(id!=null)
+		{
+			ps = con.prepareStatement("delete from PARTICIPANT where ID=?");
+			ps.setLong(1,id);
+			ps.executeUpdate();
+			con.commit();
+		}
 	}	
 	
 	/**
@@ -1276,11 +1278,13 @@ public class CTLabDAO extends BaseJDBCDAO
 			// already present;update the identifier table
 			 id = rs.getLong("PROTOCOL_ID");
 		}
-		
-		ps = con.prepareStatement("delete from PROTOCOL where ID=?");
-		ps.setLong(1,id);
-		ps.executeUpdate();
-		con.commit();
+		if(id!=null)
+		{
+			ps = con.prepareStatement("delete from PROTOCOL where ID=?");
+			ps.setLong(1,id);
+			ps.executeUpdate();
+			con.commit();
+		}	
 	}	
 	
 	/**
@@ -1306,18 +1310,21 @@ public class CTLabDAO extends BaseJDBCDAO
 
 			// check if identifier is in DB
 			if (rs.next() && !rs.isBeforeFirst()&& rs.getLong("PARTICIPANT_ID")!=0) {
-				System.out.println("protocolID " + rs.getLong("PARTICIPANT_ID"));
+				System.out.println("participantid " + rs.getLong("PARTICIPANT_ID"));
 				// already present;update the identifier table
 				 id = rs.getLong("PARTICIPANT_ID");
 			}
-			
-			ps = con.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
-			ps.setLong(1,id);
-			rs1 = ps.executeQuery();
-			if (rs.next()&& !rs.isBeforeFirst())
-			{
+			if(id!=null)
+			{	
+			 ps = con.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
+			 ps.setLong(1,id);
+			 rs1 = ps.executeQuery();
+			 if (rs1.next()&& !rs1.isBeforeFirst())
+			 {
 			  insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
-			}
+			  System.out.println("insert date "+ insertDate);
+			 }
+			}	
 			return insertDate;
 		}
 	/**
@@ -1347,13 +1354,16 @@ public class CTLabDAO extends BaseJDBCDAO
 				// already present;update the identifier table
 				 id = rs.getLong("PROTOCOL_ID");
 			}
-			
-			ps = con.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
-			ps.setLong(1,id);
-			rs1 = ps.executeQuery();
-			if (rs.next()&& !rs.isBeforeFirst())
-			{
+			if(id!=null)
+			{	
+			 ps = con.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
+			 ps.setLong(1,id);
+			 rs1 = ps.executeQuery();
+			 if (rs1.next()&& !rs1.isBeforeFirst())
+			 {
 			  insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
+			  System.out.println("insert date "+ insertDate);
+			 }
 			}
 			return insertDate;
 		}
