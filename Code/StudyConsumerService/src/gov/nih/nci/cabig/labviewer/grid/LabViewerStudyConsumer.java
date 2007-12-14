@@ -13,6 +13,7 @@ import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
@@ -114,27 +115,40 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	public void rollback(Study study) throws RemoteException, InvalidStudyException
 	{
 		String studyGridId = study.getGridId();
-		long epochPersistTime=0;
-		long epochcurrentTime=0;
+		//long epochPersistTime=0;
+		//long epochcurrentTime=0;
 		//need to get the hashmap from the application context
 		con = dao.getConnection();
-		if(map.containsKey(studyGridId))
-		{
+		//if(map.containsKey(studyGridId))
+		//{
 		try{ 
-			StudyPersistTime ppt = map.get(studyGridId);
+			/*StudyPersistTime ppt = map.get(studyGridId);
 			Calendar persistTime = ppt.getPersistTime();
 			epochPersistTime = persistTime.getTime().getTime();
 			Calendar currentTime = Calendar.getInstance();
 			epochcurrentTime=currentTime.getTime().getTime();
 			double minutes = (double)(epochcurrentTime-epochPersistTime)/MILLIS_PER_MINUTE;
-			if(minutes < THRESHOLD_MINUTE)
-			{	
-			dao.rollbackStudy(con, ppt.getProtocol());
+			if(minutes < THRESHOLD_MINUTE)*/
+			java.util.Date insertdate = dao.checkStudyForRollback(con,studyGridId);
+			java.util.Date currdate = new Date();
+			long milis1 = insertdate.getTime();
+			long milis2 = currdate.getTime();
+			long diffInMin = (milis2-milis1)/MILLIS_PER_MINUTE;
+			
+			if(insertdate != null && insertdate.before(currdate) && diffInMin > THRESHOLD_MINUTE )
+			{		
+			
+				dao.rollbackStudy(con, studyGridId);
 			}
+			else{
+				StudyCreationException ire = new StudyCreationException();
+				ire.setFaultString("Invalid study rollback message- no study found with given gridid");
+				throw ire;
 			}
+		}
 			catch(SQLException se)
 			{
-				logger.error("Error deleting participant", se);
+				logger.error("Error deleting study", se);
 			}
 			finally
 			{
@@ -145,16 +159,12 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 					logger.error("Error closing connection",e);
 				}
 			}
+			logger.info("deleted study");
 		}
-		else{
-			StudyCreationException ire = new StudyCreationException();
-			ire.setFaultString("Invalid patient rollback message- no patient found with given gridid");
-			throw ire;
-		}
-		logger.info("deleted participant");
-		cleanupHashMap(epochcurrentTime);
 		
-	}
+		
+		//cleanupHashMap(epochcurrentTime);
+		
 	/**
 	 * Cleans up the hash map - looks for the time stamp value in all the ParticipantPersistTime
 	 * if it is difference between the current time and persist time is greater than the threshold
