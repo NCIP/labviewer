@@ -110,7 +110,6 @@ public class LoginAction extends Action
 			session.setAttribute(DisplayConstants.LOGIN_OBJECT,form);
 			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
 			if(session.getAttribute("HOT_LINK")=="true")
-				 
 			{  
 				LabActivitiesSearchForm labFm=(LabActivitiesSearchForm)session.getAttribute("CURRENT_FORM");
 				try {
@@ -132,42 +131,6 @@ public class LoginAction extends Action
 		{
 			forward = new ActionForward(mapping.getInput());
 		}
-		
-		/*
-		BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-		bac.setUserId(loginForm.getLoginId());
-		bac.setPassword(loginForm.getPassword());
-		
-		GridProxyTransformer transformer = (GridProxyTransformer) ObjectFactory.getObject("gridProxyTransformerImpl");
-		
-
-			GlobusCredential cred;
-			try {
-				cred = transformer.transform(bac);
-			} catch (Exception ex) {
-				Throwable e = ex.getCause();
-				String message = null;
-				if(e instanceof InvalidCredentialFault){
-					message = "Invalid Login Id or Password";
-				}else {
-					message = "Login Application Error";
-				}
-					
-				
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, message));			
-				saveErrors( request,errors );
-				if (log.isDebugEnabled())
-					log.debug("|"+loginForm.getLoginId()+
-							"||Login|Failure|Login Failed for user name "+loginForm.getLoginId()+" "+loginForm.toString()+"|"+ex.getMessage());
-				
-				return mapping.findForward(ForwardConstants.LOGIN_FAILURE);
-			} 
-			
-			
-			String  pr = Utils.toString((GlobusCredential)cred);
-			
-			loginForm.setGridProxy(pr);
-			*/
 		
 		return forward;
 	}
