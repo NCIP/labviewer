@@ -129,7 +129,7 @@ public class LoginAction extends Action
 		}
 		else
 		{
-			forward = new ActionForward(mapping.getInput());
+			forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
 		}
 		
 		return forward;
