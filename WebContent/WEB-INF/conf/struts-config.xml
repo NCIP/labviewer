@@ -43,7 +43,11 @@
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction"
 			input="Tiles.Login.Page">
 			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoginSuccess" path="Tiles.Home.Page" />
+			<forward name="LoginFailure" path="Tiles.Login.Page" />
 			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="LoginSuccessHotLink" 
+					path="/LabActivitiesDBOperation.do" />
 		</action>
 		<action path="/Login"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoginAction"

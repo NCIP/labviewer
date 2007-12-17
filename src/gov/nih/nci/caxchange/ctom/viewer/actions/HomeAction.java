@@ -97,7 +97,11 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
+import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.security.exceptions.CSConfigurationException;
+import gov.nih.nci.security.exceptions.CSException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -105,6 +109,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -112,8 +118,6 @@ import org.apache.struts.action.ActionMapping;
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class HomeAction extends Action
 {
@@ -127,11 +131,13 @@ public class HomeAction extends Action
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception 
 	{
+		ActionErrors errors = new ActionErrors();
+		ActionForward forward = null;
 		HttpSession session = request.getSession();
-		Object credentials = session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+		String userEmail = (String)session.getAttribute("CAGRID_SSO_EMAIL_ID");
 		LoginForm loginForm = (LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT);
 		
-		if ((loginForm == null) && (credentials == null))
+		if ((loginForm == null) && (userEmail == null))
 		{
 			log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
@@ -147,15 +153,55 @@ public class HomeAction extends Action
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
 		
 		// If they got here by WebSSO then check authorization and set things up
-		if (credentials != null)
+		if (userEmail != null)
 		{
-			log.debug(credentials.toString());
+			boolean loggedIn = true;
+			loginForm = new LoginForm();
+			
+			String username = userEmail;
+			loginForm.setLoginId(username);
+			
+			// Check their authorization
+			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
+			boolean authorized = lvaHelper.isAuthorized(username);
+					
+			if (!authorized)
+			{
+				log.error("User authenticated but not authorized");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID,
+							"User does not have permissions for this application"));
+				saveErrors(request, errors);
+				loggedIn = false;
+				forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
+			}
+			
+			if (loggedIn)
+			{
+				loginForm.setGridProxy("test");
+			
+				session.setAttribute(DisplayConstants.LOGIN_OBJECT,loginForm);
+				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
+				if(session.getAttribute("HOT_LINK")=="true")
+				{  
+					LabActivitiesSearchForm labFm=(LabActivitiesSearchForm)session.getAttribute("CURRENT_FORM");
+					try
+					{
+						
+						//getPatientIdRoot((String)session.getAttribute("studySubjectGridId"),labFm);
+						
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					session.setAttribute("CURRENT_FORM", labFm);
+					return (mapping.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK));
+				}	
+				
+				forward = mapping.findForward(ForwardConstants.LOGIN_SUCCESS);
+			}
 		}
 		
-		log.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
-					"|Home|Redirect|Success|Already Logged In and Forwarding to the Home Page||");
-		
-		return mapping.findForward(ForwardConstants.HOME_PAGE);
+		return forward;
 	}
 
 }
