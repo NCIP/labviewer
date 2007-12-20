@@ -53,7 +53,18 @@
       <eip:target>
         <eip:exchange-target service="caxchange:ResponseQueueService" />
       </eip:target>
-  </eip:pipeline>  
+  </eip:pipeline>
+  
+  <!-- Pipeline to rollback -->
+  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="endpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:setSubjectService" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:MessageTypeRouter" />
+      </eip:target>
+  </eip:pipeline>
+  
   <!-- content based router to route different caXchange message types -->
   <eip:content-based-router service="caxchange:MessageTypeRouter" endpoint="endpoint">
     <eip:rules>

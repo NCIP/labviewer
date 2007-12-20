@@ -6,6 +6,7 @@ package gov.nih.nci.caXchange.outbound.operations;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Set;
 
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.MessageExchange;
@@ -15,6 +16,7 @@ import org.apache.axis.AxisFault;
 import org.apache.log4j.Category;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.apache.servicemix.jbi.jaxp.StringSource;
+import org.globus.gsi.GlobusCredential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -54,8 +56,17 @@ public class StudyRollbackStrategy implements GridInvocationStrategy {
 			throws GridInvocationException {
 
 		try {
+			GlobusCredential cred=null;
+			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
+			
+			if(s.size()>0){
+				cred=s.iterator().next();
+			}else{
+				throw new GridInvocationException("no credentials found");
+			}
+			
 			StudyConsumerClient client = new StudyConsumerClient(
-					serviceUrl);
+					serviceUrl, cred);
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
