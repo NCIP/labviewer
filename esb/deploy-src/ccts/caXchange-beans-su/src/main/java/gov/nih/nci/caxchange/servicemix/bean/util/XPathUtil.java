@@ -140,6 +140,16 @@ public class XPathUtil {
         
     }
     
+    public String getDelegatedCredentialReference() throws Exception{
+        Credentials credentials = requestDocument.getCaXchangeRequestMessage().getMetadata().getCredentials();
+        String delegatedCredentialReference=null;
+        if (credentials != null) {
+        	delegatedCredentialReference=credentials.getDelegatedCredentialReference();
+        }
+        return delegatedCredentialReference;
+        
+    }
+    
     public String getCaXchangeIdentifier() throws Exception {
         return requestDocument.getCaXchangeRequestMessage().getMetadata().getCaXchangeIdentifier();
     }

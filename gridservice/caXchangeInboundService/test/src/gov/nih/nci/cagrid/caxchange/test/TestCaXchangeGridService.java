@@ -58,7 +58,23 @@ public class TestCaXchangeGridService extends TestCase {
     String externalIdentifier = "myExternalIdentifier";
     String userName="hmarwaha";
     String password="password";
-	String delegatedReference = "delegatedReference";
+	
+    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
+    		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
+    		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
+    		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+    		"   <ns2:Address xsi:type=\"ns2:AttributedURI\">https://cbvapp-d1017.nci.nih.gov:58443/wsrf/services/cagrid/DelegatedCredential</ns2:Address>" +
+    		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
+    		"    <ns2:DelegatedCredentialKey" +
+    		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
+    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">132</ns3:delegationId>" +
+    		"    </ns2:DelegatedCredentialKey>" +
+    		"   </ns2:ReferenceProperties>" +
+    		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
+    		"  </ns2:EndpointReference>" +
+    		"</ns1:DelegatedCredentialReference>";
+    
+     
     Message message = null;
 
     static String url=System.getProperty("caxchange.url");

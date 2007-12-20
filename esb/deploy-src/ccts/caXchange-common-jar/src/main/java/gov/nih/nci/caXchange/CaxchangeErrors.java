@@ -15,4 +15,5 @@ public interface CaxchangeErrors {
 	public static final String UNHANDLED_MESSAGE_TYPE = "401";
 	public static final String CONNECT_EXCEPTION = "203";
 	public static final String TIMEOUT = "204";
+	public static final String PERMISSION_DENIED = "501";
 }

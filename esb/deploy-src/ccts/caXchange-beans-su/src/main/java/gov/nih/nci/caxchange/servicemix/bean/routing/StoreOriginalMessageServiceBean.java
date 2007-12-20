@@ -85,7 +85,7 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
     private DeliveryChannel channel;
 
 
-    public static Logger logger= LogManager.getLogger(InvokeDeploymentServiceBean.class);
+    public static Logger logger= LogManager.getLogger(InvokeDelegationServiceBean.class);
 
 
     public void onMessageExchange(MessageExchange exchange) throws MessagingException {
