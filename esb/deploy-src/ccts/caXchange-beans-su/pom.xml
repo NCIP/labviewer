@@ -133,6 +133,26 @@
       <version>${servicemix-version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>cagrid</groupId> 
+      <artifactId>cagrid-core</artifactId> 
+      <version>1.1</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.cds</groupId> 
+      <artifactId>cds-client</artifactId> 
+      <version>1.2M1</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.cds</groupId> 
+      <artifactId>cds-common</artifactId> 
+      <version>1.2M1</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.cds</groupId> 
+      <artifactId>cds-stubs</artifactId> 
+      <version>1.2M1</version> 
+    </dependency>
   </dependencies>
   <properties>
     <servicemix-version>3.1.2</servicemix-version>

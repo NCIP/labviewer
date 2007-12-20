@@ -27,7 +27,7 @@
 		</property>
 	</bean>
 
-  <bean:endpoint service="caxchange:setSubjectService" endpoint="endpoint" bean="#invokeDeploymentServiceBean"/>
+  <bean:endpoint service="caxchange:setSubjectService" endpoint="endpoint" bean="#invokeDelegationServiceBean"/>
   
   <bean:endpoint service="caxchange:storeOriginalMessageService" endpoint="endpoint" bean="#storeOriginalMessageServiceBean"/>
   
@@ -85,7 +85,10 @@
   
   <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersRollback"/>  
 
-  <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
+  <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean">
+    <property name="certificateFilePath" value="${delegation.certificateFilePath}"/>
+    <property name="keyFilePath" value="${delegation.keyFilePath}"/>
+  </bean>
   
   <bean id="storeOriginalMessageServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
   

@@ -156,7 +156,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        NormalizedMessage rollbackMessage= inOnly.createMessage();
        rollbackMessage.setContent(rollback);
        inOnly.setInMessage(rollbackMessage);
-       inOnly.setService(CaxchangeConstants.MESSAGE_TYPE_ROUTER);
+       inOnly.setService(CaxchangeConstants.ROLLBACK_PIPELINE);
        channel.send(inOnly);
    }
 

@@ -23,6 +23,8 @@ public class CaxchangeConstants {
     
     
     public static final Set ROLLBACK_STATUSES = new HashSet();
+	public static final QName ROLLBACK_PIPELINE = new QName("http://nci.nih.gov/caXchange","rollbackPipeline");
+	
     static {
         ROLLBACK_STATUSES.add("ERROR");
         ROLLBACK_STATUSES.add("FAULT");
