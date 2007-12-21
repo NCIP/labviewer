@@ -23,8 +23,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.axis.AxisFault;
 import org.apache.log4j.Category;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.apache.servicemix.jbi.jaxp.StringSource;
 import org.globus.gsi.GlobusCredential;
@@ -38,7 +36,7 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(RegistrationInvocationStrategy.class);
-
+	
 	private String serviceUrl;
 
 	/*
