@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="CaXchangeRequestProcessor" targetNamespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/bindings" location="CaXchangeRequestProcessor_bindings.wsdl"/>
-  <wsdl:service name="CaXchangeRequestProcessorService">
-    <wsdl:port name="CaXchangeRequestProcessorPortTypePort" binding="binding:CaXchangeRequestProcessorPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
