@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
    <xs:annotation>
-      <xs:documentation> $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $ 
-RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:documentation>
+      <xs:documentation> $Id: voc.xsd,v 1.3 2007-12-24 20:29:43 chene Exp $ 
+RoseTree XML to Schema: $Id: voc.xsd,v 1.3 2007-12-24 20:29:43 chene Exp $</xs:documentation>
    </xs:annotation>
    <xs:include schemaLocation="datatypes.xsd"/>
    <xs:simpleType name="Classes">
@@ -386,7 +386,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T13953 (C-0-T13953-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ActClaimAttachmentCode ActCognitiveProfessionalServiceCode ActInformationCategoryCode ActInjuryCode ActInvoicePaymentCode ActTransportationModeCode ExternallyDefinedActCodes HL7DefinedActCodes ObservationType x_LabProcessCodes"/>
+      <xs:union memberTypes="ActClaimAttachmentCode ActCognitiveProfessionalServiceCode ActInjuryCode ActInvoicePaymentCode ActTransportationModeCode ExternallyDefinedActCodes HL7DefinedActCodes ObservationType x_LabProcessCodes"/>
    </xs:simpleType>
    <xs:simpleType name="ActClaimAttachmentCode">
       <xs:annotation>
@@ -399,22 +399,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:documentation>abstDomain: A19706 (C-0-T13953-A19706-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
-   </xs:simpleType>
-   <xs:simpleType name="ActInformationCategoryCode">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19752 (C-0-T13953-A19752-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="ALLGCAT"/>
-         <xs:enumeration value="COBSCAT"/>
-         <xs:enumeration value="DEMOCAT"/>
-         <xs:enumeration value="DICAT"/>
-         <xs:enumeration value="IMMUCAT"/>
-         <xs:enumeration value="LABCAT"/>
-         <xs:enumeration value="MEDCCAT"/>
-         <xs:enumeration value="RXCAT"/>
-         <xs:enumeration value="PSVCCAT"/>
-      </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="ActInvoicePaymentCode">
       <xs:annotation>
@@ -1844,21 +1828,14 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>abstDomain: A16226 (C-0-T13953-A16226-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ActPrivilegeCategorizationType AnnotationType CommonClinicalObservationType DiagnosticImageCode IndividualCaseSafetyReportType LogicalObservationIdentifierNamesAndCodes MedicationObservationType ObservationActContextAgeType ObservationAllergyTestType ObservationDiagnosisTypes ObservationIndicationType ObservationIntoleranceType ObservationIssueTriggerCodedObservationType ObservationIssueTriggerMeasuredObservationType ObservationSequenceType ObservationSeriesType PatientCharacteristicObservationType PrescriptionObservationType SimpleMeasurableClinicalObservationType">
+      <xs:union memberTypes="AnnotationType CommonClinicalObservationType DiagnosticImageCode FDALabelData IndividualCaseSafetyReportType LogicalObservationIdentifierNamesAndCodes ObservationAllergyTestType ObservationDiagnosisTypes ObservationIndicationType ObservationIntoleranceType ObservationIssueTriggerCodedObservationType ObservationIssueTriggerMeasuredObservationType ObservationSequenceType ObservationSeriesType PatientCharacteristicObservationType PrescriptionObservationType SimpleMeasurableClinicalObservationType">
          <xs:simpleType>
             <xs:restriction base="cs">
                <xs:enumeration value="ADVERSE_REACTION"/>
-               <xs:enumeration value="_FDALabelData"/>
                <xs:enumeration value="SEV"/>
             </xs:restriction>
          </xs:simpleType>
       </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="ActPrivilegeCategorizationType">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19750 (C-0-T13953-A16226-A19750-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="AnnotationType">
       <xs:annotation>
@@ -1898,6 +1875,20 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
+   <xs:simpleType name="FDALabelData">
+      <xs:annotation>
+         <xs:documentation>abstDomain: A19255 (C-0-T13953-A16226-A19255-cpt)</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="cs">
+         <xs:enumeration value="FDACOATING"/>
+         <xs:enumeration value="FDACOLOR"/>
+         <xs:enumeration value="FDAIMPRINTCD"/>
+         <xs:enumeration value="FDALOGO"/>
+         <xs:enumeration value="FDASCORING"/>
+         <xs:enumeration value="FDASHAPE"/>
+         <xs:enumeration value="FDASIZE"/>
+      </xs:restriction>
+   </xs:simpleType>
    <xs:simpleType name="IndividualCaseSafetyReportType">
       <xs:annotation>
          <xs:documentation>abstDomain: A19622 (C-0-T13953-A16226-A19622-cpt)</xs:documentation>
@@ -1909,28 +1900,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:documentation>abstDomain: A16492 (C-0-T13953-A16226-A16492-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
-   </xs:simpleType>
-   <xs:simpleType name="ObservationActContextAgeType">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19757 (C-0-T13953-A16226-A19757-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:union memberTypes="LOINCObservationActContextAgeType">
-         <xs:simpleType>
-            <xs:restriction base="cs"/>
-         </xs:simpleType>
-      </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="LOINCObservationActContextAgeType">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19758 (C-0-T13953-A16226-A19757-A19758-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="30972-4"/>
-         <xs:enumeration value="29553-5"/>
-         <xs:enumeration value="30525-0"/>
-         <xs:enumeration value="21611-9"/>
-         <xs:enumeration value="21612-7"/>
-      </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="ObservationAllergyTestType">
       <xs:annotation>
@@ -2187,11 +2156,9 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:restriction base="cs">
          <xs:enumeration value="GOL"/>
          <xs:enumeration value="EVN.CRT"/>
-         <xs:enumeration value="EXPEC"/>
          <xs:enumeration value="OPT"/>
          <xs:enumeration value="PERM"/>
          <xs:enumeration value="PERMRQ"/>
-         <xs:enumeration value="RSK"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="x_ActMoodDefEvn">
@@ -2256,25 +2223,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>specDomain: S10199 (C-0-T10196-A16742-S10199-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ActMoodProposal">
-         <xs:simpleType>
-            <xs:restriction base="cs">
-               <xs:enumeration value="INT"/>
-               <xs:enumeration value="APT"/>
-               <xs:enumeration value="ARQ"/>
-               <xs:enumeration value="PRMS"/>
-               <xs:enumeration value="RQO"/>
-            </xs:restriction>
-         </xs:simpleType>
-      </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="ActMoodProposal">
-      <xs:annotation>
-         <xs:documentation>specDomain: S16726 (C-0-T10196-A16742-S10199-S16726-cpt)</xs:documentation>
-      </xs:annotation>
       <xs:restriction base="cs">
+         <xs:enumeration value="INT"/>
+         <xs:enumeration value="APT"/>
+         <xs:enumeration value="ARQ"/>
+         <xs:enumeration value="PRMS"/>
          <xs:enumeration value="PRP"/>
-         <xs:enumeration value="RMD"/>
+         <xs:enumeration value="RQO"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="x_ActMoodOrdPrms">
@@ -2519,7 +2474,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T14878 (C-0-T14878-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ActAccommodationReason ActAdjudicationReason ActBillableClinicalServiceReason ActIneligibilityReason ActNoImmunizationReason ActSupplyFulfillmentRefusalReason ClinicalResearchReason ControlActReason EligibilityActReasonCode NonPerformanceReasonCode ReasonForNotEvaluatingDevice ReferralReasonCode SchedulingActReason SubstanceAdminSubstitutionNotAllowedReason SubstanceAdminSubstitutionReason TransferActReason x_ActEncounterReason">
+      <xs:union memberTypes="ActAccommodationReason ActAdjudicationReason ActBillableClinicalServiceReason ActIneligibilityReason ActNoImmunizationReason ActSupplyFulfillmentRefusalReason ControlActReason EligibilityActReasonCode NonPerformanceReasonCode ReasonForNotEvaluatingDevice ReferralReasonCode SchedulingActReason SubstanceAdminSubstitutionNotAllowedReason SubstanceAdminSubstitutionReason TransferActReason x_ActEncounterReason">
          <xs:simpleType>
             <xs:restriction base="cs">
                <xs:enumeration value="MEDNEC"/>
@@ -2758,7 +2713,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T10317 (C-0-T10317-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ActRelationshipConditional ActRelationshipHasComponent ActRelationshipOutcome ActRelationshipPertains ActRelationshipSequel x_ActRelationshipDocument x_ActRelationshipEntry x_ActRelationshipEntryRelationship x_ActRelationshipExternalReference x_ActRelationshipPatientTransport x_ActRelationshipPertinentInfo x_SUCC_REPL_PREV"/>
+      <xs:union memberTypes="ActRelationshipConditional ActRelationshipHasComponent ActRelationshipOutcome ActRelationshipPertains ActRelationshipSequel x_ActRelationshipDocument x_ActRelationshipEntry x_ActRelationshipEntryRelationship x_ActRelationshipExternalReference x_ActRelationshipPatientTransport x_ActRelationshipPertinentInfo"/>
    </xs:simpleType>
    <xs:simpleType name="ActRelationshipConditional">
       <xs:annotation>
@@ -2781,9 +2736,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:restriction base="cs">
          <xs:enumeration value="RSON"/>
          <xs:enumeration value="MITGT"/>
-         <xs:enumeration value="TREAT"/>
-         <xs:enumeration value="PRYLX"/>
-         <xs:enumeration value="DIAG"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="ActRelationshipHasComponent">
@@ -2828,6 +2780,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:simpleType>
             <xs:restriction base="cs">
                <xs:enumeration value="PERT"/>
+               <xs:enumeration value="ITEMSLOC"/>
                <xs:enumeration value="NAME"/>
                <xs:enumeration value="AUTH"/>
                <xs:enumeration value="COVBY"/>
@@ -2838,9 +2791,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
                <xs:enumeration value="DRIV"/>
                <xs:enumeration value="CAUS"/>
                <xs:enumeration value="MFST"/>
-               <xs:enumeration value="ITEMSLOC"/>
                <xs:enumeration value="LIMIT"/>
-               <xs:enumeration value="EVID"/>
                <xs:enumeration value="REFR"/>
                <xs:enumeration value="SUMM"/>
             </xs:restriction>
@@ -3012,16 +2963,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:enumeration value="CAUS"/>
          <xs:enumeration value="MFST"/>
          <xs:enumeration value="REFR"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="x_SUCC_REPL_PREV">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19753 (C-0-T10317-A19753-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="PREV"/>
-         <xs:enumeration value="RPLC"/>
-         <xs:enumeration value="SUCC"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="ActSite">
@@ -4506,15 +4447,9 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
-   <xs:simpleType name="AttentionLineValue">
-      <xs:annotation>
-         <xs:documentation>vocSet: D28 (C-0-D28-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
-   </xs:simpleType>
    <xs:simpleType name="BatchName">
       <xs:annotation>
-         <xs:documentation>vocSet: D29 (C-0-D29-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D28 (C-0-D28-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -4601,19 +4536,19 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="CaseDetectionMethod">
       <xs:annotation>
-         <xs:documentation>vocSet: D30 (C-0-D30-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D29 (C-0-D29-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="CaseDiseaseImported">
       <xs:annotation>
-         <xs:documentation>vocSet: D31 (C-0-D31-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D30 (C-0-D30-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="CaseTransmissionMode">
       <xs:annotation>
-         <xs:documentation>vocSet: D32 (C-0-D32-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D31 (C-0-D31-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -4633,24 +4568,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:enumeration value="UTF-7"/>
          <xs:enumeration value="UTF-8"/>
       </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="ClinicalResearchEventReason">
-      <xs:annotation>
-         <xs:documentation>vocSet: D33 (C-0-D33-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
-   </xs:simpleType>
-   <xs:simpleType name="ClinicalResearchObservationReason">
-      <xs:annotation>
-         <xs:documentation>vocSet: D34 (C-0-D34-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
-   </xs:simpleType>
-   <xs:simpleType name="ClinicalResearchReason">
-      <xs:annotation>
-         <xs:documentation>vocSet: D35 (C-0-D35-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="CodeSystem">
       <xs:annotation>
@@ -4868,7 +4785,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:enumeration value="SDM"/>
          <xs:enumeration value="Sequencing"/>
          <xs:enumeration value="SetOperator"/>
-         <xs:enumeration value="SpecialArrangement"/>
          <xs:enumeration value="SpecimenType"/>
          <xs:enumeration value="StyleType"/>
          <xs:enumeration value="SubstanceAdminSubstitution"/>
@@ -5128,7 +5044,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="CoverageEligibilityReason">
       <xs:annotation>
-         <xs:documentation>vocSet: D36 (C-0-D36-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D32 (C-0-D32-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -6063,13 +5979,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ElementName">
       <xs:annotation>
-         <xs:documentation>vocSet: D37 (C-0-D37-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D33 (C-0-D33-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="EmployeeJob">
       <xs:annotation>
-         <xs:documentation>vocSet: D38 (C-0-D38-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D34 (C-0-D34-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -6095,7 +6011,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="EmployeeSalaryType">
       <xs:annotation>
-         <xs:documentation>vocSet: D39 (C-0-D39-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D35 (C-0-D35-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -6113,7 +6029,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="EncounterAcuity">
       <xs:annotation>
-         <xs:documentation>vocSet: D40 (C-0-D40-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D36 (C-0-D36-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -6467,25 +6383,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>abstDomain: A19699 (C-0-T16040-A16041-A19698-A19699-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="NDA16"/>
-         <xs:enumeration value="NDA17"/>
-         <xs:enumeration value="NDA01"/>
-         <xs:enumeration value="NDA02"/>
-         <xs:enumeration value="NDA08"/>
-         <xs:enumeration value="NDA03"/>
-         <xs:enumeration value="NDA12"/>
-         <xs:enumeration value="NDA10"/>
-         <xs:enumeration value="NDA04"/>
-         <xs:enumeration value="NDA13"/>
-         <xs:enumeration value="NDA09"/>
-         <xs:enumeration value="NDA05"/>
-         <xs:enumeration value="NDA14"/>
-         <xs:enumeration value="NDA06"/>
-         <xs:enumeration value="NDA15"/>
-         <xs:enumeration value="NDA11"/>
-         <xs:enumeration value="NDA07"/>
-      </xs:restriction>
+      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="MaterialEntityAdditive">
       <xs:annotation>
@@ -6764,7 +6662,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>abstDomain: A19608 (C-0-T16040-A19608-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="IndividualCaseSafetyReportSenderType NationEntityType">
+      <xs:union memberTypes="IndividualCaseSafetyReportSenderType">
          <xs:simpleType>
             <xs:restriction base="cs">
                <xs:enumeration value="RELIG"/>
@@ -6775,12 +6673,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    <xs:simpleType name="IndividualCaseSafetyReportSenderType">
       <xs:annotation>
          <xs:documentation>abstDomain: A19624 (C-0-T16040-A19608-A19624-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
-   </xs:simpleType>
-   <xs:simpleType name="NationEntityType">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19749 (C-0-T16040-A19608-A19749-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -7042,22 +6934,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T15913 (C-0-T15913-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="EntityNameSearchUse NameLegalUse NameRepresentationUse OrganizationNameUse PersonNameUse">
+      <xs:union memberTypes="EntityNameSearchUse NameRepresentationUse OrganizationNameUse PersonNameUse">
          <xs:simpleType>
             <xs:restriction base="cs">
                <xs:enumeration value="C"/>
             </xs:restriction>
          </xs:simpleType>
       </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="NameLegalUse">
-      <xs:annotation>
-         <xs:documentation>specDomain: S10176 (C-0-T15913-S10176-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="L"/>
-         <xs:enumeration value="OR"/>
-      </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="OrganizationNameUse">
       <xs:annotation>
@@ -7255,7 +7138,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ExposureAgentEntityType">
       <xs:annotation>
-         <xs:documentation>vocSet: D41 (C-0-D41-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D37 (C-0-D37-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -8732,7 +8615,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="HumanActSite">
       <xs:annotation>
-         <xs:documentation>vocSet: D42 (C-0-D42-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D38 (C-0-D38-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -8768,7 +8651,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ImagingSubjectOrientation">
       <xs:annotation>
-         <xs:documentation>vocSet: D43 (C-0-D43-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D39 (C-0-D39-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -8789,13 +8672,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="InvoiceElementModifier">
       <xs:annotation>
-         <xs:documentation>vocSet: D44 (C-0-D44-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D40 (C-0-D40-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="JobTitleName">
       <xs:annotation>
-         <xs:documentation>vocSet: D45 (C-0-D45-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D41 (C-0-D41-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -8831,7 +8714,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ListOwnershipLevel">
       <xs:annotation>
-         <xs:documentation>vocSet: D46 (C-0-D46-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D42 (C-0-D42-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -8952,7 +8835,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ManufacturerModelName">
       <xs:annotation>
-         <xs:documentation>vocSet: D47 (C-0-D47-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D43 (C-0-D43-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -9690,7 +9573,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:documentation>abstDomain: A14850 (C-0-T14824-A14850-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
-         <xs:enumeration value="multipart/x-hl7-cda-level-one"/>
+         <xs:enumeration value="multipart/x-hl7-cda-level1"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="TextMediaType">
@@ -9714,12 +9597,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
          <xs:enumeration value="video/mpeg"/>
          <xs:enumeration value="video/x-avi"/>
       </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="MedicationObservationType">
-      <xs:annotation>
-         <xs:documentation>vocSet: D48 (C-0-D48-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="MessageCondition">
       <xs:annotation>
@@ -9788,7 +9665,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T10609 (C-0-T10609-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="NoInformation"/>
+      <xs:union memberTypes="NoInformation">
+         <xs:simpleType>
+            <xs:restriction base="cs">
+               <xs:enumeration value="NP"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
    </xs:simpleType>
    <xs:simpleType name="NoInformation">
       <xs:annotation>
@@ -9842,7 +9725,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T78 (C-0-T78-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="ObservationInterpretationChange ObservationInterpretationExceptions ObservationInterpretationNormality ObservationInterpretationProtocolInclusion ObservationInterpretationSusceptibility"/>
+      <xs:union memberTypes="ObservationInterpretationChange ObservationInterpretationExceptions ObservationInterpretationNormality ObservationInterpretationSusceptibility"/>
    </xs:simpleType>
    <xs:simpleType name="ObservationInterpretationChange">
       <xs:annotation>
@@ -9914,26 +9797,6 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:restriction base="cs">
          <xs:enumeration value="L"/>
          <xs:enumeration value="LL"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="ObservationInterpretationProtocolInclusion">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19759 (C-0-T78-A19759-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:union memberTypes="ObservationInterpretationOustsideThreshold">
-         <xs:simpleType>
-            <xs:restriction base="cs"/>
-         </xs:simpleType>
-      </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="ObservationInterpretationOustsideThreshold">
-      <xs:annotation>
-         <xs:documentation>specDomain: S21634 (C-0-T78-A19759-S21634-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="EX"/>
-         <xs:enumeration value="HX"/>
-         <xs:enumeration value="LX"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:simpleType name="ObservationInterpretationSusceptibility">
@@ -10524,7 +10387,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="OtherIndicationValue">
       <xs:annotation>
-         <xs:documentation>vocSet: D49 (C-0-D49-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D44 (C-0-D44-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -10741,18 +10604,10 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>vocSet: T10901 (C-0-T10901-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="PART"/>
-   </xs:simpleType>
-   <xs:simpleType name="PART">
-      <xs:annotation>
-         <xs:documentation>specDomain: S21573 (C-0-T10901-S21573-cpt)</xs:documentation>
-      </xs:annotation>
       <xs:union memberTypes="ParticipationAncillary ParticipationIndirectTarget ParticipationInformationGenerator ParticipationInformationRecipient ParticipationPhysicalPerformer ParticipationTargetDirect ParticipationTargetLocation ParticipationVerifier x_EncounterParticipant x_EncounterPerformerParticipation x_InformationRecipient x_ParticipationAuthorPerformer x_ParticipationEntVrf x_ParticipationPrfEntVrf x_ParticipationVrfRespSprfWit x_ServiceEventPerformer">
          <xs:simpleType>
             <xs:restriction base="cs">
-               <xs:enumeration value="PART"/>
                <xs:enumeration value="CST"/>
-               <xs:enumeration value="GUAR"/>
                <xs:enumeration value="RESP"/>
             </xs:restriction>
          </xs:simpleType>
@@ -10760,7 +10615,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationAncillary">
       <xs:annotation>
-         <xs:documentation>abstDomain: A10247 (C-0-T10901-S21573-A10247-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A10247 (C-0-T10901-A10247-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="ADM"/>
@@ -10774,13 +10629,12 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationIndirectTarget">
       <xs:annotation>
-         <xs:documentation>specDomain: S19032 (C-0-T10901-S21573-S19032-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S19032 (C-0-T10901-S19032-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="IND"/>
          <xs:enumeration value="BEN"/>
          <xs:enumeration value="COV"/>
-         <xs:enumeration value="GUAR"/>
          <xs:enumeration value="HLD"/>
          <xs:enumeration value="RCV"/>
          <xs:enumeration value="RCT"/>
@@ -10788,7 +10642,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationInformationGenerator">
       <xs:annotation>
-         <xs:documentation>abstDomain: A10251 (C-0-T10901-S21573-A10251-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A10251 (C-0-T10901-A10251-cpt)</xs:documentation>
       </xs:annotation>
       <xs:union memberTypes="ParticipationInformationTranscriber">
          <xs:simpleType>
@@ -10802,7 +10656,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationInformationTranscriber">
       <xs:annotation>
-         <xs:documentation>specDomain: S21463 (C-0-T10901-S21573-A10251-S21463-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S21463 (C-0-T10901-A10251-S21463-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="TRANS"/>
@@ -10811,7 +10665,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationInformationRecipient">
       <xs:annotation>
-         <xs:documentation>specDomain: S10263 (C-0-T10901-S21573-S10263-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10263 (C-0-T10901-S10263-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="IRCP"/>
@@ -10824,7 +10678,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationPhysicalPerformer">
       <xs:annotation>
-         <xs:documentation>specDomain: S10248 (C-0-T10901-S21573-S10248-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10248 (C-0-T10901-S10248-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="PRF"/>
@@ -10835,7 +10689,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationTargetDirect">
       <xs:annotation>
-         <xs:documentation>specDomain: S10286 (C-0-T10901-S21573-S10286-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10286 (C-0-T10901-S10286-cpt)</xs:documentation>
       </xs:annotation>
       <xs:union memberTypes="ParticipationTargetDevice ParticipationTargetSubject">
          <xs:simpleType>
@@ -10852,7 +10706,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationTargetDevice">
       <xs:annotation>
-         <xs:documentation>specDomain: S10298 (C-0-T10901-S21573-S10286-S10298-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10298 (C-0-T10901-S10286-S10298-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="DEV"/>
@@ -10862,7 +10716,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationTargetSubject">
       <xs:annotation>
-         <xs:documentation>specDomain: S10287 (C-0-T10901-S21573-S10286-S10287-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10287 (C-0-T10901-S10286-S10287-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="SBJ"/>
@@ -10871,7 +10725,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationTargetLocation">
       <xs:annotation>
-         <xs:documentation>specDomain: S10302 (C-0-T10901-S21573-S10302-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10302 (C-0-T10901-S10302-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="LOC"/>
@@ -10884,7 +10738,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="ParticipationVerifier">
       <xs:annotation>
-         <xs:documentation>specDomain: S10259 (C-0-T10901-S21573-S10259-cpt)</xs:documentation>
+         <xs:documentation>specDomain: S10259 (C-0-T10901-S10259-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="VRF"/>
@@ -10894,7 +10748,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_EncounterParticipant">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19600 (C-0-T10901-S21573-A19600-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19600 (C-0-T10901-A19600-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="ADM"/>
@@ -10906,7 +10760,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_EncounterPerformerParticipation">
       <xs:annotation>
-         <xs:documentation>abstDomain: A16764 (C-0-T10901-S21573-A16764-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A16764 (C-0-T10901-A16764-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="CON"/>
@@ -10916,7 +10770,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_InformationRecipient">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19366 (C-0-T10901-S21573-A19366-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19366 (C-0-T10901-A19366-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="PRCP"/>
@@ -10925,7 +10779,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_ParticipationAuthorPerformer">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19080 (C-0-T10901-S21573-A19080-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19080 (C-0-T10901-A19080-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="AUT"/>
@@ -10934,7 +10788,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_ParticipationEntVrf">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19588 (C-0-T10901-S21573-A19588-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19588 (C-0-T10901-A19588-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="ENT"/>
@@ -10943,7 +10797,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_ParticipationPrfEntVrf">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19589 (C-0-T10901-S21573-A19589-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19589 (C-0-T10901-A19589-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="ENT"/>
@@ -10953,7 +10807,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_ParticipationVrfRespSprfWit">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19083 (C-0-T10901-S21573-A19083-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19083 (C-0-T10901-A19083-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="RESP"/>
@@ -10964,7 +10818,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="x_ServiceEventPerformer">
       <xs:annotation>
-         <xs:documentation>abstDomain: A19601 (C-0-T10901-S21573-A19601-cpt)</xs:documentation>
+         <xs:documentation>abstDomain: A19601 (C-0-T10901-A19601-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs">
          <xs:enumeration value="PRF"/>
@@ -12649,7 +12503,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="QueryRequestLimit">
       <xs:annotation>
-         <xs:documentation>vocSet: D51 (C-0-D51-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D46 (C-0-D46-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -14347,13 +14201,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="Realm">
       <xs:annotation>
-         <xs:documentation>vocSet: D52 (C-0-D52-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D47 (C-0-D47-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="RelationalName">
       <xs:annotation>
-         <xs:documentation>vocSet: D53 (C-0-D53-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D48 (C-0-D48-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -14890,25 +14744,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>abstDomain: A19679 (C-0-T12206-A19679-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:union memberTypes="x_LabSpecimenCollectionProviders">
-         <xs:simpleType>
-            <xs:restriction base="cs"/>
-         </xs:simpleType>
-      </xs:union>
-   </xs:simpleType>
-   <xs:simpleType name="x_LabSpecimenCollectionProviders">
-      <xs:annotation>
-         <xs:documentation>abstDomain: A19748 (C-0-T12206-A19679-A19748-cpt)</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="communityLaboratory"/>
-         <xs:enumeration value="homeHealth"/>
-         <xs:enumeration value="laboratory"/>
-         <xs:enumeration value="pathologist"/>
-         <xs:enumeration value="phlebotomist"/>
-         <xs:enumeration value="self"/>
-         <xs:enumeration value="thirdParty"/>
-      </xs:restriction>
+      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="ClinicalOrganizationRoleType">
       <xs:annotation>
@@ -15299,10 +15135,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
       <xs:annotation>
          <xs:documentation>abstDomain: A19417 (C-0-T12206-A19417-cpt)</xs:documentation>
       </xs:annotation>
-      <xs:restriction base="cs">
-         <xs:enumeration value="ERL"/>
-         <xs:enumeration value="SCN"/>
-      </xs:restriction>
+      <xs:restriction base="cs"/>
    </xs:simpleType>
    <xs:simpleType name="ServiceDeliveryLocationRoleType">
       <xs:annotation>
@@ -17429,7 +17262,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="SQLConjunction">
       <xs:annotation>
-         <xs:documentation>vocSet: D56 (C-0-D56-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D51 (C-0-D51-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -17457,13 +17290,13 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="SoftwareName">
       <xs:annotation>
-         <xs:documentation>vocSet: D54 (C-0-D54-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D49 (C-0-D49-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
-   <xs:simpleType name="SpecialArrangement">
+   <xs:simpleType name="SpecialAccommodation">
       <xs:annotation>
-         <xs:documentation>vocSet: D55 (C-0-D55-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D50 (C-0-D50-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
@@ -19137,7 +18970,7 @@ RoseTree XML to Schema: $Id: voc.xsd,v 1.2 2007-12-24 20:23:36 chene Exp $</xs:d
    </xs:simpleType>
    <xs:simpleType name="VerificationMethod">
       <xs:annotation>
-         <xs:documentation>vocSet: D57 (C-0-D57-cpt)</xs:documentation>
+         <xs:documentation>vocSet: D52 (C-0-D52-cpt)</xs:documentation>
       </xs:annotation>
       <xs:restriction base="cs"/>
    </xs:simpleType>
