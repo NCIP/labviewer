@@ -47,8 +47,8 @@ import java.io.InputStream;
  *
  * @author OWNER: Eric Chen  Date: Nov 5, 2007
  * @author LAST UPDATE: $Author: chene $
- * @version $Revision: 1.1 $
- * @date $$Date: 2007-11-15 23:49:07 $
+ * @version $Revision: 1.2 $
+ * @date $$Date: 2007-12-25 23:22:37 $
  */
 
 
@@ -61,7 +61,10 @@ public class DatatypeDeserializer extends DeserializerImpl implements Deserializ
     public void onEndElement(String namespace, String localName, DeserializationContext context) {
         long startTime=System.currentTimeMillis();
 
-        Datatype datatype = new SimpleDatatypeImpl("II");
+        System.out.println("************localname:" + localName);
+        //TODO Only Support Simple Data type 
+        Datatype datatype = new SimpleDatatypeImpl(localName);
+        System.out.println("************datatype:" + datatype);
 
         MessageElement msgElem = context.getCurElement();
         String asString = null;
@@ -80,6 +83,7 @@ public class DatatypeDeserializer extends DeserializerImpl implements Deserializ
         try
         {
             value = StandaloneDataTypeContentHandler.parseValue(is, datatype);
+            System.out.println("value = " + value);
         }
         catch (SAXException e)
         {
@@ -101,7 +105,7 @@ public class DatatypeDeserializer extends DeserializerImpl implements Deserializ
         ANY value = null;
         try
         {
-            value = (II) StandaloneDataTypeContentHandler.parseValue(is, datatype);
+            value = (ANY)StandaloneDataTypeContentHandler.parseValue(is, datatype);
         }
         catch (SAXException e)
         {
@@ -112,7 +116,7 @@ public class DatatypeDeserializer extends DeserializerImpl implements Deserializ
 
     public static void main(String[] args)
     {
-        final String input = "<id xmlns=\"" + HL7_URI + "\" "
+        final String input = "<II xmlns=\"" + HL7_URI + "\" "
             + "assigningAuthorityName=\"authName\" root=\"2.16.840.1.113883.19\" displayable=\"true\" extension=\"c266\"/>";
         // TODO: Maybe using DocumentInpurSource object instead input stream
         InputStream is = new ByteArrayInputStream(input.getBytes());

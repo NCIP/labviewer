@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hl7.meta.Datatype;
 import org.hl7.meta.impl.SimpleDatatypeImpl;
 import org.hl7.types.ANY;
+import org.hl7.util.DatatypeAnalyzer;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 
@@ -37,12 +38,13 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 /**
- * This class serializes a HL7 v3 data type java object to XML stream 
+ * This class serializes a HL7 v3 data type java object to XML stream
+ * XML data type element name should be the same as 
  *
  * @author OWNER: Eric Chen  Date: Nov 5, 2007
  * @author LAST UPDATE: $Author: chene $
- * @version $Revision: 1.1 $
- * @date $$Date: 2007-11-15 23:49:07 $
+ * @version $Revision: 1.2 $
+ * @date $$Date: 2007-12-25 23:22:37 $
  */
 
 
@@ -70,22 +72,36 @@ public class DatatypeSerializer implements Serializer
         throws IOException
     {
         long startTime = System.currentTimeMillis();
-            
-        //TODO: Hardcode datatype for now 
-        Datatype datatype = new SimpleDatatypeImpl("II");
-
-        StringWriter sw = new StringWriter();
-        try {
-            //TODO: Need to syn data type local name with schema name  
-            transformer.transform(new SAXSource(new DatatypeXMLSpeaker(),
-                new DatatypeXMLSpeaker.DataValueInputSource((ANY)value, "II", datatype)), new StreamResult(sw));
-            context.writeString(sw.toString());
-
-        } catch (NullPointerException e) {
-            LOG.error("Problem: getter empty value.", e);
-        } catch (TransformerException e)
+        if (value instanceof ANY)
         {
-            LOG.error("Problem: Tranformation Error.", e);
+            ANY any = (ANY) value;
+            try
+            {
+                String stringType = DatatypeAnalyzer.getTypeBase((ANY) value);
+                Datatype datatype = new SimpleDatatypeImpl(stringType);
+
+                StringWriter sw = new StringWriter();
+
+                //TODO: Need to syn data stringType local name with schema name
+                transformer.transform(new SAXSource(new DatatypeXMLSpeaker(),
+                    new DatatypeXMLSpeaker.DataValueInputSource((ANY) any, stringType, datatype)), new StreamResult(sw));
+                context.writeString(sw.toString());
+
+            }
+            catch (NullPointerException e)
+            {
+                LOG.error("Problem: getter empty value.", e);
+            }
+            catch (TransformerException e)
+            {
+                LOG.error("Problem: Tranformation Error.", e);
+            }
+            catch (DatatypeAnalyzer.AnalysisException e)
+            {
+                LOG.error("Problem: getter unknow type", e);
+            }
+
+
         }
 
         long duration = System.currentTimeMillis() - startTime;
@@ -102,13 +118,17 @@ public class DatatypeSerializer implements Serializer
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public String serialize(ANY value, String datatypeName, String localName){
+    public String serialize(ANY value, String datatypeName, String localName)
+    {
         Datatype datatype = new SimpleDatatypeImpl(datatypeName);
         StringWriter sw = new StringWriter();
-        try {
+        try
+        {
             transformer.transform(new SAXSource(new DatatypeXMLSpeaker(),
                 new DatatypeXMLSpeaker.DataValueInputSource(value, localName, datatype)), new StreamResult(sw));
-        } catch (NullPointerException e) {
+        }
+        catch (NullPointerException e)
+        {
             LOG.error("Problem: getter empty value.", e);
         }
         catch (TransformerException e)
