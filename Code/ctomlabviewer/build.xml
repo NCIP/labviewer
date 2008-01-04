@@ -78,6 +78,12 @@
 			</filterset>
 		</copy>
 		<copy file="conf/client-config.wsdd" toFile="${build.home}/WEB-INF/classes/client-config.wsdd" overwrite="true"/>
+		
+		<copy file="conf/loadToCTMSURL.properties.template" toFile="${build.home}/WEB-INF/classes/loadToCTMSURL.properties" filtering="true" overwrite="true">
+				<filterset begintoken="@" endtoken="@">
+					<filter token="loadToCTMSURL" value="${loadToCTMSURL}" />
+				</filterset>
+			</copy>
 	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
@@ -110,7 +116,7 @@
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
 		<delete dir="${build.home}" />
 	</target>
-
+		
 	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 	
 	<target name="deployTomcat" depends="all">
