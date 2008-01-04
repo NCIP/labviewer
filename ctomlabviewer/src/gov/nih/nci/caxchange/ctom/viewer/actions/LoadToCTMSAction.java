@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
@@ -27,6 +25,8 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -77,7 +78,7 @@ public class LoadToCTMSAction extends Action
 {
 	
 	private static final Logger logDB = Logger.getLogger(LoadToCTMSAction.class);
-
+	private static final String CONFIG_FILE = "/loadToCTMSURL.properties";
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -149,10 +150,24 @@ public class LoadToCTMSAction extends Action
 			list.add(map.get(lForm.getRecordId()));
 		}
 
+		 Properties props    =   new Properties();
+		    //Get the file input stream
+		    try {
+		    	InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
+				props.load(stream);
+			} 
+		    catch (FileNotFoundException e1) 
+			{
+		    	logDB.error("The config file not found: " + CONFIG_FILE);
+			} 
+			catch (IOException e1) 
+			{
+				logDB.error("Error reading the config file: " + CONFIG_FILE);
+			}
 		// Then create the request
 		//String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
 		//C3DGridServiceClient client = new C3DGridServiceClient(url);
-		String url = "http://cbvapp-d1017.nci.nih.gov:18080/wsrf/services/cagrid/CaXchangeRequestProcessor";
+		String url = (String)props.getProperty("url");//"http://cbvapp-d1017.nci.nih.gov:18080/wsrf/services/cagrid/CaXchangeRequestProcessor";
 		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
 		
 		LoadLabsRequest labRequest = new LoadLabsRequest();
