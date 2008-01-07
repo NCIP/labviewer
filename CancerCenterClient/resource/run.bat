@@ -1,0 +1,1 @@
+java -jar -Dcancer.center.client.properties=CancerCenterClient.properties CAXCHANGE.jar
