@@ -1,0 +1,69 @@
+<project name="Caxchange Routing and Workflow Client"  default="createzip"  basedir=".">
+
+    <property name="src.dir" value="src/java/main" />
+    <property name="junit.dir" value="junit" />
+    <property name="lib.home" value="lib" />
+	<property name="classes.dir" value="classes" />
+	<property name="resource" value="resource" />	
+    <property name="dist.home" value="target" />
+    <property name="jar.file" value="CAXCHANGE.jar" />
+    <property name="zip.file" value="CAXCHANGEClient.zip" />
+	<path id="cp">
+            <fileset dir="${lib.home}">
+                  <include name="**/*.jar"/>
+            </fileset>
+            <pathelement path="${classes.dir}"/>
+    </path>
+
+ 
+	 <target name="compilebatch" >
+	            <delete dir="${dist.home}" />
+	 			<mkdir dir="${classes.dir}"/>
+	            <javac srcdir="${src.dir}" destdir="${classes.dir}" >
+	                  <include name="**/*.java"/>
+	                  <classpath refid="cp"/>
+	            </javac>
+	</target>
+
+
+ 	<target name="batch" depends="compilebatch" description="Creates batch file">
+ 
+ 		<copy todir="${dist.home}">
+		  	<fileset dir="${classes.dir}" includes="**/*.*" /> 
+		</copy>
+ 		
+ 		<copy todir="${dist.home}">
+		  	<fileset dir="${src.dir}" includes="**/*.properties" /> 
+		</copy>
+ 		
+		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/> 
+   </target>
+	
+   <target name="createzip" depends="batch" description="zip file">
+ 
+ 		 <copy todir="${dist.home}\lib\">
+ 		  	<fileset dir="${lib.home}" includes="**/*.jar" />
+ 		  </copy>
+
+	 <copy todir="${dist.home}">
+	  	<fileset dir="${resource}" includes="**/*.*" />
+	  </copy>
+
+ 		 <zip destfile="CAXCHANGEClient.zip"
+ 		       basedir="${dist.home}"
+ 		       excludes="**/*.class, **/preprocessor.properties, **/log4j.properties"
+ 		  />
+   </target>
+	
+	<target name="clean"> 
+		 <delete>
+		    <fileset dir="${dist.home}" />
+		  </delete>	
+		 <delete>
+		    <fileset file="CAXCHANGEClient.zip" />
+		  </delete>	
+
+	</target>
+	
+
+</project>
