@@ -1,15 +1,10 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
-import gov.nih.nci.cagrid.caxchange.context.stubs.CaXchangeResponseServicePortType;
-import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
-import gov.nih.nci.cagrid.caxchange.context.stubs.service.CaXchangeResponseServiceAddressingLocator;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
@@ -28,7 +23,6 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -42,11 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.message.addressing.EndpointReferenceType;
 import org.apache.axis.types.URI;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -57,7 +48,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.w3c.dom.Document;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -76,9 +66,9 @@ import webservices.StudySubject;
  */
 public class LoadToCTMSAction extends Action
 {
-	
 	private static final Logger logDB = Logger.getLogger(LoadToCTMSAction.class);
 	private static final String CONFIG_FILE = "/loadToCTMSURL.properties";
+	
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -150,20 +140,23 @@ public class LoadToCTMSAction extends Action
 			list.add(map.get(lForm.getRecordId()));
 		}
 
-		 Properties props    =   new Properties();
-		    //Get the file input stream
-		    try {
-		    	InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
-				props.load(stream);
-			} 
-		    catch (FileNotFoundException e1) 
-			{
-		    	logDB.error("The config file not found: " + CONFIG_FILE);
-			} 
-			catch (IOException e1) 
-			{
-				logDB.error("Error reading the config file: " + CONFIG_FILE);
-			}
+		 Properties props = new Properties();
+		 
+		 //Get the file input stream
+		 try
+		 {
+			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
+			 props.load(stream);
+		 } 
+		 catch (FileNotFoundException e1) 
+		 {
+		     logDB.error("The config file not found: " + CONFIG_FILE);
+		 } 
+		 catch (IOException e1) 
+		 {
+			 logDB.error("Error reading the config file: " + CONFIG_FILE);
+		 }
+		 
 		// Then create the request
 		//String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
 		//C3DGridServiceClient client = new C3DGridServiceClient(url);
@@ -281,6 +274,9 @@ public class LoadToCTMSAction extends Action
 	    metadata.setExternalIdentifier("CTODS");
 	    Credentials creds = new Credentials();
 	    creds.setUserName(username);
+	    String credentialEpr = (String)request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
+	    if (credentialEpr != null)
+	    	creds.setDelegatedCredentialReference(credentialEpr);
 	    metadata.setCredentials(creds);
 	    metadata.setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
 	    requestMessage.setMetadata(metadata);
