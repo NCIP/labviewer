@@ -10,17 +10,17 @@
 		<mkdir dir="${dest.dir}" />
 		<zip destfile="${dest.dir}/${app.name}.zip">
 			<zipfileset dir="${artifacts.dir}" prefix="${app.name}/artifacts"/>
-			<zipfileset dir="${cTomData.dir}" prefix="${app.name}/cTOMDataPersistence">
+			<zipfileset dir="${cTomData.dir}" prefix="${app.name}/CTOMDataPersistence">
 				<exclude name="**/bin/**"/>
 			</zipfileset>
-			<zipfileset dir="${cTomLab.dir}" prefix="${app.name}/cTomLabViewer">
+			<zipfileset dir="${cTomLab.dir}" prefix="${app.name}/ctomlabviewer">
 				<exclude name="**/build/**"/>
 			</zipfileset>
 			<zipfileset dir="${labLoader.dir}" prefix="${app.name}/LabLoader">
 				<exclude name="**/build/**"/>
 				<exclude name="**/bin/**"/>
 			</zipfileset>
-			<zipfileset dir="${regConsumerService.dir}" prefix="${app.name}/RegistrationconsumerService">
+			<zipfileset dir="${regConsumerService.dir}" prefix="${app.name}/RegistrationConsumerService">
 				<exclude name="**/build/**"/>
 				<exclude name="**/bin/**"/>
 			</zipfileset>
