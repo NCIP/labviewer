@@ -35,6 +35,10 @@
 		<copy todir="${build.home}/WEB-INF/">
 			<fileset dir="${webinf.home}"/>
 		</copy>
+		
+		<copy todir="${lib.home}" overwrite="true">
+			<fileset dir="${artifacts.dir}" includes="ctomlabapi*.jar"/>
+		</copy>
 
 		<copy todir="${build.home}/WEB-INF/lib">
 			<fileset dir="${lib.home}" includes="**/*.jar"/>
@@ -87,9 +91,6 @@
 	</target>
 
 	<target name="compile" depends="init,prepare" description="Compiles all the files in the project">
-		<copy todir="${lib.home}" overwrite="true">
-			<fileset dir="${artifacts.dir}" includes="ctomlabapi*.jar"/>
-		</copy>
 		<javac srcdir="${src.home}" destdir="${build.home}/WEB-INF/classes" debug="true" deprecation="true" >
 			<classpath>
 				<fileset dir="${lib.home}" includes="*.jar" />
