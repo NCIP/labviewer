@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
@@ -32,6 +29,9 @@ import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,6 +68,7 @@ import org.apache.struts.action.ActionMessages;
 public class SearchAction extends Action
 {
 	private static final Logger logDB = Logger.getLogger(SearchAction.class);
+	private static final String CONFIG_FILE = "/baseURL.properties";
 
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -148,6 +150,25 @@ public class SearchAction extends Action
 			logDB.error(e.getMessage());
 		}
 		
+		//if search result is not null; forward to searchresults page
+		//get the base url for caAERS and C3D from the properties file/
+		try
+		 {   Properties props = new Properties();
+			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
+			 props.load(stream);
+			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
+		     String C3Durl = (String)props.getProperty("BaseURLC3D");
+		     session.setAttribute("BaseURLcaAERS", caAERSurl);
+		     session.setAttribute("BaseURLC3D", C3Durl);
+		 } 
+		 catch (FileNotFoundException e1) 
+		 {
+		     logDB.error("The config file not found: " + CONFIG_FILE);
+		 } 
+		 catch (IOException e1) 
+		 {
+			 logDB.error("Error reading the config file: " + CONFIG_FILE);
+		 }
 		//if search result is not null; forward to searchresults page
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
 		if (logDB.isDebugEnabled())
@@ -312,7 +333,7 @@ public class SearchAction extends Action
 		searchResult.setSearchResultObjects(allLarList);
 		request.getSession().setAttribute("RESULT_SET", map);
 		request.getSession().setAttribute("SEARCH_RESULT", searchResult);
-			
+				 
 		return searchResult;
 	}
 
