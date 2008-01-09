@@ -115,7 +115,8 @@
 		  String gridId= (String)session.getAttribute("studySubjectGridId");
 		  
 		 %>
-		<a href="<%=caAERSurl%>/studySubject?studySubjectGridId=<%=gridId%>">View this patient in caAERS</a>&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>">View these labs in C3D</a>
+		<a href="<%=caAERSurl%>/studySubject?studySubjectGridId=<%=gridId%>">View this patient in caAERS</a>
+		<!-- &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>">View these labs in C3D</a> -->
 		</td>	
 		</tr>
 		<tr>
