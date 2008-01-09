@@ -109,10 +109,13 @@
 		<tr>
 		<td colspan="3" align="center">
 		<% 
+		//Get the attributes from session.
+		  String caAERSurl=(String)session.getAttribute("BaseURLcaAERS");
+		  String C3Durl =(String)session.getAttribute("BaseURLC3D");
 		  String gridId= (String)session.getAttribute("studySubjectGridId");
+		  
 		 %>
-		<a href="<bean:message key="BaseURLcaAERS"/>/studySubject?studySubjectGridId=<%=gridId%>">View this patient in caAERS</a>
-<!--&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<bean:message key="BaseURLC3D"/>/studySubject?studySubjectGridId=<%=gridId%>">View these labs in C3D</a>-->
+		<a href="<%=caAERSurl%>/studySubject?studySubjectGridId=<%=gridId%>">View this patient in caAERS</a>&nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>">View these labs in C3D</a>
 		</td>	
 		</tr>
 		<tr>
