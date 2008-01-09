@@ -111,7 +111,7 @@
 		<% 
 		//Get the attributes from session.
 		  String caAERSurl=(String)session.getAttribute("BaseURLcaAERS");
-		  String C3Durl =(String)session.getAttribute("BaseURLC3D");
+		  String C3Durl ="";//(String)session.getAttribute("BaseURLC3D");
 		  String gridId= (String)session.getAttribute("studySubjectGridId");
 		  
 		 %>
