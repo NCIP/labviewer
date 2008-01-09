@@ -157,9 +157,9 @@ public class SearchAction extends Action
 			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
 			 props.load(stream);
 			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
-		     String C3Durl = (String)props.getProperty("BaseURLC3D");
+		     //String C3Durl = (String)props.getProperty("BaseURLC3D");
 		     session.setAttribute("BaseURLcaAERS", caAERSurl);
-		     session.setAttribute("BaseURLC3D", C3Durl);
+		     //session.setAttribute("BaseURLC3D", C3Durl);
 		 } 
 		 catch (FileNotFoundException e1) 
 		 {
