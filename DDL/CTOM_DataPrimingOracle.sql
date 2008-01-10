@@ -21,7 +21,7 @@ VALUES (2, 'labviewer','Lab Viewer Application',0,0,sysdate);
 select CSM_APPLICATI_APPLICATION__SEQ.nextval from dual;
 
 insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
-values (2, 'cctsdemo','CCTS','Demo','L5DdDAvHmUGthtxFP2ZrIA==',sysdate);
+values (2, 'cctsdemo1@nci.nih.gov','CCTS','Demo','L5DdDAvHmUGthtxFP2ZrIA==',sysdate);
 select CSM_USER_USER_ID_SEQ.nextval from dual;
 
 insert into csm_protection_element(PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID,UPDATE_DATE)
