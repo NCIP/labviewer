@@ -5,13 +5,16 @@ import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
+import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
+import gov.nih.nci.caxchange.Statuses;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
@@ -23,6 +26,7 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -100,7 +104,8 @@ public class LoadToCTMSAction extends Action
 		}
 		catch (Exception cse)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "Error in Submitting Messages to CTMS"));
+			String msg = cse.getMessage();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "Error in Submitting Messages to CTMS: " + msg));
 			saveErrors( request,errors );
 			logDB.error("Error sending labs to CTMS", cse);
 		}
@@ -158,9 +163,7 @@ public class LoadToCTMSAction extends Action
 		 }
 		 
 		// Then create the request
-		//String url = "http://NT-CBIOC3PRJB-1.nci.nih.gov:8080/wsrf/services/cagrid/C3DGridService";
-		//C3DGridServiceClient client = new C3DGridServiceClient(url);
-		String url = (String)props.getProperty("url");//"http://cbvapp-d1017.nci.nih.gov:18080/wsrf/services/cagrid/CaXchangeRequestProcessor";
+		String url = (String)props.getProperty("url");
 		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
 		
 		LoadLabsRequest labRequest = new LoadLabsRequest();
@@ -295,7 +298,6 @@ public class LoadToCTMSAction extends Action
         
         CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
         boolean gotResponse=false;
-        GetResponseResponse getResponse=null;
         
         int responseCount = 0;
         ResponseMessage responseMessage = null;
@@ -310,18 +312,27 @@ public class LoadToCTMSAction extends Action
 	        {
 	        	logDB.info("No response from caxchange", e);
 	        	responseCount++;
-	        	if (responseCount > 50)
+	        	if (responseCount > 60)
 	        	{
 	        		logDB.error("Never got a response from caxchange hub");
-	        		throw new Exception("Error sending to CTMS");
+	        		throw new Exception("No response from hub");
 	        	}
-	        	Thread.sleep(1000);
+	        	Thread.sleep(500);
 	        }
         }
         
         if (responseMessage != null)
         {
-        	logDB.info("caXchange response was " + responseMessage.getResponse().getResponseStatus().toString());
+        	Response resp = responseMessage.getResponse();
+        	
+        	logDB.info("caXchange response was " + resp.getResponseStatus().toString());
+        	
+        	if (resp.getResponseStatus().equals(Statuses.FAILURE))
+        	{
+        		String message = resp.getCaXchangeError().getErrorDescription();
+        		logDB.error("Received a failure from caxchange hub: " + message);
+        		throw new Exception(message);
+        	}
         }
 	
 		lForm.setRecordId("");
