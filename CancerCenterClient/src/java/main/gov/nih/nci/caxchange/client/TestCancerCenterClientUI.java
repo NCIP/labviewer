@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
@@ -112,14 +115,14 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jlbDisplay.setFont(new Font("Serif", Font.BOLD, 15));
 		jlbDisplay1.setFont(new Font("Serif", Font.BOLD, 15));
 		Box topBox = Box.createVerticalBox();
-		topBox.add(Box.createVerticalStrut(5));
+		topBox.add(Box.createVerticalStrut(10));
 		topBox.add(jlbDisplay);
 		topBox.add(jlbDisplay1);
 		
 		
 		Box csvBox = Box.createVerticalBox();
 		csvBox.setBorder(BorderFactory.createTitledBorder(blackline, "CSV"));
-		csvBox.add(Box.createVerticalStrut(5));
+		csvBox.add(Box.createVerticalStrut(20));
 		//add the csv, map & HL7V3 file directory selection 
 		Box csvBox1 = Box.createHorizontalBox();
 		csvBox1.add(Box.createHorizontalStrut(5));
@@ -151,7 +154,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		//HL7V2 box
 		Box HL7V2Box = Box.createVerticalBox();
 		HL7V2Box.setBorder(BorderFactory.createTitledBorder(blackline, "HL7V2"));
-		HL7V2Box.add(Box.createVerticalStrut(5));
+		HL7V2Box.add(Box.createVerticalStrut(10));
 		Box csvBox3 = Box.createHorizontalBox();
 		csvBox3.add(Box.createHorizontalStrut(5));
 		JLabel jlbHL7V2Label = new JLabel(
@@ -181,34 +184,49 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		HL7V2Box.add(csvBox6);
 		
 		//Processed files and polling interval box
-		Box csvBox4 = Box.createHorizontalBox();
-		csvBox4.add(Box.createHorizontalStrut(5));
+		Box csvBox4 = Box.createVerticalBox();
+		csvBox4.add(Box.createVerticalStrut(10));
+		csvBox4.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		JLabel jlbProcessedLabel = new JLabel(
 				"Select the directory to put the Processed file(s)");
-		
-		Box thirdBox = Box.createVerticalBox();
-		thirdBox.add(Box.createVerticalStrut(5));
-		thirdBox.setBorder(BorderFactory.createLineBorder(Color.black));
-		csvBox4.add(jlbProcessedLabel);
-		csvBox4.add(jtxtProcessedFilesDir);
+		Box thirdBox = Box.createHorizontalBox();
+		thirdBox.add(Box.createHorizontalStrut(5));
+		thirdBox.add(jlbProcessedLabel);
+		thirdBox.add(jtxtProcessedFilesDir);
 		JButton jfileProcessed = new JButton("Browse...");
 		jfileProcessed.addActionListener(this);
 		jfileProcessed.setActionCommand("BrowseProcessedDir");
 		jtxtProcessedFilesDir.add(jfileProcessed);
-		csvBox4.add(jfileProcessed);
-		thirdBox.add(csvBox4);
+		thirdBox.add(jfileProcessed);
+		csvBox4.add(thirdBox);
 		
 		Box csvBox5 = Box.createHorizontalBox();
 		csvBox5.add(Box.createHorizontalStrut(5));
 		JLabel jlbPollingLabel = new JLabel(
 				"Enter the directory polling interval in seconds");
 		csvBox5.add(jlbPollingLabel);
+		jtxtPollingInterval.addFocusListener(new FocusAdapter() {
+	         public void focusLost(FocusEvent e) {
+	             JTextField textField =
+	               (JTextField)e.getSource();
+	             String content = textField.getText();
+	             if (content.length() != 0) {
+	               try {
+	                 Integer.parseInt(content);
+	               } catch (NumberFormatException nfe) {
+	                 getToolkit().beep();
+	                 textField.requestFocus();
+	               }
+	             }
+	           }
+	         });
 		csvBox5.add(jtxtPollingInterval);
-		thirdBox.add(csvBox5);
+		csvBox4.add(csvBox5);
 		
 		//Button box
 		Box buttonBox = Box.createVerticalBox();
-		buttonBox.add(Box.createVerticalStrut(5));
+		buttonBox.add(Box.createVerticalStrut(10));
 		
 		Box csvBox7 = Box.createHorizontalBox();
 		csvBox7.add(Box.createHorizontalStrut(5));
@@ -232,7 +250,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jplPanel.add(topBox);
 		jplPanel.add(csvBox);
 		jplPanel.add(HL7V2Box);
-		jplPanel.add(thirdBox);
+		jplPanel.add(csvBox4);
 		jplPanel.add(buttonBox);
 		return jplPanel;
 	}
@@ -345,8 +363,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				processedDirectory = fileChooser.getSelectedFile().getAbsolutePath();
 				jtxtProcessedFilesDir.setText(processedDirectory);
 			}
-		}
-		else if ("Clear".equals(e.getActionCommand())) {
+		}else if ("Clear".equals(e.getActionCommand())) {
 			jtxtHL7V2Dir.setText("");
 			jtxtCSVDir.setText("");
 			jtxtMAPDir.setText("");
@@ -355,19 +372,29 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			saveDefaults();
-		    try {
-		    	TestCancerCenterClient testClient = new TestCancerCenterClient();
+		     	TestCancerCenterClient testClient = new TestCancerCenterClient();
 				testClient.test();
-				FileReader fipStream = new FileReader("../log/CancerCenterClient.log");
-				buffReader =new BufferedReader(fipStream);
-				msgDispBox.addElement(buffReader.readLine());
-										
-			} catch (FileNotFoundException e1) {
-				logger.error("FileNotFoundException"+e1.getLocalizedMessage());
-			} catch (IOException e2) {
-				// TODO Auto-generated catch block
-				logger.error("IOException"+e2.getLocalizedMessage());
-			}
+				//updating the staus panel with the log file updates.
+				int delay = 100; //milliseconds
+				  ActionListener taskPerformer = new ActionListener() {
+				      public void actionPerformed(ActionEvent evt) {
+				          //...Perform a task...
+				      try{
+				    	  FileReader fipStream = new FileReader("../log/CancerCenterClient.log");
+				       	  buffReader =new BufferedReader(fipStream);
+							while(buffReader.readLine()!=null)
+							{
+							msgDispBox.addElement(buffReader.readLine());
+							}	
+				        }  catch (FileNotFoundException e1) {
+							logger.error("FileNotFoundException"+e1.getLocalizedMessage());
+						} catch (IOException e2) {
+							// TODO Auto-generated catch block
+							logger.error("IOException"+e2.getLocalizedMessage());
+						}
+					}
+				   };
+				  new Timer(delay, taskPerformer).start();
 		}
 	}
 	
