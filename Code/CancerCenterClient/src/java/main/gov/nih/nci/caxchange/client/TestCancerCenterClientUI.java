@@ -542,14 +542,14 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			TestCancerCenterClient testClient = new TestCancerCenterClient();
 			testClient.test();
 			//updating the status panel with the log file updates.
-			int delay = 100; //milliseconds
+			int delay = 10; //milliseconds
 			try {
 				FileReader fipStream = new FileReader(
 						"../log/CancerCenterClient.log");
 				buffReader = new BufferedReader(fipStream);
 				ActionListener taskPerformer = new ActionListener() {
 					public synchronized void actionPerformed(ActionEvent evt) {
-						try {
+						try{
 							while (buffReader.readLine() != null) {
 								msgDispBox.addElement(buffReader.readLine());
 							}
@@ -557,14 +557,13 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 							logger.error("IOException"
 									+ e2.getLocalizedMessage());
 						}
-
 					}
 				};
 				new Timer(delay, taskPerformer).start();
-			} catch (FileNotFoundException e1) {
+			}catch (FileNotFoundException e1) {
 				logger
-						.error("FileNotFoundException"
-								+ e1.getLocalizedMessage());
+				.error("FileNotFoundException"
+						+ e1.getLocalizedMessage());
 			}
 		}
 	}
