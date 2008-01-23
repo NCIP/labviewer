@@ -317,7 +317,7 @@ public class LoadToCTMSAction extends Action
 	        		logDB.error("Never got a response from caxchange hub");
 	        		throw new Exception("No response from hub");
 	        	}
-	        	Thread.sleep(500);
+	        	Thread.sleep(1000);
 	        }
         }
         

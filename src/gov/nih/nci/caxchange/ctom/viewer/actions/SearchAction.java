@@ -263,11 +263,14 @@ public class SearchAction extends Action
 			query.setTarget(target);
 			List resultList = appService.query(query);
 			
-			//Connection connection = null;
-			//Session session = null;
+			// Get a connection to the database using the hibernate configuration
+			/*
+			XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("DAOConfig.xml"));
+			LabViewerDAOSupport dao = (LabViewerDAOSupport)factory.getBean("DAO");
+			Session session = dao.getSessionFactory().openSession();
 
-			//session = ORMConnection.openSession("gov.nih.nci.labhub.domain.SubjectAssignment");
-			//connection = session.connection();
+			Connection connection = session.connection();*/
+			
 			List larlist = null;
 
 			int i = 0;
