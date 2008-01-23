@@ -48,6 +48,8 @@ import org.apache.log4j.Logger;
  */
 public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 
+	
+	private static final long serialVersionUID = 1L;
 	private String csvDirectory;
 	private String hl7v2Directory;
 	private String mapDirectory;
