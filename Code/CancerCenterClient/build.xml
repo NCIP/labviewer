@@ -27,34 +27,49 @@
 
 
  	<target name="batch" depends="compilebatch" description="Creates batch file">
- 
- 		<copy todir="${dist.home}">
+  		<copy todir="${dist.home}">
 		  	<fileset dir="${classes.dir}" includes="**/*.*" /> 
 		</copy>
- 		
- 		<copy todir="${dist.home}">
+  		<copy todir="${dist.home}">
 		  	<fileset dir="${src.dir}" includes="**/*.properties" /> 
 		</copy>
- 		
-		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/> 
+ 		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/> 
    </target>
 	
-   <target name="createzip" depends="batch" description="zip file">
  
- 		 <copy todir="${dist.home}\lib\">
+	<target name="createzip" depends="batch" description="zip file">
+  	    <copy todir="${dist.home}\lib\">
  		  	<fileset dir="${lib.home}" includes="**/*.jar" />
  		  </copy>
-
-	 <copy todir="${dist.home}">
+       <copy todir="${dist.home}">
 	  	<fileset dir="${resource}" includes="**/*.*" />
-	  </copy>
-
- 		 <zip destfile="CAXCHANGEClient.zip"
+	   </copy>
+       <zip destfile="CAXCHANGEClient.zip"
  		       basedir="${dist.home}"
  		       excludes="**/*.class, **/preprocessor.properties, **/log4j.properties"
  		  />
-   </target>
+    </target>
 	
+	<target name="createjar" depends="batch" description="Creates an executable jar">
+		<manifest file="manifestUI.MF">
+			<attribute name="Main-Class" value="gov.nih.nci.caxchange.client.TestCancerCenterClientUI"/>
+		</manifest>
+		 <copy todir="${dist.home}\lib\">
+			  	<fileset dir="${lib.home}" includes="**/*.jar" />
+		 </copy>
+		 <copy todir="${dist.home}">
+		  	<fileset dir="${resource}" includes="**/*.*" />
+		  </copy>
+		<jar jarfile="CAXCHANGEClient.jar" manifest="manifestUI.MF">
+			<fileset dir="${dist.home}">
+				<exclude name="**/run.bat"/>
+				<exclude name="**/CAXCHANGE.jar"/>
+	 		  	<exclude name="**/preprocessor.properties"/>
+				<exclude name="**/CancerCenterClient.properties"/>
+				</fileset>
+		</jar>	
+	</target>
+
 	<target name="clean"> 
 		 <delete>
 		    <fileset dir="${dist.home}" />
@@ -64,6 +79,5 @@
 		  </delete>	
 
 	</target>
-	
 
 </project>
