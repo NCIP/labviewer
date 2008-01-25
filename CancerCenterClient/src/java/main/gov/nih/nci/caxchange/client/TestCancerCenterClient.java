@@ -462,7 +462,10 @@ public class TestCancerCenterClient {
 			throws Exception {
 		try {
 			boolean filemoved = false;
-
+			boolean gotResponse = false;
+			boolean hl7v3move =false;
+			GetResponseResponse getResponse = null;
+			
 			//String url = "http://cbvapp-d1017.nci.nih.gov:18080/wsrf/services/cagrid/CaXchangeRequestProcessor";//(String)props.getProperty("url");
 			//String HL7V3XMLFile="<?xml version=\"1.0\" encoding=\"UTF-8\"?> <ClinicalTrial xmlns=\"urn:hl7-org:v3\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" classCode=\"CLNTRL\" moodCode=\"EVN\"> <id root=\"2.16.840.1.113883.19\" extension=\"6230\" assigningAuthorityName=\"NCI\"/> <title representation=\"TXT\" mediaType=\"text/plain\">RANDOMIZED PHASE I/II STUDY OF VACCINIA-CEA(6D)-TRICOM AND FOWLPOX-(6D)-TRICOM WITH GM-CSF IN COMBINATION WITH DOCETAXEL IN PATIENTS WITH CEA-BEARING CANCERS</title> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <trialAtSite classCode=\"CLNTRL\" moodCode=\"EVN\"> <location typeCode=\"LOC\" contextControlCode=\"OP\"> <trialSite classCode=\"SDLOC\"> <id root=\"2.16.840.1.113883.19\" extension=\"DC005\"/> </trialSite> </location> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <investigatorAtSite classCode=\"CLNTRL\" moodCode=\"EVN\"> <responsibleParty typeCode=\"RESP\" contextControlCode=\"OP\"> <trialInvestigator classCode=\"CRINV\"> <id root=\"2.16.840.1.113883.19\" extension=\"13\"/> <investigatorNamedPerson classCode=\"PSN\" determinerCode=\"INSTANCE\"> <name>MARSHALL, JOHN, MD</name> </investigatorNamedPerson> </trialInvestigator> </responsibleParty> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <subjectAssignment classCode=\"CLNTRL\" moodCode=\"EVN\"> <recordTarget typeCode=\"RCT\" contextControlCode=\"OP\"> <enrolledSubject classCode=\"RESBJ\"> <id root=\"2.16.840.1.113883.19\" extension=\"SMITHJANE1\"/> </enrolledSubject> </recordTarget> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <studyEvent classCode=\"CTTEVENT\" moodCode=\"EVN\"> <code code=\"dummy\" codeSystem=\"2.16.840.1.113883.19\"/> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <accession classCode=\"ACSN\" moodCode=\"EVN\"> <author typeCode=\"AUT\" contextControlCode=\"OP\"> <agent classCode=\"AGNT\"> <representedLaboratory classCode=\"ORG\" determinerCode=\"INSTANCE\"> <id root=\"2.16.840.1.113883.19\" extension=\"1\"/> </representedLaboratory> </agent> </author> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <baseSpecimenDefinition classCode=\"ACT\" moodCode=\"EVN\"> <subject typeCode=\"SBJ\" contextControlCode=\"OP\"> <baseSpecimen classCode=\"SPEC\"> <productOf typeCode=\"PRD\" contextControlCode=\"OP\"> <specimenCollectionProcedure classCode=\"PROC\" moodCode=\"EVN\"> <effectiveTime xsi:type=\"IVL_TS\"> <low value=\"200603311155\"/> </effectiveTime> </specimenCollectionProcedure> </productOf> </baseSpecimen> </subject> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <baseBattery classCode=\"OBS\" moodCode=\"EVN\"> <code code=\"1\" codeSystem=\"2.16.840.1.113883.19\"/> <component typeCode=\"COMP\" contextConductionInd=\"true\"> <baseUnitaryResult classCode=\"OBS\" moodCode=\"EVN\"> <code code=\"BASO_PCT_BLD\" displayName=\"BASO %\" codeSystem=\"2.16.840.1.113883.19\" codeSystemName=\"C3D\"> <originalText representation=\"TXT\" mediaType=\"text/plain\">BASO %</originalText> </code> <statusCode code=\"completed\"/> <value value=\"0.0\" unit=\"%\"/> <performer typeCode=\"PRF\" contextControlCode=\"OP\"> <agent classCode=\"AGNT\"> <representedLaboratory classCode=\"ORG\" determinerCode=\"INSTANCE\"> <id root=\"2.16.840.1.113883.19\" extension=\"1\"/> </representedLaboratory> </agent> </performer> </baseUnitaryResult> </component> </baseBattery> </component> </baseSpecimenDefinition> </component> </accession> </component> </studyEvent> </component> </subjectAssignment> </component> </investigatorAtSite> </component> </trialAtSite> </component> </ClinicalTrial>";
 			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
@@ -492,24 +495,35 @@ public class TestCancerCenterClient {
 			 String[] strFile = fileList[i].getName().split("\\.");
 			 String strFileName=strFile[0]+"-hl7v3.xml";
 			 File hl7v3XML = new File(rawFilesBackupFolder+strFileName);
-			 FileWriter fw = new FileWriter(hl7v3XML);
+			 FileWriter fw = new FileWriter(hl7v3XML,false);
 			 fw.write(HL7V3);
 			 fw.flush();
 			 fw.close();
-			 
 			 //call the method callToStudyLookupService
-			 Study study =callStudyLookupService(hl7v3XML);
-			 
+			 Study study =callStudyLookupService(new ByteArrayInputStream(HL7V3
+						.getBytes()));
+			 if(study==null)
+			 {
+				 logger.error("No Study associated with the participant");
+				 filemoved = fileList[i].renameTo(new File(errorDir,
+							fileList[i].getName()));
+				  hl7v3move = hl7v3XML.renameTo(new File(errorDir,
+								hl7v3XML.getName()));
+			 }
+			 else{
 			 //call to change the xml attribute values
 			 String changedHL7V3 = changeXMLAttvalues(HL7V3,study);
+			 FileWriter changedfw = new FileWriter(hl7v3XML,false);
+			 changedfw.write(changedHL7V3);
+			 changedfw.flush();
+			 changedfw.close();
 			 
 			//Test code
 			Document document;
-			DocumentBuilderFactory factory = DocumentBuilderFactory
-					.newInstance();
 			ByteArrayInputStream stream = new ByteArrayInputStream(changedHL7V3
 					.getBytes());
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			DocumentBuilder builder = DocumentBuilderFactory
+			.newInstance().newDocumentBuilder();
 			document = builder.parse(stream);
 			Element root = document.getDocumentElement();
 
@@ -524,9 +538,7 @@ public class TestCancerCenterClient {
 
 			CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(
 					crsr.getEndpointReference());
-			boolean gotResponse = false;
-			boolean hl7v3move =false;
-			GetResponseResponse getResponse = null;
+			
 
 			int responseCount = 0;
 			ResponseMessage responseMessage = null;
@@ -568,9 +580,7 @@ public class TestCancerCenterClient {
 									hl7v3XML.getName()));
 
 					}
-					if (!filemoved) {
-						logger.info("Error Moving File ");
-					}
+					
 				} catch (Exception e) {
 					logger.info("No response from caxchange", e);
 					responseCount++;
@@ -588,6 +598,10 @@ public class TestCancerCenterClient {
 						+ responseMessage.getResponse().getResponseStatus()
 								.toString());
 			}
+		}//end of else
+		if (!filemoved) {
+			logger.info("Error Moving File ");
+		  }	 
 		} catch (MalformedURIException e) {
 			logger.error("MalformedURIException" + e.getLocalizedMessage());
 		} catch (RemoteException e) {
@@ -610,7 +624,7 @@ public class TestCancerCenterClient {
 
 			logger.error("Exception" + e.getLocalizedMessage());
 		}
-
+        
 	}
 
 		/**
@@ -670,7 +684,7 @@ public class TestCancerCenterClient {
 	 * participant in the HL7V3 message.
 	 * @param HL7V3
 	 */
-	private Study callStudyLookupService(File HL7V3)
+	private Study callStudyLookupService(ByteArrayInputStream HL7V3)
 	{
 		Registration registration =new Registration();
 		Study study =null;
@@ -689,7 +703,7 @@ public class TestCancerCenterClient {
 				//create the registration object
 				ParticipantType participant = new ParticipantType();
 				OrganizationAssignedIdentifierType identifier = new OrganizationAssignedIdentifierType();
-				identifier.setGridId(root);
+				participant.setGridId(root);
 				identifier.setValue(extension);
 				OrganizationAssignedIdentifierType[] identifiers ={identifier};
 				participant.setIdentifier(identifiers);
