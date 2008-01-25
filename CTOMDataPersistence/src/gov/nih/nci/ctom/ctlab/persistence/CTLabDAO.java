@@ -91,7 +91,10 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setString(2, String.valueOf(prot.getNciIdentifier()));
 				ps.setString(3, String.valueOf(prot.getIdAssigningAuth()));
 				ps.setString(4, String.valueOf(prot.getLongTxtTitle()));
-				ps.setTimestamp(5,new java.sql.Timestamp(prot.getCtomInsertDt().getTime()));
+				if (prot.getCtomInsertDt()==null) 
+					ps.setTimestamp(5,new java.sql.Timestamp(new Date().getTime()));
+				else
+					ps.setTimestamp(5,new java.sql.Timestamp(prot.getCtomInsertDt().getTime()));
 				ps.execute();
 				if (identifierUpdInd && prot.getIdentifier() != null)
 				{
@@ -217,18 +220,17 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		else
 		{
-			// Get Id from sequence
-			Statement stmt = con.createStatement();
-			rs = stmt.executeQuery("select STUDY_PARTICIPANT_ASSGNMNT_SEQ.nextval from dual");
-			rs.next();
-			spaId = rs.getLong(1);
-
 			// Check study participant identifier, if it exists, then don't
 			// insert new SPA or Participant
 			Long identifierID = saveOrInsertIdentifier(con,spa);
-			
-			if(spa.getId()==null)
+		    if(spa.getId()==null)
 			{
+			 // Get Id from sequence
+			 Statement stmt = con.createStatement();
+			 rs = stmt.executeQuery("select STUDY_PARTICIPANT_ASSGNMNT_SEQ.nextval from dual");
+			rs.next();
+			spaId = rs.getLong(1);	
+			
 			identifierUpdInd= true;	
 			saveParticipant(con, spa.getParticipant());
 			// insert into STUDY_PARTICIPANT_ASSIGNMENT
@@ -244,7 +246,11 @@ public class CTLabDAO extends BaseJDBCDAO
 				spa.setId(spaId);
 				updateIdentifier(con, spa,identifierID);
 			}
-		}
+		  }
+		  else 
+		  {
+			spaId=spa.getId();
+		  }
 	  }	    
 		Activity act = spa.getActivity();
 		if (act != null)
@@ -335,7 +341,10 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(4, participant.getLastName());
 			ps.setString(5, participant.getFirstName());
 			ps.setString(6, participant.getEthnicGroupCode());
-			ps.setTimestamp(7,new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
+			if (participant.getCtomInsertDate()==null)
+				ps.setTimestamp(7,new java.sql.Timestamp(new Date().getTime()));
+			else	
+			 ps.setTimestamp(7,new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
 			ps.execute();
 			con.commit();
 
@@ -358,8 +367,10 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(5, participant.getEthnicGroupCode());
 			ps.setLong(6, genderCDId);
 			ps.setLong(7, raceCDId);
-			ps.setTimestamp(8, new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
-			ps.setLong(9, participant.getId());
+			if (participant.getCtomInsertDate()==null)
+				ps.setTimestamp(8,new java.sql.Timestamp(new Date().getTime()));
+			else	
+			 ps.setTimestamp(8,new java.sql.Timestamp(participant.getCtomInsertDate().getTime()));
 			ps.executeUpdate();
 			con.commit();
 		}
@@ -964,10 +975,10 @@ public class CTLabDAO extends BaseJDBCDAO
 			 clinicalResult.getCrCodeDisplayText());
 			
 			//valUOMCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-			//		.getValueUnitOfMeasureCd(), null, null);
+					//.getValueUnitOfMeasureCd(), null, null);
 			
 			//labTestCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-			//		.getMeansVitStatObtCd(), null, null);
+					//.getMeansVitStatObtCd(), null, null);
 			
 		}
 
@@ -1367,4 +1378,53 @@ public class CTLabDAO extends BaseJDBCDAO
 			}
 			return insertDate;
 		}
+	
+	 /**
+	 * @param con Connection
+	 * @param part Participant
+	 * @return study Protocol
+	 * @throws SQLException
+	 */
+	public Protocol getStudy(Connection con, Participant part) throws SQLException
+	 {
+		 PreparedStatement ps = null;
+		 PreparedStatement ps1 = null;
+		 ResultSet rs = null;
+		 ResultSet rs1 = null;
+		 Protocol study = null;
+		 Long protocolId = null;
+		 Long healthCareSiteId = null;
+		
+			 ps = con.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where root=? and extension=? and study_participant_assignmnt_id is not null)) ");
+			 ps.setString(1, part.getIdentifier().getRoot());
+			 ps.setString(2, part.getIdentifier().getExtension());
+			 rs =ps.executeQuery();
+			 if(rs.next())
+			 {
+				 protocolId =rs.getLong(1);
+				  healthCareSiteId=rs.getLong(2);
+				 
+			 }
+			 if(protocolId!=null)
+			 {
+				 ps1 = con.prepareStatement("select p.long_title_text,i.root,i.extension,i.assigning_authority_name from identifier i, protocol p where i.protocol_id=p.id and p.id=?");
+				 ps1.setLong(1, protocolId);
+				 rs1= ps1.executeQuery();
+				if(rs1.next())
+				{
+				 study =new Protocol();	
+				 study.setLongTxtTitle(rs1.getString("LONG_TITLE_TEXT"));
+				 study.getIdentifier().setRoot(rs1.getString("ROOT"));
+				 study.getIdentifier().setExtension(rs1.getString("EXTENSION"));
+				 study.getIdentifier().setAssigningAuthorityName(rs1.getString("ASSIGNING_AUTHORITY_NAME"));
+				}
+			 }
+			 /*if(healthCareSiteId!=null){
+				 ps2= con.prepareStatement("select root,extension,assigning_authority_name from identifier where protocol_id=?");
+				 ps2.setLong(1, healthCareSiteId);
+				 }*/
+			 
+		
+		 return study;
+	 }
 }
