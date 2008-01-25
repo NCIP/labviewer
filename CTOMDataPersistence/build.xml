@@ -26,8 +26,8 @@
 				<filter token="database.password" value="${database.password}" />
 			</filterset>
 		</copy>
-		<jar jarfile="${artifacts.dir}/ctomlabapi-orm.jar" basedir="ctomlabapi-orm-temp"/>
-		<copy file="conf/ctomlabapi-beans.jar" todir="${artifacts.dir}"/>
+		<jar jarfile="${artifacts.dir}/ctomlabapi-orm.jar" basedir="ctomlabapi-orm-temp" update="yes"/>
+		<copy file="conf/ctomlabapi-beans.jar" todir="${artifacts.dir}" overwrite="true"/>
 		<delete dir="ctomlabapi-orm-temp" />
 	</target>
 	
