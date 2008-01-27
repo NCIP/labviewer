@@ -3,6 +3,7 @@
 	<!--xs:include schemaLocation="datatypes-base.xsd"/-->
 	<xs:element name="II" type="II"/>
 	<xs:element name="CD" type="CD"/>
+	<xs:element name="TS" type="TS"/>
 	<xs:complexType name="ANY" abstract="true"/>
 	<xs:complexType name="II">
 		<xs:complexContent>
