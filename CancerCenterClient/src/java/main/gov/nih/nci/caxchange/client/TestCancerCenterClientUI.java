@@ -14,11 +14,13 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -112,14 +114,13 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	public void init() {
 
 		try {
-			File file = new File(
-					"D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
-			if (file.exists()) {
+			InputStream is = TestCancerCenterClientUI.class.getClassLoader().
+								getResourceAsStream("./properties/DefaultProperties.properties");
+			if (is!=null) {
 
-				FileInputStream fis = new FileInputStream(file);
 				Properties props = new Properties();
 				//Read in the stored properties
-				props.load(fis);
+				props.load(is);
 				jtxtHL7V2Dir.setText(props.getProperty("HL7V2Dir"));
 				jtxtCSVDir.setText(props.getProperty("rawFilesFolder"));
 				jtxtMAPDir.setText(props.getProperty("mapFileName"));
@@ -540,9 +541,9 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtpreProcessorProFile.setText("");
 		} else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
-			saveDefaults();
+			File file = saveDefaults();
 			TestCancerCenterClient testClient = new TestCancerCenterClient();
-			testClient.test();
+			testClient.test(file);
 			//updating the status panel with the log file updates.
 			int delay = 10; //milliseconds
 			try {
@@ -617,19 +618,22 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 
 	/**
 	 * Saves the user selected values into DefaultProperties.properties file.
+	 * @return file DefaultProperties file
 	 */
-	private void saveDefaults() {
-		File file = new File(
+	private File saveDefaults() {
+		
+		File file = new File("D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
+		try{
+		if (file.exists()) 
+		{
+		 boolean wasDeleted = file.delete();
+		 if (wasDeleted) 
+		 {
+		   file = new File(
 				"D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
-		if (file.exists()) {
-			boolean wasDeleted = file.delete();
-			if (wasDeleted) {
-				file = new File(
-						"D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
-			}
-		}
-		try {
-			if (createdInProcessFolders()) {
+		 }
+        }
+	   	if (createdInProcessFolders()) {
 				FileWriter fstream = new FileWriter(file);
 				fstream.write("rawFilesFolder=" + csvDirectory);
 				fstream.write("\n");
@@ -678,10 +682,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.flush();
 				fstream.close();
 			}
+			
 		} catch (IOException e) {
 			logger.error("File not found" + e.getLocalizedMessage());
 		}
-
+      return file;
 	}
 
 }
