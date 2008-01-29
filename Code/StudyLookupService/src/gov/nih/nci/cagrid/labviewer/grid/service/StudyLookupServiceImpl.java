@@ -1,9 +1,9 @@
 package gov.nih.nci.cagrid.labviewer.grid.service;
 
-import gov.nih.nci.cabig.ccts.domain.IdentifierType;
-import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
-import gov.nih.nci.cabig.ccts.domain.ParticipantType;
-import gov.nih.nci.cabig.ccts.domain.Study;
+import gov.nih.nci.ccts.grid.IdentifierType;
+import gov.nih.nci.ccts.grid.OrganizationAssignedIdentifierType;
+import gov.nih.nci.ccts.grid.ParticipantType;
+import gov.nih.nci.ccts.grid.Study;
 import gov.nih.nci.ctom.ctlab.domain.Identifier;
 import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
@@ -40,7 +40,7 @@ public class StudyLookupServiceImpl extends StudyLookupServiceImplBase {
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.cagrid.labviewer.grid.common.StudyLookupServiceI#getStudy(gov.nih.nci.cabig.ccts.domain.Registration)
 	 */
-	public gov.nih.nci.cabig.ccts.domain.Study getStudy(gov.nih.nci.cabig.ccts.domain.Registration registration)
+	public gov.nih.nci.ccts.grid.Study getStudy(gov.nih.nci.ccts.grid.Registration registration)
   	throws RemoteException
   {
 		logger.info("StudyLookupService getStudy method called");

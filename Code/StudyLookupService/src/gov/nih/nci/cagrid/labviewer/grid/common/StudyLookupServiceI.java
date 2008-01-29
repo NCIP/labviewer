@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  */
 public interface StudyLookupServiceI {
 
-  public gov.nih.nci.cabig.ccts.domain.Study getStudy(gov.nih.nci.cabig.ccts.domain.Registration registration) throws RemoteException ;
+  public gov.nih.nci.ccts.grid.Study getStudy(gov.nih.nci.ccts.grid.Registration registration) throws RemoteException ;
 
 }
 
