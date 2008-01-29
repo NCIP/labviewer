@@ -110,7 +110,7 @@ public class StudyLookupServiceClient extends ServiceSecurityClient implements S
 		}
 	}
 
-  public gov.nih.nci.cabig.ccts.domain.Study getStudy(gov.nih.nci.cabig.ccts.domain.Registration registration) throws RemoteException {
+  public gov.nih.nci.ccts.grid.Study getStudy(gov.nih.nci.ccts.grid.Registration registration) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getStudy");
     gov.nih.nci.cagrid.labviewer.grid.stubs.GetStudyRequest params = new gov.nih.nci.cagrid.labviewer.grid.stubs.GetStudyRequest();

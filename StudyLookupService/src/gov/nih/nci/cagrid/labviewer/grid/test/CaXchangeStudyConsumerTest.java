@@ -3,10 +3,10 @@
  */
 package gov.nih.nci.cagrid.labviewer.grid.test;
 
-import gov.nih.nci.cabig.ccts.domain.Registration;
-import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.labviewer.grid.client.StudyLookupServiceClient;
+import gov.nih.nci.ccts.grid.Registration;
+import gov.nih.nci.ccts.grid.Study;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,8 +77,8 @@ public class CaXchangeStudyConsumerTest {
 	        InputStreamReader reader = new InputStreamReader(sampleIs);
 	        InputStream wsddIs = getClass().getResourceAsStream("/gov/nih/nci/cagrid/labviewer/grid/client/client-config.wsdd");
 
-	        Registration reg = (gov.nih.nci.cabig.ccts.domain.Registration)
-	        	Utils.deserializeObject(reader, gov.nih.nci.cabig.ccts.domain.Registration.class, wsddIs);
+	        Registration reg = (gov.nih.nci.ccts.grid.Registration)
+	        	Utils.deserializeObject(reader, gov.nih.nci.ccts.grid.Registration.class, wsddIs);
 	        
 	        return reg;
 	    }
