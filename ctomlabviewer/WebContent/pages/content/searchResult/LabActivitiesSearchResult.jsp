@@ -9,7 +9,6 @@
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.viewobjects.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
 <script>
-<!--
    	function submitAdverseEvent(recordIdvalue)
    	{
 	  		document.LabActivitiesSearchResultForm.operation.value="execute";
@@ -69,8 +68,6 @@
 		else
 			alert("Atleast one check box should be checked.");
  	}
-
-// -->
 </script>
 
 <!-- laf box 1st half -->
@@ -316,7 +313,7 @@
 														<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Back</html:cancel>
 													</td>
 													<td>
-														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Activities to CTMS</html:button>
+														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Labs to CDMS</html:button>
 													</td>
 												</tr>
 											</table>
