@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gov.nih.nci.caxchange.client;
 
 import java.awt.BorderLayout;
@@ -14,13 +11,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -114,8 +109,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	public void init() {
 
 		try {
-			InputStream is = TestCancerCenterClientUI.class.getClassLoader().
+			/*InputStream is = TestCancerCenterClientUI.class.getClassLoader().
 								getResourceAsStream("./properties/DefaultProperties.properties");
+			*/
+			String path = System.getProperty("DefaultProperties.File");
+			FileInputStream is = new FileInputStream(new File(path));
 			if (is!=null) {
 
 				Properties props = new Properties();
@@ -402,6 +400,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jbnAccept.addActionListener(this);
 		jbnAccept.setActionCommand("Accept");
 		csvBox7.add(jbnAccept);
+		JButton jbnClose = new JButton("Close");
+		jbnClose.addActionListener(this);
+		jbnClose.setActionCommand("Close");
+		csvBox7.setAlignmentX(Component.CENTER_ALIGNMENT);
+		csvBox7.add(jbnClose);
 		buttonBox.add(csvBox7);
 		JLabel jlbStar = new JLabel(star);
 		jlbStar.setForeground(Color.RED);
@@ -539,10 +542,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtPassword.setText("");
 			jtxtHubURL.setText("");
 			jtxtpreProcessorProFile.setText("");
-		} else if ("Accept".equals(e.getActionCommand())) {
+		}else if ("Close".equals(e.getActionCommand())) {
+			System.exit(0);
+		}else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			File file = saveDefaults();
-			TestCancerCenterClient testClient = new TestCancerCenterClient();
+			CancerCenterClient testClient = CancerCenterClient.getInstance();
 			testClient.test(file);
 			//updating the status panel with the log file updates.
 			int delay = 10; //milliseconds
@@ -621,20 +626,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	 * @return file DefaultProperties file
 	 */
 	private File saveDefaults() {
-		
-		File file = new File("D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
+		String path =System.getProperty("DefaultProperties.File");
+		File file = new File(path);
 		try{
-		if (file.exists()) 
-		{
-		 boolean wasDeleted = file.delete();
-		 if (wasDeleted) 
-		 {
-		   file = new File(
-				"D:/Development/CancerCenterClient/src/java/main/properties/DefaultProperties.properties");
-		 }
-        }
-	   	if (createdInProcessFolders()) {
-				FileWriter fstream = new FileWriter(file);
+		  	if (createdInProcessFolders()) {
+				FileWriter fstream = new FileWriter(file,false);
 				fstream.write("rawFilesFolder=" + csvDirectory);
 				fstream.write("\n");
 				fstream.write("mapFileName=" + mapDirectory);
@@ -681,12 +677,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("\n");
 				fstream.flush();
 				fstream.close();
-			}
+				}
 			
 		} catch (IOException e) {
 			logger.error("File not found" + e.getLocalizedMessage());
 		}
-      return file;
+	  return file;
 	}
 
 }
