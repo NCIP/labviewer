@@ -1,491 +1,673 @@
 package gov.nih.nci.caxchange.client;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import gov.nih.nci.caxchange.client.exceptions.FolderDoesNotExistException;
+import gov.nih.nci.caxchange.client.exceptions.FolderNotADirectoryException;
+import gov.nih.nci.caxchange.client.exceptions.PropertiesFileException;
+import gov.nih.nci.caxchange.client.preprocess.CSVP;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.FileInputStream;
-
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.concurrent.Executors; 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-
 
 import org.apache.log4j.Logger;
 
-import gov.nih.nci.caxchange.client.exceptions.*;
-import gov.nih.nci.caxchange.ws.RoutingAndWorkFlowServiceClient;
-import gov.nih.nci.caxchange.ws.RoutingAndWorkflowService;
-import gov.nih.nci.caxchange.ws.routingandworkflow.*;
-import gov.nih.nci.caxchange.client.GetBytesfromFile;
-import gov.nih.nci.caxchange.common.services.constants.TransformationConstants;
-
-import org.codehaus.xfire.client.Client;
-
-import gov.nih.nci.caxchange.client.preprocess.CSVP;
-
-
 public class CancerCenterClient {
-	
-	private final ScheduledExecutorService scheduler = 
-	       Executors.newScheduledThreadPool(1);
-	
+
 	// Property Files
-	
-	private static String preProcessorPropertiesFile_str;
-	private static String programPropertiesFile = "properties/CancerCenterClient.properties";
+	private String preProcessorPropertiesFile_str;
+	private String programPropertiesFile;
 
 	// To be set in a property file
-	
-	private static String location;
-	
-	private static String WebServiceURL;
-	private static String WorkFlowId;
-	private static String EndPointListSeparatorChar = ",";
-	private static String EndPointsCommaDelimitedString;
-	
-	private static String userName;
-	private static String userPasswd;
-	
-	private static String inProcessFolder;
-	private static String processedFolder;
-	private static String errorFolder;
-	private static String rawFilesFolder;
-	private static String rawFilesBackupFolder;
-	
-	private static String initialDelay_str;
-	private static String pollingInterval_str;
-	//private static String pollingTimeUnit_str;
-	
-	private static long initialDelay_long;
-	private static long  pollingInterval_long;
-	//private static TimeUnit pollingTimeUnit;
+	private String location;
+	private String userName;
+	private String userPasswd;
 
-	
-	private static File processedDir;
-	private static File inProcessDir;
-	private static File errorDir;
-	
-	private static File rawFilesDir;
-	private static File rawFilesBackupDirectory;
-	
-	
+	private String inProcessFolder;
+	private String processedFolder;
+	private String errorFolder;
+	private String rawFilesFolder;
+	private String rawFilesBackupFolder;
+
+	private String initialDelay_str;
+	private String pollingInterval_str;
+	private long initialDelay_long;
+	private long pollingInterval_long;
+
+	private File processedDir;
+	private File inProcessDir;
+	private File errorDir;
+
+	private File rawFilesDir;
+	private File rawFilesBackupDirectory;
+	private String hubURL;
+	private String hl7v2Dir;
+	private String hl7v2mapFileName;
+
 	// Map File used for mapping CSV file to HL7V3 format by caAdaptor.
-	private static String mapFileName;
-	
-	// Logging File
-	
-	private static Logger logger = Logger.getLogger("gov.nih.nci.caxchange.client.CancerCenterClient");
-	
-	
-	public static void main(String[] args) {
-		
-		String configFilePath = System.getProperty("cancer.center.client.properties");
-		if(configFilePath==null){
-			throw new RuntimeException("Cancer Center Client property is not set as an argument on the java command line.");
-		}
-		
-		File f = new File(configFilePath);
-		if(f==null){
-			throw new RuntimeException("Cancer Center Client Properties File is not available.");
-		}else{
-			programPropertiesFile = configFilePath;
-			f=null;
-		}
+	private String mapFileName;
 
-		
-		logger.debug("Staring Cancer Center Client -- Main Method");
+	// Logging File
+
+	private static Logger logger = Logger
+			.getLogger("gov.nih.nci.caxchange.client.CancerCenterClient");
+
+	private static CancerCenterClient cancerCenterClient;
+
+	/**
+	 * Implementing the Singleton: private constructor
+	 */
+	private CancerCenterClient() {
+
+	}
+
+	/**
+	 * getInstance creates a instance of CancerCenterClient if it is null;
+	 * else returns the previously created instance.
+	 * @return cancerCenterClient
+	 */
+	public static CancerCenterClient getInstance() {
+		if (cancerCenterClient == null)
+			cancerCenterClient = new CancerCenterClient();
+
+		return cancerCenterClient;
+	}
+
+	/**
+	 * Entry point for the TestCancerClientUI. 
+	 * @param file
+	 */
+	public void test(File file) {
+
+		String configFilePath = file.getAbsolutePath();
+		if (configFilePath == null) {
+			throw new RuntimeException(Messages
+					.getString("CancerCenterClient.1"));
+		}
+		File f = new File(configFilePath);
+		if (f == null) {
+			throw new RuntimeException(Messages
+					.getString("CancerCenterClient.2"));
+		} else {
+			getInstance().programPropertiesFile = configFilePath;
+			f = null;
+		}
+		logger.debug(Messages.getString("CancerCenterClient.129"));
 		CancerCenterClient client = new CancerCenterClient();
 		boolean success = client.checkSetup();
-    	if (success) {    		
-   		      client.process();
-        } 
-    	else
-    	{
-    		logger.fatal("Fatal: Required Resources not found to run Client Application");
-    		logger.fatal("Aborting Client");
-    		logger.fatal("Please contact System Admin");
-    	}
-			
-   }
-	
-   public boolean checkSetup()
-   {
-	   boolean success=false;
-	   try
-	   {
-		   //Load Properties File
-		   if(!loadProperties()) {
-			   throw new PropertiesFileException("Exception processing CancerCenterClient.properties file");
-		   }
-	
-
-		   rawFilesDir=new File(rawFilesFolder);
-		    rawFilesBackupDirectory = new File(rawFilesBackupFolder);
-		    
-			inProcessDir    = new File(inProcessFolder);
-		    processedDir = new File(processedFolder);
-			errorDir     = new File(errorFolder);
-			
-			File preProcessorPropertiesFile_file = new File(preProcessorPropertiesFile_str);
-			
-		   if (!preProcessorPropertiesFile_file.exists()){
-			   throw new PropertiesFileException("preProcessorPropertiesFile as defined in CancerCenterClient.properties Does not Exist");   
-		   }	
-   	       if (!rawFilesDir.exists()) {    	    	 
-   	    	 throw new FolderDoesNotExistException("rawFilesFolder as defined in CancerCenterClient.properties  Does Not Exist");           
-   	       }
-   	       if (!rawFilesDir.isDirectory()) {
-   	    	 throw new FolderNotADirectoryException("rawFilesFolder as defined in CancerCenterClient.properties  is not a Folder. It must be a folder");
-   	       }
-   	       if (!rawFilesBackupDirectory.exists()) {    	    	 
-     	    	 throw new FolderDoesNotExistException("rawFilesBackupFolder as defined in CancerCenterClient.properties  Does Not Exist");           
-     	   }
-     	   if (!rawFilesBackupDirectory.isDirectory()) {
-     	    	 throw new FolderNotADirectoryException("rawFilesBackupFolder as defined in CancerCenterClient.properties  is not a Folder. It must be a folder");
-     	   }
-   	       if (!inProcessDir.exists()) {    	    	 
-   	    	 throw new FolderDoesNotExistException("inProcessFolder as defined in CancerCenterClient.properties  Does Not Exist");           
-   	       }
-   	       if (!inProcessDir.isDirectory()) {
-   	    	 throw new FolderNotADirectoryException("inProcessFolder as defined in CancerCenterClient.properties  is not a Folder. It must be a folder");
-   	       }
-		   if (!processedDir.exists()) {    	    	 
-		    	 throw new FolderDoesNotExistException("processedFolder as defined in CancerCenterClient.properties  Does Not Exist");           
-		   }
-		   if (!processedDir.isDirectory()) {
-		    	 throw new FolderNotADirectoryException("processedFolder as defined in CancerCenterClient.properties  is not a Folder. It must be a folder");
-		   }
-		   if (!errorDir.exists()) {    	    	 
-		    	 throw new FolderDoesNotExistException("errorFolder as defined in CancerCenterClient.properties  Does Not Exist");           
-		   }
-		   if (!errorDir.isDirectory()) {
-		    	 throw new FolderNotADirectoryException("errorFolder as defined in CancerCenterClient.properties is not a Folder. It must be a folder");
-		   }
-		   success=true;
-	   }
-   	   catch (FolderDoesNotExistException e) {
-   		   logger.error(e.getErrorMessage());
-		   success=false;
-	   }
-	   catch (FolderNotADirectoryException e) {
-		   logger.error(e.getErrorMessage());
-		   success=false;
-   	   }
-	   catch(PropertiesFileException e){
-		   logger.fatal(e.getErrorMessage());
-		   success=false;
-	   }
-	   return success;
-   }
-   
-    public void process() {
-   	
-        final Runnable fileCheck = new Runnable() {
-
-                public void run() { 
-                	try{
-                	     logger.debug("Poll the File");
-                	    if(!checkPreProcessedFolder())
-                	      { 
-                	    	logger.error("Error Preprocessing Files.. Aborting"); 
-                	    	throw new Exception("Error Preprocessing Files.. Aborting");
-                	    }
-                	    else 
-                	    {
-                	    	RoutingAndWorkFlowServiceClient();
-                	    }
-                	}
-                	catch(Exception e)
-                	{
-                		logger.fatal("Fatal Error in Client.. Aborting");
-                	}
-                }
-        	
-         };
-        final ScheduledFuture<?> fileCheckHandle = 
-            scheduler.scheduleAtFixedRate(fileCheck, initialDelay_long, pollingInterval_long, SECONDS);
-    } 
-    
-    
-    public boolean checkPreProcessedFolder()
-    {    	
-    	logger.debug("In Check Pre Processed Folder");
-    	boolean retResult = true;
-    	try{
-    	    File[] fileList =  rawFilesDir.listFiles();
-    	    // Get Current Date and Time for Stamping the file
-    	    Date dt = new Date();
-    	    long currentTime = dt.getTime();
-    	    StringBuffer sbuf = new StringBuffer();
-    	    StringBuffer outbuf = new StringBuffer();
-    	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss"); 
-    	    
-    	    sbuf = sdf.format(dt, outbuf, new FieldPosition(0));
-    	    
-    	    logger.debug("Current Date Time : " + sbuf);
-    	    
-    	    for (int i=0; i<fileList.length; i++)
-    	    {
-    	    	//logger.debug("Pre Processing File : " + fileList[i].toString() );
-    	    	String fileName = fileList[i].getName().toString();
-    	    	//logger.info("File Name : " + fileName );
-    	    	
-    	    	String fileNameLocationDateTimeStamp =  location + "_" + sbuf +"_"+ fileName;
-    	    	String outFile = inProcessFolder + fileNameLocationDateTimeStamp;
-    	    	//logger.info("Out File : " + outFile);
-
-    	    		//logger.info("Valid File Name : " + fileName);
-    	    	   try{ 
-    	    		   logger.debug("Starting CSV Parser");
-    	    		   CSVP fileOut = new CSVP(fileList[i].toString(), outFile, preProcessorPropertiesFile_str);
-    	    		   
-    	    		   //logger.info("Backup Dir : " + rawFilesBackupDirectory);
-    	    		   //logger.info("Backup folder : " + rawFilesBackupFolder);
-    	    		   //logger.info("fileNameLocationDateTimeStamp : " + fileNameLocationDateTimeStamp);
-    	    		   //logger.info("*****");
-    	    		   
- 		    	    	boolean success = fileList[i].renameTo(new File(rawFilesBackupDirectory, fileNameLocationDateTimeStamp));
-    	    		    		    
- 		    	    	//logger.info("File Moved to Backup folder");
- 		    	    	//logger.info("***********");
- 		    	    	if (!success) {    		
- 		    	    		logger.error(fileList[i].toString() + "Renamed to : " + fileNameLocationDateTimeStamp + " Was not moved to the backup folder" );
- 		    	    		retResult=false;
- 		    	        }
- 		    	    	else {
- 		    	    		logger.debug("File Moved to Backup folder");
- 		    	    		retResult = true;
- 		    	    	}
- 		    	      
-    	    	   }
-    	    	   catch(Exception e)
-    	    	   {
-    	    		   retResult=false;
-    	    		     logger.error("Error PreProcessing File " + fileList[i].toString());
-    	    		     logger.error(e.getMessage());
-    	    		     logger.info("Erro Dir : " + errorDir);
-    	    		     logger.info("Error folder : " + errorFolder);
-    	    		     logger.info("fileNameLocationDateTimeStamp : " + fileNameLocationDateTimeStamp);
-    	    		     logger.info("File : " + fileList[i]);
-    	    		     logger.info("*****");
-    	    	         boolean movesuccess = fileList[i].renameTo(new File(errorDir, fileNameLocationDateTimeStamp));
-    	    		   //logger.info("****");
-    	    		   
-    	    		   if (!movesuccess) {    		
-		    	    		logger.error(fileList[i].toString() + "Renamed to : " + errorDir+fileNameLocationDateTimeStamp + " Was not moved to the error folder" );
-		    	    		 logger.info("*****");
-		    	        }
-    	    		   else{
-    	    			     logger.error(fileList[i].toString() + "Renamed to : " +errorDir+fileNameLocationDateTimeStamp + " Was moved to the error folder" );
-    	    		   }
-   
-    	    	   } // End of Catch
-
-
-    	    } // End of For
-    	    
-    	}
-    	catch (Exception e)
-    	{
- 		   logger.fatal("Error Accesing Files in file System");
-    	   retResult=false; 
-    	}
-    	return retResult;
-
-    }	   
-   
-	public final void RoutingAndWorkFlowServiceClient() {
-		try{
-		logger.debug("In RoutingAndWorkFlowServiceClient");
-		RoutingAndWorkFlowServiceClient svc = new RoutingAndWorkFlowServiceClient();
-		RoutingAndWorkflowService service = svc.getRoutingAndWorkflowServiceSoapPort(WebServiceURL);
-		Client client = Client.getInstance(service);
-		client.setProperty("mtom-enabled", "true");
-		logger.debug("Added MTOM Property");
-		RoutingAndWorkflowRequest req = new RoutingAndWorkflowRequest();
-		ProcessingInstructions procInst = new ProcessingInstructions();
-		MessageProperties mprops      = new MessageProperties();
-		Properties props = new Properties();
-		Property property = new Property();
-		property.setKey(TransformationConstants.MAP_FILE);
-		property.setValue(mapFileName);
-		List<Property> p = mprops.getProperty();
-		p.add(property);
-		Workflow wflow = new Workflow();
-		wflow.setIdentifier(WorkFlowId);
-		procInst.setWorkflow(wflow);
-		// EndPoints	
-		List<String> endpoints = procInst.getEndpoints();
-		// Tokenize
-		StringTokenizer st = new StringTokenizer(EndPointsCommaDelimitedString,EndPointListSeparatorChar,false);
-	     while (st.hasMoreTokens()) {
-	    	 String ep = st.nextToken();
-	    	 logger.debug("EndPoint" + ep);
-	         endpoints.add(ep);
-	     }
-		logger.debug("Added Workflow and End Points");
-		Credentials cred = new Credentials();
-		cred.setUserName(userName);
-		cred.setPassword(userPasswd);
-		req.setCredentials(cred);
-		req.setProcessingInstructions(procInst);
-		req.setProperties(mprops);
-		
-		MessagePayload pld = new MessagePayload(); 
-		PayloadTypes pldType = new PayloadTypes();
-		File inProcessDir    = new File(inProcessFolder);
-		// Delete Zero Byte Files Generated by Preprocessor in case of exceptions.
-		File[] inProcessfileList =  inProcessDir.listFiles();
-		for (int i=0; i<inProcessfileList.length; i++)
-		{
-			if ( inProcessfileList[i].length() == 0 )
-				inProcessfileList[i].delete(); 
+		if (success) {
+			client.process();
+		} else {
+			logger.fatal(Messages.getString("CancerCenterClient.0"));
+			logger.fatal(Messages.getString("CancerCenterClient.5"));
+			logger.fatal(Messages.getString("CancerCenterClient.6"));
 		}
-		File[] fileList =  inProcessDir.listFiles();
-		GetBytesfromFile gbf = new GetBytesfromFile();
-		for (int i=0; i<fileList.length; i++)
-	    {
-			try{
-	    	     logger.info("Processing File : " + fileList[i].toString() );
-	    	     byte[] fileBytes = gbf.GetBytesFromFile(fileList[i]);
-	    	     pld.setPayloadType(pldType);
-	    	     pld.setObject(fileBytes);
-     			 req.setPayload(pld);
-     			 req.setExternalIdentifier(fileList[i].getName().toString());
-     			 logger.info("External Identifier : " + fileList[i].getName().toString() );
-     			 
-     			 
-	    			
-	    			try {
-	    				logger.info("Invoking WebService");
-	    				Acknowledgement ack = service.executeRoutingOrWorkflow(req);
-	    				AcknowledgementStatuses status = ack.getStatus();
-	    				logger.info("Status Received from Webservice : " + status);
-	    			    boolean filemoved=false;
-	    			    
-	    			   
-	    			    
-	    			    logger.debug("status.value().trim() : " + status.value().trim());
-	    				if (status.value().trim().equalsIgnoreCase(AcknowledgementStatuses.ERROR_OCCURRED.value().trim()))
-	    				{
-	    					// Error Occured in WebService
-	    					logger.error("WebService Call Returned Error");
-	    			    	gov.nih.nci.caxchange.ws.routingandworkflow.ErrorDetails ed = new gov.nih.nci.caxchange.ws.routingandworkflow.ErrorDetails();
-	    			    	ed = ack.getError();
-	    			    	logger.error(" Error Code : " + ed.getErrorCode());
-	    			    	logger.error("Error Description : " + ed.getErrorDescription());
-	    			    	logger.error("Moving File " + fileList[i].toString() +  " to Error Folder");
-	    			    	filemoved = fileList[i].renameTo(new File(errorDir, fileList[i].getName()));
-	    				}
-	    				else if (status.value().trim().equalsIgnoreCase(AcknowledgementStatuses.MESSAGE_RECEIVED.value().trim()))
-	    			    {
-	    			      // File processed OK.. Move it to Processed Folder	
-	    			    	logger.info("WebService Call Successful");
-	    			    	logger.info("Moving File " + fileList[i].getName() + " To " + processedDir);
-	    			    	filemoved = fileList[i].renameTo(new File(processedDir, fileList[i].getName()));
-	    			    }
-	    			    else
-	    			    {
-	    			    	// WS Call was not OK.. Move it to Error Folder
-	    			    	logger.error("WebService Call Returned Error");
-	    			    	gov.nih.nci.caxchange.ws.routingandworkflow.ErrorDetails ed = new gov.nih.nci.caxchange.ws.routingandworkflow.ErrorDetails();
-	    			    	ed = ack.getError();
-	    			    	logger.error(" Error Code : " + ed.getErrorCode());
-	    			    	logger.error("Error Description : " + ed.getErrorDescription());
-	    			    	logger.error("Moving File " + fileList[i].toString() +  " to Error Folder");
-	    			    	filemoved = fileList[i].renameTo(new File(errorDir, fileList[i].getName()));
-	    			    }	    			    
-		    	    	if (!filemoved) {    		
-		    	    		logger.error(fileList[i].toString() + " Was not moved" );
-		    	    		//System Alert
-		    	        }
-		    	    	
-	    			} catch (ErrorMessage_Exception e) {
-	    				// TODO Auto-generated catch block
-	    				e.printStackTrace();
-	    			    logger.error("Exception Caught : " + e.getMessage());
-	    				//assertTrue(false);
-	    			    //Message Exception
-	    			}
-	    			catch (Exception e) {
-	    				e.printStackTrace();
-	    			    logger.error("Exception Caught : " + e.getMessage());
-	    				//assertTrue(false);
-	    			    // Failed - Error Handling
-	    			}
 
-			} // End of main Try
-			catch (IOException e)
-			{
-				logger.fatal("IO Exception reading/writing files");
-				// File I/O Exception - Raise Admin Alert
+	}
+
+	/**
+	 * Checks the setup of all the directories.
+	 * @return success
+	 */
+	public boolean checkSetup() {
+		boolean success = false;
+		try {
+			// Load Properties File
+			if (!loadProperties()) {
+				throw new PropertiesFileException(Messages
+						.getString("CancerCenterClient.7"));
 			}
-	    }	// End of For Loop
-		}
-		catch (Exception e)
-		{
-			logger.fatal("Exception Caught in RoutingAndWorkFlowServiceClient");
-			e.printStackTrace();
-		}
-	} // End of testRoutingAndWorkFlowServiceClient
-	
-	private static boolean loadProperties() {
-		boolean isSuccess=false;
-    try {
-    	 FileInputStream fis = new FileInputStream(new File(programPropertiesFile));
 
-    	 
-       	    Properties props = new Properties();
-            //Read in the stored properties
-            props.load(fis);
-            location = props.getProperty("Location");
-            preProcessorPropertiesFile_str = props.getProperty("preProcessorPropertiesFile");
-            WebServiceURL = props.getProperty("WebServiceURL");
-            WorkFlowId= props.getProperty("WorkFlowId");
-            EndPointsCommaDelimitedString = props.getProperty("EndPointsCommaDelimitedString");
-            userName = props.getProperty("userName");
-            userPasswd = props.getProperty("userPasswd");
-            rawFilesFolder = props.getProperty("rawFilesFolder");
-            rawFilesBackupFolder = props.getProperty("rawFilesBackupFolder");
-            inProcessFolder = props.getProperty("inProcessFolder");
-            processedFolder = props.getProperty("processedFolder");
-            errorFolder = props.getProperty("errorFolder");
-            mapFileName = props.getProperty("mapFileName");
-            initialDelay_str = props.getProperty("initialDelayInSeconds");
-            pollingInterval_str = props.getProperty("pollingDelayInSeconds");
-            logger.info("preProcessorPropertiesFile : " + preProcessorPropertiesFile_str);
-            logger.info("Location : " + location);
-            logger.info("WebServiceURL : " + WebServiceURL);
-            logger.info("rawFilesFolder : " + rawFilesFolder);
-            logger.info("rawFilesBackupFolder : " + rawFilesBackupFolder);
-            logger.info("inProcessFolder : " + inProcessFolder);
-            logger.info("ProcessedFolder : " + processedFolder);
-            logger.info("ErrorFolder : " + errorFolder);
-            logger.info("initialDelay_str : " + initialDelay_str);
-            logger.info("pollingInterval_str : " + pollingInterval_str);
-            logger.info("WorkFlowId : " + WorkFlowId);
-            logger.info("EndPointsCommaDelimitedString : " + EndPointsCommaDelimitedString);
-            
-            initialDelay_long = new Long(initialDelay_str);
-            pollingInterval_long = new Long (pollingInterval_str);
-            
-            logger.info("initialDelay_long : " + initialDelay_long);
-            logger.info("pollingInterval_long : " + pollingInterval_long);
-            
-            isSuccess=true;
-        } catch (Exception e) {
-           logger.error("Exception processing Cancer Center Properties File");
-           isSuccess=false;
-        }  
-            return isSuccess;
-    }
+			getInstance().setRawFilesDir(new File( getInstance().rawFilesFolder));
+			getInstance().setRawFilesBackupDirectory(new File( getInstance().rawFilesBackupFolder));
+
+			getInstance().setInProcessDir(new File( getInstance().inProcessFolder));
+			getInstance().setProcessedDir(new File( getInstance().processedFolder));
+			getInstance().setErrorDir(new File( getInstance().errorFolder));
+
+			File preProcessorPropertiesFile_file = new File(
+					 getInstance().preProcessorPropertiesFile_str);
+
+			if (! preProcessorPropertiesFile_file.exists()) {
+				throw new PropertiesFileException(Messages
+						.getString("CancerCenterClient.8"));
+			}
+			if (! getInstance().rawFilesDir.exists()) {
+				throw new FolderDoesNotExistException(Messages
+						.getString("CancerCenterClient.9"));
+			}
+			if (! getInstance().rawFilesDir.isDirectory()) {
+				throw new FolderNotADirectoryException(Messages
+						.getString("CancerCenterClient.10"));
+			}
+			if (! getInstance().rawFilesBackupDirectory.exists()) {
+				throw new FolderDoesNotExistException(Messages
+						.getString("CancerCenterClient.11"));
+			}
+			if (! getInstance().rawFilesBackupDirectory.isDirectory()) {
+				throw new FolderNotADirectoryException(Messages
+						.getString("CancerCenterClient.12"));
+			}
+			if (! getInstance().inProcessDir.exists()) {
+				throw new FolderDoesNotExistException(Messages
+						.getString("CancerCenterClient.13"));
+			}
+			if (! getInstance().inProcessDir.isDirectory()) {
+				throw new FolderNotADirectoryException(Messages
+						.getString("CancerCenterClient.14"));
+			}
+			if (! getInstance().processedDir.exists()) {
+				throw new FolderDoesNotExistException(Messages
+						.getString("CancerCenterClient.15"));
+			}
+			if (! getInstance().processedDir.isDirectory()) {
+				throw new FolderNotADirectoryException(Messages
+						.getString("CancerCenterClient.16"));
+			}
+			if (! getInstance().errorDir.exists()) {
+				throw new FolderDoesNotExistException(Messages
+						.getString("CancerCenterClient.17"));
+			}
+			if (! getInstance().errorDir.isDirectory()) {
+				throw new FolderNotADirectoryException(Messages
+						.getString("CancerCenterClient.18"));
+			}
+			success = true;
+		} catch (FolderDoesNotExistException e) {
+			logger.error(e.getErrorMessage());
+			success = false;
+		} catch (FolderNotADirectoryException e) {
+			logger.error(e.getErrorMessage());
+			success = false;
+		} catch (PropertiesFileException e) {
+			logger.fatal(e.getErrorMessage());
+			success = false;
+		}
+		return success;
+	}
+
+	/**
+	 * Polls the directory for files to be processed.When it encounters a file:
+	 * 1.It invokes the caAdapter API to convert a .csv file to HL7V3. 2.Then
+	 * invokes the grid service to persist the HL7V3 message.
+	 */
+	public void process() {
+
+		 HL7V3Transformation v3Transformation = new HL7V3Transformation(getInstance());
+		 v3Transformation.process();
+		
+		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
+		 v2Transformation.process();
+
+	}
+
+	/**
+	 * Converts the raw .CSV file to caAdapter compatible .CSV file and moves it
+	 * to the InProcess folder
+	 * 
+	 * @return retResult
+	 */
+	public boolean checkPreProcessedFolder() {
+		logger.debug(Messages.getString("CancerCenterClient.23"));
+		boolean retResult = true;
+		try {
+			File[] fileList =  getInstance().rawFilesDir.listFiles();
+			// Get Current Date and Time for Stamping the file
+			Date dt = new Date();
+			long currentTime = dt.getTime();
+			StringBuffer sbuf = new StringBuffer();
+			StringBuffer outbuf = new StringBuffer();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+
+			sbuf = sdf.format(dt, outbuf, new FieldPosition(0));
+
+			logger.debug("Current Date Time : " + sbuf);
+
+			for (int i = 0; i < fileList.length; i++) {
+				String fileName = fileList[i].getName().toString();
+				logger.info("File Name : " + fileName);
+
+				String fileNameLocationDateTimeStamp =  getInstance().location + "_" + sbuf
+						+ "_" + fileName;
+				String outFile = getInstance().inProcessFolder
+						+ fileNameLocationDateTimeStamp;
+				try {
+					logger.debug(Messages
+							.getString("CancerCenterClient.29"));
+					CSVP fileOut = new CSVP(fileList[i].toString(), outFile,
+							 getInstance().preProcessorPropertiesFile_str);
+
+					boolean success = fileList[i].renameTo(new File(
+							 getInstance().rawFilesBackupDirectory,
+							fileNameLocationDateTimeStamp));
+					if (!success) {
+						logger.error(fileList[i].toString() + "Renamed to : "
+								+ fileNameLocationDateTimeStamp
+								+ " Was not moved to the backup folder");
+						retResult = false;
+					} else {
+						logger.debug("File Moved to Backup folder");
+						retResult = true;
+					}
+
+				} catch (Exception e) {
+					retResult = false;
+					logger.error(Messages
+							.getString("CancerCenterClient.33")
+							+ fileList[i].toString());
+					logger.error(e.getMessage());
+					logger.info("Erro Dir : " +  getInstance().errorDir);
+					logger.info("Error folder : " +  getInstance().errorFolder);
+					logger.info("fileNameLocationDateTimeStamp : "
+							+ fileNameLocationDateTimeStamp);
+					logger.info("File : " + fileList[i]);
+					logger.info("*****");
+					boolean movesuccess = fileList[i].renameTo(new File(
+							 getInstance().errorDir, fileNameLocationDateTimeStamp));
+					if (!movesuccess) {
+						logger.error(fileList[i].toString() + "Renamed to : "
+								+  getInstance().errorDir + fileNameLocationDateTimeStamp
+								+ " Was not moved to the error folder");
+						logger.info("*****");
+					} else {
+						logger.error(fileList[i].toString() + "Renamed to : "
+								+  getInstance().errorDir + fileNameLocationDateTimeStamp
+								+ " Was moved to the error folder");
+					}
+
+				} // End of Catch
+
+			} // End of For
+
+		} catch (Exception e) {
+			logger.fatal("Error Accesing Files in file System", e);
+			retResult = false;
+		}
+		return retResult;
+
+	}
+
+	/**
+	 * Loads the properties from the properties file
+	 * @return isSuccess
+	 */
+	private boolean loadProperties() {
+		boolean isSuccess = false;
+		try {
+			FileInputStream fis = new FileInputStream(new File(
+					getInstance().programPropertiesFile));
+
+			Properties props = new Properties();
+			// Read in the stored properties
+			props.load(fis);
+			getInstance().setLocation(props.getProperty("Location"));
+			getInstance().setPreProcessorPropertiesFile_str( props
+					.getProperty("preProcessorPropertiesFile"));
+			getInstance().setUserName(props.getProperty("userName"));
+			getInstance().setUserPasswd(props.getProperty("userPasswd"));
+			getInstance().setRawFilesFolder(props.getProperty("rawFilesFolder"));
+			getInstance().setRawFilesBackupFolder(props.getProperty("rawFilesBackupFolder"));
+			getInstance().setInProcessFolder(props.getProperty("inProcessFolder"));
+			getInstance().setProcessedFolder(props.getProperty("processedFolder"));
+			getInstance().setErrorFolder(props.getProperty("errorFolder"));
+			getInstance().setMapFileName(props.getProperty("mapFileName"));
+			getInstance().setHl7v2Dir(props.getProperty("HL7V2Dir"));
+			getInstance().setHl7v2mapFileName(props.getProperty("hl7v2mapFileName"));
+			getInstance().setInitialDelay_str(props.getProperty("initialDelayInSeconds"));
+			getInstance().setPollingInterval_str(props.getProperty("pollingDelayInSeconds"));
+			getInstance().setHubURL(props.getProperty("HubURL"));
+			logger.info("preProcessorPropertiesFile : "
+					+ getInstance().preProcessorPropertiesFile_str);
+			logger.info("Location : " + getInstance().location);
+			logger.info("rawFilesFolder : " + getInstance().rawFilesFolder);
+			logger.info("rawFilesBackupFolder : " + getInstance().rawFilesBackupFolder);
+			logger.info("inProcessFolder : " + getInstance().inProcessFolder);
+			logger.info("ProcessedFolder : " + getInstance().processedFolder);
+			logger.info("ErrorFolder : " + getInstance().errorFolder);
+			logger.info("initialDelay_str : " + getInstance().initialDelay_str);
+			logger.info("pollingInterval_str : " + getInstance().pollingInterval_str);
+			logger.info("hubURL : " + getInstance().hubURL);
+			logger.info("hl7v2Dir : " + getInstance().hl7v2Dir);
+			logger.info("hl7v2mapFileName : " + getInstance().hl7v2mapFileName);
+			getInstance().initialDelay_long = new Long(getInstance().initialDelay_str);
+			getInstance().pollingInterval_long = new Long(getInstance().pollingInterval_str);
+			logger.info("initialDelay_long : " + getInstance().initialDelay_long);
+			logger.info("pollingInterval_long : " +getInstance(). pollingInterval_long);
+
+			isSuccess = true;
+		} catch (Exception e) {
+			logger.error(Messages.getString("CancerCenterClient.127"));
+			isSuccess = false;
+		}
+		return isSuccess;
+	}
+
+	/**
+	 * @return the preProcessorPropertiesFile_str
+	 */
+	public String getPreProcessorPropertiesFile_str() {
+		return getInstance().preProcessorPropertiesFile_str;
+	}
+
+	/**
+	 * @return the programPropertiesFile
+	 */
+	public String getProgramPropertiesFile() {
+		return getInstance().programPropertiesFile;
+	}
+
+	/**
+	 * @return the location
+	 */
+	public String getLocation() {
+		return getInstance().location;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return getInstance().userName;
+	}
+
+	/**
+	 * @return the userPasswd
+	 */
+	public String getUserPasswd() {
+		return getInstance().userPasswd;
+	}
+
+	/**
+	 * @return the inProcessFolder
+	 */
+	public String getInProcessFolder() {
+		return getInstance().inProcessFolder;
+	}
+
+	/**
+	 * @return the processedFolder
+	 */
+	public String getProcessedFolder() {
+		return getInstance().processedFolder;
+	}
+
+	/**
+	 * @return the errorFolder
+	 */
+	public String getErrorFolder() {
+		return getInstance().errorFolder;
+	}
+
+	/**
+	 * @return the rawFilesFolder
+	 */
+	public String getRawFilesFolder() {
+		return getInstance().rawFilesFolder;
+	}
+
+	/**
+	 * @return the rawFilesBackupFolder
+	 */
+	public String getRawFilesBackupFolder() {
+		return getInstance().rawFilesBackupFolder;
+	}
+
+	/**
+	 * @return the initialDelay_str
+	 */
+	public String getInitialDelay_str() {
+		return getInstance().initialDelay_str;
+	}
+
+	/**
+	 * @return the pollingInterval_str
+	 */
+	public String getPollingInterval_str() {
+		return getInstance().pollingInterval_str;
+	}
+
+	/**
+	 * @return the initialDelay_long
+	 */
+	public long getInitialDelay_long() {
+		return getInstance().initialDelay_long;
+	}
+
+	/**
+	 * @return the pollingInterval_long
+	 */
+	public long getPollingInterval_long() {
+		return getInstance().pollingInterval_long;
+	}
+
+	/**
+	 * @return the processedDir
+	 */
+	public File getProcessedDir() {
+		return getInstance().processedDir;
+	}
+
+	/**
+	 * @return the inProcessDir
+	 */
+	public File getInProcessDir() {
+		return getInstance().inProcessDir;
+	}
+
+	/**
+	 * @return the errorDir
+	 */
+	public File getErrorDir() {
+		return getInstance().errorDir;
+	}
+
+	/**
+	 * @return the rawFilesDir
+	 */
+	public File getRawFilesDir() {
+		return getInstance().rawFilesDir;
+	}
+
+	/**
+	 * @return the rawFilesBackupDirectory
+	 */
+	public File getRawFilesBackupDirectory() {
+		return getInstance().rawFilesBackupDirectory;
+	}
+
+	/**
+	 * @return the hubURL
+	 */
+	public String getHubURL() {
+		return getInstance().hubURL;
+	}
+
+	/**
+	 * @return the mapFileName
+	 */
+	public String getMapFileName() {
+		return getInstance().mapFileName;
+	}
+
+	/**
+	 * @return the hl7v2Dir
+	 */
+	public String getHl7v2Dir() {
+		return getInstance().hl7v2Dir;
+	}
+
+	/**
+	 * @return the hl7v2mapFileName
+	 */
+	public String getHl7v2mapFileName() {
+		return getInstance().hl7v2mapFileName;
+	}
+
+	/**
+	 * @param preProcessorPropertiesFile_str the preProcessorPropertiesFile_str to set
+	 */
+	public void setPreProcessorPropertiesFile_str(
+			String preProcessorPropertiesFile_str) {
+		this.preProcessorPropertiesFile_str = preProcessorPropertiesFile_str;
+	}
+
+	/**
+	 * @param programPropertiesFile the programPropertiesFile to set
+	 */
+	public void setProgramPropertiesFile(String programPropertiesFile) {
+		this.programPropertiesFile = programPropertiesFile;
+	}
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @param userPasswd the userPasswd to set
+	 */
+	public void setUserPasswd(String userPasswd) {
+		this.userPasswd = userPasswd;
+	}
+
+	/**
+	 * @param inProcessFolder the inProcessFolder to set
+	 */
+	public void setInProcessFolder(String inProcessFolder) {
+		this.inProcessFolder = inProcessFolder;
+	}
+
+	/**
+	 * @param processedFolder the processedFolder to set
+	 */
+	public void setProcessedFolder(String processedFolder) {
+		this.processedFolder = processedFolder;
+	}
+
+	/**
+	 * @param errorFolder the errorFolder to set
+	 */
+	public void setErrorFolder(String errorFolder) {
+		this.errorFolder = errorFolder;
+	}
+
+	/**
+	 * @param rawFilesFolder the rawFilesFolder to set
+	 */
+	public void setRawFilesFolder(String rawFilesFolder) {
+		this.rawFilesFolder = rawFilesFolder;
+	}
+
+	/**
+	 * @param rawFilesBackupFolder the rawFilesBackupFolder to set
+	 */
+	public void setRawFilesBackupFolder(String rawFilesBackupFolder) {
+		this.rawFilesBackupFolder = rawFilesBackupFolder;
+	}
+
+	/**
+	 * @param initialDelay_str the initialDelay_str to set
+	 */
+	public void setInitialDelay_str(String initialDelay_str) {
+		this.initialDelay_str = initialDelay_str;
+	}
+
+	/**
+	 * @param pollingInterval_str the pollingInterval_str to set
+	 */
+	public void setPollingInterval_str(String pollingInterval_str) {
+		this.pollingInterval_str = pollingInterval_str;
+	}
+
+	/**
+	 * @param initialDelay_long the initialDelay_long to set
+	 */
+	public void setInitialDelay_long(long initialDelay_long) {
+		this.initialDelay_long = initialDelay_long;
+	}
+
+	/**
+	 * @param pollingInterval_long the pollingInterval_long to set
+	 */
+	public void setPollingInterval_long(long pollingInterval_long) {
+		this.pollingInterval_long = pollingInterval_long;
+	}
+
+	/**
+	 * @param processedDir the processedDir to set
+	 */
+	public void setProcessedDir(File processedDir) {
+		this.processedDir = processedDir;
+	}
+
+	/**
+	 * @param inProcessDir the inProcessDir to set
+	 */
+	public void setInProcessDir(File inProcessDir) {
+		this.inProcessDir = inProcessDir;
+	}
+
+	/**
+	 * @param errorDir the errorDir to set
+	 */
+	public void setErrorDir(File errorDir) {
+		this.errorDir = errorDir;
+	}
+
+	/**
+	 * @param rawFilesDir the rawFilesDir to set
+	 */
+	public void setRawFilesDir(File rawFilesDir) {
+		this.rawFilesDir = rawFilesDir;
+	}
+
+	/**
+	 * @param rawFilesBackupDirectory the rawFilesBackupDirectory to set
+	 */
+	public void setRawFilesBackupDirectory(File rawFilesBackupDirectory) {
+		this.rawFilesBackupDirectory = rawFilesBackupDirectory;
+	}
+
+	/**
+	 * @param hubURL the hubURL to set
+	 */
+	public void setHubURL(String hubURL) {
+		this.hubURL = hubURL;
+	}
+
+	/**
+	 * @param hl7v2Dir the hl7v2Dir to set
+	 */
+	public void setHl7v2Dir(String hl7v2Dir) {
+		this.hl7v2Dir = hl7v2Dir;
+	}
+
+	/**
+	 * @param hl7v2mapFileName the hl7v2mapFileName to set
+	 */
+	public void setHl7v2mapFileName(String hl7v2mapFileName) {
+		this.hl7v2mapFileName = hl7v2mapFileName;
+	}
+
+	/**
+	 * @param mapFileName the mapFileName to set
+	 */
+	public void setMapFileName(String mapFileName) {
+		this.mapFileName = mapFileName;
+	}
+
 } // End of Class
 
