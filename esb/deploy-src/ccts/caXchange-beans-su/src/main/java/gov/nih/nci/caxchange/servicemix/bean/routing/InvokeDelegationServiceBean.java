@@ -26,6 +26,7 @@ import gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.security.Principal;
 
 import javax.annotation.Resource;
@@ -78,7 +79,37 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
 			return;
 		}
-		logger.debug("Received exchange: " + exchange);
+		
+		
+		
+
+		
+		// HACK: modify exchange object to log the complete content
+		
+		Field field;
+		try {
+			field = exchange.getClass().getField("maxMsgDisplaySize");
+			field.setAccessible(true);
+		    field.set(exchange, new Integer(10000));
+		} catch (SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NoSuchFieldException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		// HACK ENDS
+		
+		count++;
+		logger.debug("Received exchange: count= "+count + exchange);
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
 		try {
