@@ -9,6 +9,7 @@ import gov.nih.nci.caxchange.persistence.DAOFactory;
 
 import java.io.StringReader;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -80,7 +81,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             original.setContent(originalSource);
             originalUtil.setIn(original);
             originalUtil.initialize();
-             String messageType = originalUtil.getMessageType();
+            String messageType = originalUtil.getMessageType();
             Source aggregatedResponse = in.getContent();
             CaXchangeResponseMessageDocument responseDocument = originalUtil.generateResponseFromAggregatedResponse(aggregatedResponse);
             if (isRollbackRequired(messageType, responseDocument)) {
@@ -93,6 +94,16 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
             Source response = new DOMSource(responseDocument.getDomNode());
             sendResponse(response);
             messageExchange.setStatus(ExchangeStatus.DONE);
+            
+            
+            logger.debug("caXchange aggregated responseDocument: "+responseDocument);
+            
+            logger.debug("caXchange aggregatedResponse: "+aggregatedResponse);
+    		
+    		
+            
+            
+            
             channel.send(messageExchange);
             if (!(messageExchange.getStatus().equals(ExchangeStatus.ERROR))) {
                deleteMessage(messageExchange);
