@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +59,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private File inProcessFolder;
 	private File rawFilesBackupFolder;
 	private File errorFolder;
-	private static JFrame aWindow = new JFrame("File Conversion UI");
+	private static JFrame aWindow = new JFrame("Cancer Center Hub Client (CCHC)");
 
 	private JTextField jtxtHL7V2Dir = new JTextField();
 	private JTextField jtxtProcessedFilesDir = new JTextField();
@@ -68,11 +70,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private JTextField jtxtPollingInterval = new JTextField();
 	private JTextField jtxtInitialInterval = new JTextField();
 	private JTextField jtxtLocation = new JTextField();
-	private JTextField jtxtIDPLocation = new JTextField();
+	//private JTextField jtxtIDPLocation = new JTextField();
 	private JTextField jtxtOrgName = new JTextField();
 	private JTextField jtxtUserName = new JTextField();
 	private JTextField jtxtPassword = new JPasswordField();
 	private JTextField jtxtHubURL = new JTextField();
+	private JTextField jtxtstudyLookupServiceURL = new JTextField();
 	private JTextField jtxtpreProcessorProFile = new JTextField();
 	private DefaultListModel msgDispBox = new DefaultListModel();
 	private JList dispList = new JList();
@@ -87,6 +90,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	public TestCancerCenterClientUI() {
 		init();
 		aWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		aWindow.addWindowListener(new WindowAdapter() {
+			public void windowClosed(WindowEvent e) {
+			  System.exit(0);
+			}
+			});
 		msgDispBox.addElement("Progress Shown Here");
 
 		//Add the tabs to the frame
@@ -132,7 +140,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				jtxtInitialInterval.setText(props
 						.getProperty("initialDelayInSeconds"));
 				jtxtLocation.setText(props.getProperty("Location"));
-				jtxtIDPLocation.setText(props.getProperty("IDPLocation"));
+				//jtxtIDPLocation.setText(props.getProperty("IDPLocation"));
 				jtxtOrgName.setText(props.getProperty("ORGANIZATIONNAME"));
 				jtxtUserName.setText(props.getProperty("userName"));
 				jtxtPassword.setText(props.getProperty("userPasswd"));
@@ -339,11 +347,11 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox8.add(Box.createHorizontalStrut(88));
 		csvBox8.add(jtxtLocation);
 		csvBox4.add(csvBox8);
-		csvBox8.add(Box.createHorizontalStrut(125));
+	/*	csvBox8.add(Box.createHorizontalStrut(125));
 		JLabel jlbIDPLocationLabel = new JLabel("Enter the IDP Location");
 		csvBox8.add(jlbIDPLocationLabel);
 		csvBox8.add(Box.createHorizontalStrut(120));
-		csvBox8.add(jtxtIDPLocation);
+		csvBox8.add(jtxtIDPLocation);*/
 		csvBox4.add(csvBox8);
 
 		//Organization name
@@ -536,7 +544,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtInProcessFilesDir.setText("");
 			jtxtInitialInterval.setText("");
 			jtxtLocation.setText("");
-			jtxtIDPLocation.setText("");
+			//jtxtIDPLocation.setText("");
 			jtxtOrgName.setText("");
 			jtxtUserName.setText("");
 			jtxtPassword.setText("");
@@ -663,8 +671,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("\n");
 				fstream.write("Location=" + jtxtLocation.getText());
 				fstream.write("\n");
-				fstream.write("IDPLocation=" + jtxtIDPLocation.getText());
-				fstream.write("\n");
+				/*fstream.write("IDPLocation=" + jtxtIDPLocation.getText());
+				fstream.write("\n");*/
 				fstream.write("ORGANIZATIONNAME=" + jtxtOrgName.getText());
 				fstream.write("\n");
 				fstream.write("userName=" + jtxtUserName.getText());
