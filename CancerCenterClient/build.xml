@@ -35,13 +35,10 @@
   		<copy todir="${dist.home}">
 		  	<fileset dir="${src.dir}" includes="**/*.properties" /> 
 		</copy>
- 		 </target>
- 		<!--
- 		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/>
- 		--> 
-   
-	
- 
+ 		 <jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/>
+ 	 </target>
+ 	
+ 	 
 	<target name="createzip" depends="batch" description="zip file">
   	    <copy todir="${dist.home}\lib\">
  		  	<fileset dir="${lib.home}" includes="**/*.jar" />
