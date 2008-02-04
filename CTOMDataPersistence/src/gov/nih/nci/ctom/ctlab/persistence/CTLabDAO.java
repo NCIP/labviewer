@@ -527,11 +527,11 @@ public class CTLabDAO extends BaseJDBCDAO
 		Long identifierId = null;
 		// check if the StudyParticipantAssignment is associated with identifier
 
-		if (spa.getParticipant().getIdentifier() != null) {
-			System.out.println("The SPA --parti--indentifier is not null");
+		if (spa.getIdentifier() != null)
+		{
 			ps = con
 					.prepareStatement("select ID,STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where EXTENSION = ? AND STUDY_PARTICIPANT_ASSIGNMNT_ID IS NOT NULL");
-			ps.setString(1, spa.getParticipant().getIdentifier().getExtension());
+			ps.setString(1, spa.getIdentifier().getExtension());
 			rs = ps.executeQuery();
 
 			// check if identifier is in DB
@@ -539,7 +539,7 @@ public class CTLabDAO extends BaseJDBCDAO
 				// already present;update the identifier table
 				id = rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID");
 				spa.setId(id);
-				spa.getParticipant().getIdentifier().setId(rs.getLong("ID"));
+				spa.getIdentifier().setId(rs.getLong("ID"));
 				identifierId=rs.getLong("ID");
 			} else {
 				// get the identifier id
@@ -556,14 +556,14 @@ public class CTLabDAO extends BaseJDBCDAO
 						.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
 				// need to set the participantid into the identifier table
 				ps.setLong(1, identifierId);
-				ps.setString(2, spa.getParticipant().getIdentifier().getExtension());
-				ps.setString(3, spa.getParticipant().getIdentifier().getSource());
-				ps.setString(4, spa.getParticipant().getIdentifier().getRoot());
+				ps.setString(2, spa.getIdentifier().getExtension());
+				ps.setString(3, spa.getIdentifier().getSource());
+				ps.setString(4, spa.getIdentifier().getRoot());
 				ps.executeUpdate();
 				con.commit();
 
 				spa.setId(id);
-				spa.getParticipant().getIdentifier().setId(identifierId);
+				spa.getIdentifier().setId(identifierId);
 				
 			}
 		   	
