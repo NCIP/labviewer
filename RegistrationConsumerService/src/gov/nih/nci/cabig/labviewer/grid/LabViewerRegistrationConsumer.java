@@ -213,7 +213,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		studyPartAssig.setParticipant(part);
 		String tmp = participant.getGridId()+"."+id.getValue();
 		studyPartAssig.setStudyPartIdOrig(tmp);
-		studyPartAssig.setIdentifier(partIdent);
+		
+		// SPA identifier is same as participant but different grid id
+		Identifier regIdent = new Identifier();
+		regIdent.setSource(partIdent.getSource());
+		regIdent.setExtension(partIdent.getExtension());
+		regIdent.setRoot(registration.getGridId());
+		studyPartAssig.setIdentifier(regIdent);
+		
 		healthCare.setStudyParticipantAssignment(studyPartAssig);
 		protocol.setHealthCareSite(healthCare);
 		protocol.setCtomInsertDt(now);
