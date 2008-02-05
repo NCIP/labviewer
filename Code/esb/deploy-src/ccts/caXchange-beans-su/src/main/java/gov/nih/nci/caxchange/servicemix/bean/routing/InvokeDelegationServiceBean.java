@@ -108,8 +108,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		
 		// HACK ENDS
 		
-		count++;
-		logger.debug("Received exchange: count= "+count + exchange);
+
+		logger.debug("Received exchange: "+ exchange);
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
 		try {
