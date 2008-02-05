@@ -3,7 +3,7 @@
 
 	<!--
 	TARGET: Zip
-		Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService
+		Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService, StudyLookUpService
 	-->
 
 	<target name="build_zip">
@@ -25,6 +25,10 @@
 				<exclude name="**/bin/**"/>
 			</zipfileset>
 			<zipfileset dir="${studyConsumerService.dir}" prefix="${app.name}/StudyConsumerService">
+				<exclude name="**/build/**"/>
+				<exclude name="**/bin/**"/>
+			</zipfileset>
+			<zipfileset dir="${studyLookupService.dir}" prefix="${app.name}/StudyLookUpService">
 				<exclude name="**/build/**"/>
 				<exclude name="**/bin/**"/>
 			</zipfileset>
