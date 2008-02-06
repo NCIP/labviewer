@@ -28,7 +28,7 @@
 				<exclude name="**/build/**"/>
 				<exclude name="**/bin/**"/>
 			</zipfileset>
-			<zipfileset dir="${studyLookupService.dir}" prefix="${app.name}/StudyLookUpService">
+			<zipfileset dir="${studyLookupService.dir}" prefix="${app.name}/StudyLookupService">
 				<exclude name="**/build/**"/>
 				<exclude name="**/bin/**"/>
 			</zipfileset>
