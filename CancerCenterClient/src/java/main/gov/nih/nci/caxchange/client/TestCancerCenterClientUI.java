@@ -569,8 +569,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		}else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			File file = saveDefaults();
-			CancerCenterClient testClient = CancerCenterClient.getInstance();
-			testClient.test(file,threadsList);
+			CancerCenterClient.getInstance().test(file,threadsList);
 			//updating the status panel with the log file updates.
 			int delay = 10; //milliseconds
 			try {
