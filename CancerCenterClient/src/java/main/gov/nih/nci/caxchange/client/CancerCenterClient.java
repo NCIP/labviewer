@@ -9,9 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.log4j.Logger;
@@ -45,6 +45,7 @@ public class CancerCenterClient {
 	private File rawFilesDir;
 	private File rawFilesBackupDirectory;
 	private String hubURL;
+	private String studyLookupServiceURL;
 	private String hl7v2Dir;
 	private String hl7v2mapFileName;
 
@@ -81,7 +82,7 @@ public class CancerCenterClient {
 	 * Entry point for the TestCancerClientUI. 
 	 * @param file
 	 */
-	public void test(File file) {
+	public void test(File file,ArrayList<ScheduledExecutorService>threadList) {
 
 		String configFilePath = file.getAbsolutePath();
 		if (configFilePath == null) {
@@ -100,7 +101,7 @@ public class CancerCenterClient {
 		CancerCenterClient client = new CancerCenterClient();
 		boolean success = client.checkSetup();
 		if (success) {
-			client.process();
+			client.process(threadList);
 		} else {
 			logger.fatal(Messages.getString("CancerCenterClient.0"));
 			logger.fatal(Messages.getString("CancerCenterClient.5"));
@@ -195,13 +196,13 @@ public class CancerCenterClient {
 	 * 1.It invokes the caAdapter API to convert a .csv file to HL7V3. 2.Then
 	 * invokes the grid service to persist the HL7V3 message.
 	 */
-	public void process() {
+	public void process(ArrayList<ScheduledExecutorService>threadList) {
 
 		 HL7V3Transformation v3Transformation = new HL7V3Transformation(getInstance());
-		 v3Transformation.process();
+		 v3Transformation.process(threadList);
 		
 		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
-		 v2Transformation.process();
+		 v2Transformation.process(threadList);
 
 	}
 
@@ -320,6 +321,7 @@ public class CancerCenterClient {
 			getInstance().setInitialDelay_str(props.getProperty("initialDelayInSeconds"));
 			getInstance().setPollingInterval_str(props.getProperty("pollingDelayInSeconds"));
 			getInstance().setHubURL(props.getProperty("HubURL"));
+			getInstance().setStudyLookupServiceURL(props.getProperty("StudyLookUpServiceURL"));
 			logger.info("preProcessorPropertiesFile : "
 					+ getInstance().preProcessorPropertiesFile_str);
 			logger.info("Location : " + getInstance().location);
@@ -667,6 +669,20 @@ public class CancerCenterClient {
 	 */
 	public void setMapFileName(String mapFileName) {
 		this.mapFileName = mapFileName;
+	}
+
+	/**
+	 * @return the studyLookupServiceURL
+	 */
+	public String getStudyLookupServiceURL() {
+		return getInstance().studyLookupServiceURL;
+	}
+
+	/**
+	 * @param studyLookupServiceURL the studyLookupServiceURL to set
+	 */
+	public void setStudyLookupServiceURL(String studyLookupServiceURL) {
+		this.studyLookupServiceURL = studyLookupServiceURL;
 	}
 
 } // End of Class
