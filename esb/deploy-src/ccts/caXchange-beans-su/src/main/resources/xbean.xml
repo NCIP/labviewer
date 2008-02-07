@@ -77,6 +77,8 @@
 
   <bean:endpoint service="caxchange:loadLab" endpoint="loadLab" bean="#loadLab" />
   
+  <bean:endpoint service="caxchange:labLoader" endpoint="labLoader" bean="#labLoader" />
+  
   <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
   
   <bean id="caersProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersProcess"/>
@@ -479,5 +481,27 @@
       name="serviceUrl"
       value="${loadLab.url}" />
   </bean>
-  
+
+  <bean
+    id="labLoader"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="labLoaderInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="LabLoader" />
+    <property
+      name="targetOperation"
+      value="CT_LAB_DATA" />
+  </bean>
+
+  <bean
+    id="labLoaderInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.LabLoaderInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="${labLoader.url}" />
+  </bean>  
 </beans>
