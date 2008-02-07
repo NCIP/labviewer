@@ -57,7 +57,7 @@ public class CancerCenterClient {
 	private static Logger logger = Logger
 			.getLogger("gov.nih.nci.caxchange.client.CancerCenterClient");
 
-	private static CancerCenterClient cancerCenterClient;
+	private static CancerCenterClient cancerCenterClient=null;
 
 	/**
 	 * Implementing the Singleton: private constructor
@@ -71,7 +71,7 @@ public class CancerCenterClient {
 	 * else returns the previously created instance.
 	 * @return cancerCenterClient
 	 */
-	public static CancerCenterClient getInstance() {
+	public static synchronized CancerCenterClient getInstance() {
 		if (cancerCenterClient == null)
 			cancerCenterClient = new CancerCenterClient();
 
@@ -94,14 +94,13 @@ public class CancerCenterClient {
 			throw new RuntimeException(Messages
 					.getString("CancerCenterClient.2"));
 		} else {
-			getInstance().programPropertiesFile = configFilePath;
+			this.programPropertiesFile = configFilePath;
 			f = null;
 		}
-		logger.debug(Messages.getString("CancerCenterClient.129"));
-		CancerCenterClient client = new CancerCenterClient();
-		boolean success = client.checkSetup();
+		logger.debug(Messages.getString("this.129"));
+		boolean success = this.checkSetup();
 		if (success) {
-			client.process(threadList);
+			this.process(threadList);
 		} else {
 			logger.fatal(Messages.getString("CancerCenterClient.0"));
 			logger.fatal(Messages.getString("CancerCenterClient.5"));
@@ -123,57 +122,57 @@ public class CancerCenterClient {
 						.getString("CancerCenterClient.7"));
 			}
 
-			getInstance().setRawFilesDir(new File( getInstance().rawFilesFolder));
-			getInstance().setRawFilesBackupDirectory(new File( getInstance().rawFilesBackupFolder));
+			this.rawFilesDir=new File( rawFilesFolder);
+			this.rawFilesBackupDirectory=new File( rawFilesBackupFolder);
 
-			getInstance().setInProcessDir(new File( getInstance().inProcessFolder));
-			getInstance().setProcessedDir(new File( getInstance().processedFolder));
-			getInstance().setErrorDir(new File( getInstance().errorFolder));
+			this.inProcessDir=new File( inProcessFolder);
+			this.processedDir=new File( processedFolder);
+			this.errorDir=new File( errorFolder);
 
 			File preProcessorPropertiesFile_file = new File(
-					 getInstance().preProcessorPropertiesFile_str);
+					this.preProcessorPropertiesFile_str);
 
 			if (! preProcessorPropertiesFile_file.exists()) {
 				throw new PropertiesFileException(Messages
 						.getString("CancerCenterClient.8"));
 			}
-			if (! getInstance().rawFilesDir.exists()) {
+			if (! this.rawFilesDir.exists()) {
 				throw new FolderDoesNotExistException(Messages
 						.getString("CancerCenterClient.9"));
 			}
-			if (! getInstance().rawFilesDir.isDirectory()) {
+			if (! this.rawFilesDir.isDirectory()) {
 				throw new FolderNotADirectoryException(Messages
 						.getString("CancerCenterClient.10"));
 			}
-			if (! getInstance().rawFilesBackupDirectory.exists()) {
+			if (! this.rawFilesBackupDirectory.exists()) {
 				throw new FolderDoesNotExistException(Messages
 						.getString("CancerCenterClient.11"));
 			}
-			if (! getInstance().rawFilesBackupDirectory.isDirectory()) {
+			if (!this.rawFilesBackupDirectory.isDirectory()) {
 				throw new FolderNotADirectoryException(Messages
 						.getString("CancerCenterClient.12"));
 			}
-			if (! getInstance().inProcessDir.exists()) {
+			if (! this.inProcessDir.exists()) {
 				throw new FolderDoesNotExistException(Messages
 						.getString("CancerCenterClient.13"));
 			}
-			if (! getInstance().inProcessDir.isDirectory()) {
+			if (! this.inProcessDir.isDirectory()) {
 				throw new FolderNotADirectoryException(Messages
 						.getString("CancerCenterClient.14"));
 			}
-			if (! getInstance().processedDir.exists()) {
+			if (! this.processedDir.exists()) {
 				throw new FolderDoesNotExistException(Messages
 						.getString("CancerCenterClient.15"));
 			}
-			if (! getInstance().processedDir.isDirectory()) {
+			if (! this.processedDir.isDirectory()) {
 				throw new FolderNotADirectoryException(Messages
 						.getString("CancerCenterClient.16"));
 			}
-			if (! getInstance().errorDir.exists()) {
+			if (! this.errorDir.exists()) {
 				throw new FolderDoesNotExistException(Messages
 						.getString("CancerCenterClient.17"));
 			}
-			if (! getInstance().errorDir.isDirectory()) {
+			if (! this.errorDir.isDirectory()) {
 				throw new FolderNotADirectoryException(Messages
 						.getString("CancerCenterClient.18"));
 			}
@@ -216,7 +215,7 @@ public class CancerCenterClient {
 		logger.debug(Messages.getString("CancerCenterClient.23"));
 		boolean retResult = true;
 		try {
-			File[] fileList =  getInstance().rawFilesDir.listFiles();
+			File[] fileList =  rawFilesDir.listFiles();
 			// Get Current Date and Time for Stamping the file
 			Date dt = new Date();
 			long currentTime = dt.getTime();
@@ -232,18 +231,18 @@ public class CancerCenterClient {
 				String fileName = fileList[i].getName().toString();
 				logger.info("File Name : " + fileName);
 
-				String fileNameLocationDateTimeStamp =  getInstance().location + "_" + sbuf
+				String fileNameLocationDateTimeStamp = this.location + "_" + sbuf
 						+ "_" + fileName;
-				String outFile = getInstance().inProcessFolder
+				String outFile = this.inProcessFolder
 						+ fileNameLocationDateTimeStamp;
 				try {
 					logger.debug(Messages
 							.getString("CancerCenterClient.29"));
 					CSVP fileOut = new CSVP(fileList[i].toString(), outFile,
-							 getInstance().preProcessorPropertiesFile_str);
+							this.preProcessorPropertiesFile_str);
 
 					boolean success = fileList[i].renameTo(new File(
-							 getInstance().rawFilesBackupDirectory,
+							this.rawFilesBackupDirectory,
 							fileNameLocationDateTimeStamp));
 					if (!success) {
 						logger.error(fileList[i].toString() + "Renamed to : "
@@ -261,22 +260,22 @@ public class CancerCenterClient {
 							.getString("CancerCenterClient.33")
 							+ fileList[i].toString());
 					logger.error(e.getMessage());
-					logger.info("Erro Dir : " +  getInstance().errorDir);
-					logger.info("Error folder : " +  getInstance().errorFolder);
+					logger.info("Erro Dir : " +  this.errorDir);
+					logger.info("Error folder : " + this.errorFolder);
 					logger.info("fileNameLocationDateTimeStamp : "
 							+ fileNameLocationDateTimeStamp);
 					logger.info("File : " + fileList[i]);
 					logger.info("*****");
 					boolean movesuccess = fileList[i].renameTo(new File(
-							 getInstance().errorDir, fileNameLocationDateTimeStamp));
+							this.errorDir, fileNameLocationDateTimeStamp));
 					if (!movesuccess) {
 						logger.error(fileList[i].toString() + "Renamed to : "
-								+  getInstance().errorDir + fileNameLocationDateTimeStamp
+								+  this.errorDir + fileNameLocationDateTimeStamp
 								+ " Was not moved to the error folder");
 						logger.info("*****");
 					} else {
 						logger.error(fileList[i].toString() + "Renamed to : "
-								+  getInstance().errorDir + fileNameLocationDateTimeStamp
+								+  this.errorDir + fileNameLocationDateTimeStamp
 								+ " Was moved to the error folder");
 					}
 
@@ -300,45 +299,45 @@ public class CancerCenterClient {
 		boolean isSuccess = false;
 		try {
 			FileInputStream fis = new FileInputStream(new File(
-					getInstance().programPropertiesFile));
+					this.programPropertiesFile));
 
 			Properties props = new Properties();
 			// Read in the stored properties
 			props.load(fis);
-			getInstance().setLocation(props.getProperty("Location"));
-			getInstance().setPreProcessorPropertiesFile_str( props
-					.getProperty("preProcessorPropertiesFile"));
-			getInstance().setUserName(props.getProperty("userName"));
-			getInstance().setUserPasswd(props.getProperty("userPasswd"));
-			getInstance().setRawFilesFolder(props.getProperty("rawFilesFolder"));
-			getInstance().setRawFilesBackupFolder(props.getProperty("rawFilesBackupFolder"));
-			getInstance().setInProcessFolder(props.getProperty("inProcessFolder"));
-			getInstance().setProcessedFolder(props.getProperty("processedFolder"));
-			getInstance().setErrorFolder(props.getProperty("errorFolder"));
-			getInstance().setMapFileName(props.getProperty("mapFileName"));
-			getInstance().setHl7v2Dir(props.getProperty("HL7V2Dir"));
-			getInstance().setHl7v2mapFileName(props.getProperty("hl7v2mapFileName"));
-			getInstance().setInitialDelay_str(props.getProperty("initialDelayInSeconds"));
-			getInstance().setPollingInterval_str(props.getProperty("pollingDelayInSeconds"));
-			getInstance().setHubURL(props.getProperty("HubURL"));
-			getInstance().setStudyLookupServiceURL(props.getProperty("StudyLookUpServiceURL"));
+			this.location = props.getProperty("Location");
+			this.preProcessorPropertiesFile_str= props
+					.getProperty("preProcessorPropertiesFile");
+			this.userName = props.getProperty("userName");
+			this.userPasswd = props.getProperty("userPasswd");
+			this.rawFilesFolder=props.getProperty("rawFilesFolder");
+			this.rawFilesBackupFolder=props.getProperty("rawFilesBackupFolder");
+			this.inProcessFolder=props.getProperty("inProcessFolder");
+			this.processedFolder=props.getProperty("processedFolder");
+			this.errorFolder=props.getProperty("errorFolder");
+			this.mapFileName=props.getProperty("mapFileName");
+			this.hl7v2Dir=props.getProperty("HL7V2Dir");
+			this.hl7v2mapFileName=props.getProperty("hl7v2mapFileName");
+			this.initialDelay_str=props.getProperty("initialDelayInSeconds");
+			this.pollingInterval_str=props.getProperty("pollingDelayInSeconds");
+			this.hubURL=props.getProperty("HubURL");
+			this.studyLookupServiceURL=props.getProperty("StudyLookUpServiceURL");
 			logger.info("preProcessorPropertiesFile : "
-					+ getInstance().preProcessorPropertiesFile_str);
-			logger.info("Location : " + getInstance().location);
-			logger.info("rawFilesFolder : " + getInstance().rawFilesFolder);
-			logger.info("rawFilesBackupFolder : " + getInstance().rawFilesBackupFolder);
-			logger.info("inProcessFolder : " + getInstance().inProcessFolder);
-			logger.info("ProcessedFolder : " + getInstance().processedFolder);
-			logger.info("ErrorFolder : " + getInstance().errorFolder);
-			logger.info("initialDelay_str : " + getInstance().initialDelay_str);
-			logger.info("pollingInterval_str : " + getInstance().pollingInterval_str);
-			logger.info("hubURL : " + getInstance().hubURL);
-			logger.info("hl7v2Dir : " + getInstance().hl7v2Dir);
-			logger.info("hl7v2mapFileName : " + getInstance().hl7v2mapFileName);
-			getInstance().initialDelay_long = new Long(getInstance().initialDelay_str);
-			getInstance().pollingInterval_long = new Long(getInstance().pollingInterval_str);
-			logger.info("initialDelay_long : " + getInstance().initialDelay_long);
-			logger.info("pollingInterval_long : " +getInstance(). pollingInterval_long);
+					+ this.preProcessorPropertiesFile_str);
+			logger.info("Location : " + this.location);
+			logger.info("rawFilesFolder : " + this.rawFilesFolder);
+			logger.info("rawFilesBackupFolder : " + this.rawFilesBackupFolder);
+			logger.info("inProcessFolder : " + this.inProcessFolder);
+			logger.info("ProcessedFolder : " + this.processedFolder);
+			logger.info("ErrorFolder : " + this.errorFolder);
+			logger.info("initialDelay_str : " + this.initialDelay_str);
+			logger.info("pollingInterval_str : " + this.pollingInterval_str);
+			logger.info("hubURL : " + this.hubURL);
+			logger.info("hl7v2Dir : " + this.hl7v2Dir);
+			logger.info("hl7v2mapFileName : " + this.hl7v2mapFileName);
+			this.initialDelay_long = new Long(this.initialDelay_str);
+			this.pollingInterval_long = new Long(this.pollingInterval_str);
+			logger.info("initialDelay_long : " + this.initialDelay_long);
+			logger.info("pollingInterval_long : " + this.pollingInterval_long);
 
 			isSuccess = true;
 		} catch (Exception e) {
@@ -352,337 +351,337 @@ public class CancerCenterClient {
 	 * @return the preProcessorPropertiesFile_str
 	 */
 	public String getPreProcessorPropertiesFile_str() {
-		return getInstance().preProcessorPropertiesFile_str;
+		return this.preProcessorPropertiesFile_str;
 	}
 
 	/**
 	 * @return the programPropertiesFile
 	 */
 	public String getProgramPropertiesFile() {
-		return getInstance().programPropertiesFile;
+		return this.programPropertiesFile;
 	}
 
 	/**
 	 * @return the location
 	 */
 	public String getLocation() {
-		return getInstance().location;
+		return this.location;
 	}
 
 	/**
 	 * @return the userName
 	 */
 	public String getUserName() {
-		return getInstance().userName;
+		return this.userName;
 	}
 
 	/**
 	 * @return the userPasswd
 	 */
 	public String getUserPasswd() {
-		return getInstance().userPasswd;
+		return this.userPasswd;
 	}
 
 	/**
 	 * @return the inProcessFolder
 	 */
 	public String getInProcessFolder() {
-		return getInstance().inProcessFolder;
+		return this.inProcessFolder;
 	}
 
 	/**
 	 * @return the processedFolder
 	 */
 	public String getProcessedFolder() {
-		return getInstance().processedFolder;
+		return this.processedFolder;
 	}
 
 	/**
 	 * @return the errorFolder
 	 */
 	public String getErrorFolder() {
-		return getInstance().errorFolder;
+		return this.errorFolder;
 	}
 
 	/**
 	 * @return the rawFilesFolder
 	 */
 	public String getRawFilesFolder() {
-		return getInstance().rawFilesFolder;
+		return this.rawFilesFolder;
 	}
 
 	/**
 	 * @return the rawFilesBackupFolder
 	 */
 	public String getRawFilesBackupFolder() {
-		return getInstance().rawFilesBackupFolder;
+		return this.rawFilesBackupFolder;
 	}
 
 	/**
 	 * @return the initialDelay_str
 	 */
 	public String getInitialDelay_str() {
-		return getInstance().initialDelay_str;
+		return this.initialDelay_str;
 	}
 
 	/**
 	 * @return the pollingInterval_str
 	 */
 	public String getPollingInterval_str() {
-		return getInstance().pollingInterval_str;
+		return this.pollingInterval_str;
 	}
 
 	/**
 	 * @return the initialDelay_long
 	 */
 	public long getInitialDelay_long() {
-		return getInstance().initialDelay_long;
+		return this.initialDelay_long;
 	}
 
 	/**
 	 * @return the pollingInterval_long
 	 */
 	public long getPollingInterval_long() {
-		return getInstance().pollingInterval_long;
+		return this.pollingInterval_long;
 	}
 
 	/**
 	 * @return the processedDir
 	 */
 	public File getProcessedDir() {
-		return getInstance().processedDir;
+		return this.processedDir;
 	}
 
 	/**
 	 * @return the inProcessDir
 	 */
 	public File getInProcessDir() {
-		return getInstance().inProcessDir;
+		return this.inProcessDir;
 	}
 
 	/**
 	 * @return the errorDir
 	 */
 	public File getErrorDir() {
-		return getInstance().errorDir;
+		return this.errorDir;
 	}
 
 	/**
 	 * @return the rawFilesDir
 	 */
 	public File getRawFilesDir() {
-		return getInstance().rawFilesDir;
+		return this.rawFilesDir;
 	}
 
 	/**
 	 * @return the rawFilesBackupDirectory
 	 */
 	public File getRawFilesBackupDirectory() {
-		return getInstance().rawFilesBackupDirectory;
+		return this.rawFilesBackupDirectory;
 	}
 
 	/**
 	 * @return the hubURL
 	 */
 	public String getHubURL() {
-		return getInstance().hubURL;
+		return this.hubURL;
 	}
 
 	/**
 	 * @return the mapFileName
 	 */
 	public String getMapFileName() {
-		return getInstance().mapFileName;
+		return this.mapFileName;
 	}
 
 	/**
 	 * @return the hl7v2Dir
 	 */
 	public String getHl7v2Dir() {
-		return getInstance().hl7v2Dir;
+		return this.hl7v2Dir;
 	}
 
 	/**
 	 * @return the hl7v2mapFileName
 	 */
 	public String getHl7v2mapFileName() {
-		return getInstance().hl7v2mapFileName;
+		return this.hl7v2mapFileName;
 	}
 
 	/**
 	 * @param preProcessorPropertiesFile_str the preProcessorPropertiesFile_str to set
 	 */
 	public void setPreProcessorPropertiesFile_str(
-			String preProcessorPropertiesFile_str) {
-		this.preProcessorPropertiesFile_str = preProcessorPropertiesFile_str;
+			String preProcessorPropertiesFile_string) {
+		this.preProcessorPropertiesFile_str = preProcessorPropertiesFile_string;
 	}
 
 	/**
 	 * @param programPropertiesFile the programPropertiesFile to set
 	 */
-	public void setProgramPropertiesFile(String programPropertiesFile) {
-		this.programPropertiesFile = programPropertiesFile;
+	public void setProgramPropertiesFile(String programPropertiesfile) {
+		this.programPropertiesFile = programPropertiesfile;
 	}
 
 	/**
 	 * @param location the location to set
 	 */
-	public void setLocation(String location) {
-		this.location = location;
+	public void setLocation(String loc) {
+		this.location = loc;
 	}
 
 	/**
 	 * @param userName the userName to set
 	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String user) {
+		this.userName = user;
 	}
 
 	/**
 	 * @param userPasswd the userPasswd to set
 	 */
-	public void setUserPasswd(String userPasswd) {
-		this.userPasswd = userPasswd;
+	public void setUserPasswd(String userPassword) {
+		this.userPasswd = userPassword;
 	}
 
 	/**
 	 * @param inProcessFolder the inProcessFolder to set
 	 */
-	public void setInProcessFolder(String inProcessFolder) {
-		this.inProcessFolder = inProcessFolder;
+	public void setInProcessFolder(String inProcessFoldr) {
+		this.inProcessFolder = inProcessFoldr;
 	}
 
 	/**
 	 * @param processedFolder the processedFolder to set
 	 */
-	public void setProcessedFolder(String processedFolder) {
-		this.processedFolder = processedFolder;
+	public void setProcessedFolder(String processedFoldr) {
+		this.processedFolder = processedFoldr;
 	}
 
 	/**
 	 * @param errorFolder the errorFolder to set
 	 */
-	public void setErrorFolder(String errorFolder) {
-		this.errorFolder = errorFolder;
+	public void setErrorFolder(String errorFoldr) {
+		this.errorFolder = errorFoldr;
 	}
 
 	/**
 	 * @param rawFilesFolder the rawFilesFolder to set
 	 */
-	public void setRawFilesFolder(String rawFilesFolder) {
-		this.rawFilesFolder = rawFilesFolder;
+	public void setRawFilesFolder(String rawFilesFoldr) {
+		this.rawFilesFolder = rawFilesFoldr;
 	}
 
 	/**
 	 * @param rawFilesBackupFolder the rawFilesBackupFolder to set
 	 */
-	public void setRawFilesBackupFolder(String rawFilesBackupFolder) {
-		this.rawFilesBackupFolder = rawFilesBackupFolder;
+	public void setRawFilesBackupFolder(String rawFilesBackupFoldr) {
+		this.rawFilesBackupFolder = rawFilesBackupFoldr;
 	}
 
 	/**
 	 * @param initialDelay_str the initialDelay_str to set
 	 */
-	public void setInitialDelay_str(String initialDelay_str) {
-		this.initialDelay_str = initialDelay_str;
+	public void setInitialDelay_str(String initialDelay_string) {
+		this.initialDelay_str = initialDelay_string;
 	}
 
 	/**
 	 * @param pollingInterval_str the pollingInterval_str to set
 	 */
-	public void setPollingInterval_str(String pollingInterval_str) {
-		this.pollingInterval_str = pollingInterval_str;
+	public void setPollingInterval_str(String pollingInterval_string) {
+		this.pollingInterval_str = pollingInterval_string;
 	}
 
 	/**
 	 * @param initialDelay_long the initialDelay_long to set
 	 */
-	public void setInitialDelay_long(long initialDelay_long) {
-		this.initialDelay_long = initialDelay_long;
+	public void setInitialDelay_long(long initialDelay_lg) {
+		this.initialDelay_long = initialDelay_lg;
 	}
 
 	/**
 	 * @param pollingInterval_long the pollingInterval_long to set
 	 */
-	public void setPollingInterval_long(long pollingInterval_long) {
-		this.pollingInterval_long = pollingInterval_long;
+	public void setPollingInterval_long(long pollingInterval_lg) {
+		this.pollingInterval_long = pollingInterval_lg;
 	}
 
 	/**
 	 * @param processedDir the processedDir to set
 	 */
-	public void setProcessedDir(File processedDir) {
-		this.processedDir = processedDir;
+	public void setProcessedDir(File processedDirectory) {
+		this.processedDir = processedDirectory;
 	}
 
 	/**
 	 * @param inProcessDir the inProcessDir to set
 	 */
-	public void setInProcessDir(File inProcessDir) {
-		this.inProcessDir = inProcessDir;
+	public void setInProcessDir(File inProcessDirectory) {
+		this.inProcessDir = inProcessDirectory;
 	}
 
 	/**
 	 * @param errorDir the errorDir to set
 	 */
-	public void setErrorDir(File errorDir) {
-		this.errorDir = errorDir;
+	public void setErrorDir(File errorDirectory) {
+		this.errorDir = errorDirectory;
 	}
 
 	/**
 	 * @param rawFilesDir the rawFilesDir to set
 	 */
-	public void setRawFilesDir(File rawFilesDir) {
-		this.rawFilesDir = rawFilesDir;
+	public void setRawFilesDir(File rawFilesDirectory) {
+		this.rawFilesDir = rawFilesDirectory;
 	}
 
 	/**
 	 * @param rawFilesBackupDirectory the rawFilesBackupDirectory to set
 	 */
-	public void setRawFilesBackupDirectory(File rawFilesBackupDirectory) {
-		this.rawFilesBackupDirectory = rawFilesBackupDirectory;
+	public void setRawFilesBackupDirectory(File rawFilesBackupDir) {
+		this.rawFilesBackupDirectory = rawFilesBackupDir;
 	}
 
 	/**
 	 * @param hubURL the hubURL to set
 	 */
-	public void setHubURL(String hubURL) {
-		this.hubURL = hubURL;
+	public void setHubURL(String huburl) {
+		this.hubURL = huburl;
 	}
 
 	/**
 	 * @param hl7v2Dir the hl7v2Dir to set
 	 */
-	public void setHl7v2Dir(String hl7v2Dir) {
-		this.hl7v2Dir = hl7v2Dir;
+	public void setHl7v2Dir(String hl7v2Directory) {
+		this.hl7v2Dir = hl7v2Directory;
 	}
 
 	/**
 	 * @param hl7v2mapFileName the hl7v2mapFileName to set
 	 */
-	public void setHl7v2mapFileName(String hl7v2mapFileName) {
-		this.hl7v2mapFileName = hl7v2mapFileName;
+	public void setHl7v2mapFileName(String hl7v2mapFile) {
+		this.hl7v2mapFileName = hl7v2mapFile;
 	}
 
 	/**
 	 * @param mapFileName the mapFileName to set
 	 */
-	public void setMapFileName(String mapFileName) {
-		this.mapFileName = mapFileName;
+	public void setMapFileName(String mapFile) {
+		this.mapFileName = mapFile;
 	}
 
 	/**
 	 * @return the studyLookupServiceURL
 	 */
 	public String getStudyLookupServiceURL() {
-		return getInstance().studyLookupServiceURL;
+		return this.studyLookupServiceURL;
 	}
 
 	/**
 	 * @param studyLookupServiceURL the studyLookupServiceURL to set
 	 */
-	public void setStudyLookupServiceURL(String studyLookupServiceURL) {
-		this.studyLookupServiceURL = studyLookupServiceURL;
+	public void setStudyLookupServiceURL(String studyLookupServiceurl) {
+		this.studyLookupServiceURL = studyLookupServiceurl;
 	}
 
 } // End of Class
