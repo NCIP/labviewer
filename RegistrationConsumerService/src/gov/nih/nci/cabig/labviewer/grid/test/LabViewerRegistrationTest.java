@@ -8,6 +8,7 @@ import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.xml.sax.SAXException;
 
@@ -20,7 +21,7 @@ public class LabViewerRegistrationTest
 {
 	//String serviceUrl = "http://localhost:8080/wsrf/services/cagrid/RegistrationConsumer";
 	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
-	String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/RegistrationConsumer";
 	String sampleFile = "/SampleRegistrationMessage.xml";
 	
 	/**
@@ -44,6 +45,9 @@ public class LabViewerRegistrationTest
 		try
 		{
 			System.out.println("Calling patient registration service at " + serviceUrl);
+			
+			// Setup the credentials
+			//GlobusCredential userCredential = new GlobusCredential("cctsdemo1@nci.nih.gov");
 			
 			// Create the client
 			RegistrationConsumerClient client = new RegistrationConsumerClient(this.serviceUrl);
