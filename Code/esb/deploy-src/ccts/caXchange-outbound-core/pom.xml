@@ -483,6 +483,21 @@
       <artifactId>adverse-event-tests</artifactId> 
       <version>1.0</version> 
     </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.lab-loader-consumer</groupId> 
+      <artifactId>lab-loader-client</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.outbound.lab-loader-consumer</groupId> 
+      <artifactId>lab-loader-common</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+	<dependency>
+      <groupId>cagrid.outbound.lab-loader-consumer</groupId> 
+      <artifactId>lab-loader-stubs</artifactId> 
+      <version>1.0</version> 
+    </dependency>
     <dependency>
       <groupId>gov.nih.nci.caxchange</groupId>
       <artifactId>caXchange-common-jar</artifactId>

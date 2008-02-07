@@ -112,6 +112,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		logger.debug("Received exchange: "+ exchange);
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
+		
+		
 		try {
 			invokeDelegationService(exchange);
 		} catch (Exception e) {
@@ -145,6 +147,10 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			XPathUtil util = new XPathUtil();
 			util.setIn(in);
 			util.initialize();
+			
+			//TODO: this is a temporary arrangement for Lab Loader
+			if("CT_LAB_DATA".equals(util.getMessageType()))
+				return;
 
 			GlobusCredential hostCredential = null;
 			

@@ -99,7 +99,15 @@
         <eip:target>
           <eip:exchange-target service="caxchange:adverseEvent" />
         </eip:target>
-      </eip:routing-rule> 
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='CT_LAB_DATA']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:ctLabData" />
+        </eip:target>
+      </eip:routing-rule>
       <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
@@ -139,6 +147,13 @@
   <eip:caxchange-static-recipient-list service="caxchange:adverseEvent" endpoint="endpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callAdverseEventPipeline" />
+      </eip:recipients>
+  </eip:caxchange-static-recipient-list>
+  
+  <!-- static recipient list for CT_LAB_DATA -->
+  <eip:caxchange-static-recipient-list service="caxchange:ctLabData" endpoint="endpoint">
+      <eip:recipients>
+        <eip:exchange-target service="caxchange:callCTLabDataPipeline" />
       </eip:recipients>
   </eip:caxchange-static-recipient-list>
   
@@ -393,7 +408,17 @@
         <eip:target>
           <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
         </eip:target>
+  </eip:pipeline>
+  
+  <eip:pipeline service="caxchange:callCTLabDataPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:labLoader" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
   </eip:pipeline> 
+
   
   <!-- End EIP Components for invoking the cTOM -->  
   
