@@ -167,7 +167,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 	public synchronized void registerResponseListeners() throws Exception {
 		count++;
 		logger.debug("in registerresponseListeners: count="+count);
-/*		try {
+		try {
 			if(connection==null || session==null || consumer==null || listener==null){
 				ServiceConfiguration configuration = getConfiguration();
 				if (connectionFactory == null) {
@@ -193,7 +193,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 			ex.printStackTrace();
 			throw new Exception("Error registers response listeners.", ex);
 		} finally  {
-		}*/
+		}
 	}    
 
 }
