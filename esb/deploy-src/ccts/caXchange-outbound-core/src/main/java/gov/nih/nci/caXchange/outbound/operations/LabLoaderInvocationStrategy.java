@@ -34,12 +34,10 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.labviewer.client.LabLoaderClient;
 
 
-public class LabLoaderInvocationStrategy implements GridInvocationStrategy {
+public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(LabLoaderInvocationStrategy.class);
-
-	private String serviceUrl;
 
 	/*
 	 * (non-Javadoc)
@@ -110,14 +108,6 @@ public class LabLoaderInvocationStrategy implements GridInvocationStrategy {
 			log.error("Failed to invoke lab loader service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
-	}
-
-	public String getServiceUrl() {
-		return serviceUrl;
-	}
-
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
 	}
 
 }

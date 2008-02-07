@@ -1,4 +1,4 @@
-package gov.nih.nci.caxchange.servicemix.bean.util;
+package gov.nih.nci.caXchange;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +21,7 @@ public class CaxchangeConstants {
     public static final String ERROR_MESSAGE="caxchange.errormessage";
     public static final String ERROR_CODE="caxchange.errorcode";
     
+    public static final String TARGET_ID="caxchange.gridservice.target.id";    
     
     public static final Set ROLLBACK_STATUSES = new HashSet();
 	public static final QName ROLLBACK_PIPELINE = new QName("http://nci.nih.gov/caXchange","rollbackPipeline");

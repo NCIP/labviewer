@@ -32,12 +32,10 @@ import webservices.AckStatus;
 import webservices.Acknowledgement;
 import webservices.LoadLabsRequest;
 
-public class AdverseEventInvocationStrategy implements GridInvocationStrategy {
+public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(AdverseEventInvocationStrategy.class);
-
-	private String serviceUrl;
 
 	/*
 	 * (non-Javadoc)
@@ -103,14 +101,6 @@ public class AdverseEventInvocationStrategy implements GridInvocationStrategy {
 			log.error("Failed to invoke loab lab service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
-	}
-
-	public String getServiceUrl() {
-		return serviceUrl;
-	}
-
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
 	}
 
 }

@@ -11,8 +11,10 @@ import javax.jbi.messaging.MessageExchange;
  * 
  * @author steve
  */
-public interface GridInvocationStrategy {
+public abstract class GridInvocationStrategy {
 
+	protected String serviceUrl;
+	protected boolean isItineraryBased;
     /**
      * Performs operations on the grid service.
      * 
@@ -20,8 +22,24 @@ public interface GridInvocationStrategy {
      * @return
      * @throws GridInvocationException
      */
-    public GridInvocationResult invokeGridService(DeliveryChannel channel,
+    public abstract GridInvocationResult invokeGridService(DeliveryChannel channel,
 	    MessageExchange exchange, GridMessage message)
 	    throws GridInvocationException;
+    
+	public String getServiceUrl() {
+		return serviceUrl;
+	}
+
+	public void setServiceUrl(String serviceUrl) {
+		this.serviceUrl = serviceUrl;
+	}
+
+	public boolean isItineraryBased() {
+		return isItineraryBased;
+	}
+
+	public void setItineraryBased(boolean isItineraryBased) {
+		this.isItineraryBased = isItineraryBased;
+	}
 
 }

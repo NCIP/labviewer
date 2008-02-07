@@ -34,12 +34,10 @@ import gov.nih.nci.cagrid.common.Utils;
 /**
  * @author stevec
  */
-public class LoadLabInvocationStrategy implements GridInvocationStrategy {
+public class LoadLabInvocationStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(LoadLabInvocationStrategy.class);
-
-	private String serviceUrl;
 
 	/*
 	 * (non-Javadoc)

@@ -1,5 +1,6 @@
 package gov.nih.nci.caXchange.outbound;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caXchange.outbound.impl.GridMessageImpl;
 
@@ -154,7 +155,7 @@ public class GridSU implements MessageExchangeListener {
 
 				if (!isRollback()) {
 					NormalizedMessage out = exchange.createMessage();
-					Document output = createOutputDocument(gridMessage, result);
+					Document output = createOutputDocument(exchange, gridMessage, result);
 					out.setContent(new DOMSource(output));
 					exchange.setMessage(out, "out");
 				} else {
@@ -169,7 +170,7 @@ public class GridSU implements MessageExchangeListener {
 					log.debug("Exhausted retries. Returning error.");
 					if(!isRollback()) {
 						NormalizedMessage out = exchange.createMessage();
-						Document output = createErrorDocument(gie);
+						Document output = createErrorDocument(exchange, gie);
 						out.setContent(new DOMSource(output));
 						exchange.setMessage(out, "out");
 					} else {
@@ -223,7 +224,9 @@ public class GridSU implements MessageExchangeListener {
 		this.targetOperation = targetOperation;
 	}
 
-	public String getTargetId() {
+	public String getTargetId(MessageExchange exchange) {
+		if(strategy.isItineraryBased())
+			return (String) exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID);
 		return targetId;
 	}
 
@@ -284,11 +287,11 @@ public class GridSU implements MessageExchangeListener {
 		this.rollback = rollback;
 	}
 
-	protected Document createBaseOutputDocument() throws Exception {
+	protected Document createBaseOutputDocument(MessageExchange exchange) throws Exception {
 		Document output = new SourceTransformer().createDocument();
 		Element root = output.createElement(RESPONSE_ELEMENT);
 		Element targetServiceId = output.createElement(TARGET_SERVICE_ID_ELEMENT);
-		targetServiceId.setTextContent(getTargetId());
+		targetServiceId.setTextContent(getTargetId(exchange));
 		Element targetServiceOp = output.createElement(TARGET_SERVICE_OP_ELEMENT);
 		targetServiceOp.setTextContent(getTargetOperation());
 		root.appendChild(targetServiceId);
@@ -297,10 +300,10 @@ public class GridSU implements MessageExchangeListener {
 		return output;
 	}
 
-	protected Document createOutputDocument(GridMessage gridMessage,
+	protected Document createOutputDocument(MessageExchange exchange, GridMessage gridMessage,
 			GridInvocationResult result) throws Exception {
 
-		Document output = createBaseOutputDocument();
+		Document output = createBaseOutputDocument(exchange);
 		Element root = output.getDocumentElement();
 		Element targetStatus = output.createElement(TARGET_STATUS_ELEMENT);
 		if (result.isFault()) {
@@ -318,8 +321,8 @@ public class GridSU implements MessageExchangeListener {
 		return output;
 	}
 
-	public Document createErrorDocument(Exception e) throws Exception {
-		Document output = createBaseOutputDocument();
+	public Document createErrorDocument(MessageExchange exchange, Exception e) throws Exception {
+		Document output = createBaseOutputDocument(exchange);
 		Element root = output.getDocumentElement();
 		Element targetStatus = output.createElement(TARGET_STATUS_ELEMENT);
 		targetStatus.setTextContent("ERROR");

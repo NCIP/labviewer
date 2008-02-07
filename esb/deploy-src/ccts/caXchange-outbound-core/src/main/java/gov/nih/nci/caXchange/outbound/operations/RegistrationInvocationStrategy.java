@@ -3,6 +3,7 @@
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.ConnectException;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.jbi.messaging.DeliveryChannel;
@@ -32,12 +34,12 @@ import org.w3c.dom.Node;
 /**
  * @author stevec
  */
-public class RegistrationInvocationStrategy implements GridInvocationStrategy {
+public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(RegistrationInvocationStrategy.class);
 	
-	private String serviceUrl;
+	private Properties caxchangeProps;
 
 	/*
 	 * (non-Javadoc)
@@ -60,8 +62,13 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 				throw new GridInvocationException("no credentials found");
 			}
 			
+			String url=serviceUrl;
+			if(isItineraryBased){
+				url=caxchangeProps.getProperty(exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID)+".registration.url");
+			}
+			
 			RegistrationConsumerClient client = new RegistrationConsumerClient(
-					serviceUrl, cred);
+					url, cred);
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
@@ -109,12 +116,12 @@ public class RegistrationInvocationStrategy implements GridInvocationStrategy {
 		}
 	}
 
-	public String getServiceUrl() {
-		return serviceUrl;
+	public Properties getCaxchangeProps() {
+		return caxchangeProps;
 	}
 
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
+	public void setCaxchangeProps(Properties caxchangeProps) {
+		this.caxchangeProps = caxchangeProps;
 	}
 
 }

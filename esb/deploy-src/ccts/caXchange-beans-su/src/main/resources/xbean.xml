@@ -26,6 +26,13 @@
 			<value>classpath:caxchange.properties</value>
 		</property>
 	</bean>
+	
+  <bean id="caxchangeProps"
+    class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="location">
+      <value>classpath:caxchange.properties</value>
+    </property>
+  </bean>
 
   <bean:endpoint service="caxchange:setSubjectService" endpoint="endpoint" bean="#invokeDelegationServiceBean"/>
   
@@ -37,7 +44,7 @@
   
   <bean:endpoint service="caxchange:caersProcess" endpoint="endpoint" bean="#caersProcess" />
   
-   <bean:endpoint service="caxchange:pscRollback" endpoint="endpoint" bean="#pscRollback" />
+  <bean:endpoint service="caxchange:pscRollback" endpoint="endpoint" bean="#pscRollback" />
   
   <bean:endpoint service="caxchange:caersRollback" endpoint="endpoint" bean="#caersRollback" />
   
@@ -85,7 +92,11 @@
   
   <bean id="pscRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.PscRollback"/>
   
-  <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersRollback"/>  
+  <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersRollback"/>
+  
+  <bean:endpoint service="caxchange:multiSiteRegistration" endpoint="multiSiteRegistration" bean="#multiSiteRegistration" />
+
+  <bean:endpoint service="caxchange:multiSiteStudy" endpoint="multiSiteStudy" bean="#multiSiteStudy" />
 
   <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean">
     <property name="certificateFilePath" value="${delegation.certificateFilePath}"/>
@@ -107,7 +118,7 @@
       </property>
   </bean>
   
-    <bean
+  <bean
     id="c3dRegistration"
     class="gov.nih.nci.caXchange.outbound.GridSU">
     <property name="strategy">
@@ -499,9 +510,43 @@
   <bean
     id="labLoaderInvocationStrategy"
     class="gov.nih.nci.caXchange.outbound.operations.LabLoaderInvocationStrategy">
-
     <property
       name="serviceUrl"
-      value="${labLoader.url}" />
-  </bean>  
+      value="${ctom.labLoader.url}" />
+  </bean>
+  
+  <bean
+    id="multiSiteRegistration"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <bean id="multiSiteRegistrationInvocationStrategy" 
+      class="gov.nih.nci.caXchange.outbound.operations.RegistrationInvocationStrategy">
+        <property name="caxchangeProps">
+          <ref bean="caxchangeProps"/>
+        </property>
+        <property name="itineraryBased" value="true"/>
+      </bean>
+    </property>
+    <property
+      name="targetOperation"
+      value="MULTISITE_REGISTER_SUBJECT" />
+  </bean>
+  
+  <bean
+    id="multiSiteStudy"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <bean id="multiSiteStudyInvocationStrategy" 
+      class="gov.nih.nci.caXchange.outbound.operations.StudyInvocationStrategy">
+        <property name="caxchangeProps">
+          <ref bean="caxchangeProps"/>
+        </property>
+        <property name="itineraryBased" value="true"/>
+      </bean>
+    </property>
+    <property
+      name="targetOperation"
+      value="MULTISITE_STUDY_CREATION" />
+  </bean>
+
 </beans>

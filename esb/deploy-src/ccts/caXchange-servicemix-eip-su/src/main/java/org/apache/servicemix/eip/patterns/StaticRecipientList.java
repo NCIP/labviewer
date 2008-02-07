@@ -94,9 +94,9 @@ public class StaticRecipientList extends EIPEndpoint {
     public void validate() throws DeploymentException {
         super.validate();
         // Check recipients
-        if (recipients == null || recipients.length == 0) {
-            throw new IllegalArgumentException("recipients should contain at least one ExchangeTarget");
-        }
+        //if (recipients == null || recipients.length == 0) {
+          //  throw new IllegalArgumentException("recipients should contain at least one ExchangeTarget");
+        //}
         // Create correlation property
         correlation = "StaticRecipientList.Correlation." + getService() + "." + getEndpoint();
     }
