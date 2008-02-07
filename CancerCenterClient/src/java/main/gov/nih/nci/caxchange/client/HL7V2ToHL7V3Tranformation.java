@@ -2,10 +2,13 @@ package gov.nih.nci.caxchange.client;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import edu.knu.medinfo.hl7.v2tree.HL7MessageTreeException;
-import gov.nih.nci.caadapter.common.util.FileUtil;
-import gov.nih.nci.caadapter.ui.mapping.V2V3.V2Converter;
+import gov.nih.nci.caadapter.ui.mapping.V2V3.ConvertFromV2ToCSV;
 
 import java.io.File;
+import java.text.FieldPosition;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -27,6 +30,7 @@ public class HL7V2ToHL7V3Tranformation {
 			.newScheduledThreadPool(1);
 
 	private CancerCenterClient cancerCenterClient;
+	private String fileNameLocationDateTimeStamp;
 	
 	public HL7V2ToHL7V3Tranformation(CancerCenterClient client){
 		cancerCenterClient = client;
@@ -38,8 +42,8 @@ public class HL7V2ToHL7V3Tranformation {
 	 * Invokes the caAdapter API to convert a generated .CSV to HL7V3.
 	 * Invokes the grid service to persist the generated HL7V3 message.
 	 */
-	public void process() {
-
+	public void process(ArrayList<ScheduledExecutorService>threadList) {
+	   threadList.add(scheduler);
 		final Runnable fileCheck = new Runnable() {
 
 			public void run() {
@@ -60,15 +64,28 @@ public class HL7V2ToHL7V3Tranformation {
 						}
 						File[] fileList = inProcessDir.listFiles();
 						for (int i = 0; i < fileList.length; i++) {
+							String csvFileName = getFileName(fileList[i].getName().toString());
 							// invokes the caAdapter API to convert a HL7V2 file
 							// to HL7V3.
-							String cvsFileName = invokecaAdapterAPIV2toV3(fileList[i].getAbsolutePath());
-							// invokes the grid service to persist the HL7V3
-							// message.
-							if(cvsFileName!=null){
-							HL7V3Transformation hl7v3Transformation = new HL7V3Transformation(cancerCenterClient);
-							String hl7v3 = hl7v3Transformation.invokecaAdapterAPI(cvsFileName);
-							hl7v3Transformation.invokeGridService(fileList, i, hl7v3);
+							boolean transformed=invokecaAdapterAPIV2toV3(fileList[i].getAbsolutePath(),csvFileName,"D:\\CCHC STUFF\\v2tov3\\v2.scs");
+							if(transformed)
+							{
+								System.out.println("Transformed");
+								boolean success = new File(csvFileName).renameTo(new File(
+										cancerCenterClient.getInProcessFolder(),
+										fileNameLocationDateTimeStamp));
+								System.out.println("success" +success);
+								boolean Tsuccess = fileList[i].renameTo(new File(
+										cancerCenterClient.getRawFilesBackupDirectory(),
+										fileNameLocationDateTimeStamp));
+								System.out.println("Tsuccess" +Tsuccess);
+								if (!success) {
+									logger.error(fileList[i].toString() + "Renamed to : "
+											+ csvFileName
+											+ " Was not moved to the backup folder");
+									} else {
+									logger.debug("File Moved to Backup folder");
+								}
 							}
 						}
 					}
@@ -84,32 +101,68 @@ public class HL7V2ToHL7V3Tranformation {
 	}
 
 	
-	
 	/**
 	 * Invokes the caAdapter API to convert the HL7V2 message file to HL7V3
 	 * message. This is a 2 step process 
 	 * 1.Convert HL7V2 to .CSV file 
 	 * 2.Convert .CSV file to HL7V3 message - 
 	 * 	call the method callTocaAdapterAPI() to perform the transformation.
+	 * @param hl7FileName
+	 * @param csvFileName
+	 * @param scsFileName
 	 * @throws Exception
 	 */
-	public String invokecaAdapterAPIV2toV3(String hl7FileName) throws Exception {
-		//String hl7FileName = "D:/Development/CancerCenterClient/src/java/main/gov/nih/nci/caxchange/client/HL7V2.xml"; 
-		String csvFileName = "";//"D:/Development/CancerCenterClient/src/java/main/gov/nih/nci/caxchange/client/HL7V2.cvs"; 
-		String scsFileName = "";//"D:/Development/CancerCenterClient/src/java/main/gov/nih/nci/caxchange/client/HL7V2.scs"; 
+	public boolean invokecaAdapterAPIV2toV3(String hl7FileName,String csvFileName,String scsFileName) throws Exception {
+	      boolean flag =false;
 		try {
-			V2Converter con = new V2Converter(FileUtil.getV2DataDirPath());
-			con.convertV2ToCSV(hl7FileName, csvFileName, scsFileName);
-			if (!con.isCSVValid()) {
-				List<String> errList = con.getValidationMessages();
+			String hl7v2file =  hl7FileName.replace('\\', '\\');// input v2 message file
+			String metaDir = "D:\\Development\\CancerCenterClient\\v2Meta\\v2Meta";// v2 meta data directory
+			String csvFile = csvFileName.replace('/', '\\');             // output csv file
+			String scsFile = scsFileName.replace('/', '\\');              // scs file for validation
+			String msgtype="ORU^R01";                  // message type
+			String version = "2.4";                      // target version
+			 // Constructor
+	        ConvertFromV2ToCSV con = new ConvertFromV2ToCSV(metaDir
+	                                                        , hl7v2file           
+	                                                        , msgtype
+	                                                        , version
+	                                                        , csvFile
+	                                                        , scsFile
+	                                                        , false                      // this value must be false
+	                                                      );
+	        flag=con.isSuccessful();  
+			if (!flag) {
+				List<String> errList = con.getErrorMessages();
+				for(String messages: errList){
+				  logger.error(messages);
+				}
 			}
-		} catch (HL7MessageTreeException e) {
+		} catch (Exception e) {
 			logger.error(Messages.getString("CancerCenterClient.51"), e 
 					.fillInStackTrace());
 		}
-		return csvFileName;
-		
-	
+		return flag;
 	}
+   
+	/**
+	 * @param fileName
+	 * @return
+	 */
+	private String getFileName(String fileName)
+	{
+		// Get Current Date and Time for Stamping the file
+		Date dt = new Date();
+		long currentTime = dt.getTime();
+		StringBuffer sbuf = new StringBuffer();
+		StringBuffer outbuf = new StringBuffer();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 
+		sbuf = sdf.format(dt, outbuf, new FieldPosition(0));
+		
+		String[] strFile = fileName.split("\\."); 
+	    fileNameLocationDateTimeStamp =  cancerCenterClient.getLocation() + "_" + sbuf + "_" + "V2TOV3"
+		+ "_" + strFile[0] +".csv";
+		String outFile = cancerCenterClient.getRawFilesBackupDirectory()+"\\"+ fileNameLocationDateTimeStamp;
+		return outFile;
+	}
 }
