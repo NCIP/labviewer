@@ -1,11 +1,11 @@
 package gov.nih.nci.nih.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
 import gov.nih.nci.caXchange.messaging.ErrorDetails;
 import gov.nih.nci.caXchange.messaging.Response;
 import gov.nih.nci.caXchange.messaging.ResponseMessage;
 import gov.nih.nci.caXchange.messaging.Statuses;
-import gov.nih.nci.caxchange.servicemix.bean.util.CaxchangeConstants;
 import gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean;
 
 import java.io.InputStream;

@@ -37,12 +37,10 @@ import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 /**
  * @author stevec
  */
-public class RegistrationRollbackStrategy implements GridInvocationStrategy {
+public class RegistrationRollbackStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(RegistrationRollbackStrategy.class);
-
-	private String serviceUrl;
 
 	/*
 	 * (non-Javadoc)
@@ -96,14 +94,6 @@ public class RegistrationRollbackStrategy implements GridInvocationStrategy {
 			log.error("Failed to invoke registration service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
-	}
-
-	public String getServiceUrl() {
-		return serviceUrl;
-	}
-
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
 	}
 
 }

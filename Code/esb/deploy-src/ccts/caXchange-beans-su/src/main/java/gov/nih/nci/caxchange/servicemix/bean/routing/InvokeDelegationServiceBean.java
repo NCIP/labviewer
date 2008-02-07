@@ -16,11 +16,11 @@
  */
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridSU;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.security.CaXchangePrincipal;
-import gov.nih.nci.caxchange.servicemix.bean.util.CaxchangeConstants;
 import gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil;
 
 import java.io.BufferedReader;
