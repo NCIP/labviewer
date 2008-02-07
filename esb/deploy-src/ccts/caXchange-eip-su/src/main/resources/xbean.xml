@@ -83,7 +83,7 @@
         <eip:target>
           <eip:exchange-target service="caxchange:studyCreationRecipients" />
         </eip:target>
-      </eip:routing-rule>      
+      </eip:routing-rule>
       <eip:routing-rule>
         <eip:predicate>
           <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='LOAD_LAB_TO_CDMS']) = 1" namespaceContext="#nsContext"/>
@@ -106,6 +106,22 @@
         </eip:predicate>
         <eip:target>
           <eip:exchange-target service="caxchange:ctLabData" />
+        </eip:target>
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='MULTISITE_REGISTER_SUBJECT']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:multiSiteRegisterSubjectRecipients" />
+        </eip:target>
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='MULTISITE_STUDY_CREATION']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:multiSiteStudyCreationRecipients" />
         </eip:target>
       </eip:routing-rule>
       <eip:routing-rule>
@@ -134,7 +150,7 @@
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
         <eip:exchange-target service="caxchange:ctomStudyRouter" />
       </eip:recipients>
-  </eip:caxchange-static-recipient-list>  
+  </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for load lab to CDMS -->
   <eip:caxchange-static-recipient-list service="caxchange:loadLabToCDMS" endpoint="endpoint">
@@ -158,9 +174,24 @@
   </eip:caxchange-static-recipient-list>
   
   
+  <!-- static recipient list for multi-site register subject -->
+  <eip:caxchange-itinerary-based-recipient-list service="caxchange:multiSiteRegisterSubjectRecipients" endpoint="endpoint">
+    <eip:recipient>
+	  <eip:exchange-target service="caxchange:multiSiteRegistrationPipeline" />
+    </eip:recipient>
+  </eip:caxchange-itinerary-based-recipient-list>
+  
+  <!-- static recipient list for multi-site study creation -->
+  <eip:caxchange-itinerary-based-recipient-list service="caxchange:multiSiteStudyCreationRecipients" endpoint="endpoint">
+    <eip:recipient>
+	  <eip:exchange-target service="caxchange:multiSiteStudyPipeline" />
+    </eip:recipient>
+  </eip:caxchange-itinerary-based-recipient-list>
+  
+  
   <!--- EIP components for invoking the PSC  -->
   
-    <eip:content-based-router service="caxchange:pscRouter" endpoint="endpoint">
+  <eip:content-based-router service="caxchange:pscRouter" endpoint="endpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -429,9 +460,32 @@
         </eip:target>
   </eip:caxchangeAggregator>
   
+  
+  <!--  eip components for invoking multisite Registration and study requests -->
+  
+  <eip:pipeline service="caxchange:multiSiteRegistrationPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:multiSiteRegistration" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
+  </eip:pipeline>
+  
+  <eip:pipeline service="caxchange:multiSiteStudyPipeline" endpoint="endpoint">
+    <eip:transformer>
+      <eip:exchange-target service="caxchange:multiSiteStudy" />
+    </eip:transformer>
+    <eip:target>
+      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+    </eip:target>
+  </eip:pipeline>  
+
+  
+  
   <!--  EIP send response for unhandled message type -->
   
-    <eip:pipeline service="caxchange:callUnhandledMessageType" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callUnhandledMessageType" endpoint="endpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:unhandledMessageType" />
       </eip:transformer>

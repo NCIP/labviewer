@@ -40,6 +40,7 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="credentials" type="caXchange:credentials" minOccurs="0"/>
+			<xs:element name="targetSite" minOccurs="0" maxOccurs="unbounded" nillable="true" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="responseMetadata">
@@ -137,6 +138,8 @@
 			<xs:enumeration value="LOAD_LAB_TO_CDMS"/>
 			<xs:enumeration value="LAB_BASED_AE"/>
 			<xs:enumeration value="SCHEDULE_MODIFICATION"/>
+			<xs:enumeration value="MULTISITE_STUDY_CREATION"/>
+			<xs:enumeration value="MULTISITE_REGISTER_SUBJECT"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

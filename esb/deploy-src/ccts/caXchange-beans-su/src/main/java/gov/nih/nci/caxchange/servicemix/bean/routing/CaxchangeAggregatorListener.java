@@ -1,5 +1,6 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.messaging.CaXchangeRequestMessageDocument;
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
 import gov.nih.nci.caXchange.messaging.Statuses;

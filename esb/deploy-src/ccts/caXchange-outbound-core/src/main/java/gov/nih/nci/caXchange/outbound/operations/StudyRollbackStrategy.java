@@ -37,12 +37,10 @@ import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
 /**
  * @author stevec
  */
-public class StudyRollbackStrategy implements GridInvocationStrategy {
+public class StudyRollbackStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(StudyRollbackStrategy.class);
-
-	private String serviceUrl;
 
 	/*
 	 * (non-Javadoc)
@@ -96,14 +94,6 @@ public class StudyRollbackStrategy implements GridInvocationStrategy {
 			log.error("Failed to invoke study service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
-	}
-
-	public String getServiceUrl() {
-		return serviceUrl;
-	}
-
-	public void setServiceUrl(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
 	}
 
 }

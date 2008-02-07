@@ -67,7 +67,7 @@ public class TestCaXchangeGridService extends TestCase {
     		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
     		"    <ns2:DelegatedCredentialKey" +
     		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
-    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">132</ns3:delegationId>" +
+    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">480</ns3:delegationId>" +
     		"    </ns2:DelegatedCredentialKey>" +
     		"   </ns2:ReferenceProperties>" +
     		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
@@ -121,6 +121,7 @@ public class TestCaXchangeGridService extends TestCase {
         GetResponseResponse getResponse=null;
         while(!gotResponse) {
         try {
+        	Thread.currentThread().sleep((long)2000);
             getResponse = responsePort.getResponse(new GetResponseRequest());
             gotResponse= true;
         }catch (Exception e) {
@@ -323,6 +324,44 @@ public class TestCaXchangeGridService extends TestCase {
       }
 
     }
+    
+    
+    
+    
+    /**
+     * Test messagess of type REGISTER_SUBJECT.
+     *
+     * .
+     */
+    public void testMultiSiteRegisterSubject() {
+      try {
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("registersubject.xml");
+        if (testMessage == null) {
+            throw new RuntimeException("Test message does not exist.");
+        }
+        message.getMetadata().setMessageType(MessageTypes.MULTISITE_REGISTER_SUBJECT);
+        MessagePayload messagePayload = new MessagePayload();
+        URI uri = new URI();
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        messagePayload.setXmlSchemaDefinition(uri);
+        DocumentBuilder db =dbf.newDocumentBuilder();
+        Document payload = db.parse(testMessage);
+        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+        messagePayload.set_any(new MessageElement[]{messageElement});
+        message.getRequest().setBusinessMessagePayload(messagePayload);
+        String[] targets={"c3pr1", "c3pr2"};
+        
+        message.getMetadata().setTargetSite(targets);
+        ResponseMessage responseMessage = invokeService();
+        assertNotNull(responseMessage);
+      }
+      catch(Exception e) {
+          System.out.println("Error sending message .");
+          throw new RuntimeException(e);
+      }
+
+    }
+
 
     public static Test suite() {
        TestSuite suite = new TestSuite();
@@ -333,6 +372,9 @@ public class TestCaXchangeGridService extends TestCase {
        suite.addTest(new TestCaXchangeGridService("testCtLabData"));
        suite.addTest(new TestCaXchangeGridService("testLoadLab"));
        suite.addTest(new TestCaXchangeGridService("testAENotification"));
+       
+       suite.addTest(new TestCaXchangeGridService("testMultiSiteRegisterSubject"));
+       
 
        return suite;
     }

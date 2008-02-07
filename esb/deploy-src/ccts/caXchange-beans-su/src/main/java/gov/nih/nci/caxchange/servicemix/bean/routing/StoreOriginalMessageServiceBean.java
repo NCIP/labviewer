@@ -16,6 +16,7 @@
  */
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
