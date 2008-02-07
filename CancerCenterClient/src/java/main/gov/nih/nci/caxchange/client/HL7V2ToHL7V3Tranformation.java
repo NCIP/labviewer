@@ -116,7 +116,7 @@ public class HL7V2ToHL7V3Tranformation {
 	      boolean flag =false;
 		try {
 			String hl7v2file =  hl7FileName.replace('\\', '\\');// input v2 message file
-			String metaDir = "D:\\Development\\CancerCenterClient\\v2Meta\\v2Meta";// v2 meta data directory
+			String metaDir = "./v2Meta";// v2 meta data directory
 			String csvFile = csvFileName.replace('/', '\\');             // output csv file
 			String scsFile = scsFileName.replace('/', '\\');              // scs file for validation
 			String msgtype="ORU^R01";                  // message type
