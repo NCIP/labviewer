@@ -1,113 +1,113 @@
-<project name="Caxchange Routing and Workflow Client"  default="createzip"  basedir=".">
+<project name="Caxchange Routing and Workflow Client" default="createzip" basedir=".">
+	
+	<!-- Sets the properties -->
 	<property file="build.properties" />
-    <property name="src.dir" value="src/java/main" />
-    <property name="junit.dir" value="junit" />
-    <property name="lib.home" value="lib" />
+	<property name="src.dir" value="src/java/main" />
+	<property name="junit.dir" value="junit" />
+	<property name="lib.home" value="lib" />
 	<property name="classes.dir" value="classes" />
-	<property name="resource" value="resource" />
 	<property name="conf" value="conf" />
-    <property name="dist.home" value="target" />
-    <property name="jar.file" value="CAXCHANGE.jar" />
-    <property name="zip.file" value="CAXCHANGEClient.zip" />
+	<property name="dist.home" value="target" />
+	<property name="jar.file" value="CAXCHANGE.jar" />
+	<property name="zip.file" value="CAXCHANGEClient.zip" />
 	<property name="property.home" value="${dist.home}/properties" />
 	<path id="cp">
-            <fileset dir="${lib.home}">
-                  <include name="**/*.jar"/>
-            </fileset>
-            <pathelement path="${classes.dir}"/>
-    </path>
+		<fileset dir="${lib.home}">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement path="${classes.dir}" />
+	</path>
 
- 
-	 <target name="compilebatch" >
-	            <delete dir="${dist.home}" />
-	 			<mkdir dir="${classes.dir}"/>
-	            <javac srcdir="${src.dir}" destdir="${classes.dir}" >
-	                  <include name="**/*.java"/>
-	                  <classpath refid="cp"/>
-	            </javac>
+	<!-- Compiles the source files -->
+	<target name="compilebatch">
+		<delete dir="${dist.home}" />
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<include name="**/*.java" />
+			<classpath refid="cp" />
+		</javac>
 	</target>
 
+	<!-- Creates batch file -->
+	<target name="batch" depends="compilebatch" description="Creates batch file">
+		<copy todir="${dist.home}">
+			<fileset dir="${classes.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${src.dir}" includes="**/*.properties" />
+		</copy>
+		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}" />
+	</target>
 
- 	<target name="batch" depends="compilebatch" description="Creates batch file">
-  		<copy todir="${dist.home}">
-		  	<fileset dir="${classes.dir}" includes="**/*.*" /> 
-		</copy>
-  		<copy todir="${dist.home}">
-		  	<fileset dir="${src.dir}" includes="**/*.properties" /> 
-		</copy>
- 		 <jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}"/>
- 	 </target>
- 	
- 	 
+	<!-- Creates a zip file with CAXCHANGE.jar -->
 	<target name="createzip" depends="batch" description="zip file">
-  	    <copy todir="${dist.home}\lib\">
- 		  	<fileset dir="${lib.home}" includes="**/*.jar" />
- 		  </copy>
-       <copy todir="${dist.home}">
-	  	<fileset dir="${resource}" includes="**/*.*" />
-	   </copy>
-       <zip destfile="CAXCHANGEClient.zip"
- 		       basedir="${dist.home}"
- 		       excludes="**/*.class, **/preprocessor.properties, **/log4j.properties"
- 		  />
-    </target>
-	
-	<target name="createExecutablejar"  description="Creates an executable jar">
+		<copy todir="${dist.home}\lib\">
+			<fileset dir="${lib.home}" includes="**/*.jar" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${conf}" includes="**/*.*" />
+		</copy>
+		<zip destfile="CAXCHANGEClient.zip" basedir="${dist.home}" excludes="**/*.class, **/preprocessor.properties, **/log4j.properties" />
+	</target>
+
+	<!-- Creates an executable jar file -->
+
+	<target name="createExecutablejar" depends="batch" description="Creates an executable jar">
 		<manifest file="manifestUI.MF">
-			<attribute name="Main-Class" value="gov.nih.nci.caxchange.client.TestCancerCenterClientUI"/>
+			<attribute name="Main-Class" value="gov.nih.nci.caxchange.client.TestCancerCenterClientUI" />
 		</manifest>
 		<copy todir="${dist.home}">
-		  	<fileset dir="${classes.dir}" includes="**/*.*" /> 
+			<fileset dir="${classes.dir}" includes="**/*.*" />
 		</copy>
 		<copy todir="${dist.home}">
-		  	<fileset dir="${src.dir}" includes="**/*.properties" /> 
-		 </copy>
-		<unzip dest="${dist.home}">
-					<fileset dir="${lib.home}">
-						<include name="*.jar"/>
-					</fileset>
-		</unzip>
+			<fileset dir="${src.dir}" includes="**/*.properties" />
+		</copy>
+		<copy todir="${dist.home}\lib\">
+			<fileset dir="${lib.home}" includes="**/*.jar" />
+		</copy>
 		<copy todir="${dist.home}">
-		   <fileset dir="${conf}" includes="**/*.*" />
-		 </copy>
-		<jar jarfile="CAXCHANGEClient.jar" manifest="manifestUI.MF">
+			<fileset dir="${conf}" includes="**/*.*" />
+		</copy>
+		<jar jarfile="CAXCHANGEClient.jar" manifest="${src.dir}\Manifest.txt">
 			<fileset dir="${dist.home}">
-				<include name="*"/>
-				<include name="**/*.*"/>
-				<exclude name="**/run.bat"/>
-			  	<exclude name="**/preprocessor.properties"/>
-				<exclude name="**/CancerCenterClient.properties"/>
+				<include name="*" />
+				<include name="**/*.*" />
+				<exclude name="**/run.bat" />
+				<exclude name="**/preprocessor.properties" />
+				<exclude name="${dist.home}\${jar.file}" />
+				<exclude name="**/CancerCenterClient.properties" />
+			</fileset>
+		</jar>
+	</target>
+
+	<!-- Run target is for testing purposes - used to run the TestCancerCenterClientUI -->
+
+	<target name="run" depends="compilebatch,batch">
+		<java classname="gov.nih.nci.caxchange.client.TestCancerCenterClientUI" fork="yes">
+			<classpath location="${dist.home}">
+				<fileset dir="${dist.home}">
+					<include name="gov/nih/**" />
 				</fileset>
-		</jar>	
-	</target>
-	
-	<target name="run" depends="compilebatch,batch" >
-			<java classname="gov.nih.nci.caxchange.client.TestCancerCenterClientUI" fork="yes">	
-				<classpath location="${dist.home}">
-							<fileset dir="${dist.home}">
-							<include name="gov/nih/**"/>
-						</fileset>
-					</classpath>
-				<classpath location="${lib.home}">
-					<fileset dir="${lib.home}">
-						<include name="*.jar"/>
-					</fileset>
-				</classpath>
-				<jvmarg value="-DDefaultProperties.File=${install.directory}/${property.home}/DefaultProperties.properties"/>	
-			</java>
-		</target>
-	
-	<target name="clean"> 
-		 <delete>
-				    <fileset dir="${classes.dir}" />
-				  </delete>
-		 <delete>
-		    <fileset dir="${dist.home}" />
-		  </delete>	
-		 <delete>
-		    <fileset file="CAXCHANGEClient.zip" />
-		  </delete>	
-
+			</classpath>
+			<classpath location="${lib.home}">
+				<fileset dir="${lib.home}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<jvmarg value="-DDefaultProperties.File=${install.directory}/${property.home}/DefaultProperties.properties" />
+		</java>
 	</target>
 
+	<!-- Cleans up the classes directory -->
+	<target name="clean">
+		<delete>
+			<fileset dir="${classes.dir}" />
+		</delete>
+		<delete>
+			<fileset dir="${dist.home}" />
+		</delete>
+		<delete>
+			<fileset file="CAXCHANGEClient.zip" />
+		</delete>
+	</target>
 </project>
