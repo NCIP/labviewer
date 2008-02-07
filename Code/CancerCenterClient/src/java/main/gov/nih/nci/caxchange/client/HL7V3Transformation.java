@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -77,10 +78,10 @@ public class HL7V3Transformation {
 	 * It invokes the caAdapter API to convert a .CSV file to HL7V3.
 	 * Invokes the grid service to persist the generated HL7V3 message.
 	 */
-	public void process() {
-
+	public void process(ArrayList<ScheduledExecutorService>threadList) {
+		threadList.add(scheduler);
 		final Runnable fileCheck = new Runnable() {
-
+		
 			public void run() {
 				try {
 					logger.debug(Messages.getString("CancerCenterClient.128")); 
@@ -99,10 +100,19 @@ public class HL7V3Transformation {
 						}
 						File[] fileList = inProcessDir.listFiles();
 						for (int i = 0; i < fileList.length; i++) {
+							String HL7V3;
+							if (fileList[i].getName().indexOf("V2TOV3")==-1)
+							{	
 							// invokes the caAdapter API to convert a .csv file
 							// to HL7V3.
-							String HL7V3 = invokecaAdapterAPI(fileList[i]
-									.getAbsolutePath());
+							  HL7V3 = invokecaAdapterAPI(fileList[i].getAbsolutePath(),cancerCenterClient.getMapFileName());
+							}
+							else
+							{
+								// invokes the caAdapter API to convert a V2 generated.csv file
+								// to HL7V3.
+								  HL7V3 = invokecaAdapterAPI(fileList[i].getAbsolutePath(),cancerCenterClient.getHl7v2mapFileName().replace('/', '\\'));
+							}
 							// invokes the grid service to persist the HL7V3
 							// message.
 							invokeGridService(fileList, i, HL7V3);
@@ -122,13 +132,14 @@ public class HL7V3Transformation {
 	/**
 	 * Invokes the caAdapter API to convert the .csv file to HL7V3 message.
 	 * @param filePath
+	 *  @param mapFile
 	 * @return hl7MessageXml
 	 * @throws Exception
 	 */
-	public String invokecaAdapterAPI(String filePath) throws Exception {
+	public String invokecaAdapterAPI(String filePath, String mapFile) throws Exception {
 		// Transformation Service
 		TransformationService transformationService = new TransformationService(
-				cancerCenterClient.getMapFileName(), filePath);
+				mapFile, filePath);
 		List<XMLElement> xmlElements;
 		String hl7MessageXml = null;
 		try {
@@ -409,9 +420,8 @@ public class HL7V3Transformation {
 			participant.setIdentifier(identifiers);
 			registration.setParticipant(participant);
 			// Call the StudyLookupService
-			// Create the client
-			StudyLookupServiceClient client = new StudyLookupServiceClient(
-					"http://localhost:8080/wsrf/services/cagrid/StudyLookupService"); 
+			// Create the client -"http://localhost:8080/wsrf/services/cagrid/StudyLookupService"
+			StudyLookupServiceClient client = new StudyLookupServiceClient(cancerCenterClient.getStudyLookupServiceURL()); 
 			// Call the service
 			study = client.getStudy(registration);
 

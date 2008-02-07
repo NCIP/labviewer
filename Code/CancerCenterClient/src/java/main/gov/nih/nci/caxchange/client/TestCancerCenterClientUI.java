@@ -18,7 +18,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -83,6 +85,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			.getLogger("gov.nih.nci.caxchange.client.TestCancerCenterClientUI");
 	private BufferedReader buffReader;
 	private Border blackline = BorderFactory.createLineBorder(Color.black);
+	private final ArrayList<ScheduledExecutorService>threadsList=new ArrayList<ScheduledExecutorService>();
 
 	/**
 	 * Default constructor.
@@ -92,6 +95,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		aWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		aWindow.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
+			  stopThreads();
 			  System.exit(0);
 			}
 			});
@@ -145,6 +149,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				jtxtUserName.setText(props.getProperty("userName"));
 				jtxtPassword.setText(props.getProperty("userPasswd"));
 				jtxtHubURL.setText(props.getProperty("HubURL"));
+				jtxtstudyLookupServiceURL.setText(props.getProperty("StudyLookUpServiceURL"));
 				jtxtpreProcessorProFile.setText(props
 						.getProperty("preProcessorPropertiesFile"));
 
@@ -371,6 +376,13 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox10.add(Box.createHorizontalStrut(124));
 		csvBox10.add(jtxtHubURL);
 		csvBox4.add(csvBox10);
+		Box csvBox12 = Box.createHorizontalBox();
+		csvBox12.add(Box.createHorizontalStrut(10));
+		JLabel jlbstudyLookupServiceURLLabel = new JLabel("Enter the StudyLookUpService URL");
+		csvBox12.add(jlbstudyLookupServiceURLLabel);
+		csvBox12.add(Box.createHorizontalStrut(27));
+		csvBox12.add(jtxtstudyLookupServiceURL);
+		csvBox4.add(csvBox12);
 
 		//User Creds
 		Box userBox = Box.createVerticalBox();
@@ -550,13 +562,15 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtPassword.setText("");
 			jtxtHubURL.setText("");
 			jtxtpreProcessorProFile.setText("");
+			jtxtstudyLookupServiceURL.setText("");
 		}else if ("Close".equals(e.getActionCommand())) {
+			stopThreads();
 			System.exit(0);
 		}else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			File file = saveDefaults();
 			CancerCenterClient testClient = CancerCenterClient.getInstance();
-			testClient.test(file);
+			testClient.test(file,threadsList);
 			//updating the status panel with the log file updates.
 			int delay = 10; //milliseconds
 			try {
@@ -681,6 +695,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("\n");
 				fstream.write("HubURL=" + jtxtHubURL.getText());
 				fstream.write("\n");
+				fstream.write("StudyLookUpServiceURL=" + jtxtstudyLookupServiceURL.getText());
+				fstream.write("\n");
 				fstream.write("preProcessorPropertiesFile=" + preProcessorFile);
 				fstream.write("\n");
 				fstream.flush();
@@ -693,4 +709,18 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	  return file;
 	}
 
+	/**
+	 * Stops the threads which are polling the directories to check for a new 
+	 * .CSV file or a HL7V2 message 
+	 */
+	private void stopThreads()
+	{
+		if(!threadsList.isEmpty()){
+		for(ScheduledExecutorService se: threadsList)
+		{
+			se.shutdownNow();
+		}
+		}	
+	}
+	 
 }
