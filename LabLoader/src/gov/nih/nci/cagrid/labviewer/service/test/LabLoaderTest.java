@@ -9,7 +9,7 @@ public class LabLoaderTest
 {
 	//String serviceUrl = "http://localhost:8080/wsrf/services/cagrid/LabLoader";
 	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/LabLoader";
-	String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/LabLoader";
+	String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/LabLoader";
 	String sampleFile = "/SampleHL7v3.xml";
 	
 	/**
@@ -27,7 +27,7 @@ public class LabLoaderTest
 	 */
 	public void test()
 	{
-		System.out.println("Beginning test to call Lab Loader");
+		System.out.println("Beginning test to call Lab Loader at " + serviceUrl);
 		
 		try
 		{
