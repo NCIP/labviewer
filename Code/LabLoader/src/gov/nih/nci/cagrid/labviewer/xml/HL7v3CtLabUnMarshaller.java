@@ -616,7 +616,8 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 		}
 		
-		try {
+		try
+		{
 			String value = null;
 			expression = "//studyEvent/component/accession/component/baseSpecimenDefinition/component/baseBattery/component/baseUnitaryResult/referenceRange/range/value/low/@value";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
@@ -624,11 +625,14 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			value = xNode.getNodeValue();
 			clinicalResult.setRefRangeLow(new Double(value));
 
-		} catch (NullPointerException ex) {
-
+		}
+		catch (NullPointerException ex)
+		{
+			clinicalResult.setRefRangeLow(new Double(0));
 		}
 		
-		try {
+		try
+		{
 			String value = null;
 			expression = "//studyEvent/component/accession/component/baseSpecimenDefinition/component/baseBattery/component/baseUnitaryResult/referenceRange/range/value/high/@value";
 			Node xNode = (Node) xpath.evaluate(expression, doc,
@@ -636,8 +640,10 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			value = xNode.getNodeValue();
 			clinicalResult.setRefRangeHigh(new Double(value));
 
-		} catch (NullPointerException ex) {
-
+		}
+		catch (NullPointerException ex)
+		{
+			clinicalResult.setRefRangeHigh(new Double(0));
 		}
 
 		try {
