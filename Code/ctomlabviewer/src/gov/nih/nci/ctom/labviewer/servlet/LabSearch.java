@@ -1,12 +1,10 @@
 package gov.nih.nci.ctom.labviewer.servlet;
 
-import gov.nih.nci.cabig.ctms.web.sso.GridProxyValidationException;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

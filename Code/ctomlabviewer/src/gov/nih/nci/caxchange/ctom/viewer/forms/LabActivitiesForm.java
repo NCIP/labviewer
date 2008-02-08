@@ -94,7 +94,6 @@ package gov.nih.nci.caxchange.ctom.viewer.forms;
  *
  */
 
-import gov.nih.nci.caxchange.ctom.viewer.applicationservice.EventsManager;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.util.ObjectFactory;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.FormElement;
@@ -371,6 +370,7 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 
 	}
 
+	/*
 	public void loadToCTMS(HttpServletRequest request) throws Exception
 	{
 		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
@@ -396,7 +396,8 @@ public class LabActivitiesForm extends ValidatorForm implements BaseAssociationF
 		
 		this.recordId = "";
 		this.recordIds = null;
-	}	
+	}
+	*/
 	
 	/* (non-Javadoc)
 	 * @see gov.nih.nci.security.forms.BaseDBForm#removeDBObject(javax.servlet.http.HttpServletRequest)
