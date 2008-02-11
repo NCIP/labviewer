@@ -16,6 +16,10 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import org.apache.log4j.Logger;
 
+/**
+ * @author asharma
+ *
+ */
 public class CancerCenterClient {
 
 	// Property Files
@@ -48,6 +52,7 @@ public class CancerCenterClient {
 	private String studyLookupServiceURL;
 	private String hl7v2Dir;
 	private String hl7v2mapFileName;
+	private String version;
 
 	// Map File used for mapping CSV file to HL7V3 format by caAdaptor.
 	private String mapFileName;
@@ -211,7 +216,7 @@ public class CancerCenterClient {
 	 * 
 	 * @return retResult
 	 */
-	public boolean checkPreProcessedFolder() {
+	public synchronized boolean checkPreProcessedFolder() {
 		logger.debug(Messages.getString("CancerCenterClient.23"));
 		boolean retResult = true;
 		try {
@@ -321,6 +326,7 @@ public class CancerCenterClient {
 			this.pollingInterval_str=props.getProperty("pollingDelayInSeconds");
 			this.hubURL=props.getProperty("HubURL");
 			this.studyLookupServiceURL=props.getProperty("StudyLookUpServiceURL");
+			this.version=props.getProperty("V2Version");
 			logger.info("preProcessorPropertiesFile : "
 					+ this.preProcessorPropertiesFile_str);
 			logger.info("Location : " + this.location);
@@ -338,6 +344,7 @@ public class CancerCenterClient {
 			this.pollingInterval_long = new Long(this.pollingInterval_str);
 			logger.info("initialDelay_long : " + this.initialDelay_long);
 			logger.info("pollingInterval_long : " + this.pollingInterval_long);
+			logger.info("V2Version : " + this.version);
 
 			isSuccess = true;
 		} catch (Exception e) {
@@ -636,35 +643,35 @@ public class CancerCenterClient {
 	}
 
 	/**
-	 * @param rawFilesBackupDirectory the rawFilesBackupDirectory to set
+	 * @param rawFilesBackupDir the rawFilesBackupDirectory to set
 	 */
 	public void setRawFilesBackupDirectory(File rawFilesBackupDir) {
 		this.rawFilesBackupDirectory = rawFilesBackupDir;
 	}
 
 	/**
-	 * @param hubURL the hubURL to set
+	 * @param huburl the hubURL to set
 	 */
 	public void setHubURL(String huburl) {
 		this.hubURL = huburl;
 	}
 
 	/**
-	 * @param hl7v2Dir the hl7v2Dir to set
+	 * @param hl7v2Directory the hl7v2Dir to set
 	 */
 	public void setHl7v2Dir(String hl7v2Directory) {
 		this.hl7v2Dir = hl7v2Directory;
 	}
 
 	/**
-	 * @param hl7v2mapFileName the hl7v2mapFileName to set
+	 * @param hl7v2mapFile the hl7v2mapFileName to set
 	 */
 	public void setHl7v2mapFileName(String hl7v2mapFile) {
 		this.hl7v2mapFileName = hl7v2mapFile;
 	}
 
 	/**
-	 * @param mapFileName the mapFileName to set
+	 * @param mapFile the mapFileName to set
 	 */
 	public void setMapFileName(String mapFile) {
 		this.mapFileName = mapFile;
@@ -677,11 +684,25 @@ public class CancerCenterClient {
 		return this.studyLookupServiceURL;
 	}
 
+	
 	/**
-	 * @param studyLookupServiceURL the studyLookupServiceURL to set
+	 * @param studyLookupServiceurl
 	 */
 	public void setStudyLookupServiceURL(String studyLookupServiceurl) {
 		this.studyLookupServiceURL = studyLookupServiceurl;
+	}
+	/**
+	 * @return the version
+	 */
+	public String getVersion() {
+		return this.version;
+	}
+
+	/**
+	 * @param ver the version to set
+	 */
+	public void setVersion(String ver) {
+		this.version= ver;
 	}
 
 } // End of Class
