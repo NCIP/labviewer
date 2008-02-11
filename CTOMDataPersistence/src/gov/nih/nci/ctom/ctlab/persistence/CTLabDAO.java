@@ -1394,10 +1394,11 @@ public class CTLabDAO extends BaseJDBCDAO
 		 Protocol study = null;
 		 Long protocolId = null;
 		 Long healthCareSiteId = null;
-		
-			 ps = con.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where root=? and extension=? and study_participant_assignmnt_id is not null)) ");
-			 ps.setString(1, part.getIdentifier().getRoot());
-			 ps.setString(2, part.getIdentifier().getExtension());
+		 
+		 //ps = con.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where root=? and extension=? and study_participant_assignmnt_id is not null)) ");
+		     ps = con.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where extension=? and study_participant_assignmnt_id is not null)) ");
+			 //ps.setString(1, part.getIdentifier().getRoot());
+			 ps.setString(1, part.getIdentifier().getExtension());
 			 rs =ps.executeQuery();
 			 if(rs.next())
 			 {
