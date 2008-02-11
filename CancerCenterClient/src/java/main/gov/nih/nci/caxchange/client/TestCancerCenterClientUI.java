@@ -27,6 +27,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -80,6 +81,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private JTextField jtxtstudyLookupServiceURL = new JTextField();
 	private JTextField jtxtpreProcessorProFile = new JTextField();
 	private DefaultListModel msgDispBox = new DefaultListModel();
+	private String[] version = {"2.2","2.3","2.4","2.5"};
+	private JComboBox jcomboBoxVersion=new JComboBox(version);
 	private JList dispList = new JList();
 	private static Logger logger = Logger
 			.getLogger("gov.nih.nci.caxchange.client.TestCancerCenterClientUI");
@@ -151,8 +154,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				jtxtHubURL.setText(props.getProperty("HubURL"));
 				jtxtstudyLookupServiceURL.setText(props.getProperty("StudyLookUpServiceURL"));
 				jtxtpreProcessorProFile.setText(props
-						.getProperty("preProcessorPropertiesFile"));
-
+					.getProperty("preProcessorPropertiesFile"));
+				jcomboBoxVersion.setSelectedItem(props.getProperty("V2Version"));
 				csvDirectory = jtxtCSVDir.getText();
 				inProcessDirectory = jtxtInProcessFilesDir.getText();
 				mapDirectory = jtxtMAPDir.getText();
@@ -162,7 +165,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				preProcessorFile = jtxtpreProcessorProFile.getText();
 			}
 		} catch (Exception e) {
-			logger.error("Exception processing Cancer Center Properties File");
+			logger.error("Exception processing Cancer Center Properties File"+e);
 		}
 	}
 
@@ -252,6 +255,15 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jtxtMAPHL7V2Dir.add(jfileMAPHL7V2);
 		csvBox6.add(jfileMAPHL7V2);
 		HL7V2Box.add(csvBox6);
+
+		Box csvBox13 = Box.createHorizontalBox();
+		csvBox13.add(Box.createHorizontalStrut(10));
+		JLabel jlbVersionLabel = new JLabel("Select the Version");
+		csvBox13.add(jlbVersionLabel);
+		csvBox13.add(Box.createHorizontalStrut(60));
+		jcomboBoxVersion.addActionListener(this);
+		csvBox13.add(jcomboBoxVersion);
+		HL7V2Box.add(csvBox13);
 
 		//1. Processed files & In process directory 2. polling delay & Initial delay
 		Box csvBox4 = Box.createVerticalBox();
@@ -649,6 +661,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private File saveDefaults() {
 		String path =System.getProperty("DefaultProperties.File");
 		File file = new File(path);
+		String txtVersion =(String)jcomboBoxVersion.getSelectedItem();
 		try{
 		  	if (createdInProcessFolders()) {
 				FileWriter fstream = new FileWriter(file,false);
@@ -684,8 +697,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("\n");
 				fstream.write("Location=" + jtxtLocation.getText());
 				fstream.write("\n");
-				/*fstream.write("IDPLocation=" + jtxtIDPLocation.getText());
-				fstream.write("\n");*/
+				fstream.write("V2Version=" + txtVersion);
+				fstream.write("\n");
 				fstream.write("ORGANIZATIONNAME=" + jtxtOrgName.getText());
 				fstream.write("\n");
 				fstream.write("userName=" + jtxtUserName.getText());
