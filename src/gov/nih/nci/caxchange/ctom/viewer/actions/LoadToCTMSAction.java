@@ -98,15 +98,15 @@ public class LoadToCTMSAction extends Action
 		try
 		{  //calls the loadToCTMS method
 			loadToCTMS(request, lForm, username);
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, "Messages Submitted to CTMS Successfully"));
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, "Messages Submitted to CDMS Successfully"));
 			saveMessages( request, messages );
 		}
 		catch (Exception cse)
 		{
 			String msg = cse.getMessage();
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "Error in Submitting Messages to CTMS: " + msg));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "Error in Submitting Messages to CDMS: " + msg));
 			saveErrors( request,errors );
-			logDB.error("Error sending labs to CTMS", cse);
+			logDB.error("Error sending labs to CDMS", cse);
 		}
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
 		
