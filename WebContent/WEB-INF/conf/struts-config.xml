@@ -23,6 +23,7 @@
 		<forward name="MenuSelection" path="/MenuSelection.do" />
 		<forward name="LoginPage" path="Tiles.Login.Page" />
 		<forward name="AdminHome" path="/AdminHome.do" />
+		<forward name="studysubject" path="/studysubject.do" />
 	</global-forwards>
 	<action-mappings>
 
