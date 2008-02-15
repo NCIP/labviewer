@@ -50,7 +50,7 @@
 
 	<error-page>
 		<error-code>404</error-code>
-		<location>/pages/content/main/Error404.html</location>
+		<location>/pages/content/main/Error404.jsp</location>
 	</error-page>
 
 	<!-- JSTL Tag Library Descriptors -->
