@@ -28,6 +28,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -50,7 +52,7 @@ public class StudySubjectAction extends Action
 	{
 		HttpSession session = request.getSession();
 		LabActivitiesSearchForm baseDBForm = new LabActivitiesSearchForm();
-				
+		ActionErrors errors = new ActionErrors();		
 		if((request.getParameter("studySubjectGridId"))!=null){
 			session.setAttribute(DisplayConstants.HOT_LINK,"true"); 
 			session.setAttribute("studySubjectGridId", (String)request.getParameter("studySubjectGridId"));
@@ -64,6 +66,25 @@ public class StudySubjectAction extends Action
 				
 			} catch (Exception e) {
 				log.error("Error retreiving patient information",e);
+			}
+			if(labFm.getStudyId()==null)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						DisplayConstants.ERROR_ID,
+						"No Patient Information associated with that study"));
+				saveErrors(request, errors);
+				if (log.isDebugEnabled())
+					log
+							.debug(session.getId()
+									+ "|"
+									+ ((LoginForm) session
+											.getAttribute(DisplayConstants.LOGIN_OBJECT))
+											.getLoginId() + "|"
+									+ labFm.getFormName()
+									+ "|search|Failure|No Patient Information associated with that study"
+									+ labFm.getFormName() + " object|"
+									+ form.toString() + "|");
+				return (mapping.findForward(ForwardConstants.SEARCH_FAILURE));
 			}
 			session.setAttribute("CURRENT_FORM", labFm);
 		  	String operation= "execute";
