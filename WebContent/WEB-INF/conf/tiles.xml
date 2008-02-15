@@ -8,15 +8,8 @@
 	<!-- Base layouts -->
 	<definition name="Base" page="/pages/layout/BaseLayout.jsp">
 		<put name="OrgHeader" value="/pages/header/OrgHeader.jsp" />
-<!-- 
-		<put name="AppHeader" value="/pages/header/AppHeader.jsp" />
--->
 		<put name="AppMenu" value="/pages/menu/MainMenu.jsp"/>
 		<put name="AppAdminMenu" value="/pages/menu/SuperAdminMenu.jsp"/>		
-<!-- 
-		<put name="AppFooter" value="/pages/footer/AppFooter.jsp" />
-		<put name="OrgFooter" value="/pages/footer/OrgFooter.jsp" />
--->
 		<put name="Title" type="string"	value="CTODS Lab Viewer" />
 	</definition>
 
@@ -50,6 +43,12 @@
 	</definition>
 	<definition name="Tiles.500.Error.DetailsPage" extends="Base">
 		<put name="Content" value="/pages/content/main/ErrorDetails.jsp" />
+	</definition>
+	
+	<!-- Error 404 Pages -->
+	<definition name="Tiles.404.Error.Page" extends="Base">
+		<put name="Title" type="string"	value="404 Error Page" />
+		<put name="Content" value="/pages/content/main/Error.jsp" />
 	</definition>
 	
 	<!-- Home Pages -->
