@@ -178,6 +178,8 @@
 			<forward name="HomePage" path="Tiles.Home.Page" />
 			<forward name="LoginSuccessHotLink" 
 					path="/LabActivitiesDBOperation.do" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />		
 			 </action>
 	</action-mappings>
 
