@@ -704,8 +704,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		ps.setString(3, String.valueOf(act.getStartDateOrig()));
 		ps.setString(4, String.valueOf(act.getStartDateOrig()));
 		try {
-			java.util.Date  startTmp = new SimpleDateFormat("yyyyMMddHHmm").parse(String.valueOf(act.getStartDateOrig()));
-			java.util.Date  stopTmp = new SimpleDateFormat("yyyyMMddHHmm").parse(String.valueOf(act.getStartDateOrig()));
+			java.util.Date  startTmp = new SimpleDateFormat("yyyyMMddHHmmss").parse(act.getStartDateOrig());
+			java.util.Date  stopTmp = new SimpleDateFormat("yyyyMMddHHmmss").parse(act.getStartDateOrig());
 			ps.setTimestamp(5,new java.sql.Timestamp(startTmp.getTime()));
 			ps.setTimestamp(6, new java.sql.Timestamp(stopTmp.getTime()));
 			ps.execute();
