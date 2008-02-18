@@ -132,13 +132,13 @@ public class HL7V3Transformation {
 								fileMoved = fileList[i].renameTo(new File(
 										cancerCenterClient.getRawFilesBackupDirectory(),
 										fileList[i].getName()));
-								if(!fileMoved)
-									 logger.error("Error moving the .CSV file to backup folder");
 								//invoke the grid service setup
 								setUpToInvokeGrid(fileName);
 							}
 							
 						}
+						if(!fileMoved && fileList.length > 0)
+							 logger.error("Error moving the .CSV file to backup folder");
 						
 					}
 				} catch (Exception e) {
@@ -325,7 +325,8 @@ public class HL7V3Transformation {
 				if (hl7v3XML != null) {
 					hl7v3move = hl7v3XML.renameTo(new File(cancerCenterClient
 							.getErrorDir(), hl7v3XML.getName()));
-				} else {
+				}
+				else{
 					logger.error(Messages.getString("CancerCenterClient.62"));
 				}
 			} else {
@@ -395,7 +396,7 @@ public class HL7V3Transformation {
 						logger.info(
 								Messages.getString("CancerCenterClient.71"), e);
 						responseCount++;
-						if (responseCount > 50) {
+						if (responseCount > 1) {
 							logger.error(Messages
 									.getString("CancerCenterClient.72"));
 							throw new Exception(Messages
@@ -412,13 +413,13 @@ public class HL7V3Transformation {
 				}
 			}// end of else
 			if (!hl7v3move) {
-				logger.info("Error Moving File ");
+				logger.info("Error Moving File"+ hl7v3XML.getName());
 			}
 		} catch (MalformedURIException e) {
 			logger.error("MalformedURIException" + e.getLocalizedMessage());
 		} catch (RemoteException e) {
 
-			logger.error("RemoteException" + e.getLocalizedMessage());
+			logger.error("RemoteException" + e);
 		} catch (IOException e) {
 
 			logger.error("IOException" + e.getLocalizedMessage());
