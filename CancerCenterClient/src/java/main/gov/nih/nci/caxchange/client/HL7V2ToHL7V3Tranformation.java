@@ -67,7 +67,7 @@ public class HL7V2ToHL7V3Tranformation {
 							String csvFileName = getFileName(fileList[i].getName().toString());
 							// invokes the caAdapter API to convert a HL7V2 file
 							// to HL7V3.
-							boolean transformed=invokecaAdapterAPIV2toV3(fileList[i].getAbsolutePath(),csvFileName,"D:\\CCHC STUFF\\v2tov3\\v2.scs");
+							boolean transformed=invokecaAdapterAPIV2toV3(fileList[i].getAbsolutePath(),csvFileName,cancerCenterClient.getScsFileName());
 							if(transformed)
 							{
 								System.out.println("Transformed");
@@ -120,7 +120,7 @@ public class HL7V2ToHL7V3Tranformation {
 			String csvFile = csvFileName.replace('/', '\\');             // output csv file
 			String scsFile = scsFileName.replace('/', '\\');              // scs file for validation
 			String msgtype="ORU^R01";                  // message type
-			String version = "2.4";                      // target version
+			String version = cancerCenterClient.getVersion();                      // target version
 			 // Constructor
 	        ConvertFromV2ToCSV con = new ConvertFromV2ToCSV(metaDir
 	                                                        , hl7v2file           
