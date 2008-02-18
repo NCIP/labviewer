@@ -1,8 +1,10 @@
 <project name="Caxchange Routing and Workflow Client" default="createzip" basedir=".">
-	
+
 	<!-- Sets the properties -->
 	<property file="build.properties" />
 	<property name="src.dir" value="src/java/main" />
+	<property name="v2.dir" value="v2tov3" />
+	<property name="v2Meta.dir" value="v2Meta" />
 	<property name="junit.dir" value="junit" />
 	<property name="lib.home" value="lib" />
 	<property name="classes.dir" value="classes" />
@@ -44,13 +46,19 @@
 		<copy todir="${dist.home}\lib\">
 			<fileset dir="${lib.home}" includes="**/*.jar" />
 		</copy>
+		<copy todir="${dist.home}\v2tov3\">
+			<fileset dir="${v2.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}\v2Meta\">
+			<fileset dir="${v2Meta.dir}" includes="**/*.*" />
+		</copy>
 		<copy todir="${dist.home}">
 			<fileset dir="${conf}" includes="**/*.*" />
 		</copy>
 		<zip destfile="CAXCHANGEClient.zip" basedir="${dist.home}" excludes="**/*.class, **/preprocessor.properties, **/log4j.properties" />
 	</target>
 
-	<!-- Creates an executable jar file -->
+	<!-- Creates an executable jar file 
 
 	<target name="createExecutablejar" depends="batch" description="Creates an executable jar">
 		<manifest file="manifestUI.MF">
@@ -61,6 +69,12 @@
 		</copy>
 		<copy todir="${dist.home}">
 			<fileset dir="${src.dir}" includes="**/*.properties" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${v2.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${v2Meta.dir}" includes="**/*.*" />
 		</copy>
 		<copy todir="${dist.home}\lib\">
 			<fileset dir="${lib.home}" includes="**/*.jar" />
@@ -79,7 +93,7 @@
 			</fileset>
 		</jar>
 	</target>
-
+-->
 	<!-- Run target is for testing purposes - used to run the TestCancerCenterClientUI -->
 
 	<target name="run" depends="compilebatch,batch">
