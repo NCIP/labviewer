@@ -52,6 +52,7 @@ public class CancerCenterClient {
 	private String studyLookupServiceURL;
 	private String hl7v2Dir;
 	private String hl7v2mapFileName;
+	private String scsFileName;
 	private String version;
 
 	// Map File used for mapping CSV file to HL7V3 format by caAdaptor.
@@ -205,8 +206,8 @@ public class CancerCenterClient {
 		 HL7V3Transformation v3Transformation = new HL7V3Transformation(getInstance());
 		 v3Transformation.process(threadList);
 		
-		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
-		 v2Transformation.process(threadList);
+		// HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
+		 //v2Transformation.process(threadList);
 
 	}
 
@@ -322,6 +323,7 @@ public class CancerCenterClient {
 			this.mapFileName=props.getProperty("mapFileName");
 			this.hl7v2Dir=props.getProperty("HL7V2Dir");
 			this.hl7v2mapFileName=props.getProperty("hl7v2mapFileName");
+			this.scsFileName=props.getProperty("scsFileName");
 			this.initialDelay_str=props.getProperty("initialDelayInSeconds");
 			this.pollingInterval_str=props.getProperty("pollingDelayInSeconds");
 			this.hubURL=props.getProperty("HubURL");
@@ -340,6 +342,7 @@ public class CancerCenterClient {
 			logger.info("hubURL : " + this.hubURL);
 			logger.info("hl7v2Dir : " + this.hl7v2Dir);
 			logger.info("hl7v2mapFileName : " + this.hl7v2mapFileName);
+			logger.info("scsFileName : " + this.scsFileName);
 			this.initialDelay_long = new Long(this.initialDelay_str);
 			this.pollingInterval_long = new Long(this.pollingInterval_str);
 			logger.info("initialDelay_long : " + this.initialDelay_long);
@@ -704,6 +707,18 @@ public class CancerCenterClient {
 	public void setVersion(String ver) {
 		this.version= ver;
 	}
+	/**
+	 * @return the scsFileName
+	 */
+	public String getScsFileName() {
+		return this.scsFileName;
+	}
 
+	/**
+	 * @param scsFile the scsFileName to set
+	 */
+	public void setScsFileName(String scsFile) {
+		this.scsFileName= scsFile;
+	}
 } // End of Class
 

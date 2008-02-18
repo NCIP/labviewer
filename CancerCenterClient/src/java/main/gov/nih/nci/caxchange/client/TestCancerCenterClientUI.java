@@ -56,6 +56,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private String hl7v2Directory;
 	private String mapDirectory;
 	private String hl7v2mapDirectory;
+	private String scsFileName;
 	private String processedDirectory;
 	private String inProcessDirectory;
 	private String preProcessorFile;
@@ -68,6 +69,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private JTextField jtxtProcessedFilesDir = new JTextField();
 	private JTextField jtxtCSVDir = new JTextField();
 	private JTextField jtxtMAPDir = new JTextField();
+	private JTextField jtxtSCSDir = new JTextField();
 	private JTextField jtxtMAPHL7V2Dir = new JTextField();
 	private JTextField jtxtInProcessFilesDir = new JTextField();
 	private JTextField jtxtPollingInterval = new JTextField();
@@ -137,6 +139,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				jtxtHL7V2Dir.setText(props.getProperty("HL7V2Dir"));
 				jtxtCSVDir.setText(props.getProperty("rawFilesFolder"));
 				jtxtMAPDir.setText(props.getProperty("mapFileName"));
+				jtxtSCSDir.setText(props.getProperty("scsFileName"));
 				jtxtPollingInterval.setText(props
 						.getProperty("pollingDelayInSeconds"));
 				jtxtProcessedFilesDir.setText(props
@@ -163,6 +166,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				hl7v2mapDirectory = jtxtMAPHL7V2Dir.getText();
 				processedDirectory = jtxtProcessedFilesDir.getText();
 				preProcessorFile = jtxtpreProcessorProFile.getText();
+				scsFileName=jtxtSCSDir.getText();
 			}
 		} catch (Exception e) {
 			logger.error("Exception processing Cancer Center Properties File"+e);
@@ -176,8 +180,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	protected JPanel createMainPanel() {
 
 		//Heading display box
-		String text = "Accepts and saves the user entered values to perform";
-		String text1 = "the csv to HL7V3 and HL7V2 to HL7V3 conversion";
+		String text = "Accepts and Saves User preferences to perform the CSV to HL7V3 and HL7V2 to HL7V3 conversion";
+		String text1 = "";
 		String star = "* Please select/enter all the form fields";
 		JPanel jplPanel = new JPanel();
 		jplPanel.setLayout(new BoxLayout(jplPanel, BoxLayout.PAGE_AXIS));
@@ -185,6 +189,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		JLabel jlbDisplay = new JLabel(text);
 		JLabel jlbDisplay1 = new JLabel(text1);
 		jlbDisplay.setForeground(Color.BLUE);
+		jlbDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
 		jlbDisplay1.setForeground(Color.BLUE);
 		jlbDisplay.setFont(new Font("Serif", Font.BOLD, 15));
 		jlbDisplay1.setFont(new Font("Serif", Font.BOLD, 15));
@@ -192,7 +197,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		topBox.add(Box.createVerticalStrut(10));
 		topBox.add(jlbDisplay);
 		topBox.add(jlbDisplay1);
-
+			     
 		Box csvBox = Box.createVerticalBox();
 		csvBox.setBorder(BorderFactory.createTitledBorder(blackline, "CSV"));
 		csvBox.add(Box.createVerticalStrut(10));
@@ -255,6 +260,20 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jtxtMAPHL7V2Dir.add(jfileMAPHL7V2);
 		csvBox6.add(jfileMAPHL7V2);
 		HL7V2Box.add(csvBox6);
+		
+		Box csvBox14 = Box.createHorizontalBox();
+		csvBox14.add(Box.createHorizontalStrut(10));
+		JLabel jlbSCSLabel = new JLabel("Select the SCS file");
+		csvBox14.add(jlbSCSLabel);
+		csvBox14.add(Box.createHorizontalStrut(62));
+		csvBox14.add(jtxtSCSDir);
+		JButton jfileSCS = new JButton("Browse...");
+		jfileSCS.addActionListener(this);
+		jfileSCS.setActionCommand("BrowseSCSFile");
+		jtxtSCSDir.add(jfileSCS);
+		csvBox14.add(jfileSCS);
+		HL7V2Box.add(csvBox14);
+
 
 		Box csvBox13 = Box.createHorizontalBox();
 		csvBox13.add(Box.createHorizontalStrut(10));
@@ -422,12 +441,16 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 
 		Box csvBox7 = Box.createHorizontalBox();
 		csvBox7.add(Box.createHorizontalStrut(10));
+		JButton jbnHelp = new JButton("Help");
+		jbnHelp.addActionListener(this);
+		jbnHelp.setActionCommand("Help");
+		csvBox7.setAlignmentX(Component.CENTER_ALIGNMENT);
+		csvBox7.add(jbnHelp);
 		JButton jbnClear = new JButton("Clear");
 		jbnClear.addActionListener(this);
 		jbnClear.setActionCommand("Clear");
 		csvBox7.setAlignmentX(Component.CENTER_ALIGNMENT);
 		csvBox7.add(jbnClear);
-
 		JButton jbnAccept = new JButton("Accept");
 		jbnAccept.addActionListener(this);
 		jbnAccept.setActionCommand("Accept");
@@ -470,7 +493,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jplPanel.add(listScrollPane);
 		return jplPanel;
 	}
-
+	
 	/**
 	 * @param args
 	 */
@@ -516,7 +539,17 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 						.getSelectedFile().getAbsolutePath());
 				jtxtMAPHL7V2Dir.setText(hl7v2mapDirectory);
 			}
-		} else if ("BrowseHL7V2File".equals(e.getActionCommand())) {
+		} else if ("BrowseSCSFile".equals(e.getActionCommand())) {
+			msgDispBox.addElement("Selecting the SCS file directory");
+			JFileChooser fileChooser = fileChoose();
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int result = fileChooser.showSaveDialog(this);
+			if (result != JFileChooser.CANCEL_OPTION) {
+				scsFileName = fileSeparatorReplace(fileChooser
+						.getSelectedFile().getAbsolutePath());
+				jtxtSCSDir.setText(scsFileName);
+			}
+		}else if ("BrowseHL7V2File".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Selecting the HL7V2 file directory");
 			JFileChooser fileChooser = fileChoose();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -562,6 +595,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtHL7V2Dir.setText("");
 			jtxtCSVDir.setText("");
 			jtxtMAPDir.setText("");
+			jtxtSCSDir.setText("");
 			jtxtPollingInterval.setText("");
 			jtxtProcessedFilesDir.setText("");
 			jtxtMAPHL7V2Dir.setText("");
@@ -578,7 +612,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		}else if ("Close".equals(e.getActionCommand())) {
 			stopThreads();
 			System.exit(0);
-		}else if ("Accept".equals(e.getActionCommand())) {
+		}else if ("Help".equals(e.getActionCommand())) {
+			String fileName = "./conf/CCHC End User Guide.doc";
+			try{
+				Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL \""+fileName);
+			}catch (IOException e1){ e1.printStackTrace(); }
+        }else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			File file = saveDefaults();
 			CancerCenterClient.getInstance().test(file,threadsList);
@@ -672,6 +711,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("HL7V2Dir=" + hl7v2Directory);
 				fstream.write("\n");
 				fstream.write("hl7v2mapFileName=" + hl7v2mapDirectory);
+				fstream.write("\n");
+				fstream.write("scsFileName=" + scsFileName);
 				fstream.write("\n");
 				fstream.write("inProcessDirectory=" + inProcessDirectory);
 				fstream.write("\n");
