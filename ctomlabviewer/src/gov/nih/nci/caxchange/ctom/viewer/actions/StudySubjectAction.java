@@ -73,17 +73,8 @@ public class StudySubjectAction extends Action
 						DisplayConstants.ERROR_ID,
 						"No Patient Information associated with that study"));
 				saveErrors(request, errors);
-				if (log.isDebugEnabled())
-					log
-							.debug(session.getId()
-									+ "|"
-									+ ((LoginForm) session
-											.getAttribute(DisplayConstants.LOGIN_OBJECT))
-											.getLoginId() + "|"
-									+ labFm.getFormName()
-									+ "|search|Failure|No Patient Information associated with that study"
-									+ labFm.getFormName() + " object|"
-									+ form.toString() + "|");
+				log.debug("No Patient Information associated with that study");
+				
 				return (mapping.findForward(ForwardConstants.SEARCH_FAILURE));
 			}
 			session.setAttribute("CURRENT_FORM", labFm);
