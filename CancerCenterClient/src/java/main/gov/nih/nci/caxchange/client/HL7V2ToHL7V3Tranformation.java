@@ -74,17 +74,17 @@ public class HL7V2ToHL7V3Tranformation {
 								boolean success = new File(csvFileName).renameTo(new File(
 										cancerCenterClient.getInProcessFolder(),
 										fileNameLocationDateTimeStamp));
-								System.out.println("success" +success);
+								//System.out.println("success" +success);
 								boolean Tsuccess = fileList[i].renameTo(new File(
 										cancerCenterClient.getRawFilesBackupDirectory(),
 										fileNameLocationDateTimeStamp));
-								System.out.println("Tsuccess" +Tsuccess);
+								//System.out.println("Tsuccess" +Tsuccess);
 								if (!success) {
 									logger.error(fileList[i].toString() + "Renamed to : "
-											+ csvFileName
-											+ " Was not moved to the backup folder");
+											+ csvFileName +"InProcess folder");
 									} else {
-									logger.debug("File Moved to Backup folder");
+									logger.debug("File Moved to In Process folder");
+									new File(csvFileName).delete();
 								}
 							}
 						}
