@@ -24,7 +24,6 @@ import org.w3c.dom.Node;
 import webservices.Acknowledgement;
 import webservices.LoadLabsRequest;
 
-import gov.nih.nci.c3d.domainobjects.LabsLoadRequest;
 import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
@@ -61,23 +60,8 @@ public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 			}
 			*/
 			LabLoaderClient client = new LabLoaderClient(serviceUrl);//, cred);
-			//C3DGridServiceClient client = new C3DGridServiceClient(serviceUrl, cred);
 
-			////////SourceTransformer transformer = new SourceTransformer();
-			////////InputStream deseralizeStream = client.getClass().getResourceAsStream(
-			////////				"/loadlab/client-config.wsdd");
-			
-			/*StringReader reader = new StringReader(transformer.toString(message
-					.getPayload()));
-			LabsLoadRequest request = (LabsLoadRequest) Utils.deserializeObject(
-					reader, LabsLoadRequest.class, deseralizeStream);*/
-
-			
-			//log.debug("messsssssage:"+message.getPayload().getNodeValue());
 			String xml=(new SourceTransformer()).toString(message.getPayload());
-			//String msg=xml.substring(xml.indexOf("<study"));
-			log.debug("text messsssssage:"+xml);
-			//log.debug("messsssssage:"+(new SourceTransformer()).contentToString(exchange.getMessage("in")));
 			client.loadLab(xml);
 
 			final Document resp = new SourceTransformer()
