@@ -159,9 +159,11 @@ public class HL7V3Transformation {
 	private void setUpToInvokeGrid(String fileName) {
 		// invokes the grid service to persist the HL7V3
 		// message.
+		int counter = 1;
 		try {
 			for (String HL7V3 : HL7V3Msgs) {
-					invokeGridService(fileName, HL7V3, HL7V3Msgs.indexOf(HL7V3));
+					invokeGridService(fileName, HL7V3, counter);
+					counter++;
 			}
 		} catch (Exception e) {
 			logger.fatal(Messages.getString("CancerCenterClient.22"));
