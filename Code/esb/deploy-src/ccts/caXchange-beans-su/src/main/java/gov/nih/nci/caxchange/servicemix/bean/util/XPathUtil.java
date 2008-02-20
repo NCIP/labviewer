@@ -74,10 +74,8 @@ public class XPathUtil {
     "    <caXchangeIdentifier>0da440a0-8ff5-11dc-babe-d4801775f7f7</caXchangeIdentifi\n" + 
     "er>\n" + 
     "    <credentials>\n" + 
-    "      <userName>hmarwaha</userName>\n" + 
     "      <groupName xsi:nil=\"true\"/>\n" + 
     "      <gridIdentifier xsi:nil=\"true\"/>\n" + 
-    "      <password>password</password>\n" + 
     "    </credentials>\n" + 
     "  </metaData>\n" + 
     "  <request>\n" + 
