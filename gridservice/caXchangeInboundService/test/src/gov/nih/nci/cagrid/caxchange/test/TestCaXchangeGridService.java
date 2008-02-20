@@ -56,10 +56,8 @@ public class TestCaXchangeGridService extends TestCase {
     CaXchangeRequestProcessorClient client;
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     String externalIdentifier = "myExternalIdentifier";
-    String userName="hmarwaha";
-    String password="password";
 	
-    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
+/*    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
     		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
     		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
     		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -67,12 +65,29 @@ public class TestCaXchangeGridService extends TestCase {
     		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
     		"    <ns2:DelegatedCredentialKey" +
     		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
-    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">480</ns3:delegationId>" +
+    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">521</ns3:delegationId>" +
+    		"    </ns2:DelegatedCredentialKey>" +
+    		"   </ns2:ReferenceProperties>" +
+    		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
+    		"  </ns2:EndpointReference>" +
+    		"</ns1:DelegatedCredentialReference>";*/
+
+		String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
+    		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
+    		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
+    		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+    		"   <ns2:Address xsi:type=\"ns2:AttributedURI\">https://cbvapp-q1010.nci.nih.gov:18443/wsrf/services/cagrid/DelegatedCredential</ns2:Address>" +
+    		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
+    		"    <ns2:DelegatedCredentialKey" +
+    		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
+    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">64</ns3:delegationId>" +
     		"    </ns2:DelegatedCredentialKey>" +
     		"   </ns2:ReferenceProperties>" +
     		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
     		"  </ns2:EndpointReference>" +
     		"</ns1:DelegatedCredentialReference>";
+    
+     
     
      
     Message message = null;
@@ -93,8 +108,6 @@ public class TestCaXchangeGridService extends TestCase {
        Metadata metadata = new Metadata();
        metadata.setExternalIdentifier(externalIdentifier);
        Credentials creds = new Credentials();
-       creds.setUserName(userName);
-       creds.setPassword(password);
 	   creds.setDelegatedCredentialReference(delegatedReference);
        metadata.setCredentials(creds);
        message.setMetadata(metadata);

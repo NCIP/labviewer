@@ -6,8 +6,6 @@
   <ns1:externalIdentifier>myExternalIdentifier</ns1:externalIdentifier>
   <ns1:caXchangeIdentifier>82bb15d0-9d47-11dc-a6e7-fbc72c1213b2</ns1:caXchangeIdentifier>
   <ns1:credentials>
-   <ns1:userName>hmarwaha</ns1:userName>
-   <ns1:password>password</ns1:password>
   </ns1:credentials>
  </ns1:metadata>
  <ns1:request>

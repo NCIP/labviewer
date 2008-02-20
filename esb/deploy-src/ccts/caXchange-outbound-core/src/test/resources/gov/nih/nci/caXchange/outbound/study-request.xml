@@ -5,10 +5,8 @@
     <externalIdentifier>myExternalIdentifier</externalIdentifier>
     <caXchangeIdentifier>2319a1b0-9b7a-11dc-8b10-c2ed0a64d6d3</caXchangeIdentifier>
     <credentials>
-      <userName>hmarwaha</userName>
       <groupName xsi:nil="true"/>
       <gridIdentifier xsi:nil="true"/>
-      <password>password</password>
     </credentials>
   </metadata>
   <request>
