@@ -253,8 +253,6 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 			            metaData.setExternalIdentifier("myExternalIdentifier");
 			            metaData.setMessageType(MessageTypes.STUDY_CREATION);
 			            Credentials creds = new Credentials();
-			            creds.setUserName("hmarwaha");
-			            creds.setPassword("password");
 			            metaData.setCredentials(creds); 
 			            requestMessage.setMetadata(metaData);
 			            Request request = new Request();
