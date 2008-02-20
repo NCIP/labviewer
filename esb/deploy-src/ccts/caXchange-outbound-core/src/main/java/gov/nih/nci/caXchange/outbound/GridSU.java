@@ -331,7 +331,12 @@ public class GridSU implements MessageExchangeListener {
 		Element errorCode = output.createElement(ERROR_CODE_ELEMENT);
 		Element errorDescription = output.createElement(ERROR_DESCRIPTION_ELEMENT);
 		errorCode.setTextContent(findErrorCodeForException(e));
-		errorDescription.setTextContent(e.getMessage());
+		
+		String errorDesc=e.getMessage();
+		if(e instanceof AxisFault){
+			errorDesc=((AxisFault)e).getFaultString();
+		}
+		errorDescription.setTextContent(errorDesc);
 		payloadElement.appendChild(errorCode);
 		payloadElement.appendChild(errorDescription);
 		root.appendChild(payloadElement);
