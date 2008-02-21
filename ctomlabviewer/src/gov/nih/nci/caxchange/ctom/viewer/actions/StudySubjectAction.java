@@ -10,6 +10,7 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -52,21 +53,66 @@ public class StudySubjectAction extends Action
 	{
 		HttpSession session = request.getSession();
 		LabActivitiesSearchForm baseDBForm = new LabActivitiesSearchForm();
-		ActionErrors errors = new ActionErrors();		
-		if((request.getParameter("studySubjectGridId"))!=null){
+		ActionErrors errors = new ActionErrors();
+		ActionForward forward = null;
+		String studySubjectGridId = (String)request.getParameter("studySubjectGridId");
+		
+		log.debug("studySubjectGridId is " + studySubjectGridId);
+		
+		if(studySubjectGridId != null)
+		{
+			// Since they may have come from another app but logged in through webSSO let's check auth
+			String userEmail = (String)session.getAttribute("CAGRID_SSO_EMAIL_ID");
+			
+			if (userEmail != null)
+			{
+				boolean loggedIn = true;
+				LoginForm loginForm = new LoginForm();
+				
+				String username = userEmail;
+				loginForm.setLoginId(username);
+				
+				// Check their authorization
+				LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
+				boolean authorized = lvaHelper.isAuthorized(username);
+						
+				if (!authorized)
+				{
+					log.error("User authenticated but not authorized");
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID,
+								"User does not have permissions for this application"));
+					saveErrors(request, errors);
+					loggedIn = false;
+					forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
+				}
+				
+				if (loggedIn)
+				{
+					loginForm.setGridProxy("test");
+					session.setAttribute(DisplayConstants.LOGIN_OBJECT,loginForm);
+					session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
+				}
+			}
+			
+			// Then proceed on
 			session.setAttribute(DisplayConstants.HOT_LINK,"true"); 
-			session.setAttribute("studySubjectGridId", (String)request.getParameter("studySubjectGridId"));
+			session.setAttribute("studySubjectGridId", studySubjectGridId);
 			session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.SEARCH);
 			session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
 			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
-			LabActivitiesSearchForm labFm=(LabActivitiesSearchForm)session.getAttribute("CURRENT_FORM");
-			try {
+			LabActivitiesSearchForm labFm = (LabActivitiesSearchForm)session.getAttribute("CURRENT_FORM");
+			
+			try
+			{
 				log.info("Get Patient info");
 				getPatientIdRoot((String)session.getAttribute("studySubjectGridId"),labFm);
 				
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				log.error("Error retreiving patient information",e);
 			}
+			
 			if(labFm.getStudyId()==null)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -75,33 +121,24 @@ public class StudySubjectAction extends Action
 				saveErrors(request, errors);
 				log.debug("No Patient Information associated with that study");
 				
-				return (mapping.findForward(ForwardConstants.SEARCH_FAILURE));
+				forward = mapping.findForward(ForwardConstants.SEARCH_FAILURE);
 			}
+			
 			session.setAttribute("CURRENT_FORM", labFm);
-		  	String operation= "execute";
-			return (mapping.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK));
-			}
-		
-		
-		// clear the junk in the session here
-		 
-		if (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null && request.getParameter("studySubjectGridId")==null ) 
-		{
-			session.removeAttribute(DisplayConstants.CURRENT_ACTION);
-			session.removeAttribute(DisplayConstants.CURRENT_FORM);
-			session.removeAttribute(DisplayConstants.SEARCH_RESULT);
-			session.setAttribute(DisplayConstants.HOT_LINK,"false");
-			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
-		if (log.isDebugEnabled())
-				log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
-			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
+			forward = mapping.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK);
 		}
-
-		if (log.isDebugEnabled())
-			log.debug(session.getId()+"|"+((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId()+
-					"|Home|Redirect|Success|Already Logged In and Forwarding to the Home Page||");
+		else
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					DisplayConstants.ERROR_ID,
+					"No Patient Information associated with that study"));
+			saveErrors(request, errors);
+			log.debug("No Patient Information associated with that study");
+			
+			forward = mapping.findForward(ForwardConstants.SEARCH_FAILURE);
+		}
 		
-		return mapping.findForward(ForwardConstants.HOME_PAGE);
+		return forward;
 	}
 	/**
 	 * 
