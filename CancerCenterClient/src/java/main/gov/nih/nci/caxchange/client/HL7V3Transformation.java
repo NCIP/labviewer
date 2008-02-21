@@ -24,10 +24,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -44,6 +46,10 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
+import org.globus.gsi.GlobusCredential;
+import org.globus.gsi.GlobusCredentialException;
+import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+import org.ietf.jgss.GSSCredential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -64,7 +70,7 @@ public class HL7V3Transformation {
 
 	private final ScheduledExecutorService scheduler = Executors
 			.newScheduledThreadPool(1);
-
+	private static final String CONFIG_FILE = "/project.properties";
 	private List<String> HL7V3Msgs = Collections
 			.synchronizedList(new ArrayList<String>());
 
@@ -222,12 +228,12 @@ public class HL7V3Transformation {
 		Metadata metadata = new Metadata();
 		metadata.setExternalIdentifier("CTODS");
 		metadata.setMessageType(MessageTypes.CT_LAB_DATA);
-
-		// Credentials creds = new Credentials();// Optional Credentials - for
+		
+		//  Credentials creds = new Credentials();// Optional Credentials - for
 		// testing purposes comment out the creds.
 		// creds.setUserName(userName);
 		// creds.setPassword(userPasswd);
-		// metadata.setCredentials(creds);
+		 
 
 		requestMessage.setMetadata(metadata);
 		Request caxchangeRequest = new Request();
@@ -309,9 +315,13 @@ public class HL7V3Transformation {
 			boolean gotResponse = false;
 			boolean hl7v3move = false;
 			GetResponseResponse getResponse = null;
-
+			Properties props = new Properties();
+			InputStream istream = getClass().getResourceAsStream(CONFIG_FILE);
+			props.load(istream);
+			String proxyFile = (String)props.getProperty("proxyFile");
+			GlobusCredential gb =new GlobusCredential(proxyFile);
 			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
-					cancerCenterClient.getHubURL());
+					cancerCenterClient.getHubURL(),gb);
 			// creates the caXchange Message
 			Message requestMessage = new Message();
 			MessagePayload messagePayload = createMessage(requestMessage);
@@ -348,8 +358,7 @@ public class HL7V3Transformation {
 				messagePayload.set_any(new MessageElement[] { messageElement });
 				requestMessage.getRequest().setBusinessMessagePayload(
 						messagePayload);
-
-				CaXchangeResponseServiceReference crsr = client
+                CaXchangeResponseServiceReference crsr = client
 						.processRequestAsynchronously(requestMessage);
 
 				CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(
@@ -398,7 +407,7 @@ public class HL7V3Transformation {
 						logger.info(
 								Messages.getString("CancerCenterClient.71"), e);
 						responseCount++;
-						if (responseCount > 1) {
+						if (responseCount > 20) {
 							logger.error(Messages
 									.getString("CancerCenterClient.72"));
 							throw new Exception(Messages
@@ -428,8 +437,9 @@ public class HL7V3Transformation {
 		} catch (InterruptedException e) {
 
 			logger.error("InterruptedException" + e.getLocalizedMessage());
-		} catch (Exception e) {
-
+		} catch (GlobusCredentialException e1) {
+			logger.error("GlobusCredentialException" + e1.getLocalizedMessage());
+		}catch (Exception e) {
 			logger.error("Exception" + e.getLocalizedMessage());
 		}
 
