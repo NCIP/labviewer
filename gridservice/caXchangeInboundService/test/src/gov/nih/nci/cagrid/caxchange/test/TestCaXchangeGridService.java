@@ -57,7 +57,7 @@ public class TestCaXchangeGridService extends TestCase {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     String externalIdentifier = "myExternalIdentifier";
 	
-/*    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
+    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
     		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
     		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
     		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -65,14 +65,14 @@ public class TestCaXchangeGridService extends TestCase {
     		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
     		"    <ns2:DelegatedCredentialKey" +
     		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
-    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">521</ns3:delegationId>" +
+    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">620</ns3:delegationId>" +
     		"    </ns2:DelegatedCredentialKey>" +
     		"   </ns2:ReferenceProperties>" +
     		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
     		"  </ns2:EndpointReference>" +
-    		"</ns1:DelegatedCredentialReference>";*/
+    		"</ns1:DelegatedCredentialReference>";
 
-		String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
+/*		String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
     		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
     		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
     		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
@@ -86,7 +86,7 @@ public class TestCaXchangeGridService extends TestCase {
     		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
     		"  </ns2:EndpointReference>" +
     		"</ns1:DelegatedCredentialReference>";
-    
+  */  
      
     
      
