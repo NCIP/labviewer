@@ -1,4 +1,4 @@
-<project name="Caxchange Routing and Workflow Client" default="createzip" basedir=".">
+<project name="Caxchange Routing and Workflow Client" default="createClientZip" basedir=".">
 
 	<!-- Sets the properties -->
 	<property file="build.properties" />
@@ -53,7 +53,7 @@
 	</target>
 
 	<!-- Creates a zip file with CAXCHANGE.jar -->
-	<target name="createzip" depends="batch" description="zip file">
+	<target name="createClientZip" depends="batch" description="zip file">
 		<copy todir="${dist.home}\lib\">
 			<fileset dir="${lib.home}" includes="**/*.jar" />
 		</copy>
