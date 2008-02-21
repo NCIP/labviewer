@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
@@ -91,7 +92,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private BufferedReader buffReader;
 	private Border blackline = BorderFactory.createLineBorder(Color.black);
 	private final ArrayList<ScheduledExecutorService>threadsList=new ArrayList<ScheduledExecutorService>();
-
+	private static final String CONFIG_FILE = "/project.properties";
 	/**
 	 * Default constructor.
 	 */
@@ -613,10 +614,14 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			stopThreads();
 			System.exit(0);
 		}else if ("Help".equals(e.getActionCommand())) {
-			String fileName = "./conf/CCHC End User Guide.doc";
-			try{
-				Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL \""+fileName);
-			}catch (IOException e1){ e1.printStackTrace(); }
+			try{ 
+			 Properties props = new Properties();
+			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
+			 props.load(stream);
+			 String fileName = (String)props.getProperty("helpDoc");
+			 Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL \""+fileName);
+			}catch (IOException e1){ logger.error("IOException"
+					+ e1.getLocalizedMessage()); }
         }else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
 			File file = saveDefaults();
