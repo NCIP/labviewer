@@ -3,6 +3,11 @@
 
 	<property environment="env" />
 	<property file="build.properties" />
+	<property name="test.dir" value="test" />
+	<property name="test.src.dir" value="${test.dir}/src" />
+	<property name="test.lib.dir" value="${test.dir}/lib" />
+	<property name="test.log.dir" value="test/logs" />
+	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 
 	<target name="init">
 		<property name="webinf.home" value="${web.home}/WEB-INF" />
@@ -18,6 +23,8 @@
 
 	<target name="prepareDir" depends="init">
 		<mkdir dir="${build.home}" />
+		<mkdir dir="${test.home}" />
+		<mkdir dir="${junit.results.dir}" />
 		<mkdir dir="${build.home}/WEB-INF" />
 		<mkdir dir="${build.home}/WEB-INF/tld" />
 		<mkdir dir="${build.home}/WEB-INF/conf" />
@@ -122,6 +129,33 @@
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
 		<delete dir="${build.home}" />
 	</target>
+
+	<target name="test" depends="all" description="Tests the CTOM Lab Domain model API">
+		
+		<junit printsummary="yes" haltonfailure="yes" showoutput="yes">
+			<classpath>
+				<pathelement path="${libext.home}/ctodslabviewer.jar" />
+				<fileset dir="${lib.home}" includes="*" />
+				<fileset dir="${otherlib.home}" includes="*" />
+				<fileset dir="${libext.home}" includes="*" />
+				<pathelement path="test/classes"/>
+			</classpath>
+
+			<batchtest fork="yes" todir="${junit.results.dir}">
+
+				<fileset dir="${test.home}">
+					<include name="**/*Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		
+		
+		
+		
+	</target>
+
+
+
 
 	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 
