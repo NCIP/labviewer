@@ -131,22 +131,46 @@
 	</target>
 
 	<target name="test" depends="all" description="Tests the CTOM Lab Domain model API">
+		<javac srcdir="${test.home}/src" destdir="${test.home}/classes" debug="true" deprecation="true">
+					<classpath>
+						<pathelement path="${libext.home}/ctodslabviewer.jar" />
+						<pathelement path="test/resources"/>
+						<fileset dir="${lib.home}" includes="*" />
+						<fileset dir="${otherlib.home}" includes="*" />
+						<fileset dir="${libext.home}" includes="*" />
+						<fileset dir="lib-ext" includes="*" />
+						<pathelement path="otherlib/servlet.jar"/>
+						<fileset dir="WebContent/WEB-INF/lib" includes="*" />
+						<pathelement path="WebContent/WEB-INF/lib/activation.jar"/>
+						<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
+						<pathelement path="dist/ctodslabviewer.war"/>
+						<pathelement path="build/WEB-INF/classes"/>
+						
+						<pathelement path="test/resources/ctodslabviewer.jar"/>
+					</classpath>
+				</javac>
 		
 		<junit printsummary="yes" haltonfailure="yes" showoutput="yes">
 			<classpath>
 				<pathelement path="${libext.home}/ctodslabviewer.jar" />
+				<pathelement path="test/resources"/>
+				<pathelement path="test/classes"/>
 				<fileset dir="${lib.home}" includes="*" />
 				<fileset dir="${otherlib.home}" includes="*" />
 				<fileset dir="${libext.home}" includes="*" />
-				<pathelement path="test/classes"/>
+				<fileset dir="lib-ext" includes="*" />
+				<pathelement path="otherlib/servlet.jar"/>
+				<fileset dir="WebContent/WEB-INF/lib" includes="*" />
+				<pathelement path="WebContent/WEB-INF/lib/activation.jar"/>
+				<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
+				<pathelement path="dist/ctodslabviewer.war"/>
+				<pathelement path="build/WEB-INF/classes"/>
+				
+				<pathelement path="test/resources/ctodslabviewer.jar"/>
 			</classpath>
+			
+			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="result"/>
 
-			<batchtest fork="yes" todir="${junit.results.dir}">
-
-				<fileset dir="${test.home}">
-					<include name="**/*Test*.java" />
-				</fileset>
-			</batchtest>
 		</junit>
 		
 		
