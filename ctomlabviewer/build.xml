@@ -174,7 +174,7 @@
 			<batchtest fork="yes" todir="${report.dir}">
 			                <fileset dir="${src.home}" includes="*Test.java"/>
 			            </batchtest>
-			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="result"/>
+			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="${test.home}/testresults"/>
 
 		</junit>
 		
