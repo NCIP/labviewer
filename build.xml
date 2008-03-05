@@ -170,7 +170,7 @@
 				
 				<pathelement path="test/resources/ctodslabviewer.jar"/>
 			</classpath>
-			<formatter type="xml"/>
+			<formatter type="plain"/>
 			<batchtest fork="yes" todir="${report.dir}">
 			                <fileset dir="${src.home}" includes="*Test.java"/>
 			            </batchtest>
