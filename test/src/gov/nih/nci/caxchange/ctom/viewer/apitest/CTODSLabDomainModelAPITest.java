@@ -1,14 +1,9 @@
 package gov.nih.nci.caxchange.ctom.viewer.apitest;
-import gov.nih.nci.cagrid.caxchange.test.TestCaXchangeGridService;
-//import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
-import gov.nih.nci.labhub.domain.Activity;
 import gov.nih.nci.labhub.domain.CD;
-import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.labhub.domain.LaboratoryResult;
 import gov.nih.nci.labhub.domain.LaboratoryTest;
 import gov.nih.nci.labhub.domain.Specimen;
 import gov.nih.nci.labhub.domain.SpecimenCollection;
-import gov.nih.nci.labhub.domain.StudySite;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.client.ApplicationServiceProvider;
@@ -106,33 +101,15 @@ public class CTODSLabDomainModelAPITest extends TestCase{
 		List resultList = appService.query(query);
 		Iterator iter = resultList.iterator();
 		while (iter.hasNext()){
-			SubjectAssignment sa = (SubjectAssignment)iter.next();
-			//LabActivityResult labActivityResult=null;
-			
-			StudySite s = sa.getStudySite();
-			//System.out.println("\t Records from database");
-			System.out.println(iter.getClass());
-			System.out.println("\tID="+sa.getId());
-			//System.out.println("\tTYPE="+sa.getType());
-			//System.out.println("\t ACTIVITY="+sa.getActivityCollection());
-			//Collection<Activity> activities = sa.getActivityCollection();
-			/*for (Activity activity : activities) {
-				System.out.println("\t Start Date:"+activity.getPlannedTimeElapsedDescription());
-				System.out.println("\t End Date: "+activity.getActualEndDateTime());
-			}*/
-			
+			SubjectAssignment sa = (SubjectAssignment)iter.next();	
 			Collection activityCollection = sa.getActivityCollection();
 			for (Iterator activityIterator = activityCollection.iterator(); activityIterator.hasNext();)
 			{
-				
 				SpecimenCollection activity = (SpecimenCollection) activityIterator.next();
 				Collection specimenCollection = activity.getSpecimenCollection();
-				//System.out.println("specimen collection"+specimenCollection);
 				Iterator specimenIterator = specimenCollection.iterator();
 				Specimen specimen = (Specimen) specimenIterator.next();
 				Collection labTestCollection = specimen.getLaboratoryTestCollection();
-				
-
 				for (Iterator labTestIterator = labTestCollection
 						.iterator(); labTestIterator.hasNext();)
 				{
@@ -140,53 +117,30 @@ public class CTODSLabDomainModelAPITest extends TestCase{
 					CD labTestIde = labTest.getLaboratoryTestId();
 					LaboratoryResult labResult = labTest.getLaboratoryResult();
 					CD units = labResult.getUnits();
-					String labname=specimen.getCommentFromLaboratory();
+					String labTestId = labTestIde.getCode();
 					Float numericResult = labResult.getNumericResult();
 					String unitOfMeasure = units.getCode();
 					Float lowRange = new Float ( labResult.getReferenceRangeLow());
-					Float highRange = new Float (labResult.getReferenceRangeHigh());
-					
-					System.out.println("\t LAB NAME="+labname+"\t VALUE="+numericResult+"\t UNIT OF MEASURE="+unitOfMeasure+ "\t LOW RANGE="+lowRange+"\t HIGH RANGE"+highRange);
+					Float highRange = new Float (labResult.getReferenceRangeHigh());		
+					System.out.println("\t LAB NAME="+labTestId+"\t VALUE="+numericResult+"\t UNIT OF MEASURE="+unitOfMeasure+ "\t LOW RANGE="+lowRange+"\t HIGH RANGE="+highRange);
 				}
 		
-			}
-			
-			
-			//System.out.println("\t STUDY SUBJECT ID="+sa.getStudySubjectIdentifier());
-			//System.out.println("\t PATTICIPANT="+sa.getParticipant());
-			//System.out.println("\t CLASS="+sa.getClass());
-			System.out.println("\t STUDY SITE ="+sa.getStudySite());
-			
-			Collection<II> temp = sa.getStudySubjectIdentifier();
-			for(II ii:temp)
-				System.out.println("\t\tsubjIdentifier.extension="+ii.getExtension()+"--"+ii.getRoot());
-			for(II ii:s.getStudy().getStudyIdentifier())
-				
-				System.out.println("\t\tsubjIdentifier.extension="+ii.getExtension()+"--"+ii.getRoot());
+			}		
 			
 		}		
 		
 	} catch (Exception e) {
 		e.printStackTrace();
-		assertTrue(false);
+		//assertTrue(false);
 	}
 	
 	}
-	
-	
-	
-	
-	
-	
-	
+		
 	
     public static Test suite() {
     	System.out.println("Add more test to the suits here");
         TestSuite suite = new TestSuite();
-
         suite.addTest(new CTODSLabDomainModelAPITest("testAPIClient"));
-        
-
         return suite;
      }
 
