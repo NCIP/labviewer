@@ -183,7 +183,7 @@
 		
 	</target>
 	
-	<target name="junitreport">
+	<target name="junitreport" description="Prepares the html report of the junit test execution results">
 	        <junitreport todir="${report.dir}">
 	            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
 	            <report todir="${report.dir}"/>
