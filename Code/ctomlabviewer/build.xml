@@ -8,7 +8,8 @@
 	<property name="test.lib.dir" value="${test.dir}/lib" />
 	<property name="test.log.dir" value="test/logs" />
 	<property name="junit.results.dir" value="${test.log.dir}/junit" />
-
+	<property name="report.dir"  value="${test.dir}/junitreport"/>
+	
 	<target name="init">
 		<property name="webinf.home" value="${web.home}/WEB-INF" />
 		<property name="lib.home" value="${webinf.home}/lib" />
@@ -24,6 +25,7 @@
 	<target name="prepareDir" depends="init">
 		<mkdir dir="${build.home}" />
 		<mkdir dir="${test.home}" />
+		 <mkdir dir="${report.dir}"/>
 		<mkdir dir="${junit.results.dir}" />
 		<mkdir dir="${build.home}/WEB-INF" />
 		<mkdir dir="${build.home}/WEB-INF/tld" />
@@ -168,7 +170,10 @@
 				
 				<pathelement path="test/resources/ctodslabviewer.jar"/>
 			</classpath>
-			
+			<formatter type="xml"/>
+			<batchtest fork="yes" todir="${report.dir}">
+			                <fileset dir="${src.home}" includes="*Test.java"/>
+			            </batchtest>
 			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="result"/>
 
 		</junit>
@@ -177,6 +182,13 @@
 		
 		
 	</target>
+	
+	<target name="junitreport">
+	        <junitreport todir="${report.dir}">
+	            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+	            <report todir="${report.dir}"/>
+	        </junitreport>
+	    </target>
 
 
 
