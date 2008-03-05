@@ -4,10 +4,6 @@
 	<property environment="env" />
 	<property file="build.properties" />
 	<property name="test.dir" value="test" />
-	<property name="test.src.dir" value="${test.dir}/src" />
-	<property name="test.lib.dir" value="${test.dir}/lib" />
-	<property name="test.log.dir" value="test/logs" />
-	<property name="junit.results.dir" value="${test.log.dir}/junit" />
 	<property name="report.dir"  value="${test.dir}/junitreport"/>
 	
 	<target name="init">
@@ -26,7 +22,6 @@
 		<mkdir dir="${build.home}" />
 		<mkdir dir="${test.home}" />
 		 <mkdir dir="${report.dir}"/>
-		<mkdir dir="${junit.results.dir}" />
 		<mkdir dir="${build.home}/WEB-INF" />
 		<mkdir dir="${build.home}/WEB-INF/tld" />
 		<mkdir dir="${build.home}/WEB-INF/conf" />
@@ -147,7 +142,6 @@
 						<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
 						<pathelement path="dist/ctodslabviewer.war"/>
 						<pathelement path="build/WEB-INF/classes"/>
-						
 						<pathelement path="test/resources/ctodslabviewer.jar"/>
 					</classpath>
 				</javac>
@@ -167,30 +161,22 @@
 				<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
 				<pathelement path="dist/ctodslabviewer.war"/>
 				<pathelement path="build/WEB-INF/classes"/>
-				
 				<pathelement path="test/resources/ctodslabviewer.jar"/>
 			</classpath>
 			<formatter type="plain"/>
 			<batchtest fork="yes" todir="${report.dir}">
-			                <fileset dir="${src.home}" includes="*Test.java"/>
-			            </batchtest>
+			    <fileset dir="${src.home}" includes="*Test.java"/>
+			</batchtest>
 			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="${test.home}/testresults"/>
-
 		</junit>
-		
-		
-		
-		
 	</target>
 	
 	<target name="junitreport" description="Prepares the html report of the junit test execution results">
 	        <junitreport todir="${report.dir}">
-	            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+	            <fileset dir="${report.dir}" includes="testresults.txt"/>
 	            <report todir="${report.dir}"/>
 	        </junitreport>
 	    </target>
-
-
 
 
 	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
