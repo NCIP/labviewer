@@ -35,7 +35,7 @@
     <module>caXchange-outbound-jms-su</module>
     <module>caXchange-eip-su</module>    
     <module>caXchange-ccts-sa</module>
-    <module>caXchange-servicemix-eip-su</module>
+    <module>caXchange-servicemix-eip-se</module>
   </modules>
   <distributionManagement>
     <repository>
