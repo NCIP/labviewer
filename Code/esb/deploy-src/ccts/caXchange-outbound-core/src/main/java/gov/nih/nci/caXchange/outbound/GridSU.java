@@ -79,7 +79,12 @@ public class GridSU implements MessageExchangeListener {
 	public void onMessageExchange(MessageExchange exchange)
 			throws MessagingException {
 
-		log.debug("Grid service unit received exchange: " + exchange);
+		if (ExchangeStatus.DONE == exchange.getStatus() || ExchangeStatus.ERROR == exchange.getStatus()) {
+			log.debug("returning done status recvd:"+exchange.getStatus());
+			exchange.setStatus(ExchangeStatus.DONE);
+			return;
+		}
+		
 		if (ExchangeStatus.ACTIVE != exchange.getStatus()) {
 			failInactiveExchange(exchange);
 		}
@@ -164,7 +169,7 @@ public class GridSU implements MessageExchangeListener {
 				break;
 			} catch (GridInvocationException gie) {
 				log.error("Failed to invoke grid service.", gie);
-				if (gie.getCanRetry()) {
+				if (gie.getCanRetry() && i<retries) {
 					log.debug("Retrying invocation");
 				} else {
 					log.debug("Exhausted retries. Returning error.");
