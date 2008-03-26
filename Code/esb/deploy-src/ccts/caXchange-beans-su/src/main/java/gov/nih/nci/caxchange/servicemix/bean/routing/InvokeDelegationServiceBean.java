@@ -80,36 +80,6 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			return;
 		}
 		
-		
-		
-
-		
-		// HACK: modify exchange object to log the complete content
-		
-		Field field;
-		try {
-			field = exchange.getClass().getField("maxMsgDisplaySize");
-			field.setAccessible(true);
-		    field.set(exchange, new Integer(10000));
-		} catch (SecurityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (NoSuchFieldException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		// HACK ENDS
-		
-
-		logger.debug("Received exchange: "+ exchange);
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
 		
