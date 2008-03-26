@@ -68,8 +68,19 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 	
 	private String certificateFilePath, keyFilePath;
 
+	private static GlobusCredential hostCredential = null;
+	
 	public static Logger logger = LogManager
 	.getLogger(InvokeDelegationServiceBean.class);
+	
+	public InvokeDelegationServiceBean() throws GridInvocationException{
+		try{
+			hostCredential = new GlobusCredential(certificateFilePath, keyFilePath);
+		}catch (GlobusCredentialException e){
+			throw new GridInvocationException(
+					"Unable to create Host Credentials from the Certificate and Key File", e);
+		}
+	}
 	
 	public void onMessageExchange(MessageExchange exchange)
 	throws MessagingException {
@@ -121,17 +132,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			//TODO: this is a temporary arrangement for Lab Loader
 			if("CT_LAB_DATA".equals(util.getMessageType()))
 				return;
-
-			GlobusCredential hostCredential = null;
 			
 			String delegationEPR = util.getDelegatedCredentialReference();
-			
-			try{
-				hostCredential = new GlobusCredential(certificateFilePath, keyFilePath);
-			}catch (GlobusCredentialException e){
-				throw new GridInvocationException(
-						"Unable to create Host Credentials from the Certificate and Key File", e);
-			}
 			
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try{
