@@ -40,6 +40,12 @@
 	  		document.LabActivitiesSearchResultForm.operation.value="execute";
 	  		ischecked = true;
   		}
+  		if (target=="saveToCSV")
+  		{
+  		   	document.LabActivitiesSearchResultForm.action="saveToCSV.do";  
+	  		document.LabActivitiesSearchResultForm.operation.value="execute";
+	  		ischecked = true;
+  		}
   		else
   		{   
 	  		var radioLen = document.LabActivitiesSearchResultForm.recordIds.length;
@@ -314,6 +320,9 @@
 													</td>
 													<td>
 														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Labs to CDMS</html:button>
+													</td>
+													<td>
+													   <html:button style="actionButton" property="saveToCSV" onclick="setAndSubmit('saveToCSV');">Save Labs to CSV</html:button>
 													</td>
 												</tr>
 											</table>
