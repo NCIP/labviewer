@@ -1,5 +1,6 @@
 package gov.nih.nci.cabig.labviewer.grid;
 
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.HealthcareSiteType;
 import gov.nih.nci.ccts.grid.IdentifierType;
 import gov.nih.nci.ccts.grid.ParticipantType;
@@ -7,6 +8,7 @@ import gov.nih.nci.ccts.grid.Registration;
 import gov.nih.nci.ccts.grid.StudyRefType;
 import gov.nih.nci.ccts.grid.StudySiteType;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumer;
+import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 import gov.nih.nci.ccts.grid.stubs.types.InvalidRegistrationException;
 import gov.nih.nci.ccts.grid.stubs.types.RegistrationConsumptionException;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
@@ -19,7 +21,6 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -120,7 +121,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		java.util.Date now = new Date();
 		StudyRefType studyRef = registration.getStudyRef();
 		
-		/* Authorization code currently disabled
+		// Authorization code currently disabled
 		String username = RegistrationConsumerAuthorization.getCallerIdentity();
 		
 		if (username == null)
@@ -146,7 +147,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 				throw rce;
 			}
 		}
-		*/
+		
 	
 		// save the study data
 		Protocol protocol = new Protocol();
