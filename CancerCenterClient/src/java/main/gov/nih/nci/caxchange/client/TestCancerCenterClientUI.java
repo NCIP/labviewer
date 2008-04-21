@@ -229,7 +229,25 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jtxtMAPDir.add(jfileMAP);
 		csvBox2.add(jfileMAP);
 		csvBox.add(csvBox2);
-
+		Box csvBox4 = Box.createVerticalBox();
+		csvBox4.add(Box.createVerticalStrut(10));
+		csvBox4.setBorder(BorderFactory.createTitledBorder(blackline,
+				"Common Settings"));
+		JLabel jlbPreProcessedLabel = new JLabel(
+				"Select the Pre Processed Property file");
+		Box secondBox = Box.createHorizontalBox();
+		secondBox.add(Box.createHorizontalStrut(10));
+		secondBox.add(jlbPreProcessedLabel);
+		secondBox.add(Box.createHorizontalStrut(10));
+		secondBox.add(jtxtpreProcessorProFile);
+		JButton jfilePreProcessed = new JButton("Browse...");
+		jfilePreProcessed.addActionListener(this);
+		jfilePreProcessed.setActionCommand("BrowsePreProcessedFile");
+		jtxtpreProcessorProFile.add(jfilePreProcessed);
+		secondBox.add(jfilePreProcessed);
+		csvBox.add(secondBox);
+		
+		
 		//HL7V2 box
 		Box HL7V2Box = Box.createVerticalBox();
 		HL7V2Box
@@ -286,23 +304,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		HL7V2Box.add(csvBox13);
 
 		//1. Processed files & In process directory 2. polling delay & Initial delay
-		Box csvBox4 = Box.createVerticalBox();
-		csvBox4.add(Box.createVerticalStrut(10));
-		csvBox4.setBorder(BorderFactory.createTitledBorder(blackline,
-				"Common Settings"));
-		JLabel jlbPreProcessedLabel = new JLabel(
-				"Select the Pre Processed Property file");
-		Box secondBox = Box.createHorizontalBox();
-		secondBox.add(Box.createHorizontalStrut(10));
-		secondBox.add(jlbPreProcessedLabel);
-		secondBox.add(Box.createHorizontalStrut(10));
-		secondBox.add(jtxtpreProcessorProFile);
-		JButton jfilePreProcessed = new JButton("Browse...");
-		jfilePreProcessed.addActionListener(this);
-		jfilePreProcessed.setActionCommand("BrowsePreProcessedFile");
-		jtxtpreProcessorProFile.add(jfilePreProcessed);
-		secondBox.add(jfilePreProcessed);
-		csvBox4.add(secondBox);
+		
 
 		JLabel jlbProcessedLabel = new JLabel(
 				"Select the Processed file(s) directory");
