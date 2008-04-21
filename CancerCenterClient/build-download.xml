@@ -14,7 +14,7 @@
 				<exclude name="**/target/**"/>
 				<exclude name="**/data/**"/>
 				<exclude name="**/tmp/**"/>
-				<exclude name="**/workingapace/**"/>
+				<exclude name="**/workingsapace/**"/>
 			</zipfileset>
 	</zip>
 	</target>
