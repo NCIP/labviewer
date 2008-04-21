@@ -148,7 +148,6 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 			}
 		}
 		
-	
 		// save the study data
 		Protocol protocol = new Protocol();
 		protocol.setLongTxtTitle(studyRef.getLongTitleText());
