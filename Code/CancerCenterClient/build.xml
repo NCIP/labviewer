@@ -53,7 +53,7 @@
 	</target>
 
 	<!-- Creates a zip file with CAXCHANGE.jar -->
-	<target name="createClientZip" depends="batch" description="zip file">
+	<target name="createClientZip" depends="batch" description="zip file" >
 		<copy todir="${dist.home}\lib\">
 			<fileset dir="${lib.home}" includes="**/*.jar" />
 		</copy>
@@ -69,7 +69,7 @@
 		<copy todir="${dist.home}">
 			<fileset dir="${artifacts.dir}" excludes="**/*.zip" />
 		</copy>
-		<zip destfile="${artifacts.dir}/CAXCHANGEClient.zip" basedir="${dist.home}" excludes="**/*.class, **/preprocessor.properties, **/log4j.properties" />
+		<zip destfile="${artifacts.dir}/CAXCHANGEClient.zip" basedir="${dist.home}" excludes="**/*.class, **/preprocessor.properties, **/log4j.properties" overwrite="true"/>
 	</target>
 
 	<!-- Cleans up the classes directory -->
