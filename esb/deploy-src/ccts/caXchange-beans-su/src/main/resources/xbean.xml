@@ -98,7 +98,7 @@
 
   <bean:endpoint service="caxchange:multiSiteStudy" endpoint="multiSiteStudy" bean="#multiSiteStudy" />
 
-  <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean">
+  <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean" init-method="init">
     <property name="certificateFilePath" value="${delegation.certificateFilePath}"/>
     <property name="keyFilePath" value="${delegation.keyFilePath}"/>
   </bean>
