@@ -73,7 +73,11 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 	public static Logger logger = LogManager
 	.getLogger(InvokeDelegationServiceBean.class);
 	
-	public InvokeDelegationServiceBean() throws GridInvocationException{
+	public InvokeDelegationServiceBean() {
+
+	}
+	
+	public void init() throws GridInvocationException{
 		try{
 			hostCredential = new GlobusCredential(certificateFilePath, keyFilePath);
 		}catch (GlobusCredentialException e){
@@ -132,6 +136,7 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			//TODO: this is a temporary arrangement for Lab Loader
 			if("CT_LAB_DATA".equals(util.getMessageType()))
 				return;
+			
 			
 			String delegationEPR = util.getDelegatedCredentialReference();
 			
