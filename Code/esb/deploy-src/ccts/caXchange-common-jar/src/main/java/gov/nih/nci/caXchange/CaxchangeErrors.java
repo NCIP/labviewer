@@ -1,4 +1,9 @@
 package gov.nih.nci.caXchange;
+/**
+ * This class contains the error codes used in the caxchange project
+ * @author KhanalY
+ *
+ */
 
 public interface CaxchangeErrors {
 	public static final String AXIS_FAULT="101";

@@ -30,7 +30,9 @@ import org.xml.sax.SAXException;
 
 
 /**
- * Hello world!
+ * This class contains the methods for processing caxchange message and send to 
+ * target grid services and create the response
+ * @author steve
  * 
  */
 public class GridSU implements MessageExchangeListener {
@@ -75,7 +77,15 @@ public class GridSU implements MessageExchangeListener {
 	private boolean copySubject = true;
 	private int retries = 3;
 	private int waitBetweenRetries = 3000;
-
+	
+	/**
+	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
+	 * all the exchange will be dispatched to the onMessageExchange() method
+	 * Here is tries to execute strategy depending on the message exchange sent
+	 * @param messageExchange
+	 * @return
+	 * @throws MessagingException
+	 */
 	public void onMessageExchange(MessageExchange exchange)
 			throws MessagingException {
 
@@ -99,55 +109,83 @@ public class GridSU implements MessageExchangeListener {
 	}
 
 	/**
-	 * Number of times to retry grid invocation in case of failure.
-	 * 
-	 * @return int number of retries
+	 * This method defines number of times to retry grid invocation in case of failure.
+	 * @param
+	 * @return retries
+	 * @throws
 	 */
 	public int getRetries() {
 		return retries;
 	}
 
 	/**
-	 * Number of times to retry grid invocation in case of failure.
+	 * This method sets number of times to retry grid invocation in case of failure.
 	 * 
-	 * @param int
-	 *            number of retries
+	 * @param retries
+	 * @return
+	 * @throws
+	 *           
 	 */
 	public void setRetries(int retries) {
 		this.retries = retries;
 	}
 
 	/**
-	 * Seconds to wait between retries.
-	 * 
-	 * @return int seconds
+	 * This method gets seconds to wait between retries.
+	 * @param
+	 * @return waitBetweenRetries
+	 * @throws
 	 */
 	public int getWaitBetweenRetries() {
 		return waitBetweenRetries;
 	}
 
 	/**
-	 * Seconds to wait between retries.
+	 * This mehods sets time in seconds to wait between retries.
 	 * 
-	 * @param int
-	 *            seconds
+	 * @param waitBetweenRetries
+	 *            
 	 */
 	public void setWaitBetweenRetries(int waitBetweenRetries) {
 		this.waitBetweenRetries = waitBetweenRetries;
 	}
 
+	/**
+	 * This methods gets the grid invocaton strategy
+	 * @param 
+	 * @return strategy
+	 * @throws
+	 */
 	public GridInvocationStrategy getStrategy() {
 		return strategy;
 	}
 
+	/**
+	 * This methods sets the grid invocation strategy
+	 * @param strategy
+	 * @return
+	 * @throws
+	 */
 	public void setStrategy(GridInvocationStrategy strategy) {
 		this.strategy = strategy;
 	}
 
+	/**
+	 * This method gets delivery channel for the message exchange
+	 * @param
+	 * @return channel
+	 * @throws
+	 */
 	public DeliveryChannel getChannel() {
 		return channel;
 	}
-
+	/**
+	 * This methods invokes the grid service with the exchanges form the ESB 
+	 * depending upon the grid invocation strategy
+	 * @param exchange
+	 * @return
+	 * @throws Exception
+	 */
 	public void executeStrategy(MessageExchange exchange) throws Exception {
 
 		for (int i = 0; i <= retries; i++) {
@@ -197,10 +235,10 @@ public class GridSU implements MessageExchangeListener {
 	 * If enabled the properties and attachments are copied to the destination
 	 * message
 	 * 
-	 * @param NormalizedMessage
-	 *            in the in message of the exchange
-	 * @param NormalizedMessage
-	 *            out the out message of the exchange
+	 * @param in
+	 * @param out
+	 * @return targetOperation
+	 * @throws Exception
 	 */
 	protected void copyPropertiesAndAttachments(NormalizedMessage in,
 			NormalizedMessage out) throws Exception {
@@ -220,78 +258,134 @@ public class GridSU implements MessageExchangeListener {
 			out.setSecuritySubject(in.getSecuritySubject());
 		}
 	}
-
+	/**
+	 * Gets the target operation
+	 * @param
+	 * @return targetOperation
+	 * @throws
+	 */
 	public String getTargetOperation() {
 		return targetOperation;
 	}
-
+	/**
+	 * Sets the target operation
+	 * @param targetOperation
+	 * @return
+	 * @throws
+	 */
 	public void setTargetOperation(String targetOperation) {
 		this.targetOperation = targetOperation;
 	}
 
+	/**
+	 * Gets the target id
+	 * @param exchange
+	 * @return
+	 * @throws
+	 */
 	public String getTargetId(MessageExchange exchange) {
 		if(strategy.isItineraryBased())
 			return (String) exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID);
 		return targetId;
 	}
 
+	/**
+	 * Sets the target id
+	 * @param targetId
+	 * @return
+	 * @throws
+	 */
 	public void setTargetId(String targetId) {
 		this.targetId = targetId;
 	}
 
 	/**
+	 * Returns if the message have attachments or not
+	 * @param
 	 * @return the copyAttachments
+	 * @throws
 	 */
 	public boolean isCopyAttachments() {
 		return copyAttachments;
 	}
 
 	/**
+	 * Sets the attachments to the message
 	 * @param copyAttachments
-	 *            the copyAttachments to set
+	 * @return
+	 * @throws           
 	 */
 	public void setCopyAttachments(boolean copyAttachments) {
 		this.copyAttachments = copyAttachments;
 	}
 
 	/**
+	 * Return if there is properties copy or not in message exchange
+	 * @param
 	 * @return the copyProperties
+	 * @throws
 	 */
 	public boolean isCopyProperties() {
 		return copyProperties;
 	}
 
 	/**
+	 * Sets copy properties to the exchange
 	 * @param copyProperties
-	 *            the copyProperties to set
+	 * @return
+	 * @throws          
 	 */
 	public void setCopyProperties(boolean copyProperties) {
 		this.copyProperties = copyProperties;
 	}
 
 	/**
+	 * Returns if it had to copy subject part of message
+	 * @param
 	 * @return the copySubject
+	 * @throws
 	 */
 	public boolean isCopySubject() {
 		return copySubject;
 	}
 
 	/**
+	 * Sets the copy subject
 	 * @param copySubject
-	 *            the copySubject to set
+	 * @return
+	 * @throws   
 	 */
 	public void setCopySubject(boolean copySubject) {
 		this.copySubject = copySubject;
 	}
 
+	/**
+	 * Checks if rollback is required
+	 * @param
+	 * @return rollback
+	 * @throws
+	 */
 	public boolean isRollback() {
 		return rollback;
 	}
 
+	/**
+	 * Sets the rollback
+	 * @param rollback
+	 * @return
+	 * @throws
+	 *
+	 */
 	public void setRollback(boolean rollback) {
 		this.rollback = rollback;
 	}
-
+	
+	/**
+	 * Creates the output document for target grid service
+	 * @param exchange
+	 * @return output
+	 * @throws Exception
+	 */
 	protected Document createBaseOutputDocument(MessageExchange exchange) throws Exception {
 		Document output = new SourceTransformer().createDocument();
 		Element root = output.createElement(RESPONSE_ELEMENT);
@@ -304,7 +398,15 @@ public class GridSU implements MessageExchangeListener {
 		output.appendChild(root);
 		return output;
 	}
-
+	
+	/**
+	 * This methods creates output document with grid message
+	 * @param exchange
+	 * @param gridMessage
+	 * @param result
+	 * @return output
+	 * @throws Exception
+	 */
 	protected Document createOutputDocument(MessageExchange exchange, GridMessage gridMessage,
 			GridInvocationResult result) throws Exception {
 
@@ -325,7 +427,14 @@ public class GridSU implements MessageExchangeListener {
 		root.appendChild(payloadElement);
 		return output;
 	}
-
+	/**
+	 * This method creates the error code document with the description of 
+	 * the causes of error
+	 * @param exchange
+	 * @param e
+	 * @return output
+	 * @throws Exception
+	 */
 	public Document createErrorDocument(MessageExchange exchange, Exception e) throws Exception {
 		Document output = createBaseOutputDocument(exchange);
 		Element root = output.getDocumentElement();
@@ -347,7 +456,12 @@ public class GridSU implements MessageExchangeListener {
 		root.appendChild(payloadElement);
 		return output;
 	}
-
+/**
+ * This methods gives the error code for the exception
+ * @param e
+ * @return errorCode
+ * @throws
+ */
 	public static String findErrorCodeForException(Throwable e) {
 
 		String errorCode="";
@@ -381,7 +495,12 @@ public class GridSU implements MessageExchangeListener {
 			
 		return errorCode;
 	}
-
+	/**
+	 * This method checks the shows the status of the inactive exchanges
+	 * @param exchange
+	 * @return
+	 * @throws MessagingException
+	 */
 	private void failInactiveExchange(MessageExchange exchange)
 			throws MessagingException {
 

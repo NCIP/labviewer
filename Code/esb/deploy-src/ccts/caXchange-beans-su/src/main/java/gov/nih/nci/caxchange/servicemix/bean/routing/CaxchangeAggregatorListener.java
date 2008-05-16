@@ -1,5 +1,4 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
-
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.messaging.CaXchangeRequestMessageDocument;
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
@@ -7,63 +6,51 @@ import gov.nih.nci.caXchange.messaging.Statuses;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
-
-import java.io.StringReader;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.annotation.Resource;
-
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.InOnly;
 import javax.jbi.messaging.MessageExchange;
-
 import javax.jbi.messaging.MessagingException;
-
 import javax.jbi.messaging.NormalizedMessage;
-
 import javax.jbi.messaging.RobustInOnly;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
-
 import javax.xml.transform.dom.DOMSource;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
-
-import org.w3c.dom.Document;
-
-import org.xml.sax.InputSource;
-
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
-/**
- * Listens to the aggregated response from EIP aggregator and creates 
- * a response message for the response queue. optionally if one of the 
- * requests have failed it sends a rollback if the input message type is
- * eligible for rollback.
- * 
- *  
- * @author hmarwaha
- *
- */
+	/**
+	 * Listens to the aggregated response from EIP aggregator and creates 
+	 * a response message for the response queue. Optionally if one of the 
+	 * requests have failed it sends a rollback if the input message type is
+	 * eligible for rollback.
+	 * 
+	 *  
+	 * @author hmarwaha
+	 *
+	 */
 public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 
     @Resource
     private DeliveryChannel channel;
 
     static Logger logger = LogManager.getLogger(CaxchangeAggregatorListener.class);
-    List messageTypesEligibleForRollback = new ArrayList();
-
+    List<String> messageTypesEligibleForRollback = new ArrayList<String>();
+    /**
+     * Default constructor
+     */
     public CaxchangeAggregatorListener() {
     }
-
+	/**
+	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
+	 * all the exchange will be dispatched to the onMessageExchange() method
+	 * @param messageExchange
+	 * @return
+	 * @throws MessagingException
+	 */
     public void onMessageExchange(MessageExchange messageExchange) throws MessagingException{
         String correlationID=null;
         try {
@@ -116,9 +103,8 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
     }
     /**
      * Get the original message stored in the database.
-     * 
      * @param correlationID
-     * @return
+     * @return 
      * @throws Exception
      */
     public Source getOriginalMessage(String correlationID) throws Exception {
@@ -140,7 +126,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
      * 
      * @param messageType
      * @param responseDocument
-     * @return
+     * @return rollbackRequired
      * @throws Exception
      */
     public boolean isRollbackRequired(String messageType, CaXchangeResponseMessageDocument responseDocument)throws Exception {
@@ -157,10 +143,10 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        return rollbackRequired;
     }
    /**
-    * Send a rollback for the current request. set the operation to rollback and
+    * Send a roll back for the current request. set the operation to roll back and
     * route the message.
-    * 
     * @param rollback
+    * @return
     * @throws MessagingException
     */
    public void sendRollback(Source rollback) throws MessagingException {
@@ -174,8 +160,8 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 
     /**
      * Send the caXchange response back to the response queue.
-     * 
      * @param response
+     * @return
      * @throws MessagingException
      */
     public void sendResponse(Source response) throws MessagingException {
@@ -189,8 +175,9 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
     }
     /**
      * delete the original message in the database.
-     * 
      * @param exchange
+     * @return
+     * @throws
      */
     public void deleteMessage(MessageExchange exchange)  {
       try {
@@ -203,12 +190,22 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
         logger.error("Error deleting original message.",e);
       }
     }
-
-    public void setMessageTypesEligibleForRollback(List messageTypesEligibleForRollback) {
+    /**
+     * Sets the message types eligible for roll back.
+     * @param messageTypesEligibleForRollback
+     * @return
+     * @throws
+     */
+    public void setMessageTypesEligibleForRollback(List<String> messageTypesEligibleForRollback) {
         this.messageTypesEligibleForRollback = messageTypesEligibleForRollback;
     }
-
-    public List getMessageTypesEligibleForRollback() {
+    /**
+     *Gets the message types eligible for rollback
+     * @param 
+     * @return messageTypesEligibleForRollback
+     * @throws
+     */
+    public List<String> getMessageTypesEligibleForRollback() {
         return messageTypesEligibleForRollback;
     }
 }

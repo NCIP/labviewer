@@ -7,7 +7,7 @@ import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.NormalizedMessage;
 
 /**
- * Provides conversion between normalized message and a grid message
+ * This interface provides methods for conversion between normalized message and a grid message
  * 
  * @author steve
  */

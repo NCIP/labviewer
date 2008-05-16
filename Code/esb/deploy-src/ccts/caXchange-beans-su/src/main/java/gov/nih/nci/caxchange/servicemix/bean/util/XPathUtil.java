@@ -2,62 +2,40 @@ package gov.nih.nci.caxchange.servicemix.bean.util;
 
 
 import gov.nih.nci.caXchange.messaging.CaXchangeRequestMessageDocument;
-
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
 import gov.nih.nci.caXchange.messaging.Credentials;
 import gov.nih.nci.caXchange.messaging.ErrorDetails;
-import gov.nih.nci.caXchange.messaging.Message;
-
 import gov.nih.nci.caXchange.messaging.MessagePayload;
 import gov.nih.nci.caXchange.messaging.MessageStatuses;
-import gov.nih.nci.caXchange.messaging.MessageTypes;
-
-
 import gov.nih.nci.caXchange.messaging.Metadata;
 import gov.nih.nci.caXchange.messaging.Operations;
-import gov.nih.nci.caXchange.messaging.Request;
-
 import gov.nih.nci.caXchange.messaging.Response;
 import gov.nih.nci.caXchange.messaging.ResponseMessage;
-
 import gov.nih.nci.caXchange.messaging.ResponseMetadata;
 import gov.nih.nci.caXchange.messaging.Statuses;
-
 import gov.nih.nci.caXchange.messaging.TargetResponseMessage;
-
 import java.io.StringReader;
-
 import javax.jbi.messaging.NormalizedMessage;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
-
 import javax.xml.transform.dom.DOMSource;
-
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
-
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.expression.JAXPNodeSetXPathExpression;
-import org.apache.servicemix.jbi.jaxp.SourceTransformer;
-
-import org.apache.servicemix.jbi.jaxp.StringSource;
-
-import org.apache.xmlbeans.XmlOptions;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import org.xml.sax.InputSource;
-
+/**
+ * This class process caxchange request and response messages
+ * @author hmarwaha
+ *
+ */
 public class XPathUtil {
  
     public static final String CAXCHANGE_URI="http://caXchange.nci.nih.gov/messaging";
@@ -112,10 +90,17 @@ public class XPathUtil {
     
     NormalizedMessage in;
     
-    
+    /**
+     * Default constructor
+     */
     public XPathUtil() {
     }
-    
+    /**
+     * Parse caxchnge request message documents
+	 * @param 
+	 * @return 
+	 * @throws Exception
+	 */ 
     public void initialize() throws Exception{
         if (in.getContent() instanceof DOMSource) {
             DOMSource ds= (DOMSource)in.getContent();
@@ -127,7 +112,12 @@ public class XPathUtil {
             requestDocument = CaXchangeRequestMessageDocument.Factory.parse(ss.getInputStream());
         }
     }
-    
+    /**
+     * Get user name 
+	 * @param 
+	 * @return userName
+	 * @throws Exception
+	 */ 
     public String getUserName() throws Exception{
         Credentials credentials = requestDocument.getCaXchangeRequestMessage().getMetadata().getCredentials();
         String userName=null;
@@ -137,7 +127,12 @@ public class XPathUtil {
         return userName;
         
     }
-    
+    /**
+     * Get delegated credential reference
+	 * @param 
+	 * @return delegatedCredentialReference
+	 * @throws Exception
+	 */ 
     public String getDelegatedCredentialReference() throws Exception{
         Credentials credentials = requestDocument.getCaXchangeRequestMessage().getMetadata().getCredentials();
         String delegatedCredentialReference=null;
@@ -147,21 +142,41 @@ public class XPathUtil {
         return delegatedCredentialReference;
         
     }
-    
+    /**
+     * Gets caxchange identifier
+	 * @param 
+	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getExternalIdentifier()
+	 * @throws Exception
+	 */ 
     public String getCaXchangeIdentifier() throws Exception {
         return requestDocument.getCaXchangeRequestMessage().getMetadata().getCaXchangeIdentifier();
     }
-    
+    /**
+     * Gets message type
+	 * @param 
+	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getExternalIdentifier()
+	 * @throws Exception
+	 */  
     public String getExternalIdentifier() throws Exception {
         return requestDocument.getCaXchangeRequestMessage().getMetadata().getExternalIdentifier();
     }    
-    
+    /**
+     * Gets message type
+	 * @param 
+	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getMessageType().toString()
+	 * @throws Exception
+	 */  
     public String getMessageType() throws Exception {
         return requestDocument.getCaXchangeRequestMessage().getMetadata().getMessageType().toString();
-    }        
+    }   
     
-
-    
+    /**
+     * This method cheks if the rollback is required
+	 * @param errCode
+	 * @param errMessage
+	 * @return new DOMSource(responseDocument.getDomNode())
+	 * @throws Exception
+	 */    
     public Source generateResponseFromErroredRequest(String errCode, String errMessage) throws Exception {
         CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance();
         ResponseMessage responseMessage = responseDocument.addNewCaXchangeResponseMessage();
@@ -177,7 +192,12 @@ public class XPathUtil {
         return new DOMSource(responseDocument.getDomNode());
         
     }
-    
+    /**
+     * This method cheks if the rollback is required
+	 * @param aggregatedResponse
+	 * @return responseDocument
+	 * @throws Exception
+	 */
     public CaXchangeResponseMessageDocument generateResponseFromAggregatedResponse(Source aggregatedResponse) throws Exception {
         CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance();
         ResponseMessage responseMessage = responseDocument.addNewCaXchangeResponseMessage();
@@ -191,7 +211,13 @@ public class XPathUtil {
         
         return responseDocument;
     }
-    
+    /**
+     * This method cheks if the rollback is required
+	 * @param aggregatedResponse
+	 * @param response
+	 * @return response
+	 * @throws Exception
+	 */
     public Response buildResponse(Source aggregatedResponse, Response response) throws Exception{
         XPath xpath = XPathFactory.newInstance().newXPath();
         CaXchangeNamespaceContext cnc = new CaXchangeNamespaceContext();
@@ -256,7 +282,13 @@ public class XPathUtil {
         response.setResponseStatus(responseStatus);
         return response;
     }
-    
+    /**
+     * This method cheks if the rollback is required
+	 * @param aggregatedResponse
+	 * @return false
+	 * @throws Exception
+	 */
+    /*No references*/
     public boolean isRollbackRequired(Source aggregatedResponse) throws Exception{
         XPath xpath = XPathFactory.newInstance().newXPath();
         Node node = ((DOMSource)aggregatedResponse).getNode();
@@ -272,17 +304,33 @@ public class XPathUtil {
         }
         return false;
     }
-    
+    /**
+     * This method gets the roll back message
+	 * @param in
+	 * @return the original document with the rollback operation
+	 * @throws Exception
+	 */
     public Source getRollbackMessage() throws Exception {
         requestDocument.getCaXchangeRequestMessage().getMetadata().setOperation(Operations.ROLLBACK);
         return new DOMSource(requestDocument.getDomNode());
     }
     
-
+    /**
+     * This method sets the normalized message
+	 * @param in
+	 * @return
+	 * @throws 
+	 */
     public void setIn(NormalizedMessage in) {
         this.in = in;
     }
-
+    /**
+     * This method gets the normalized message
+	 * @param 
+	 * @return in
+	 * @throws 
+	 */
+    /*No references*/
     public NormalizedMessage getIn() {
         return in;
     }
@@ -290,28 +338,12 @@ public class XPathUtil {
     public static void main(String [] args) {
         try  {
             XPathUtil util = new XPathUtil();
-            //util.generateResponseFromAggregatedResponse(null);
             DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document= db.parse(new InputSource(new StringReader(util.myDocumentAgg)));
             DOMSource ds = new DOMSource(document);
-            //util.isRollbackRequired(ds);
             Response response = Response.Factory.newInstance();
             util.buildResponse(ds, response);
             System.out.println(response);
-            /*util.st= new SourceTransformer();
-            util.document= util.st.toDOMDocument(new StringSource(util.myDocument));
-            util.expression = new JAXPNodeSetXPathExpression();
-            util.nsc = new CaXchangeNamespaceContext();
-            util.nsc.addNameSpace("caxchange",CAXCHANGE_URI);
-            util.expression.setNamespaceContext(util.nsc);
-            util.isRollbackRequired();
-            */
-            /*
-            System.out.println( util.isCaXchangeRequest());
-            util.expression = new JAXPNodeSetXPathExpression();
-            System.out.println(util.getExternalIdentifier());
-            util.expression = new JAXPNodeSetXPathExpression();
-            System.out.println(util.getCaXchangeIdentifier()); */
         } catch (Exception ex)  {
             ex.printStackTrace();
         } finally  {

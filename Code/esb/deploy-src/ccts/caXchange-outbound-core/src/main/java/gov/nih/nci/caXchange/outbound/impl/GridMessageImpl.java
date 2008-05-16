@@ -13,6 +13,8 @@ import gov.nih.nci.caXchange.outbound.GridMessage;
 import gov.nih.nci.caXchange.outbound.GridSU;
 
 /**
+ * This class contains the methods related to getting meta data, payload and
+ * schema definition related to caxchange message
  * @author steve
  * 
  */
@@ -22,12 +24,20 @@ public class GridMessageImpl implements GridMessage {
 			.getInstance(GridMessageImpl.class);
 
 	private Document message;
-
+	/**
+	 * Constructor for the class
+	 * @param message
+	 */
 	public GridMessageImpl(Document message) {
 
 		this.message = message;
 	}
-
+	/**
+	 * This methods gets the meta data form the caxchange message
+	 * @param
+	 * @return null
+	 * @throws
+	 */
 	public Element getMetaData() {
 		NodeList elements = message.getDocumentElement()
 				.getElementsByTagNameNS(GridSU.NS, GridSU.META_DATA_ELEMENT);
@@ -39,7 +49,13 @@ public class GridMessageImpl implements GridMessage {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * This method gets the payload from the caxchange message
+	 * @param
+	 * @return node or null
+	 * @throws
+	 */
 	public Element getPayload() {
 		NodeList nodes = getBusinessPayload().getChildNodes();
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -56,6 +72,12 @@ public class GridMessageImpl implements GridMessage {
 		return null;
 	}
 
+	/**
+	 * This method gets the schema definition from the caxchange message
+	 * @param
+	 * @return null
+	 * @throws
+	 */
 	public Element getSchemaDefinition() {
 		NodeList nodes = getBusinessPayload().getElementsByTagNameNS(
 				GridSU.NS, GridSU.SCHEMA_DEFINITION_ELEMENT);
@@ -68,7 +90,13 @@ public class GridMessageImpl implements GridMessage {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * This method gets the business payload form the caxchange message
+	 * @param
+	 * @return null
+	 * @throws
+	 */
 	protected Element getBusinessPayload() {
 		NodeList nodes = getRequest().getElementsByTagNameNS(GridSU.NS, GridSU.REQUEST_PAYLOAD_ELEMENT);
 
@@ -79,7 +107,12 @@ public class GridMessageImpl implements GridMessage {
 			return null;
 		}
 	}
-
+	/**
+	 * This method gets the caxchange request message
+	 * @param
+	 * @return null
+	 * @throws
+	 */
 	protected Element getRequest() {
 		NodeList nodes = message.getElementsByTagNameNS(GridSU.NS, GridSU.REQUEST_ELEMENT);
 		if (nodes.getLength() == 1) {
