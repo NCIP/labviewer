@@ -1,6 +1,6 @@
 package gov.nih.nci.caXchange;
 /**
- * This class contains the error codes used in the caxchange project
+ * This interface contains the error codes used in the caxchange project
  * @author KhanalY
  *
  */
