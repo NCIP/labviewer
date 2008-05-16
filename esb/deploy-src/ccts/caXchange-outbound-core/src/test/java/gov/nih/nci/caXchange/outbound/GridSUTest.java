@@ -12,9 +12,18 @@ import org.apache.servicemix.client.DefaultServiceMixClient;
 import org.apache.servicemix.tck.SpringTestSupport;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 import org.springframework.context.support.AbstractXmlApplicationContext;
-
+/**
+ * This class consists of the different test cases for the target grid service
+ * @author steve
+ *
+ */
 public class GridSUTest extends SpringTestSupport {
-
+	/**
+	 * This method test the CTOM grid service
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCTOMExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -32,6 +41,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This method test Load Lab grid service 
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testLoadLabExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("loadlab-request.xml");
@@ -49,6 +64,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This method tests the CTOM study grid service 
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCTOMSStudyExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("study-request.xml");
@@ -66,6 +87,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This mehtod tests CTOM grid service for the rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCTOMRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -81,6 +108,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	/**
+	 * This method test CTOM study grid service for the rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCTOMStudyRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("study-request.xml");
@@ -96,6 +129,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	/**
+	 * This method test C3D grid service registration
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testC3DRegistrationExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -113,6 +152,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This method test CAAERS grid service
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCAAERSExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -130,6 +175,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This  method test CAAERS study grid service
+	 * @param
+	 * @return 
+	 * @throws Exception
+	 */
 	public void testCAAERSStudyExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("study-request.xml");
@@ -146,7 +197,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertTrue(me.getMessage("out") != null);
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
-	
+	/**
+	 * This method test CAARES grid service for the rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCAAERSRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -162,6 +218,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	/**
+	 * This method test CAAERS grid service for the study rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testCAAERSStudyRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -177,7 +239,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 
-	
+	/**
+	 * This method test PSC grid service 
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testPSCExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -195,6 +262,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
 	
+	/**
+	 * This method test PSC grid service for the commit action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testPSCStudyExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("study-request.xml");
@@ -211,7 +284,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertTrue(me.getMessage("out") != null);
 		assertEquals("TestProperty", me.getMessage("out").getProperty("Test"));
 	}
-	
+	/**
+	 * This method test PSC grid service for the rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testPSCRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -227,7 +305,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
-	
+	/**
+	 * This method test PSC grid service for the study rollback action
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testPSCStudyRollbackExchange() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("registration-request.xml");
@@ -243,6 +326,12 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	/**
+	 * This method tests PSC grid service for the adverse event
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testPSCAdverseEvent() throws Exception {
 		DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
 		InputStream fis = getClass().getResourceAsStream("adverse-event-request.xml");
@@ -258,19 +347,31 @@ public class GridSUTest extends SpringTestSupport {
 		assertEquals(ExchangeStatus.DONE, me.getStatus());
 	}
 	
+	/**
+	 * This method test retrying exchange
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */ /*No references*/
 	public void testRetryingExchange() throws Exception {
 
 	}
-
+	/**
+	 * This method tests the fault exchange
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */ /*No references*/
 	public void testFaultExchange() throws Exception {
 
 	}
 
-	/*
-	 * (non-Javadoc) *
-	 * 
-	 * @see org.apache.servicemix.tck.SpringTestSupport#createBeanFactory()
-	 */
+	/**
+	 * This method returns application context form the given xml file
+	 * @param
+	 * @return application context
+	 * @throws
+	 */ /*No references*/
 	@Override
 	protected AbstractXmlApplicationContext createBeanFactory() {
 		return new ClassPathXmlApplicationContext("spring.xml");

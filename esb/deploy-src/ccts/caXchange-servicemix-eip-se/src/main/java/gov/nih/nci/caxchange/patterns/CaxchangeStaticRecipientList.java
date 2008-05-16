@@ -7,14 +7,24 @@ import javax.jbi.messaging.NormalizedMessage;
 import org.apache.servicemix.eip.patterns.StaticRecipientList;
 
 /**
- *
+ * This class contains static Recipient List that adds the count of recipients as a property
+ * @author hmarwaha
  * @org.apache.xbean.XBean element="caxchange-static-recipient-list"
  *                  description="A static Recipient List that adds the count of recipients as a property"
  */
 public class CaxchangeStaticRecipientList extends StaticRecipientList {
-    public CaxchangeStaticRecipientList() {
-    }
     
+	/**
+     * Default constructor
+     */
+	public CaxchangeStaticRecipientList() {
+    }
+    /**
+     * This methods counts the number of static receipients 
+     * @param exchange
+     * @return
+     * @throws Exception
+     */
     public void process(MessageExchange exchange) throws Exception {
          NormalizedMessage in = exchange.getMessage("in");
          int length= getRecipients().length;

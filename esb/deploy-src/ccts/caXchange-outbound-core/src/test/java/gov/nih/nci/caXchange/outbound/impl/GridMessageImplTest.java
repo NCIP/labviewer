@@ -10,9 +10,19 @@ import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.w3c.dom.Document;
 
 import junit.framework.TestCase;
-
+/**
+ * This class consists of test methods for the study and registration 
+ * of different target grid services
+ * @author steve
+ *
+ */
 public class GridMessageImplTest extends TestCase {
-    
+    /**
+     * This method tests the registration of grid service
+     * @param
+     * @return
+     * @throws Exception
+     */
     public void testRegistrationMessage() throws Exception {
 	InputStream fis = GridSUTest.class.getResourceAsStream("registration-request.xml");
 	Document document = new SourceTransformer().toDOMDocument(new StreamSource(fis));
@@ -32,6 +42,12 @@ public class GridMessageImplTest extends TestCase {
 	assertNotNull(message.getSchemaDefinition());
     }
     
+    /**
+     * This method tests study for the grid service
+     * @param
+     * @return
+     * @throws Exception
+     */
     public void testStudyMessage() throws Exception {
     	InputStream fis = GridSUTest.class.getResourceAsStream("study-request.xml");
     	Document document = new SourceTransformer().toDOMDocument(new StreamSource(fis));

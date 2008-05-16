@@ -18,17 +18,11 @@ package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
-import gov.nih.nci.caXchange.outbound.GridSU;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.security.CaXchangePrincipal;
 import gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.lang.reflect.Field;
 import java.security.Principal;
-
 import javax.annotation.Resource;
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
@@ -37,8 +31,6 @@ import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.security.auth.Subject;
-
-import org.apache.log4j.Category;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
@@ -52,7 +44,13 @@ import org.cagrid.gaards.cds.stubs.types.PermissionDeniedFault;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.GlobusCredentialException;
 import org.globus.wsrf.encoding.DeserializationException;
-
+/**
+ * It includes two components: a pipeline, which invokes a bean component that calls 
+ * delegation service for authorization and authentication
+ *  
+ * @author hmarwaha
+ *
+ */
 public class InvokeDelegationServiceBean implements MessageExchangeListener {
 
 	@Resource
@@ -73,10 +71,19 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 	public static Logger logger = LogManager
 	.getLogger(InvokeDelegationServiceBean.class);
 	
+	/**
+     * Default constructor
+     */
 	public InvokeDelegationServiceBean() {
 
 	}
-	
+	/**
+	 * This method creates the Host credentials from the certificate and the key file provides in 
+	 * caxchange.property file
+	 * @param 
+	 * @return
+	 * @throws GridInvocationException
+	 */	
 	public void init() throws GridInvocationException{
 		try{
 			hostCredential = new GlobusCredential(certificateFilePath, keyFilePath);
@@ -86,6 +93,13 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		}
 	}
 	
+	/**
+	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
+	 * all the exchange will be dispatched to the onMessageExchange() method
+	 * @param exchange
+	 * @return
+	 * @throws MessagingException
+	 */	
 	public void onMessageExchange(MessageExchange exchange)
 	throws MessagingException {
 		if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
@@ -120,8 +134,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 
 	/**
 	 * invokes the delegation service and sets the subject in the message.
-	 * 
 	 * @param exchange
+	 * @return
 	 * @throws Exception
 	 */
 	public void invokeDelegationService(MessageExchange exchange)
@@ -195,19 +209,19 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		}
 
 	}
-
+   /*No references*/
 	public String getCertificateFilePath() {
 		return certificateFilePath;
 	}
-
+	/*No references*/
 	public void setCertificateFilePath(String certificateFilePath) {
 		this.certificateFilePath = certificateFilePath;
 	}
-
+	/*No references*/
 	public String getKeyFilePath() {
 		return keyFilePath;
 	}
-
+	/*No references*/
 	public void setKeyFilePath(String keyFilePath) {
 		this.keyFilePath = keyFilePath;
 	}

@@ -6,7 +6,8 @@ package gov.nih.nci.caXchange.outbound;
 import org.w3c.dom.Element;
 
 /**
- * Defines the message to be sent from esb to the grid service.
+ * This interface defines the message to be sent 
+ * from ESB to the grid service.
  * 
  * @author steve
  */

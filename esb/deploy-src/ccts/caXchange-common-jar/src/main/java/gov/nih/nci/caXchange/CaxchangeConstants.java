@@ -1,11 +1,17 @@
 package gov.nih.nci.caXchange;
-
+/**
+ * This class contins the constants used in the caxchange project
+ *  @author KhanalY
+ */
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
 
 public class CaxchangeConstants {
+	/**
+	 * Default constructor
+	 */
     public CaxchangeConstants() {
     }
 
@@ -23,7 +29,7 @@ public class CaxchangeConstants {
     
     public static final String TARGET_ID="caxchange.gridservice.target.id";    
     
-    public static final Set ROLLBACK_STATUSES = new HashSet();
+    public static final Set<String> ROLLBACK_STATUSES = new HashSet<String>();
 	public static final QName ROLLBACK_PIPELINE = new QName("http://nci.nih.gov/caXchange","rollbackPipeline");
 	
     static {

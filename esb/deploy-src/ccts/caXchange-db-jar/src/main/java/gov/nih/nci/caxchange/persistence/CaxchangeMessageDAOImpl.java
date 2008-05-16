@@ -8,24 +8,36 @@ import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 
-import java.util.List;
+//import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+//import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+/**
+ * This class contains the methods for storing, retriving and deleting 
+ * the message from MqSql database
+ * @author hmarwaha
+ *
+ */
 public class CaxchangeMessageDAOImpl  implements CaxchangeMessageDAO{
 
     DataSource dataSource;
     static Logger logger = LogManager.getLogger(CaxchangeMessageDAOImpl.class);
-
+    /**
+     * Default constructor
+     */
     public CaxchangeMessageDAOImpl() {
     }
-
+    /**
+     * This method stores the message and corresponding in the table 
+     * @param caxchangeMessage
+     * @return
+     * @throws Exception
+     */
     public void storeMessage(CaxchangeMessage caxchangeMessage) throws Exception {
         Connection conn=null;
         PreparedStatement ps=null;
@@ -45,7 +57,13 @@ public class CaxchangeMessageDAOImpl  implements CaxchangeMessageDAO{
             if (conn != null )conn.close();
         }
     }
-
+    
+    /**
+     * This method get message from corresponding table 
+     * @param id
+     * @return message
+     * @throws Exception
+     */
     public CaxchangeMessage getMessage(String id) throws Exception{
 
         Connection conn=null;
@@ -73,6 +91,12 @@ public class CaxchangeMessageDAOImpl  implements CaxchangeMessageDAO{
         }
     }
 
+    /**
+     * This method deletes message from corresponding table 
+     * @param message
+     * @return 
+     * @throws Exception
+     */
     public void deleteMessage(CaxchangeMessage message) throws Exception{
         Connection conn=null;
         PreparedStatement ps=null;
@@ -92,11 +116,21 @@ public class CaxchangeMessageDAOImpl  implements CaxchangeMessageDAO{
         }
     }
 
-
+    /**
+     * This method sets data source 
+     * @param dataSource
+     * @return 
+     * @throws 
+     */  /*No references*/
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
+    /**
+     * This method get data source 
+     * @param 
+     * @return dataSource
+     * @throws 
+     */ /*No references*/
     public DataSource getDataSource() {
         return dataSource;
     }

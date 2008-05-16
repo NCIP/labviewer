@@ -3,15 +3,38 @@ package gov.nih.nci.caxchange.persistence;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+/**
+ * This class process CaxchangeMessage.xml file to send and get 
+ * message form database
+ * @author hmarwaha
+ *
+ */
 public class DAOFactory {
    static ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("CaxchangeMessage.xml");
-    public DAOFactory() {
+   
+   /**
+    * Default constructor
+    */ 
+   public DAOFactory() {
     }
     
+   /**
+    * This method gets caxchange DAO message 
+    * @param
+    * @return CaxchangeMessageDAO object
+    * @throws
+    */
     public static CaxchangeMessageDAO getCaxchangeMessageDAO() {
         return (CaxchangeMessageDAO)appContext.getBean("caxchangeMessageDAO");
     }
+    
+    /**
+     * Main methods to exercise setters and getters  
+     * defined in CaxchangeMessageDAO
+     * @param args
+     * @return 
+     * @throws
+     */
     
     public static void main(String [] args) {
         try  {

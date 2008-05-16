@@ -18,18 +18,28 @@ import org.apache.servicemix.eip.support.ExchangeTarget;
 import org.apache.servicemix.jbi.util.MessageUtil;
 import org.apache.xmlbeans.XmlException;
 
-/**
-*
-* @org.apache.xbean.XBean element="caxchange-itinerary-based-recipient-list"
-*                  description="A static Recipient List that adds the count of targetSites as a property"
-*/
+	/**This is class handles static Recipient List that 
+	 * adds the count of targetSites as a property
+	 *@author hmarwaha
+	 * @org.apache.xbean.XBean element="caxchange-itinerary-based-recipient-list"
+	 *                  description="A static Recipient List that adds the count of targetSites as a property"
+	 */
 public class CaxchangeItineraryBasedRecipientList  extends StaticRecipientList {
 	
 	public ExchangeTarget recipient;
 	
+	/**
+	 * Default constructor
+	 */
     public CaxchangeItineraryBasedRecipientList() {
     }
     
+    /**
+     * This methods counts the caxchange message recipient and the message correlation id
+     * @param exchange
+     * @return
+     * @throws Exception
+     */
     public void process(MessageExchange exchange) throws Exception {
          NormalizedMessage in = exchange.getMessage("in");
          
@@ -45,7 +55,11 @@ public class CaxchangeItineraryBasedRecipientList  extends StaticRecipientList {
          super.process(exchange);
     }
     
-    /* (non-Javadoc)
+    /** This methods checks synchronously the message exchange patterns if they are supported and sends the response
+     * back to the aggregator
+     * @param exchange
+     * @return
+     * @throws Exception
      * @see org.apache.servicemix.eip.EIPEndpoint#processSync(javax.jbi.messaging.MessageExchange)
      */
     protected void processSync(MessageExchange exchange) throws Exception {
@@ -69,7 +83,11 @@ public class CaxchangeItineraryBasedRecipientList  extends StaticRecipientList {
         done(exchange);
     }
 
-    /* (non-Javadoc)
+    /** This methods checks asynchronously the message exchange patterns if they are supported and sends the response
+     * back to the aggregator
+     * @param exchange
+     * @return
+     * @throws Exception
      * @see org.apache.servicemix.eip.EIPEndpoint#processAsync(javax.jbi.messaging.MessageExchange)
      */
     protected void processAsync(MessageExchange exchange) throws Exception {
@@ -99,7 +117,13 @@ public class CaxchangeItineraryBasedRecipientList  extends StaticRecipientList {
     	}
     }
 
-
+    /**
+     * This methods get the target sites for the normalized message
+     * @param in
+     * @return null
+     * @throws XmlException
+     * @throws IOException
+     */
 	private String[] getTargetSites(NormalizedMessage in) throws XmlException, IOException {
 		CaXchangeRequestMessageDocument requestDocument=null;
         if (in.getContent() instanceof DOMSource) {
@@ -116,11 +140,23 @@ public class CaxchangeItineraryBasedRecipientList  extends StaticRecipientList {
         }
 		return null;
 	}
-
+	
+	/**
+	 * Gets the recipient of the messages
+	 * @param
+	 * @return recipient
+	 * @throws
+	 */
 	public ExchangeTarget getRecipient() {
 		return recipient;
 	}
-
+	
+	/**
+	 * Sets the recipient of the message
+	 * @param recipient
+	 * @return
+	 * @throws
+	 */
 	public void setRecipient(ExchangeTarget recipient) {
 		this.recipient = recipient;
 	}

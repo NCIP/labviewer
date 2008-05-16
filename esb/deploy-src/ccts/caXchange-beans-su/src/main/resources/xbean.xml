@@ -40,14 +40,6 @@
   
   <bean:endpoint service="caxchange:handleErrorResponseService" endpoint="endpoint" bean="#handleErrorResponseBean"/>
   
-  <bean:endpoint service="caxchange:pscProcess" endpoint="endpoint" bean="#pscProcess" />
-  
-  <bean:endpoint service="caxchange:caersProcess" endpoint="endpoint" bean="#caersProcess" />
-  
-  <bean:endpoint service="caxchange:pscRollback" endpoint="endpoint" bean="#pscRollback" />
-  
-  <bean:endpoint service="caxchange:caersRollback" endpoint="endpoint" bean="#caersRollback" />
-  
   <bean:endpoint service="caxchange:unhandledMessageType" endpoint="endpoint" bean="#unhandledMessageType" />
   
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="endpoint" bean="#aggregatorListener" />
@@ -86,14 +78,7 @@
   
   <bean:endpoint service="caxchange:labLoader" endpoint="labLoader" bean="#labLoader" />
   
-  <bean id="pscProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.PscProcess"/>
-  
-  <bean id="caersProcess" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersProcess"/>
-  
-  <bean id="pscRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.PscRollback"/>
-  
-  <bean id="caersRollback" class="gov.nih.nci.caxchange.servicemix.bean.target.CaersRollback"/>
-  
+
   <bean:endpoint service="caxchange:multiSiteRegistration" endpoint="multiSiteRegistration" bean="#multiSiteRegistration" />
 
   <bean:endpoint service="caxchange:multiSiteStudy" endpoint="multiSiteStudy" bean="#multiSiteStudy" />
