@@ -2,19 +2,12 @@ package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
-import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
-import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
-import gov.nih.nci.caxchange.persistence.DAOFactory;
-
 import javax.annotation.Resource;
-
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
-
 import javax.jbi.messaging.NormalizedMessage;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
@@ -26,7 +19,7 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
  * appropriate error properties and sends the exchange back for the 
  * error response to be generated.
  * 
- * @author Ekagra
+ * @author hmarwaha
  *
  */
 public class UnhandledMessageTypeBean implements MessageExchangeListener {
@@ -34,16 +27,21 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
     private DeliveryChannel channel;
     
     static Logger logger = LogManager.getLogger(UnhandledMessageTypeBean.class);
-    
+    /**
+     * Default constructor
+     */
     public UnhandledMessageTypeBean() {
     }
+    
     /**
-     * Handles the exchange with the Message type for which 
-     * routing has not been defined.
-     * 
-     * @param exchange
-     * @throws MessagingException
-     */
+	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
+	 * all the exchange will be dispatched to the onMessageExchange() method
+	 * Here it handles the exchange with the message type for which routing has 
+	 * not been defined
+	 * @param exchange
+	 * @return
+	 * @throws MessagingException
+	 */
     public void onMessageExchange(MessageExchange exchange) throws MessagingException {
         if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
             return;

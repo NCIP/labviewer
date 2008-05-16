@@ -4,7 +4,7 @@
 package gov.nih.nci.caXchange.outbound;
 
 /**
- * This exception is raised during execution of the grid invocation strategy.
+ * This class contains exception that are  raised during execution of the grid invocation strategy.
  * @author steve
  */
 public class GridInvocationException extends Exception {
@@ -14,7 +14,7 @@ public class GridInvocationException extends Exception {
     private boolean canRetry;
 
     /**
-     * Constructor
+     * Default Constructor
      */
     public GridInvocationException() {
 	super();
@@ -24,6 +24,8 @@ public class GridInvocationException extends Exception {
      * Constructor
      * @param message
      * @param cause
+     * @return
+     * @throws
      */
     public GridInvocationException(String message, Throwable cause) {
 	super(message, cause);
@@ -32,6 +34,8 @@ public class GridInvocationException extends Exception {
     /**
      * Constructor
      * @param message
+     * @return
+     * @throws
      */
     public GridInvocationException(String message) {
 	super(message);
@@ -40,6 +44,8 @@ public class GridInvocationException extends Exception {
     /**
      * Constructor
      * @param cause
+     * @return
+     * @throws
      */
     public GridInvocationException(Throwable cause) {
 	super(cause);
@@ -48,18 +54,21 @@ public class GridInvocationException extends Exception {
     /**
      * Returns true if a grid invocation can be retried because of this
      * exception.
-     * 
-     * @return
+     * @param
+     * @return canRetry
+     * @throws
      */
     public boolean getCanRetry() {
 	return canRetry;
     }
     
     /**
-     * Sets if a grid invocation can be retried because of this
+     * This method sets if a grid invocation can be 
+     * retried because of this
      * exception.
-     * 
+     * @param canRetry
      * @return
+     * @throws
      */
     public void setCanRetry(boolean canRetry) {
 	this.canRetry = canRetry;

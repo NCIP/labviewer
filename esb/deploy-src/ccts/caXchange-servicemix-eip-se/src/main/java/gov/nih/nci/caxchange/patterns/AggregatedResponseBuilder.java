@@ -21,7 +21,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import org.xml.sax.InputSource;
-
+/**
+ * This class builds the aggregated response after 
+ * getting responses from all the target grid services
+ * @author hmarwaha
+ *
+ */
 public class AggregatedResponseBuilder {
     static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
@@ -45,11 +50,22 @@ public class AggregatedResponseBuilder {
     "                    <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" +
     "                </messagePayload>\n" +
     "            </businessResponse>";
-
+    
+    /**
+     * Default constructor
+     */
     public AggregatedResponseBuilder() {
     }
 
-
+    /**
+     * This methods scans the list of messages form all the target 
+     * grid services and builds the response document to send it to 
+     * listener aggregator
+     * @param messages
+     * @param timeOut
+     * @return document
+     * @throws Exception
+     */
     static Document buildAggregatedDocument(List messages, boolean timeOut) throws Exception {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document =documentBuilder.newDocument();

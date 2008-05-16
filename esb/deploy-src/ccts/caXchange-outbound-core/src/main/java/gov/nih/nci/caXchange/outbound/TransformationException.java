@@ -12,12 +12,13 @@ public class TransformationException extends GridInvocationException {
     private static final long serialVersionUID = -715846006735137847L;
 
     /**
-     * 
+     * Default constructor
      */
     public TransformationException() {
     }
 
     /**
+     * Parameterized constructor
      * @param message
      * @param cause
      */
@@ -25,6 +26,7 @@ public class TransformationException extends GridInvocationException {
 	super(message, cause);
     }
     /**
+     * Parameterized constructor
      * @param message
      */
     public TransformationException(String message) {
@@ -32,6 +34,7 @@ public class TransformationException extends GridInvocationException {
     }
 
     /**
+     * Parameterized constructor
      * @param cause
      */
     public TransformationException(Throwable cause) {

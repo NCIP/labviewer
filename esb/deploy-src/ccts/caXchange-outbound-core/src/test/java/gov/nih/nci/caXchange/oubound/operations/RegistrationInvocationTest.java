@@ -26,6 +26,12 @@ import junit.framework.TestCase;
 
 public class RegistrationInvocationTest extends TestCase {
 
+	/**
+	 * This methods test the RegistrationConsumer Grid service
+	 * @param
+	 * @return
+	 * @throws Exception
+	 */
 	public void testClient() throws Exception {
 		System.out
 				.println("Running the RegistrationConsumer Grid Service Client");
@@ -69,7 +75,13 @@ public class RegistrationInvocationTest extends TestCase {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * This method returns registration for the the given study and identifier
+	 * @param
+	 * @return registration
+	 * @throws
+	 */
 	private Registration getPopulatedRegistration() {
 
 		Registration registration = new Registration();

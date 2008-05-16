@@ -19,67 +19,32 @@ package gov.nih.nci.caxchange.servicemix.bean.routing;
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
-
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
-
 import gov.nih.nci.caxchange.persistence.DAOFactory;
-
-import java.security.Principal;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import java.util.Set;
-
 import org.apache.servicemix.MessageExchangeListener;
-
 import javax.annotation.Resource;
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
-
 import javax.jbi.messaging.NormalizedMessage;
-
-import javax.security.auth.Subject;
-
-import javax.security.auth.login.LoginContext;
-
 import javax.xml.transform.Source;
-
 import javax.xml.transform.Transformer;
-
 import javax.xml.transform.TransformerFactory;
-
 import javax.xml.transform.stream.StreamResult;
-
-import gov.nih.nci.caxchange.security.CaXchangePrincipal;
-import gov.nih.nci.caxchange.security.DelegationServiceCallbackHandler;
-
-import gov.nih.nci.caxchange.security.DelegationServiceLoginConfiguration;
-
-
 import java.io.StringWriter;
-
-import javax.jbi.messaging.InOnly;
-
-import javax.jbi.messaging.RobustInOnly;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.expression.JAXPNodeSetXPathExpression;
-import org.apache.servicemix.jbi.jaxp.SourceTransformer;
-
-import org.apache.servicemix.jbi.jaxp.StringSource;
-
 import org.apache.servicemix.jbi.util.MessageUtil;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
-
+/**
+ * This class stores original message in the database to use it later 
+ * for generating response and or sending roll back
+ *  
+ * @author hmarwaha
+ *
+ */
 public class StoreOriginalMessageServiceBean implements MessageExchangeListener {
 
     @Resource
@@ -88,7 +53,13 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
 
     public static Logger logger= LogManager.getLogger(InvokeDelegationServiceBean.class);
 
-
+	/**
+	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
+	 * all the exchange will be dispatched to the onMessageExchange() method
+	 * @param exchange
+	 * @return
+	 * @throws MessagingException
+	 */	
     public void onMessageExchange(MessageExchange exchange) throws MessagingException {
         if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
             return;
@@ -121,10 +92,10 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
 
 
    /**
-     * Store the original message in the database to add with the exchange
+     * This method store the original message in the database to add with the exchange
      * correlationID as the message id.
-     * 
      * @param exchange
+     * @return
      * @throws Exception
      */
     public void storeOriginalMessage(MessageExchange exchange) throws Exception {
