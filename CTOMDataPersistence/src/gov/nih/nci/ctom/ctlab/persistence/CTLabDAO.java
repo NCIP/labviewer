@@ -1623,4 +1623,86 @@ public class CTLabDAO extends BaseJDBCDAO
         }
         return study;
     }
+	/**
+	 * Used for Demo purpose. checks to see if the participant exists.
+	 * @param con
+	 * @param protocol
+	 * @param mrn patient mrn 
+	 * @return
+	 * @throws SQLException
+	 */
+	public Long checkParticipantExists(Connection con, Protocol protocol,String mrn) throws SQLException {
+        PreparedStatement ps = null;
+        PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        ResultSet rs1 = null;
+        Long spa_id=null;
+        String root=null;
+        int count=0;
+        
+        try {
+            ps = con
+                 .prepareStatement("select study_participant_assignmnt_id, root from identifier where extension=? and study_participant_assignmnt_id is not null");
+             ps.setString(1, mrn);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+            	spa_id = rs.getLong(1);
+            	root = rs.getString(2);
+
+            }
+            if (spa_id != null) {
+            	String identOrg = root+"."+mrn;
+                ps1 = con
+                  .prepareStatement("select count(*) from identifier where protocol_id in (select protocol_id from study_site where id in( select study_site_id from study_participant_assignment where id = ? and STUDY_PARTICIPANT_IDENTFR_ORIG=? ))"); 
+                ps1.setLong(1, spa_id);
+                ps1.setString(2,identOrg);// get the participant root+mrn
+                rs1 = ps1.executeQuery();
+                if (rs1.next()) {
+                	 count= rs1.getInt(1);
+                  }
+            }
+            if(count==1 && root!=null)
+              return spa_id;	
+            
+        }  finally {
+            if(ps != null) {
+                ps.close();
+            }
+            if(ps1 != null) {
+                ps1.close();
+            }
+            if(rs1 != null) {
+                rs1.close();
+            }            
+            if(rs != null) {
+                rs.close();
+            }
+        }
+        return spa_id;
+    }
+	
+	/**
+	 * Updates the Participant Grid id --just for Demo 
+	 * @param participantGridId
+	 * @param con
+	 */
+	public void updateParticipantGridId(Connection con, String participantGridId,Long spaId,String mrn)throws SQLException
+	{
+		PreparedStatement ps=null;
+		System.out.println(participantGridId +" "+spaId + " "+mrn);
+		try{
+			ps = con
+            .prepareStatement("update identifier set root=? where extension=? and study_participant_assignmnt_id=?");
+        ps.setString(1, participantGridId);
+        ps.setString(2, mrn);
+        ps.setLong(3, spaId);
+        ps.executeUpdate();
+        con.commit();
+		}finally{
+			if(ps != null) {
+                ps.close();
+            }
+		}
+	}
+	
 }
