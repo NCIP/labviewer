@@ -121,7 +121,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		java.util.Date now = new Date();
 		StudyRefType studyRef = registration.getStudyRef();
 		
-		// Authorization code currently disabled
+		/*// Authorization code 
 		String username = RegistrationConsumerAuthorization.getCallerIdentity();
 		
 		if (username == null)
@@ -146,7 +146,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 				rce.setFaultString("User not authorized for this operation");
 				throw rce;
 			}
-		}
+		}*/
 		
 		// save the study data
 		Protocol protocol = new Protocol();
@@ -212,6 +212,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		StudyParticipantAssignment studyPartAssig = new StudyParticipantAssignment();
 		studyPartAssig.setParticipant(part);
 		String tmp = participant.getGridId()+"."+id.getValue();
+		String mrn =id.getValue();
 		studyPartAssig.setStudyPartIdOrig(tmp);
 		
 		// SPA identifier is same as participant but different grid id
@@ -229,7 +230,17 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumer
 		
 		try
 		{
+			//Perform the check to see if the patient exists - Demo case where labs are loaded prior to registering a patient.
+			 
+			Long spaid = dao.checkParticipantExists(con,protocol,mrn);
+			if(spaid!=null){
+			//	protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().setRoot(root);
+				System.out.println(protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().getRoot());
+				dao.updateParticipantGridId(con,registration.getGridId(),spaid,mrn);
+			}
+			else{
 			dao.saveProtocol(con, protocol);
+			}
 		/*	logger.info("Persisted the study with patient information");
 			//After you persist the protocol, put the participant associated with the
 			//protocol into a HashMap. 
