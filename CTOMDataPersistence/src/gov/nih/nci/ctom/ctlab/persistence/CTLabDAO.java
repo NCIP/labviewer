@@ -1680,11 +1680,14 @@ public class CTLabDAO extends BaseJDBCDAO
         }
         return spa_id;
     }
-	
+
 	/**
 	 * Updates the Participant Grid id --just for Demo 
-	 * @param participantGridId
 	 * @param con
+	 * @param participantGridId
+	 * @param spaId
+	 * @param mrn
+	 * @throws SQLException
 	 */
 	public void updateParticipantGridId(Connection con, String participantGridId,Long spaId,String mrn)throws SQLException
 	{
