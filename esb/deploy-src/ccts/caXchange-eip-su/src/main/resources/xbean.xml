@@ -136,11 +136,17 @@
   <!-- static recipient list for register subject -->
     <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="endpoint">
       <eip:recipients>
-	    <eip:exchange-target service="caxchange:pscRegisterSubjectRouter" />
+	<eip:exchange-target service="caxchange:pscRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:ctomRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:c3DRegisterSubjectRouter" />
       </eip:recipients>
+      <eip:targetServiceIdentifiers>
+               <value>psc</value>
+               <value>caAERS</value>
+               <value>LabViewer</value>
+               <value>C3D</value>
+      </eip:targetServiceIdentifiers>
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for study creation -->
@@ -150,13 +156,18 @@
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
         <eip:exchange-target service="caxchange:ctomStudyRouter" />
       </eip:recipients>
+      <eip:targetServiceIdentifiers>
+               <value>psc</value>
+               <value>caAERS</value>
+               <value>LabViewer</value>
+      </eip:targetServiceIdentifiers>      
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for load lab to CDMS -->
   <eip:caxchange-static-recipient-list service="caxchange:loadLabToCDMS" endpoint="endpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callLoadLabPipeline" />
-      </eip:recipients>
+      </eip:recipients>      
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for AdverseEvents -->
@@ -170,24 +181,26 @@
   <eip:caxchange-static-recipient-list service="caxchange:ctLabData" endpoint="endpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callCTLabDataPipeline" />
-      </eip:recipients>
+      </eip:recipients>     
   </eip:caxchange-static-recipient-list>
   
   
   <!-- static recipient list for multi-site register subject -->
+  <!--
   <eip:caxchange-itinerary-based-recipient-list service="caxchange:multiSiteRegisterSubjectRecipients" endpoint="endpoint">
     <eip:recipient>
 	  <eip:exchange-target service="caxchange:multiSiteRegistrationPipeline" />
     </eip:recipient>
   </eip:caxchange-itinerary-based-recipient-list>
-  
+  -->
   <!-- static recipient list for multi-site study creation -->
+  <!--
   <eip:caxchange-itinerary-based-recipient-list service="caxchange:multiSiteStudyCreationRecipients" endpoint="endpoint">
     <eip:recipient>
 	  <eip:exchange-target service="caxchange:multiSiteStudyPipeline" />
     </eip:recipient>
   </eip:caxchange-itinerary-based-recipient-list>
-  
+  -->
   
   <!--- EIP components for invoking the PSC  -->
   

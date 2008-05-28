@@ -1,19 +1,36 @@
 package gov.nih.nci.caxchange.patterns;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import java.util.List;
 
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.NormalizedMessage;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.eip.support.AbstractAggregator;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 /**
  * This class contains getters and setters to calculate timeout using correlation id and aggregation
@@ -24,6 +41,8 @@ import org.w3c.dom.Document;
 public class CaxchangeAggregator extends AbstractAggregator {
     static final String EXCHANGE_CORRELATIONID="org.apache.servicemix.correlationId";
     protected  long timeOut=5*60*1000;
+    //This is the set of service identifiers from which exchanges are expected.
+    protected Set exchangesToReceive = null;
     static Logger logger=LogManager.getLogger(CaxchangeAggregator.class);
     
     /**
@@ -70,9 +89,67 @@ public class CaxchangeAggregator extends AbstractAggregator {
         
         return new Date(currentTime+timeOut);
     }
+    /**
+     * Initializes the aggregator to anticipate responses from which target services.
+     * 
+     * @param targetServiceIdentifiers
+     * @return
+     */
+    protected Set initializeExchangesToReceive(String targetServiceIdentifiers){
+    	if (targetServiceIdentifiers == null) {
+    		exchangesToReceive =  new HashSet(0);
+    		return exchangesToReceive;
+    	}
+    	StringTokenizer st = new StringTokenizer(targetServiceIdentifiers,",");
+    	exchangesToReceive = new HashSet(st.countTokens()); 
+    	while(st.hasMoreTokens()) {
+    		exchangesToReceive.add(st.nextToken());
+    	}
+    	return exchangesToReceive;
+    }
+    /**
+     * Gets the target service identifier from the message. This is defined by
+     * the xpath expression :  /targetResponse/targetServiceIdentifier
+     * @param message
+     * @return
+     */
+    protected String getTargetServiceIdentifier(NormalizedMessage message) {
+       try {	
+    	Source content = message.getContent();
+    	SourceTransformer sourceTransformer = new SourceTransformer();
+    	Node node = sourceTransformer.toDOMNode(content);
+    	XPath xpath = XPathFactory.newInstance().newXPath();
+        XPathExpression expression = xpath.compile("/targetResponse/targetServiceIdentifier");
+        String targetServiceIdentifier = (String)expression.evaluate(node,XPathConstants.STRING);
+    	return targetServiceIdentifier;
+       }
+       catch(TransformerException te) {
+    	   te.printStackTrace();
+    	   logger.error("Error getting targetServiceIdentifier from target response.",te);
+    	   return null;
+       }
+       catch(XPathExpressionException xe) {
+    	   xe.printStackTrace();
+    	   logger.error("Error getting targetServiceIdentifier from target response.",xe);
+    	   return null;
+       }
+       catch(ParserConfigurationException pce){
+    	   logger.error("Error getting targetServiceIdentifier from target response.", pce);
+    	   return null;
+       }
+       catch(IOException ie){
+    	   logger.error("Error getting targetServiceIdentifier from target response.", ie);
+    	   return null;
+       }
+       catch(SAXException se){
+    	   logger.error("Error getting targetServiceIdentifier from target response.", se);
+    	   return null;
+       }
+    }
     
     /**
      * This method add the message to the aggregator and return if the aggregation is complete or not
+     * 
      * @param aggregate
      * @param message
      * @param exchange
@@ -92,6 +169,13 @@ public class CaxchangeAggregator extends AbstractAggregator {
         if (count!=null) {
             caxchangeAggregate.setCount(new Integer(count).intValue());
         }
+        if (exchangesToReceive == null) {
+        	String targetServiceIdentifiers = (String)message.getProperty(CaxchangeEIPConstants.CAXCHANGE_RECIPIENTS);
+        	initializeExchangesToReceive(targetServiceIdentifiers);
+        }
+        String targetServiceIdentifier = getTargetServiceIdentifier(message);
+        //Remove the targetServiceIdentifier from the set of service identifiers from which exchanges are expected.
+        exchangesToReceive.remove(targetServiceIdentifier);
         return caxchangeAggregate.isAggregationComplete();
     }
     
@@ -110,7 +194,7 @@ public class CaxchangeAggregator extends AbstractAggregator {
         logger.debug("Building aggregate");
         CaxchangeAggregation caxchangeAggregate = (CaxchangeAggregation)aggregate;
         List messages= caxchangeAggregate.getMessages();
-        Document document =AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout);        
+        Document document =AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout, exchangesToReceive);        
         message.setContent(new DOMSource(document));
         message.setProperty(CaxchangeEIPConstants.ORIGINAL_EXCHANGE_CORRELATIONID, caxchangeAggregate.getCorrelationId());
        return;

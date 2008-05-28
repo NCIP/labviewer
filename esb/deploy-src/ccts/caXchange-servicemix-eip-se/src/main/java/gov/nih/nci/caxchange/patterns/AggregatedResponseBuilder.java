@@ -6,6 +6,7 @@ import java.io.StringReader;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.jbi.messaging.NormalizedMessage;
 
@@ -14,6 +15,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import javax.xml.transform.Source;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 
 import org.w3c.dom.Document;
@@ -29,10 +32,11 @@ import org.xml.sax.InputSource;
  */
 public class AggregatedResponseBuilder {
     static DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+    static Logger logger = LogManager.getLogger(AggregatedResponseBuilder.class);
 
     static String timeOutResponse ="  <targetResponse>\n" +
-"                <targetServiceIdentifier>aggregator</targetServiceIdentifier>\n" +
-"                <targetServiceOperation>aggregator</targetServiceOperation>\n" +
+"                <targetServiceIdentifier>@targetServiceIdentifier@</targetServiceIdentifier>\n" +
+"                <targetServiceOperation></targetServiceOperation>\n" +
 "                <targetMessageStatus>ERROR</targetMessageStatus>\n" +
 "                   <targetError>  "+
 "                        <errorCode>"+CaxchangeErrors.TIMEOUT+"</errorCode>  "+
@@ -40,7 +44,7 @@ public class AggregatedResponseBuilder {
 "                    </targetError> "+
 "            </targetResponse>";
 
-    static Document timeOutDocument=null;
+    protected static Document timeOutDocument=null;
 
     String faultResponse = "            <businessResponse>\n" +
     "                <targetServiceIdentifier>targetServiceIdentifier0</targetServiceIdentifier>\n" +
@@ -66,7 +70,7 @@ public class AggregatedResponseBuilder {
      * @return document
      * @throws Exception
      */
-    static Document buildAggregatedDocument(List messages, boolean timeOut) throws Exception {
+    static Document buildAggregatedDocument(List messages, boolean timeOut, Set exchangesToReceive) throws Exception {
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document =documentBuilder.newDocument();
         Element aggregateResponse = document.createElement("aggregateResponse");
@@ -82,12 +86,20 @@ public class AggregatedResponseBuilder {
                 aggregateResponse.appendChild(importedNode);
             }
         }
+        //Create the timeout response for the services which have not yet responded.
         if (timeOut) {
-		if(timeOutDocument==null) {
-			timeOutDocument = documentBuilder.parse(new InputSource(new StringReader(timeOutResponse)));
-	    	}
-                Node importedNode = document.importNode(timeOutDocument.getDocumentElement(), true);
-                aggregateResponse.appendChild(importedNode);
+        	if (exchangesToReceive != null) {
+        	   Iterator exchangesToReceiveIterator = exchangesToReceive.iterator();
+        	   while (exchangesToReceiveIterator.hasNext()) {
+        		     String exchangeIdentifier = (String)exchangesToReceiveIterator.next();
+        		     logger.debug("******"+exchangeIdentifier);
+        		     String serviceTimeOutResponse = timeOutResponse.replace("@targetServiceIdentifier@", exchangeIdentifier);
+        		     logger.debug("******"+serviceTimeOutResponse);
+			         timeOutDocument = documentBuilder.parse(new InputSource(new StringReader(serviceTimeOutResponse)));
+                     Node importedNode = document.importNode(timeOutDocument.getDocumentElement(), true);
+                     aggregateResponse.appendChild(importedNode);
+        	   }
+        	}
      	}
         return document;
     }

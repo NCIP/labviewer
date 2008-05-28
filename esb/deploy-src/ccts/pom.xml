@@ -127,6 +127,7 @@
 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
+        <inherited>true</inherited>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
@@ -134,9 +135,10 @@
       </plugin>
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
+        <inherited>true</inherited>
         <artifactId>jbi-maven-plugin</artifactId>
         <version>${servicemix-version}</version>
-        <extensions>true</extensions>
+        <extensions>true</extensions>      
       </plugin>
     </plugins>
   </build>
