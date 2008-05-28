@@ -120,6 +120,7 @@
         <version>${servicemix-version}</version>      
         <extensions>true</extensions>
         <configuration>
+          <generateJbiDescriptor>false</generateJbiDescriptor>
           <type>service-unit</type>
         </configuration>
       </plugin>     
