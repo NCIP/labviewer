@@ -96,15 +96,17 @@
         <includes>
           <include>**/*</include>
         </includes>
-      </resource>    
+      </resource>            
     </resources>
-    <plugins>
+    <plugins>      
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
+        <inherited>true</inherited>
         <version>${servicemix-version}</version>      
         <extensions>true</extensions>
         <configuration>
+          <generateJbiDescriptor>false</generateJbiDescriptor>
           <type>service-unit</type>
         </configuration>
       </plugin>     
