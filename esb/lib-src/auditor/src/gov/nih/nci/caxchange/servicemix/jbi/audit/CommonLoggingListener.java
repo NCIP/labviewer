@@ -36,6 +36,7 @@ public class CommonLoggingListener implements ExchangeListener {
     private boolean logExchangesSent = true;
     private boolean logExchangesAccepted=true;
     private List<String> filters = new ArrayList();
+    private List<String> exchangeStatuses = new ArrayList();
     
 
     Logger logger = LogManager.getLogger(CommonLoggingListener.class);
@@ -114,14 +115,18 @@ public class CommonLoggingListener implements ExchangeListener {
          boolean error = messageExchange.getStatus().equals(ExchangeStatus.ERROR);
          UserInfoHelper.setUserInfo(getUserFromExchangeEvent(exchangeEvent), messageExchange.getExchangeId());
          try {
+        	 String messageExchangeAsString = messageExchange.toString();
+        	 //Escape any single quotes :
+        	 messageExchangeAsString = messageExchangeAsString.replace("'", "''");        	 
          if (error) {
-             logger.error(messageExchange);
+             logger.error(messageExchangeAsString);
          }else {
-             logger.info(messageExchange);
+             logger.info(messageExchangeAsString);
          }
          }catch(Exception e){
-             e.printStackTrace();
-         }
+        	 //Log but ignore the exception as this is a logging error .
+        	  logger.error("Error logging message exchange.", e);
+          }
        }
          
     }
@@ -135,13 +140,17 @@ public class CommonLoggingListener implements ExchangeListener {
            boolean error = messageExchange.getStatus().equals(ExchangeStatus.ERROR);
            UserInfoHelper.setUserInfo(getUserFromExchangeEvent(exchangeEvent), messageExchange.getExchangeId());
            try{
+        	 String messageExchangeAsString = messageExchange.toString();
+        	 //Escape any single quotes :
+        	 messageExchangeAsString = messageExchangeAsString.replace("'", "''");
              if (error) {
-                logger.error(messageExchange);
+                logger.error(messageExchangeAsString);
              }else {
-                logger.info(messageExchange);
+                logger.info(messageExchangeAsString);
              }
            }catch(Exception e) {
-              e.printStackTrace();
+        	 //Log but ignore the exception as this is a logging error .
+        	   logger.error("Error logging message exchange.", e);
            }
         }
     }
