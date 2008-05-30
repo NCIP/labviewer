@@ -20,7 +20,7 @@
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
   <!-- Pipeline to invoke the delegation service -->
-  <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="invokeDelegationPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:setSubjectService" />
       </eip:transformer>
@@ -33,7 +33,7 @@
   </eip:pipeline>  
   
   <!-- Pipeline to store original message -->
-  <eip:pipeline service="caxchange:storeOriginalMessagePipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:storeOriginalMessagePipeline" endpoint="storeOriginalMessagePipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:storeOriginalMessageService" />
       </eip:transformer>
@@ -46,7 +46,7 @@
   </eip:pipeline>   
   
   <!-- Pipeline to create an error response and forward it to JMS outbound queue -->
-  <eip:pipeline service="caxchange:handleErrorResponsePipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:handleErrorResponsePipeline" endpoint="handleErrorResponsePipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:handleErrorResponseService" />
       </eip:transformer>
@@ -56,7 +56,7 @@
   </eip:pipeline>
   
   <!-- Pipeline to rollback -->
-  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="rollbackPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:setSubjectService" />
       </eip:transformer>
@@ -66,7 +66,7 @@
   </eip:pipeline>
   
   <!-- content based router to route different caXchange message types -->
-  <eip:content-based-router service="caxchange:MessageTypeRouter" endpoint="endpoint">
+  <eip:content-based-router service="caxchange:MessageTypeRouter" endpoint="MessageTypeRouterEndpoint">
     <eip:rules>
       <eip:routing-rule>
         <eip:predicate>
@@ -134,7 +134,7 @@
   
   <!-- Static recipient lists for each type of message -->
   <!-- static recipient list for register subject -->
-    <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="endpoint">
+    <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="registerSubjectRecipientsEndpoint">
       <eip:recipients>
 	<eip:exchange-target service="caxchange:pscRegisterSubjectRouter" />
         <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter" />
@@ -150,7 +150,7 @@
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for study creation -->
-    <eip:caxchange-static-recipient-list service="caxchange:studyCreationRecipients" endpoint="endpoint">
+    <eip:caxchange-static-recipient-list service="caxchange:studyCreationRecipients" endpoint="studyCreationRecipientsEndpoint">
       <eip:recipients>
 	    <eip:exchange-target service="caxchange:pscStudyCreationRouter" />
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
@@ -164,21 +164,21 @@
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for load lab to CDMS -->
-  <eip:caxchange-static-recipient-list service="caxchange:loadLabToCDMS" endpoint="endpoint">
+  <eip:caxchange-static-recipient-list service="caxchange:loadLabToCDMS" endpoint="loadLabToCDMSEndpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callLoadLabPipeline" />
       </eip:recipients>      
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for AdverseEvents -->
-  <eip:caxchange-static-recipient-list service="caxchange:adverseEvent" endpoint="endpoint">
+  <eip:caxchange-static-recipient-list service="caxchange:adverseEvent" endpoint="adverseEventEndpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callAdverseEventPipeline" />
       </eip:recipients>
   </eip:caxchange-static-recipient-list>
   
   <!-- static recipient list for CT_LAB_DATA -->
-  <eip:caxchange-static-recipient-list service="caxchange:ctLabData" endpoint="endpoint">
+  <eip:caxchange-static-recipient-list service="caxchange:ctLabData" endpoint="ctLabDataEndpoint">
       <eip:recipients>
         <eip:exchange-target service="caxchange:callCTLabDataPipeline" />
       </eip:recipients>     
@@ -204,7 +204,7 @@
   
   <!--- EIP components for invoking the PSC  -->
   
-  <eip:content-based-router service="caxchange:pscRouter" endpoint="endpoint">
+  <eip:content-based-router service="caxchange:pscRouter" endpoint="pscRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -222,7 +222,7 @@
       </eip:rules>
   </eip:content-based-router>
   
-  <eip:pipeline service="caxchange:callPscPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callPscPipeline" endpoint="callPscPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:pscProcess" />
       </eip:transformer>
@@ -231,7 +231,7 @@
       </eip:target>
   </eip:pipeline>
 
-  <eip:content-based-router service="caxchange:pscRegisterSubjectRouter" endpoint="endpoint">
+  <eip:content-based-router service="caxchange:pscRegisterSubjectRouter" endpoint="pscRegisterSubjectRouterEndpoint">
     <eip:rules>
       <eip:routing-rule>
         <eip:predicate>
@@ -249,7 +249,7 @@
     </eip:rules>
   </eip:content-based-router>
 
-  <eip:pipeline service="caxchange:callPSCRegistrationPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callPSCRegistrationPipeline" endpoint="callPSCRegistrationPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:pscRegistration" />
     </eip:transformer>
@@ -258,7 +258,7 @@
     </eip:target>
   </eip:pipeline>  
   
-  <eip:content-based-router service="caxchange:pscStudyCreationRouter" endpoint="endpoint">
+  <eip:content-based-router service="caxchange:pscStudyCreationRouter" endpoint="pscStudyCreationRouterEndpoint">
     <eip:rules>
       <eip:routing-rule>
         <eip:predicate>
@@ -276,7 +276,7 @@
     </eip:rules>
   </eip:content-based-router>
 
-  <eip:pipeline service="caxchange:callPSCStudyPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callPSCStudyPipeline" endpoint="callPSCStudyPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:pscStudy" />
     </eip:transformer>
@@ -285,7 +285,7 @@
     </eip:target>
   </eip:pipeline>
 
-  <eip:pipeline service="caxchange:callAdverseEventPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callAdverseEventPipeline" endpoint="callAdverseEventPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:pscAdverseEvent" />
     </eip:transformer>
@@ -297,7 +297,7 @@
   <!-- End EIP Components for invoking the PSC -->
   
   <!--- EIP components for invoking the load lab to CDMS  -->
-    <eip:pipeline service="caxchange:callLoadLabPipeline" endpoint="endpoint">
+    <eip:pipeline service="caxchange:callLoadLabPipeline" endpoint="callLoadLabPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:loadLab" />
       </eip:transformer>
@@ -308,7 +308,7 @@
   <!-- End EIP Components for invoking the load lab to CDMS  -->
   
   <!--- EIP components for invoking the C3D  -->
-    <eip:content-based-router service="caxchange:c3DRegisterSubjectRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:c3DRegisterSubjectRouter" endpoint="c3DRegisterSubjectRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -326,7 +326,7 @@
       </eip:rules>
   </eip:content-based-router>
   
-    <eip:pipeline service="caxchange:callc3DRegistrationPipeline" endpoint="endpoint">
+    <eip:pipeline service="caxchange:callc3DRegistrationPipeline" endpoint="callc3DRegistrationPipelineEndpoint">
         <eip:transformer>
           <eip:exchange-target service="caxchange:c3dRegistration" />
         </eip:transformer>
@@ -340,7 +340,7 @@
   
   <!--- EIP components for invoking the caAERS  -->
   
-    <eip:content-based-router service="caxchange:caaersRegisterSubjectRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:caaersRegisterSubjectRouter" endpoint="caaersRegisterSubjectRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -359,7 +359,7 @@
   </eip:content-based-router>
   
 
-    <eip:content-based-router service="caxchange:caaersStudyCreationRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:caaersStudyCreationRouter" endpoint="caaersStudyCreationRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -377,7 +377,7 @@
       </eip:rules>
   </eip:content-based-router>  
   
-  <eip:pipeline service="caxchange:callcaAERSRegistrationPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callcaAERSRegistrationPipeline" endpoint="callcaAERSRegistrationPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:caaersRegistration" />
       </eip:transformer>
@@ -386,7 +386,7 @@
       </eip:target>
   </eip:pipeline>  
   
-  <eip:pipeline service="caxchange:callcaAERSStudyPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callcaAERSStudyPipeline" endpoint="callcaAERSStudyPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:caaersStudy" />
       </eip:transformer>
@@ -400,7 +400,7 @@
   
   <!--- EIP components for invoking the cTOM  -->
   
-    <eip:content-based-router service="caxchange:ctomRegisterSubjectRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:ctomRegisterSubjectRouter" endpoint="ctomRegisterSubjectRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -418,7 +418,7 @@
       </eip:rules>
   </eip:content-based-router>
   
-    <eip:content-based-router service="caxchange:ctomStudyRouter" endpoint="endpoint">
+    <eip:content-based-router service="caxchange:ctomStudyRouter" endpoint="ctomStudyRouterEndpoint">
       <eip:rules>
         <eip:routing-rule>
           <eip:predicate>
@@ -436,7 +436,7 @@
       </eip:rules>
   </eip:content-based-router>  
   
-  <eip:pipeline service="caxchange:callCtomRegistrationPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callCtomRegistrationPipeline" endpoint="callCtomRegistrationPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:ctomRegistration" />
       </eip:transformer>
@@ -445,7 +445,7 @@
       </eip:target>
   </eip:pipeline>  
   
-    <eip:pipeline service="caxchange:callCtomStudyPipeline" endpoint="endpoint">
+    <eip:pipeline service="caxchange:callCtomStudyPipeline" endpoint="callCtomStudyPipelineEndpoint">
         <eip:transformer>
           <eip:exchange-target service="caxchange:ctomStudy" />
         </eip:transformer>
@@ -454,7 +454,7 @@
         </eip:target>
   </eip:pipeline>
   
-  <eip:pipeline service="caxchange:callCTLabDataPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callCTLabDataPipeline" endpoint="callCTLabDataPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:labLoader" />
     </eip:transformer>
@@ -467,7 +467,7 @@
   <!-- End EIP Components for invoking the cTOM -->  
   
   <!-- EIP Aggregator -->
-  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="endpoint" timeOut="22000">
+  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="caxchangeResponseAggregatorEndpoint" timeOut="22000">
          <eip:target>
            <eip:exchange-target service="caxchange:aggregatorListener"  />
         </eip:target>
@@ -476,7 +476,7 @@
   
   <!--  eip components for invoking multisite Registration and study requests -->
   
-  <eip:pipeline service="caxchange:multiSiteRegistrationPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:multiSiteRegistrationPipeline" endpoint="multiSiteRegistrationPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:multiSiteRegistration" />
     </eip:transformer>
@@ -485,7 +485,7 @@
     </eip:target>
   </eip:pipeline>
   
-  <eip:pipeline service="caxchange:multiSiteStudyPipeline" endpoint="endpoint">
+  <eip:pipeline service="caxchange:multiSiteStudyPipeline" endpoint="multiSiteStudyPipelineEndpoint">
     <eip:transformer>
       <eip:exchange-target service="caxchange:multiSiteStudy" />
     </eip:transformer>
@@ -498,7 +498,7 @@
   
   <!--  EIP send response for unhandled message type -->
   
-  <eip:pipeline service="caxchange:callUnhandledMessageType" endpoint="endpoint">
+  <eip:pipeline service="caxchange:callUnhandledMessageType" endpoint="callUnhandledMessageTypeEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:unhandledMessageType" />
       </eip:transformer>
