@@ -29,7 +29,7 @@
 	</bean>
 
 	<jms:endpoint service="caxchange:CaXchangeRequestConsumer"
-		endpoint="jms" targetService="caxchange:invokeDelegationPipeline"
+		endpoint="caxchangeInboundJmsConsumerEndpoint" targetService="caxchange:invokeDelegationPipeline"
 		targetEndpoint="endpoint" role="consumer" destinationStyle="queue"
 		jmsProviderDestinationName="caxchangeInboundQueue"
 		defaultMep="http://www.w3.org/2004/08/wsdl/in-only"

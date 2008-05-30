@@ -29,7 +29,7 @@
 	</bean>
 
     <jms:endpoint service="caxchange:ResponseQueueService"
-                  endpoint="myProvider"
+                  endpoint="caxchangeOutboundJmsProviderEndpoint"
                   role="provider" 
                   destinationStyle="queue"
                   jmsProviderDestinationName="caxchangeOutboundQueue"
