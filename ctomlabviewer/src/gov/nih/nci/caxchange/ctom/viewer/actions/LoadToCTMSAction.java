@@ -153,11 +153,11 @@ public class LoadToCTMSAction extends Action
 		String username = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
 		
 		UserInfoHelper.setUserInfo(username, session.getId());		
-		
+		int numOfLabs =0;
 		try
 		{  //calls the loadToCTMS method
-			loadToCTMS(request, lForm, username);
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, "Messages Submitted to CDMS Successfully"));
+			numOfLabs = loadToCTMS(request, lForm, username);
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, numOfLabs+" Message(s) Submitted to CDMS Successfully"));
 			saveMessages( request, messages );
 		}
 		catch (Exception cse)
@@ -181,28 +181,34 @@ public class LoadToCTMSAction extends Action
 	 * @param form
 	 * @throws Exception
 	 */
-	private void loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
+	private int loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
 	{
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
 		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
 		ArrayList list = new ArrayList();
-		String test = lForm.getRecordId();
-		StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
-		int count = stringTokenizer.countTokens();
-		
+		String[] test = lForm.getRecordIds();
+		//StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
+		int count =0;
+		int numOfLabs=0;
 		// Create the list of results to send
-		if (count >= 1)
+		/*if (count >= 1)
 		{
 			while (stringTokenizer.hasMoreTokens())
 			{
 				list.add(map.get(stringTokenizer.nextToken()));
 			}
 		}
-		else
+		else*/
+		if(test!=null)
 		{
-			list.add(map.get(lForm.getRecordId()));
+			count = test.length;
+			for(int i=0;i<count;i++)
+			{
+				if(map.get(test[i]) != null){
+					list.add(map.get(test[i]));	
+				}
+			}
 		}
-
 		 Properties props = new Properties();
 		 
 		 //Get the file input stream
@@ -324,7 +330,7 @@ public class LoadToCTMSAction extends Action
 		}
 		
 		labRequest.setLabResult(labResults);
-		
+		numOfLabs = labResults.length; 
 		//PrintWriter writer = new PrintWriter("c3dmessage.xml");
 		QName lab = new QName("LoadLabsRequest");
         //Utils.serializeObject(labRequest, lab, writer);
@@ -395,6 +401,7 @@ public class LoadToCTMSAction extends Action
 	
 		lForm.setRecordId("");
 		lForm.setRecordId(null);
+		return numOfLabs;
 	}	
 
 }
