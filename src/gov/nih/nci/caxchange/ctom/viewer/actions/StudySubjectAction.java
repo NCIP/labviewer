@@ -256,18 +256,20 @@ public class StudySubjectAction extends Action
 				{	
 					II ident = (II)i.next();
 					labFm.setPatientId(ident.getExtension());
-					//System.out.println(ident.getExtension());
-					//System.out.println("Study gridid"+studyGridId);
+					log.debug(ident.getExtension());
+					log.debug("Study gridid"+studyGridId);
 				}
 				for(Iterator i = ii.getStudySite().getStudy().getStudyIdentifier().iterator();i.hasNext();)
 				{	
 					II ident = (II)i.next();
 					labFm.setStudyId(ident.getExtension());
-					//System.out.println(ident.getExtension());
+					log.debug(ident.getExtension());
 				}
 			}		
 		}
-		catch(Exception e){}
+		catch(Exception e){
+			log.error("Exception while retriving patient id",e);
+		}
 		}	
 }
 
