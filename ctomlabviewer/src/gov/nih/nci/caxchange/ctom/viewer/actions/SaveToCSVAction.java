@@ -61,19 +61,22 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
+import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,6 +91,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
+import webservices.Documentation;
+import webservices.LabResult;
+import webservices.LoadLabsRequest;
+import webservices.Participant;
+import webservices.PerformedActivity;
+import webservices.PerformedStudy;
+import webservices.StudySubject;
 
 /**
  * This class Saves the Lab data Search results to a CSV file. 
@@ -147,6 +158,11 @@ public class SaveToCSVAction extends Action
 	}
 	
 	
+	/**
+	 * Gets the CSV file name and type
+	 * @param response
+	 * @return
+	 */
 	private ActionForward getFileName(HttpServletResponse response)
 	{
 		//get the filename
@@ -155,36 +171,170 @@ public class SaveToCSVAction extends Action
 		return null;
 		
 	}
+	
 	/**
-	 * Collects the selectd form data and calls the EvenManager sendLabActivitiesmethod to
-	 * load the data to CTMS
+	 * Collects the selected form data and saves the labs to CSV file
 	 * @param request
 	 * @param form
+	 * @param username
+	 * @param response
 	 * @throws Exception
 	 */
 	private void saveToCSV(HttpServletRequest request,ActionForm form, String username, HttpServletResponse response) throws Exception
 	{
+		System.out.println("In Save to CSV");
 		getFileName(response);
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
-		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
+	    HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
+		ArrayList list = new ArrayList();
+		String[] test = lForm.getRecordIds();
+		//StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
+		int count=0;
+		if(test!=null)
+		{
+			count = test.length;
+			for(int i=0;i<count;i++)
+			{
+				if(map.get(test[i]) != null){
+					list.add(map.get(test[i]));	
+				}
+			}
+		}
+		int numOfLabs=0;
+		// Create the list of results to send
+		/*if (count >= 1)
+		{
+			while (stringTokenizer.hasMoreTokens())
+			{
+				list.add(map.get(stringTokenizer.nextToken()));
+			}
+		}
+		else*/
+		
+	    // Then for each lab selected set the lab information
+		LabResult labResults[]= new LabResult[list.size()];
+		int i = 0;
+		
+		for (Iterator labs = list.iterator(); labs.hasNext();)
+		{
+			LabActivityResult lab = (LabActivityResult)labs.next();
+			
+			// Populate the study information
+			Documentation documentation = new Documentation();
+			PerformedStudy performedStudy = new PerformedStudy();
+			
+			String studyId = lab.getStudyId();
+			if (studyId != null)
+			{
+				// Set the study identifier on the document
+				webservices.II ii = new webservices.II();
+				ii.setExtension("STUDY:" + studyId);
+				ii.setAssigningAuthorityName("CTODS");
+				ii.setRoot("C3D");
+				webservices.II[] iis = new webservices.II[1];
+				iis[0] = ii;
+				documentation.setII(iis);
+			}
+			Documentation[] docs = new Documentation[1];
+			docs[0] = documentation;
+			performedStudy.setDocumentation(docs);
+			
+			// Then set the participant and study subject assignment identifiers
+			Participant participant= new Participant();
+			StudySubject studySubject= new StudySubject();
+			
+			Collection<II> studySubjectIds = lab.getSubjectAssignment().getStudySubjectIdentifier();
+			if (studySubjectIds != null && studySubjectIds.size() > 0)
+			{
+				Iterator<II> idIterator = studySubjectIds.iterator();
+				II ssII = idIterator.next();
+				webservices.II ii = new webservices.II();
+				ii.setAssigningAuthorityName("CTODS");
+				ii.setRoot("C3D");
+				ii.setExtension("MRN:" + ssII.getExtension());
+				webservices.II[] iis = new webservices.II[1];
+				iis[0] = ii;
+				participant.setII(iis);
+				webservices.II ii2 = new webservices.II();
+				ii2.setAssigningAuthorityName("CTODS");
+				ii2.setRoot("C3D");
+				ii2.setExtension("PATIENTPOSITION:" + ssII.getExtension());
+				webservices.II[] iis2 = new webservices.II[1];
+				iis2[0] = ii2;
+				studySubject.setII(iis2);
+			}
+			studySubject.setParticipant(participant);
+			studySubject.setPerformedStudy(performedStudy);
+			
+			// Set the activity name
+			PerformedActivity performedActivity= new PerformedActivity();
+			String testName = lab.getLabTestId();
+			performedActivity.setName(testName);
+			PerformedActivity[] performedActivitys = new PerformedActivity[1];
+			performedActivitys[0] = performedActivity;
+			studySubject.setPerformedActivity(performedActivitys);
+			
+			// Then set the lab result
+			LabResult labResult = new LabResult();
+			labResult.setStudySubject(studySubject);
+			
+			// Set the reported date
+			Date labDate = lab.getActualDate();
+			if (labDate != null)
+			{
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(labDate);
+				labResult.setReportedDateTime(cal);
+			}
+			
+			// Set the lab result details
+			String numResult = lab.getNumericResult();
+			if ((numResult != null) && (!numResult.equals("")))
+				labResult.setNumericResult(Float.parseFloat(numResult));
+			String txtResult = lab.getTextResult();
+			if ((txtResult != null) && (!txtResult.equals("")))
+				labResult.setTextResult(txtResult);
+			String labUom = lab.getUnitOfMeasure();
+			if (labUom != null)
+				labResult.setNumericUnit(labUom);
+			String lowRange = lab.getLowRange();
+			if (lowRange != null)
+				labResult.setReferenceRangeLow(Float.parseFloat(lowRange));
+			String highRange = lab.getHighRange();
+			if (highRange != null)
+				labResult.setReferenceRangeHigh(Float.parseFloat(highRange));
+			
+			labResults[i] = labResult;
+			i++;
+		}
 		java.io.PrintWriter out = response.getWriter(); 
 		String data = "";
-		int counter=0;
 		String heading=" Patient Id,Date / Time,Lab Test,Text Result,Numeric Result,Unit Of Measure,Lower Limit,Upper Limit";
 		out.write(heading);
 		out.write("\n");
-		for(int i=1; i<= map.size();i++)
+		System.out.println("Selected Lab results:"+labResults.length);
+		for(int ii=0; ii<labResults.length;ii++)
 		{
-			String id = Integer.valueOf(i).toString();
-			LabActivityResult result = (LabActivityResult)map.get(id);
-			data = result.getPatientId() +","+ result.getDate()+","+result.getLabTestId()+","+result.getTextResult()+","+result.getNumericResult()+","+result.getUnitOfMeasure()+","+result.getLowRange()+","+result.getHighRange()+"\n";
+			LabResult result = labResults[ii];
+			data = result.getStudySubject().getParticipant().getII(0).getExtension() +","+ convertToString(new Date (result.getReportedDateTime().getTimeInMillis()))+","+result.getStudySubject().getPerformedActivity(0).getName()+","+result.getTextResult()+","+result.getNumericResult()+","+result.getNumericUnit()+","+result.getReferenceRangeLow()+","+result.getReferenceRangeHigh()+"\n";
+			System.out.println("Data: "+data);
 			out.write(data);
 			data="";
-			counter++;
 		}
 		out.flush();
 		out.close();	
 	}	
-		
+	
+	/**
+	 * @param date
+	 * @return
+	 */
+	private static String convertToString(java.util.Date date) {
+		if (date == null)
+			return "-";
+		SimpleDateFormat formatter = new SimpleDateFormat();
+		String str = formatter.format(date);
+		return str;
+	}	
 
 }
