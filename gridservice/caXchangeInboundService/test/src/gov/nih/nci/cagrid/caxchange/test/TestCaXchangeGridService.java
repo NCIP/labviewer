@@ -3,6 +3,7 @@ package gov.nih.nci.cagrid.caxchange.test;
 
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 
+import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.CaXchangeResponseServicePortType;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
@@ -25,11 +26,13 @@ import gov.nih.nci.caxchange.ResponseMessage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.io.StringReader;
 
 import java.io.Reader;
 
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -44,6 +47,12 @@ import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
 
 import org.apache.axis.types.URI;
+import org.cagrid.gaards.cds.client.CredentialDelegationServiceClient;
+import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
+import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
+import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.encoding.DeserializationException;
 
 import org.w3c.dom.Document;
 
@@ -54,42 +63,14 @@ import org.w3c.dom.Document;
 public class TestCaXchangeGridService extends TestCase {
 
     CaXchangeRequestProcessorClient client;
+    GlobusCredential userCredentials=null;
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    Properties caxchangeProperties = null;
     String externalIdentifier = "myExternalIdentifier";
-	
-    String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
-    		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
-    		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
-    		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-    		"   <ns2:Address xsi:type=\"ns2:AttributedURI\">https://cbvapp-d1017.nci.nih.gov:58443/wsrf/services/cagrid/DelegatedCredential</ns2:Address>" +
-    		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
-    		"    <ns2:DelegatedCredentialKey" +
-    		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
-    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">620</ns3:delegationId>" +
-    		"    </ns2:DelegatedCredentialKey>" +
-    		"   </ns2:ReferenceProperties>" +
-    		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
-    		"  </ns2:EndpointReference>" +
-    		"</ns1:DelegatedCredentialReference>";
+    String userName=null;
+    String password=null;
+    String delegatedReference = null;
 
-/*		String delegatedReference = "" + "<ns1:DelegatedCredentialReference xmlns:ns1=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types \">" +
-    		"<ns2:EndpointReference xsi:type=\"ns2:EndpointReferenceType\"" +
-    		" xmlns:ns2=\"http://schemas.xmlsoap.org/ws/2004/03/addressing\" " +
-    		" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
-    		"   <ns2:Address xsi:type=\"ns2:AttributedURI\">https://cbvapp-q1010.nci.nih.gov:18443/wsrf/services/cagrid/DelegatedCredential</ns2:Address>" +
-    		"   <ns2:ReferenceProperties xsi:type=\"ns2:ReferencePropertiesType\">" +
-    		"    <ns2:DelegatedCredentialKey" +
-    		" xmlns:ns2=\"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential\">" +
-    		"     <ns3:delegationId xmlns:ns3=\"http://gaards.cagrid.org/cds\">64</ns3:delegationId>" +
-    		"    </ns2:DelegatedCredentialKey>" +
-    		"   </ns2:ReferenceProperties>" +
-    		"   <ns2:ReferenceParameters xsi:type=\"ns2:ReferenceParametersType\"/>" +
-    		"  </ns2:EndpointReference>" +
-    		"</ns1:DelegatedCredentialReference>";
-  */  
-     
-    
-     
     Message message = null;
 
     static String url=System.getProperty("caxchange.url");
@@ -103,19 +84,61 @@ public class TestCaXchangeGridService extends TestCase {
 
     public void setUp() {
       try {
-       client = new CaXchangeRequestProcessorClient(url);
+       caxchangeProperties = new Properties();
+       caxchangeProperties.load(TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("caxchange.properties"));
+       delegatedReference = caxchangeProperties.getProperty("delegatedReference");
+       userName= caxchangeProperties.getProperty("userName");
+       password = caxchangeProperties.getProperty("password");
        message = new Message();
        Metadata metadata = new Metadata();
        metadata.setExternalIdentifier(externalIdentifier);
        Credentials creds = new Credentials();
+       creds.setUserName(userName);
+       creds.setPassword(password);
 	   creds.setDelegatedCredentialReference(delegatedReference);
        metadata.setCredentials(creds);
        message.setMetadata(metadata);
        Request request = new Request();
        message.setRequest(request);
+       GlobusCredential hostCredential=null;
+       try {
+          hostCredential = new GlobusCredential(caxchangeProperties.getProperty("hostCertLocation"),caxchangeProperties.getProperty("hostKeyLocation"));
+       }catch(Exception e) {
+    	   throw new Exception("Error creating host credentials",e);
+       }
+       DelegatedCredentialReference delegatedCredentialReference = null;
+		try{
+			
+			delegatedCredentialReference =  
+				(DelegatedCredentialReference)
+				                     Utils.deserializeObject(new StringReader(delegatedReference), DelegatedCredentialReference.class, CredentialDelegationServiceClient.class.getResourceAsStream("client-config.wsdd"));
+
+		}catch (DeserializationException e){
+			throw new Exception(
+					"Unable to deserialize the Delegation Reference", e);
+		}
+		DelegatedCredentialUserClient delegatedCredentialUserClient = null;
+
+		try{
+			delegatedCredentialUserClient = new DelegatedCredentialUserClient(
+					delegatedCredentialReference, hostCredential);
+		}catch (Exception e){
+			throw new Exception(
+					"Unable to Initialize the Delegation Lookup Client", e);
+		}
+		try{
+			userCredentials = delegatedCredentialUserClient
+			.getDelegatedCredential();
+		}catch (CDSInternalFault e){
+			throw new Exception(
+					"Error retrieve the Delegated Credentials", e);
+		}
+		 client = new CaXchangeRequestProcessorClient(url, userCredentials);
+		
       }
       catch(Exception e) {
           System.out.println("Error creating the client");
+          e.printStackTrace();
           throw new RuntimeException(e);
       }
     }
@@ -128,24 +151,21 @@ public class TestCaXchangeGridService extends TestCase {
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(message);
         System.out.println("Message has been send.");
         EndpointReferenceType endPointReference =crsr.getEndpointReference();
-        CaXchangeResponseServiceAddressingLocator locator = new CaXchangeResponseServiceAddressingLocator();
-        CaXchangeResponseServicePortType responsePort = locator.getCaXchangeResponseServicePortTypePort(endPointReference);
+        CaXchangeResponseServiceClient responsClient = new CaXchangeResponseServiceClient(endPointReference, userCredentials);
         boolean gotResponse=false;
-        GetResponseResponse getResponse=null;
+        ResponseMessage getResponse=null;
         while(!gotResponse) {
         try {
-        	Thread.currentThread().sleep((long)2000);
-            getResponse = responsePort.getResponse(new GetResponseRequest());
+            getResponse = responsClient.getResponse();
             gotResponse= true;
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
         }
-        ResponseMessage responseMessage = getResponse.getCaXchangeResponseMessage();
         StringWriter stringWriter = new StringWriter();
-        Utils.serializeObject(responseMessage, new QName("http://caXchange.nci.nih.gov/messaging", "caXchangeResponseMessage"), stringWriter);
+        Utils.serializeObject(getResponse, new QName("http://caXchange.nci.nih.gov/messaging", "caXchangeResponseMessage"), stringWriter);
         System.out.println(stringWriter.toString());
-        return responseMessage;
+        return getResponse;
     }
     /**
      * test messages of type STUDY_CREATION.
@@ -165,7 +185,7 @@ public class TestCaXchangeGridService extends TestCase {
         messagePayload.setXmlSchemaDefinition(uri);
         DocumentBuilder db =dbf.newDocumentBuilder();
         Document payload = db.parse(testMessage);
-        String namespaceURI=payload.getFirstChild().getAttributes().getNamedItem("xmlns").getNodeValue();
+        //String namespaceURI=payload.getFirstChild().getAttributes().getNamedItem("xmlns").getNodeValue();
         MessageElement messageElement = new MessageElement(payload.getDocumentElement());
         messagePayload.set_any(new MessageElement[]{messageElement});
         message.getRequest().setBusinessMessagePayload(messagePayload);
@@ -174,6 +194,7 @@ public class TestCaXchangeGridService extends TestCase {
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
+          e.printStackTrace();
           throw new RuntimeException(e);
       }
 
@@ -283,7 +304,7 @@ public class TestCaXchangeGridService extends TestCase {
      */
     public void testCtLabData() {
       try {
-        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("ctlabdata.xml");
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("SampleHL7v3.xml");
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
@@ -337,57 +358,17 @@ public class TestCaXchangeGridService extends TestCase {
       }
 
     }
-    
-    
-    
-    
-    /**
-     * Test messagess of type REGISTER_SUBJECT.
-     *
-     * .
-     */
-    public void testMultiSiteRegisterSubject() {
-      try {
-        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("registersubject.xml");
-        if (testMessage == null) {
-            throw new RuntimeException("Test message does not exist.");
-        }
-        message.getMetadata().setMessageType(MessageTypes.MULTISITE_REGISTER_SUBJECT);
-        MessagePayload messagePayload = new MessagePayload();
-        URI uri = new URI();
-        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
-        messagePayload.setXmlSchemaDefinition(uri);
-        DocumentBuilder db =dbf.newDocumentBuilder();
-        Document payload = db.parse(testMessage);
-        MessageElement messageElement = new MessageElement(payload.getDocumentElement());
-        messagePayload.set_any(new MessageElement[]{messageElement});
-        message.getRequest().setBusinessMessagePayload(messagePayload);
-        String[] targets={"c3pr1", "c3pr2"};
-        
-        message.getMetadata().setTargetSite(targets);
-        ResponseMessage responseMessage = invokeService();
-        assertNotNull(responseMessage);
-      }
-      catch(Exception e) {
-          System.out.println("Error sending message .");
-          throw new RuntimeException(e);
-      }
-
-    }
-
 
     public static Test suite() {
        TestSuite suite = new TestSuite();
 
-       suite.addTest(new TestCaXchangeGridService("testStudyCreation"));
-       suite.addTest(new TestCaXchangeGridService("testRegisterSubject"));
-       suite.addTest(new TestCaXchangeGridService("testScheduleModification"));
-       suite.addTest(new TestCaXchangeGridService("testCtLabData"));
+       //suite.addTest(new TestCaXchangeGridService("testStudyCreation"));
+       //suite.addTest(new TestCaXchangeGridService("testRegisterSubject"));
+       //suite.addTest(new TestCaXchangeGridService("testScheduleModification"));
+       //suite.addTest(new TestCaXchangeGridService("testCtLabData"));
        suite.addTest(new TestCaXchangeGridService("testLoadLab"));
-       suite.addTest(new TestCaXchangeGridService("testAENotification"));
-       
-       suite.addTest(new TestCaXchangeGridService("testMultiSiteRegisterSubject"));
-       
+       //suite.addTest(new TestCaXchangeGridService("testAENotification"));
+
 
        return suite;
     }
