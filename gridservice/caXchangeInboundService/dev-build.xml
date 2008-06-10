@@ -133,6 +133,7 @@
 	    <copy todir="./build/test/classes">
 	           <fileset dir="./test/resources" >
 		           <include name="*.xml" />
+		           <include name="*.properties" />
                    </fileset>
 	    </copy>
 
