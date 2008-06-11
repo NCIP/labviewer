@@ -199,7 +199,7 @@ public class CSVP
 					data = new DataRow(CSVSplitter(text), defaultValues, timeFields, splitFields, columnOrder, Short.parseShort(properties.getProperty("column.count")));
 					out.write(data.getString());
 					counter++;
-					System.out.println(String.valueOf(counter) + " row(s) writen");
+					logger.debug(String.valueOf(counter) + " row(s) writen");
 				}
 				logger.info("File finished processing successfully");
 			}
