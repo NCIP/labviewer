@@ -63,17 +63,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import gov.nih.nci.caadapter.common.validation.ValidatorResults;
 import gov.nih.nci.caadapter.hl7.transformation.TransformationService;
 import gov.nih.nci.caadapter.hl7.transformation.data.XMLElement;
-import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
-import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
-import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
-import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
 import gov.nih.nci.cagrid.labviewer.grid.client.StudyLookupServiceClient;
-import gov.nih.nci.caxchange.Message;
-import gov.nih.nci.caxchange.MessagePayload;
-import gov.nih.nci.caxchange.MessageTypes;
-import gov.nih.nci.caxchange.Metadata;
-import gov.nih.nci.caxchange.Request;
-import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.ccts.grid.OrganizationAssignedIdentifierType;
 import gov.nih.nci.ccts.grid.ParticipantType;
 import gov.nih.nci.ccts.grid.Registration;
@@ -83,12 +73,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -102,13 +89,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.types.URI;
-import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
-import org.globus.gsi.GlobusCredential;
-import org.globus.gsi.GlobusCredentialException;
-import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
-import org.ietf.jgss.GSSCredential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -125,17 +106,17 @@ import org.xml.sax.SAXException;
  */
 public class HL7V3Transformation {
 
-	private CancerCenterClient cancerCenterClient;
+	CancerCenterClient cancerCenterClient;
 
 	private final ScheduledExecutorService scheduler = Executors
 			.newScheduledThreadPool(1);
-	private static final String CONFIG_FILE = "/project.properties";
+	
 	private List<String> HL7V3Msgs = Collections
 			.synchronizedList(new ArrayList<String>());
 
 	// Logging File
-	private static Logger logger = Logger
-			.getLogger("gov.nih.nci.caxchange.client.HL7V3Transformation");
+	static Logger logger = Logger
+			.getLogger("client");
 
 	public HL7V3Transformation(CancerCenterClient client) {
 		cancerCenterClient = client;
@@ -194,18 +175,24 @@ public class HL7V3Transformation {
 										fileList[i].getName()));
 							} else {
 								String fileName = fileList[i].getName();
+								if(fileList[i].getName().indexOf("V2TOV3") != -1){
 								fileMoved = fileList[i].renameTo(new File(
 										cancerCenterClient.getRawFilesBackupDirectory(),
-										fileList[i].getName()));
+										fileName));
+								logger.debug("File Moved " +fileMoved+":" +fileName );
+								}else {
+									fileMoved=true;
+								}
 								//invoke the grid service setup
 								setUpToInvokeGrid(fileName);
+								if(fileList[i].getName().indexOf("V2TOV3") == -1){
+									fileList[i].delete();
+								}	
 							}
-							
-						}
-						if(!fileMoved && fileList.length > 0)
-							 logger.error("Error moving the .CSV file to backup folder");
-						
 					}
+					if(!fileMoved && fileList.length > 0)
+							 logger.error("Error moving the .CSV file InProcessfolder to backup folder");
+				 }							
 				} catch (Exception e) {
 					logger.fatal(Messages.getString("CancerCenterClient.22"));
 				}
@@ -225,12 +212,48 @@ public class HL7V3Transformation {
 		// invokes the grid service to persist the HL7V3
 		// message.
 		int counter = 1;
+		boolean hl7v3move = false;
+		MessageElement messageElement=null;
 		try {
 			for (String HL7V3 : HL7V3Msgs) {
-					invokeGridService(fileName, HL7V3, counter);
-					counter++;
-			}
-		} catch (Exception e) {
+					
+				// Create HL7V3 File
+				File hl7v3XML = createHL7V3File(fileName, HL7V3, counter);
+
+				// call the method callToStudyLookupService
+				Study study = invokeStudyLookupService(new ByteArrayInputStream(
+						HL7V3.getBytes()));
+				if (study == null) {
+					logger.error(Messages.getString("CancerCenterClient.61"));
+					if (hl7v3XML != null) {
+						hl7v3move = hl7v3XML.renameTo(new File(cancerCenterClient
+								.getErrorDir(), hl7v3XML.getName()));
+					}
+					else{
+						logger.error(Messages.getString("CancerCenterClient.62"));
+					}
+				} else {
+					// call to change the xml attribute values
+					String changedHL7V3 = changeXMLAttvalues(HL7V3, study);
+					FileWriter changedfw = new FileWriter(hl7v3XML, false);
+					changedfw.write(changedHL7V3);
+					changedfw.flush();
+					changedfw.close();
+
+					// gets the Document
+					ByteArrayInputStream stream = new ByteArrayInputStream(
+							changedHL7V3.getBytes());
+					Document document = getDocument(stream);
+					Element root = document.getDocumentElement();
+					messageElement = new MessageElement(root);
+ 			}
+				if(messageElement!=null){
+					InvokeGridService invokeGridService = new InvokeGridService(cancerCenterClient);	
+					invokeGridService.invokeGridService(messageElement,hl7v3XML);
+				}
+				counter++;
+		 }
+		}catch (Exception e) {
 			logger.fatal(Messages.getString("CancerCenterClient.22"));
 		}
 
@@ -266,7 +289,7 @@ public class HL7V3Transformation {
 				for (XMLElement rootElement : xmlElements) {
 					hl7MessageXml.add(rootElement.toXML().toString());
 				}
-				logger.info(Messages.getString("CancerCenterClient.46")
+				logger.debug(Messages.getString("CancerCenterClient.46")
 						+ hl7MessageXml);
 			}
 		} catch (Exception e) {
@@ -274,39 +297,6 @@ public class HL7V3Transformation {
 					.fillInStackTrace());
 		}
 		return hl7MessageXml;
-	}
-
-	/**
-	 * Create the caXchange message
-	 * 
-	 * @param requestMessage
-	 * @return messagePayload
-	 */
-	private MessagePayload createMessage(Message requestMessage) {
-		// Create the caXchange message
-		Metadata metadata = new Metadata();
-		metadata.setExternalIdentifier("CTODS");
-		metadata.setMessageType(MessageTypes.CT_LAB_DATA);
-		
-		//  Credentials creds = new Credentials();// Optional Credentials - for
-		// testing purposes comment out the creds.
-		// creds.setUserName(userName);
-		// creds.setPassword(userPasswd);
-		 
-
-		requestMessage.setMetadata(metadata);
-		Request caxchangeRequest = new Request();
-		requestMessage.setRequest(caxchangeRequest);
-		MessagePayload messagePayload = new MessagePayload();
-		URI uri = new URI();
-		try {
-			uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
-		} catch (MalformedURIException e) {
-			logger.error("MalformedURIException" + e);
-		}
-		messagePayload.setXmlSchemaDefinition(uri);
-
-		return messagePayload;
 	}
 
 	/**
@@ -361,150 +351,6 @@ public class HL7V3Transformation {
 	}
 
 	/**
-	 * Invokes the Grid Service HUB to load the HL7V3 message.
-	 * 
-	 * @param fileList
-	 * @param i
-	 * @param HL7V3
-	 * @throws Exception
-	 */
-	public final void invokeGridService(String fileName, String HL7V3,
-			 int index) throws Exception {
-		try {
-			boolean gotResponse = false;
-			boolean hl7v3move = false;
-			GetResponseResponse getResponse = null;
-			Properties props = new Properties();
-			InputStream istream = getClass().getResourceAsStream(CONFIG_FILE);
-			props.load(istream);
-			String proxyFile = (String)props.getProperty("proxyFile");
-			GlobusCredential gb =new GlobusCredential(proxyFile);
-			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
-					cancerCenterClient.getHubURL(),gb);
-			// creates the caXchange Message
-			Message requestMessage = new Message();
-			MessagePayload messagePayload = createMessage(requestMessage);
-
-			// Create HL7V3 File
-			File hl7v3XML = createHL7V3File(fileName, HL7V3, index);
-
-			// call the method callToStudyLookupService
-			Study study = invokeStudyLookupService(new ByteArrayInputStream(
-					HL7V3.getBytes()));
-			if (study == null) {
-				logger.error(Messages.getString("CancerCenterClient.61"));
-				if (hl7v3XML != null) {
-					hl7v3move = hl7v3XML.renameTo(new File(cancerCenterClient
-							.getErrorDir(), hl7v3XML.getName()));
-				}
-				else{
-					logger.error(Messages.getString("CancerCenterClient.62"));
-				}
-			} else {
-				// call to change the xml attribute values
-				String changedHL7V3 = changeXMLAttvalues(HL7V3, study);
-				FileWriter changedfw = new FileWriter(hl7v3XML, false);
-				changedfw.write(changedHL7V3);
-				changedfw.flush();
-				changedfw.close();
-
-				// gets the Document
-				ByteArrayInputStream stream = new ByteArrayInputStream(
-						changedHL7V3.getBytes());
-				Document document = getDocument(stream);
-				Element root = document.getDocumentElement();
-				MessageElement messageElement = new MessageElement(root);
-				messagePayload.set_any(new MessageElement[] { messageElement });
-				requestMessage.getRequest().setBusinessMessagePayload(
-						messagePayload);
-                CaXchangeResponseServiceReference crsr = client
-						.processRequestAsynchronously(requestMessage);
-
-				CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(
-						crsr.getEndpointReference());
-
-				int responseCount = 0;
-				ResponseMessage responseMessage = null;
-				while (!gotResponse) {
-					try {
-						responseMessage = responseService.getResponse();
-
-						if (responseMessage.getResponse().getResponseStatus()
-								.toString().equalsIgnoreCase("Success")) {
-
-							logger.info("Response:Success -Moving File "
-									+ hl7v3XML.getName()
-									+ Messages
-											.getString("CancerCenterClient.65")
-									+ cancerCenterClient.getProcessedDir());
-							hl7v3move = hl7v3XML.renameTo(new File(
-									cancerCenterClient.getProcessedDir(),
-									hl7v3XML.getName()));
-							gotResponse = true;
-						} else if (responseMessage.getResponse()
-								.getResponseStatus().toString()
-								.equalsIgnoreCase("Failure")) {
-
-							logger.info("Response: Failure -Moving File "
-									+ hl7v3XML.getName() + " To "
-									+ cancerCenterClient.getProcessedDir());
-							hl7v3move = hl7v3XML.renameTo(new File(
-									cancerCenterClient.getErrorDir(), hl7v3XML
-											.getName()));
-							gotResponse = true;
-						} else {
-							logger.info("Error -Moving File "
-									+ hl7v3XML.getName() + " To "
-									+ cancerCenterClient.getProcessedDir());
-							hl7v3move = hl7v3XML.renameTo(new File(
-									cancerCenterClient.getErrorDir(), hl7v3XML
-											.getName()));
-
-						}
-
-					} catch (Exception e) {
-						logger.info(
-								Messages.getString("CancerCenterClient.71"), e);
-						responseCount++;
-						if (responseCount > 20) {
-							logger.error(Messages
-									.getString("CancerCenterClient.72"));
-							throw new Exception(Messages
-									.getString("CancerCenterClient.73"));
-						}
-						Thread.sleep(1000);
-					}
-				}
-
-				if (responseMessage != null) {
-					logger.info(Messages.getString("CancerCenterClient.74")
-							+ responseMessage.getResponse().getResponseStatus()
-									.toString());
-				}
-			}// end of else
-			if (!hl7v3move) {
-				logger.info("Error Moving File"+ hl7v3XML.getName());
-			}
-		} catch (MalformedURIException e) {
-			logger.error("MalformedURIException" + e.getLocalizedMessage());
-		} catch (RemoteException e) {
-
-			logger.error("RemoteException" + e);
-		} catch (IOException e) {
-
-			logger.error("IOException" + e.getLocalizedMessage());
-		} catch (InterruptedException e) {
-
-			logger.error("InterruptedException" + e.getLocalizedMessage());
-		} catch (GlobusCredentialException e1) {
-			logger.error("GlobusCredentialException" + e1.getLocalizedMessage());
-		}catch (Exception e) {
-			logger.error("Exception" + e.getLocalizedMessage());
-		}
-
-	}
-
-	/**
 	 * Invokes the StudyLookup Service to lookup study information for a
 	 * participant in the HL7V3 message.
 	 * 
@@ -526,8 +372,8 @@ public class HL7V3Transformation {
 					XPathConstants.STRING);
 			String extension = (String) xpath.evaluate(expression2, document,
 					XPathConstants.STRING);
-			System.out.println("Root" + root);
-			System.out.println("Extension" + extension);
+			logger.debug("Root" + root);
+			logger.debug("Extension" + extension);
 			// create the registration object
 			ParticipantType participant = new ParticipantType();
 			OrganizationAssignedIdentifierType identifier = new OrganizationAssignedIdentifierType();
