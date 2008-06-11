@@ -94,6 +94,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -102,6 +103,7 @@ import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -114,6 +116,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private String csvDirectory;
 	private String hl7v2Directory;
+	private String hl7v3Directory;
 	private String mapDirectory;
 	private String hl7v2mapDirectory;
 	private String scsFileName;
@@ -127,6 +130,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 
 	private JTextField jtxtHL7V2Dir = new JTextField();
 	private JTextField jtxtProcessedFilesDir = new JTextField();
+	private JTextField jtxtV3Dir = new JTextField();
 	private JTextField jtxtCSVDir = new JTextField();
 	private JTextField jtxtMAPDir = new JTextField();
 	private JTextField jtxtSCSDir = new JTextField();
@@ -144,10 +148,13 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private JTextField jtxtpreProcessorProFile = new JTextField();
 	private DefaultListModel msgDispBox = new DefaultListModel();
 	private String[] version = {"2.2","2.3","2.4","2.5"};
+	private String[] type = {"Demo","Development"};
 	private JComboBox jcomboBoxVersion=new JComboBox(version);
+	private JComboBox jcomboBoxType=new JComboBox(type);
+	private JScrollPane listScrollPane = new JScrollPane();
 	private JList dispList = new JList();
 	private static Logger logger = Logger
-			.getLogger("gov.nih.nci.caxchange.client.TestCancerCenterClientUI");
+			.getLogger("client");
 	private BufferedReader buffReader;
 	private Border blackline = BorderFactory.createLineBorder(Color.black);
 	private final ArrayList<ScheduledExecutorService>threadsList=new ArrayList<ScheduledExecutorService>();
@@ -173,7 +180,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		JPanel jpanelStatus = createStatusPanel();
 		jtab.addTab("Status", jpanelStatus);
 		aWindow.getContentPane().add(jtab, BorderLayout.CENTER);
-		aWindow.setSize(950, 650);
+		aWindow.setSize(950, 800);
 		aWindow.setVisible(true);
 
 	}
@@ -197,6 +204,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				//Read in the stored properties
 				props.load(is);
 				jtxtHL7V2Dir.setText(props.getProperty("HL7V2Dir"));
+				jtxtV3Dir.setText(props.getProperty("HL7V3Dir"));
 				jtxtCSVDir.setText(props.getProperty("rawFilesFolder"));
 				jtxtMAPDir.setText(props.getProperty("mapFileName"));
 				jtxtSCSDir.setText(props.getProperty("scsFileName"));
@@ -223,6 +231,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				inProcessDirectory = jtxtInProcessFilesDir.getText();
 				mapDirectory = jtxtMAPDir.getText();
 				hl7v2Directory = jtxtHL7V2Dir.getText();
+				hl7v3Directory = jtxtV3Dir.getText();
 				hl7v2mapDirectory = jtxtMAPHL7V2Dir.getText();
 				processedDirectory = jtxtProcessedFilesDir.getText();
 				preProcessorFile = jtxtpreProcessorProFile.getText();
@@ -257,7 +266,38 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		topBox.add(Box.createVerticalStrut(10));
 		topBox.add(jlbDisplay);
 		topBox.add(jlbDisplay1);
-			     
+		
+		Box typeBox = Box.createVerticalBox();
+		typeBox.setBorder(BorderFactory.createTitledBorder(blackline, "Environment"));
+		typeBox.add(Box.createVerticalStrut(10));
+		//add the csv, map & HL7V3 file directory selection 
+		Box csvBoxType = Box.createHorizontalBox();
+		csvBoxType.add(Box.createHorizontalStrut(10));
+		JLabel jlbUserTypeLabel = new JLabel("Select the Environment type");
+		csvBoxType.add(jlbUserTypeLabel);
+		csvBoxType.add(Box.createHorizontalStrut(10));
+		jcomboBoxType.addActionListener(this);
+		jcomboBoxType.setActionCommand("ChangeEnv");
+		csvBoxType.add(jcomboBoxType);
+		typeBox.add(csvBoxType);
+		//HL7V3 files Processing
+		Box v3Box = Box.createVerticalBox();
+		v3Box.setBorder(BorderFactory.createTitledBorder(blackline, "HL7V3"));
+		v3Box.add(Box.createVerticalStrut(10));
+		//HL7V3 file directory selection 
+		Box v3Box1 = Box.createHorizontalBox();
+		v3Box1.add(Box.createHorizontalStrut(10));
+		JLabel jlbV3Label = new JLabel("Select the HL7V3 files directory");
+		v3Box1.add(jlbV3Label);
+		v3Box1.add(Box.createHorizontalStrut(10));
+		v3Box1.add(jtxtV3Dir);
+		JButton jfileV3 = new JButton("Browse...");
+		jfileV3.addActionListener(this);
+		jfileV3.setActionCommand("BrowseV3File");
+		jtxtCSVDir.add(jfileV3);
+		v3Box1.add(jfileV3);
+		v3Box.add(v3Box1);
+		//CSV to HL7V3 files Processing		
 		Box csvBox = Box.createVerticalBox();
 		csvBox.setBorder(BorderFactory.createTitledBorder(blackline, "CSV"));
 		csvBox.add(Box.createVerticalStrut(10));
@@ -266,7 +306,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox1.add(Box.createHorizontalStrut(10));
 		JLabel jlbCSVLabel = new JLabel("Select the raw files directory");
 		csvBox1.add(jlbCSVLabel);
-		csvBox1.add(Box.createHorizontalStrut(10));
+		csvBox1.add(Box.createHorizontalStrut(63));
 		csvBox1.add(jtxtCSVDir);
 		JButton jfileCSV = new JButton("Browse...");
 		jfileCSV.addActionListener(this);
@@ -280,7 +320,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		JLabel jlbMAPLabel = new JLabel("Select the MAP file");
 
 		csvBox2.add(jlbMAPLabel);
-		csvBox2.add(Box.createHorizontalStrut(67));
+		csvBox2.add(Box.createHorizontalStrut(120));
 		csvBox2.add(jtxtMAPDir);
 		JButton jfileMAP = new JButton("Browse...");
 		jfileMAP.addActionListener(this);
@@ -307,7 +347,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox.add(secondBox);
 		
 		
-		//HL7V2 box
+		//HL7V2 to HL7V3 files Processing
 		Box HL7V2Box = Box.createVerticalBox();
 		HL7V2Box
 				.setBorder(BorderFactory.createTitledBorder(blackline, "HL7V2"));
@@ -357,7 +397,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox13.add(Box.createHorizontalStrut(10));
 		JLabel jlbVersionLabel = new JLabel("Select the Version");
 		csvBox13.add(jlbVersionLabel);
-		csvBox13.add(Box.createHorizontalStrut(60));
+		csvBox13.add(Box.createHorizontalStrut(61));
 		jcomboBoxVersion.addActionListener(this);
 		csvBox13.add(jcomboBoxVersion);
 		HL7V2Box.add(csvBox13);
@@ -528,10 +568,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		jlbStar.setFont(new Font("Ariel", Font.ITALIC, 12));
 		jlbStar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		buttonBox.add(jlbStar);
-
+		
 		jplPanel.add(topBox);
+		jplPanel.add(typeBox);
 		jplPanel.add(csvBox);
 		jplPanel.add(HL7V2Box);
+		jplPanel.add(v3Box);
 		jplPanel.add(csvBox4);
 		jplPanel.add(userBox);
 		jplPanel.add(buttonBox);
@@ -549,7 +591,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		dispList.setSelectedIndex(0);
 		dispList.setFont(new Font("Ariel", Font.PLAIN, 15));
 		dispList.setForeground(Color.BLUE);
-		JScrollPane listScrollPane = new JScrollPane(dispList);
+		listScrollPane.getViewport().setView(dispList);
 		JPanel jplPanel = new JPanel();
 		jplPanel.setLayout(new GridLayout(1, 1));
 		jplPanel.add(listScrollPane);
@@ -571,6 +613,14 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	 * @param e The ActionEvent that was fired
 	 */
 	public void actionPerformed(ActionEvent e) {
+		if("ChangeEnv".equals(e.getActionCommand())){
+			msgDispBox.addElement("Changing the Environment");
+			String txtEnv =(String)jcomboBoxType.getSelectedItem();
+			if(txtEnv.equals("Demo"))
+				changeLoggingLevel(Level.INFO);
+			else
+				changeLoggingLevel(Level.DEBUG);
+		}
 		if ("BrowseCSVFile".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Selecting the CVS file directory");
 			JFileChooser fileChooser = fileChoose();
@@ -581,7 +631,17 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 						.getSelectedFile().getAbsolutePath());
 				jtxtCSVDir.setText(csvDirectory);
 			}
-		} else if ("BrowseMAPFile".equals(e.getActionCommand())) {
+		}else if ("BrowseV3File".equals(e.getActionCommand())) {
+			msgDispBox.addElement("Selecting the HL7V3 file directory");
+			JFileChooser fileChooser = fileChoose();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int result = fileChooser.showSaveDialog(this);
+			if (result != JFileChooser.CANCEL_OPTION) {
+				hl7v3Directory = fileSeparatorReplace(fileChooser
+						.getSelectedFile().getAbsolutePath());
+				jtxtV3Dir.setText(hl7v3Directory);
+			}
+		}else if ("BrowseMAPFile".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Selecting the MAP file directory");
 			JFileChooser fileChooser = fileChoose();
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -655,6 +715,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			}
 		} else if ("Clear".equals(e.getActionCommand())) {
 			jtxtHL7V2Dir.setText("");
+			jtxtV3Dir.setText("");
 			jtxtCSVDir.setText("");
 			jtxtMAPDir.setText("");
 			jtxtSCSDir.setText("");
@@ -685,6 +746,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 					+ e1.getLocalizedMessage()); }
         }else if ("Accept".equals(e.getActionCommand())) {
 			msgDispBox.addElement("Saving the selection");
+			dispList.setAutoscrolls(true);
 			File file = saveDefaults();
 			CancerCenterClient.getInstance().test(file,threadsList);
 			//updating the status panel with the log file updates.
@@ -698,8 +760,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 						try{
 							while (buffReader.readLine() != null) {
 								msgDispBox.addElement(buffReader.readLine());
+								dispList.validate();
+								listScrollPane.validate();
+								JScrollBar sb = listScrollPane.getVerticalScrollBar();
+								sb.setValue(sb.getMaximum());	
 							}
-						} catch (IOException e2) {
+						}catch (IOException e2) {
 							logger.error("IOException"
 									+ e2.getLocalizedMessage());
 						}
@@ -772,6 +838,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				FileWriter fstream = new FileWriter(file,false);
 				fstream.write("rawFilesFolder=" + csvDirectory);
 				fstream.write("\n");
+				fstream.write("HL7V3Dir=" + hl7v3Directory);
+				fstream.write("\n");
 				fstream.write("mapFileName=" + mapDirectory);
 				fstream.write("\n");
 				fstream.write("HL7V2Dir=" + hl7v2Directory);
@@ -841,5 +909,18 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		}
 		}	
 	}
+	
+	/**
+	 * Changes the Logging level to either info or debug depending on the
+	 * selected drop down list item Demo or Developer. 
+	 * @param level
+	 */
+	private void changeLoggingLevel(Level level){			
+		Logger clientLogger = Logger.getLogger("client");
+		clientLogger.setLevel(level);
+		clientLogger.debug("Debug Message");
+		clientLogger.info("Info Message");
+	}	
+	
 	 
 }

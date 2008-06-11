@@ -110,6 +110,7 @@ public class CancerCenterClient {
 	private String hubURL;
 	private String studyLookupServiceURL;
 	private String hl7v2Dir;
+	private String hl7v3Dir;
 	private String hl7v2mapFileName;
 	private String scsFileName;
 	private String version;
@@ -120,7 +121,7 @@ public class CancerCenterClient {
 	// Logging File
 
 	private static Logger logger = Logger
-			.getLogger("gov.nih.nci.caxchange.client.CancerCenterClient");
+			.getLogger("client");
 
 	private static CancerCenterClient cancerCenterClient=null;
 
@@ -268,7 +269,10 @@ public class CancerCenterClient {
 		
 		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
 		 v2Transformation.process(threadList);
-
+		 
+		LoadV3Labs loadLabs = new LoadV3Labs(getInstance());
+		loadLabs.process(threadList);
+		 
 	}
 
 	/**
@@ -382,6 +386,7 @@ public class CancerCenterClient {
 			this.errorFolder=props.getProperty("errorFolder");
 			this.mapFileName=props.getProperty("mapFileName");
 			this.hl7v2Dir=props.getProperty("HL7V2Dir");
+			this.hl7v3Dir=props.getProperty("HL7V3Dir");
 			this.hl7v2mapFileName=props.getProperty("hl7v2mapFileName");
 			this.scsFileName=props.getProperty("scsFileName");
 			this.initialDelay_str=props.getProperty("initialDelayInSeconds");
@@ -400,6 +405,7 @@ public class CancerCenterClient {
 			logger.info("initialDelay_str : " + this.initialDelay_str);
 			logger.info("pollingInterval_str : " + this.pollingInterval_str);
 			logger.info("hubURL : " + this.hubURL);
+			logger.info("hl7v3Dir : " + this.hl7v3Dir);
 			logger.info("hl7v2Dir : " + this.hl7v2Dir);
 			logger.info("hl7v2mapFileName : " + this.hl7v2mapFileName);
 			logger.info("scsFileName : " + this.scsFileName);
@@ -779,6 +785,20 @@ public class CancerCenterClient {
 	 */
 	public void setScsFileName(String scsFile) {
 		this.scsFileName= scsFile;
+	}
+
+	/**
+	 * @return the hl7v3Dir
+	 */
+	public String getHl7v3Dir() {
+		return hl7v3Dir;
+	}
+
+	/**
+	 * @param hl7v3Dir the hl7v3Dir to set
+	 */
+	public void setHl7v3Dir(String hl7v3Dir) {
+		this.hl7v3Dir = hl7v3Dir;
 	}
 } // End of Class
 
