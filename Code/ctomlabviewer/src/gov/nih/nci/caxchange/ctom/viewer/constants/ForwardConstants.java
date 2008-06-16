@@ -108,6 +108,7 @@ public interface ForwardConstants
 	public static final String LOAD_PROTECTIONGROUPASSOCIATION_FAILURE = "LoadProtectionGroupAssociationFailure";
 	public static final String LOAD_PROTECTIONELEMENTPRIVILEGESASSOCIATION_FAILURE = "LoadProtectionElementPrivilegesAssociationFailure";
 
+	public static final String WEBSSO_LOGOUT_SUCCESS="WebSSOLogoutSuccess";
 	public static final String LOGOUT_SUCCESS="LogoutSuccess";
 	public static final String LOGOUT_ACTION="LogoutAction";
 	
