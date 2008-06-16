@@ -9,6 +9,51 @@
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.viewobjects.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
 <script>
+
+function setUp()
+{
+   var numRows2 = document.LabActivitiesSearchResultForm.recordIds.length;
+    if(numRows2 >0)
+     SelectAllOn =false;
+    else
+      SelectAllOn = true;
+}
+
+function SelectAll()
+  {
+    var numRows2 = document.LabActivitiesSearchResultForm.recordIds.length;
+    if(SelectAllOn == false)
+    {
+      for(k=0; k<numRows2; k++)
+      {
+        formObj= eval(document.LabActivitiesSearchResultForm.recordIds[k]);
+        if(formObj && formObj.checked == false)
+        {
+          formObj.checked=true;
+        }
+      }
+      SelectAllOn = true;
+      if (document.LabActivitiesSearchResultForm.CheckGif != null)
+          document.LabActivitiesSearchResultForm.CheckGif.alt = "Unselect All";
+      }
+    else
+    { 
+      for(m=0; m<numRows2; m++)
+      {
+        
+        formObj= eval(document.LabActivitiesSearchResultForm.recordIds[m]);
+        if(formObj && formObj.checked==true)
+        {
+          formObj.checked=false;
+        }
+      }
+      SelectAllOn = false;
+      if (document.LabActivitiesSearchResultForm.CheckGif != null)
+          document.LabActivitiesSearchResultForm.CheckGif.alt = "Select All";
+       }
+      
+  }
+  
    	function submitAdverseEvent(recordIdvalue)
    	{
 	  		document.LabActivitiesSearchResultForm.operation.value="execute";
@@ -75,9 +120,9 @@
 			alert("Atleast one check box should be checked.");
  	}
 </script>
-
+<body onload="javaScript:setUp();">
 <!-- laf box 1st half -->
-<div class="box">
+<div class="box" >
 	<div class="pane" align=center>
     <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
@@ -89,8 +134,8 @@
 	            <div class="content">
 <!-- laf box 1st half -->
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="100%">
-	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="100%" >
+	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self" >
 		<html:hidden property="operation" value="read" />
 		<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
 		<html:hidden property="gridProxy" value="<%=loginObject.getGridProxy()%>" />
@@ -135,8 +180,10 @@
 										<td>
 											<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
 												<tr>
-													<th class="dataTableHeader" scope="col" align="center" width="5%">
-														Select
+												   <th class="dataTableHeader" scope="col" align="center" width="5%">
+													<a href="javascript:SelectAll();">
+													<img id="CheckGif" src="images/CheckBox.gif" border="0" alt="Select All" >
+													</a>
 													</th>
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Patient Id
@@ -317,6 +364,9 @@
 												<tr>
 													<td>
 														<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Back</html:cancel>
+													</td>
+													<td>
+														<html:button style="actionButton" property="loadActivitiesTocaAERS">Load Labs to caAERS</html:button>
 													</td>
 													<td>
 														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Labs to CDMS</html:button>
