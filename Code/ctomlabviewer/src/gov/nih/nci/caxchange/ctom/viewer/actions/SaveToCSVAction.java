@@ -317,7 +317,7 @@ public class SaveToCSVAction extends Action
 		{
 			LabResult result = labResults[ii];
 			data = result.getStudySubject().getParticipant().getII(0).getExtension() +","+ convertToString(new Date (result.getReportedDateTime().getTimeInMillis()))+","+result.getStudySubject().getPerformedActivity(0).getName()+","+result.getTextResult()+","+result.getNumericResult()+","+result.getNumericUnit()+","+result.getReferenceRangeLow()+","+result.getReferenceRangeHigh()+"\n";
-			System.out.println("Data: "+data);
+			//System.out.println("Data: "+data);
 			out.write(data);
 			data="";
 		}
