@@ -291,7 +291,7 @@ public class LoadToCTMSAction extends Action
 			PerformedActivity performedActivity= new PerformedActivity();
 			String testName = lab.getLabTestId();
 			performedActivity.setName(testName);
-			PerformedActivity[] performedActivitys = new PerformedActivity[1];
+		    PerformedActivity[] performedActivitys = new PerformedActivity[1];
 			performedActivitys[0] = performedActivity;
 			studySubject.setPerformedActivity(performedActivitys);
 			
@@ -342,6 +342,7 @@ public class LoadToCTMSAction extends Action
 	    Credentials creds = new Credentials();
 	    creds.setUserName(username);
 	    String credentialEpr = (String)request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
+	    logDB.info("The credential EPR: "+ credentialEpr);
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
 	    metadata.setCredentials(creds);
