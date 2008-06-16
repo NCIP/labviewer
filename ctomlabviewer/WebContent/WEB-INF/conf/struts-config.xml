@@ -64,6 +64,7 @@
 		<action path="/Logout"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LogoutAction">
 			<forward name="LogoutSuccess" path="Tiles.Login.Page" />
+			<forward name="WebSSOLogoutSuccess" path="Tiles.Logout.Page" />
 		</action>
 		<action path="/MenuSelection"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.MenuSelectionAction"

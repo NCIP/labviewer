@@ -12,12 +12,20 @@
 		<put name="AppAdminMenu" value="/pages/menu/SuperAdminMenu.jsp"/>		
 		<put name="Title" type="string"	value="CTODS Lab Viewer" />
 	</definition>
-
+	<!-- Base layouts -->
+	<definition name="BaseLogOut" page="/pages/layout/BaseLayout.jsp">
+		<put name="Title" type="string"	value="CTODS Lab Viewer" />
+	</definition>
 	<!-- Pages Begin -->
 	
 	<!-- Login Pages -->
 	<definition name="Tiles.Login.Page" extends="Base">
 		<put name="Content" value="/pages/content/main/Login.jsp" />
+	</definition>
+	
+	<!-- Logout Pages -->
+	<definition name="Tiles.Logout.Page" extends="BaseLogOut">
+		<put name="Content" value="/pages/content/main/Logout.jsp" />
 	</definition>
 	
 	<!-- Footer Pages -->
