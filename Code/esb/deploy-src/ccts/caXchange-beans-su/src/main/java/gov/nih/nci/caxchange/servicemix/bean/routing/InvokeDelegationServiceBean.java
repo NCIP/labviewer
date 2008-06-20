@@ -115,14 +115,14 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		
 		try {
 			invokeDelegationService(exchange);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			logger.error("Error calling delegation service.", e);
 			Fault fault = exchange.createFault();
 			MessageUtil.transfer(in, fault);
 			fault.setProperty(CaxchangeConstants.ERROR_CODE,
 			"DELEGATION_SERVICE_ERROR");
 			fault.setProperty(CaxchangeConstants.ERROR_MESSAGE,
-			"Error occurred calling  delegation service.");
+			"Error occurred calling  delegation service."+e.getMessage());
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;

@@ -28,9 +28,6 @@ import org.globus.gsi.GlobusCredential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import webservices.AckStatus;
-import webservices.Acknowledgement;
-import webservices.LoadLabsRequest;
 
 public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 
@@ -39,7 +36,7 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -49,16 +46,16 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 			throws GridInvocationException {
 
 		try {
-			
+
 			GlobusCredential cred=null;
 			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			
+
 			AdverseEventConsumerClient client = new AdverseEventConsumerClient(
 					serviceUrl, cred);
 
@@ -67,7 +64,7 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 							"/adverse-event/client-config.wsdd");
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
-			
+
 			AENotificationType request = (AENotificationType) Utils.deserializeObject(
 					reader, AENotificationType.class, deseralizeStream);
 
@@ -76,11 +73,11 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 
 			final Document resp = new SourceTransformer()
 					.toDOMDocument(new StringSource("<result>success</result>"));
-			
+
 			return new GridInvocationResult() {
 
 				public Node getResult() {
-					
+
 					return resp.getDocumentElement();
 				}
 

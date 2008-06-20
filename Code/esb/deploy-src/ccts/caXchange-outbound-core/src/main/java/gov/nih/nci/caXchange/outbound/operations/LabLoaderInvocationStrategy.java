@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
@@ -21,10 +21,6 @@ import org.globus.gsi.GlobusCredential;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import webservices.Acknowledgement;
-import webservices.LoadLabsRequest;
-
-import gov.nih.nci.c3d.webservices.client.C3DGridServiceClient;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
@@ -40,7 +36,7 @@ public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -51,8 +47,8 @@ public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 
 		try {
 			GlobusCredential cred=null;
-/*			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+  /*		Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
@@ -79,7 +75,7 @@ public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 				}
 
 			};
-			
+
 		} catch (AxisFault af) {
 			log.error("Failed to invoke lab loader service.", af);
 			GridInvocationException gie =

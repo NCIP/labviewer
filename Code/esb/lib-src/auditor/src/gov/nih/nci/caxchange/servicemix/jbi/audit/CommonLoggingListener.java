@@ -36,7 +36,6 @@ public class CommonLoggingListener implements ExchangeListener {
     private boolean logExchangesSent = true;
     private boolean logExchangesAccepted=true;
     private List<String> filters = new ArrayList();
-    private List<String> exchangeStatuses = new ArrayList();
     
 
     Logger logger = LogManager.getLogger(CommonLoggingListener.class);
@@ -86,7 +85,12 @@ public class CommonLoggingListener implements ExchangeListener {
         }
           
     }
-    
+    /**
+     * Finds out whether an exchange matches a particular pattern.
+     * 
+     * @param exchangeEvent
+     * @return
+     */
     public boolean matchFilter(ExchangeEvent exchangeEvent) {
         if ((filters == null)||(filters.size()==0)) {
             return true;
