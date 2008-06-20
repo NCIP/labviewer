@@ -43,20 +43,20 @@ import org.xml.sax.InputSource;
 public class CaxchangeResponseListener implements MessageListener {
     BaseResourceHome resourceHome;
     Logger logger = LogManager.getLogger(CaxchangeResponseListener.class);
-    
-    String testResponse="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-    "<ns1:caXchangeResponseMessage xmlns:ns1=\"http://caXchange.nci.nih.gov/messaging\">\n" + 
-    "  <ns1:responseMetaData >\n" + 
-    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</externalIdentifier>\n" + 
-    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</caXchangeIdentifier>\n" + 
-    "  </ns1:responseMetaData>\n" + 
-    "  <ns1:response>\n" + 
-    "    <ns1:responseStatus>FAILURE</ns1:responseStatus>\n" + 
-    "    <ns1:caXchangeError>\n" + 
-    "      <errorCode>DELEGATION_SERVICE_ERROR</errorCode>\n" + 
-    "      <errorDescription>Error occurred calling the delegation service.</errorDescription>\n" + 
-    "    </ns1:caXchangeError>\n" + 
-    "  </ns1:response>\n" + 
+
+    String testResponse="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+    "<ns1:caXchangeResponseMessage xmlns:ns1=\"http://caXchange.nci.nih.gov/messaging\">\n" +
+    "  <ns1:responseMetaData >\n" +
+    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</externalIdentifier>\n" +
+    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</caXchangeIdentifier>\n" +
+    "  </ns1:responseMetaData>\n" +
+    "  <ns1:response>\n" +
+    "    <ns1:responseStatus>FAILURE</ns1:responseStatus>\n" +
+    "    <ns1:caXchangeError>\n" +
+    "      <errorCode>DELEGATION_SERVICE_ERROR</errorCode>\n" +
+    "      <errorDescription>Error occurred calling the delegation service.</errorDescription>\n" +
+    "    </ns1:caXchangeError>\n" +
+    "  </ns1:response>\n" +
     "</ns1:caXchangeResponseMessage>";
 
     public CaxchangeResponseListener() {
@@ -68,38 +68,23 @@ public class CaxchangeResponseListener implements MessageListener {
            Transformer tr = TransformerFactory.newInstance().newTransformer();
            StreamSource ss = new StreamSource(new StringReader(textMessage.getText()));
            tr.transform(ss, new StreamResult(System.out));
-           System.out.println("Got the message..");
-           try {
-             ResponseHandler responseHandler = new ResponseHandler();
-             responseHandler.setResponseText(textMessage.getText());
-             ResponseMessage responseMessage = responseHandler.getResponse();
-             String caXchangeIdentifier = responseMessage.getResponseMetadata().getCaXchangeIdentifier();
-             logger.info("Got response for caXchangeIdentifier."+caXchangeIdentifier);
-             ResourceKey resourceKey = new SimpleResourceKey(resourceHome.getKeyTypeName(), caXchangeIdentifier);  
-             System.out.println("ressourceKey created "+resourceKey.getName()+" "+resourceKey.getValue());
+           logger.debug("Got the message.."+textMessage.getText());
+           ResponseHandler responseHandler = new ResponseHandler();
+           responseHandler.setResponseText(textMessage.getText());
+           ResponseMessage responseMessage = responseHandler.getResponse();
+           String caXchangeIdentifier = responseMessage.getResponseMetadata().getCaXchangeIdentifier();
+           logger.info("Got response for caXchangeIdentifier."+caXchangeIdentifier);
+           ResourceKey resourceKey = new SimpleResourceKey(resourceHome.getKeyTypeName(), caXchangeIdentifier);
+           logger.debug("ressourceKey created "+resourceKey.getName()+" "+resourceKey.getValue());
              CaXchangeResponseServiceResource resource = resourceHome.getResource(resourceKey);
              if (resource != null) {
                  resource.setCaXchangeResponseMessageValue(responseMessage);
-                 System.out.println("Updated the Resource with the response.");
+                 logger.info("Updated the Resource with the response for :"+caXchangeIdentifier);
              }
-           }
-           catch (Exception e) {
-               logger.error("Error parsing response ",e);
-
-           }
-        /*
-           ResponseMessage responseMessage = new ResponseMessage();
-           Response response = new Response();
-           response.setResponseStatus(Statuses.SUCCESS);
-           responseMessage.setResponse(response);
-           String id=textMessage.getText();
-           ResourceKey resourceKey = new SimpleResourceKey(resourceKeyQName, id);
-           CaxchangeContextResource currentResource = resourceHome.getResource(resourceKey);
-           currentResource.setCaXchangeResponseMessageValue(responseMessage);
-           System.out.println("Resource has been updated."); */
        }
        catch(Exception e) {
-           e.printStackTrace();
+           logger.error("Error occurred getting response and setting to the resource ",e);
+           throw new RuntimeException(e);
        }
     }
 

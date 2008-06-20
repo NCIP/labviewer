@@ -15,6 +15,7 @@ public class Metadata  implements java.io.Serializable {
  * will be overridden by the caXchange components */
     private java.lang.String caXchangeIdentifier;
     private gov.nih.nci.caxchange.Credentials credentials;
+    private java.lang.String[] targetSite;
 
     public Metadata() {
     }
@@ -24,12 +25,14 @@ public class Metadata  implements java.io.Serializable {
            gov.nih.nci.caxchange.Credentials credentials,
            java.lang.String externalIdentifier,
            gov.nih.nci.caxchange.MessageTypes messageType,
-           gov.nih.nci.caxchange.Operations operation) {
+           gov.nih.nci.caxchange.Operations operation,
+           java.lang.String[] targetSite) {
            this.operation = operation;
            this.messageType = messageType;
            this.externalIdentifier = externalIdentifier;
            this.caXchangeIdentifier = caXchangeIdentifier;
            this.credentials = credentials;
+           this.targetSite = targetSite;
     }
 
 
@@ -134,6 +137,34 @@ public class Metadata  implements java.io.Serializable {
         this.credentials = credentials;
     }
 
+
+    /**
+     * Gets the targetSite value for this Metadata.
+     * 
+     * @return targetSite
+     */
+    public java.lang.String[] getTargetSite() {
+        return targetSite;
+    }
+
+
+    /**
+     * Sets the targetSite value for this Metadata.
+     * 
+     * @param targetSite
+     */
+    public void setTargetSite(java.lang.String[] targetSite) {
+        this.targetSite = targetSite;
+    }
+
+    public java.lang.String getTargetSite(int i) {
+        return this.targetSite[i];
+    }
+
+    public void setTargetSite(int i, java.lang.String _value) {
+        this.targetSite[i] = _value;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Metadata)) return false;
@@ -160,7 +191,10 @@ public class Metadata  implements java.io.Serializable {
               this.caXchangeIdentifier.equals(other.getCaXchangeIdentifier()))) &&
             ((this.credentials==null && other.getCredentials()==null) || 
              (this.credentials!=null &&
-              this.credentials.equals(other.getCredentials())));
+              this.credentials.equals(other.getCredentials()))) &&
+            ((this.targetSite==null && other.getTargetSite()==null) || 
+             (this.targetSite!=null &&
+              java.util.Arrays.equals(this.targetSite, other.getTargetSite())));
         __equalsCalc = null;
         return _equals;
     }
@@ -186,6 +220,17 @@ public class Metadata  implements java.io.Serializable {
         }
         if (getCredentials() != null) {
             _hashCode += getCredentials().hashCode();
+        }
+        if (getTargetSite() != null) {
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getTargetSite());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getTargetSite(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -223,6 +268,13 @@ public class Metadata  implements java.io.Serializable {
         elemField.setXmlName(new javax.xml.namespace.QName("http://caXchange.nci.nih.gov/messaging", "credentials"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://caXchange.nci.nih.gov/messaging", "credentials"));
         elemField.setMinOccurs(0);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("targetSite");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://caXchange.nci.nih.gov/messaging", "targetSite"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 
