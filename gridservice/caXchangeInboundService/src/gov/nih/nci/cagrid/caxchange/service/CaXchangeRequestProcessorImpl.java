@@ -37,11 +37,11 @@ import org.apache.log4j.Logger;
 
 import org.globus.wsrf.ResourceKey;
 
-/** 
+/**
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
- * 
+ *
  * @created by Introduce Toolkit version 1.1
- * 
+ *
  */
 public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImplBase {
 	protected static String brokerURL=null; //"tcp://localhost:61618";
@@ -65,14 +65,14 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 	}
 	/**
 	 * Processes a request by sending it to the caXchange inbound queue.
-	 * 
+	 *
 	 * @param caXchangeRequestMessage
 	 * @return
 	 * @throws RemoteException
 	 */
 	public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
 		try {
-			gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+			gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
 			ResourceKey resKey = ctxResourceHome.createResource();
 			caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(resKey.getValue().toString());
 			registerResponseListeners();
@@ -94,7 +94,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 	}
 	/**
 	 * Send the message to the caXchange inbound JMS component.
-	 * 
+	 *
 	 * @param caXchangeRequestMessage
 	 * @throws Exception
 	 */
@@ -110,7 +110,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 				destination = new ActiveMQQueue(configuration.getCaXchangeInboundDestination());
 			}
 
-			conn = connectionFactory.createConnection();
+			conn = connectionFactory.createConnection("system", "manager");
 			session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 			MessageProducer producer = session.createProducer(destination);
 			RequestGeneratorHelper rgh = new RequestGeneratorHelper();
@@ -138,11 +138,11 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 			if (session != null){
 				session.close();
 			}
-		}    
+		}
 	}
 	/**
 	 * Updating the Resource with the error Response.
-	 * 
+	 *
 	 * @param caXchangeRequestMessage
 	 * @throws Exception
 	 */
@@ -150,7 +150,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 		try {
 			ResponseHandler responseHandler = new ResponseHandler();
 			ResponseMessage response = responseHandler.getResponseFromError(caXchangeRequestMessage, "ERROR_SENDING_REQUEST", "An error happened sending the request to the inbound queue.");
-			gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+			gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
 			CaXchangeResponseServiceResource resource= (CaXchangeResponseServiceResource)ctxResourceHome.find(resKey);
 			resource.setCaXchangeResponseMessageValue(response);
 		}catch(Exception e) {
@@ -161,7 +161,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 
 	/**
 	 * Register listeners for the response queue to update the Resources.
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public synchronized void registerResponseListeners() throws Exception {
@@ -176,7 +176,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 				if (replyDestination == null) {
 					replyDestination = new ActiveMQQueue(configuration.getCaXchangeResponseDestination());
 				}
-				connection = connectionFactory.createConnection();
+				connection = connectionFactory.createConnection("system","manager");
 				CaxchangeResponseExceptionListener el = new CaxchangeResponseExceptionListener();
 				connection.setExceptionListener(el);
 
@@ -194,7 +194,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
 			throw new Exception("Error registers response listeners.", ex);
 		} finally  {
 		}
-	}    
+	}
 
 }
 

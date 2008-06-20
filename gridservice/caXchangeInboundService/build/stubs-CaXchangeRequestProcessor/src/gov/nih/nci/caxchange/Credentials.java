@@ -12,11 +12,13 @@ public class Credentials  implements java.io.Serializable {
     private java.lang.String groupName;
     private java.lang.String gridIdentifier;
     private java.lang.String password;
+    private java.lang.String delegatedCredentialReference;
 
     public Credentials() {
     }
 
     public Credentials(
+           java.lang.String delegatedCredentialReference,
            java.lang.String gridIdentifier,
            java.lang.String groupName,
            java.lang.String password,
@@ -25,6 +27,7 @@ public class Credentials  implements java.io.Serializable {
            this.groupName = groupName;
            this.gridIdentifier = gridIdentifier;
            this.password = password;
+           this.delegatedCredentialReference = delegatedCredentialReference;
     }
 
 
@@ -107,6 +110,26 @@ public class Credentials  implements java.io.Serializable {
         this.password = password;
     }
 
+
+    /**
+     * Gets the delegatedCredentialReference value for this Credentials.
+     * 
+     * @return delegatedCredentialReference
+     */
+    public java.lang.String getDelegatedCredentialReference() {
+        return delegatedCredentialReference;
+    }
+
+
+    /**
+     * Sets the delegatedCredentialReference value for this Credentials.
+     * 
+     * @param delegatedCredentialReference
+     */
+    public void setDelegatedCredentialReference(java.lang.String delegatedCredentialReference) {
+        this.delegatedCredentialReference = delegatedCredentialReference;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof Credentials)) return false;
@@ -130,7 +153,10 @@ public class Credentials  implements java.io.Serializable {
               this.gridIdentifier.equals(other.getGridIdentifier()))) &&
             ((this.password==null && other.getPassword()==null) || 
              (this.password!=null &&
-              this.password.equals(other.getPassword())));
+              this.password.equals(other.getPassword()))) &&
+            ((this.delegatedCredentialReference==null && other.getDelegatedCredentialReference()==null) || 
+             (this.delegatedCredentialReference!=null &&
+              this.delegatedCredentialReference.equals(other.getDelegatedCredentialReference())));
         __equalsCalc = null;
         return _equals;
     }
@@ -153,6 +179,9 @@ public class Credentials  implements java.io.Serializable {
         }
         if (getPassword() != null) {
             _hashCode += getPassword().hashCode();
+        }
+        if (getDelegatedCredentialReference() != null) {
+            _hashCode += getDelegatedCredentialReference().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -185,6 +214,12 @@ public class Credentials  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("password");
         elemField.setXmlName(new javax.xml.namespace.QName("http://caXchange.nci.nih.gov/messaging", "password"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("delegatedCredentialReference");
+        elemField.setXmlName(new javax.xml.namespace.QName("http://caXchange.nci.nih.gov/messaging", "delegatedCredentialReference"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setMinOccurs(0);
         typeDesc.addFieldDesc(elemField);

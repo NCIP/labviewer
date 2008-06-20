@@ -23,12 +23,16 @@ public class MessageTypes implements java.io.Serializable {
     public static final java.lang.String _LOAD_LAB_TO_CDMS = "LOAD_LAB_TO_CDMS";
     public static final java.lang.String _LAB_BASED_AE = "LAB_BASED_AE";
     public static final java.lang.String _SCHEDULE_MODIFICATION = "SCHEDULE_MODIFICATION";
+    public static final java.lang.String _MULTISITE_STUDY_CREATION = "MULTISITE_STUDY_CREATION";
+    public static final java.lang.String _MULTISITE_REGISTER_SUBJECT = "MULTISITE_REGISTER_SUBJECT";
     public static final MessageTypes STUDY_CREATION = new MessageTypes(_STUDY_CREATION);
     public static final MessageTypes REGISTER_SUBJECT = new MessageTypes(_REGISTER_SUBJECT);
     public static final MessageTypes CT_LAB_DATA = new MessageTypes(_CT_LAB_DATA);
     public static final MessageTypes LOAD_LAB_TO_CDMS = new MessageTypes(_LOAD_LAB_TO_CDMS);
     public static final MessageTypes LAB_BASED_AE = new MessageTypes(_LAB_BASED_AE);
     public static final MessageTypes SCHEDULE_MODIFICATION = new MessageTypes(_SCHEDULE_MODIFICATION);
+    public static final MessageTypes MULTISITE_STUDY_CREATION = new MessageTypes(_MULTISITE_STUDY_CREATION);
+    public static final MessageTypes MULTISITE_REGISTER_SUBJECT = new MessageTypes(_MULTISITE_REGISTER_SUBJECT);
     public java.lang.String getValue() { return _value_;}
     public static MessageTypes fromValue(java.lang.String value)
           throws java.lang.IllegalArgumentException {
