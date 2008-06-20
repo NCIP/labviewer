@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: Harsh Marwaha
+Build-Jdk: 1.5.0_15
+Main-Class: gov.nih.nci.caxchange.eip.EipConfig
+Class-Path: . log4j-1.2.13.jar
+
