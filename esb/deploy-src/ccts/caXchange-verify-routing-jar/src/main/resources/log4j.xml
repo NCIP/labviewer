@@ -17,10 +17,24 @@
     limitations under the License.
 
 -->
-<beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
-       xmlns:caxchange="http://nci.nih.gov/caXchange">
-       
-<import resource="classpath:/caXchangeConf/eip/eip.xml" />        
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 
-</beans>
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+        <param name="threshold" value="INFO"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p - %-30c{1} - %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="gov.nih">
+        <level value="WARN"/>
+    </logger>
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</log4j:configuration>
+

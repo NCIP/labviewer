@@ -36,6 +36,7 @@
     <module>caXchange-eip-su</module>    
     <module>caXchange-ccts-sa</module>
     <module>caXchange-servicemix-eip-se</module>
+    <module>caXchange-verify-routing-jar</module>
   </modules>
   <distributionManagement>
     <repository>
@@ -117,8 +118,11 @@
   					<configuration>
   						<tasks>
   							<copy
-  								file="caXchange-common-jar/src/main/resources/${env}.properties"
+  								file="caXchange-common-jar/src/main/conf/${env}.properties"
   								tofile="${project.build.outputDirectory}/caxchange.properties" />
+  						        <copy todir="${project.build.outputDirectory}/caXchangeConf" >
+							  	<fileset dir="caXchange-common-jar/src/main/conf/caXchangeConf"/>
+  							</copy>
   						</tasks>
   					</configuration>
   				</execution>
