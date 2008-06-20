@@ -1,6 +1,8 @@
 package gov.nih.nci.cagrid.caxchange.test;
 
 
+import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
+import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
@@ -20,6 +22,7 @@ import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
+import gov.nih.nci.caxchange.Statuses;
 
 import gov.nih.nci.caxchange.ResponseMessage;
 
@@ -51,13 +54,19 @@ import org.cagrid.gaards.cds.client.CredentialDelegationServiceClient;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
+import org.cagrid.gaards.websso.utils.WebSSOConstants;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.DeserializationException;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 import org.w3c.dom.Document;
 
 /**
- * Test the caXchange Grid service.
+ * Test the caXchange. This class contains methods to send test messages of all the 
+ * message types accepted by caXchange.
+ * 
+ * @author Harsh Marwaha
  *
  */
 public class TestCaXchangeGridService extends TestCase {
@@ -86,7 +95,6 @@ public class TestCaXchangeGridService extends TestCase {
       try {
        caxchangeProperties = new Properties();
        caxchangeProperties.load(TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("caxchange.properties"));
-       delegatedReference = caxchangeProperties.getProperty("delegatedReference");
        userName= caxchangeProperties.getProperty("userName");
        password = caxchangeProperties.getProperty("password");
        message = new Message();
@@ -95,46 +103,19 @@ public class TestCaXchangeGridService extends TestCase {
        Credentials creds = new Credentials();
        creds.setUserName(userName);
        creds.setPassword(password);
-	   creds.setDelegatedCredentialReference(delegatedReference);
        metadata.setCredentials(creds);
        message.setMetadata(metadata);
        Request request = new Request();
        message.setRequest(request);
-       GlobusCredential hostCredential=null;
-       try {
-          hostCredential = new GlobusCredential(caxchangeProperties.getProperty("hostCertLocation"),caxchangeProperties.getProperty("hostKeyLocation"));
-       }catch(Exception e) {
-    	   throw new Exception("Error creating host credentials",e);
-       }
-       DelegatedCredentialReference delegatedCredentialReference = null;
-		try{
-			
-			delegatedCredentialReference =  
-				(DelegatedCredentialReference)
-				                     Utils.deserializeObject(new StringReader(delegatedReference), DelegatedCredentialReference.class, CredentialDelegationServiceClient.class.getResourceAsStream("client-config.wsdd"));
+	   org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager authManager = new org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager();
+	   UsernamePasswordCredentials credentials = new UsernamePasswordCredentials();
+	   credentials.setUsername(userName.trim());
+	   credentials.setPassword(password.trim());
+	   Authentication auth = authManager.authenticate(credentials);
+	   delegatedReference =  authManager.getSerializedDelegationEpr();
+	   creds.setDelegatedCredentialReference(delegatedReference);
+   	   client = new CaXchangeRequestProcessorClient(url, authManager.getCredentials());
 
-		}catch (DeserializationException e){
-			throw new Exception(
-					"Unable to deserialize the Delegation Reference", e);
-		}
-		DelegatedCredentialUserClient delegatedCredentialUserClient = null;
-
-		try{
-			delegatedCredentialUserClient = new DelegatedCredentialUserClient(
-					delegatedCredentialReference, hostCredential);
-		}catch (Exception e){
-			throw new Exception(
-					"Unable to Initialize the Delegation Lookup Client", e);
-		}
-		try{
-			userCredentials = delegatedCredentialUserClient
-			.getDelegatedCredential();
-		}catch (CDSInternalFault e){
-			throw new Exception(
-					"Error retrieve the Delegated Credentials", e);
-		}
-		 client = new CaXchangeRequestProcessorClient(url, userCredentials);
-		
       }
       catch(Exception e) {
           System.out.println("Error creating the client");
@@ -191,6 +172,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -222,6 +204,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -253,6 +236,9 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        //Since lab based AE is currently an unhandled message type it should return a response of failure
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.FAILURE);
+        assertEquals(responseMessage.getResponse().getCaXchangeError().getErrorCode(),"401");
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -288,6 +274,7 @@ public class TestCaXchangeGridService extends TestCase {
         //System.out.println(sw);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -320,6 +307,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -351,6 +339,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -359,15 +348,30 @@ public class TestCaXchangeGridService extends TestCase {
 
     }
 
+    public void testAuthentication() {
+    	try {
+    		org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager authManager = new org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager();
+    		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials();
+    		credentials.setUsername("cctsdemo1@nci.nih.gov");
+    		credentials.setPassword("!Ccts1");
+    		Authentication auth = authManager.authenticate(credentials);
+    		assertNotNull(auth.getPrincipal().getId());
+    	}catch(Exception e){
+    		System.out.println("Error authenticating .");
+            throw new RuntimeException(e);
+    	}
+    }
+
     public static Test suite() {
        TestSuite suite = new TestSuite();
 
-       //suite.addTest(new TestCaXchangeGridService("testStudyCreation"));
-       //suite.addTest(new TestCaXchangeGridService("testRegisterSubject"));
-       //suite.addTest(new TestCaXchangeGridService("testScheduleModification"));
-       //suite.addTest(new TestCaXchangeGridService("testCtLabData"));
+      suite.addTest(new TestCaXchangeGridService("testStudyCreation"));
+      suite.addTest(new TestCaXchangeGridService("testRegisterSubject"));
+      // suite.addTest(new TestCaXchangeGridService("testAuthentication"));
+       suite.addTest(new TestCaXchangeGridService("testScheduleModification"));
+       suite.addTest(new TestCaXchangeGridService("testCtLabData"));
        suite.addTest(new TestCaXchangeGridService("testLoadLab"));
-       //suite.addTest(new TestCaXchangeGridService("testAENotification"));
+       suite.addTest(new TestCaXchangeGridService("testAENotification"));
 
 
        return suite;
