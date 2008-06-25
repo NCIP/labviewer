@@ -61,6 +61,8 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
+import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
@@ -117,11 +119,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 /**
  * This class performs the search action. The search action calls the searchObjects method with
  * the user entered search criteria and queries the database.
- * If the search returns a non null resultset; it forwards the user to search results page and
+ * If the search returns a non null result set; it forwards the user to search results page and
  * displays the results.
  * @author asharma
  * 
@@ -212,7 +217,7 @@ public class SearchAction extends Action
 		}
 		
 		//if search result is not null; forward to searchresults page
-		//get the base url for caAERS and C3D from the properties file/
+		//get the base url for caAERS and C3D from the properties file
 		try
 		 {   Properties props = new Properties();
 			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
@@ -325,15 +330,7 @@ public class SearchAction extends Action
 			List resultList = appService.query(query);
 			
 			// Get a connection to the database using the hibernate configuration
-			/*
-			XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("DAOConfig.xml"));
-			LabViewerDAOSupport dao = (LabViewerDAOSupport)factory.getBean("DAO");
-			Session session = dao.getSessionFactory().openSession();
-
-			Connection connection = session.connection();*/
-			
 			List larlist = null;
-
 			int i = 0;
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
@@ -348,31 +345,16 @@ public class SearchAction extends Action
 					i++;
 					labActivityResult = (LabActivityResult) larlist.get(j);
 					labActivityResult.setAdverseEventReported("0");
-					/*
-					ResultSet rs = connection
-							.createStatement()
-							.executeQuery(
-									"select ADVERSE_EVENT_INDICATOR, UPDATE_DATE from LV_ADVERSE_EVENTS where CLINICAL_RESULT_ID = "
-											+ labActivityResult
-													.getLabResultId());
-					if (rs.next()) {
-						labActivityResult.setAdverseEventReported(rs
-								.getString(1));
-						labActivityResult
-								.setAdverseEventReportedDate(new SimpleDateFormat(
-										"MM-dd-yyyy").format(rs.getDate(2)));
-					} else {
-						labActivityResult.setAdverseEventReported("0");
-					}
-					// labActivityResult.setRecordId(Integer.toString(i));
-
-					// map.put(Integer.toString(i), labActivityResult);
-					 */
 					allLarList.add(labActivityResult);
 				}
 			}
+			
+			
 			if (allLarList != null && allLarList.size() > 0)
 			{
+				//check if labs were loaded before
+				checkForLoadedLabs(allLarList);
+			
 				LabActivityResultComparator comp = (LabActivityResultComparator) ObjectFactory
 						.getObject("labActivityResultComparator");
 				Collections.sort(allLarList, comp);
@@ -403,10 +385,10 @@ public class SearchAction extends Action
 
 	/**
 	 * printRecord creates the view object that will properly display the results
-	 * <P>
 	 * @param sa
 	 * @param beginDate2
 	 * @param endDate2
+	 * @param request
 	 * @return
 	 * @throws ParseException
 	 */
@@ -414,7 +396,6 @@ public class SearchAction extends Action
 		throws ParseException
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-
 		ArrayList list = new ArrayList();
 
 		Date beginActDate = null;
@@ -504,12 +485,11 @@ public class SearchAction extends Action
 											labActivityResult.setLabTestId(labTestId);
 										}
 										LaboratoryResult labResult = labTest.getLaboratoryResult();
-
+										
 										if (labResult != null)
 										{
-											numericResult = labResult.getNumericResult();
+											numericResult = labResult.getNumericResult();				              
 											labActivityResult.setLabResultId(labResult.getId().toString());
-
 											if (numericResult != null)
 												labActivityResult.setNumericResult(numericResult.toString());
 											else
@@ -570,6 +550,10 @@ public class SearchAction extends Action
 		return list;
 	}
 	
+	/**
+	 * @param identifiers
+	 * @return
+	 */
 	private String retrieveIdentifier(Collection<II> identifiers)
 	{
 		String identifier = null;
@@ -580,6 +564,10 @@ public class SearchAction extends Action
 		return identifier;
 	}
 
+	/**
+	 * @param date
+	 * @return
+	 */
 	private static String convertToString(java.util.Date date) {
 		if (date == null)
 			return "-";
@@ -587,6 +575,10 @@ public class SearchAction extends Action
 		String str = formatter.format(date);
 		return str;
 	}
+	/**
+	 * @param identifiers
+	 * @return
+	 */
 	private String retriveGridId(Collection<II> identifiers)
 	{
 		String identifier = null;
@@ -596,5 +588,36 @@ public class SearchAction extends Action
 		
 		return identifier;
 	}
+	
+	/**
+	 * Checks if the labs were loaded to CDMS or caAERS
+	 * and if yes; then sets their corresponding indicators to true.
+	 * @param allLarList
+	 */
+	private void checkForLoadedLabs(List allLarList)
+	{
+		Session session=null;
+		try{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			for (int j = 0; j < allLarList.size(); j++)
+			{
+				LabActivityResult labActivityResult = null;
+				labActivityResult = (LabActivityResult) allLarList.get(j);
+				int labResultId =Integer.parseInt(labActivityResult.getLabResultId());
+				List<LabViewerStatus> result =session.createQuery("from LabViewerStatus where clinicalResultId=?").setInteger(0, labResultId).list();
+		        if(result!=null)
+		        {
+		        	for(LabViewerStatus lvs: result){
+		        		if(lvs.isCdmsIndicator()){
+		        			labActivityResult.setLabLoadedToCDMS(true);
+		        		}
+		        	}
+		        }
+			
+		   }
+		}catch (Exception se){
+			logDB.error("Error looking up Lab result");
+	    }
+	}	
 }
 
