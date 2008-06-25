@@ -407,8 +407,10 @@ public class LoadToCTMSAction extends Action
 	    if(session!=null)
 	    {
 	    	HashMap<String,String> labResultIds = (HashMap<String,String>)request.getSession().getAttribute("LabResultIDs");
-	    	for(String key: labResultIds.keySet())
+	    	if(labResultIds!= null)
 	    	{
+	    	 for(String key: labResultIds.keySet())
+	    	 {
 	    		int labResutId = Integer.parseInt(labResultIds.get(key));
 	    		LabViewerStatus lvs = new LabViewerStatus();
 	    		lvs.setCdmsIndicator(true);
@@ -416,9 +418,10 @@ public class LoadToCTMSAction extends Action
 	    		lvs.setClinicalResultId(labResutId);
 	    		session.beginTransaction();
 	    		session.save(lvs);
-	    	}
+	    	 }
 		  session.getTransaction().commit();
-	    }  
+	     }
+	   } 	
 		}catch (Exception se){
 			logDB.error("Error updating Lab Result: ",se);
 		    if (session.getTransaction() != null) {
@@ -438,13 +441,15 @@ public class LoadToCTMSAction extends Action
 		SearchResult searchResult= (SearchResult)request.getSession().getAttribute("SEARCH_RESULT");
 		List search = searchResult.getSearchResultObjects();
 		HashMap<String,String> labResultIds = (HashMap<String,String>)request.getSession().getAttribute("LabResultIDs");
-		for(String key: labResultIds.keySet()){
+		if(labResultIds!= null)
+    	{
+		 for(String key: labResultIds.keySet()){
 			int index = (Integer.parseInt(key))-1;
 			LabActivityResult lar = (LabActivityResult)search.get(index);
 			lar.setLabLoadedToCDMS(true);
 			lar.setLabLoadedToCDMSDate(new java.util.Date().toString());
-		}
-		request.getSession().setAttribute("SEARCH_RESULT", searchResult);
+		 }
+  		 request.getSession().setAttribute("SEARCH_RESULT", searchResult);
+       }	
 	}
-
 }
