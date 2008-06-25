@@ -22,10 +22,12 @@ function setUp()
 function SelectAll()
   {
     var numRows2 = document.LabActivitiesSearchResultForm.recordIds.length;
+    
     if(SelectAllOn == false)
     {
       for(k=0; k<numRows2; k++)
       {
+         
         formObj= eval(document.LabActivitiesSearchResultForm.recordIds[k]);
         if(formObj && formObj.checked == false)
         {
@@ -209,6 +211,9 @@ function SelectAll()
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Upper Limit
 													</th>
+													<th class="dataTableHeader" scope="col" align="center" width="9%">
+														Sent to CDMS
+													</th>
 													<!--
 													<th class="dataTableHeader" scope="col" align="center" width="13%">
 														Adverse Events
@@ -266,6 +271,18 @@ function SelectAll()
 															<bean:write name="searchResultObject" property="highRange" />
 															&nbsp;
 														</td>
+														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
+															<td class="dataCellText" width="9%" bgcolor="grey">
+																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:equal>
+														<logic:notEqual name="searchResultObject" property="labLoadedToCDMS" value="true">
+															<td class="dataCellText" width="9%">
+																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:notEqual>
 														<!--
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="<%="0"%>">
 															<td class="dataCellText" width="15%">
@@ -333,6 +350,18 @@ function SelectAll()
 															<bean:write name="searchResultObject" property="highRange" />
 															&nbsp;
 														</td>
+														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
+															<td class="dataCellText" width="9%" bgcolor="grey">
+																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:equal>
+														<logic:notEqual name="searchResultObject" property="labLoadedToCDMS" value="true">
+															<td class="dataCellText" width="9%">
+																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:notEqual>
 														<!--
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="<%="0"%>">
 															<td class="dataCellText" width="15%">
