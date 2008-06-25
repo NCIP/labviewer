@@ -87,6 +87,8 @@ public class LabActivityResult
 	private String isAdverseEvent = "";
 	private String adverseEventReported = "";
 	private String adverseEventReportedDate = "";
+	private boolean labLoadedToCDMS= false;
+	private String labLoadedToCDMSDate = "";
 	
 	public String getStudyId()
 	{
@@ -257,6 +259,34 @@ public class LabActivityResult
 
 	public Date getActualDate() {
 		return actualDate;
+	}
+
+	/**
+	 * @return the labLoadedToCDMS
+	 */
+	public boolean isLabLoadedToCDMS() {
+		return labLoadedToCDMS;
+	}
+
+	/**
+	 * @param labLoadedToCDMS the labLoadedToCDMS to set
+	 */
+	public void setLabLoadedToCDMS(boolean labLoadedToCDMS) {
+		this.labLoadedToCDMS = labLoadedToCDMS;
+	}
+
+	/**
+	 * @return the labLoadedToCDMSDate
+	 */
+	public String getLabLoadedToCDMSDate() {
+		return labLoadedToCDMSDate;
+	}
+
+	/**
+	 * @param labLoadedToCDMSDate the labLoadedToCDMSDate to set
+	 */
+	public void setLabLoadedToCDMSDate(String labLoadedToCDMSDate) {
+		this.labLoadedToCDMSDate = labLoadedToCDMSDate;
 	}
 	
 }
