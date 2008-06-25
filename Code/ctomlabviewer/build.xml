@@ -59,6 +59,13 @@
 				<filter token="database_passwd" value="${database.password}" />
 			</filterset>
 		</copy>
+		<copy file="conf/cTODSlabviewer.hibernate.cfg.xml.template" toFile="${build.home}/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
+					<filterset begintoken="@" endtoken="@">
+						<filter token="database_url" value="${database.url}" />
+						<filter token="database_user" value="${database.username}" />
+						<filter token="database_passwd" value="${database.password}" />
+					</filterset>
+				</copy>
 		<copy file="conf/log4j.properties.template" toFile="${build.home}/WEB-INF/classes/log4j.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="log_dir" value="${log.dir}" />
@@ -111,6 +118,7 @@
 			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties" />
 			<fileset file="${src.home}/applicationContext.xml" />
+			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 		</copy>
 	</target>
 
