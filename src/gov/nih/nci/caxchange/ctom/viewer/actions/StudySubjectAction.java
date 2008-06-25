@@ -199,11 +199,7 @@ public class StudySubjectAction extends Action
 		return forward;
 	}
 	/**
-	 * 
-	 * Select i.extension from identifier i where i.protocol_id in (
-	 * select ss.protocol_id from study_site ss, study_participant_assignment spa, identifier ii where ((ii.root='50113a1a-4c3e-4418-8c37-7383cba1aaf8' and ii.study_participant_assignmnt_id=spa.id 
-	 * and spa.study_site_id=ss.id))) UNION
-	 * select i.extension from identifier i where i.root='50113a1a-4c3e-4418-8c37-7383cba1aaf8' and i.study_participant_assignmnt_id is not null
+	 * Gets the Root for the Patient associated with a Study. 
 	 * @param studyGridId
 	 * @param labFm
 	 * @throws Exception
@@ -214,7 +210,13 @@ public class StudySubjectAction extends Action
 		try
 		{
 			ApplicationService appService = ApplicationServiceProvider.getApplicationService();
-			
+		
+		/* The Resulting SQL	
+		 * Select i.extension from identifier i where i.protocol_id in (
+		 * select ss.protocol_id from study_site ss, study_participant_assignment spa, identifier ii where ((ii.root='50113a1a-4c3e-4418-8c37-7383cba1aaf8' and ii.study_participant_assignmnt_id=spa.id 
+		 * and spa.study_site_id=ss.id))) UNION
+		 * select i.extension from identifier i where i.root='50113a1a-4c3e-4418-8c37-7383cba1aaf8' and i.study_participant_assignmnt_id is not null
+		*/	
 			// Create the query to get SubjectAssignment object
 			CQLQuery query = new CQLQuery();
 			CQLObject target = new CQLObject();
