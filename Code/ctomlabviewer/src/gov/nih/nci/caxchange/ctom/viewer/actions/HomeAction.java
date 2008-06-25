@@ -154,14 +154,6 @@ public class HomeAction extends Action {
 				if (session.getAttribute("HOT_LINK") == "true") {
 					LabActivitiesSearchForm labFm = (LabActivitiesSearchForm) session
 							.getAttribute("CURRENT_FORM");
-					try {
-
-						// getPatientIdRoot((String)session.getAttribute("studySubjectGridId"),labFm);
-
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					session.setAttribute("CURRENT_FORM", labFm);
 					return (mapping
 							.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK));
