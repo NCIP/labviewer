@@ -599,6 +599,7 @@ public class SearchAction extends Action
 		Session session=null;
 		try{
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
 			for (int j = 0; j < allLarList.size(); j++)
 			{
 				LabActivityResult labActivityResult = null;
@@ -615,8 +616,10 @@ public class SearchAction extends Action
 		        }
 			
 		   }
+		  session.getTransaction().commit();
 		}catch (Exception se){
-			logDB.error("Error looking up Lab result");
+			logDB.error("Error looking up Lab result",se);
+			
 	    }
 	}	
 }
