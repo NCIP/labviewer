@@ -1,6 +1,6 @@
 /**
  * Copyright Notice.  Copyright 2008  Scenpro, Inc (“caBIG™ Participant”). caXchange
- * [insert name of caBIG™ software program] was created with NCI funding and is part of the caBIG™ initiative. 
+ * was created with NCI funding and is part of the caBIG™ initiative. 
  * The software subject to this notice and license includes both human readable source code form and 
  * machine readable, binary, object code form (the “caBIG™ Software”).
  * This caBIG™ Software License (the “License”) is between caBIG™ Participant and You.  
@@ -55,14 +55,11 @@
  * 		PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
  * 		ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
  * 		OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * 
- */
+ **/
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
-import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
@@ -73,26 +70,27 @@ import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
+import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
+import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
+import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -110,6 +108,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -139,7 +139,6 @@ public class LoadToCTMSAction extends Action
 	{
 		ActionErrors errors = new ActionErrors();
 		ActionMessages messages = new ActionMessages();
-		
 		HttpSession session = request.getSession();
 		LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm) form;
 		
@@ -149,15 +148,16 @@ public class LoadToCTMSAction extends Action
 			logDB.error("No Session or User Object Forwarding to the Login Page");
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
-		
 		String username = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
-		
 		UserInfoHelper.setUserInfo(username, session.getId());		
 		int numOfLabs =0;
+		
 		try
 		{  //calls the loadToCTMS method
 			numOfLabs = loadToCTMS(request, lForm, username);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, numOfLabs+" Message(s) Submitted to CDMS Successfully"));
+			updateLabResult(request);
+			updateLabResultForUI(request);
 			saveMessages( request, messages );
 		}
 		catch (Exception cse)
@@ -168,49 +168,44 @@ public class LoadToCTMSAction extends Action
 			logDB.error("Error sending labs to CDMS", cse);
 		}
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
-		
 		//if the login is valid and the selected form data is successfully loaded to CTMS; 
 		//it returns to the search results page and displays the load successful message	
 		return (mapping.findForward(ForwardConstants.LOAD_TO_CTMS_EVENT_SUCCESS));
 	}
 	
-	 /**
-	 * Collects the selectd form data and calls the EvenManager sendLabActivitiesmethod to
+	/**
+	 * Collects the selected form data and calls the EvenManager sendLabActivitiesmethod to
 	 * load the data to CTMS
 	 * @param request
 	 * @param form
+	 * @param username
+	 * @return
 	 * @throws Exception
 	 */
 	private int loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
 	{
+		HttpSession session = request.getSession();
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
 		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
-		ArrayList list = new ArrayList();
+		HashMap<String,LabActivityResult> labResultsMap = new HashMap<String,LabActivityResult>();
+		HashMap<String,String> labResultIds = new HashMap<String,String>();
 		String[] test = lForm.getRecordIds();
-		//StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
 		int count =0;
 		int numOfLabs=0;
 		// Create the list of results to send
-		/*if (count >= 1)
-		{
-			while (stringTokenizer.hasMoreTokens())
-			{
-				list.add(map.get(stringTokenizer.nextToken()));
-			}
-		}
-		else*/
 		if(test!=null)
 		{
 			count = test.length;
 			for(int i=0;i<count;i++)
 			{
 				if(map.get(test[i]) != null){
-					list.add(map.get(test[i]));	
+					LabActivityResult lar = (LabActivityResult)map.get(test[i]);
+					labResultsMap.put(test[i],lar);
+					labResultIds.put(test[i],lar.getLabResultId());
 				}
 			}
 		}
 		 Properties props = new Properties();
-		 
 		 //Get the file input stream
 		 try
 		 {
@@ -233,13 +228,11 @@ public class LoadToCTMSAction extends Action
 		LoadLabsRequest labRequest = new LoadLabsRequest();
 		
 		// Then for each lab selected set the lab information
-		LabResult labResults[]= new LabResult[list.size()];
+		LabResult labResults[]= new LabResult[labResultsMap.size()];
 		int i = 0;
 		
-		for (Iterator labs = list.iterator(); labs.hasNext();)
-		{
-			LabActivityResult lab = (LabActivityResult)labs.next();
-			
+		for(String key: labResultsMap.keySet()){
+			LabActivityResult lab = labResultsMap.get(key);
 			// Populate the study information
 			Documentation documentation = new Documentation();
 			PerformedStudy performedStudy = new PerformedStudy();
@@ -300,7 +293,7 @@ public class LoadToCTMSAction extends Action
 			labResult.setStudySubject(studySubject);
 			
 			// Set the reported date
-			Date labDate = lab.getActualDate();
+			java.util.Date labDate = lab.getActualDate();
 			if (labDate != null)
 			{
 				Calendar cal = Calendar.getInstance();
@@ -332,7 +325,7 @@ public class LoadToCTMSAction extends Action
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length; 
 		//PrintWriter writer = new PrintWriter("c3dmessage.xml");
-		QName lab = new QName("LoadLabsRequest");
+		 QName lab = new QName("LoadLabsRequest");
         //Utils.serializeObject(labRequest, lab, writer);
         
 		// Create the caxchange message
@@ -354,16 +347,14 @@ public class LoadToCTMSAction extends Action
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
         messagePayload.setXmlSchemaDefinition(uri);
-        
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
 		
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
-        
         CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
-        boolean gotResponse=false;
         
+        boolean gotResponse=false;
         int responseCount = 0;
         ResponseMessage responseMessage = null;
         while(!gotResponse)
@@ -385,24 +376,75 @@ public class LoadToCTMSAction extends Action
 	        	Thread.sleep(1000);
 	        }
         }
-        
         if (responseMessage != null)
         {
         	Response resp = responseMessage.getResponse();
-        	
-        	logDB.info("caXchange response was " + resp.getResponseStatus().toString());
-        	
-        	if (resp.getResponseStatus().equals(Statuses.FAILURE))
+           	logDB.info("caXchange response was " + resp.getResponseStatus().toString());
+           	if (resp.getResponseStatus().equals(Statuses.FAILURE))
         	{
         		String message = resp.getCaXchangeError().getErrorDescription();
         		logDB.error("Received a failure from caxchange hub: " + message);
         		throw new Exception(message);
         	}
         }
-	
-		lForm.setRecordId("");
+	    lForm.setRecordId("");
 		lForm.setRecordId(null);
+		session.setAttribute("LabResultIDs", labResultIds);
 		return numOfLabs;
 	}	
+	
+	/**
+	 * updateLabResult updates the database with information about the
+	 * labs results that were sent to CDMS.
+	 * @param request
+	 */
+	private void updateLabResult(HttpServletRequest request)
+	{
+		Session session=null;
+		Date date = new Date();
+		try{
+	    session =  HibernateUtil.getSessionFactory().getCurrentSession();
+	    if(session!=null)
+	    {
+	    	HashMap<String,String> labResultIds = (HashMap<String,String>)request.getSession().getAttribute("LabResultIDs");
+	    	for(String key: labResultIds.keySet())
+	    	{
+	    		int labResutId = Integer.parseInt(labResultIds.get(key));
+	    		LabViewerStatus lvs = new LabViewerStatus();
+	    		lvs.setCdmsIndicator(true);
+	    		lvs.setCdmsSentDate(date);
+	    		lvs.setClinicalResultId(labResutId);
+	    		session.beginTransaction();
+	    		session.save(lvs);
+	    	}
+		  session.getTransaction().commit();
+	    }  
+		}catch (Exception se){
+			logDB.error("Error updating Lab Result: ",se);
+		    if (session.getTransaction() != null) {
+		    	session.getTransaction().rollback();
+		      }
+		} finally { 
+		       session.close();
+		 }
+		     
+	}
+	
+	/**
+	 * Update the LabResults for UI display
+	 * @param request
+	 */
+	private void updateLabResultForUI(HttpServletRequest request){
+		SearchResult searchResult= (SearchResult)request.getSession().getAttribute("SEARCH_RESULT");
+		List search = searchResult.getSearchResultObjects();
+		HashMap<String,String> labResultIds = (HashMap<String,String>)request.getSession().getAttribute("LabResultIDs");
+		for(String key: labResultIds.keySet()){
+			int index = (Integer.parseInt(key))-1;
+			LabActivityResult lar = (LabActivityResult)search.get(index);
+			lar.setLabLoadedToCDMS(true);
+			lar.setLabLoadedToCDMSDate(new java.util.Date().toString());
+		}
+		request.getSession().setAttribute("SEARCH_RESULT", searchResult);
+	}
 
 }
