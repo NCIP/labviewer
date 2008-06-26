@@ -20,7 +20,7 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-		<param name="threshold" value="DEBUG"/>
+		<param name="threshold" value="INFO"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p - %-30c{1} - %m%n"/>
 		</layout>
@@ -37,9 +37,9 @@
 		<param name="server" value="localhost"/>
 		<param name="maxBufferSize" value="1"/>
 		<param name="dbDriverClass" value="com.mysql.jdbc.Driver"/>
-		<param name="dbUrl" value="jdbc:mysql://localhost/test"/>
-		<param name="dbUser" value="root"/>
-		<param name="dbPwd" value="root"/>
+		<param name="dbUrl" value="jdbc:mysql://@LLT_DATABASE_HOST@:@LLT_DATABASE_PORT@/@LLT_DATABASE@"/>
+		<param name="dbUser" value="@LLT_DATABASE_USERNAME@"/>
+		<param name="dbPwd" value="@LLT_DATABASE_PASSWORD@"/>
 		<param name="useFilter" value="false"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value=":: [%d{ISO8601}] %-5p %c{1}.%M() %x - %m%n"/>
@@ -62,7 +62,7 @@
 	</logger>
 	<logger name="org.apache.servicemix">
 		<!-- To enable debug logging, replace the INFO by DEBUG -->
-		<level value="DEBUG"/>
+		<level value="INFO"/>
 	</logger>
 	<logger name="org.apache.servicemix.jbi.config">
 		<level value="WARN"/>
