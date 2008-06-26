@@ -70,6 +70,7 @@ import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
+import gov.nih.nci.caxchange.TargetResponseMessage;
 import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
@@ -109,7 +110,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -381,9 +381,18 @@ public class LoadToCTMSAction extends Action
         	Response resp = responseMessage.getResponse();
            	logDB.info("caXchange response was " + resp.getResponseStatus().toString());
            	if (resp.getResponseStatus().equals(Statuses.FAILURE))
-        	{
-        		String message = resp.getCaXchangeError().getErrorDescription();
+        	{   String message="";
+           		if(resp.getCaXchangeError()!=null){
+        		message = resp.getCaXchangeError().getErrorDescription();
         		logDB.error("Received a failure from caxchange hub: " + message);
+           		}else{
+           			if(resp.getTargetResponse()!=null)
+           			{
+           		     for(TargetResponseMessage msg: resp.getTargetResponse()){
+           		    	 message = msg.getTargetMessageStatus().getValue() +":" +msg.getTargetError().getErrorDescription();
+           		     }
+           			}
+           		}
         		throw new Exception(message);
         	}
         }
@@ -424,13 +433,11 @@ public class LoadToCTMSAction extends Action
 	   } 	
 		}catch (Exception se){
 			logDB.error("Error updating Lab Result: ",se);
-		    if (session.getTransaction() != null) {
+			if (session.getTransaction() != null) {
 		    	session.getTransaction().rollback();
-		      }
-		} finally { 
-		       session.close();
-		 }
-		     
+		    	}
+		      
+		} 		     
 	}
 	
 	/**
