@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+
+<project name="caXchange-Installer" default="version-check" >
+		<description>
+        This ant script contains the caXchange installation,deployment and database schema creation tasks.
+        </description>
+
+	 <!-- PROPERTIES -->
+	 <property environment="env"/>
+	 <property file="install.properties"/>
+	 <property name="cax.home" value="." />
+	 <property name="tom.home" value="${env.CATALINA_HOME}" />
+	 <property name="lib.dir" value="${cax.home}/lib"/>
+	 <property name="temp.dir" value="${cax.home}/temp" />
+	<property name="log.dir" value="${cax.home}/logs" />
+	
+	<!--Validates the CATALINA_HOME and JDK version-->
+	<target name="assert"  description="Uses ant to detect current jdk version and validates CATALINA_HOME is set">
+	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
+      <condition>
+        <not>
+          <equals arg1="${ant.java.version}" arg2="1.5" />
+        </not>
+      </condition>
+    </fail>
+	<fail unless="env.CATALINA_HOME" message="CATALINA_HOME environment variable  has not been set!"/>
+	</target>
+
+	
+	
+	<!--Checks the software version if they comply with the technology stack CBIIT is following-->
+	<target name="version-check" depends="system-init,assert" description="checks the software version used in your system">
+		<echo message="###########################################"/>
+		<echo message="#Welcome To caxchange v1.1 Installation   #"/>
+		<echo message="###########################################"/>
+		<echo message="Current Setup: "/>
+        <echo message="JDK Version       : ${java.version}"/>
+		<echo message="ANT Version       : ${ant.version}"/>
+		<echo message="caGRID Version    : ${CAGRID_VERSION}"/>
+		<echo message="Tomcat Version    : ${TOMCAT_VERSION}"/>
+		<echo message="MySql Version     : ${MYSQL_VERSION}"/>
+		<echo message="Servicemix Version: ${SERVICEMIX_VERSION}"/>
+		<echo message="Operating System  : ${os.name}"/>
+		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
+		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
+		<echo message="CATALINA_HOME is  : ${env.CATALINA_HOME}"/>
+		<echo message="CAX_HOME is       : ${env.CAX_HOME}"/>
+		<!--<condition property="java.version" >
+			<and>
+				<available value="1.5.0_16"/>
+			</and>
+		</condition>-->
+		
+		<echo message="Type ant -p for targets available"/>
+    </target>
+	
+	
+	<!--Get current timestamp for the log creation-->
+	<tstamp>
+		<format property="touch.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+
+	<!--Initializes the logs-->
+	<target name="system-init" description="Creates the temp and the log directory">
+		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${log.dir}" />
+		<record name="${log.dir}/install-${touch.time}.log" action="start"/>
+	</target>
+	
+	<!--Clens the templorary files and folder created by the different targets-->
+    <target name="clean" description="clean temp files folders and targets" >
+		
+		<delete includeemptydirs="true">
+			<fileset dir="${cax.home}/temp/" includes="**/*"/>
+		</delete>
+    </target>
+
+	<!--Installs the servicemix from apache site and unzip to location given in install.properties file-->
+	<target name="servicemix-install" depends="assert,system-init,clean" description="download servicemix">
+        <echo message="You current SERVICEMIX_HOME in property file :${SERVICEMIX_HOME}"/>
+		<input   message="Do you want to install servicemix at this location "
+		validargs="y,n"
+		addproperty="ifyes"/>
+		<condition property="ifno">
+		<equals arg1="n" arg2="${ifyes}"/>
+		</condition>
+		<fail if="ifno">Please set the new servicemix location in install.properties file and run script again</fail>
+		<!--<echo message="Setting environment variable to ${SERVICEMIX_HOME}"/>-->
+		<mkdir dir="${SERVICEMIX_HOME}"/>
+		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip"
+		 verbose="true"
+		 usetimestamp="true"/>		
+		 <unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip" dest="${SERVICEMIX_HOME}"/>	
+		
+	</target>
+
+
+	<target name="servicemix-components-install" depends="assert,system-init" description="install servicemix components used for caxchange">
+		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-bean-3.1.2-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-bean-3.1.2-installer.zip"/>
+		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-jms-3.1.2-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-jms-3.1.2-installer.zip"/>
+		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-shared-3.1.2-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-shared-3.1.2-installer.zip"/>
+	</target>
+
+
+	<!--Configures the jndi and activemq xml files for the servicemix-->
+	<target name="servicemix-configure" depends="assert,db-init" description="config servicemix container">
+		<!--<copy file="${cax.home}/lib/mysql-connector-java-5.1.5-bin.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
+		<copy file="${cax.home}/lib/commons-dbcp-1.2.1.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>-->
+		<copy file="${cax.home}/lib/clm.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
+		<copy file="${cax.home}/lib/clmauditor.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
+		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
+		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
+		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		
+		
+		
+		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		
+		<copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
+
+
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+
+
+	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
+    <fileset dir="${cax.home}/lib"/>
+  </copy>
+	
+
+		    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+    <fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
+  </copy>
+
+   <!--<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
+    <fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
+  </copy>-->
+	
+
+	</target>
+
+	<!--Starts  the tomcat container-->
+    <target name="tomcat-start" depends="assert" description="starts tomcat server">
+    <java jar="${tom.home}/bin/bootstrap.jar" fork="true">
+        <jvmarg value="-Dcatalina.home=${tom.home}"/>
+    </java>
+	</target>
+
+	<!--Stops the tomcat container-->
+	<target name="tomcat-stop" depends="assert" description="stops tomat server">
+    <java jar="${tom.home}/bin/bootstrap.jar" fork="true">
+        <jvmarg value="-Dcatalina.home=${tom.home}"/>
+        <arg line="stop"/>
+    </java>
+	</target>
+
+
+	<target name="db-init"  depends="assert" description="Initializes the environment for the databases">
+		<copy file="${cax.home}/databaseScripts/caXchangePersistenceStore.sql" tofile="${cax.home}/temp/caXchangePersistenceStore.sql"
+		overwrite="true"/>
+		<copy file="${cax.home}/databaseScripts/AuthSchemaMySQL.sql" tofile="${cax.home}/temp/AuthSchemaMySQL.sql"
+		overwrite="true"/>
+		<copy file="${cax.home}/databaseScripts/CLMSchemaMySQL.sql" tofile="${cax.home}/temp/CLMSchemaMySQL.sql"
+		overwrite="true"/>
+		<copy file="${cax.home}/databaseScripts/DataPrimingMySQL.sql" tofile="${cax.home}/temp/DataPrimingMySQL.sql"
+		overwrite="true"/>
+		<replace  file="${cax.home}/temp/caXchangePersistenceStore.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/AuthSchemaMySQL.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/CLMSchemaMySQL.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+
+		<copy file="${cax.home}/conf/servicemix/activemq.xml" tofile="${cax.home}/temp/activemq.xml"
+		overwrite="true"/>
+		<copy file="${cax.home}/conf/servicemix/servicemix.properties" tofile="${cax.home}/temp/servicemix.properties"
+		overwrite="true"/>
+		<replace  file="${cax.home}/temp/servicemix.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+		
+		<replace  file="${cax.home}/temp/servicemix.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE@" property="amq_database_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE_PORT@" property="amq_db_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE_HOST@" property="amq_db_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE_USER@" property="amq_db_username"/>
+		</replace>
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE_PASS@" property="amq_db_password"/>
+		</replace>
+		
+		<copy file="${cax.home}/conf/servicemix/jndi.xml" tofile="${cax.home}/temp/jndi.xml"
+		overwrite="true"/>
+		<replace  file="${cax.home}/temp/jndi.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@JNDI_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/jndi.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@JNDI_DATABASE_PORT@" property="caxchangedb_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/jndi.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@JNDI_DATABASE_HOST@" property="caxchangedb_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/jndi.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@JNDI_DATABASE_USER@" property="caxchangedb_username"/>
+		</replace>
+		<replace  file="${cax.home}/temp/jndi.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@JNDI_DATABASE_PASS@" property="caxchangedb_password"/>
+		</replace>
+
+
+	</target>
+	
+	<!--creats the necessary schema in MySql database for the caxchange software bunlde-->
+	<target name="mysql-db-initialize-caxchange"  depends="assert,system-init,db-init" description="Initilizes the database for caxchagne">
+		<echo message="Initializing MySql database for caxchange application....."/>
+		<sql 
+		driver="${caxchangedb.driverClass}"
+		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/${caxchangedb1_name}"
+		userid="${caxchangedb_username}"
+		password="${caxchangedb_password}"
+		 autocommit="true"
+		src="${cax.home}/temp/caXchangePersistenceStore.sql">
+		<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			
+			</sql>
+	</target>
+
+
+	<!--creats the necessary schema in MySql database for the caxchange software bunlde-->
+	<target name="mysql-db-initialize-llt" depends="system-init,db-init" description="Initilizes the database for LLT">
+		<echo message="Initializing MySql database for llt application....."/>
+		<sql 
+		driver="${caxchangedb.driverClass}"
+		url="jdbc:mysql://${llt_db_host}:${llt_db_port}/${llt_db_name}"
+		userid="${llt_db_username}"
+		password="${llt_db_password}"
+		onerror="continue">
+		<transaction src="${cax.home}/temp/AuthSchemaMySQL.sql"/>
+		<transaction src="${cax.home}/temp/CLMSchemaMySQL.sql"/>
+		<transaction src="${cax.home}/temp/DataPrimingMySQL.sql"/>
+		<transaction>commit;</transaction>
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+
+
+	
+	
+	<!--Deploys the inbound grid service to tomcat -->
+	<target name="grid-setup"   depends="assert,system-init"  description="sets grid service for the caxchange">
+		<ant dir="${cax.home}/gridservice/caXchangeInboundService/" target="deployTomcat" />	
+	</target>
+
+	
+
+	
+
+	<target name="auditor-configure" depends="assert" description="config to make Auditor ready for its deployment">
+		<copy file="${cax.home}/lib/clmauditor.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib"/>
+		<copy file="${cax.home}/lib/clm.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib"/>
+		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
+		</replace>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
+		</replace>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
+		</replace>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
+		</replace>
+	</target>
+
+	<target name="llt-configure" depends="assert" description="config to make LLT ready for its deployment">
+		<copy file="${cax.home}/conf/tomcat/login.config" 
+		todir="${tom.home}/conf" overwrite="true"/>
+
+		<replace  file="${tom.home}/conf/server.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+		<replace  file="${tom.home}/conf/server.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
+		</replace>
+		<replace  file="${tom.home}/conf/server.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
+		</replace>
+		<replace  file="${tom.home}/conf/server.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
+		</replace>
+		<replace file="${tom.home}/conf/server.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
+		</replace>
+
+
+
+		<replace  file="${tom.home}/conf/login.config" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+		<replace  file="${tom.home}/conf/login.config" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
+		</replace>
+		<replace file="${tom.home}/conf/login.config" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
+		</replace>
+		<replace  file="${tom.home}/conf/login.config" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
+		</replace>
+		<replace file="${tom.home}/conf/login.config" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
+		</replace>
+
+		<copy file="${cax.home}/conf/tomcat/catalina.properties" 
+		todir="${tom.home}/conf" overwrite="true"/>
+		<copy file="${cax.home}/lib/mysql-connector-java-5.1.5-bin.jar" todir="${tom.home}/common/lib" overwrite="true"/>
+		<copy file="${cax.home}/lib/antlr-2.7.6rc1.jar" todir="${tom.home}/common/lib" overwrite="true"/>
+		<copy file="${cax.home}/lib/log4j-1.2.13.jar" todir="${tom.home}/common/lib" overwrite="true"/>
+
+	</target>
+	
+	<!--Deploys the LLT wat to the Tomcat webapps folder-->
+	<target name="llt-deploy" depends="assert,system-init,llt-configure" description="deploys the LLT war to tomcat ">
+		<copy todir="${tom.home}/webapps" overwrite="true">
+			<fileset file="${cax.home}/war/llt.war" />
+		</copy>
+	</target>
+	<!--Deploys the service assembly and the service engine to servicemix container-->
+    <target name="sa-deploy"  depends="assert,system-init,servicemix-configure" description="deploys the servicemix assembly">
+			<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
+		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-1.0-SNAPSHOT-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-1.0-SNAPSHOT.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+    </target>
+
+	<!--Caxchange complete install with servicemix -->
+	<target name="complete-install"   depends="assert,system-init,clean,db-init,mysql-db-initialize-caxchange,servicemix-install,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
+	<echo message="caxchange-complete-installation complete"/>
+	</target>
+
+
+</project>
