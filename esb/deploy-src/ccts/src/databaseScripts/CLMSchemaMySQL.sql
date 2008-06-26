@@ -1,8 +1,8 @@
-# Replace the ccts_csm with proper database name that is to be created. 
+# Replace the <<database_name>> with proper database name that is to be created. 
 
-CREATE DATABASE IF NOT EXISTS ccts_csm;
+CREATE DATABASE IF NOT EXISTS @LLT_DATABASE@;
 
-USE ccts_csm;
+USE @LLT_DATABASE@;
 
 DROP TABLE IF EXISTS log_message;
 CREATE TABLE  log_message (
