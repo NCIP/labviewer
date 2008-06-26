@@ -9,6 +9,16 @@
       <outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
     </file>
+	 <file>
+      <source>src/build.xml</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+	 <file>
+      <source>src/install.properties</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
     <file>
        <source>src/conf/servicemix/${env}.properties</source>
        <outputDirectory>/conf/servicemix</outputDirectory>
