@@ -41,7 +41,7 @@
             is not on a network, which may prevent the broker to start.
             In such a case, just remove the discoveryUri attribute.  
          -->
-			<amq:transportConnector uri="tcp://localhost:62618" discoveryUri="multicast://default"/>
+			<amq:transportConnector uri="tcp://@AMQ_DATABASE_HOST@:@AMQ_PORT@" discoveryUri="multicast://default"/>
 		</amq:transportConnectors>
 		<amq:networkConnectors>
 			<!-- by default just auto discover the other brokers -->
@@ -96,9 +96,9 @@
   -->
 	<bean id="mysql-ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="<<ACTIVEMQ-DB-URL>>"/>
-		<property name="username" value="<<ACTIVEMQ-DB-USERNAME>>"/>
-		<property name="password" value="<<ACTIVEMQ-DB-PASSWORD>>"/>
+		<property name="url" value="jdbc:mysql://@AMQ_DATABASE_HOST@:@AMQ_DATABASE_PORT@/@AMQ_DATABASE@"/>
+		<property name="username" value="@AMQ_DATABASE_USER@"/>
+		<property name="password" value="@AMQ_DATABASE_PASS@"/>
 		<property name="poolPreparedStatements" value="true"/>
 	</bean>
 </beans>

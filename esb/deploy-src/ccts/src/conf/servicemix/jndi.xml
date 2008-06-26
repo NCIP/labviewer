@@ -52,9 +52,9 @@
 		<entry key="java:comp/env/jdbc/servicemixDB">
 			<bean id="mysql-ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 				<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-				<property name="url" value="<<SERVICEMIX-DB-URL>>"/>
-				<property name="username" value="<<SERVICEMIX-DB-USERNAME>>"/>
-				<property name="password" value="<<SERVICEMIX-DB-PASSWORD>>"/>
+				<property name="url" value="jdbc:mysql://@JNDI_DATABASE_HOST@:@JNDI_DATABASE_PORT@/@JNDI_DATABASE@"/>
+				<property name="username" value="@JNDI_DATABASE_USER@"/>
+				<property name="password" value="@JNDI_DATABASE_PASS@"/>
 			</bean>
 		</entry>
 	</util:map>
