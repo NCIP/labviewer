@@ -49,7 +49,7 @@
         <outputDirectory>/lib</outputDirectory>
         <includes>
 		    <include>cagrid:addressing</include>
-            <include>cagrid:axis</include>
+                    <include>cagrid:axis</include>
 		    <include>cagrid:axis-url</include>
 		    <include>cagrid:bootstrap</include>
 		    <include>cagrid:cagrid-advertisement</include>
@@ -58,6 +58,7 @@
 		    <include>cagrid:cagrid-metadata-data</include>
 		    <include>cagrid:cagrid-metadata-security</include>
 		    <include>cagrid:cagrid-metadata-utils</include>
+		    <include>cagrid:cagrid-core</include>
 		    <include>cagrid:castor</include>
 		    <include>cagrid:cog-axis</include>
 		    <include>cagrid:cog-jglobus</include>
@@ -126,7 +127,6 @@
   <moduleSets>
      <moduleSet>
          <includes>
-            <include>gov.nih.nci.caxchange:caXchange-servicemix-eip-se</include>
             <include>gov.nih.nci.caxchange:caXchange-ccts-sa</include>
          </includes>
          <includeSubModules>false</includeSubModules>
@@ -136,5 +136,17 @@
             <unpack>false</unpack>
          </binaries>
      </moduleSet>
+     <moduleSet>
+         <includes>
+            <include>gov.nih.nci.caxchange:caXchange-servicemix-eip-se</include>
+         </includes>
+         <includeSubModules>true</includeSubModules>
+         <binaries>
+            <attachmentClassifier>installer</attachmentClassifier>
+            <outputDirectory>/serviceAssemblies</outputDirectory>
+            <includeDependencies>false</includeDependencies>
+            <unpack>false</unpack>
+         </binaries>
+     </moduleSet>     
   </moduleSets>
 </assembly>
