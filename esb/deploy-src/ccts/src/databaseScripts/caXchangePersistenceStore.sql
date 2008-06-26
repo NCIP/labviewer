@@ -1,0 +1,13 @@
+# Replace the ccts_xchg with proper database name that is to be created.
+
+CREATE DATABASE IF NOT EXISTS ccts_xchg;
+
+USE ccts_xchg;
+
+CREATE TABLE  IF NOT EXISTS CAXCHANGE_MESSAGES
+(
+   MESSAGE_ID  VARCHAR(500) NOT NULL,
+   ORIGINAL_MESSAGE  MEDIUMTEXT,
+   CONSTRAINT PRIMARY KEY (MESSAGE_ID(500))
+);
+

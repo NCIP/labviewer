@@ -1,0 +1,24 @@
+<beans>
+
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
+
+<broker brokerName="brokerOne" useJmx="true" xmlns="http://activemq.org/config/1.0">
+
+    <persistenceAdapter>
+      <journaledJDBC journalLogFiles="5" dataDirectory="${activemq.base}/data/broker" />
+    </persistenceAdapter>
+
+    <transportConnectors>
+      <transportConnector uri="tcp://localhost:62618" discoveryUri="multicast://default" />
+    </transportConnectors>
+
+	
+    <networkConnectors>
+      <networkConnector uri="multicast://default?initialReconnectDelay=100" />
+      <!--networkConnector uri="static://(tcp://localhost:61616)" /-->
+    </networkConnectors>
+	
+
+  </broker>
+
+</beans>
