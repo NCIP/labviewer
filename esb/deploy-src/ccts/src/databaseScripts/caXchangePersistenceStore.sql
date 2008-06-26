@@ -1,9 +1,9 @@
-# Replace the ccts_xchg with proper database name that is to be created.
+# Replace the <<database_name>> with proper database name that is to be created. 
+CREATE DATABASE IF NOT EXISTS @CAXCHANGE_DATABASE@ ;
+commit;
 
-CREATE DATABASE IF NOT EXISTS ccts_xchg;
-
-USE ccts_xchg;
-
+USE @CAXCHANGE_DATABASE@;
+commit;
 CREATE TABLE  IF NOT EXISTS CAXCHANGE_MESSAGES
 (
    MESSAGE_ID  VARCHAR(500) NOT NULL,
