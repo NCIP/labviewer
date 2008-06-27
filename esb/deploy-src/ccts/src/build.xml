@@ -121,6 +121,32 @@
 		
 		<copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
 
+		
+
+
+		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
+		</replace>
+
+		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
+
 
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
@@ -166,18 +192,13 @@
 
 
 	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
-    <fileset dir="${cax.home}/lib"/>
-  </copy>
+			<fileset dir="${cax.home}/lib"/>
+		</copy>
 	
 
-		    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
-    <fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
-  </copy>
-
-   <!--<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
-    <fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
-  </copy>-->
-	
+		<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
+		</copy>
 
 	</target>
 
