@@ -43,4 +43,9 @@ all the components are not started
 7)Give the location of your local certs and key in the install.properties file
 
 
+Useful commands:
+1)mvn -Denv=local -Dmaven.test.skip=true clean install assembly:directory
+2)ant clean all test -Dcaxchange.url=http://localhost:8080/wsrf/services/cagrid/CaXchangeRequestProcessor
+
+
 
