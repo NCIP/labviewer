@@ -379,9 +379,7 @@
 	</target>
 
 	<target name="llt-configure" depends="assert,servicemix-configure" description="config to make LLT ready for its deployment">
-		<copy file="${cax.home}/conf/tomcat/login.config" 
-		todir="${tom.home}/conf" overwrite="true"/>
-
+		
 		<replace  file="${tom.home}/conf/server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
@@ -426,8 +424,7 @@
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 
-		<copy file="${cax.home}/conf/tomcat/catalina.properties" 
-		todir="${tom.home}/conf" overwrite="true"/>
+		
 	</target>
 	
 	<!--Deploys the LLT wat to the Tomcat webapps folder-->
