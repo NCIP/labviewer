@@ -9,10 +9,10 @@
       <outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
     </file>
-	 <file>
-      <source>src/build.xml</source>
-      <outputDirectory>/</outputDirectory>
-      <filtered>true</filtered>
+    <file>
+       <source>src/conf/servicemix/${env}.properties</source>
+       <outputDirectory>/conf/servicemix</outputDirectory>
+       <destName>caxchange.properties</destName>
     </file>
 	 <file>
       <source>src/install.properties</source>
@@ -23,7 +23,7 @@
        <source>src/conf/servicemix/${env}.properties</source>
        <outputDirectory>/conf/servicemix</outputDirectory>
        <destName>caxchange.properties</destName>
-    </file>
+    </file>    
   </files>  
   <fileSets>
     <fileSet>
@@ -52,12 +52,22 @@
        <includes>
          <include>**/*.war</include>
        </includes>
-    </fileSet>      
+    </fileSet>  
+    <fileSet>
+       <directory>${inbound-service-location}</directory>
+       <outputDirectory>/gridservice/</outputDirectory>
+       <includes>
+                <include>**/*</include>
+       </includes>
+    </fileSet>
   </fileSets>  
   <dependencySets>
      <dependencySet>
         <outputDirectory>/lib</outputDirectory>
         <includes>
+                    <include>mysql:mysql-connector-java</include>
+                    <include>commons-dbcp:commons-dbcp</include>
+                    <include>antlr:antlr</include>
 		    <include>cagrid:addressing</include>
                     <include>cagrid:axis</include>
 		    <include>cagrid:axis-url</include>
@@ -130,7 +140,8 @@
 		    <include>cagrid:wss4j</include>
 		    <include>cagrid:xalan</include>
 		    <include>cagrid:xerces-impl</include>
-		    <include>cagrid:xmlsec</include>		   
+		    <include>cagrid:xmlsec</include>	
+		    <include>gov.nih.nci.caxchange:caxchange-clm-jar</include>
         </includes>
      </dependencySet>
   </dependencySets>
@@ -154,6 +165,16 @@
          <binaries>
             <attachmentClassifier>installer</attachmentClassifier>
             <outputDirectory>/serviceAssemblies</outputDirectory>
+            <includeDependencies>false</includeDependencies>
+            <unpack>false</unpack>
+         </binaries>
+     </moduleSet>     
+     <moduleSet>
+         <includes>
+            <include>gov.nih.nci.caxchange:caXchange-auditor-jar</include>
+         </includes>
+         <binaries>
+            <outputDirectory>/lib</outputDirectory>
             <includeDependencies>false</includeDependencies>
             <unpack>false</unpack>
          </binaries>
