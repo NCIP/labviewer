@@ -107,10 +107,6 @@
 
 	<!--Configures the jndi and activemq xml files for the servicemix-->
 	<target name="servicemix-configure" depends="assert,db-init" description="config servicemix container">
-		<!--<copy file="${cax.home}/lib/mysql-connector-java-5.1.5-bin.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
-		<copy file="${cax.home}/lib/commons-dbcp-1.2.1.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>-->
-		<copy file="${cax.home}/lib/clm.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
-		<copy file="${cax.home}/lib/clmauditor.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional" overwrite="true"/>
 		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
 		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
 		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
@@ -357,9 +353,7 @@
 
 	
 
-	<target name="auditor-configure" depends="assert" description="config to make Auditor ready for its deployment">
-		<copy file="${cax.home}/lib/clmauditor.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib"/>
-		<copy file="${cax.home}/lib/clm.jar" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib"/>
+	<target name="auditor-configure" depends="assert,servicemix-configure" description="config to make Auditor ready for its deployment">
 		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
@@ -384,7 +378,7 @@
 		</replace>
 	</target>
 
-	<target name="llt-configure" depends="assert" description="config to make LLT ready for its deployment">
+	<target name="llt-configure" depends="assert,servicemix-configure" description="config to make LLT ready for its deployment">
 		<copy file="${cax.home}/conf/tomcat/login.config" 
 		todir="${tom.home}/conf" overwrite="true"/>
 
@@ -434,10 +428,6 @@
 
 		<copy file="${cax.home}/conf/tomcat/catalina.properties" 
 		todir="${tom.home}/conf" overwrite="true"/>
-		<copy file="${cax.home}/lib/mysql-connector-java-5.1.5-bin.jar" todir="${tom.home}/common/lib" overwrite="true"/>
-		<copy file="${cax.home}/lib/antlr-2.7.6rc1.jar" todir="${tom.home}/common/lib" overwrite="true"/>
-		<copy file="${cax.home}/lib/log4j-1.2.13.jar" todir="${tom.home}/common/lib" overwrite="true"/>
-
 	</target>
 	
 	<!--Deploys the LLT wat to the Tomcat webapps folder-->
