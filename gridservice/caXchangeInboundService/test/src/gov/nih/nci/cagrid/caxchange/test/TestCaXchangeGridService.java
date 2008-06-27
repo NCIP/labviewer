@@ -291,7 +291,7 @@ public class TestCaXchangeGridService extends TestCase {
      */
     public void testCtLabData() {
       try {
-        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("SampleHL7v3.xml");
+        InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("ctlabdata.xml");
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
