@@ -37,7 +37,9 @@
     <module>caXchange-ccts-sa</module>
     <module>caXchange-servicemix-eip-se</module>
     <module>caXchange-verify-routing-jar</module>
+    <module>caXchange-auditor-jar</module>
   </modules>
+  <!--
   <distributionManagement>
     <repository>
       <uniqueVersion>false</uniqueVersion>
@@ -58,6 +60,7 @@
       <layout>default</layout>
     </snapshotRepository>
   </distributionManagement>
+  -->
   <!-- Add ServiceMix repository -->
   <pluginRepositories>
     <pluginRepository>
@@ -98,6 +101,21 @@
       <version>1.1</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+	    <groupId>mysql</groupId>
+	    <artifactId>mysql-connector-java</artifactId>
+	    <version>3.1.14</version>
+     </dependency> 
+     <dependency>
+     	    <groupId>commons-dbcp</groupId>
+     	    <artifactId>commons-dbcp</artifactId>
+	    <version>1.2.1</version>
+     </dependency>
+     <dependency>
+           <groupId>antlr</groupId>
+           <artifactId>antlr</artifactId>
+           <version>2.7.6</version>
+     </dependency>
     <!-- caGrid Dependencies -->
     <dependency>
       <groupId>cagrid</groupId>
@@ -538,8 +556,12 @@
       <groupId>cagrid</groupId> 
       <artifactId>xmlsec</artifactId> 
       <version>4.0.3</version> 
-      
     </dependency>    
+    <dependency>
+        <groupId>gov.nih.nci.caxchange</groupId>
+        <artifactId>caxchange-clm-jar</artifactId>
+        <version>3.2</version>
+    </dependency>     
   </dependencies>
   <build>
     <extensions>
@@ -576,5 +598,6 @@
   </build>
   <properties>
     <servicemix-version>3.1.2</servicemix-version>
+    <inbound-service-location>../../../gridservice</inbound-service-location>
   </properties>
 </project>
