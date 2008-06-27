@@ -73,6 +73,9 @@
 		<delete includeemptydirs="true">
 			<fileset dir="${cax.home}/temp/" includes="**/*"/>
 		</delete>
+		<delete includeemptydirs="true">
+			<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/data" includes="**/*"/>
+		</delete>
     </target>
 
 	<!--Installs the servicemix from apache site and unzip to location given in install.properties file-->
@@ -443,6 +446,21 @@
 	<!--Caxchange complete install with servicemix -->
 	<target name="complete-install"   depends="assert,system-init,clean,db-init,mysql-db-initialize-caxchange,servicemix-install,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
 	<echo message="caxchange-complete-installation complete"/>
+	</target>
+
+
+	<target name="smoke-test"   depends="assert,system-init"  description="Runs caxchange smoke test">
+	<echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
+		<input   message="Did you stop your servicemix "
+		validargs="y,n"
+		addproperty="ifyes"/>
+		<condition property="ifno">
+		<equals arg1="n" arg2="${ifyes}"/>
+		</condition>
+		<fail if="ifno">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
+		<echo message="Initializing caxchange smoke test..............."/>
+		 <rename src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original"/>
+	
 	</target>
 
 
