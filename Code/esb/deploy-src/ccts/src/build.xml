@@ -413,7 +413,7 @@
 		<echo message="Creating  MySql database caxchange,llt and amq .."/>
 		<sql 
 		driver="${caxchangedb.driverClass}"
-		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/${caxchangedb1_name}"
+		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/"
 		userid="${caxchangedb_username}"
 		password="${caxchangedb_password}"
 		 autocommit="true"
@@ -434,7 +434,7 @@
 		<echo message="Initializing MySql database for caxchange application....."/>
 		<sql 
 		driver="${caxchangedb.driverClass}"
-		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/"
+		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/${caxchangedb1_name}"
 		userid="${caxchangedb_username}"
 		password="${caxchangedb_password}"
 		 autocommit="true"
@@ -454,7 +454,7 @@
 		<echo message="Initializing MySql database for llt application....."/>
 		<sql 
 		driver="${caxchangedb.driverClass}"
-		url="jdbc:mysql://${llt_db_host}:${llt_db_port}/"
+		url="jdbc:mysql://${llt_db_host}:${llt_db_port}/${llt_db_name}"
 		userid="${llt_db_username}"
 		password="${llt_db_password}"
 		onerror="continue">
