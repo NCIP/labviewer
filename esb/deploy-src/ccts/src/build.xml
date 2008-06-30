@@ -575,10 +575,8 @@
 	</target>
 
 
-	<target name="smoke-test"   depends="assert,system-init,servicemix-install,servicemix-install,servicemix-configure-smoke-test,mysql-db-initialize-caxchange,sa-deploy"  description="Runs caxchange smoke test">
-	<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
-    <fileset dir="${temp.dir}/caXchangeConf_original"/>
-  </move>
+	<target name="smoke-test"   depends="complete-install"  description="Runs caxchange smoke test">
+	
 	<echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
 		<input   message="Did you stop your servicemix "
 		validargs="y,n"
@@ -587,7 +585,31 @@
 		<equals arg1="n" arg2="${ifyessmoke}"/>
 		</condition>
 		<fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
+		<move todir="${temp.dir}/caXchangeConf_original" failonerror="false">
+    <fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+  </move>
+  
+  <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
+			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
+		</copy>
+
+		<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+    <fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test"/>
+  </move>
+		
 		<echo message="Initializing caxchange smoke test..............."/>
+
+		<input   message="Are  you done with smoke test and want to return to origianl  servicemix config"
+		validargs="y,n"
+		addproperty="ifyesorgi"/>
+		<condition property="ifnoorgi">
+		<equals arg1="n" arg2="${ifyesorgi}"/>
+		</condition>
+		<fail if="ifnoorgi">Please finish the smoke test and comeback</fail>
+		<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" failonerror="false">
+    <fileset dir="${temp.dir}/caXchangeConf_original"/>
+  </move>
+  <echo message="Please restart servicemix to take orginal config take effect..............."/>
 	</target>
 
 
