@@ -199,6 +199,100 @@
 
 	</target>
 
+
+	<!--Servicemix configure smoke test-->
+	<target name="servicemix-configure-smoke-test" depends="assert,db-init" description="config servicemix container">
+		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
+		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
+		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		
+		
+		
+		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		
+		<copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
+
+		
+
+
+		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
+		</replace>
+
+		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
+
+
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+
+
+	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
+			<fileset dir="${cax.home}/lib"/>
+		</copy>
+	
+
+		<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
+			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
+		</copy>
+
+	</target>
+
 	<!--Starts  the tomcat container-->
     <target name="tomcat-start" depends="assert" description="starts tomcat server">
     <java jar="${tom.home}/bin/bootstrap.jar" fork="true">
@@ -216,6 +310,8 @@
 
 
 	<target name="db-init"  depends="assert" description="Initializes the environment for the databases">
+		<copy file="${cax.home}/databaseScripts/create-db.sql" tofile="${cax.home}/temp/create-db.sql"
+		overwrite="true"/>
 		<copy file="${cax.home}/databaseScripts/caXchangePersistenceStore.sql" tofile="${cax.home}/temp/caXchangePersistenceStore.sql"
 		overwrite="true"/>
 		<copy file="${cax.home}/databaseScripts/AuthSchemaMySQL.sql" tofile="${cax.home}/temp/AuthSchemaMySQL.sql"
@@ -224,6 +320,22 @@
 		overwrite="true"/>
 		<copy file="${cax.home}/databaseScripts/DataPrimingMySQL.sql" tofile="${cax.home}/temp/DataPrimingMySQL.sql"
 		overwrite="true"/>
+
+		<replace  file="${cax.home}/temp/create-db.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/create-db.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/create-db.sql" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_DATABASE@" property="amq_database_name"/>
+		</replace>
+
+
+
 		<replace  file="${cax.home}/temp/caXchangePersistenceStore.sql" 
 		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
@@ -298,6 +410,22 @@
 			<replacefilter token="@JNDI_DATABASE_PASS@" property="caxchangedb_password"/>
 		</replace>
 
+		<echo message="Creating  MySql database caxchange,llt and amq .."/>
+		<sql 
+		driver="${caxchangedb.driverClass}"
+		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/${caxchangedb1_name}"
+		userid="${caxchangedb_username}"
+		password="${caxchangedb_password}"
+		 autocommit="true"
+		src="${cax.home}/temp/create-db.sql">
+		<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+			
+			</sql>
+
 
 	</target>
 	
@@ -306,7 +434,7 @@
 		<echo message="Initializing MySql database for caxchange application....."/>
 		<sql 
 		driver="${caxchangedb.driverClass}"
-		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/${caxchangedb1_name}"
+		url="jdbc:mysql://${caxchangedb_host}:${caxchangedb_port}/"
 		userid="${caxchangedb_username}"
 		password="${caxchangedb_password}"
 		 autocommit="true"
@@ -326,7 +454,7 @@
 		<echo message="Initializing MySql database for llt application....."/>
 		<sql 
 		driver="${caxchangedb.driverClass}"
-		url="jdbc:mysql://${llt_db_host}:${llt_db_port}/${llt_db_name}"
+		url="jdbc:mysql://${llt_db_host}:${llt_db_port}/"
 		userid="${llt_db_username}"
 		password="${llt_db_password}"
 		onerror="continue">
@@ -447,19 +575,21 @@
 	</target>
 
 
-	<target name="smoke-test"   depends="assert,system-init"  description="Runs caxchange smoke test">
+	<target name="smoke-test"   depends="assert,system-init,servicemix-install,servicemix-install,servicemix-configure-smoke-test,mysql-db-initialize-caxchange,sa-deploy"  description="Runs caxchange smoke test">
+	<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+    <fileset dir="${temp.dir}/caXchangeConf_original"/>
+  </move>
 	<echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
 		<input   message="Did you stop your servicemix "
 		validargs="y,n"
-		addproperty="ifyes"/>
-		<condition property="ifno">
-		<equals arg1="n" arg2="${ifyes}"/>
+		addproperty="ifyessmoke"/>
+		<condition property="ifnosmoke">
+		<equals arg1="n" arg2="${ifyessmoke}"/>
 		</condition>
-		<fail if="ifno">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
+		<fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
 		<echo message="Initializing caxchange smoke test..............."/>
-		 <rename src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original"/>
-	
 	</target>
+
 
 
 </project>
