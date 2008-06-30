@@ -1,6 +1,4 @@
 # Replace the <<database_name>> with proper database name that is to be created. 
-CREATE DATABASE IF NOT EXISTS @CAXCHANGE_DATABASE@ ;
-commit;
 
 USE @CAXCHANGE_DATABASE@;
 commit;
