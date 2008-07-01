@@ -11,43 +11,11 @@
   <version>1.0-SNAPSHOT</version>
   <description>jar file containing supporting classes for verifying caxchange routing and bean component configuration.</description>
    <dependencies> 
-   <!-- 
-	<dependency>
-	    <groupId>commons-collections</groupId>
-	    <artifactId>commons-collections</artifactId>
-	    <version>2.0</version>
-	    <type>jar</type>
-	</dependency>
-	--> 
-	<!-- 
-	<dependency>
-	    <groupId>commons-logging</groupId>
-	    <artifactId>commons-logging</artifactId>
-	    <version>1.1</version>
-	    <type>jar</type>
-	</dependency> 	-->
 	    <dependency>
 	      <groupId>log4j</groupId>
 	      <artifactId>log4j</artifactId>
 	      <version>1.2.13</version>
 	    </dependency>	
-	    <!--  
-	    <dependency>
-	      <groupId>gov.nih.nci.caxchange</groupId>
-	      <artifactId>meta-jar</artifactId>
-	      <version>1.0-SNAPSHOT</version>
-	    </dependency>	    
-    <dependency>
-      <groupId>org.apache.servicemix</groupId>
-      <artifactId>servicemix-bean</artifactId>
-      <version>${servicemix-version}</version>
-      <type>jar</type>
-    </dependency>	 
-       	<dependency>
-          <groupId>org.apache.xmlbeans</groupId> 
-           <artifactId>xmlbeans</artifactId> 
-	    <version>2.3.0</version>
-	</dependency> -->
    </dependencies>
    <build>
     <outputDirectory>target/classes</outputDirectory>
