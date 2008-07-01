@@ -257,9 +257,8 @@ public class CancerCenterClient {
 	}
 
 	/**
-	 * Polls the directory for files to be processed.When it encounters a file:
-	 * 1.It invokes the caAdapter API to convert a .csv file to HL7V3. 2.Then
-	 * invokes the grid service to persist the HL7V3 message.
+	 * Process starts the HL7V3Transformation process,HL7V2ToHL7V3Tranformation and
+	 * LoadV3Labs process to poll the directories for files to be transformed.
 	 * @param threadList
 	 */
 	public void process(ArrayList<ScheduledExecutorService>threadList) {
@@ -270,8 +269,8 @@ public class CancerCenterClient {
 		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
 		 v2Transformation.process(threadList);
 		 
-		LoadV3Labs loadLabs = new LoadV3Labs(getInstance());
-		loadLabs.process(threadList);
+		 LoadV3Labs loadLabs = new LoadV3Labs(getInstance());
+		 loadLabs.process(threadList);
 		 
 	}
 
