@@ -133,7 +133,7 @@ public class HL7V3Transformation {
 		final Runnable fileCheck = new Runnable() {
 			public void run() {
 				try {
-					logger.debug(Messages.getString("CancerCenterClient.128"));
+					logger.debug(Messages.getString("Polling for csv files"));
 					if (!cancerCenterClient.checkPreProcessedFolder()) {
 						logger.error(Messages
 								.getString("CancerCenterClient.20"));
@@ -367,7 +367,6 @@ public class HL7V3Transformation {
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			String expression1 = "//enrolledSubject/id/@root";
 			String expression2 = "//enrolledSubject/id/@extension";
-
 			String root = (String) xpath.evaluate(expression1, document,
 					XPathConstants.STRING);
 			String extension = (String) xpath.evaluate(expression2, document,
@@ -376,7 +375,8 @@ public class HL7V3Transformation {
 			logger.debug("Extension" + extension);
 			// create the registration object
 			ParticipantType participant = new ParticipantType();
-			OrganizationAssignedIdentifierType identifier = new OrganizationAssignedIdentifierType();
+			OrganizationAssignedIdentifierType identifier = 
+				new OrganizationAssignedIdentifierType();
 			participant.setGridId(root);
 			identifier.setValue(extension);
 			OrganizationAssignedIdentifierType[] identifiers = { identifier };
