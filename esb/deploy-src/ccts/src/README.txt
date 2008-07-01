@@ -10,16 +10,13 @@ CATALINA_HOME(Your tomcat home directory)
 specific to your environment
 
 
-4)We assume that database schema is already created for the caxchange and LLT and activemq
-with required credentials
-
-5)Copy ant paste the servicemix.xml  context information from the conf/tomcat folder in caxchange
+4)Copy ant paste the servicemix.xml  context information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
-6)Copy ant paste the login.conf  datasource information from the conf/tomcat folder in caxchange
+5)Copy ant paste the login.conf  datasource information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
-7)Copy ant paste the catalina.properties  additional line  information from the conf/tomcat folder in caxchange
+6)Copy ant paste the catalina.properties  additional line  information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
 
