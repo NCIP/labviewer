@@ -178,6 +178,22 @@
             <includeDependencies>false</includeDependencies>
             <unpack>false</unpack>
          </binaries>
-     </moduleSet>     
+     </moduleSet>   
+     <moduleSet>
+        <includes>
+           <include>gov.nih.nci.caxchange:caXchange-verify-routing-jar</include>
+        </includes>
+        <binaries>
+            <outputDirectory>/verifyRouting</outputDirectory>
+            <dependencySets>
+               <dependencySet>
+                 <includes>
+                   <include>log4j:log4j</include>
+                 </includes>
+               </dependencySet>
+             </dependencySets>
+            <unpack>false</unpack>
+        </binaries>
+     </moduleSet>
   </moduleSets>
 </assembly>
