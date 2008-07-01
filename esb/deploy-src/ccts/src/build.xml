@@ -612,6 +612,29 @@
   <echo message="Please restart servicemix to take orginal config take effect..............."/>
 	</target>
 
+		<!--Verifies if there were any error in the routing-->
+	 <target name="verify-routing" description="Verifies if there is any changes in the routing pattern" >
+		
+		 <copy todir="${cax.home}/verifyRouting/caXchangeConf">
+			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
+		</copy>
+		<java
+           dir="${cax.home}/verifyRouting"
+           jar="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.0-SNAPSHOT.jar"
+           fork="true"
+           failonerror="true"
+           maxmemory="128m"
+           >
+         <arg value="-jar"/>
+         <classpath>
+           <pathelement location="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.0-SNAPSHOT.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+
+    </target>
+
+
 
 
 </project>
