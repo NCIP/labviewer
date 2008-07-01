@@ -60,10 +60,17 @@ package gov.nih.nci.caxchange.client;
  * 
  */
 
+
+import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
+import gov.nih.nci.cagrid.authentication.bean.Credential;
+import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
+import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
+import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.MessageTypes;
@@ -83,6 +90,7 @@ import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.GlobusCredentialException;
+
 
 /**
  * @author asharma
@@ -118,7 +126,7 @@ public class InvokeGridService {
 			InputStream istream = getClass().getResourceAsStream(InvokeGridService.CONFIG_FILE);
 			props.load(istream);
 			String proxyFile = (String)props.getProperty("proxyFile");
-			GlobusCredential gb =new GlobusCredential(proxyFile);
+			GlobusCredential gb =new GlobusCredential(proxyFile);//this.obtainCredentials();//new GlobusCredential(proxyFile);
 			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
 					cancerCenterClient.getHubURL(),gb);
 			// creates the caXchange Message
@@ -243,6 +251,49 @@ public class InvokeGridService {
 		messagePayload.setXmlSchemaDefinition(uri);
 	
 		return messagePayload;
+	}
+	
+	/**
+	 * Obtains grid credentials directly from Dorian.
+	 * @return GlobusCredential
+	 */
+	private GlobusCredential obtainCredentials(){
+		
+		GlobusCredential proxy =null;
+		try{
+			   
+			   //Create credential		
+
+			   Credential cred = new Credential();
+			   BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
+			   bac.setUserId("cctsdemo1@nci.nih.gov");
+			   bac.setPassword("!Ccts1");
+			   cred.setBasicAuthenticationCredential(bac);
+					
+			   //Authenticate to the IdP (DorianIdP) using credential
+			   AuthenticationClient authClient = new AuthenticationClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",cred);
+			   SAMLAssertion saml = authClient.authenticate();
+					
+
+			   //Requested Grid Credential lifetime (12 hours)
+					    
+			   ProxyLifetime lifetime = new ProxyLifetime();
+			   lifetime.setHours(12);
+
+			   //Delegation Path Length
+					
+			   int delegationLifetime = 0;
+
+			   //Request Grid Credential
+
+			    IFSUserClient dorian = new IFSUserClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian");
+			    proxy = dorian.createProxy(saml, lifetime,delegationLifetime);
+					
+			 }catch (Exception e) {
+			   e.printStackTrace();
+			 }
+			 return proxy;
+
 	}
 
 }
