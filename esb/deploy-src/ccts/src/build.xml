@@ -39,7 +39,6 @@
 		<echo message="caGRID Version    : ${CAGRID_VERSION}"/>
 		<echo message="Tomcat Version    : ${TOMCAT_VERSION}"/>
 		<echo message="MySql Version     : ${MYSQL_VERSION}"/>
-		<echo message="Servicemix Version: ${SERVICEMIX_VERSION}"/>
 		<echo message="Operating System  : ${os.name}"/>
 		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
 		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
