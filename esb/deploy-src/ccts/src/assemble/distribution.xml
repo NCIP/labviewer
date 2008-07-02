@@ -12,7 +12,7 @@
     <file>
       <source>src/build.xml</source>
       <outputDirectory>/</outputDirectory>
-      <filtered>true</filtered>
+      <filtered>false</filtered>
     </file>
 	 <file>
       <source>src/install.properties</source>
