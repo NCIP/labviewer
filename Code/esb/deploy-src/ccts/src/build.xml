@@ -43,14 +43,7 @@
 		<echo message="Operating System  : ${os.name}"/>
 		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
 		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
-		<echo message="CATALINA_HOME is  : ${env.CATALINA_HOME}"/>
-		<echo message="CAX_HOME is       : ${env.CAX_HOME}"/>
-		<!--<condition property="java.version" >
-			<and>
-				<available value="1.5.0_16"/>
-			</and>
-		</condition>-->
-		
+		<echo message="CATALINA_HOME is  : ${env.CATALINA_HOME}"/>		
 		<echo message="Type ant -p for targets available"/>
     </target>
 	
