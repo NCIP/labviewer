@@ -28,7 +28,6 @@
 
 	
 	
-	<!--Checks the software version if they comply with the technology stack CBIIT is following-->
 	<target name="version-check" depends="system-init,assert" description="checks the software version used in your system">
 		<echo message="###########################################"/>
 		<echo message="#Welcome To caxchange v1.1 Installation   #"/>
