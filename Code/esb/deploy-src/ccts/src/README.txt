@@ -6,17 +6,19 @@ JAVA_HOME(JDK installation path)
 CATALINA_HOME(Your tomcat home directory)
 
 
-3)Please replce the <<REPLACE_THIS_VALUE>> in install.properties files with the values 
+3)Please replce the #REPLACE_THIS_VALUE# in install.properties files with the values 
 specific to your environment
 
+4)Do ant -p for available targets 
 
-4)Copy ant paste the servicemix.xml  context information from the conf/tomcat folder in caxchange
+
+5)Copy ant paste the servicemix.xml  context information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
-5)Copy ant paste the login.conf  datasource information from the conf/tomcat folder in caxchange
+6)Copy ant paste the login.conf  datasource information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
-6)Copy ant paste the catalina.properties  additional line  information from the conf/tomcat folder in caxchange
+7)Copy ant paste the catalina.properties  additional line  information from the conf/tomcat folder in caxchange
 distribution to the appropriate place in the tomcat used. 
 
 
@@ -41,8 +43,12 @@ all the components are not started
 
 
 Useful commands:
-1)mvn -Denv=local -Dmaven.test.skip=true clean install assembly:directory
-2)ant clean all test -Dcaxchange.url=http://localhost:8080/wsrf/services/cagrid/CaXchangeRequestProcessor
+1)To build service assembly,service engine and create distribution directory structure and this command
+need to be issue from ccts folder level form cVs directory structure
+mvn -Denv=local -Dmaven.test.skip=true clean install assembly:directory
+2)To send test message using grid proxy and this command need to be issue form gridservice/caXchangeInboundService
+from caxchange home
+ant clean all test -Dcaxchange.url=http://localhost:8080/wsrf/services/cagrid/CaXchangeRequestProcessor
 
 
 
