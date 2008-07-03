@@ -1106,13 +1106,7 @@ public class CTLabDAO extends BaseJDBCDAO
 			 clinicalResult.getCrCodeSystem(),clinicalResult.getCrCodeSystemName(),
 			 clinicalResult.getCrCodeSystemVersion(),
 			 clinicalResult.getCrCodeDisplayText());
-			
-			//valUOMCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-				//	.getValueUnitOfMeasureCd(), null, null);
-			
-			//labTestCdId = insertOrsaveConceptDescriptor(con, clinicalResult
-				//	.getMeansVitStatObtCd(), null, null);
-			
+							
 		}
 
 		if (labTestCdId == null) // This is a required field in the database
