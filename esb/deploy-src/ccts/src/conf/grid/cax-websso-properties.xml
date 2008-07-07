@@ -23,7 +23,7 @@
 	<authentication-service-list>
 		<authentication-service>
 			<service-name>Dorian</service-name>
-			<service-url>@@AUTHENTICATION-URL@</service-url>
+			<service-url>@AUTHENTICATION-URL@</service-url>
 		</authentication-service>
 	</authentication-service-list>
 	<delegated-application-list>
