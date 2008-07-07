@@ -692,7 +692,7 @@
 	</target>
 
 		<!--Verifies if there were any error in the routing-->
-	 <target name="verify-routing" description="Verifies if there is any changes in the routing pattern" >
+	 <target name="verify-routing" depends="assert,system-init" description="Verifies if there is any changes in the routing pattern" >
 		
 		 <copy todir="${cax.home}/verifyRouting/caXchangeConf">
 			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
