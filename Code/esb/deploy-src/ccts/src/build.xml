@@ -568,27 +568,7 @@
 
 	<target name="smoke-test"   depends="complete-install"  description="Runs caxchange smoke test">
 
-	<copy file="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" tofile="${cax.home}/temp/cax.prop"/>
-	<replace file="${cax.home}/temp/cax.prop" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CERT@" property="delegation_certificateFilePath"/>
-		</replace>
-		<replace file="${cax.home}/temp/cax.prop" 
-		 propertyFile="install.properties">
-			<replacefilter token="@KEY@" property="delegation_keyFilePath"/>
-		</replace>
-		<replace file="${cax.home}/temp/cax.prop" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_USERNAME@" property="ccts_grid_test_userName"/>
-		</replace>
-		<replace file="${cax.home}/temp/cax.prop" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_PASSWORD@" property="ccts_grid_test_password"/>
-		</replace>
-		<copy file="${cax.home}/temp/cax.prop" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties"/>
-
-
-		<echo message="Please update your url in file caxchange home gridservice/caXchangeInboundService/test/resources/websso-properties.xml"/>
+			<echo message="Please update your url in file caxchange home gridservice/caXchangeInboundService/test/resources/websso-properties.xml"/>
 		<input   message="If you updated the url or are ok with the existing url in websso.properties please presss y to continue"
 		validargs="y,n"
 		addproperty="ifyesurl"/>
