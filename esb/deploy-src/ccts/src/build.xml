@@ -625,6 +625,12 @@
 
     </target>
 
+	<target name="update-routing-configuration"   depends="assert,system-init"  description="Deploy the updated routing configuration to servicemix">
+	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
+			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
+		</copy>
+	</target>
+
 
 
 
