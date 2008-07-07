@@ -136,6 +136,32 @@
 		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
 
 
+		<copy file="${cax.home}/conf/grid/cax-websso-properties.xml" tofile="${cax.home}/temp/cax-websso-properties.xml" />
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@DORIAN-URL@" property="dorian_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@DELEGATION-URL@" property="delegation_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AUTHENTICATION-URL@" property="authentication_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
+		</replace>
+
+		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
+
+
+
+
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 		 propertyFile="install.properties">
@@ -567,6 +593,58 @@
 
 
 	<target name="smoke-test"   depends="complete-install"  description="Runs caxchange smoke test">
+
+	<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
+		</replace>
+
+		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
+
+
+		<copy file="${cax.home}/conf/grid/cax-websso-properties.xml" tofile="${cax.home}/temp/cax-websso-properties.xml" />
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@DORIAN-URL@" property="dorian_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@DELEGATION-URL@" property="delegation_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AUTHENTICATION-URL@" property="authentication_service_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
+		</replace>
+
+		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
+
+
+
+
+
 
 			<echo message="Please update your url in file caxchange home gridservice/caXchangeInboundService/test/resources/websso-properties.xml"/>
 		<input   message="If you updated the url or are ok with the existing url in websso.properties please presss y to continue"
