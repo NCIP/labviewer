@@ -163,6 +163,33 @@
 
 
 
+		
+		<copy file="${cax.home}/conf/grid/cax-grid-service.properties" tofile="${cax.home}/temp/cax-grid-service.properties" />
+		<replace  file="${cax.home}/temp/cax-grid-service.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/cax-grid-service.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+		
+		<copy file="${cax.home}/temp/cax-grid-service.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/service.properties" overwrite="true"/>
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
