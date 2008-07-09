@@ -15,7 +15,17 @@
       <filtered>false</filtered>
     </file>
 	 <file>
-      <source>src/install.properties</source>
+      <source>src/local-install.properties</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+	<file>
+      <source>src/prod-install.properties</source>
+      <outputDirectory>/</outputDirectory>
+      <filtered>true</filtered>
+    </file>
+	<file>
+      <source>src/dev-install.properties</source>
       <outputDirectory>/</outputDirectory>
       <filtered>true</filtered>
     </file>
