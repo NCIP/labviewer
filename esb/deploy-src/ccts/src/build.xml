@@ -125,7 +125,7 @@
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="$install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
 		</replace>
 
@@ -504,7 +504,7 @@
 		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
