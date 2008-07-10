@@ -7,8 +7,7 @@
 
 	 <!-- PROPERTIES -->
 	 <property environment="env" />
-	 <property name="y" value="local" />
-	 <property file="${y}-install.properties"/>
+	 <property file="install.properties"/>
 	 <property name="cax.home" value="." />
 	 <property name="tom.home" value="${env.CATALINA_HOME}" />
 	 <property name="lib.dir" value="${cax.home}/lib"/>
@@ -116,22 +115,22 @@
 
 		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="$install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
 		</replace>
 
@@ -140,22 +139,22 @@
 
 		<copy file="${cax.home}/conf/grid/cax-websso-properties.xml" tofile="${cax.home}/temp/cax-websso-properties.xml" />
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@DORIAN-URL@" property="dorian_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@DELEGATION-URL@" property="delegation_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AUTHENTICATION-URL@" property="authentication_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
 		</replace>
 
@@ -166,43 +165,43 @@
 
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
 
@@ -236,22 +235,22 @@
 
 		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
 		</replace>
 
@@ -260,43 +259,43 @@
 
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
 		</replace>
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
 
@@ -341,30 +340,30 @@
 		overwrite="true"/>
 
 		<replace  file="${cax.home}/temp/create-db.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/create-db.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/create-db.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE@" property="amq_database_name"/>
 		</replace>
 
 
 
 		<replace  file="${cax.home}/temp/caXchangePersistenceStore.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/AuthSchemaMySQL.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/CLMSchemaMySQL.sql" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 
@@ -373,59 +372,59 @@
 		<copy file="${cax.home}/conf/servicemix/servicemix.properties" tofile="${cax.home}/temp/servicemix.properties"
 		overwrite="true"/>
 		<replace  file="${cax.home}/temp/servicemix.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
 		</replace>
 		
 		<replace  file="${cax.home}/temp/servicemix.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE@" property="amq_database_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE_PORT@" property="amq_db_port"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE_HOST@" property="amq_db_host"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE_USER@" property="amq_db_username"/>
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_DATABASE_PASS@" property="amq_db_password"/>
 		</replace>
 		
 		<copy file="${cax.home}/conf/servicemix/jndi.xml" tofile="${cax.home}/temp/jndi.xml"
 		overwrite="true"/>
 		<replace  file="${cax.home}/temp/jndi.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@JNDI_DATABASE@" property="caxchangedb1_name"/>
 		</replace>
 		<replace  file="${cax.home}/temp/jndi.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@JNDI_DATABASE_PORT@" property="caxchangedb_port"/>
 		</replace>
 		<replace  file="${cax.home}/temp/jndi.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@JNDI_DATABASE_HOST@" property="caxchangedb_host"/>
 		</replace>
 		<replace  file="${cax.home}/temp/jndi.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@JNDI_DATABASE_USER@" property="caxchangedb_username"/>
 		</replace>
 		<replace  file="${cax.home}/temp/jndi.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@JNDI_DATABASE_PASS@" property="caxchangedb_password"/>
 		</replace>
 
@@ -509,19 +508,19 @@
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 	</target>
@@ -529,46 +528,46 @@
 	<target name="llt-configure" depends="assert,servicemix-configure" description="config to make LLT ready for its deployment">
 		
 		<replace  file="${tom.home}/conf/server.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${tom.home}/conf/server.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
 		<replace  file="${tom.home}/conf/server.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
 		<replace  file="${tom.home}/conf/server.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
 		<replace file="${tom.home}/conf/server.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 
 
 
 		<replace  file="${tom.home}/conf/login.config" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
 		<replace  file="${tom.home}/conf/login.config" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
 		<replace file="${tom.home}/conf/login.config" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
 		<replace  file="${tom.home}/conf/login.config" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
 		<replace file="${tom.home}/conf/login.config" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 
@@ -598,22 +597,22 @@
 
 	<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
 		</replace>
 
@@ -622,22 +621,22 @@
 
 		<copy file="${cax.home}/conf/grid/cax-websso-properties.xml" tofile="${cax.home}/temp/cax-websso-properties.xml" />
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@DORIAN-URL@" property="dorian_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@DELEGATION-URL@" property="delegation_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@AUTHENTICATION-URL@" property="authentication_service_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="${y}-install.properties">
+		 propertyFile="install.properties">
 			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
 		</replace>
 
