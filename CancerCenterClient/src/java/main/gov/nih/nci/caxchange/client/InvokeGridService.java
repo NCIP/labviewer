@@ -126,7 +126,7 @@ public class InvokeGridService {
 			InputStream istream = getClass().getResourceAsStream(InvokeGridService.CONFIG_FILE);
 			props.load(istream);
 			String proxyFile = (String)props.getProperty("proxyFile");
-			GlobusCredential gb =new GlobusCredential(proxyFile);//this.obtainCredentials();//new GlobusCredential(proxyFile);
+			GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);
 			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
 					cancerCenterClient.getHubURL(),gb);
 			// creates the caXchange Message
@@ -236,8 +236,7 @@ public class InvokeGridService {
 		// testing purposes comment out the creds.
 		// creds.setUserName(userName);
 		// creds.setPassword(userPasswd);
-		 
-	
+		
 		requestMessage.setMetadata(metadata);
 		Request caxchangeRequest = new Request();
 		requestMessage.setRequest(caxchangeRequest);
@@ -266,31 +265,27 @@ public class InvokeGridService {
 
 			   Credential cred = new Credential();
 			   BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-			   bac.setUserId("cctsdemo1@nci.nih.gov");
-			   bac.setPassword("!Ccts1");
+			   bac.setUserId(cancerCenterClient.getUserName());
+			   bac.setPassword(cancerCenterClient.getUserPasswd());
 			   cred.setBasicAuthenticationCredential(bac);
 					
 			   //Authenticate to the IdP (DorianIdP) using credential
-			   AuthenticationClient authClient = new AuthenticationClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",cred);
+			   AuthenticationClient authClient = new AuthenticationClient(cancerCenterClient.getAuthenticationService(),cred);
 			   SAMLAssertion saml = authClient.authenticate();
 					
-
 			   //Requested Grid Credential lifetime (12 hours)
-					    
 			   ProxyLifetime lifetime = new ProxyLifetime();
 			   lifetime.setHours(12);
 
 			   //Delegation Path Length
-					
 			   int delegationLifetime = 0;
 
 			   //Request Grid Credential
-
-			    IFSUserClient dorian = new IFSUserClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian");
+        	    IFSUserClient dorian = new IFSUserClient(cancerCenterClient.getAuthenticationService());
 			    proxy = dorian.createProxy(saml, lifetime,delegationLifetime);
 					
 			 }catch (Exception e) {
-			   e.printStackTrace();
+				 InvokeGridService.logger.error("Exception" + e.getLocalizedMessage());
 			 }
 			 return proxy;
 
