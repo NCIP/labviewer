@@ -50,8 +50,8 @@ public class ResponseHandler {
     static String testResponse ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
     "<caXchangeResponseMessage xmlns=\"http://caXchange.nci.nih.gov/messaging\">\n" + 
     "  <responseMetaData>\n" + 
-    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68</externalIdentifier>\n" + 
-    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68</caXchangeIdentifier>\n" + 
+    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</externalIdentifier>\n" + 
+    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</caXchangeIdentifier>\n" + 
     "  </responseMetaData>\n" + 
     "  <response>\n" + 
     "    <responseStatus>FAILURE</responseStatus>\n" + 
@@ -66,8 +66,8 @@ public class ResponseHandler {
     static String testResponse1 ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
     "<caXchangeResponseMessage>\n" + 
     "  <responseMetaData>\n" + 
-    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68</externalIdentifier>\n" + 
-    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68</caXchangeIdentifier>\n" + 
+    "    <externalIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</externalIdentifier>\n" + 
+    "    <caXchangeIdentifier>REGISTER_SUBJECTmyExternalIdentifiercafb12d0-8ae8-11dc-9ed7-c7f4bfd99e68hmarwahapassword</caXchangeIdentifier>\n" + 
     "  </responseMetaData>\n" + 
     "  <response>\n" + 
     "    <responseStatus>FAILURE</responseStatus>\n" + 
