@@ -13,7 +13,7 @@
 	 <property name="lib.dir" value="${cax.home}/lib"/>
 	 <property name="temp.dir" value="${cax.home}/temp" />
 	<property name="log.dir" value="${cax.home}/logs" />
-	
+	<property name="tomcat.prop" value="${cax.home}/conf/tomcat" />	
 	
 	<!--Validates the CATALINA_HOME and JDK version-->
 	<target name="assert"  description="Uses ant to detect current jdk version and validates CATALINA_HOME is set">
@@ -71,13 +71,15 @@
 	<!--Installs the servicemix from apache site and unzip to location given in install.properties file-->
 	<target name="servicemix-install" depends="assert,system-init,clean" description="download servicemix">
         <echo message="You current SERVICEMIX_HOME in property file :${SERVICEMIX_HOME}"/>
-		<input   message="Do you have servicemix already installed or want to install new servicemix at this location "
+	<!--	 Commented to fix the bug.. Yogaraj to fix this after his vacation.
+            <input   message="Do you have servicemix already installed at this location. Servicemix should be installed before running this script."
 		validargs="y,n"
 		addproperty="ifyes"/>
 		<condition property="ifno">
 		<equals arg1="n" arg2="${ifyes}"/>
 		</condition>
-		<fail if="ifno">Please set the new servicemix location that you have already installed or want to install new in install.properties file and run script again</fail>
+		<fail if="ifno">Please set the new servicemix location that you have already installed and run script again</fail>
+        -->
 		<!--<echo message="Setting environment variable to ${SERVICEMIX_HOME}"/>-->
 		<mkdir dir="${SERVICEMIX_HOME}"/>
 		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip"
@@ -526,52 +528,57 @@
 	</target>
 
 	<target name="llt-configure" depends="assert,servicemix-configure" description="config to make LLT ready for its deployment">
-		
-		<replace  file="${tom.home}/conf/server.xml" 
+             <mkdir dir="${temp.dir}/tomcat" />
+             <copy  todir="${temp.dir}/tomcat" >
+               <fileset dir="${tomcat.prop}"/> 
+             </copy>		
+
+		<replace  file="${temp.dir}/tomcat/llt-server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
-		<replace  file="${tom.home}/conf/server.xml" 
+		<replace  file="${temp.dir}/tomcat/llt-server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
-		<replace  file="${tom.home}/conf/server.xml" 
+		<replace  file="${temp.dir}/tomcat/llt-server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
-		<replace  file="${tom.home}/conf/server.xml" 
+		<replace  file="${temp.dir}/tomcat/llt-server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
-		<replace file="${tom.home}/conf/server.xml" 
+		<replace file="${temp.dir}/tomcat/llt-server.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 
 
-
-		<replace  file="${tom.home}/conf/login.config" 
+		<replace  file="${temp.dir}/tomcat/llt-login.config" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
-		<replace  file="${tom.home}/conf/login.config" 
+		<replace  file="${temp.dir}/tomcat/llt-login.config" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
-		<replace file="${tom.home}/conf/login.config" 
+		<replace file="${temp.dir}/tomcat/llt-login.config" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
-		<replace  file="${tom.home}/conf/login.config" 
+		<replace  file="${temp.dir}/tomcat/llt-login.config" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
-		<replace file="${tom.home}/conf/login.config" 
+		<replace file="${temp.dir}/tomcat/llt-login.config" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
 
-		
+	<echo message="llt-login.config, llt-catalina.properties, llt-server.xml files are configured and are copied in ${temp.dir}/tomcat "/>		
+	<echo message="Please follow instructions in the installation guide move contents of these files to the tomcat server"/>	
+
 	</target>
 	
 	<!--Deploys the LLT wat to the Tomcat webapps folder-->
@@ -579,16 +586,17 @@
 		<copy todir="${tom.home}/webapps" overwrite="true">
 			<fileset file="${cax.home}/war/llt.war" />
 		</copy>
+
 	</target>
 	<!--Deploys the service assembly and the service engine to servicemix container-->
     <target name="sa-deploy"  depends="assert,system-init,servicemix-configure" description="deploys the servicemix assembly">
 			<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
-		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-1.0-SNAPSHOT-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
-        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-1.0-SNAPSHOT.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-1.1-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-1.1.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
     </target>
 
 	<!--Caxchange complete install with servicemix -->
-	<target name="complete-install"   depends="assert,system-init,clean,db-init,mysql-db-initialize-caxchange,servicemix-install,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
+	<target name="complete-install"   depends="assert,system-init,clean,db-init,mysql-db-initialize-caxchange,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
 	<echo message="caxchange-complete-installation complete"/>
 	</target>
 
@@ -700,14 +708,14 @@
 		</copy>
 		<java
            dir="${cax.home}/verifyRouting"
-           jar="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.0-SNAPSHOT.jar"
+           jar="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.1.jar"
            fork="true"
            failonerror="true"
            maxmemory="128m"
            >
          <arg value="-jar"/>
          <classpath>
-           <pathelement location="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.0-SNAPSHOT.jar"/>
+           <pathelement location="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.1.jar"/>
            <pathelement path="${java.class.path}"/>
          </classpath>
        </java>
