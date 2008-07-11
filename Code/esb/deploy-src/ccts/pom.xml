@@ -561,7 +561,7 @@
         <groupId>gov.nih.nci.caxchange</groupId>
         <artifactId>caxchange-clm-jar</artifactId>
         <version>3.2</version>
-    </dependency>     
+    </dependency> 
   </dependencies>
   <build>
     <extensions>
@@ -588,16 +588,74 @@
       </plugin>
         <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
-            <configuration>
-               <descriptors>
-                  <descriptor>src/assemble/distribution.xml</descriptor>
-               </descriptors>
-            </configuration>
-        </plugin>      
+            <inherited>false</inherited>
+                <configuration>
+                  <descriptors>
+                      <descriptor>src/assemble/distribution.xml</descriptor>
+                 </descriptors>
+                  </configuration>
+        </plugin> 
+        <plugin>
+	    <artifactId>maven-antrun-plugin</artifactId>
+	    <inherited>false</inherited>
+	     <executions>
+	        <execution>
+	            <id>package</id>
+	            <phase>package</phase>	        
+ 	            <configuration>
+ 	               <tasks>
+	                 <taskdef resource="net/sf/antcontrib/antlib.xml">
+		           <classpath>
+			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar" />
+		           </classpath>
+	                 </taskdef>
+	                 <mkdir dir="${temp-tomcat-dir}" />
+                         <ant antfile="${inbound-service-location}/caXchangeInboundService/build.xml" inheritAll="false" target="createWar" >
+	                       <property name="tomcat.dir" value="C:/temp.tomcat.dir"/>
+	                       <property name="webapp.name" value="wsrf-caxchange"/>
+	                       <property name="build.compiler" value="extJavac"/>
+ 	                  </ant>
+ 	               </tasks>
+ 	            </configuration>
+ 	            <goals>
+ 	              <goal>run</goal>
+ 	            </goals>
+                </execution>
+                <execution>
+                   <id>install</id>
+                    <phase>install</phase>	        
+ 	            <configuration>
+ 	               <tasks>
+ 	                   <echo message="Install Phase" />
+ 	               </tasks>
+ 	            </configuration>
+ 	            <goals>
+ 	              <goal>run</goal>
+ 	            </goals>                   
+                </execution>
+                <execution>
+                   <phase>clean</phase>
+ 	            <configuration>
+ 	               <tasks>
+	                 <taskdef resource="net/sf/antcontrib/antlib.xml">
+		           <classpath>
+			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar" />
+		           </classpath>
+	                 </taskdef>
+                         <delete dir="${temp-tomcat-dir}" />
+ 	               </tasks>
+ 	            </configuration>
+ 	            <goals>
+ 	              <goal>run</goal>
+ 	            </goals>                   
+                </execution>
+               </executions>
+        </plugin>
     </plugins>
   </build>
   <properties>
     <servicemix-version>3.1.2</servicemix-version>
     <inbound-service-location>../../../gridservice</inbound-service-location>
+    <temp-tomcat-dir>c:/temp.tomcat.dir</temp-tomcat-dir>
   </properties>
 </project>
