@@ -84,6 +84,21 @@ public abstract class CaXchangeRequestProcessorImplBase {
 		return serviceBaseResource.getServiceMetadataValue();
 	}
 
+	
+	
+	
+	protected metadata.Services getServicesValue(){
+		CaXchangeRequestProcessorResource serviceBaseResource;
+		try {
+			serviceBaseResource = (CaXchangeRequestProcessorResource)ResourceContext.getResourceContext().getResource();
+		} catch (ResourceContextException e) {
+			return null;
+		} catch (ResourceException e) {
+			return null;
+		}
+		return serviceBaseResource.getServicesValue();
+	}
+
 		
 	
 	

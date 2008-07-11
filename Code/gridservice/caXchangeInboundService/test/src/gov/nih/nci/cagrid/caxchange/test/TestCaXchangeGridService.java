@@ -63,9 +63,9 @@ import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.w3c.dom.Document;
 
 /**
- * Test the caXchange. This class contains methods to send test messages of all the 
+ * Test the caXchange. This class contains methods to send test messages of all the
  * message types accepted by caXchange.
- * 
+ *
  * @author Harsh Marwaha
  *
  */
@@ -172,7 +172,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
-        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -204,7 +204,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
-        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -274,7 +274,7 @@ public class TestCaXchangeGridService extends TestCase {
         //System.out.println(sw);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
-        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -307,7 +307,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
-        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
@@ -339,7 +339,7 @@ public class TestCaXchangeGridService extends TestCase {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         ResponseMessage responseMessage = invokeService();
         assertNotNull(responseMessage);
-        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS); 
+        assertEquals(responseMessage.getResponse().getResponseStatus(),Statuses.SUCCESS);
       }
       catch(Exception e) {
           System.out.println("Error sending message .");

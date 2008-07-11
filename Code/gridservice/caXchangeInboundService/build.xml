@@ -249,6 +249,7 @@
 	<!-- Compile the stubs generated in the previous step -->
 	<target name="compileStubs" depends="stubs">
 		<runtarget target="preCompileStubs" />
+		<echo message="${env.JAVA_HOME}" />
 		<javac srcdir="${stubs.src}" destdir="${stubs.dest}" debug="${java.debug}" classpathref="base.classpath">
 			<include name="**/*.java" />
 		</javac>
