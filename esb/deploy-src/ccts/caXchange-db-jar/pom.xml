@@ -80,26 +80,12 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <verbose>true</verbose>
-          <fork>false</fork>
+          <fork>true</fork>
           <source>1.5</source>
           <target>1.5</target>
           <debug>true</debug>
         </configuration>
       </plugin>
-      <!-- <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <groupId>org.apache.maven.plugins</groupId>
-          <configuration>
-            <classesDirectory>classes</classesDirectory>
-            <finalName>caxchangedb</finalName>
-            <outputDirectory>target</outputDirectory>
-            <archive>          
-              <manifest>
-                 <addClasspath>true</addClasspath>
-              </manifest>          
-            </archive>
-          </configuration>
-      </plugin> -->
     </plugins>
   </build>
     
