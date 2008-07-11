@@ -89,6 +89,7 @@ public class CancerCenterClient {
 	private String location;
 	private String userName;
 	private String userPasswd;
+	private String authenticationService;
 
 	private String inProcessFolder;
 	private String processedFolder;
@@ -377,7 +378,8 @@ public class CancerCenterClient {
 			this.preProcessorPropertiesFile_str= props
 					.getProperty("preProcessorPropertiesFile");
 			this.userName = props.getProperty("userName");
-			this.userPasswd = props.getProperty("userPasswd");
+			this.userPasswd = props.getProperty("userPassword");
+			this.authenticationService=props.getProperty("authenticationService");
 			this.rawFilesFolder=props.getProperty("rawFilesFolder");
 			this.rawFilesBackupFolder=props.getProperty("rawFilesBackupFolder");
 			this.inProcessFolder=props.getProperty("inProcessFolder");
@@ -413,6 +415,8 @@ public class CancerCenterClient {
 			logger.info("initialDelay_long : " + this.initialDelay_long);
 			logger.info("pollingInterval_long : " + this.pollingInterval_long);
 			logger.info("V2Version : " + this.version);
+			logger.info("AuthenticationService : " + this.authenticationService);
+
 
 			isSuccess = true;
 		} catch (Exception e) {
@@ -798,6 +802,20 @@ public class CancerCenterClient {
 	 */
 	public void setHl7v3Dir(String hl7v3Dir) {
 		this.hl7v3Dir = hl7v3Dir;
+	}
+
+	/**
+	 * @return the authenticationService
+	 */
+	public String getAuthenticationService() {
+		return authenticationService;
+	}
+
+	/**
+	 * @param authenticationService the authenticationService to set
+	 */
+	public void setAuthenticationService(String authenticationService) {
+		this.authenticationService = authenticationService;
 	}
 } // End of Class
 
