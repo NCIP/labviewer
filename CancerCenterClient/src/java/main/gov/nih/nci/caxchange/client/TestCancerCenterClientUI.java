@@ -144,6 +144,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private JTextField jtxtUserName = new JTextField();
 	private JTextField jtxtPassword = new JPasswordField();
 	private JTextField jtxtHubURL = new JTextField();
+	private JTextField jtxtauthenURL = new JTextField();
 	private JTextField jtxtstudyLookupServiceURL = new JTextField();
 	private JTextField jtxtpreProcessorProFile = new JTextField();
 	private DefaultListModel msgDispBox = new DefaultListModel();
@@ -221,7 +222,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				//jtxtIDPLocation.setText(props.getProperty("IDPLocation"));
 				jtxtOrgName.setText(props.getProperty("ORGANIZATIONNAME"));
 				jtxtUserName.setText(props.getProperty("userName"));
-				jtxtPassword.setText(props.getProperty("userPasswd"));
+				jtxtPassword.setText(props.getProperty("userPassword"));
+				jtxtauthenURL.setText(props.getProperty("authenticationService"));
 				jtxtHubURL.setText(props.getProperty("HubURL"));
 				jtxtstudyLookupServiceURL.setText(props.getProperty("StudyLookUpServiceURL"));
 				jtxtpreProcessorProFile.setText(props
@@ -535,6 +537,13 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 		csvBox11.add(jlbpasswordLabel);
 		csvBox11.add(Box.createHorizontalStrut(10));
 		csvBox11.add(jtxtPassword);
+		Box csvBox15 = Box.createHorizontalBox();
+		csvBox15.add(Box.createHorizontalStrut(10));
+		JLabel jlbauthenURLLabel = new JLabel("Authentication Service");
+		csvBox15.add(jlbauthenURLLabel);
+		csvBox15.add(Box.createHorizontalStrut(93));
+		csvBox15.add(jtxtauthenURL);
+		userBox.add(csvBox15);
 		userBox.add(csvBox11);
 
 		//Button box
@@ -729,6 +738,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			jtxtOrgName.setText("");
 			jtxtUserName.setText("");
 			jtxtPassword.setText("");
+			jtxtauthenURL.setText("");
 			jtxtHubURL.setText("");
 			jtxtpreProcessorProFile.setText("");
 			jtxtstudyLookupServiceURL.setText("");
@@ -879,6 +889,8 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 				fstream.write("userName=" + jtxtUserName.getText());
 				fstream.write("\n");
 				fstream.write("userPassword=" + jtxtPassword.getText());
+				fstream.write("\n");
+				fstream.write("authenticationService=" + jtxtauthenURL.getText());
 				fstream.write("\n");
 				fstream.write("HubURL=" + jtxtHubURL.getText());
 				fstream.write("\n");
