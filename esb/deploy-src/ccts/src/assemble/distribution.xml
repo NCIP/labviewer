@@ -53,7 +53,14 @@
        <includes>
          <include>**/*.war</include>
        </includes>
-    </fileSet>  
+    </fileSet>
+    <fileSet>
+       <directory>${inbound-service-location}/caXchangeInboundService/dist/</directory>
+       <outputDirectory>/war/</outputDirectory>
+       <includes>
+                <include>wsrf-caxchange.war</include>
+       </includes>
+    </fileSet>
     <fileSet>
        <directory>${inbound-service-location}</directory>
        <outputDirectory>/gridservice/</outputDirectory>
