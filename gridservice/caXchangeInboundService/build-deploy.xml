@@ -25,6 +25,7 @@
 	<property name="tomcat.dir" value="${env.CATALINA_HOME}" />
 	
 	<property name="jboss.dir" value="${env.JBOSS_HOME}" />
+	<property name="webapp.name" value="wsrf"/>
 	
 
 
@@ -80,6 +81,18 @@
 			<replacefilter token="INDEX_REFRESH" value="${index.service.index.refresh_milliseconds}" />
 		</replace>
 	</target>
+	
+	<target name="createWar" depends="setDeploymentProperties" description="Creates a wsrf-caxchange.war file for deployment to tomcat">
+	       <ant antfile="${env.GLOBUS_LOCATION}/share/globus_wsrf_common/tomcat/tomcat.xml" inheritAll="false" target="deploySecureTomcat">
+	          <property name="tomcat.dir" value="${tomcat.dir}"/>
+	          <property name="webapp.name" value="${webapp.name}"/>
+	       </ant>
+	       <antcall target="deployTomcat" />
+	       <mkdir dir="dist" />
+	       <war destfile="dist/${webapp.name}.war" 
+	            webxml="${tomcat.dir}/webapps/${webapp.name}/WEB-INF/web.xml"
+	            basedir="${tomcat.dir}/webapps/${webapp.name}" />
+	</target>
 
 
 	<!-- deploy service to tomcat -->
@@ -87,9 +100,9 @@
 		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
 
 		<property name="webapp.dir" value="${tomcat.dir}" />
-		<property name="webapp.deploy.dir" value="${webapp.dir}/webapps/wsrf/WEB-INF" />
+		<property name="webapp.deploy.dir" value="${webapp.dir}/webapps/${webapp.name}/WEB-INF" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
-		<property name="webapp.wsrf.schema.dir" value="${webapp.dir}/webapps/wsrf/share/schema" />
+		<property name="webapp.wsrf.schema.dir" value="${webapp.dir}/webapps/${webapp.name}/share/schema" />
 
 		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${webapp.dir}" />
 
