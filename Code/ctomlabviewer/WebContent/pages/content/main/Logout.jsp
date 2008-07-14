@@ -20,7 +20,7 @@
 	           
 <!-- laf box 1st half -->
 			<table summary="" cellpadding="0" cellspacing="0" border="0"
-				class="contentPage" width="30%" height="80%" >
+				class="contentPage" width="40%" height="80%" >
 				<div>
 				 <p align="left">
 				Logout successful</p>
