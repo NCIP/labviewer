@@ -1,14 +1,17 @@
 <project name="wsrf" default="dist" basedir=".">
 
-	<property file="build.properties"/>
-
+	<property name="PROP.FILE" location="${PROP.FILE}"/>
+		<property file="${PROP.FILE}" />
+			<echo>
+		        PROP.FILE = ${PROP.FILE}</echo>
+	     <property name="lib.home" value="lib"/>
 	<target name="createConnectionProperties" description="Creates the connection properties file">
 		<delete>
 			<fileset file="${build.source.dir}/dataConnection.properties" />
 		</delete>
 		<copy file="conf/dataConnection.properties.template" toFile="${build.source.dir}/dataConnection.properties" filtering="true">
 			<filterset begintoken="@" endtoken="@">
-				<filtersfile file="build.properties" />
+				<filtersfile file="${PROP.FILE}" />
 			</filterset>
 		</copy>
 	</target>
