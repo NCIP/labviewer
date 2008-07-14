@@ -2,7 +2,10 @@
 	<description>UPT Project Build File</description>
 
 	<property environment="env" />
-	<property file="build.properties" />
+	<property name="PROP.FILE" location="${PROP.FILE}"/>
+	<property file="${PROP.FILE}" />
+		<echo>
+	        PROP.FILE = ${PROP.FILE}</echo>
 	<property name="test.dir" value="test" />
 	<property name="report.dir"  value="${test.dir}/junitreport"/>
 	
