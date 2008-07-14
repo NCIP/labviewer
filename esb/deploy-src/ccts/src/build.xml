@@ -98,10 +98,56 @@
 		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-shared-3.1.2-installer.zip"
 		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-shared-3.1.2-installer.zip"/>
 	</target>
+	
+	<target name="configure-caxchange-properties" depends="assert,system-init" description="Copy and update the caxchange.properties file based on the setup in install.properties" >
+	        <copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
+		</replace>
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
+		</replace>
+	        
+	</target>
+	
 
 
 	<!--Configures the jndi and activemq xml files for the servicemix-->
-	<target name="servicemix-configure" depends="assert,db-init" description="config servicemix container">
+	<target name="servicemix-configure" depends="assert,db-init,configure-caxchange-properties" description="config servicemix container">
 		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
 		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
 		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
@@ -109,9 +155,6 @@
 		
 		
 		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		
-		<copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
-
 		
 
 
@@ -161,51 +204,6 @@
 		</replace>
 
 		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
-
-
-
-
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
-		</replace>
 
 
 	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
@@ -494,8 +492,15 @@
 	
 	
 	<!--Deploys the inbound grid service to tomcat -->
+	<!--
 	<target name="grid-setup"   depends="assert,system-init"  description="sets grid service for the caxchange">
 		<ant dir="${cax.home}/gridservice/caXchangeInboundService/" target="deployTomcat" />	
+	</target>
+        -->
+	<target name="grid-setup"   depends="assert,system-init,configure-caxchange-properties"  description="sets grid service for the caxchange">
+		<copy file="${cax.home}/war/wsrf-caxchange.war" todir="${tom.home}/webapps" overwrite="true" />
+		<mkdir dir="${tom.home}/conf/caXchange" />
+		<copy file="${cax.home}/temp/caxchange.properties" todir="${tom.home}/conf/caXchange" overwrite="true"/>
 	</target>
 
 	
