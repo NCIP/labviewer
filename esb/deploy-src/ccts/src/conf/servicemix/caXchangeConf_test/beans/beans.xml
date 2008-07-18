@@ -460,5 +460,13 @@
       id="testInvocationStrategy"
       class="gov.nih.nci.caXchange.outbound.operations.TestInvocationStrategy">
   </bean>
+  
+    <bean    id="caAERSLoadLabStrategySU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+        <property name="strategy">
+          <ref bean="testInvocationStrategy" />
+         </property>
+        <property      name="targetId"      value="caAERS" />
+        <property   name="targetOperation"   value="loadLabs" />
+    </bean>
 
 </beans>
