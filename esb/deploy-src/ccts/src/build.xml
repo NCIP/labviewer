@@ -217,98 +217,7 @@
 	</target>
 
 
-	<!--Servicemix configure smoke test-->
-	<target name="servicemix-configure-smoke-test" depends="assert" description="config servicemix container">
-		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
-		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
-		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		
-		
-		
-		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		
-		<copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
-
-		
-
-
-		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
-		</replace>
-
-		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
-
-
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE@" property="caxchangedb1_name"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_PORT@" property="caxchangedb_port"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="$@CAXCHANGE_DATABASE_HOST@" property="caxchangedb_host"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_USERNAME@" property="caxchangedb_username"/>
-		</replace>
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CAXCHANGE_DATABASE_PASSWORD@" property="caxchangedb_password"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
-		</replace>
-
-
-	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
-			<fileset dir="${cax.home}/lib"/>
-		</copy>
 	
-
-		<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
-			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
-		</copy>
-
-	</target>
 
 	<!--Starts  the tomcat container-->
     <target name="tomcat-start" depends="assert" description="starts tomcat server">
@@ -611,104 +520,7 @@
 	<echo message="caxchange-complete-installation complete"/>
 	</target>
 
-	<target name="smoke-test"   depends="complete-install"  description="Runs caxchange smoke test">
-
-	<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CERTIFICATE_PATH@" property="delegation_certificateFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_GRID_TEST_USERNAME@" property="ccts_grid_test_userName"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
-		 propertyFile="install.properties">
-			<replacefilter token="@CCTS_GRID_TEST_PASSWORD@" property="ccts_grid_test_password"/>
-		</replace>
-
-		<copy file="${cax.home}/temp/grid-caxchange.properties" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/caxchange.properties" overwrite="true"/>
-
-
-		<copy file="${cax.home}/conf/grid/cax-websso-properties.xml" tofile="${cax.home}/temp/cax-websso-properties.xml" />
-		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="install.properties">
-			<replacefilter token="@DORIAN-URL@" property="dorian_service_url"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="install.properties">
-			<replacefilter token="@DELEGATION-URL@" property="delegation_service_url"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="install.properties">
-			<replacefilter token="@AUTHENTICATION-URL@" property="authentication_service_url"/>
-		</replace>
-
-		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
-		 propertyFile="install.properties">
-			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
-		</replace>
-
-		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
-
-
-
-
-
-
-			<echo message="Please update your url in file caxchange home gridservice/caXchangeInboundService/test/resources/websso-properties.xml"/>
-		<input   message="If you updated the url or are ok with the existing url in websso.properties please presss y to continue"
-		validargs="y,n"
-		addproperty="ifyesurl"/>
-		<condition property="ifnourl">
-		<equals arg1="n" arg2="${ifyesurl}"/>
-		</condition>
-		<fail if="ifnourl">Please update websso url and try smoke test again</fail>
-
 	
-	<echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
-		<input   message="Did you stop your servicemix "
-		validargs="y,n"
-		addproperty="ifyessmoke"/>
-		<condition property="ifnosmoke">
-		<equals arg1="n" arg2="${ifyessmoke}"/>
-		</condition>
-		<fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
-		<move todir="${temp.dir}/caXchangeConf_original" failonerror="false">
-    <fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
-  </move>
-  
-  <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test">
-			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
-		</copy>
-
-		<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
-    <fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_test"/>
-  </move>
-		
-		<echo message="Initializing caxchange smoke test..............."/>
-
-		<input   message="Are  you done with smoke test and want to return to origianl  servicemix config"
-		validargs="y,n"
-		addproperty="ifyesorgi"/>
-		<condition property="ifnoorgi">
-		<equals arg1="n" arg2="${ifyesorgi}"/>
-		</condition>
-		<fail if="ifnoorgi">Please finish the smoke test and comeback</fail>
-		<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" failonerror="false">
-    <fileset dir="${temp.dir}/caXchangeConf_original"/>
-  </move>
-  <echo message="Please restart servicemix to take orginal config take effect..............."/>
-	</target>
 
 		<!--Verifies if there were any error in the routing-->
 	 <target name="verify-routing" depends="assert,system-init" description="Verifies if there is any changes in the routing pattern" >
@@ -740,5 +552,38 @@
 
 
 
+	<!--Smoke Test-->
+	<target name="configure-smoke-test"   description="Configures caxchange smoke test">
+                <echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
+                <input   message="Did you stop your servicemix "
+                validargs="y,n"
+                addproperty="ifyessmoke"/>
+                <condition property="ifnosmoke">
+                <equals arg1="n" arg2="${ifyessmoke}"/>
+                </condition>
+                <fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
+                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original" failonerror="false">
+				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+				</move>
+  				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+				<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
+                </copy>
+	</target>
+
+
+    <target name="revert-smoke-test"    description="Revert caxchange smoke test">
+                 <echo message="Initializing caxchange smoke test..............."/>
+                 <input   message="Are  you done with smoke test and want to return to original  servicemix config"
+                 validargs="y,n"
+                 addproperty="ifyesorgi"/>
+                 <condition property="ifnoorgi">
+                 <equals arg1="n" arg2="${ifyesorgi}"/>
+                 </condition>
+                 <fail if="ifnoorgi">Please finish the smoke test and comeback</fail>
+                 <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" failonerror="false">
+					<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original"/>
+				</move>
+					<echo message="Please restart servicemix to take orginal config take effect..............."/>
+                </target>
 
 </project>
