@@ -391,5 +391,18 @@
         <eip:namespace prefix="caxchange">http://caXchange.nci.nih.gov/messaging</eip:namespace>
       </eip:namespaces>
   </eip:namespace-context>
+  
+  
+  <!-- EIP components for LAB_BASED_AE -->
+  
+      <eip:pipeline service="caxchange:callLabBasedAePipeline" endpoint="callLabBasedAePipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:caaersLoadLab" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+        </eip:target>
+       </eip:pipeline>
+
 
 </beans>
