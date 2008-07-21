@@ -31,9 +31,7 @@
 		<amq:persistenceAdapter>
 			<amq:journaledJDBC journalLogFiles="5" dataDirectory="./data/amq"/>
 			<!-- To use a different datasource, use th following syntax : -->
-			<!-- 
-      <amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#postgres-ds"/>
-       -->
+			<amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#mysql-ds"/>
 		</amq:persistenceAdapter>
 		<amq:transportConnectors>
 			<!-- Activate a TCP connector with multicast discovery.
