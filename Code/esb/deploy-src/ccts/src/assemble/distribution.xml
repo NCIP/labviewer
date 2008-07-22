@@ -150,6 +150,11 @@
 		    <include>cagrid:xerces-impl</include>
 		    <include>cagrid:xmlsec</include>	
 		    <include>gov.nih.nci.caxchange:caxchange-clm-jar</include>
+		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-client</include>
+		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-tests</include>
+		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-common</include>
+		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-service</include>
+		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-stubs</include>
         </includes>
      </dependencySet>
   </dependencySets>
