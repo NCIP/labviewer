@@ -64,6 +64,14 @@
         </eip:target>
       </eip:routing-rule>
       <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='LAB_BASED_AE']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:labBasedAe" />
+        </eip:target>
+      </eip:routing-rule>      
+      <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
         </eip:target>
