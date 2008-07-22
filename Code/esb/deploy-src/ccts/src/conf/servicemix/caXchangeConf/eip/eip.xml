@@ -79,7 +79,8 @@
   <import resource="classpath:/caXchangeConf/eip/adverseEventRecipients.xml" /> 
   
   <import resource="classpath:/caXchangeConf/eip/labDataRecipients.xml" /> 
-
+  
+  <import resource="classpath:/caXchangeConf/eip/labBasedAeRecipients.xml" /> 
     
   <!--- EIP components for invoking the PSC  -->
   
