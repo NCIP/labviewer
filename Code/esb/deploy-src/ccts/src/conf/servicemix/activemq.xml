@@ -31,7 +31,9 @@
 		<amq:persistenceAdapter>
 			<amq:journaledJDBC journalLogFiles="5" dataDirectory="./data/amq"/>
 			<!-- To use a different datasource, use th following syntax : -->
-			<amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#mysql-ds"/>
+			<!-- 
+      <amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#postgres-ds"/>
+       -->
 		</amq:persistenceAdapter>
 		<amq:transportConnectors>
 			<!-- Activate a TCP connector with multicast discovery.
@@ -39,7 +41,7 @@
             is not on a network, which may prevent the broker to start.
             In such a case, just remove the discoveryUri attribute.  
          -->
-			<amq:transportConnector uri="tcp://@AMQ_DATABASE_HOST@:@AMQ_PORT@" discoveryUri="multicast://default"/>
+			<amq:transportConnector uri="tcp://@AMQ_HOST@:@AMQ_PORT@" discoveryUri="multicast://default"/>
 		</amq:transportConnectors>
 		<amq:networkConnectors>
 			<!-- by default just auto discover the other brokers -->
