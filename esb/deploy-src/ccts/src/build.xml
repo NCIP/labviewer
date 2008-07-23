@@ -304,6 +304,10 @@
 		</replace>
 		<replace  file="${cax.home}/temp/activemq.xml" 
 		 propertyFile="install.properties">
+			<replacefilter token="@AMQ_HOST@" property="amq_host"/>
+		</replace>		
+		<replace  file="${cax.home}/temp/activemq.xml" 
+		 propertyFile="install.properties">
 			<replacefilter token="@AMQ_PORT@" property="amq_port"/>
 		</replace>
 		
