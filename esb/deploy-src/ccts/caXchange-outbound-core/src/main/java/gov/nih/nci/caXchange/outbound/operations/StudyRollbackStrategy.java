@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
@@ -44,7 +44,7 @@ public class StudyRollbackStrategy extends GridInvocationStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -56,19 +56,19 @@ public class StudyRollbackStrategy extends GridInvocationStrategy {
 		try {
 			GlobusCredential cred=null;
 			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			
+
 			StudyConsumerClient client = new StudyConsumerClient(
 					serviceUrl, cred);
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"client-config.wsdd");
+							"/study/client-config.wsdd");
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
 			Study request = (Study) Utils.deserializeObject(
