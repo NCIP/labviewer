@@ -458,8 +458,8 @@
   
   <bean  id="caAERSLoadLabStrategy"     class="gov.nih.nci.caXchange.outbound.operations.GenericInvocationStrategy">
             <property  name="serviceUrl"     value="${caaers.labLoader.url}" />
-            <property  name="gridClientClassName"  value="gov.nih.nci.ccts.grid.client.LabViewerConsumerClient" />         
-            <property  name="requestPayloadClassName"    value="services.LoadLabsRequest" />    
+            <property  name="gridClientClassName"  value="gov.nih.nci.ccts.grid.client.LabConsumerServiceClient" />         
+            <property  name="requestPayloadClassName"    value="gov.nih.nci.cabig.ccts.domain.LoadLabsRequest" />    
             <property name="operationName"  value="loadLabs" />             
   </bean>
     
