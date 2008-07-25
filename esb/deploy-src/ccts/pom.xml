@@ -568,11 +568,6 @@
       <version>1.0</version> 
     </dependency>
     <dependency>
-      <groupId> cagrid.outbound.LabViewer-consumer </groupId> 
-      <artifactId>LabViewer-consumer-tests</artifactId> 
-      <version>1.0</version> 
-    </dependency>
-    <dependency>
       <groupId>cagrid.outbound.LabViewer-consumer </groupId> 
       <artifactId>LabViewer-consumer-common</artifactId> 
       <version>1.0</version> 
