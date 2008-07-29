@@ -35,8 +35,7 @@ import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.ccts.grid.Study;
-import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
+
 /**
  * A generic class that can be configured to invoke an operation on a grid service.
  * 

@@ -9,7 +9,7 @@ import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.ccts.grid.Registration;
+import gov.nih.nci.cabig.ccts.domain.Registration;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 
 import java.io.InputStream;
