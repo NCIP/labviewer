@@ -4,7 +4,7 @@ import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
-import gov.nih.nci.cabig.ctms.grid.ae.beans.AENotificationType;
+import aenotification.AENotificationType;
 import gov.nih.nci.cabig.ctms.grid.ae.client.AdverseEventConsumerClient;
 import gov.nih.nci.cabig.ctms.grid.ae.stubs.RegisterRequestAeNotification;
 import gov.nih.nci.cabig.ctms.grid.ae.stubs.RegisterResponse;

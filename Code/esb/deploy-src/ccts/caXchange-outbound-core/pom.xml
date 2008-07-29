@@ -488,32 +488,32 @@
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-client</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-common</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-stubs</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-client</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-common</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
       <artifactId>registration-stubs</artifactId> 
-      <version>1.5</version> 
+      <version>1.6</version> 
    </dependency>
     <dependency>
       <groupId>cagrid.outbound.loadlab-consumer</groupId> 
@@ -533,27 +533,27 @@
     <dependency>
       <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
       <artifactId>adverse-event-client</artifactId> 
-      <version>1.0</version> 
+      <version>1.2</version> 
     </dependency>
 	<dependency>
       <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
       <artifactId>adverse-event-common</artifactId> 
-      <version>1.0</version> 
+      <version>1.2</version> 
     </dependency>
 	<dependency>
       <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
       <artifactId>adverse-event-service</artifactId> 
-      <version>1.0</version> 
+      <version>1.2</version> 
     </dependency>
 	<dependency>
       <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
       <artifactId>adverse-event-stubs</artifactId> 
-      <version>1.0</version> 
+      <version>1.2</version> 
     </dependency>
 	<dependency>
       <groupId>cagrid.outbound.adverse-event-consumer</groupId> 
       <artifactId>adverse-event-tests</artifactId> 
-      <version>1.0</version> 
+      <version>1.2</version> 
     </dependency>
 	<dependency>
       <groupId>cagrid.outbound.lab-loader-consumer</groupId> 
