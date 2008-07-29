@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.caxchange.context.service;
 
 import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResource;
-import gov.nih.nci.cagrid.caxchange.service.ServiceConfiguration;
+import  gov.nih.nci.cagrid.caxchange.service.CaXchangeRequestProcessorConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -23,7 +23,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public abstract class CaXchangeResponseServiceImplBase {
@@ -32,22 +32,22 @@ public abstract class CaXchangeResponseServiceImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public CaXchangeRequestProcessorConfiguration getConfiguration() throws Exception {
+		return CaXchangeRequestProcessorConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome)resource;
 	}
 
 	
 	
 	
-	public gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome getCaXchangeRequestProcessorResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceHome getCaXchangeRequestProcessorResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("caXchangeRequestProcessorHome");
-		return (gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceHome)resource;
 	}
 	
 	
@@ -68,10 +68,6 @@ public abstract class CaXchangeResponseServiceImplBase {
 
 		return resourceHome;
 	}
-	
-		
-	
-	
 
 
 }
