@@ -155,6 +155,7 @@
 		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-common</include>
 		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-service</include>
 		    <include>cagrid.outbound.LabViewer-consumer:LabViewer-consumer-stubs</include>
+		    <include>cagrid.gridca</include>
         </includes>
      </dependencySet>
   </dependencySets>
