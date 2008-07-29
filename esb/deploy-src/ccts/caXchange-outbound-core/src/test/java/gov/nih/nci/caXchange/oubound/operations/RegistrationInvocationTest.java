@@ -13,14 +13,14 @@ import javax.xml.namespace.QName;
 import org.xml.sax.InputSource;
 
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.ccts.grid.HealthcareSiteType;
-import gov.nih.nci.ccts.grid.IdentifierType;
-import gov.nih.nci.ccts.grid.ParticipantType;
-import gov.nih.nci.ccts.grid.Registration;
-import gov.nih.nci.ccts.grid.ScheduledEpochType;
-import gov.nih.nci.ccts.grid.StudyRefType;
-import gov.nih.nci.ccts.grid.StudySiteType;
-import gov.nih.nci.ccts.grid.SystemAssignedIdentifierType;
+import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
+import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.ParticipantType;
+import gov.nih.nci.cabig.ccts.domain.Registration;
+import gov.nih.nci.cabig.ccts.domain.ScheduledEpochType;
+import gov.nih.nci.cabig.ccts.domain.StudyRefType;
+import gov.nih.nci.cabig.ccts.domain.StudySiteType;
+import gov.nih.nci.cabig.ccts.domain.SystemAssignedIdentifierType;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 import junit.framework.TestCase;
 
