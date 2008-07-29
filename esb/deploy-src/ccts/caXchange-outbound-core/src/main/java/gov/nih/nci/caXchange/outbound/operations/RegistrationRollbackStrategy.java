@@ -26,12 +26,12 @@ import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.ccts.grid.HealthcareSiteType;
-import gov.nih.nci.ccts.grid.IdentifierType;
-import gov.nih.nci.ccts.grid.Registration;
-import gov.nih.nci.ccts.grid.StudyRefType;
-import gov.nih.nci.ccts.grid.StudySiteType;
-import gov.nih.nci.ccts.grid.SystemAssignedIdentifierType;
+import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
+import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.Registration;
+import gov.nih.nci.cabig.ccts.domain.StudyRefType;
+import gov.nih.nci.cabig.ccts.domain.StudySiteType;
+import gov.nih.nci.cabig.ccts.domain.SystemAssignedIdentifierType;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 
 /**
