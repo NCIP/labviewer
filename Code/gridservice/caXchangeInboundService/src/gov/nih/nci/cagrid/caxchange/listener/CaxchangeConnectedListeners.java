@@ -20,7 +20,7 @@ public class CaxchangeConnectedListeners {
     protected static ConnectionFactory connectionFactory = null;
     protected static String replyQueueName=null;
     protected static Destination replyDestination=null;
-    protected static gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome=null;
+    protected static gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome=null;
     
 
     
@@ -35,7 +35,7 @@ public class CaxchangeConnectedListeners {
         replyQueueName = rqn;
     }
     
-    public static void setCtxResourceHome( gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome crh) {
+    public static void setCtxResourceHome( gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome crh) {
         ctxResourceHome = crh;
     }
     

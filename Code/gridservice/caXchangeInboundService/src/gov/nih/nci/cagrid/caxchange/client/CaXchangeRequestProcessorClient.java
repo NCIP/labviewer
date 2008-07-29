@@ -234,10 +234,6 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 		return port;
 	}
 
-	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
-		return portType.getResourceProperty(resourcePropertyQName);
-	}
-
 	public static void usage(){
 		System.out.println(CaXchangeRequestProcessorClient.class.getName() + " -url <service url>");
 	}
