@@ -1,7 +1,7 @@
 package gov.nih.nci.cagrid.caxchange.service;
 
 import gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResource;
-import gov.nih.nci.cagrid.caxchange.service.ServiceConfiguration;
+import  gov.nih.nci.cagrid.caxchange.service.CaXchangeRequestProcessorConfiguration;
 
 import java.rmi.RemoteException;
 
@@ -23,7 +23,7 @@ import org.globus.wsrf.ResourcePropertySet;
  *
  * Provides some simple accessors for the Impl.
  * 
- * @created by Introduce Toolkit version 1.1
+ * @created by Introduce Toolkit version 1.2
  * 
  */
 public abstract class CaXchangeRequestProcessorImplBase {
@@ -32,22 +32,22 @@ public abstract class CaXchangeRequestProcessorImplBase {
 	
 	}
 	
-	public ServiceConfiguration getConfiguration() throws Exception {
-		return ServiceConfiguration.getConfiguration();
+	public CaXchangeRequestProcessorConfiguration getConfiguration() throws Exception {
+		return CaXchangeRequestProcessorConfiguration.getConfiguration();
 	}
 	
 	
-	public gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome getResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceHome getResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("home");
-		return (gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceHome)resource;
 	}
 
 	
 	
 	
-	public gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome getCaXchangeResponseServiceResourceHome() throws Exception {
+	public gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome getCaXchangeResponseServiceResourceHome() throws Exception {
 		ResourceHome resource = getResourceHome("caXchangeResponseServiceHome");
-		return (gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome)resource;
+		return (gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome)resource;
 	}
 	
 	
@@ -68,45 +68,6 @@ public abstract class CaXchangeRequestProcessorImplBase {
 
 		return resourceHome;
 	}
-	
-	
-	
-	
-	protected gov.nih.nci.cagrid.metadata.ServiceMetadata getServiceMetadataValue(){
-		CaXchangeRequestProcessorResource serviceBaseResource;
-		try {
-			serviceBaseResource = (CaXchangeRequestProcessorResource)ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		return serviceBaseResource.getServiceMetadataValue();
-	}
-
-		
-	
-	
-	protected Object getMetadata(QName metadataQName) {
-		CaXchangeRequestProcessorResource serviceBaseResource = null;
-		try {
-			serviceBaseResource = (CaXchangeRequestProcessorResource) ResourceContext.getResourceContext().getResource();
-		} catch (ResourceContextException e) {
-			return null;
-		} catch (ResourceException e) {
-			return null;
-		}
-		ResourcePropertySet resourcePropertySet = serviceBaseResource.getResourcePropertySet();
-		if (resourcePropertySet != null) {
-			ResourceProperty property = resourcePropertySet.get(metadataQName);
-			if (property != null) {
-				return property.get(0);
-			}
-
-		}
-		return null;
-	}
-	
 
 
 }

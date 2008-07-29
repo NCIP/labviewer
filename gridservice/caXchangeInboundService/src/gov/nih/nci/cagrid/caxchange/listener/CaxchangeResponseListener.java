@@ -4,11 +4,11 @@ package gov.nih.nci.cagrid.caxchange.listener;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
-import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome;
+import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome;
 
 import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResource;
 
-import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.ResourceConstants;
+import gov.nih.nci.cagrid.caxchange.context.common.CaXchangeResponseServiceConstants;
 
 import java.io.StringReader;
 
@@ -41,7 +41,7 @@ import org.globus.wsrf.impl.SimpleResourceKey;
 import org.xml.sax.InputSource;
 
 public class CaxchangeResponseListener implements MessageListener {
-    BaseResourceHome resourceHome;
+	CaXchangeResponseServiceResourceHome resourceHome;
     Logger logger = LogManager.getLogger(CaxchangeResponseListener.class);
 
     String testResponse="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -78,7 +78,7 @@ public class CaxchangeResponseListener implements MessageListener {
            logger.debug("ressourceKey created "+resourceKey.getName()+" "+resourceKey.getValue());
              CaXchangeResponseServiceResource resource = resourceHome.getResource(resourceKey);
              if (resource != null) {
-                 resource.setCaXchangeResponseMessageValue(responseMessage);
+                 resource.setCaXchangeResponseMessage(responseMessage);
                  logger.info("Updated the Resource with the response for :"+caXchangeIdentifier);
              }
        }
@@ -88,11 +88,11 @@ public class CaxchangeResponseListener implements MessageListener {
        }
     }
 
-    public void setResourceHome(BaseResourceHome resourceHome) {
+    public void setResourceHome(CaXchangeResponseServiceResourceHome resourceHome) {
         this.resourceHome = resourceHome;
     }
 
-    public BaseResourceHome getResourceHome() {
+    public CaXchangeResponseServiceResourceHome getResourceHome() {
         return resourceHome;
     }
 }

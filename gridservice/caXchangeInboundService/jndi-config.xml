@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/CaXchangeResponseService">
-    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -19,7 +19,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -43,7 +43,7 @@
     <resourceLink name="caXchangeRequestProcessorHome" target="java:comp/env/services/SERVICE-INSTANCE-PREFIX/CaXchangeRequestProcessor/home" />
   </service>
   <service name="SERVICE-INSTANCE-PREFIX/CaXchangeRequestProcessor">
-    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -66,11 +66,15 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.caxchange.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.caxchange.service.CaXchangeRequestProcessorConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
+        </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
         </parameter>
         <parameter>
           <name>caXchangeInboundBrokerURL</name>
@@ -86,7 +90,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.caxchange.service.globus.resource.CaXchangeRequestProcessorResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>

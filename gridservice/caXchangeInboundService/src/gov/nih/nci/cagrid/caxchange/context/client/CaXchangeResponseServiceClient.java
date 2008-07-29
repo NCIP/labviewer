@@ -80,9 +80,6 @@ public class CaXchangeResponseServiceClient extends ServiceSecurityClient implem
 		return port;
 	}
 	
-	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws RemoteException {
-		return portType.getResourceProperty(resourcePropertyQName);
-	}
 
 	public static void usage(){
 		System.out.println(CaXchangeResponseServiceClient.class.getName() + " -url <service url>");
@@ -110,6 +107,15 @@ public class CaXchangeResponseServiceClient extends ServiceSecurityClient implem
 		}
 	}
 
+  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"getResponse");
+    gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest params = new gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest();
+    gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse boxedResult = portType.getResponse(params);
+    return boxedResult.getCaXchangeResponseMessage();
+    }
+  }
+
   public org.oasis.wsrf.lifetime.DestroyResponse destroy(org.oasis.wsrf.lifetime.Destroy params) throws RemoteException {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"destroy");
@@ -121,15 +127,6 @@ public class CaXchangeResponseServiceClient extends ServiceSecurityClient implem
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"setTerminationTime");
     return portType.setTerminationTime(params);
-    }
-  }
-
-  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException {
-    synchronized(portTypeMutex){
-      configureStubSecurity((Stub)portType,"getResponse");
-    gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest params = new gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest();
-    gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse boxedResult = portType.getResponse(params);
-    return boxedResult.getCaXchangeResponseMessage();
     }
   }
 

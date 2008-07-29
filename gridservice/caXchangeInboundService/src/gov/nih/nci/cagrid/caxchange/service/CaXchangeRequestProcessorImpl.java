@@ -68,7 +68,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
   public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
 	  logger.debug("caxchange gridservice: rcvd msg "+caXchangeRequestMessage);
       try {
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
           ResourceKey resKey = ctxResourceHome.createResource();
           caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(resKey.getValue().toString());
           try { //Sending the request to the caXchange inbound queue
@@ -98,7 +98,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
     protected void sendMessage(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws Exception {
         Session session = null;
         try  {
-            ServiceConfiguration configuration = getConfiguration();
+        	CaXchangeRequestProcessorConfiguration configuration = getConfiguration();
             CaXchangeExternalProperties properties = CaXchangeExternalProperties.getInstance();
             String inboundJmsBrokerUrl = properties.getProperty("inbound.jms.brokerURL");
             if (inboundJmsBrokerUrl==null) {
@@ -149,9 +149,9 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
        try {
           ResponseHandler responseHandler = new ResponseHandler();
           ResponseMessage response = responseHandler.getResponseFromError(caXchangeRequestMessage, "ERROR_SENDING_REQUEST", "An error happened sending the request to the inbound queue.");
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
           CaXchangeResponseServiceResource resource= (CaXchangeResponseServiceResource)ctxResourceHome.find(resKey);
-          resource.setCaXchangeResponseMessageValue(response);
+          resource.setCaXchangeResponseMessage(response);
        }catch(Exception e) {
            logger.error("Error updating resource with the error response.", e);
            throw e;
@@ -165,7 +165,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
      */
     public void registerResponseListeners() throws Exception {
         try {
-            ServiceConfiguration configuration = getConfiguration();
+        	CaXchangeRequestProcessorConfiguration configuration = getConfiguration();
             CaXchangeExternalProperties properties = CaXchangeExternalProperties.getInstance();
             String outboundJmsBrokerUrl = properties.getProperty("outbound.jms.brokerURL");
             if (outboundJmsBrokerUrl==null) {

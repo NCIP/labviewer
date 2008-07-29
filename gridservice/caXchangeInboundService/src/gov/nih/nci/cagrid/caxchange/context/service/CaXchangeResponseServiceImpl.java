@@ -17,23 +17,19 @@ import org.apache.log4j.Logger;
 public class CaXchangeResponseServiceImpl extends CaXchangeResponseServiceImplBase {
 	   static Logger logger = LogManager.getLogger(CaXchangeResponseServiceImpl.class);
 
-
-
 	public CaXchangeResponseServiceImpl() throws RemoteException {
 		super();
 	}
 
-
-
   public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException {
       try {
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.BaseResourceHome brh =getResourceHome();
+          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome brh =getResourceHome();
           CaXchangeResponseServiceResource currentResource = brh.getAddressedResource();
-          if (currentResource.getCaXchangeResponseMessageValue() == null) {
+          if (currentResource.getCaXchangeResponseMessage() == null) {
               RemoteException resoureNotReady = new RemoteException("CaXchange response not ready.");
               throw resoureNotReady;
           }
-          ResponseMessage responseMessage = currentResource.getCaXchangeResponseMessageValue();
+          ResponseMessage responseMessage = currentResource.getCaXchangeResponseMessage();
           return responseMessage;
       }
       catch (RemoteException re) {
