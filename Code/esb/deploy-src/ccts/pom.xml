@@ -143,43 +143,43 @@
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-advertisement</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-core</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-introduce-tools</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-metadata-common</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-metadata-data</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-metadata-security</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cagrid-metadata-utils</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
@@ -191,25 +191,25 @@
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cog-axis</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cog-jglobus</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cog-tomcat</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>cog-url</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
@@ -431,25 +431,25 @@
     <dependency>
       <groupId>cagrid.service-security-provider</groupId> 
       <artifactId>client</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid.service-security-provider</groupId> 
       <artifactId>common</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid.service-security-provider</groupId> 
       <artifactId>service</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
       <groupId>cagrid.service-security-provider</groupId> 
       <artifactId>stubs</artifactId> 
-      <version>1.1</version> 
+      <version>1.2</version> 
       
     </dependency>
     <dependency>
@@ -568,6 +568,11 @@
       <version>1.0</version> 
     </dependency>
     <dependency>
+      <groupId> cagrid.outbound.LabViewer-consumer </groupId> 
+      <artifactId>LabViewer-consumer-tests</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+    <dependency>
       <groupId>cagrid.outbound.LabViewer-consumer </groupId> 
       <artifactId>LabViewer-consumer-common</artifactId> 
       <version>1.0</version> 
@@ -582,6 +587,11 @@
       <artifactId>LabViewer-consumer-stubs</artifactId> 
       <version>1.0</version> 
     </dependency>
+    <dependency>
+      <groupId>cagrid</groupId> 
+      <artifactId>gridca</artifactId> 
+      <version>1.2</version> 
+    </dependency>    
   </dependencies>
   <build>
     <extensions>
@@ -632,7 +642,7 @@
 	                 <mkdir dir="${temp-tomcat-dir}" />
                          <ant antfile="${inbound-service-location}/caXchangeInboundService/build.xml" inheritAll="false" target="createWar" >
 	                       <property name="tomcat.dir" value="C:/temp.tomcat.dir"/>
-	                       <property name="webapp.name" value="wsrf-caxchange"/>
+	                       <property name="globus.webapp" value="wsrf-caxchange"/>
 	                       <property name="build.compiler" value="extJavac"/>
  	                  </ant>
  	               </tasks>
