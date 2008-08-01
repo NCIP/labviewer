@@ -159,6 +159,19 @@
         </includes>
      </dependencySet>
   </dependencySets>
+
+
+
+  <dependencySets>
+     <dependencySet>
+        <outputDirectory>/ext/lib</outputDirectory>
+        <includes>
+                    <include>junit:junit</include>
+		</includes>
+     </dependencySet>
+  </dependencySets>
+
+
   <moduleSets>
      <moduleSet>
          <includes>
