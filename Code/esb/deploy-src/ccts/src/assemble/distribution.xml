@@ -158,12 +158,6 @@
 		    <include>cagrid.gridca</include>
         </includes>
      </dependencySet>
-	 <dependencySet>
-        <outputDirectory>/ext/lib</outputDirectory>
-        <includes>
-                    <include>junit:junit</include>
-		</includes>
-     </dependencySet>
   </dependencySets>
 
 
