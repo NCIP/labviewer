@@ -493,7 +493,7 @@
 		</replace>
 	</target>
 
-	<target name="llt-configure" depends="assert,servicemix-configure, mysql-db-initialize-llt" description="config to make LLT ready for its deployment">
+	<target name="llt-configure" depends="assert,servicemix-configure" description="config to make LLT ready for its deployment">
              <mkdir dir="${temp.dir}/tomcat" />
              <copy  todir="${temp.dir}/tomcat" >
                <fileset dir="${tomcat.prop}"/> 
@@ -567,7 +567,7 @@
 	</target>
 
 	<!--Caxchange hub install with servicemix -->
-	<target name="hub-install"   depends="assert,system-init,clean,db-init,mysql-db-initialize-caxchange,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
+	<target name="hub-install"   depends="assert,system-init,clean,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
 	<echo message="caxchange-complete-installation complete"/>
 	</target>
 
