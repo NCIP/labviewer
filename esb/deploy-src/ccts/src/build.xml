@@ -67,10 +67,34 @@
 		</delete>
 
     </target>
+    
+    
+    <target name="servicemix-install" description="Unix/window">
+    <condition property="isUnix">
+	    <and>
+		    <os family="unix"/>
+		
+	    </and>
+    </condition>
+    <antcall target="servicemix-install-unix"/>
+	   
+    
+    <condition property="isWin">
+	    <not>
+		    <os family="unix"/>
+		    
+	    </not>
+    </condition>
+    <antcall target="servicemix-install-win"/>
+</target>
+
 
 	<!--Installs the servicemix from apache site and unzip to location given in install.properties file-->
-	<target name="servicemix-install" depends="assert,system-init,clean" description="download servicemix">
-        <echo message="You current SERVICEMIX_HOME in property file :${SERVICEMIX_HOME}"/>
+	<target name="servicemix-install-unix" depends="assert,system-init,clean" description="download servicemix" if="isUnix">
+		
+		
+		
+        <echo message="You current SERVICEMIX_HOME in property file :${SERVICEMIX_HOME}  for Unix" />
             <input   message="Do you want to install Servicemix at this location:"
 		validargs="y,n"
 		addproperty="ifyes"/>
@@ -85,6 +109,29 @@
 		 verbose="true"
 		 usetimestamp="true"/>		
 		 <unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>	
+		 <chmod dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/bin/servicemix" perm="755"  />
+		
+	</target>
+	
+	<target name="servicemix-install-win" depends="assert,system-init,clean" description="download servicemix" if="isWin">
+		
+		
+		
+		<echo message="You current SERVICEMIX_HOME in property file :${SERVICEMIX_HOME}  for Windows"/>
+		<input   message="Do you want to install Servicemix at this location:"
+			 validargs="y,n"
+			 addproperty="ifyes"/>
+		<condition property="ifno">
+			<equals arg1="n" arg2="${ifyes}"/>
+		</condition>
+		<fail if="ifno">Please set the new servicemix location that you have already installed and run script again</fail>
+		
+		<!--<echo message="Setting environment variable to ${SERVICEMIX_HOME}"/>-->
+		<mkdir dir="${SERVICEMIX_HOME}"/>
+		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip"
+		     verbose="true"
+		     usetimestamp="true"/>		
+		<unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>
 		
 	</target>
 
@@ -572,6 +619,7 @@
   				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
 				<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
                 </copy>
+				<echo message="Please start servicemix and send CaXchangeRequestMessage to initiate smoke test..............."/>
 	</target>
 
 
