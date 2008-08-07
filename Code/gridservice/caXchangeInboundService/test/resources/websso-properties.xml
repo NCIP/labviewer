@@ -6,7 +6,7 @@
         <host-credential-certificate-file-path>C:\tomcat\tomcat-dor\certificates\sso-cert.pem</host-credential-certificate-file-path>
 	<host-credential-key-file-path>C:\tomcat\tomcat-dor\certificates\sso-key.pem</host-credential-key-file-path>	
 	-->
-	<websso-server-host-identity>/C=US/O=CBIT/OU=ccts/OU=caBIG/OU=Services/CN=host/cbvapp-d1017-app.nci.nih.gov</websso-server-host-identity>
+	<websso-server-host-identity>>/O=CCTS/OU=DEV/OU=Trust Fabric/CN=host/cbvapp-d1017.nci.nih.gov</websso-server-host-identity>
 	<dorian-information>
 		<service-url>https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian</service-url>
 		<proxy-lifetime-hours>12</proxy-lifetime-hours>
@@ -28,8 +28,8 @@
 	</authentication-service-list>
 	<delegated-application-list>
 		<delegated-application>
-			<application-name>Application Server</application-name>
-			<host-identity>/C=US/O=CBIT/OU=ccts/OU=caBIG/OU=Services/CN=host/cbvapp-d1017-app.nci.nih.gov</host-identity>
+			<application-name>CCTS DEV App Server</application-name>
+			<host-identity>/O=CCTS/OU=DEV/OU=Trust Fabric/CN=host/cbvapp-d1017.nci.nih.gov</host-identity>
 		</delegated-application>
 	</delegated-application-list>
 </websso-properties>
