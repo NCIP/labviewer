@@ -27,7 +27,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>caXchange-outbound-jms-su</artifactId>
   <packaging>jbi-service-unit</packaging>
-  <name>A custom project</name>
+  <name>Outbound Jms SU</name>
   <url>http://www.myorganization.org</url>
   <pluginRepositories>
     <pluginRepository>
