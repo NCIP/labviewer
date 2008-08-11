@@ -28,7 +28,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>caXchange-inbound-jms-su</artifactId>
 	<packaging>jbi-service-unit</packaging>
-	<name>A custom project</name>
+	<name>caXchange Inbound Jms SU</name>
 	<url>http://www.myorganization.org</url>
 	<pluginRepositories>
 		<pluginRepository>
