@@ -249,6 +249,11 @@
 			<replacefilter token="@HOST_IDENTITY@" property="caxchange_host_identity"/>
 		</replace>
 
+		<replace  file="${cax.home}/temp/cax-websso-properties.xml" 
+		 propertyFile="install.properties">
+			<replacefilter token="@WEBSSO_HOST_IDENTITY@" property="websso_host_identity"/>
+		</replace>
+
 		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
 
 
@@ -595,10 +600,22 @@
 
     </target>
 
-	<target name="update-routing-configuration"   depends="assert,system-init"  description="Deploy the updated routing configuration to servicemix">
+	<target name="update-routing-configuration"   depends="assert,system-init,servicemix-configure"  description="Deploy the updated routing configuration to servicemix">
+	 <echo message="Please stop your servicemix using CTRL+C to update routing configuration also note that configuration files will be overwritten after executing this target"/>
+	  <input   message="Did you stop your servicemix "
+                validargs="y,n"
+                addproperty="ifyesrouting"/>
+                <condition property="ifnorouting">
+                <equals arg1="n" arg2="${ifyesrouting}"/>
+                </condition>
+                <fail if="ifnorouting">Please stop servicemix using CTRL+C to update routing configuration  and run script again</fail>
+				<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_routing" failonerror="false">
+				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+				</move>
 	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
 			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
 		</copy>
+		<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
 	</target>
 
 
@@ -613,7 +630,7 @@
                 <equals arg1="n" arg2="${ifyessmoke}"/>
                 </condition>
                 <fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
-                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original" failonerror="false">
+                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke" failonerror="false">
 				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
 				</move>
   				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
@@ -633,7 +650,7 @@
                  </condition>
                  <fail if="ifnoorgi">Please finish the smoke test and comeback</fail>
                  <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" failonerror="false">
-					<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original"/>
+					<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke"/>
 				</move>
 					<echo message="Please restart servicemix to take orginal config take effect..............."/>
                 </target>
