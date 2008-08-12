@@ -2,7 +2,7 @@
 	<description>UPT Project Build File</description>
 
 	<property environment="env" />
-	<property name="PROP.FILE" location="${PROP.FILE}"/>
+	<property name="PROP.FILE" location="build.properties"/>
 	<property file="${PROP.FILE}" />
 		<echo>
 	        PROP.FILE = ${PROP.FILE}</echo>
@@ -57,6 +57,8 @@
 	<target name="configure" depends="prepareDir, configureCSMAuthentication, configureWebSSOAuthentication">
 		<copy file="conf/labviewer.hibernate.cfg.xml.template" toFile="${build.home}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
+				<filter token="database_dialect" value="${database.dialect}" />
+				<filter token="database_driver" value="${database.driver}" />
 				<filter token="database_url" value="${database.url}" />
 				<filter token="database_user" value="${database.username}" />
 				<filter token="database_passwd" value="${database.password}" />
@@ -64,6 +66,8 @@
 		</copy>
 		<copy file="conf/cTODSlabviewer.hibernate.cfg.xml.template" toFile="${build.home}/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
 					<filterset begintoken="@" endtoken="@">
+						<filter token="database_dialect" value="${database.dialect}" />
+						<filter token="database_driver" value="${database.driver}" />
 						<filter token="database_url" value="${database.url}" />
 						<filter token="database_user" value="${database.username}" />
 						<filter token="database_passwd" value="${database.password}" />
@@ -74,15 +78,16 @@
 				<filter token="log_dir" value="${log.dir}" />
 			</filterset>
 		</copy>
-		<copy file="conf/loadToCTMSURL.properties.template" toFile="${build.home}/WEB-INF/classes/loadToCTMSURL.properties" filtering="true" overwrite="true">
+		<copy file="conf/loadLabURLS.properties.template" toFile="${build.home}/WEB-INF/classes/loadLabURLS.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
-				<filter token="loadToCTMSURL" value="${loadToCTMSURL}" />
+				<filter token="loadLabURLS" value="${loadLabURLS}" />				
 			</filterset>
 		</copy>
 		<copy file="conf/baseURL.properties.template" toFile="${build.home}/WEB-INF/classes/baseURL.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="BaseURLcaAERS" value="${BaseURLcaAERS}" />
 				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
+				<filter token="hotLink_Type" value="${hotLink_Type}" />
 			</filterset>
 		</copy>
 	</target>
@@ -91,6 +96,7 @@
 		<copy file="conf/web.xml.csm.template" toFile="${build.home}/WEB-INF/web.xml" overwrite="true" />
 		<copy file="conf/login.config.template" toFile="${dist.home}/login.config" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
+			    <filter token="database_driver" value="${database.driver}" />
 				<filter token="database_url" value="${database.url}" />
 				<filter token="database_user" value="${database.username}" />
 				<filter token="database_passwd" value="${database.password}" />
