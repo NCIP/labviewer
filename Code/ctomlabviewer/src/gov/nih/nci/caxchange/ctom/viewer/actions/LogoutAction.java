@@ -142,6 +142,11 @@ public class LogoutAction extends Action
 		}
 	}
 	
+	/**
+	 * Retrieves the UPT Context name.
+	 * @return
+	 * @throws Exception
+	 */
 	private static String getUPTContextName() throws Exception
 	{
 		Document configDocument = null;
