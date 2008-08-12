@@ -8,6 +8,14 @@
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.viewobjects.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
+
+
+<script type="text/javascript" src="prototype.js"></script>
+<script type="text/javascript" src="ccts-hotlinks.js"></script>
+<script type="text/javascript">
+    CCTS.appShortName = 'labviewer'
+</script>
+
 <script>
 
 function setUp()
@@ -87,12 +95,6 @@ function SelectAll()
 	  		document.LabActivitiesSearchResultForm.operation.value="execute";
 	  		ischecked = true;
   		}
-  		if (target=="saveToCSV")
-  		{
-  		   	document.LabActivitiesSearchResultForm.action="saveToCSV.do";  
-	  		document.LabActivitiesSearchResultForm.operation.value="execute";
-	  		ischecked = true;
-  		}
   		else
   		{   
 	  		var radioLen = document.LabActivitiesSearchResultForm.recordIds.length;
@@ -110,9 +112,21 @@ function SelectAll()
 				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordId.value + "," + document.LabActivitiesSearchResultForm.recordIds[i].value;
 					ischecked = true;
 				}
-			}   
-			document.LabActivitiesSearchResultForm.action="loadToCTMS.do";  
-	  		document.LabActivitiesSearchResultForm.operation.value="execute";
+			}
+			if (target=="saveToCSV")
+  			{
+  		 		document.LabActivitiesSearchResultForm.action="saveToCSV.do";  
+	  			document.LabActivitiesSearchResultForm.operation.value="execute";
+			
+  			}   
+			else if(target=="loadActivitiesToCTMS"){
+				document.LabActivitiesSearchResultForm.action="loadToCTMS.do";  
+	  			document.LabActivitiesSearchResultForm.operation.value="execute";
+	  			}
+	  		else{
+	  			document.LabActivitiesSearchResultForm.action="loadTocaAERS.do";  
+	  			document.LabActivitiesSearchResultForm.operation.value="execute";
+	  		}	
 		}
 		if(ischecked) {
 		   document.LabActivitiesSearchResultForm.target="_self";
@@ -122,10 +136,14 @@ function SelectAll()
 			alert("Atleast one check box should be checked.");
  	}
 </script>
+
+ 
 <body onload="javaScript:setUp();">
+
+
 <!-- laf box 1st half -->
 <div class="box" >
-	<div class="pane" align=center>
+	<div class="pane" align="center">
     <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
 	      <h2>Lab Activities - Search Results</h2>
@@ -163,10 +181,11 @@ function SelectAll()
 		  String caAERSurl=(String)session.getAttribute("BaseURLcaAERS");
 		  String C3Durl ="";//(String)session.getAttribute("BaseURLC3D");
 		  String gridId= (String)session.getAttribute("studySubjectGridId");
+		  String hotLinkType= (String)session.getAttribute("hotLinkType");
 		  
 		 %>
-		<a href="<%=caAERSurl%>/pages/ae/list?studySubjectGridId=<%=gridId%>" target="_blank">View this patient in caAERS</a>
-		<!-- &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>">View these labs in C3D</a> -->
+		<a href="<%=caAERSurl%>/pages/ae/list?studySubjectGridId=<%=gridId%>" target="<%=hotLinkType%>">View this patient in caAERS</a>
+		<!-- &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>" target="c3d">View these labs in C3D</a> -->
 		</td>	
 		</tr>
 		<tr>
@@ -213,6 +232,9 @@ function SelectAll()
 													</th>
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Sent to CDMS
+													</th>
+													<th class="dataTableHeader" scope="col" align="center" width="9%">
+														Sent to caAERS
 													</th>
 													<!--
 													<th class="dataTableHeader" scope="col" align="center" width="13%">
@@ -272,14 +294,26 @@ function SelectAll()
 															&nbsp;
 														</td>
 														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
-															<td class="dataCellText" width="9%" bgcolor="grey">
-																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+															<td class="dataCellText" width="9%" bgcolor="blue">
+																<bean:write name="searchResultObject" property="labLoadedToCDMSDate" />
 																&nbsp;
 															</td>
 														</logic:equal>
 														<logic:notEqual name="searchResultObject" property="labLoadedToCDMS" value="true">
 															<td class="dataCellText" width="9%">
 																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:notEqual>
+														<logic:equal name="searchResultObject" property="adverseEventReported" value="true">
+															<td class="dataCellText" width="9%" bgcolor="blue">
+																<bean:write name="searchResultObject" property="adverseEventReportedDate" />
+																&nbsp;
+															</td>
+														</logic:equal>
+														<logic:notEqual name="searchResultObject" property="adverseEventReported" value="true">
+															<td class="dataCellText" width="9%">
+																<bean:write name="searchResultObject" property="adverseEventReported" />
 																&nbsp;
 															</td>
 														</logic:notEqual>
@@ -351,14 +385,26 @@ function SelectAll()
 															&nbsp;
 														</td>
 														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
-															<td class="dataCellText" width="9%" bgcolor="grey">
-																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+															<td class="dataCellText" width="9%" bgcolor="blue">
+																<bean:write name="searchResultObject" property="labLoadedToCDMSDate" />
 																&nbsp;
 															</td>
 														</logic:equal>
 														<logic:notEqual name="searchResultObject" property="labLoadedToCDMS" value="true">
 															<td class="dataCellText" width="9%">
 																<bean:write name="searchResultObject" property="labLoadedToCDMS" />
+																&nbsp;
+															</td>
+														</logic:notEqual>
+														<logic:equal name="searchResultObject" property="adverseEventReported" value="true">
+															<td class="dataCellText" width="9%" bgcolor="blue">
+																<bean:write name="searchResultObject" property="adverseEventReportedDate" />
+																&nbsp;
+															</td>
+														</logic:equal>
+														<logic:notEqual name="searchResultObject" property="adverseEventReported" value="true">
+															<td class="dataCellText" width="9%">
+																<bean:write name="searchResultObject" property="adverseEventReported" />
 																&nbsp;
 															</td>
 														</logic:notEqual>
@@ -395,8 +441,8 @@ function SelectAll()
 														<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Back</html:cancel>
 													</td>
 													<td>
-														<html:button style="actionButton" property="loadActivitiesTocaAERS">Load Labs to caAERS</html:button>
-													</td>
+														<html:button style="actionButton" property="loadActivitiesTocaAERS" onclick="setAndSubmit('loadActivitiesTocaAERS');">Load Labs to caAERS</html:button>
+													</td> 
 													<td>
 														<html:button style="actionButton" property="loadActivitiesToCTMS" onclick="setAndSubmit('loadActivitiesToCTMS');">Load Labs to CDMS</html:button>
 													</td>
