@@ -85,6 +85,7 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -109,6 +110,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+//import gov.nih.nci.cagrid.common.Utils;
 import org.hibernate.Session;
 
 import webservices.Documentation;
@@ -129,7 +131,7 @@ import webservices.StudySubject;
 public class LoadToCTMSAction extends Action
 {
 	private static final Logger logDB = Logger.getLogger(LoadToCTMSAction.class);
-	private static final String CONFIG_FILE = "/loadToCTMSURL.properties";
+	private static final String CONFIG_FILE = "/loadLabURLS.properties";
 	
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -179,7 +181,7 @@ public class LoadToCTMSAction extends Action
 	 * @param request
 	 * @param form
 	 * @param username
-	 * @return
+	 * @return numOfLabs number of labs loaded
 	 * @throws Exception
 	 */
 	private int loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
@@ -324,9 +326,9 @@ public class LoadToCTMSAction extends Action
 		
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length; 
-		//PrintWriter writer = new PrintWriter("c3dmessage.xml");
-		 QName lab = new QName("LoadLabsRequest");
-        //Utils.serializeObject(labRequest, lab, writer);
+	 	//PrintWriter writer = new PrintWriter("c3dmessage.xml");
+		 QName lab = new QName("http://c3d.nci.nih.gov/webservices","LoadLabsRequest");
+         //Utils.serializeObject(labRequest, lab, writer);
         
 		// Create the caxchange message
 		Message requestMessage = new Message();
