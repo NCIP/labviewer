@@ -85,7 +85,7 @@ public class LabActivityResult
 	private String lowRange = "";;
 	private String highRange = "";
 	private String isAdverseEvent = "";
-	private String adverseEventReported = "";
+	private boolean adverseEventReported = false;
 	private String adverseEventReportedDate = "";
 	private boolean labLoadedToCDMS= false;
 	private String labLoadedToCDMSDate = "";
@@ -220,19 +220,6 @@ public class LabActivityResult
 		this.unitOfMeasure = unitOfMeasure;
 	}
 
-	
-	public String getAdverseEventReported()
-	{
-		return adverseEventReported;
-	}
-
-	
-	public void setAdverseEventReported(String adverseEventReported)
-	{
-		this.adverseEventReported = adverseEventReported;
-	}
-
-	
 	public String getAdverseEventReportedDate()
 	{
 		return adverseEventReportedDate;
@@ -287,6 +274,20 @@ public class LabActivityResult
 	 */
 	public void setLabLoadedToCDMSDate(String labLoadedToCDMSDate) {
 		this.labLoadedToCDMSDate = labLoadedToCDMSDate;
+	}
+
+	/**
+	 * @return the adverseEventReported
+	 */
+	public boolean isAdverseEventReported() {
+		return adverseEventReported;
+	}
+
+	/**
+	 * @param adverseEventReported the adverseEventReported to set
+	 */
+	public void setAdverseEventReported(boolean adverseEventReported) {
+		this.adverseEventReported = adverseEventReported;
 	}
 	
 }
