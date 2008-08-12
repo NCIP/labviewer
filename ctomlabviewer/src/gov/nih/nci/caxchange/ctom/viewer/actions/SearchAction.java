@@ -223,8 +223,14 @@ public class SearchAction extends Action
 			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
 			 props.load(stream);
 			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
+			 String hotLinkType = (String)props.getProperty("hotLink_Type");
 		     //String C3Durl = (String)props.getProperty("BaseURLC3D");
 		     session.setAttribute("BaseURLcaAERS", caAERSurl);
+		     //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
+		     session.setAttribute("hotLinkType", hotLinkType);
+		     //change the title to include patient information
+		     String titleString = "CTODS Lab Viewer : "+ session.getAttribute("patientName")+ " ("+ lForm.getPatientId() +") Study:"+session.getAttribute("studyName") +" ("+lForm.getStudyId()+")";
+		     session.setAttribute("pageTitle",titleString); 
 		     //session.setAttribute("BaseURLC3D", C3Durl);
 		 } 
 		 catch (FileNotFoundException e1) 
@@ -335,16 +341,16 @@ public class SearchAction extends Action
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
 				SubjectAssignment sa = (SubjectAssignment) resultsIterator.next();
-
+                
 				LabActivityResult labActivityResult = null;
 
 				larlist = printRecord(sa, lForm.getBeginDate(), lForm.getEndDate(),request);
-
+         
 				for (int j = 0; j < larlist.size(); j++)
 				{
 					i++;
 					labActivityResult = (LabActivityResult) larlist.get(j);
-					labActivityResult.setAdverseEventReported("0");
+					labActivityResult.setAdverseEventReported(false);
 					allLarList.add(labActivityResult);
 				}
 			}
@@ -352,7 +358,7 @@ public class SearchAction extends Action
 			
 			if (allLarList != null && allLarList.size() > 0)
 			{
-				//check if labs were loaded before
+				//check if labs were loaded to CDMS or caAERS 
 				checkForLoadedLabs(allLarList);
 			
 				LabActivityResultComparator comp = (LabActivityResultComparator) ObjectFactory
@@ -422,6 +428,10 @@ public class SearchAction extends Action
 
 		if (sa != null)
 		{
+			//get the participant Name
+			String patientName= sa.getParticipant().getFirstName() + "  "+sa.getParticipant().getLastName(); 
+			request.getSession().setAttribute("patientName", patientName);
+			
 			LabActivityResult labActivityResult = new LabActivityResult();
 
 			labActivityResult.setSubjectAssignment(sa);
@@ -439,6 +449,8 @@ public class SearchAction extends Action
 			if (site != null)
 			{
 				Study study = site.getStudy();
+				String studyTitle=study.getName();
+				request.getSession().setAttribute("studyName", studyTitle);
 				identifiers = study.getStudyIdentifier();
 				studyId = retrieveIdentifier(identifiers);
 				labActivityResult.setStudyId(studyId);
@@ -611,6 +623,11 @@ public class SearchAction extends Action
 		        	for(LabViewerStatus lvs: result){
 		        		if(lvs.isCdmsIndicator()){
 		        			labActivityResult.setLabLoadedToCDMS(true);
+		        			labActivityResult.setLabLoadedToCDMSDate(lvs.getCdmsSentDate().toString());
+		        		}
+		        		if(lvs.isAdverseEventIndicator()){
+		        			labActivityResult.setAdverseEventReported(true);
+		        			labActivityResult.setAdverseEventReportedDate(lvs.getAdverseEventSentDate().toString());
 		        		}
 		        	}
 		        }
