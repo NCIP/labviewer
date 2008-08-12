@@ -1,7 +1,7 @@
 labviewer
 {
 	gov.nih.nci.security.authentication.loginmodules.RDBMSLoginModule required
-	driver=oracle.jdbc.driver.OracleDriver
+	driver=@database_driver@
 	url="@database_url@"
 	user=@database_user@
 	passwd=@database_passwd@
