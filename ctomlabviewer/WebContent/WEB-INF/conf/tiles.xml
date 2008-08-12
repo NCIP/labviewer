@@ -12,6 +12,14 @@
 		<put name="AppAdminMenu" value="/pages/menu/SuperAdminMenu.jsp"/>		
 		<put name="Title" type="string"	value="CTODS Lab Viewer" />
 	</definition>
+	
+	<!-- Base layouts -->
+	<definition name="BaseSearchResults" page="/pages/layout/BaseLayout-searchRes.jsp">
+		<put name="OrgHeader" value="/pages/header/OrgHeader.jsp" />
+		<put name="AppMenu" value="/pages/menu/MainMenu.jsp"/>
+		<put name="AppAdminMenu" value="/pages/menu/SuperAdminMenu.jsp"/>	
+			
+	</definition>
 	<!-- Base layouts -->
 	<definition name="BaseLogOut" page="/pages/layout/BaseLayout.jsp">
 		<put name="Title" type="string"	value="CTODS Lab Viewer" />
@@ -76,7 +84,7 @@
 	</definition>	
 	
 	<!-- Search Result Pages -->
-	<definition name="Tiles.LabActivities.Search.Result" extends="Base">
+	<definition name="Tiles.LabActivities.Search.Result" extends="BaseSearchResults">
 		<put name="Content" value="/pages/content/searchResult/LabActivitiesSearchResult.jsp" />
 	</definition>
 
