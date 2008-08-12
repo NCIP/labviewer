@@ -78,7 +78,8 @@ public interface ForwardConstants
 	public static final String LOAD_SEARCH_SUCCESS="LoadSearchSuccess";
 	public static final String LOAD_SEARCH_RESULT_SUCCESS="LoadSearchResultSuccess";	
 	public static final String SUBMIT_ADVERSE_EVENT_SUCCESS="SubmitAdverseEventSuccess";
-	public static final String LOAD_TO_CTMS_EVENT_SUCCESS="LoadToCTMSSuccess";	
+	public static final String LOAD_TO_CTMS_EVENT_SUCCESS="LoadToCTMSSuccess";
+	public static final String LOAD_TO_caAERS_EVENT_SUCCESS="LoadTocaAERSSuccess";
 	public static final String SAVE_TO_CSV_EVENT_SUCCESS="SaveToCSVSuccess";	
 	public static final String READ_SUCCESS="ReadSuccess";
 	public static final String UPDATE_SUCCESS="UpdateSuccess";
