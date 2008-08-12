@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<securityConfig xmlns="http://www.globus.org">
+    <credential>
+        <key-file value="/local/home/globus/certs/cbvapp-d1017-app.nci.nih.gov-key.pem"/>
+        <cert-file value="/local/home/globus/certs/cbvapp-d1017-app.nci.nih.gov-cert.pem"/>
+    </credential>
+    
+</securityConfig>
