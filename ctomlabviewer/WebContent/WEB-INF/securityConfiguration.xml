@@ -10,8 +10,10 @@
     </bean>
 
     <bean
-            id="httpClient"
-            class="org.jasig.cas.util.HttpClient3FactoryBean"/>
+            id="httpClient" class="org.jasig.cas.util.HttpClient3FactoryBean">
+            
+            <property name="useStrictHostNameChecking" value="false"></property>
+     </bean>       
 
     <!-- final String casServerUrl, final boolean renew, final HttpClient httpClient, final Service proxyCallbackUrl, List proxyChains, boolean acceptAnyProxy, final ProxyGrantingTicketStorage proxyGrantingTicketStorage, final ProxyRetriever proxyRetriever -->
     <bean
