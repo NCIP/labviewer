@@ -99,6 +99,12 @@ function MM_swapImage() { //v3.0
 			<%} else {%>
 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">Lab Activities</a></div></li>
 			<%}%>
+			<%if( session.getAttribute("testEnabled").equals("true")){ %>
+			<%if (tableId.equalsIgnoreCase(DisplayConstants.TEST_ID)){%>
+	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
+			<%} else {%>
+		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
+			<%}}%>
 	    </ul>
 	</logic:present>
 
