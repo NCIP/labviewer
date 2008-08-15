@@ -73,6 +73,7 @@ public interface ForwardConstants
 	public static final String FAILURE="failure" ;
 	public static final String CANCEL="cancel" ;
 	
+	public static final String LOAD_TEST = "LoadTestSuccess";
 	public static final String LOAD_HOME_SUCCESS = "LoadHomeSuccess";
 	public static final String LOAD_ADD_SUCCESS="LoadAddSuccess";
 	public static final String LOAD_SEARCH_SUCCESS="LoadSearchSuccess";
