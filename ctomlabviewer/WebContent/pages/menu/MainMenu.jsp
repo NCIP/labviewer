@@ -115,6 +115,25 @@ function MM_swapImage() { //v3.0
 				<!-- link 7 ends -->
 				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
 					/>
+				<!-- link 7 begins -->
+				<%if (tableId.equalsIgnoreCase(DisplayConstants.TEST_ID )){%>
+				<td height="16" class="mainMenuItemOver"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.TEST_ID %>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.TEST_ID %>')">Test</a>
+				<%}if (!tableId.equalsIgnoreCase(DisplayConstants.TEST_ID )){%>
+				<td height="16" class="mainMenuItem"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.TEST_ID %>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.TEST_ID %>')">Test</a>
+				<%}%>
+				<!-- link 7 ends -->
+				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
+					/>	
 				<!-- link 8 begins -->
 				<td height="16" class="mainMenuItem"
 					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
