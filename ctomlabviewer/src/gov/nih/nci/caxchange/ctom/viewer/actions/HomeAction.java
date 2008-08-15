@@ -61,6 +61,11 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
@@ -88,6 +93,7 @@ import org.apache.struts.action.ActionMapping;
 public class HomeAction extends Action {
 
 	private static final Logger log = Logger.getLogger(HomeAction.class);
+	private static final String CONFIG_FILE = "/baseURL.properties";
 
 	/*
 	 * (non-Javadoc)
@@ -97,6 +103,7 @@ public class HomeAction extends Action {
 	 *      javax.servlet.http.HttpServletRequest,
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -147,7 +154,7 @@ public class HomeAction extends Action {
 
 			if (loggedIn) {
 				loginForm.setGridProxy("test");
-
+				getProperties(session);
 				session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
 				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 						DisplayConstants.HOME_ID);
@@ -164,6 +171,27 @@ public class HomeAction extends Action {
 		}
 
 		return forward;
+	}
+	
+	/**
+	 * Get the properties from properties file
+	 * @param session
+	 */
+	private void getProperties(HttpSession session){
+		try
+		 {   Properties props = new Properties();
+			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
+			 props.load(stream);
+			 String testEnabled = (String)props.getProperty("testEnabled");
+			 session.setAttribute("testEnabled", testEnabled);
+		 }catch (FileNotFoundException e1) 
+		 {
+		     log.error("The config file not found: " + CONFIG_FILE);
+		 } 
+		 catch (IOException e1) 
+		 {
+			 log.error("Error reading the config file: " + CONFIG_FILE);
+		 }	 
 	}
 
 }
