@@ -73,7 +73,7 @@ public class DisplayConstants
 	public static String CAAERS_URL = "http://cbiovqa5010.nci.nih.gov:38080/caaers/pages/ae/list";
 	//Dev
 	//public static String CAAERS_URL = "http://cbiovdev5041.nci.nih.gov:38080/caaers/pages/ae/list";
-	public static String APPLICATION_CONTEXT_NAME = "ctomlabviewer";
+	public static String APPLICATION_CONTEXT_NAME = "labviewer";
 	
 	public static String CONFIG_FILE_PATH_PROPERTY_NAME = "gov.nih.nci.security.configFile";
 	public static String USER_PROVISIONING_MANAGER = "USER_PROVISIONING_MANAGER";
@@ -110,6 +110,7 @@ public class DisplayConstants
 	public static final String HOME_ID = "Home";
 	public static final String ADMIN_HOME_ID = "AdminHome";
 	public static final String LABACTIVITES_ID = "LabActivities";
+	public static final String TEST_ID = "Happy";
 	public static final String LOGOUT_ID = "Logout";
 	
 	public static final String HOME_NAME = "Home";
