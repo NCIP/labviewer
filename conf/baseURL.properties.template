@@ -2,3 +2,4 @@
 BaseURLcaAERS=@BaseURLcaAERS@
 BaseURLC3D=@BaseURLC3D@
 hotLink_Type=@hotLink_Type@
+testEnabled=@testEnabled@
