@@ -39,7 +39,7 @@
 
 		<action path="/ViewErrorDetails"
 			forward="Tiles.500.Error.DetailsPage" />
-
+			
 		<action path="/Home"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction"
 			input="Tiles.Login.Page">
@@ -66,6 +66,17 @@
 			<forward name="LogoutSuccess" path="Tiles.Login.Page" />
 			<forward name="WebSSOLogoutSuccess" path="Tiles.Logout.Page" />
 		</action>
+		
+		<action path="/Happy"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.HappyAction">
+			<forward name="LoadTestSuccess" path="Tiles.Happy.Page" />
+			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="AdminHomePage"
+				path="Tiles.SuperAdmin.Home.Page" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />	
+			<forward name="LogoutAction" path="/Logout.do" />
+		</action>
 		<action path="/MenuSelection"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.MenuSelectionAction"
 			name="MenuForm" scope="session" 
@@ -79,6 +90,7 @@
 			<forward name="AdminHomePage"
 				path="Tiles.SuperAdmin.Home.Page" />
 			<forward name="LogoutAction" path="/Logout.do" />
+			<forward name="LoadTestSuccess" path="/Happy.do" />	
 		</action>
 		<action path="/LabActivitiesDBOperation"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadSearchSetupAction"
