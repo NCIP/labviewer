@@ -87,5 +87,10 @@
 	<definition name="Tiles.LabActivities.Search.Result" extends="BaseSearchResults">
 		<put name="Content" value="/pages/content/searchResult/LabActivitiesSearchResult.jsp" />
 	</definition>
+	
+	<!-- Happy Page -->
+	<definition name="Tiles.Happy.Page" extends="Base">
+		<put name="Content" value="/pages/content/main/happy.jsp" />
+	</definition>
 
 </tiles-definitions>
