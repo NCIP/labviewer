@@ -198,9 +198,9 @@ public class HL7V2ToHL7V3Tranformation {
 	}
    
 	/**
-	 * Returns the intermediate csv file.
+	 * Returns the intermediate CSV file.
 	 * @param fileName
-	 * @return
+	 * @return outFile intermediate CSV file 
 	 */
 	private String getFileName(String fileName)
 	{

@@ -148,6 +148,7 @@ public class CancerCenterClient {
 	/**
 	 * Entry point for the TestCancerClientUI. 
 	 * @param file
+	 * @param threadList
 	 */
 	public void test(File file,ArrayList<ScheduledExecutorService>threadList) {
 

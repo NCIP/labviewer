@@ -107,6 +107,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
+ * Cancer Center Client UI class.
  * @author asharma
  *
  */
