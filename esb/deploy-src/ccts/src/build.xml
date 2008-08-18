@@ -620,8 +620,23 @@
 
 
 
+
+<target name="configure-smoke-test" description="test is the condition to run smoke test are met">
+   
+	<condition property="isSmoke">
+        <not>
+            <available file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke"/>
+            
+        </not>
+    </condition>
+	 <antcall target="configure-smoke-test-call"/>
+	<fail message="Please delete caXchangeConf_original_before_smoke before starting smoke test so that new backup files will be stored here"/>
+</target>
+
+
+
 	<!--Smoke Test-->
-	<target name="configure-smoke-test"   description="Configures caxchange smoke test">
+	<target name="configure-smoke-test-call"   description="Configures caxchange smoke test" if="isSmoke">
                 <echo message="Please stop your servicemix using CTRL+C to run caxchange smoke test"/>
                 <input   message="Did you stop your servicemix "
                 validargs="y,n"
@@ -630,7 +645,7 @@
                 <equals arg1="n" arg2="${ifyessmoke}"/>
                 </condition>
                 <fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
-                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke" failonerror="false">
+                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke" failonerror="false" preservelastmodified="yes" verbose="yes">
 				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
 				</move>
   				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
