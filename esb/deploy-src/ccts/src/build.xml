@@ -187,7 +187,94 @@
 		 propertyFile="install.properties">
 			<replacefilter token="@KEY_PATH@" property="delegation_keyFilePath"/>
 		</replace>
+
+
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CTOM_REGISTRATION_URL@" property="ctom_registration_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CTOM_REGISTRATIONROLLBACK_URL@" property="ctom_registrationRollback_url"/>
+		</replace>
+
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CTOM_STUDY_URL@" property="ctom_study_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CTOM_STUDYROLLBACK_URL@" property="ctom_studyRollback_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CTOM_LABLOADER_URL@" property="ctom_labLoader_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@PSC_REGISTRATION_URL@" property="psc_registration_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@PSC_REGISTRATIONROLLBACK_URL@" property="psc_registrationRollback_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@PSC_STUDY_URL@" property="psc_study_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@PSC_STUDYROLLBACK_URL@" property="psc_studyRollback_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@PSC_ADVERSEEVENT_URL@" property="psc_adverseEvent_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAAERS_REGISTRATION_URL@" property="caaers_registration_url"/>
+		</replace>
 	        
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAAERS_REGISTRATIONROLLBACK_URL@" property="caaers_registrationRollback_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAAERS_STUDY_URL@" property="caaers_study_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAAERS_STUDYROLLBACK_URL@" property="caaers_studyRollback_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@CAAERS_STUDYROLLBACK_URL@" property="caaers_labLoader_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@C3D_REGISTRATION_URL@" property="c3d_registration_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@LOADLAB_URL@" property="loadLab_url"/>
+		</replace>
 	</target>
 	
 
