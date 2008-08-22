@@ -13,8 +13,10 @@ import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 
 import javax.jbi.messaging.NormalizedMessage;
+import javax.jbi.messaging.MessageExchange.Role;
 
 import javax.security.auth.Subject;
+import javax.xml.transform.dom.DOMSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -22,6 +24,8 @@ import org.apache.servicemix.jbi.audit.AbstractAuditor;
 import org.apache.servicemix.jbi.container.JBIContainer;
 import org.apache.servicemix.jbi.event.ExchangeEvent;
 import org.apache.servicemix.jbi.event.ExchangeListener;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.w3c.dom.Node;
 /**
  *  Audit exchanges sent from the NMR and the exchanges accepted into the NMR
  *  using Commons Logging API.
@@ -119,7 +123,7 @@ public class CommonLoggingListener implements ExchangeListener {
          boolean error = messageExchange.getStatus().equals(ExchangeStatus.ERROR);
          UserInfoHelper.setUserInfo(getUserFromExchangeEvent(exchangeEvent), messageExchange.getExchangeId());
          try {
-        	 String messageExchangeAsString = messageExchange.toString();
+        	 String messageExchangeAsString = convertMessageExchangeToString(messageExchange);
         	 //Escape any single quotes :
         	 messageExchangeAsString = messageExchangeAsString.replace("'", "''");        	 
          if (error) {
@@ -144,7 +148,7 @@ public class CommonLoggingListener implements ExchangeListener {
            boolean error = messageExchange.getStatus().equals(ExchangeStatus.ERROR);
            UserInfoHelper.setUserInfo(getUserFromExchangeEvent(exchangeEvent), messageExchange.getExchangeId());
            try{
-        	 String messageExchangeAsString = messageExchange.toString();
+        	 String messageExchangeAsString = convertMessageExchangeToString(messageExchange);
         	 //Escape any single quotes :
         	 messageExchangeAsString = messageExchangeAsString.replace("'", "''");
              if (error) {
@@ -156,6 +160,64 @@ public class CommonLoggingListener implements ExchangeListener {
         	 //Log but ignore the exception as this is a logging error .
         	   logger.error("Error logging message exchange.", e);
            }
+        }
+    }
+    
+    public String convertMessageExchangeToString(MessageExchange me) {
+        try {
+            StringBuffer sb = new StringBuffer();
+            String name = me.getClass().getName();
+            name = name.substring(name.lastIndexOf('.') + 1, name.length() - 4);
+            sb.append(name);
+            sb.append("[\n");
+            sb.append("  id: ").append(me.getExchangeId()).append('\n');
+            sb.append("  status: ").append(me.getStatus()).append('\n');
+            sb.append("  role: ").append(me.getRole() == Role.CONSUMER ? "consumer" : "provider").append('\n');
+            if (me.getInterfaceName() != null) {
+                sb.append("  interface: ").append(me.getInterfaceName()).append('\n');
+            }
+            if (me.getService() != null) {
+                sb.append("  service: ").append(me.getService()).append('\n');
+            }
+            if (me.getEndpoint() != null) {
+                sb.append("  endpoint: ").append(me.getEndpoint().getEndpointName()).append('\n');
+            }
+            if (me.getOperation() != null) {
+                sb.append("  operation: ").append(me.getOperation()).append('\n');
+            }
+            SourceTransformer st = new SourceTransformer(); 
+            display(me,"in", sb, st);
+            display(me,"out", sb, st);
+            display(me,"fault", sb, st);
+            if (me.getError() != null) {
+                sb.append("  error: ");
+                sb.append(me.getError());
+                sb.append('\n');
+            }
+            sb.append("]");
+            return sb.toString();
+        } catch (Exception e) {
+            logger.error("Error caught in converting message exchange to string.", e);
+            return "Error caught in converting message exchange to string."+e.getMessage();
+        }
+    }    
+    
+    private void display(MessageExchange me, String msg, StringBuffer sb, SourceTransformer st) {
+        if (me.getMessage(msg) != null) {
+            sb.append("  ").append(msg).append(": ");
+            try {
+                if (me.getMessage(msg).getContent() != null) {
+                    Node node = st.toDOMNode(me.getMessage(msg).getContent());
+                    me.getMessage(msg).setContent(new DOMSource(node));
+                    String str = st.toString(node);
+                    sb.append(str);                    
+                } else {
+                    sb.append("null");
+                }
+            } catch (Exception e) {
+                sb.append("Unable to convert to string: ").append(e);
+            }
+            sb.append('\n');
         }
     }
 
