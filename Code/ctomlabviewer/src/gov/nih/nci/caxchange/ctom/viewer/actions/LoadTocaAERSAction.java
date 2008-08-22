@@ -396,7 +396,7 @@ public class LoadTocaAERSAction extends Action
            		    	MessageElement[] messagePay = msg.getTargetBusinessMessage().get_any();
            		    	for(MessageElement mEle: messagePay)
            		    	{
-           		    		String mEleValue =mEle.getAttributeValue("Acknowlegdement");
+           		    		String mEleValue = mEle.getAttributeValue("Acknowledgement");
            		    		if(mEleValue.equalsIgnoreCase("Processed"))
            		    		{
            		    			logDB.info("Response from Target Service was " + mEleValue);	
