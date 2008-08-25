@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
@@ -41,7 +41,7 @@ public class LoadLabInvocationStrategy extends GridInvocationStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -53,27 +53,27 @@ public class LoadLabInvocationStrategy extends GridInvocationStrategy {
 		try {
 			GlobusCredential cred=null;
 			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			
+
 			C3DGridServiceClient client = new C3DGridServiceClient(serviceUrl, cred);
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"/loadlab/client-config.wsdd");
-			
+							"client-config.wsdd");
+
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
 			LoadLabsRequest request = (LoadLabsRequest) Utils.deserializeObject(
 					reader, LoadLabsRequest.class, deseralizeStream);
 			Acknowledgement reply = client.loadLabs(request);
-			
+
 			InputStream serializeStream = client.getClass().getResourceAsStream(
-							"/loadlab/client-config.wsdd");
+							"client-config.wsdd");
 			StringWriter writer = new StringWriter();
 			Utils.serializeObject(reply, new QName(
 					"http://ccts.nci.nih.gov/LoadLab",
@@ -100,7 +100,7 @@ public class LoadLabInvocationStrategy extends GridInvocationStrategy {
 				gie.setCanRetry(true);
 			}
 			throw gie;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			log.error("Failed to invoke loab lab service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}

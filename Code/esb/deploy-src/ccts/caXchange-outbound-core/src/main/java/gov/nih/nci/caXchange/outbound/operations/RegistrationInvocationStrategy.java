@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
@@ -38,12 +38,12 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 
 	private static final Category log = Category
 			.getInstance(RegistrationInvocationStrategy.class);
-	
+
 	private Properties caxchangeProps;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -55,18 +55,18 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 		try {
 			GlobusCredential cred=null;
 			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			
+
 			String url=serviceUrl;
 			if(isItineraryBased){
 				url=caxchangeProps.getProperty(exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID)+".registration.url");
 			}
-			
+
 			RegistrationConsumerClient client = new RegistrationConsumerClient(
 					url, cred);
 
@@ -78,10 +78,10 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 			Registration request = (Registration) Utils.deserializeObject(
 					reader, Registration.class, deseralizeStream);
 			Registration reply = client.register(request);
-			
+
 			//commented to remove commit
 			//client.commit(request);
-			
+
 			InputStream serializeStream = client.getClass().getResourceAsStream(
 							"/registration/client-config.wsdd");
 			StringWriter writer = new StringWriter();
@@ -110,7 +110,7 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 				gie.setCanRetry(true);
 			}
 			throw gie;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			log.error("Failed to invoke registration service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
