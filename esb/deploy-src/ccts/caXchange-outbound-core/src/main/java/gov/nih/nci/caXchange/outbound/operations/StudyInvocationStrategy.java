@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
@@ -49,7 +49,7 @@ public class StudyInvocationStrategy extends GridInvocationStrategy {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.caXchange.outbound.GridInvocationStrategy#invokeGridService(javax.jbi.messaging.DeliveryChannel,
 	 *      javax.jbi.messaging.MessageExchange,
 	 *      gov.nih.nci.caXchange.outbound.GridMessage)
@@ -61,18 +61,18 @@ public class StudyInvocationStrategy extends GridInvocationStrategy {
 		try {
 			GlobusCredential cred=null;
 			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
-			
+
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			
+
 			String url=serviceUrl;
 			if(isItineraryBased){
 				url=caxchangeProps.getProperty(exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID)+".study.url");
 			}
-			
+
 			StudyConsumerClient client = new StudyConsumerClient(
 					url, cred);
 
@@ -109,7 +109,7 @@ public class StudyInvocationStrategy extends GridInvocationStrategy {
 				gie.setCanRetry(true);
 			}
 			throw gie;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			log.error("Failed to invoke study service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
