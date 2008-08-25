@@ -61,7 +61,7 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
-							"/adverse-event/client-config.wsdd");
+							"client-config.wsdd");
 			StringReader reader = new StringReader(transformer.toString(message
 					.getPayload()));
 
@@ -94,7 +94,7 @@ public class AdverseEventInvocationStrategy extends GridInvocationStrategy {
 				gie.setCanRetry(true);
 			}
 			throw gie;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			log.error("Failed to invoke loab lab service.", e);
 			throw new GridInvocationException(e.getMessage(), e);
 		}
