@@ -92,7 +92,7 @@
 		       </ant>
 		       <antcall target="deployTomcat" />
 		       <mkdir dir="dist" />
-		       <copy file="lo4j.properties" tofile="${tomcat.dir}/webapps/wsrf-caxchange/WEB-INF/classes/log4j.properties"/>
+		       <copy file="log4j.properties" tofile="${tomcat.dir}/webapps/wsrf-caxchange/WEB-INF/classes/log4j.properties"/>
 		       <war destfile="dist/${globus.webapp}.war" 
 		            webxml="${tomcat.dir}/webapps/${globus.webapp}/WEB-INF/web.xml"
 		            basedir="${tomcat.dir}/webapps/${globus.webapp}" />
