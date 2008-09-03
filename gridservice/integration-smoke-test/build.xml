@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+
+<project name="Integration-Smoke-Test" default="version-check" >
+		<description>
+        This ant script contains the integration smoke tests for CCTS installation
+        </description>
+
+	 <!-- PROPERTIES -->
+	 <property environment="env" />
+	 <property file="build.properties"/>
+	 <property name="home" value="." />
+	 <property name="lib.dir" value="${home}/lib"/>
+	 <property name="build.dir" value="${home}/build"/>
+	 <property name="dist.dir" value="${home}/dist"/>
+	 <property name="src.dir" value="${home}/src"/>
+	 <property name="temp.dir" value="${home}/temp" />
+	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
+	 <property name="jar.file.name" value="smoketest.jar" />
+	
+	<!--Validates the GLOBUS_LOCATION and JDK version-->
+	<target name="assert"  description="Uses ant to detect current jdk version and validates GLOBUS_LOCATION is set">
+	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
+      <condition>
+        <not>
+          <equals arg1="${ant.java.version}" arg2="1.5" />
+        </not>
+      </condition>
+    </fail>
+	<fail unless="env.GLOBUS_LOCATION" message="GLOBUS_LOCATION environment variable  has not been set!"/>
+	</target>
+
+	
+	
+	<target name="version-check" depends="init,assert" description="checks the software version used in your system">
+		<echo message="###########################################"/>
+		<echo message="#Welcome To caxchange v1.1 Installation   #"/>
+		<echo message="###########################################"/>
+		<echo message="Current Setup: "/>
+                <echo message="JDK Version       : ${java.version}"/>
+		<echo message="ANT Version       : ${ant.version}"/>
+		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
+		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
+		<echo message="GLOBUS_LOCATION is : ${env.GLOBUS_LOCATION}"/>
+		<echo message="Type ant -p for targets available"/>
+    </target>
+	
+	
+	
+
+	<!--Initializes the logs-->
+	<target name="init" description="Creates the temp and the log directory">
+		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dir}/classes" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/lib" />
+	</target>
+	
+	<!--Clens the templorary files and folder created by the different targets-->
+    <target name="clean" description="clean temp files folders and targets" >
+		
+		<delete includeemptydirs="true">
+			<fileset dir="${home}/temp/" includes="**/*"/>
+		</delete>
+                 <delete includeemptydirs="true">
+			<fileset dir="${build.dir}" includes="**/*"/>
+		</delete>
+                <delete includeemptydirs="true">
+			<fileset dir="${dist.dir}" includes="**/*"/>
+		</delete>		
+    </target>
+	<path id="globusClassPath" >
+			   <fileset dir="${ext.globus.dir}/lib" >
+			       <include name="*.jar"/>
+			       <include name="*.zip"/>
+			   </fileset>
+	</path>
+	
+	<path id="compileClassPath" >
+		   <fileset dir="${lib.dir}" >
+		       <include name="*.jar"/>
+		       <include name="*.zip"/>
+		   </fileset>
+		   <path refid="globusClassPath" />
+		</path>
+		
+	<target name="compile" depends="init"
+		description="compile the source ">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src.dir}" 
+		       destdir="${build.dir}/classes" 
+		       debug="true" 
+		       deprecation="${javac.deprecation}"
+                       classpathref="compileClassPath">
+		</javac>
+	</target>
+   
+	<target name="dist" depends="init,compile"  description="Creates the distributable folder">
+		<jar jarfile="${dist.dir}/lib/${jar.file.name}" basedir="${build.dir}/classes"
+			 excludes="**/websso/**">
+			<manifest>
+				<attribute name="Class-Path" value=".."/>
+			</manifest>
+		</jar>
+		<jar jarfile="${dist.dir}/lib/websso.jar" basedir="${build.dir}/classes"
+				 includes="**/websso/**">
+			<manifest>
+				<attribute name="Class-Path" value=".."/>
+			</manifest>
+		</jar>
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+				<include name="*.zip"/>
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/payloads">
+			<fileset dir="${home}/payloads">
+				<include name="*.*"/>
+			</fileset>			
+		</copy>
+		<copy todir="${dist.dir}/resources">
+			<fileset dir="${home}/resources">
+				<include name="*.*"/>
+			</fileset>			
+		</copy>		
+		<copy todir="${dist.dir}/conf">
+			<fileset dir="${home}/conf">
+				<include name="**/*.*"/>
+			</fileset>			
+		</copy>		
+		<copy todir="${dist.dir}">
+			<fileset dir="${home}/scripts">
+				<include name="*.*"/>
+			</fileset>			
+		</copy>			
+    </target>
+</project>
