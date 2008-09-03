@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+
+<project name="Integration-Smoke-Test" default="version-check" >
+		<description>
+        This ant script contains the integration smoke tests for CCTS installation
+        </description>
+
+	 <!-- PROPERTIES -->
+	 <property environment="env" />
+	 <property file="build.properties"/>
+	 <property name="home" value="." />
+	 <property name="lib.dir" value="${home}/lib"/>
+	 <property name="temp.dir" value="${home}/temp" />
+	 <property name="log.dir" value="${home}/logs" />
+	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	
+       <target name="assert"  description="Uses ant to detect current jdk version and validates GLOBUS_LOCATION is set">
+	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
+      <condition>
+        <not>
+          <equals arg1="${ant.java.version}" arg2="1.5" />
+        </not>
+      </condition>
+    </fail>
+	<fail unless="env.GLOBUS_LOCATION" message="GLOBUS_LOCATION environment variable  has not been set!"/>
+	</target>
+
+	
+	
+	<target name="version-check" depends="init,assert" description="checks the software version used in your system">
+		<echo message="###########################################"/>
+		<echo message="#Integration smoke testing                #"/>
+		<echo message="###########################################"/>
+		<echo message="Current Setup: "/>
+                <echo message="JDK Version       : ${java.version}"/>
+		<echo message="ANT Version       : ${ant.version}"/>
+		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
+		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
+		<echo message="GLOBUS_LOCATION is : ${env.GLOBUS_LOCATION}"/>
+		<echo message="Type ant -p for targets available"/>
+    </target>
+    	<path id="globusClassPath" >
+    		   <fileset dir="${ext.globus.dir}/lib" >
+    		       <include name="*.jar"/>
+    		       <include name="*.zip"/>
+    		   </fileset>
+    	</path>
+    	<path id="resourcesClassPath" >
+    	    	 <fileset dir="${home}/resources" >
+	    		       <include name="*.*"/>
+	    	 </fileset>
+    	</path>
+    	<path id="payloadsClassPath" >
+    	    	 <fileset dir="${home}/payloads" >
+	    		       <include name="*.*"/>
+	    	 </fileset>
+    	</path>    	
+    	<path id="testClassPath" >
+    	   <fileset dir="${lib.dir}" >
+    	       <include name="*.jar"/>
+    	       <include name="*.zip"/>
+    	   </fileset>
+           <path refid="globusClassPath" />
+           <path refid="resourcesClassPath" />
+           <path refid="payloadsClassPath" />
+	</path>
+	
+	
+	<!--Get current timestamp for the log creation-->
+	<tstamp>
+		<format property="touch.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+
+	<!--Initializes the logs-->
+	<target name="init" description="Creates the temp and the log directory">
+		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${log.dir}" />
+		<record name="${log.dir}/CaXchange-Integration-Test-${touch.time}.log" action="start"/>
+	</target>
+	
+	<!-- replaces the tokens with the property values -->
+	<target name="replace" depends="init" description="Replaces the tokens with property values" >
+		<replace dir="${home}/resources" propertyFile="${home}/build.properties">
+			<replacefilter token="@ccts.grid.userName@" property="ccts.grid.userName"/>
+			<replacefilter token="@ccts.grid.password@" property="ccts.grid.password"/>
+			<replacefilter token="@dorian.url@" property="dorian.url"/>
+		        <replacefilter token="@cds.url@" property="cds.url"/>
+			<replacefilter token="@authentication.url@" property="authentication.url"/>
+			<replacefilter token="@app.node.identity@" property="app.node.identity"/>
+		</replace>
+	</target>
+	<!--Cleans the templorary files and folder created by the different targets-->
+        <target name="clean" description="clean temp files folders and targets" >
+		
+		<delete includeemptydirs="true">
+			<fileset dir="${cax.home}/temp/" includes="**/*"/>
+		</delete>
+
+        </target>
+        
+        <target name="testStudyCreation" depends="init,replace" description="Sends a STUDY_CREATION message to caXchange">
+                <mkdir dir="${home}/${junit.results.dir}" />
+	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+	            <classpath refid="testClassPath" />
+	            <formatter type="xml" />
+	            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestStudyCreation" />
+	        </junit>
+        </target>
+        
+        <target name="testRegisterSubject" depends="init,replace"  description="Sends a REGISTER_SUBJECT message to caXchange">
+                <mkdir dir="${home}/${junit.results.dir}" />
+	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+	            <classpath refid="testClassPath" />
+	            <formatter type="xml" />
+	            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestRegisterSubject" />
+	        </junit>
+        </target>        
+
+	<target name="testLoadLab" depends="init,replace" description="Sends a LOAD_LAB_TO_CDMS message to caXchange">
+	                <mkdir dir="${home}/${junit.results.dir}" />
+		        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+		            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+		            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+		            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+		            <classpath refid="testClassPath" />
+		            <formatter type="xml" />
+		            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestLoadLab" />
+		        </junit>
+	        </target>  
+	
+	<target name="testAENotification" depends="init,replace" description="Sends a LAB_BASED_AE message to caXchange">
+		                <mkdir dir="${home}/${junit.results.dir}" />
+			        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+			            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+			            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+			            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+			            <classpath refid="testClassPath" />
+			            <formatter type="xml" />
+			            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestAENotification" />
+			        </junit>
+		        </target>  
+	
+	<target name="testCtLabData" depends="init,replace" description="Sends a CT_LAB_DATA message to caXchange">
+			                <mkdir dir="${home}/${junit.results.dir}" />
+				        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+				            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+				            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+				            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+				            <classpath refid="testClassPath" />
+				            <formatter type="xml" />
+				            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestCtLabData" />
+				        </junit>
+			        </target>  
+	
+	
+	<target name="testScheduleModification" depends="init,replace" description="Sends a SCHEDULE_MODIFICATION message to caXchange">
+				                <mkdir dir="${home}/${junit.results.dir}" />
+					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+					            <classpath refid="testClassPath" />
+					            <formatter type="xml" />
+					            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestScheduleModification" />
+					        </junit>
+				        </target>  
+	
+
+	<target name="restore-caxchange-configuration"   description="Restores caxchange smoke test" >
+	                <echo message="The current caXchange routing configuration will be overwritten. Please stop your servicemix using kill command."/>
+	                <input   message="Servicemix is stopped. Do you want to continue?"
+	                validargs="y,n"
+	                addproperty="ifyessmokerestore"/>
+	                <condition property="ifnosmokerestore">
+	                <equals arg1="n" arg2="${ifyessmokerestore}"/>
+	                </condition>
+	                <fail if="ifnosmokerestore">Please kill servicemix  to restore caxchange configuration and run script again</fail>
+	  				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
+					<fileset dir="${home}/conf/caXchangeConf_restore"/>
+	                </copy>
+					<echo message="Please start servicemix.CaXchange routing configuration has been restored."/>
+		</target>
+
+
+	    <target name="configure-caxchange-not-invoke-target-services"    description="Configures caxchange not to invoke target services">
+	                 <echo message="Initializing caxchange test not to invoke target services."/>
+	                 <input   message="Do you want to configure caxchange test not to invoke target services"
+	                 validargs="y,n"
+	                 addproperty="ifyesorginotinvoke"/>
+	                 <condition property="ifnoorginotinvoke">
+	                 <equals arg1="n" arg2="${ifyesorginotinvoke}"/>
+	                 </condition>
+	                 <fail if="ifnoorginotinvoke">Please use this target when you do configuration changes and want to revert them back for the target services</fail>
+	                 <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_testing" failonerror="false">
+						<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+					</copy>
+	    	
+	    	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
+	    					<fileset dir="${home}/conf/caXchangeConf_to_not_invoke"/>
+	    	                </copy>
+	    			
+	    	        
+						<echo message="Please restart servicemix to take orginal config to take effect..............."/>
+	                </target>
+</project>
