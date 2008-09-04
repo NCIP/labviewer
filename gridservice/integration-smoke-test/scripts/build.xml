@@ -10,7 +10,6 @@
 	 <property file="build.properties"/>
 	 <property name="home" value="." />
 	 <property name="lib.dir" value="${home}/lib"/>
-	 <property name="temp.dir" value="${home}/temp" />
 	 <property name="log.dir" value="${home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	
@@ -73,13 +72,12 @@
 
 	<!--Initializes the logs-->
 	<target name="init" description="Creates the temp and the log directory">
-		<mkdir dir="${temp.dir}" />
 		<mkdir dir="${log.dir}" />
 		<record name="${log.dir}/CaXchange-Integration-Test-${touch.time}.log" action="start"/>
 	</target>
 	
 	<!-- replaces the tokens with the property values -->
-	<target name="replace" depends="init" description="Replaces the tokens with property values" >
+	<target name="replace" depends="init"  >
 		<replace dir="${home}/resources" propertyFile="${home}/build.properties">
 			<replacefilter token="@ccts.grid.userName@" property="ccts.grid.userName"/>
 			<replacefilter token="@ccts.grid.password@" property="ccts.grid.password"/>
@@ -89,14 +87,7 @@
 			<replacefilter token="@app.node.identity@" property="app.node.identity"/>
 		</replace>
 	</target>
-	<!--Cleans the templorary files and folder created by the different targets-->
-        <target name="clean" description="clean temp files folders and targets" >
-		
-		<delete includeemptydirs="true">
-			<fileset dir="${cax.home}/temp/" includes="**/*"/>
-		</delete>
-
-        </target>
+	
         
         <target name="testStudyCreation" depends="init,replace" description="Sends a STUDY_CREATION message to caXchange">
                 <mkdir dir="${home}/${junit.results.dir}" />
@@ -172,40 +163,5 @@
 				        </target>  
 	
 
-	<target name="restore-caxchange-configuration"   description="Restores caxchange smoke test" >
-	                <echo message="The current caXchange routing configuration will be overwritten. Please stop your servicemix using kill command."/>
-	                <input   message="Servicemix is stopped. Do you want to continue?"
-	                validargs="y,n"
-	                addproperty="ifyessmokerestore"/>
-	                <condition property="ifnosmokerestore">
-	                <equals arg1="n" arg2="${ifyessmokerestore}"/>
-	                </condition>
-	                <fail if="ifnosmokerestore">Please kill servicemix  to restore caxchange configuration and run script again</fail>
-	  				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
-					<fileset dir="${home}/conf/caXchangeConf_restore"/>
-	                </copy>
-					<echo message="Please start servicemix.CaXchange routing configuration has been restored."/>
-		</target>
-
-
-	    <target name="configure-caxchange-not-invoke-target-services"    description="Configures caxchange not to invoke target services">
-	                 <echo message="Initializing caxchange test not to invoke target services."/>
-	                 <input   message="Do you want to configure caxchange test not to invoke target services"
-	                 validargs="y,n"
-	                 addproperty="ifyesorginotinvoke"/>
-	                 <condition property="ifnoorginotinvoke">
-	                 <equals arg1="n" arg2="${ifyesorginotinvoke}"/>
-	                 </condition>
-	                 <fail if="ifnoorginotinvoke">Please use this target when you do configuration changes and want to revert them back for the target services</fail>
-	                 <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_testing" failonerror="false">
-						<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
-					</copy>
-	    	
-	    	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
-	    					<fileset dir="${home}/conf/caXchangeConf_to_not_invoke"/>
-	    	                </copy>
-	    			
-	    	        
-						<echo message="Please restart servicemix to take orginal config to take effect..............."/>
-	                </target>
+	
 </project>
