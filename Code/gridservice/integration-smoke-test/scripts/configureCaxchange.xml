@@ -171,7 +171,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-not-to-invoke-c3d"   depends="replace,init"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-c3d"   depends="replace,init"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
