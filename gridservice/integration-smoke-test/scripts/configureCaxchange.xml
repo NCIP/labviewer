@@ -27,7 +27,7 @@
 	<!--Initializes the logs-->
 	<target name="init" description="Creates  the log directory">
 		<mkdir dir="${log.dir}" />
-		<record name="${log.dir}/CaXchange-Configuration-Test-${touch.time}.log" action="start"/>
+		<record name="${log.dir}/CaXchange-Configuration-${touch.time}.log" action="start"/>
 	</target>
 	
 	
