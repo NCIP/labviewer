@@ -13,7 +13,7 @@
 	 <property name="build.dir" value="${home}/build"/>
 	 <property name="dist.dir" value="${home}/dist"/>
 	 <property name="src.dir" value="${home}/src"/>
-	 <property name="temp.dir" value="${home}/temp" />
+	
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}"/>
 	 <property name="jar.file.name" value="smoketest.jar" />
 	
@@ -48,8 +48,8 @@
 	
 
 	<!--Initializes the logs-->
-	<target name="init" description="Creates the temp and the log directory">
-		<mkdir dir="${temp.dir}" />
+	<target name="init" description="Creates home,dist,classes and lib directory">
+		
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dir}/classes" />
 		<mkdir dir="${dist.dir}" />
@@ -57,12 +57,9 @@
 	</target>
 	
 	<!--Clens the templorary files and folder created by the different targets-->
-    <target name="clean" description="clean temp files folders and targets" >
+    <target name="clean" description="clean dist and build directory" >
 		
-		<delete includeemptydirs="true">
-			<fileset dir="${home}/temp/" includes="**/*"/>
-		</delete>
-                 <delete includeemptydirs="true">
+        <delete includeemptydirs="true">
 			<fileset dir="${build.dir}" includes="**/*"/>
 		</delete>
                 <delete includeemptydirs="true">
