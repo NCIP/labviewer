@@ -10,24 +10,36 @@
 	 <property file="build.properties"/>
 	 <property name="home" value="." />
 	 <property name="lib.dir" value="${home}/lib"/>
-	 <property name="temp.dir" value="${home}/temp" />
+	
 	 <property name="log.dir" value="${home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	
 	<target name="default">
 		<echo message="Please type -p to see available targerts"/>
 	</target>
+
+
+	<!--Get current timestamp for the log creation-->
+	<tstamp>
+		<format property="touch.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+
+	<!--Initializes the logs-->
+	<target name="init" description="Creates  the log directory">
+		<mkdir dir="${log.dir}" />
+		<record name="${log.dir}/CaXchange-Configuration-Test-${touch.time}.log" action="start"/>
+	</target>
 	
 	
 	<!-- replaces the tokens with the property values -->
-	<target name="replace" description="Replaces the tokens with property values" >
+	<target name="replace"  >
 		<replace dir="${home}" includes="start_servicemix.sh,stop_servicemix.sh" propertyFile="${home}/build.properties">
 			<replacefilter token="@SERVICEMIX_HOME@" property="SERVICEMIX_HOME"/>
 		</replace>
 	</target>	
 
 
-	<target name="detect-os-is-unix" description="Finds if it is Unix machine ">
+	<target name="detect-os-is-unix" >
     <condition property="isUnix">
 	    <and>
 		    <os family="unix"/>
@@ -36,7 +48,7 @@
     </condition>
 	</target>
 	   
-    <target name="detect-os-is-win" description="Finds if it is Window machine ">
+    <target name="detect-os-is-win" >
     <condition property="isWin">
 	    <and>
 		    <os family="windows"/>
@@ -45,7 +57,7 @@
     </condition>
 	</target>
 
-	<target name="detect-os-is-other" description="Finds if it is other machine than windows/unix">
+	<target name="detect-os-is-other" >
 	 <condition property="isOtherOS">
              <not>
                  <or>
@@ -56,7 +68,7 @@
          </condition>
 		 </target>
 
-	<target name="call-stop-servicemix-in-unix" description="Executes the unix shutdown script if the os is unix" depends="detect-os-is-unix" if="isUnix">
+	<target name="call-stop-servicemix-in-unix"  depends="detect-os-is-unix" if="isUnix">
 		<chmod file="${home}/stop_servicemix.sh" perm="744"/>
 		 <exec dir="${home}" executable="${home}/stop_servicemix.sh" >
 			 
@@ -66,7 +78,7 @@
 					
 	</target>
 
-	<target name="call-stop-servicemix-in-win" description="Prompts the user to press stop servicemix" depends="detect-os-is-win" if="isWin">
+	<target name="call-stop-servicemix-in-win"  depends="detect-os-is-win" if="isWin">
 		 <echo message="Please stop servicemix."/>
 	                <input   message="Is servicemix stopped?"
 	                validargs="y,n"
@@ -78,7 +90,7 @@
 	</target>
 
 	    
-	<target name="restore-caxchange-configuration" depends="replace" description="Restores caxchange routing configuration to default installation settings" >
+	<target name="default-caxchange-configuration" depends="replace,init" description="Restores caxchange routing configuration to default installation settings" >
 	                <echo message="As part of this servicemix will be stopped and the current caXchange routing configuration will be overwritten."/>
 	                <input   message="Do you want to continue?"
 	                validargs="y,n"
@@ -97,7 +109,7 @@
 	</target>
 
 
-	    <target name="configure-caxchange-not-to-invoke-target-services"   depends="replace"  description="Configures caxchange not to invoke target services" >
+	    <target name="configure-caxchange-not-to-invoke-target-services"   depends="replace,init"  description="Configures caxchange not to invoke target services" >
 	                 
 	    	       <condition property="ifNotInvoke">
 	    		       <and>
@@ -129,7 +141,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-labviewer"   depends="replace"  description="Configures caxchange to invoke only LabViewer target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-labviewer"   depends="replace,init"  description="Configures caxchange to invoke only LabViewer target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -159,7 +171,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-not-to-invoke-c3d"   depends="replace"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-not-to-invoke-c3d"   depends="replace,init"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -189,7 +201,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-psc"   depends="replace"  description="Configures caxchange to invoke only PSC target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-psc"   depends="replace,init"  description="Configures caxchange to invoke only PSC target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -218,7 +230,7 @@
 	    </target>
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-caaers"   depends="replace"  description="Configures caxchange to invoke only caAERS target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-caaers"   depends="replace,init"  description="Configures caxchange to invoke only caAERS target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -250,7 +262,7 @@
 	    
 	    
 	
-	<target name="restore-from-backup" description="restores the caxchange configuration form backup">
+	<target name="restore-from-backup" depends="init,replace" description="restores the caxchange configuration form backup">
 
 		<echo message="As part of this servicemix will be stopped and the current caXchange routing configuration will be overwritten."/>
 	                <input   message="Do you want to continue?"
