@@ -13,7 +13,7 @@
 	 <property name="log.dir" value="${home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	
-       <target name="assert"  description="Uses ant to detect current jdk version and validates GLOBUS_LOCATION is set">
+       <target name="assert"  >
 	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
       <condition>
         <not>
@@ -26,7 +26,7 @@
 
 	
 	
-	<target name="version-check" depends="init,assert" description="checks the software version used in your system">
+	<target name="version-check" depends="init,assert" >
 		<echo message="###########################################"/>
 		<echo message="#Integration smoke testing                #"/>
 		<echo message="###########################################"/>
@@ -71,7 +71,7 @@
 	</tstamp>
 
 	<!--Initializes the logs-->
-	<target name="init" description="Creates the temp and the log directory">
+	<target name="init" >
 		<mkdir dir="${log.dir}" />
 		<record name="${log.dir}/CaXchange-Integration-Test-${touch.time}.log" action="start"/>
 	</target>
