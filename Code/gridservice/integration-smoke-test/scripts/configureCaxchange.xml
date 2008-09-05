@@ -90,7 +90,7 @@
 	</target>
 
 	    
-	<target name="default-caxchange-configuration" depends="replace,init" description="Restores caxchange routing configuration to default installation settings" >
+	<target name="set-default-caxchange-configuration" depends="replace,init" description="Restores caxchange routing configuration to default installation settings" >
 	                <echo message="As part of this servicemix will be stopped and the current caXchange routing configuration will be overwritten."/>
 	                <input   message="Do you want to continue?"
 	                validargs="y,n"
@@ -141,7 +141,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-labviewer"   depends="replace,init"  description="Configures caxchange to invoke only LabViewer target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-only-labviewer"   depends="replace,init"  description="Configures caxchange to invoke only LabViewer target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -171,7 +171,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-c3d"   depends="replace,init"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-not-to-invoke-c3d"   depends="replace,init"  description="Configures caxchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -201,7 +201,7 @@
 	    
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-psc"   depends="replace,init"  description="Configures caxchange to invoke only PSC target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-only-psc"   depends="replace,init"  description="Configures caxchange to invoke only PSC target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -230,7 +230,7 @@
 	    </target>
 	    
 	    
-	    <target name="configure-caxchange-to-invoke-caaers"   depends="replace,init"  description="Configures caxchange to invoke only caAERS target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
+	    <target name="configure-caxchange-to-invoke-only-caaers"   depends="replace,init"  description="Configures caxchange to invoke only caAERS target services for REGISTER_SUBJECT and STUDY_CREATION messages." >
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
@@ -286,4 +286,32 @@
 		</move>
 		 <echo message="Please start servicemix for configuration changes to take effect."/>
 	</target>
+	
+	    <target name="configure-caxchange-to-invoke-only-C3D"   depends="replace,init"  description="Configures caxchange to invoke only C3D target services for REGISTER_SUBJECT messages." >
+		    
+		    <condition property="ifNotInvoke">
+			    <and>
+				    <available file="${SERVICEMIX_HOME}/conf/caXchangeConf_original_before_testing"/>    
+			    </and>
+		    </condition>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${SERVICEMIX_HOME}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${SERVICEMIX_HOME}/conf/caXchangeConf_original_before_testing."/>
+		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
+		    <input   message="Do you want to continue?"
+			     validargs="y,n"
+			     addproperty="ifyesorginotinvoke"/>
+		    <condition property="ifnoorginotinvoke">
+			    <equals arg1="n" arg2="${ifyesorginotinvoke}"/>
+		    </condition>
+		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange to test integration only with C3D for REGISTER_SUBJECT messages </fail>
+		    <antcall target="call-stop-servicemix-in-unix"/>
+		    <antcall target="call-stop-servicemix-in-win"/>
+		    <copy todir="${SERVICEMIX_HOME}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${SERVICEMIX_HOME}/conf/caXchangeConf"/>
+		    </copy>
+		    <copy todir="${SERVICEMIX_HOME}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${home}/conf/caXchangeConf_C3D"/>
+		    </copy>		
+		    <echo message="Please start servicemix for configuration changes to take effect."/>
+	    </target>	
 </project>
