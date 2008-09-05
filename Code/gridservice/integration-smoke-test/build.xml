@@ -18,7 +18,7 @@
 	 <property name="jar.file.name" value="smoketest.jar" />
 	
 	<!--Validates the GLOBUS_LOCATION and JDK version-->
-	<target name="assert"  description="Uses ant to detect current jdk version and validates GLOBUS_LOCATION is set">
+	<target name="assert"  >
 	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
       <condition>
         <not>
@@ -31,7 +31,7 @@
 
 	
 	
-	<target name="version-check" depends="init,assert" description="checks the software version used in your system">
+	<target name="version-check" depends="init,assert" description="displays the software version and their path  in system used ">
 		<echo message="###########################################"/>
 		<echo message="#Welcome To caxchange v1.1 Installation   #"/>
 		<echo message="###########################################"/>
@@ -48,7 +48,7 @@
 	
 
 	<!--Initializes the logs-->
-	<target name="init" description="Creates home,dist,classes and lib directory">
+	<target name="init" >
 		
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${build.dir}/classes" />
@@ -92,7 +92,7 @@
 		</javac>
 	</target>
    
-	<target name="dist" depends="init,compile"  description="Creates the distributable folder">
+	<target name="dist" depends="init,compile"  description="creates the distributable folder">
 		<jar jarfile="${dist.dir}/lib/${jar.file.name}" basedir="${build.dir}/classes"
 			 excludes="**/websso/**">
 			<manifest>

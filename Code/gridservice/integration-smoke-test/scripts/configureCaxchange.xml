@@ -25,7 +25,7 @@
 	</tstamp>
 
 	<!--Initializes the logs-->
-	<target name="init" description="Creates  the log directory">
+	<target name="init" >
 		<mkdir dir="${log.dir}" />
 		<record name="${log.dir}/CaXchange-Configuration-${touch.time}.log" action="start"/>
 	</target>
@@ -262,7 +262,7 @@
 	    
 	    
 	
-	<target name="restore-from-backup" depends="init,replace" description="restores the caxchange configuration form backup">
+	<target name="restore-from-backup" depends="init,replace" description="Restores the caxchange configuration form backup">
 
 		<echo message="As part of this servicemix will be stopped and the current caXchange routing configuration will be overwritten."/>
 	                <input   message="Do you want to continue?"
@@ -284,5 +284,6 @@
 		<move todir="${SERVICEMIX_HOME}/conf/caXchangeConf" failonerror="false">
 			<fileset dir="${SERVICEMIX_HOME}/conf/caXchangeConf_original_before_testing"/>
 		</move>
+		 <echo message="Please start servicemix for configuration changes to take effect."/>
 	</target>
 </project>
