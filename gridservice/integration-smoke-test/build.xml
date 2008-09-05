@@ -59,10 +59,10 @@
 	<!--Clens the templorary files and folder created by the different targets-->
     <target name="clean" description="clean dist and build directory" >
 		
-        <delete includeemptydirs="true">
-			<fileset dir="${build.dir}" includes="**/*"/>
+        <delete includeemptydirs="true" quiet="true">
+			<fileset dir="${build.dir}" includes="**/*" />
 		</delete>
-                <delete includeemptydirs="true">
+                <delete includeemptydirs="true" quiet="true">
 			<fileset dir="${dist.dir}" includes="**/*"/>
 		</delete>		
     </target>
