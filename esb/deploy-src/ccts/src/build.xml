@@ -143,8 +143,10 @@
 		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-jms-3.1.2-installer.zip"/>
 		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-shared-3.1.2-installer.zip"
 		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-shared-3.1.2-installer.zip"/>
+		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-http-3.1.2-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-http-3.1.2-installer.zip"/>
 	</target>
-	
+
 	<target name="configure-caxchange-properties" depends="assert,system-init" description="Copy and update the caxchange.properties file based on the setup in install.properties" >
 	        <copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
 		<replace  file="${cax.home}/temp/caxchange.properties" 
@@ -263,7 +265,7 @@
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 		 propertyFile="install.properties">
-			<replacefilter token="@CAAERS_STUDYROLLBACK_URL@" property="caaers_labLoader_url"/>
+			<replacefilter token="@CAAERS_LABLOADER_URL@" property="caaers_labLoader_url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
