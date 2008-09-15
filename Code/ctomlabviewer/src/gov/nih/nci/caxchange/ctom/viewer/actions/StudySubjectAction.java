@@ -148,7 +148,7 @@ public class StudySubjectAction extends Action
 				{
 					loginForm.setGridProxy("test");
 					session.setAttribute(DisplayConstants.LOGIN_OBJECT,loginForm);
-					session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
+					session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.LABACTIVITES_ID);
 				}
 			}
 			
@@ -157,7 +157,7 @@ public class StudySubjectAction extends Action
 			session.setAttribute("studySubjectGridId", studySubjectGridId);
 			session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.SEARCH);
 			session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
-			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
+			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.LABACTIVITES_ID);
 			LabActivitiesSearchForm labFm = (LabActivitiesSearchForm)session.getAttribute("CURRENT_FORM");
 			
 			try
@@ -222,7 +222,7 @@ public class StudySubjectAction extends Action
 			CQLObject target = new CQLObject();
 			target.setName("gov.nih.nci.labhub.domain.SubjectAssignment");
 			//target.setAttribute(new CQLAttribute("studySubjectIdentifier",
-					//CQLPredicate.IS_NOT_NULL,""));
+				//	CQLPredicate.IS_NOT_NULL,""));
 			
 			// Set the subject Identifier on the association to II
 			CQLAssociation subjectAssignmentAssociation1 = new CQLAssociation();
@@ -241,7 +241,6 @@ public class StudySubjectAction extends Action
 			studySiteAssociation1.setName("gov.nih.nci.labhub.domain.Study");
 			studySiteAssociation1.setTargetRoleName("study");
 			subjectAssignmentAssociation2.setAssociation(studySiteAssociation1);
-			
 			
 			CQLGroup finalgroup = new CQLGroup();
 			finalgroup.addAssociation(subjectAssignmentAssociation1);
