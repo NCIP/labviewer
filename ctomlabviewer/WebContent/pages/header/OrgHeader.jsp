@@ -57,6 +57,8 @@ function MM_swapImage() { //v3.0
 			tableId = DisplayConstants.HOME_ID;
 			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
 		}
+		if(session.getAttribute("testEnabled")==null)
+		   session.setAttribute("testEnabled","false");
 	}
 	catch (Exception e)
 	{
