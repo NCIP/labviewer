@@ -294,7 +294,7 @@ function SelectAll()
 															&nbsp;
 														</td>
 														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
-															<td class="dataCellText" width="9%" bgcolor="blue">
+															<td class="dataCellText" width="9%" bgcolor="silver">
 																<bean:write name="searchResultObject" property="labLoadedToCDMSDate" />
 																&nbsp;
 															</td>
@@ -306,7 +306,7 @@ function SelectAll()
 															</td>
 														</logic:notEqual>
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="true">
-															<td class="dataCellText" width="9%" bgcolor="blue">
+															<td class="dataCellText" width="9%" bgcolor="silver">
 																<bean:write name="searchResultObject" property="adverseEventReportedDate" />
 																&nbsp;
 															</td>
@@ -385,7 +385,7 @@ function SelectAll()
 															&nbsp;
 														</td>
 														<logic:equal name="searchResultObject" property="labLoadedToCDMS" value="true">
-															<td class="dataCellText" width="9%" bgcolor="blue">
+															<td class="dataCellText" width="9%" bgcolor="silver">
 																<bean:write name="searchResultObject" property="labLoadedToCDMSDate" />
 																&nbsp;
 															</td>
@@ -397,7 +397,7 @@ function SelectAll()
 															</td>
 														</logic:notEqual>
 														<logic:equal name="searchResultObject" property="adverseEventReported" value="true">
-															<td class="dataCellText" width="9%" bgcolor="blue">
+															<td class="dataCellText" width="9%" bgcolor="silver">
 																<bean:write name="searchResultObject" property="adverseEventReportedDate" />
 																&nbsp;
 															</td>
