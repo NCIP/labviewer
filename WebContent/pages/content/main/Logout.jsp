@@ -21,12 +21,13 @@
 <!-- laf box 1st half -->
 			<table summary="" cellpadding="0" cellspacing="0" border="0"
 				class="contentPage" width="40%" height="80%" >
-				<div>
+				<div align="center">
 				 <p align="left">
 				Logout successful</p>
+				<p align="left">
 				<font size="2" face="verdana">
-				<p align="left">You have successfully logged out of the Central Authentication Service.</p>
-				<p align="left">For security reasons, exit your web browser.<br>
+				You have successfully logged out of the Central Authentication Service.<br><br>
+				For security reasons, exit your web browser.<br>
 				</p>
 				<br>
 				</font>
