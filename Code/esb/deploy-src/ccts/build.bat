@@ -1,1 +1,0 @@
-mvn -Denv=local -Dmaven.test.skip=true clean install assembly:directory
