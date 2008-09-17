@@ -277,6 +277,21 @@
 		 propertyFile="install.properties">
 			<replacefilter token="@LOADLAB_URL@" property="loadLab_url"/>
 		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@GME_URL@" property="gme_url"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@GME_CACHE_DIRECTORY@" property="gme_cache_directory"/>
+		</replace>
+
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+		 propertyFile="install.properties">
+			<replacefilter token="@MESSAGETYPES_FOR_VALIDATION@" property="messageTypes_for_validation"/>
+		</replace>
 	</target>
 	
 
