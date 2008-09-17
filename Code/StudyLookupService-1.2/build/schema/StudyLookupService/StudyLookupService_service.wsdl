@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="StudyLookupService" targetNamespace="http://grid.labviewer.cagrid.nci.nih.gov/StudyLookupService/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://grid.labviewer.cagrid.nci.nih.gov/StudyLookupService/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://grid.labviewer.cagrid.nci.nih.gov/StudyLookupService/bindings" location="StudyLookupService_bindings.wsdl"/>
-  <wsdl:service name="StudyLookupService">
-    <wsdl:port name="StudyLookupServicePortTypePort" binding="binding:StudyLookupServicePortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
