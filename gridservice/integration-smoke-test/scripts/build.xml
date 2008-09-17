@@ -8,9 +8,9 @@
 	 <!-- PROPERTIES -->
 	 <property environment="env" />
 	 <property file="build.properties"/>
-	 <property name="home" value="." />
-	 <property name="lib.dir" value="${home}/lib"/>
-	 <property name="log.dir" value="${home}/logs" />
+	 <property name="integration_smoke_test_home" value="." />
+	 <property name="lib.dir" value="${integration_smoke_test_home}/lib"/>
+	 <property name="log.dir" value="${integration_smoke_test_home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	
        <target name="assert"  >
@@ -33,8 +33,8 @@
 		<echo message="Current Setup: "/>
                 <echo message="JDK Version       : ${java.version}"/>
 		<echo message="ANT Version       : ${ant.version}"/>
-		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
-		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
+		<echo message="JAVA_integration_smoke_test_home is      : ${env.JAVA_integration_smoke_test_home}"/>
+		<echo message="ANT_integration_smoke_test_home is       : ${env.ANT_integration_smoke_test_home}"/>
 		<echo message="GLOBUS_LOCATION is : ${env.GLOBUS_LOCATION}"/>
 		<echo message="Type ant -p for targets available"/>
     </target>
@@ -45,12 +45,12 @@
     		   </fileset>
     	</path>
     	<path id="resourcesClassPath" >
-    	    	 <fileset dir="${home}/resources" >
+    	    	 <fileset dir="${integration_smoke_test_home}/resources" >
 	    		       <include name="*.*"/>
 	    	 </fileset>
     	</path>
     	<path id="payloadsClassPath" >
-    	    	 <fileset dir="${home}/payloads" >
+    	    	 <fileset dir="${integration_smoke_test_home}/payloads" >
 	    		       <include name="*.*"/>
 	    	 </fileset>
     	</path>    	
@@ -78,7 +78,7 @@
 	
 	<!-- replaces the tokens with the property values -->
 	<target name="replace" depends="init"  >
-		<replace dir="${home}/resources" propertyFile="${home}/build.properties">
+		<replace dir="${integration_smoke_test_home}/resources" propertyFile="${integration_smoke_test_home}/build.properties">
 			<replacefilter token="@ccts.grid.userName@" property="ccts.grid.userName"/>
 			<replacefilter token="@ccts.grid.password@" property="ccts.grid.password"/>
 			<replacefilter token="@dorian.url@" property="dorian.url"/>
@@ -90,75 +90,75 @@
 	
         
         <target name="testStudyCreation" depends="init,replace" description="Sends a STUDY_CREATION message to caXchange">
-                <mkdir dir="${home}/${junit.results.dir}" />
+                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 	            <classpath refid="testClassPath" />
 	            <formatter type="xml" />
-	            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestStudyCreation" />
+	            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestStudyCreation" />
 	        </junit>
         </target>
         
         <target name="testRegisterSubject" depends="init,replace"  description="Sends a REGISTER_SUBJECT message to caXchange">
-                <mkdir dir="${home}/${junit.results.dir}" />
+                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 	            <classpath refid="testClassPath" />
 	            <formatter type="xml" />
-	            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestRegisterSubject" />
+	            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestRegisterSubject" />
 	        </junit>
         </target>        
 
 	<target name="testLoadLab" depends="init,replace" description="Sends a LOAD_LAB_TO_CDMS message to caXchange">
-	                <mkdir dir="${home}/${junit.results.dir}" />
+	                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 		        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 		            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 		            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 		            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 		            <classpath refid="testClassPath" />
 		            <formatter type="xml" />
-		            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestLoadLab" />
+		            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestLoadLab" />
 		        </junit>
 	        </target>  
 	
 	<target name="testAENotification" depends="init,replace" description="Sends a LAB_BASED_AE message to caXchange">
-		                <mkdir dir="${home}/${junit.results.dir}" />
+		                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 			        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 			            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 			            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 			            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 			            <classpath refid="testClassPath" />
 			            <formatter type="xml" />
-			            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestAENotification" />
+			            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestAENotification" />
 			        </junit>
 		        </target>  
 	
 	<target name="testCtLabData" depends="init,replace" description="Sends a CT_LAB_DATA message to caXchange">
-			                <mkdir dir="${home}/${junit.results.dir}" />
+			                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 				        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 				            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 				            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 				            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 				            <classpath refid="testClassPath" />
 				            <formatter type="xml" />
-				            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestCtLabData" />
+				            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestCtLabData" />
 				        </junit>
 			        </target>  
 	
 	
 	<target name="testScheduleModification" depends="init,replace" description="Sends a SCHEDULE_MODIFICATION message to caXchange">
-				                <mkdir dir="${home}/${junit.results.dir}" />
+				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 					            <classpath refid="testClassPath" />
 					            <formatter type="xml" />
-					            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestScheduleModification" />
+					            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestScheduleModification" />
 					        </junit>
 				        </target>  
 
@@ -166,14 +166,14 @@
 
 							
 	<target name="testUnknownMessageType" depends="init,replace" description="Sends UNKNOWN_MSG_TYPE message to caXchange">
-				                <mkdir dir="${home}/${junit.results.dir}" />
+				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 					            <classpath refid="testClassPath" />
 					            <formatter type="xml" />
-					            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestUnknownMessageType" />
+					            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestUnknownMessageType" />
 					        </junit>
 				        </target>  
 	
