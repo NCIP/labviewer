@@ -2,7 +2,12 @@
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Cgriff (DHHS/NIH/NCI) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:caXchange="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/messaging" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="caXchangeRequestMessage" type="caXchange:message"/>
-	<xs:element name="caXchangeResponseMessage" type="caXchange:responseMessage"/>        
+	<xs:element name="caXchangeResponseMessage" type="caXchange:responseMessage"/>
+	<xs:element name="caXchangeRoutingMetadata" type="caXchange:routingMetadata">
+		<xs:annotation>
+			<xs:documentation>Gives the routing metadata for caXchange</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="message">
 		<xs:sequence>
 			<xs:element name="metadata" type="caXchange:metadata"/>
@@ -14,7 +19,7 @@
 			<xs:element name="responseMetadata" type="caXchange:responseMetadata"/>
 			<xs:element name="response" type="caXchange:response"/>
 		</xs:sequence>
-	</xs:complexType>        
+	</xs:complexType>
 	<xs:complexType name="request">
 		<xs:sequence>
 			<xs:element name="businessMessagePayload" type="caXchange:messagePayload"/>
@@ -24,15 +29,15 @@
 		<xs:sequence>
 			<xs:element name="responseStatus" type="caXchange:statuses"/>
 			<xs:choice>
-				<xs:element name="caXchangeError" type="caXchange:errorDetails" />
+				<xs:element name="caXchangeError" type="caXchange:errorDetails"/>
 				<xs:element name="targetResponse" type="caXchange:targetResponseMessage" maxOccurs="unbounded"/>
 			</xs:choice>
 		</xs:sequence>
-	</xs:complexType>	
+	</xs:complexType>
 	<xs:complexType name="metadata">
 		<xs:sequence>
 			<xs:element name="operation" type="caXchange:operations"/>
-			<xs:element name="messageType" type="caXchange:messageTypes"/>
+			<xs:element name="messageType" type="xs:string"/>
 			<xs:element name="externalIdentifier" type="xs:string"/>
 			<xs:element name="caXchangeIdentifier" type="xs:string" minOccurs="0">
 				<xs:annotation>
@@ -40,7 +45,7 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="credentials" type="caXchange:credentials" minOccurs="0"/>
-			<xs:element name="targetSite" minOccurs="0" maxOccurs="unbounded" nillable="true" type="xs:string"/>
+			<xs:element name="targetSite" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="responseMetadata">
@@ -78,7 +83,7 @@
 	<xs:complexType name="messagePayload">
 		<xs:sequence>
 			<xs:element name="xmlSchemaDefinition" type="xs:anyURI"/>
-			<xs:any  processContents="lax" minOccurs="0" maxOccurs="1" />
+			<xs:any processContents="lax" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="errorDetails">
@@ -88,7 +93,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:simpleType name="errorCodes">
-	    <xs:annotation>
+		<xs:annotation>
 			<xs:documentation>
 			  000 OK
 			  
@@ -106,6 +111,13 @@
 			  303 SAX Exception
 			  304 Paser Configuration Exception
 			  305 IO Exception
+			  
+			  400 Error invoking Delegation Service
+			  401 Internal Error Delegation Service
+			  402 Fault returned from Delegation Service
+			  403 Permission denied fault from Delegation Service
+			  
+			  500 Error getting metadata.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string"/>
@@ -138,8 +150,18 @@
 			<xs:enumeration value="LOAD_LAB_TO_CDMS"/>
 			<xs:enumeration value="LAB_BASED_AE"/>
 			<xs:enumeration value="SCHEDULE_MODIFICATION"/>
-			<xs:enumeration value="MULTISITE_STUDY_CREATION"/>
-			<xs:enumeration value="MULTISITE_REGISTER_SUBJECT"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:complexType name="mtMetadata">
+		<xs:sequence>
+			<xs:element name="messageType" type="xs:string" nillable="false"/>
+			<xs:element name="payloadUri" type="xs:anyURI" nillable="true"/>
+			<xs:element name="reliableTransactions" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="routingMetadata">
+		<xs:sequence>
+			<xs:element name="messageTypeMetadata" type="caXchange:mtMetadata" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
 </xs:schema>

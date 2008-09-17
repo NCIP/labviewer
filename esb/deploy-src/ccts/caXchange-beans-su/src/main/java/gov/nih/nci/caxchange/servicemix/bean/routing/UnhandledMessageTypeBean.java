@@ -60,8 +60,8 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
            out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxchange does not handle this message type :"+messageType);
         }catch(Exception e) {
-            out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
-            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxhange does not handle this message type.");        	
+            logger.error("An error occurred sending unhandled message type error response to the queue.", e);
+            throw new MessagingException("An error occurred sending  unhandled message type error response to the queue.", e);
         }
         exchange.setMessage(out,"out");
         channel.send(exchange);

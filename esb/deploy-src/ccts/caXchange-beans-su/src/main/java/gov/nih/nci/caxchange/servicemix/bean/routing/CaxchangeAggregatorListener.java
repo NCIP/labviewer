@@ -21,6 +21,8 @@ import javax.xml.transform.dom.DOMSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
+import org.apache.servicemix.jbi.jaxp.StringSource;
+
 import gov.nih.nci.caxchange.servicemix.bean.util.*;
 	/**
 	 * Listens to the aggregated response from EIP aggregator and creates 
@@ -115,9 +117,10 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
         }
         String originalMessage = message.getMessage();
         logger.debug("original message "+originalMessage);
+        StringSource source = new StringSource(originalMessage); 
         CaXchangeRequestMessageDocument orgDoc= CaXchangeRequestMessageDocument.Factory.parse(originalMessage);
 
-        return new DOMSource(orgDoc.getDomNode());
+        return source;
     }
     /**
      * Verify if a rollback is required. A rollback is required if the request has

@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 
 public class TestStudyCreation extends TestCaXchangeGridService {
 
-	
+
     /**
      * test messages of type STUDY_CREATION.
      *
@@ -30,8 +30,8 @@ public class TestStudyCreation extends TestCaXchangeGridService {
         if (!cpr.exists()) {
             throw new RuntimeException("Test message does not exist.");
         }
-        InputStream testMessage = cpr.getInputStream(); 
-        message.getMetadata().setMessageType(MessageTypes.STUDY_CREATION);
+        InputStream testMessage = cpr.getInputStream();
+        message.getMetadata().setMessageType("STUDY_CREATION");
         MessagePayload messagePayload = new MessagePayload();
         URI  uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -62,7 +62,7 @@ public class TestStudyCreation extends TestCaXchangeGridService {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
-	
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -74,5 +74,5 @@ public class TestStudyCreation extends TestCaXchangeGridService {
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }	
+      }
 }

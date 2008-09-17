@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!--
     
     Licensed to the Apache Software Foundation (ASF) under one or more
@@ -38,6 +35,7 @@
     <module>caXchange-servicemix-eip-se</module>
     <module>caXchange-verify-routing-jar</module>
     <module>caXchange-auditor-jar</module>
+    <module>caxchange-metadata-service</module>
   </modules>
   <!--
   <distributionManagement>
@@ -591,7 +589,12 @@
       <groupId>cagrid</groupId> 
       <artifactId>gridca</artifactId> 
       <version>1.2</version> 
-    </dependency>      
+    </dependency>    
+	 <dependency>
+      <groupId>junit</groupId> 
+      <artifactId>junit</artifactId> 
+      <version>3.8.1</version> 
+    </dependency>   
   </dependencies>
   <build>
     <extensions>
@@ -636,11 +639,11 @@
  	               <tasks>
 	                 <taskdef resource="net/sf/antcontrib/antlib.xml">
 		           <classpath>
-			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar" />
+			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar"/>
 		           </classpath>
 	                 </taskdef>
-	                 <mkdir dir="${temp-tomcat-dir}" />
-                         <ant antfile="${inbound-service-location}/caXchangeInboundService/build.xml" inheritAll="false" target="createWar" >
+	                 <mkdir dir="${temp-tomcat-dir}"/>
+                         <ant antfile="${inbound-service-location}/caXchangeInboundService/build.xml" inheritAll="false" target="createWar">
 	                       <property name="tomcat.dir" value="C:/temp.tomcat.dir"/>
 	                       <property name="globus.webapp" value="wsrf-caxchange"/>
 	                       <property name="build.compiler" value="extJavac"/>
@@ -656,7 +659,7 @@
                     <phase>install</phase>	        
  	            <configuration>
  	               <tasks>
- 	                   <echo message="Install Phase" />
+ 	                   <echo message="Install Phase"/>
  	               </tasks>
  	            </configuration>
  	            <goals>
@@ -669,10 +672,10 @@
  	               <tasks>
 	                 <taskdef resource="net/sf/antcontrib/antlib.xml">
 		           <classpath>
-			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar" />
+			         <pathelement location="${inbound-service-location}/caXchangeInboundService/tools/lib/ant-contrib.jar"/>
 		           </classpath>
 	                 </taskdef>
-                         <delete dir="${temp-tomcat-dir}" />
+                         <delete dir="${temp-tomcat-dir}"/>
  	               </tasks>
  	            </configuration>
  	            <goals>

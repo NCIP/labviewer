@@ -93,7 +93,6 @@
           <version>1.2.13</version>
           <scope>provided</scope>
     </dependency>   
-               
              <dependency>
                     <groupId>gov.nih.nci.caxchange</groupId>
                     <artifactId>caXchange-beans-su</artifactId>
@@ -113,14 +112,19 @@
                         <groupId>gov.nih.nci.caxchange</groupId>
                         <artifactId>caXchange-inbound-jms-su</artifactId>
                         <version>${project.version}</version>
-            </dependency>          
+            </dependency>      
+            <dependency>
+                        <groupId>gov.nih.nci.caxchange</groupId>
+                        <artifactId>caXchange-metadata-service</artifactId>
+                        <version>${project.version}</version>
+            </dependency>              
   </dependencies>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
-        <version>${servicemix-version}</version>      
+        <version>${servicemix-version}</version>   
         <extensions>true</extensions>
         <configuration>
           <type>service-assembly</type>         
