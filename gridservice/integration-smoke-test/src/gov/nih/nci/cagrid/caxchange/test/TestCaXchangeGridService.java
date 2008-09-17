@@ -92,7 +92,7 @@ public class TestCaXchangeGridService extends TestCase {
     public TestCaXchangeGridService(String name) {
         super(name);
     }
-    
+
     public InputStream getResourceInputStream(String fileName) throws Exception {
     	ClassPathResource cpr = new ClassPathResource(fileName);
     	if (!cpr.exists()) {
@@ -165,7 +165,7 @@ public class TestCaXchangeGridService extends TestCase {
         return getResponse;
     }
 
- 
+
 
     /**
      * Test messagess of type LAB_BASED_AE.
@@ -178,7 +178,7 @@ public class TestCaXchangeGridService extends TestCase {
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
-        message.getMetadata().setMessageType(MessageTypes.LAB_BASED_AE);
+        message.getMetadata().setMessageType("LAB_BASED_AE");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -217,7 +217,7 @@ public class TestCaXchangeGridService extends TestCase {
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
-        message.getMetadata().setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+        message.getMetadata().setMessageType("LOAD_LAB_TO_CDMS");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -253,7 +253,7 @@ public class TestCaXchangeGridService extends TestCase {
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
-        message.getMetadata().setMessageType(MessageTypes.CT_LAB_DATA);
+        message.getMetadata().setMessageType("CT_LAB_DATA");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -285,7 +285,7 @@ public class TestCaXchangeGridService extends TestCase {
         if (testMessage == null) {
             throw new RuntimeException("Test message does not exist.");
         }
-        message.getMetadata().setMessageType(MessageTypes.SCHEDULE_MODIFICATION);
+        message.getMetadata().setMessageType("SCHEDULE_MODIFICATION");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

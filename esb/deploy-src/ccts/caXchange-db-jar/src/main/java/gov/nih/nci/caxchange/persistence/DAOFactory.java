@@ -4,22 +4,22 @@ import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
- * This class process CaxchangeMessage.xml file to send and get 
+ * This class process CaxchangeMessage.xml file to send and get
  * message form database
  * @author hmarwaha
  *
  */
 public class DAOFactory {
    static ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("CaxchangeMessage.xml");
-   
+
    /**
     * Default constructor
-    */ 
+    */
    public DAOFactory() {
     }
-    
+
    /**
-    * This method gets caxchange DAO message 
+    * This method gets caxchange DAO message
     * @param
     * @return CaxchangeMessageDAO object
     * @throws
@@ -27,15 +27,25 @@ public class DAOFactory {
     public static CaxchangeMessageDAO getCaxchangeMessageDAO() {
         return (CaxchangeMessageDAO)appContext.getBean("caxchangeMessageDAO");
     }
-    
+
+   /**
+	* This method gets caxchange metadata DAO
+	* @param
+	* @return CaxchangeMetadataDAO object
+	* @throws
+	*/
+	public static CaxchangeMetadataDAO getCaxchangeMetadataDAO() {
+		return (CaxchangeMetadataDAO)appContext.getBean("caxchangeMetadataDAO");
+    }
+
     /**
-     * Main methods to exercise setters and getters  
+     * Main methods to exercise setters and getters
      * defined in CaxchangeMessageDAO
      * @param args
-     * @return 
+     * @return
      * @throws
      */
-    
+
     public static void main(String [] args) {
         try  {
            CaxchangeMessage message =  new CaxchangeMessage();
@@ -53,6 +63,6 @@ public class DAOFactory {
             ex.printStackTrace();
         } finally  {
         }
-        
+
     }
 }

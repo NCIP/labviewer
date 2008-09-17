@@ -3,6 +3,7 @@
   <ns2:Namespace location="./caXchange.xsd" namespace="http://caXchange.nci.nih.gov/messaging" packageName="gov.nih.nci.caxchange" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="caXchangeRequestMessage" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="caXchangeResponseMessage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="caXchangeRoutingMetadata" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>

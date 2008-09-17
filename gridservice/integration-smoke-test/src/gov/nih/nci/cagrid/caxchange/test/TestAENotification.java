@@ -20,12 +20,12 @@ public class TestAENotification extends TestCaXchangeGridService{
 	public TestAENotification(){
 		super();
 	}
-	
+
 	public TestAENotification(String name){
 		super(name);
 	}
-	
-	
+
+
 	/**
      * Test messagess of type LAB_BASED_AE.
      *
@@ -34,7 +34,7 @@ public class TestAENotification extends TestCaXchangeGridService{
     public void testAENotification() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/LAB_BASED_AE.xml");
-          message.getMetadata().setMessageType(MessageTypes.LAB_BASED_AE);
+          message.getMetadata().setMessageType("LAB_BASED_AE");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -60,7 +60,7 @@ public class TestAENotification extends TestCaXchangeGridService{
       }
 
     }
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -72,7 +72,7 @@ public class TestAENotification extends TestCaXchangeGridService{
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }		
-    
-    
+      }
+
+
 }

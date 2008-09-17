@@ -37,14 +37,21 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <systemProperties>
+            <property>
+              <name>log4j.configuration</name>
+              <value>file:target/test-classes/log4j.properties</value>
+            </property>
+          </systemProperties>          
           <excludes>
             <exclude>**/StoreOriginalMessageServiceBeanDatabaseDownTest.*</exclude>
             <exclude>**/StoreOriginalMessageServiceBeanTest.*</exclude>
             <exclude>**/HandleErrorResponseBeanTest.*</exclude>
             <exclude>**/GenerateResponseBeanTest.*</exclude>
-            <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
-            <exclude>**/InvokeDeploymentServiceBeanTest.*</exclude>
-            <exclude>**/XPathUtilTest.*</exclude>
+            <!-- <exclude>**/CaxchangeAggregatorListenerTest.*</exclude> -->
+             <exclude>**/InvokeDelegationServiceBeanTest.*</exclude>
+            <exclude>**/XPathUtilTest.*</exclude>  
+            <exclude>**/PayloadValidationTest.*</exclude>
           </excludes>
         </configuration>
       </plugin>      
@@ -114,6 +121,11 @@
       <artifactId>caXchange-common-jar</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+       <groupId>gov.nih.nci.caxchange</groupId>
+       <artifactId>caXchange-verify-routing-jar</artifactId>
+       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>gov.nih.nci.caxchange</groupId>
@@ -428,6 +440,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>cagrid.mobius</groupId> 
+      <artifactId>mobius-castor</artifactId> 
+      <version>1.2</version> 
+      <scope>provided</scope>      
+    </dependency> 
+    <dependency>
       <groupId>cagrid</groupId> 
       <artifactId>resolver</artifactId> 
       <version>1.1</version> 
@@ -610,6 +628,16 @@
       <groupId>cagrid.cds</groupId> 
       <artifactId>cds-stubs</artifactId> 
       <version>1.2</version> 
+    </dependency> 
+    <dependency>
+      <groupId>cagrid</groupId>
+      <artifactId>gme</artifactId>
+      <version>1.2</version>
+    </dependency>    
+    <dependency>
+      <groupId>cagrid</groupId>
+      <artifactId>gme-stubs</artifactId>
+      <version>1.2</version>
     </dependency>    
   </dependencies>
   <properties>

@@ -37,7 +37,7 @@ public class TestRegisterSubject extends TestCaXchangeGridService {
     public void testRegisterSubject() {
       try {
     	InputStream testMessage = getResourceInputStream("/payloads/REGISTER_SUBJECT.xml");
-        message.getMetadata().setMessageType(MessageTypes.REGISTER_SUBJECT);
+        message.getMetadata().setMessageType("REGISTER_SUBJECT");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -56,8 +56,8 @@ public class TestRegisterSubject extends TestCaXchangeGridService {
           throw new RuntimeException(e);
       }
 
-    }	
-	
+    }
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -69,5 +69,5 @@ public class TestRegisterSubject extends TestCaXchangeGridService {
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }		
+      }
 }

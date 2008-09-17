@@ -22,10 +22,10 @@ public class TestCtLabData extends TestCaXchangeGridService{
 	}
 	public TestCtLabData(String name){
 		super(name);
-		
+
 	}
-	
-	
+
+
 	 /**
      * Test messagess of type CT_LAB_DATA .
      *
@@ -34,7 +34,7 @@ public class TestCtLabData extends TestCaXchangeGridService{
     public void testCtLabData() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/CT_LAB_DATA.xml");
-          message.getMetadata().setMessageType(MessageTypes.CT_LAB_DATA);
+          message.getMetadata().setMessageType("CT_LAB_DATA");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -54,7 +54,7 @@ public class TestCtLabData extends TestCaXchangeGridService{
       }
 
     }
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -66,6 +66,6 @@ public class TestCtLabData extends TestCaXchangeGridService{
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }	
+      }
 
 }

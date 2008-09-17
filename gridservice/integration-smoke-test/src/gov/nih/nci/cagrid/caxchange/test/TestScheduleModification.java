@@ -16,14 +16,14 @@ import org.w3c.dom.Document;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 public class TestScheduleModification extends TestCaXchangeGridService{
- 
+
 	public TestScheduleModification(){
 		super();
 	}
 	public TestScheduleModification(String name){
 		super(name);
 	}
-	
+
 	  /**
      * Test messagess of type SCHEDULE_MODIFICATION .
      *
@@ -32,7 +32,7 @@ public class TestScheduleModification extends TestCaXchangeGridService{
     public void testScheduleModification() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/SCHEDULE_MODIFICATION.xml");
-          message.getMetadata().setMessageType(MessageTypes.SCHEDULE_MODIFICATION);
+          message.getMetadata().setMessageType("SCHEDULE_MODIFICATION");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -52,8 +52,8 @@ public class TestScheduleModification extends TestCaXchangeGridService{
       }
 
     }
-    
-    
+
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -65,5 +65,5 @@ public class TestScheduleModification extends TestCaXchangeGridService{
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }	
+      }
 }

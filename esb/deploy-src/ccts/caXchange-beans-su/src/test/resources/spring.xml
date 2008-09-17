@@ -1,6 +1,6 @@
 <beans xmlns:sm="http://servicemix.apache.org/config/1.0"
   xmlns:bean="http://servicemix.apache.org/bean/1.0"
-  xmlns:caxchange="http://servicemix.apache.org/caXchange">
+  xmlns:caxchange="http://nci.nih.gov/caXchange">
 
   <sm:container id="jbi" embedded="true" createMBeanServer="false">
     <sm:activationSpecs>
@@ -10,9 +10,11 @@
             <bean:endpoints>
 <!--                <bean:endpoint service="c3d:enrollPatient" endpoint="enrollPatient"
                 bean="#enrollPatient" /> -->
-  			<bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndPoint" bean="#invokeDeploymentServiceBean"/>                               
+  			<bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndPoint" bean="#invokeDelegationServiceBean"/>                               
   			<bean:endpoint service="caxchange:handleErrorResponse" endpoint="endPoint" bean="#handleErrorResponseBean"/>
-  			<bean:endpoint service="caxchange:storeOriginalMessage" endpoint="endPoint" bean="#storeOriginalMessageBean"/>  			
+  			<bean:endpoint service="caxchange:storeOriginalMessage" endpoint="endPoint" bean="#storeOriginalMessageBean"/>
+  			<bean:endpoint service="caxchange:payloadValidator"    endpoint="endPoint" bean="#payloadValidatorBean" />
+  			  <bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />			
             </bean:endpoints>
           </bean:component>
         </sm:component>
@@ -20,10 +22,40 @@
     </sm:activationSpecs>
   </sm:container>
 
- <bean id="invokeDeploymentServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDeploymentServiceBean"/>
+ <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean"/>
  <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
  <bean id="storeOriginalMessageBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
  <bean id="xpathUtil" class="gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil" />
+ <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" >
+  
+      <property name="messageTypesEligibleForRollback" >
+            <list>
+                <value>STUDY_CREATION</value>
+                <value>REGISTER_SUBJECT</value>
+            </list>
+      </property>
+  </bean>
+ <bean id="payloadValidator" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidator" init-method="init"/>
+ <bean id="gmeSchemaFactory" class="gov.nih.nci.caxchange.servicemix.bean.validation.GMESchemaFactory" init-method="init">
+       <property name="GMEGridServiceLocation"
+                 value="http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+       <property name="cacheDirectoryLocation"
+                 value="c:/gme_cache_directory" />
+ </bean>
+ <bean id="payloadValidatorBean" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidatorBean" >
+       <property name="payloadValidator">
+           <ref bean="payloadValidator"/>
+       </property>
+       <property name="gmeSchemaFactory">
+          <ref bean="gmeSchemaFactory" />
+       </property>
+       <property name="messageTypesEligibleForValidation" >
+            <list>
+                <value>STUDY_CREATION</value>
+                <value>REGISTER_SUBJECT</value>
+            </list>
+       </property>                 
+ </bean>
 </beans>
 
 

@@ -161,6 +161,22 @@
 					            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestScheduleModification" />
 					        </junit>
 				        </target>  
+
+
+
+							
+	<target name="testUnknownMessageType" depends="init,replace" description="Sends UNKNOWN_MSG_TYPE message to caXchange">
+				                <mkdir dir="${home}/${junit.results.dir}" />
+					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+					            <classpath refid="testClassPath" />
+					            <formatter type="xml" />
+					            <test fork="yes" todir="${home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestUnknownMessageType" />
+					        </junit>
+				        </target>  
+	
 	
 
 	
