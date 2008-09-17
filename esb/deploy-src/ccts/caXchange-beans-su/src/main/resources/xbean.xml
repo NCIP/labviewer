@@ -57,7 +57,7 @@
          <property name="gmeSchemaFactory">
             <ref bean="gmeSchemaFactory" />
          </property>
-         <property name="messageTypesForValidation" value="${messageTypes.for,validation}" />                 
+         <property name="messageTypesForValidation" value="${messageTypes.for.validation}" />                 
  </bean>
  
   <bean:endpoint service="caxchange:payloadValidationService" endpoint="payloadValidationEndpoint" bean="#payloadValidatorBean" />
