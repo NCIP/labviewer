@@ -8,10 +8,10 @@
 	 <!-- PROPERTIES -->
 	 <property environment="env" />
 	 <property file="build.properties"/>
-	 <property name="home" value="." />
-	 <property name="lib.dir" value="${home}/lib"/>
+	 <property name="integration_smoke_test_home" value="." />
+	 <property name="lib.dir" value="${integration_smoke_test_home}/lib"/>
 	
-	 <property name="log.dir" value="${home}/logs" />
+	 <property name="log.dir" value="${integration_smoke_test_home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
 	
 	<target name="default">
@@ -33,8 +33,8 @@
 	
 	<!-- replaces the tokens with the property values -->
 	<target name="replace"  >
-		<replace dir="${home}" includes="start_servicemix.sh,stop_servicemix.sh" propertyFile="${home}/build.properties">
-			<replacefilter token="@servicemix.home@" property="servicemix.home"/>
+		<replace dir="${integration_smoke_test_home}" includes="start_servicemix.sh,stop_servicemix.sh" propertyFile="${integration_smoke_test_home}/build.properties">
+			<replacefilter token="@servicemix.integration_smoke_test_home@" property="servicemix.integration_smoke_test_home"/>
 		</replace>
 	</target>	
 
@@ -69,10 +69,10 @@
 		 </target>
 
 	<target name="call-stop-servicemix-in-unix"  depends="detect-os-is-unix" if="isUnix">
-		<chmod file="${home}/stop_servicemix.sh" perm="744"/>
-		 <exec dir="${home}" executable="${home}/stop_servicemix.sh" >
+		<chmod file="${integration_smoke_test_home}/stop_servicemix.sh" perm="744"/>
+		 <exec dir="${integration_smoke_test_home}" executable="${integration_smoke_test_home}/stop_servicemix.sh" >
 			 
-		 <env key="PATH" path="${env.PATH}:${home}"/>
+		 <env key="PATH" path="${env.PATH}:${integration_smoke_test_home}"/>
 		 </exec>
 					
 					
@@ -102,8 +102,8 @@
 					<antcall target="call-stop-servicemix-in-unix"/>
 					<antcall target="call-stop-servicemix-in-win"/>
 	                
-			<copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-					<fileset dir="../${home}/conf/caXchangeConf_restore"/>
+			<copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+					<fileset dir="../${integration_smoke_test_home}/conf/caXchangeConf_restore"/>
 	                </copy>
 					<echo message="Please start servicemix.CaXchange routing configuration has been restored."/>
 	</target>
@@ -113,11 +113,11 @@
 	                 
 	    	       <condition property="ifNotInvoke">
 	    		       <and>
-	    		            <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+	    		            <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 	    		        </and>
 	    		</condition>
-                       <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-                        <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/conf/caXchangeConf_original_before_testing."/>
+                       <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+                        <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing."/>
 	    		<echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 	                 <input   message="Do you want to continue?"
 	                 validargs="y,n"
@@ -128,11 +128,11 @@
 	                 <fail if="ifnoorginotinvoke">Please use this target to configure caXchange not to invoke target services </fail>
 			 <antcall target="call-stop-servicemix-in-unix"/>
 					<antcall target="call-stop-servicemix-in-win"/>
-	                 <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-				<fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+	                 <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+				<fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 			 </copy>
-	    	         <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-	    					<fileset dir="${home}/conf/caXchangeConf_not_invoke_targetServices"/>
+	    	         <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+	    					<fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_not_invoke_targetServices"/>
 	    	         </copy>		
 	    	 	<echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>
@@ -145,11 +145,11 @@
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
-				    <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+				    <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 			    </and>
 		    </condition>
-		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-		    <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/conf/caXchangeConf_original_before_testing."/>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing."/>
 		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 		    <input   message="Do you want to continue?"
 			     validargs="y,n"
@@ -160,11 +160,11 @@
 		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange to test integration only with LabViewer for STUDY_CREATION and REGISTER_SUBJECT messages </fail>
 		    <antcall target="call-stop-servicemix-in-unix"/>
 		    <antcall target="call-stop-servicemix-in-win"/>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-			    <fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 		    </copy>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-			    <fileset dir="${home}/conf/caXchangeConf_LabViewer"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_LabViewer"/>
 		    </copy>		
 		    <echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>
@@ -175,11 +175,11 @@
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
-				    <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+				    <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 			    </and>
 		    </condition>
-		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-		    <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_testing."/>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_testing."/>
 		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 		    <input   message="Do you want to continue?"
 			     validargs="y,n"
@@ -190,11 +190,11 @@
 		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange not to invoke C3D target services for REGISTER_SUBJECT and STUDY_CREATION messages. </fail>
 		    <antcall target="call-stop-servicemix-in-unix"/>
 		    <antcall target="call-stop-servicemix-in-win"/>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-			    <fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 		    </copy>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-			    <fileset dir="${home}/conf/caXchangeConf_No_C3D"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_No_C3D"/>
 		    </copy>		
 		    <echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>
@@ -205,11 +205,11 @@
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
-				    <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+				    <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 			    </and>
 		    </condition>
-		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-		    <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/conf/caXchangeConf_original_before_testing."/>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing."/>
 		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 		    <input   message="Do you want to continue?"
 			     validargs="y,n"
@@ -220,11 +220,11 @@
 		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange to test integration only with PSC for STUDY_CREATION and REGISTER_SUBJECT messages</fail>
 		    <antcall target="call-stop-servicemix-in-unix"/>
 		    <antcall target="call-stop-servicemix-in-win"/>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-			    <fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 		    </copy>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-			    <fileset dir="${home}/conf/caXchangeConf_PSC"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_PSC"/>
 		    </copy>		
 		    <echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>
@@ -234,11 +234,11 @@
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
-				    <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+				    <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 			    </and>
 		    </condition>
-		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-		    <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/conf/caXchangeConf_original_before_testing."/>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing."/>
 		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 		    <input   message="Do you want to continue?"
 			     validargs="y,n"
@@ -249,11 +249,11 @@
 		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange to test integration only with caAERS for REGISTER_SUBJECT and STUDY_CREATION messages</fail>
 		    <antcall target="call-stop-servicemix-in-unix"/>
 		    <antcall target="call-stop-servicemix-in-win"/>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-			    <fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 		    </copy>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-			    <fileset dir="${home}/conf/caXchangeConf_caAERS"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_caAERS"/>
 		    </copy>		
 		    <echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>
@@ -274,15 +274,15 @@
 	                <fail if="ifnotbackup">To restore caxchange configuration please run this target again</fail>
 		<condition property="ifNoBackup">
 			    		        <not>
-			    		            <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>
+			    		            <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>
 			    		            
 			    		        </not>
 		</condition>
-		<fail if="ifNoBackup">There is no backup at ${servicemix.home}/conf/caXchangeConf_original_before_testing"</fail>
+		<fail if="ifNoBackup">There is no backup at ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"</fail>
 		<antcall target="call-stop-servicemix-in-unix"/>
 					<antcall target="call-stop-servicemix-in-win"/>
-		<move todir="${servicemix.home}/conf/caXchangeConf" failonerror="false">
-			<fileset dir="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>
+		<move todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" failonerror="false">
+			<fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>
 		</move>
 		 <echo message="Please start servicemix for configuration changes to take effect."/>
 	</target>
@@ -291,11 +291,11 @@
 		    
 		    <condition property="ifNotInvoke">
 			    <and>
-				    <available file="${servicemix.home}/conf/caXchangeConf_original_before_testing"/>    
+				    <available file="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing"/>    
 			    </and>
 		    </condition>
-		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
-		    <echo message="Backup of your current routing configuration will be located in ${servicemix.home}/conf/caXchangeConf_original_before_testing."/>
+		    <fail if="ifNotInvoke">This target backs up current configuration to ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing. This backup folder already exists, please delete to proceed.</fail>
+		    <echo message="Backup of your current routing configuration will be located in ${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing."/>
 		    <echo message="As part of this task servicemix will be stopped, current routing configuration backed up, and routing configuration updated."/>
 		    <input   message="Do you want to continue?"
 			     validargs="y,n"
@@ -306,11 +306,11 @@
 		    <fail if="ifnoorginotinvoke">Please use this target to configure caXchange to test integration only with C3D for REGISTER_SUBJECT messages </fail>
 		    <antcall target="call-stop-servicemix-in-unix"/>
 		    <antcall target="call-stop-servicemix-in-win"/>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf_original_before_testing" failonerror="false">
-			    <fileset dir="${servicemix.home}/conf/caXchangeConf"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf_original_before_testing" failonerror="false">
+			    <fileset dir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf"/>
 		    </copy>
-		    <copy todir="${servicemix.home}/conf/caXchangeConf" overwrite="true">
-			    <fileset dir="${home}/conf/caXchangeConf_C3D"/>
+		    <copy todir="${servicemix.integration_smoke_test_home}/conf/caXchangeConf" overwrite="true">
+			    <fileset dir="${integration_smoke_test_home}/conf/caXchangeConf_C3D"/>
 		    </copy>		
 		    <echo message="Please start servicemix for configuration changes to take effect."/>
 	    </target>	
