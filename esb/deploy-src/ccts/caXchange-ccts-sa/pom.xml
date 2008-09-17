@@ -115,7 +115,7 @@
             </dependency>      
             <dependency>
                         <groupId>gov.nih.nci.caxchange</groupId>
-                        <artifactId>caXchange-metadata-service</artifactId>
+                        <artifactId>caxchange-metadata-service</artifactId>
                         <version>${project.version}</version>
             </dependency>              
   </dependencies>
