@@ -6,7 +6,7 @@
 
 # User specific environment and startup programs
 
-SERVICEMIX_HOME=@SERVICEMIX_HOME@
+SERVICEMIX_HOME=@servicemix.home@
 PATH=$PATH:$SERVICEMIX_HOME/bin:$HOME/bin
 
 export PATH SERVICEMIX_HOME
