@@ -115,14 +115,25 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		
 		try {
 			invokeDelegationService(exchange);
-		} catch (Throwable e) {
-			logger.error("Error calling delegation service.", e);
-			Fault fault = exchange.createFault();
-			MessageUtil.transfer(in, fault);
-			fault.setProperty(CaxchangeConstants.ERROR_CODE,
-			"DELEGATION_SERVICE_ERROR");
-			fault.setProperty(CaxchangeConstants.ERROR_MESSAGE,
-			"Error occurred calling  delegation service."+e.getMessage());
+		}
+		catch (CDSInternalFault e){
+			Fault fault = getFault("401","Internal error invoking delegation service."+e.getMessage(), exchange);
+			exchange.setFault(fault);
+			channel.send(exchange);
+			return;			
+		}catch (DelegationFault e){
+			Fault fault = getFault("402","Delegation fault invoking delegation service."+e.getMessage(), exchange);
+			exchange.setFault(fault);
+			channel.send(exchange);
+			return;	
+		}catch (PermissionDeniedFault e){
+			Fault fault = getFault("403","Permission denied fault invoking delegation service."+e.getMessage(), exchange);
+			exchange.setFault(fault);
+			channel.send(exchange);
+			return;	
+		}
+		catch (Throwable e) {
+			Fault fault = getFault("400","Error invoking delegation service."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;
@@ -156,10 +167,10 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try{
-				
+				logger.error("****"+delegationEPR);
 				delegatedCredentialReference =  
 					(DelegatedCredentialReference)
-					                     Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, CredentialDelegationServiceClient.class.getResourceAsStream("client-config.wsdd"));
+					                     Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, DelegatedCredentialUserClient.class.getResourceAsStream("client-config.wsdd"));
 
 			}catch (DeserializationException e){
 				throw new GridInvocationException(
@@ -169,6 +180,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			DelegatedCredentialUserClient delegatedCredentialUserClient = null;
 
 			try{
+				logger.error("**** delegatedCredentialReference.getEndpointReference"+delegatedCredentialReference.getEndpointReference());
+				logger.error("**** delegatedCredentialReference.getEndpointReference.getAddress"+delegatedCredentialReference.getEndpointReference().getAddress());
 				delegatedCredentialUserClient = new DelegatedCredentialUserClient(
 						delegatedCredentialReference, hostCredential);
 			}catch (Exception e){
@@ -182,14 +195,14 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 				userCredential = delegatedCredentialUserClient
 				.getDelegatedCredential();
 			}catch (CDSInternalFault e){
-				throw new GridInvocationException(
-						"Error retrieve the Delegated Credentials", e);
+				logger.error("Internal error getting delegated credentials.",e); 
+				throw e;
 			}catch (DelegationFault e){
-				throw new GridInvocationException(
-						"Error retrieve the Delegated Credentials", e);
+				logger.error("Delegation fault occurred getting delegated credentials.", e);
+				throw e;
 			}catch (PermissionDeniedFault e){
-				throw new GridInvocationException(
-						"Error retrieve the Delegated Credentials", e);
+				logger.error("Permission denied fault getting delegated credentials.", e);
+				throw e;
 			}
 
 			Subject subject = new Subject();
@@ -209,6 +222,17 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		}
 
 	}
+	public Fault getFault(String errorCode, String errorMessage, MessageExchange exchange) throws MessagingException {
+		NormalizedMessage in = exchange.getMessage("in");
+		Fault fault = exchange.createFault();
+		MessageUtil.transfer(in, fault);
+		fault.setProperty(CaxchangeConstants.ERROR_CODE,
+		errorCode);
+		fault.setProperty(CaxchangeConstants.ERROR_MESSAGE,
+		errorMessage);
+        return fault;
+	}
+	
    /*No references*/
 	public String getCertificateFilePath() {
 		return certificateFilePath;

@@ -23,7 +23,7 @@ public class TestLoadLab extends TestCaXchangeGridService{
 	public TestLoadLab(String name){
 		super(name);
 	}
-	
+
 	/**
      * Test messagess of type LOAD_LAB_TO_CDMS.
      *
@@ -31,9 +31,9 @@ public class TestLoadLab extends TestCaXchangeGridService{
      */
     public void testLoadLab() {
       try {
-    	  
+
     	  InputStream testMessage = getResourceInputStream("/payloads/LOAD_LAB_TO_CDMS.xml");
-          message.getMetadata().setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+          message.getMetadata().setMessageType("LOAD_LAB_TO_CDMS");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
@@ -57,7 +57,7 @@ public class TestLoadLab extends TestCaXchangeGridService{
       }
 
     }
-    
+
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
@@ -69,5 +69,5 @@ public class TestLoadLab extends TestCaXchangeGridService{
      public static void main(String[] args) {
           url = System.getProperty("caxchange.url");
           junit.textui.TestRunner.run(suite());
-      }	
+      }
 }

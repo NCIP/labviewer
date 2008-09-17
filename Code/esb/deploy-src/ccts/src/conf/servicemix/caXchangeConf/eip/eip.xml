@@ -19,6 +19,7 @@
 -->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
+       
   <!-- Pipeline to invoke the delegation service -->
   <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="invokeDelegationPipelineEndpoint">
       <eip:transformer>
@@ -28,9 +29,22 @@
          <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
       </eip:faultsTarget>
       <eip:target>
-        <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+        <eip:exchange-target service="caxchange:validatePayloadPipeline" />
       </eip:target>
   </eip:pipeline>  
+  
+  <!-- Pipeline to validate payload -->
+  <eip:pipeline service="caxchange:validatePayloadPipeline" endpoint="validatePayloadPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:payloadValidationService" />
+        </eip:transformer>
+        <eip:faultsTarget>
+           <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+        </eip:faultsTarget>
+        <eip:target>
+          <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+        </eip:target>
+  </eip:pipeline>     
   
   <!-- Pipeline to store original message -->
   <eip:pipeline service="caxchange:storeOriginalMessagePipeline" endpoint="storeOriginalMessagePipelineEndpoint">
@@ -44,6 +58,7 @@
         <eip:exchange-target service="caxchange:MessageTypeRouter" />
       </eip:target>
   </eip:pipeline>   
+  
   
   <!-- Pipeline to create an error response and forward it to JMS outbound queue -->
   <eip:pipeline service="caxchange:handleErrorResponsePipeline" endpoint="handleErrorResponsePipelineEndpoint">

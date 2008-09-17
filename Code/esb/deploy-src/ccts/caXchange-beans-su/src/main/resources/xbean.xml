@@ -36,6 +36,34 @@
     </property>
   </bean>
   
+  <bean id="caXchangeMetadataBean"
+     class="gov.nih.nci.caxchange.servicemix.bean.metadata.CaXchangeRoutingMetadataBean" init-method="initializeEipConfig" >
+         <property name="location">
+           <value>classpath:/caXchangeConf/eip/eip.xml</value>
+         </property>
+  </bean>
+  
+   <bean id="payloadValidator" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidator" init-method="init"/>
+   <bean id="gmeSchemaFactory" class="gov.nih.nci.caxchange.servicemix.bean.validation.GMESchemaFactory" init-method="init">
+         <property name="GMEGridServiceLocation"
+                   value="${gme.url}"/>
+         <property name="cacheDirectoryLocation"
+                   value="${gme.cache.directory}" />
+   </bean>
+   <bean id="payloadValidatorBean" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidatorBean" >
+         <property name="payloadValidator">
+             <ref bean="payloadValidator"/>
+         </property>
+         <property name="gmeSchemaFactory">
+            <ref bean="gmeSchemaFactory" />
+         </property>
+         <property name="messageTypesForValidation" value="${messageTypes.for,validation}" />                 
+ </bean>
+ 
+  <bean:endpoint service="caxchange:payloadValidationService" endpoint="payloadValidationEndpoint" bean="#payloadValidatorBean" />
+  
+  <bean:endpoint service="caxchange:getCaXchangeMetadataService" endpoint="getCaXchangeMetadataEndpoint" bean="#caXchangeMetadataBean"/>
+
   <import resource="classpath:/caXchangeConf/beans/beans.xml" /> 
   
 </beans>

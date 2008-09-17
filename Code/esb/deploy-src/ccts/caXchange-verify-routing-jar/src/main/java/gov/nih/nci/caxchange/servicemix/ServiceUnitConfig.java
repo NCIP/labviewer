@@ -3,6 +3,7 @@ package gov.nih.nci.caxchange.servicemix;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,13 +27,14 @@ import org.w3c.dom.NodeList;
 /**
  * A class that reads the initializes for verification service unit configuration
  * files.
- * 
+ *
  * @author Harsh Marwaha
  *
  */
 public abstract class ServiceUnitConfig {
-	
+
 	protected String fileName;
+	protected URL url;
 	protected Document configuration;
 	protected DocumentBuilderFactory documentBuilderFactory;
 	protected DocumentBuilder documentBuilder;
@@ -43,7 +45,7 @@ public abstract class ServiceUnitConfig {
     /**
      * Initialize the class by loading the serivcemix service unit configuration
      * file.
-     * 
+     *
      * @throws ConfigurationException
      */
     public void initialize() throws ConfigurationException {
@@ -51,7 +53,16 @@ public abstract class ServiceUnitConfig {
        try {
     	  documentBuilderFactory =  DocumentBuilderFactory.newInstance();
     	  documentBuilder = documentBuilderFactory.newDocumentBuilder();
-    	  inputStream = ServiceUnitConfig.class.getClassLoader().getResourceAsStream(fileName);
+    	  if (url != null) {
+			  try {
+			   inputStream = url.openStream();
+		      }catch(java.io.IOException e) {
+				  throw new ConfigurationException("Configuration file not found from url:"+url.getPath());
+		      }
+	      }
+	      if (inputStream == null) {
+    	     inputStream = ServiceUnitConfig.class.getClassLoader().getResourceAsStream(fileName);
+	  	  }
     	  if (inputStream==null) {
     		  throw new ConfigurationException("Configuration file not found:"+fileName);
     	  }
@@ -66,10 +77,10 @@ public abstract class ServiceUnitConfig {
     	   throw new  ConfigurationException("Error initializing beans config",e);
        }
     }
-    
+
     /**
      * Returns the import nodes in this document.
-     * 
+     *
      * @return
      * @throws ConfigurationException
      */
@@ -84,10 +95,10 @@ public abstract class ServiceUnitConfig {
     		throw new ConfigurationException("Error getting the imports.",e);
     	}
     }
-    
+
     /**
      * Processes an import node to load it and import it into the current document.
-     * 
+     *
      * @param importDocument
      * @throws ConfigurationException
      */
@@ -114,11 +125,11 @@ public abstract class ServiceUnitConfig {
     		throw new ConfigurationException("Error processing imports.",e);
     	}
     }
-    
-    
+
+
     /**
      * Prints a node to the given OutputStream.
-     * 
+     *
      * @param node
      * @param stream
      * @throws ConfigurationException
@@ -137,13 +148,20 @@ public abstract class ServiceUnitConfig {
     		logger.error("Error printing node:"+node.getNodeName(),e);
     		throw new  ConfigurationException("Error printing node:"+node.getNodeName(),e);
     	}
-    }    
-    
+    }
+
 	public String getFileName() {
 		return fileName;
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public URL getURL() {
+		return url;
+	}
+	public void setURL(URL url) {
+		this.url = url;
 	}
 
 }

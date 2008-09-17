@@ -28,5 +28,12 @@
 			<ref local="dataSource" />
 		</property>
 	</bean>
+	
+	<bean id="caxchangeMetadataDAO"
+		class="gov.nih.nci.caxchange.persistence.CaxchangeMetadataDAOImpl">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+	</bean>	
 
 </beans>

@@ -117,6 +117,35 @@ public class EipConfig extends ServiceUnitConfig {
     		throw new EipConfigurationException("Error verifying routing for:"+node,e);
     	}
     }
+    /**
+     * This method returns a String[] of message types configured within caXchange.
+     * @return
+     * @throws EipConfigurationException
+     */
+    public String[] getConfiguredMessageTypes()throws EipConfigurationException  {
+    	try {
+    		Node messageTypeRouter = getComponentByServiceName("caxchange:MessageTypeRouter");
+    		XPath xpath = xpathFactory.newXPath();
+    	    XPathExpression xpathExpression = xpath.compile("..//@xpath");
+    	    NodeList xpaths = (NodeList)xpathExpression.evaluate(messageTypeRouter.getFirstChild(), XPathConstants.NODESET);
+    	    String[] messageTypes = new String[xpaths.getLength()];
+    	    int i=0;
+    	    while((xpaths!=null)&&(i<xpaths.getLength())) {
+    	    	Node xpathNode = xpaths.item(i);
+    	    	String xpathMessageType = xpathNode.getNodeValue();
+    	    	String messageType = xpathMessageType.substring(xpathMessageType.indexOf("caxchange:messageType='")+23, 
+    	    			                                           xpathMessageType.indexOf("'",xpathMessageType.indexOf("caxchange:messageType='")+23));
+    	    	System.out.println(messageType);		                                           
+    	    	messageTypes[i] = messageType;
+    	    	i++;
+    	    	
+    	    }
+    	    return messageTypes;
+    	}catch(Exception e){
+    		logger.error("Error getting message types.",e);
+    		throw new EipConfigurationException("Error getting message types.",e);
+    	}
+    }
     
 
 	
