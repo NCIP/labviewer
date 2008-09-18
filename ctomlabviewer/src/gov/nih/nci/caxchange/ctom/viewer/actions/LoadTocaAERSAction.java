@@ -60,17 +60,14 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.cabig.ccts.domain.Documentation;
 import gov.nih.nci.cabig.ccts.domain.LabResult;
+import gov.nih.nci.cabig.ccts.domain.LoadLabsRequest;
 import gov.nih.nci.cabig.ccts.domain.Participant;
 import gov.nih.nci.cabig.ccts.domain.PerformedActivity;
 import gov.nih.nci.cabig.ccts.domain.PerformedStudy;
 import gov.nih.nci.cabig.ccts.domain.StudySubject;
-import gov.nih.nci.cabig.ccts.domain.LoadLabsRequest;
-
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
-//import gov.nih.nci.cagrid.common.Utils;
-
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
@@ -81,7 +78,6 @@ import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
 import gov.nih.nci.caxchange.TargetResponseMessage;
-
 import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
@@ -90,14 +86,12 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
-
 import gov.nih.nci.labhub.domain.II;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-//import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -110,6 +104,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.namespace.QName;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
@@ -123,6 +120,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Session;
+import org.w3c.dom.Document;
 
 /**
  * This class performs the Load to caAERS action. It loads the selected form data to caAERS.
@@ -343,7 +341,7 @@ public class LoadTocaAERSAction extends Action
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
 	    metadata.setCredentials(creds);
-	    metadata.setMessageType(MessageTypes.LAB_BASED_AE);
+	    metadata.setMessageType(MessageTypes._LAB_BASED_AE);
 	    requestMessage.setMetadata(metadata);
 	    Request caxchangeRequest = new Request();
 	    requestMessage.setRequest(caxchangeRequest);
@@ -392,26 +390,19 @@ public class LoadTocaAERSAction extends Action
            		}
            		if(resp.getTargetResponse()!=null)
            			{
-           		     for(TargetResponseMessage msg: resp.getTargetResponse()){
-           		    	MessageElement[] messagePay = msg.getTargetBusinessMessage().get_any();
-           		    	for(MessageElement mEle: messagePay)
-           		    	{
-           		    		String mEleValue = mEle.getAttributeValue("Acknowledgement");
-           		    		if(mEleValue.equalsIgnoreCase("Processed"))
-           		    		{
-           		    			logDB.info("Response from Target Service was " + mEleValue);	
+           			      String status = getTargetResponse(resp);
+           			
+           		    		if(status.equalsIgnoreCase("Processed"))
+           		    		{	
+           		    			logDB.info("Response from Target Service was " +status);	
            		    		}
            		    		else
            		    		{
-           		        		logDB.error("Received response from Target Service: " + mEleValue);
-           		        		throw new Exception(mEleValue);
+           		        		logDB.error("Received response from Target Service: " + status);
+           		        		throw new Exception( status);
            		    		}
-           		    	}
-           		    	           		    	
-           		     }
-           			}
-        	}
-        	else if (resp.getResponseStatus().equals(Statuses.FAILURE))
+           		    }
+           	else if (resp.getResponseStatus().equals(Statuses.FAILURE))
         	  {   String message="";
            		if(resp.getCaXchangeError()!=null){
         		message = resp.getCaXchangeError().getErrorDescription();
@@ -427,11 +418,77 @@ public class LoadTocaAERSAction extends Action
         		throw new Exception(message);
         	}
         }
+       }	
 	    lForm.setRecordId("");
 		lForm.setRecordId(null);
 		session.setAttribute("LabResultIDs", labResultIds);
 		return numOfLabs;
+		
+}	
+	/**
+	 * @param resp
+	 * @return
+	 */
+	private String getTargetResponse(Response resp)
+	{
+		String status ="";
+			String errorCode ="" ;
+			String errorDesc = "";
+		     for(TargetResponseMessage msg: resp.getTargetResponse()){
+		    	MessageElement[] messagePay = msg.getTargetBusinessMessage().get_any();
+		    	for(MessageElement mEle: messagePay)
+		    	{
+		    		if(mEle != null){
+		    			if(mEle.getName().equalsIgnoreCase("Acknowledgement"))
+		    			{
+		    				Iterator it = mEle.getChildElements();
+		    				while(it.hasNext()){
+		    				MessageElement ME = (MessageElement)it.next();
+		    				if(ME.getName().equalsIgnoreCase("Status"))
+		    				 {
+		    					 List doc = ME.getChildren();
+		    					 if(doc != null){ 
+		    					  status =doc.get(0).toString(); }
+		    				 }
+		    				if(ME.getName().equalsIgnoreCase("Errors"))
+		    				 {
+		    					Iterator itr = ME.getChildElements();
+		    					while(itr.hasNext()){
+		    						MessageElement ME2 = (MessageElement)itr.next();
+		    						if(ME2.getName().equalsIgnoreCase("WsError"))
+      		    				 {
+		    							Iterator itr1 = ME2.getChildElements();
+       		    					while(itr1.hasNext()){
+       		    						MessageElement ME3 = (MessageElement)itr1.next();
+       		    						if(ME3.getName().equalsIgnoreCase("ErrorCode")){
+       		    							List doc2 = ME3.getChildren();
+       		    							if(doc2 != null){
+       		    							errorCode =doc2.get(0).toString();; }
+       		    						}
+       		    						if(ME3.getName().equalsIgnoreCase("ErrorDesc")){	
+       		    							List doc2 = ME3.getChildren();
+       		    							if(doc2 != null){
+       		    							errorDesc = doc2.get(0).toString();; }
+       		    						}	
+       		    					}	
+      		    				 }
+		    					}
+		    					
+		    				 }
+		    				}  		
+		    			}
+		    		}
+		    	}
+		     }
+		     logDB.debug("status" + status);
+				logDB.debug("errorCode" + errorCode);
+				logDB.debug("errorDesc" + errorDesc);
+		     if(status.equalsIgnoreCase("Processed"))
+		    	 return status;
+		     else 
+		    	  return status =errorCode + "-" + errorDesc;
 	}	
+		
 	
 	/**
 	 * updateLabResult updates the database with information about the
@@ -453,7 +510,7 @@ public class LoadTocaAERSAction extends Action
 	    	 {
 	    		int labResutId = Integer.parseInt(labResultIds.get(key));
 	    		LabViewerStatus lvs = new LabViewerStatus();
-	    		lvs.setAdverseEventIndicator(true);
+	    		lvs.setAdverseEventIndicator("true");
 	    		lvs.setAdverseEventSentDate(date);
 	    		lvs.setClinicalResultId(labResutId);
 	    		session.beginTransaction();
