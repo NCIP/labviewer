@@ -813,7 +813,7 @@ public class CTLabDAO extends BaseJDBCDAO
             // Get Id from sequence
             stmt = con.createStatement();
             //rs = stmt.executeQuery("select STUDY_TIME_POINT_SEQ.nextval from dual");
-            rs = stmt.executeQuery("select nextval('ACTIVITY_SEQ')");
+            rs = stmt.executeQuery("select nextval('STUDY_TIME_POINT_SEQ')");
             rs.next();
             studyTimePoint.setId(rs.getLong(1));
             // insert into STUDY_TIME_POINT
@@ -876,10 +876,10 @@ public class CTLabDAO extends BaseJDBCDAO
             if (specimenCollection.getCentralLaboratory() != null) {
                 saveCentralLaboratory(con, specimenCollection.getCentralLaboratory());
                 // Get Id from sequence
-                Statement stmt = con.createStatement();
+               /* Statement stmt = con.createStatement();
                 rs = stmt.executeQuery("select nextval('ACTIVITY_SEQ')");
                 rs.next();
-                Long id = rs.getLong(1);
+                Long id = rs.getLong(1);*/
                 //ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (PROCEDURE_ACTIVITY_ID, CENTRAL_LABORATORY_ORG_ID)  values(?,?)");
                 ps = con.prepareStatement("insert into SPECIMEN_COLLECTION (ID,CENTRAL_LABORATORY_ID)  values(?,?)");
                 ps.setLong(1, specimenCollection.getProcedureActivityId());
@@ -919,7 +919,7 @@ public class CTLabDAO extends BaseJDBCDAO
 	     try {
             // Get Id from sequence 
             stmt = con.createStatement();
-            rs = stmt.executeQuery("select nextval('ACTIVITY_SEQ')");
+            rs = stmt.executeQuery("select nextval('SPECIMEN_SEQ')");
             rs.next();
             specimen.setId(rs.getLong(1));
             boolean sc = false;
