@@ -428,9 +428,6 @@ public class SearchAction extends Action
 
 		if (sa != null)
 		{
-			//get the participant Name
-			String patientName= sa.getParticipant().getFirstName() + "  "+sa.getParticipant().getLastName(); 
-			request.getSession().setAttribute("patientName", patientName);
 			
 			LabActivityResult labActivityResult = new LabActivityResult();
 
@@ -456,6 +453,16 @@ public class SearchAction extends Action
 				labActivityResult.setStudyId(studyId);
 			}
 			
+			//get the participant Name
+			String patientName="Participant name";
+			if(sa.getParticipant()!=null)
+			{
+				 String firstName=sa.getParticipant().getFirstName()!=null?sa.getParticipant().getFirstName():"" ;
+				 String lastName= sa.getParticipant().getLastName()!=null?sa.getParticipant().getLastName():"" ;
+				 patientName= firstName + "  "+ lastName;
+			 
+			request.getSession().setAttribute("patientName", patientName);
+			}
 			// Now set the lab information
 			Collection activityCollection = sa.getActivityCollection();
 			if (activityCollection != null && activityCollection.size() > 0)
@@ -621,11 +628,11 @@ public class SearchAction extends Action
 		        if(result!=null)
 		        {
 		        	for(LabViewerStatus lvs: result){
-		        		if(lvs.isCdmsIndicator()){
+		        		if(lvs.isCdmsIndicator().equals("true")){
 		        			labActivityResult.setLabLoadedToCDMS(true);
 		        			labActivityResult.setLabLoadedToCDMSDate(lvs.getCdmsSentDate().toString());
 		        		}
-		        		if(lvs.isAdverseEventIndicator()){
+		        		if(lvs.isAdverseEventIndicator().equals("true")){
 		        			labActivityResult.setAdverseEventReported(true);
 		        			labActivityResult.setAdverseEventReportedDate(lvs.getAdverseEventSentDate().toString());
 		        		}
