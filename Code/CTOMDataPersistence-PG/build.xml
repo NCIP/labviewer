@@ -45,6 +45,8 @@
 				<fileset dir="${lib.home}" includes="*.jar" />
 			</classpath>
 		</javac>
+		<copy file="${build.source.dir}/dataConnection.properties" toFile="${build.classes.dir}/dataConnection.properties"/>
+		
 	</target>
 
 	<target name="dist" depends="compile,createConnectionProperties,changectomlabapiormjar">
@@ -59,5 +61,93 @@
 			</fileset>
 		</jar>
 	</target>
+	
+	<!-- Smoke test Clean up targets -->
+	
+	<!-- Smoke test Study Clean up target -->
+	<target name="cleanStudy" description="Cleans the smoke study from the CTODS database">
+			<echo>Cleaning the smoke study from the CTODS database</echo>
+		<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">	
+					<classpath location="${build.classes.dir}">
+							<fileset dir="${lib.home}">
+								<include name="*.jar"/>
+							</fileset>
+				</classpath>
+				<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.StudyTest" haltonfailure="yes" outfile="result"/>
+			</junit>
+		</target>
 
+	<!-- Smoke test Patient Clean up target -->		
+		<target name="cleanPatient" description="Cleans the smoke study patient from the CTODS database">
+			<echo>Cleaning the smoke study patient from the CTODS database</echo>
+			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
+				<classpath location="${build.classes.dir}">
+											<fileset dir="${lib.home}">
+												<include name="*.jar"/>
+											</fileset>
+								</classpath>
+								<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.PatientTest"/>
+			</junit>
+		</target>
+	
+	<!-- Smoke test Lab(s) Clean up target -->		
+		<target name="cleanLab" description="Cleans the smoke study lab from the CTODS database">
+			<echo>Cleaning the smoke study lab from the CTODS database</echo>
+			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
+						<classpath location="${build.classes.dir}">
+								<fileset dir="${lib.home}">
+									<include name="*.jar"/>
+								</fileset>
+						</classpath>
+			<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.LabTest"/>
+			</junit>
+		</target>
+	<!-- Verifies the smoke study Lab data target -->		
+		<target name="verifyLabData" description="Verifies the smoke study Lab data from the CTODS database">
+			<echo>Verifying the smoke study Lab data from the CTODS database</echo>
+			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
+						<classpath location="${build.classes.dir}">
+								<fileset dir="${lib.home}">
+									<include name="*.jar"/>
+								</fileset>
+						</classpath>
+			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyLabData"/>
+			</junit>
+		</target>
+	<!-- Verifies the smoke study patient data target -->		
+		<target name="verifyPatientData" description="Verifies the smoke study patient data from the CTODS database">
+			<echo>Verifying the smoke study patient data from the CTODS database</echo>
+			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
+						<classpath location="${build.classes.dir}">
+								<fileset dir="${lib.home}">
+									<include name="*.jar"/>
+								</fileset>
+						</classpath>
+			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyPatientData"/>
+			</junit>
+		</target>
+	<!-- Verifies the smoke study data target -->		
+		<target name="verifyStudyData" description="Verifies the smoke study data from the CTODS database">
+			<echo>Verifying the smoke study data from the CTODS database</echo>
+			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
+						<classpath location="${build.classes.dir}">
+								<fileset dir="${lib.home}">
+									<include name="*.jar"/>
+								</fileset>
+						</classpath>
+			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
+			       <formatter type="plain"/>
+			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyStudyData"/>
+			</junit>
+		</target>
 </project>
