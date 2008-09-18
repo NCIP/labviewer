@@ -67,9 +67,9 @@ import java.util.Date;
 public class LabViewerStatus {
 
 	Integer id;
-	boolean adverseEventIndicator;
+	String adverseEventIndicator="false";
 	Date adverseEventSentDate=null;
-	boolean cdmsIndicator;
+	String cdmsIndicator="false";
 	Date cdmsSentDate=null;
 	int clinicalResultId;
 	Date ctomInsertDate=null;
@@ -89,13 +89,13 @@ public class LabViewerStatus {
 	/**
 	 * @return the adverseEventIndicator
 	 */
-	public boolean isAdverseEventIndicator() {
+	public String isAdverseEventIndicator() {
 		return adverseEventIndicator;
 	}
 	/**
 	 * @param adverseEventIndicator the adverseEventIndicator to set
 	 */
-	public void setAdverseEventIndicator(boolean adverseEventIndicator) {
+	public void setAdverseEventIndicator(String adverseEventIndicator) {
 		this.adverseEventIndicator = adverseEventIndicator;
 	}
 	/**
@@ -113,13 +113,13 @@ public class LabViewerStatus {
 	/**
 	 * @return the cdmsIndicator
 	 */
-	public boolean isCdmsIndicator() {
+	public String isCdmsIndicator() {
 		return cdmsIndicator;
 	}
 	/**
 	 * @param cdmsIndicator the cdmsIndicator to set
 	 */
-	public void setCdmsIndicator(boolean cdmsIndicator) {
+	public void setCdmsIndicator(String cdmsIndicator) {
 		this.cdmsIndicator = cdmsIndicator;
 	}
 	/**
