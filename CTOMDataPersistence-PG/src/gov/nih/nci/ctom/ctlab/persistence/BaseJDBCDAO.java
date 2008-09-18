@@ -14,22 +14,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author griffinch
  */
 public abstract class BaseJDBCDAO
 {
 	private static final String CONFIG_FILE = "/dataConnection.properties";
+	private static final Logger log = Logger.getLogger(BaseJDBCDAO.class);
 	public Connection getConnection()
 	{
 	    Connection result = null;
-	    
-		//String fDriverName="oracle.jdbc.driver.OracleDriver";
-		//String fDbName="jdbc:oracle:thin:@cbiodb30.nci.nih.gov:1521:cccqa";
-		//String fDbName="jdbc:oracle:thin:@localhost:1521:xe";
-		//String fUserName="caxchange";
-		//String fPassword="caxchange";
-	    
 	    Properties props    =   new Properties();
 	    //Get the file input stream
 	    try {
@@ -38,11 +34,13 @@ public abstract class BaseJDBCDAO
 		} 
 	    catch (FileNotFoundException e1) 
 		{
-			System.err.println("The config file not found: " + CONFIG_FILE);
+	    	log.error("The config file not found: " + CONFIG_FILE);
+	    	throw(e1);
 		} 
 		catch (IOException e1) 
 		{
-			System.err.println("Error reading the config file: " + CONFIG_FILE);
+			log.error("Error reading the config file: " + CONFIG_FILE);
+			throw(e1);
 		}
 	    //Read the properties from the properties file
 		String fDriverName = (String)props.getProperty("driver");
@@ -52,22 +50,34 @@ public abstract class BaseJDBCDAO
 	    try
 	    {
 	       Class.forName(fDriverName).newInstance();
+	       System.out.println("Check classpath. loaded db driver: " + fDriverName);
 	    }
 	    catch (Exception ex)
 	    {
-	        System.err.println("Check classpath. Cannot load db driver: " + fDriverName);
+	    	log.error("Check classpath. Cannot load db driver: " + fDriverName);
+	    	throw(ex);
 	    }
 
 	    try
 	    {
 	    	result = DriverManager.getConnection(fDbName, fUserName, fPassword);
+	    	if(result!=null)
+	    	{
+	    		log.info("Connection to db obtained");
+	    		System.out.println("Connection to db obtained");
+	    	}else
+	    	{
+	    		log.error("Unable to obtain connection to the db");
+	    		System.out.println("Unable to obtain connection to the db");
+	    		throw(new NullPointerException("Null Connection object"));
+	    	}
 	    	
-	    	 }
+	    }
 	    catch (SQLException e)
 	    {
-	        System.err.println( "Driver loaded, but cannot connect to db: " + fDbName);
+	    	log.error( "Driver loaded, but cannot connect to db: " + fDbName);
+	    	log.error( "Driver loaded, but cannot connect to db: " + e.getLocalizedMessage());
 	    }
-	    
 	    return result;
 	}
 	
