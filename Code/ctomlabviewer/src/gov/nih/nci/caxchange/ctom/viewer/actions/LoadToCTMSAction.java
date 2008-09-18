@@ -341,7 +341,7 @@ public class LoadToCTMSAction extends Action
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
 	    metadata.setCredentials(creds);
-	    metadata.setMessageType(MessageTypes.LOAD_LAB_TO_CDMS);
+	    metadata.setMessageType(MessageTypes._LOAD_LAB_TO_CDMS);
 	    requestMessage.setMetadata(metadata);
 	    Request caxchangeRequest = new Request();
 	    requestMessage.setRequest(caxchangeRequest);
@@ -424,7 +424,7 @@ public class LoadToCTMSAction extends Action
 	    	 {
 	    		int labResutId = Integer.parseInt(labResultIds.get(key));
 	    		LabViewerStatus lvs = new LabViewerStatus();
-	    		lvs.setCdmsIndicator(true);
+	    		lvs.setCdmsIndicator("true");
 	    		lvs.setCdmsSentDate(date);
 	    		lvs.setClinicalResultId(labResutId);
 	    		session.beginTransaction();
