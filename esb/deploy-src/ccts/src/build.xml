@@ -773,5 +773,24 @@
 				</move>
 					<echo message="Please restart servicemix to take orginal config take effect..............."/>
                 </target>
+                
+    <target name="configure-gme-database" description="Imports the CCTS message schemas into the GME database" >
+          <copy todir="${temp.dir}/scripts" >
+              <fileset dir="${cax.home}/scripts" />
+          </copy>
+          <replace file="${temp.dir}/scripts/gmeImportDb.sh" propertyFile="${cax.home}/install.properties">
+	  			<replacefilter token="@GME_DATABASE_PREFIX@" property="GME_DATABASE_PREFIX"/>
+	  			<replacefilter token="@GME_DATABASE_USER@" property="GME_DATABASE_USER"/>
+	  			<replacefilter token="@GME_DATABASE_PASSWORD@" property="GME_DATABASE_PASSWORD"/>
+	  		        <replacefilter token="@GME_DATABASE_HOST@" property="GME_DATABASE_HOST"/>
+	  			<replacefilter token="@MY_SQL_HOME@" property="MY_SQL_HOME"/>
+	  			<replacefilter token="@GME_SERVICE_URL@" property="gme_url"/>
+	   </replace>
+	   <chmod file="${temp.dir}/scripts/gmeImportDb.sh" perm="744"/>
+		 <exec dir="${temp.dir}" executable="${temp.dir}/scripts/gmeImportDb.sh" >
+			 
+		     <env key="PATH" path="${env.PATH}:${temp.dir}"/>
+		 </exec>	   
+    </target>
 
 </project>
