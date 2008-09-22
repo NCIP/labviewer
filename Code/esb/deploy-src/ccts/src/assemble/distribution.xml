@@ -46,7 +46,14 @@
        <includes>
          <include>**/*</include>
        </includes>
-    </fileSet>  
+    </fileSet>
+    <fileSet>
+       <directory>src/scripts/</directory>
+       <outputDirectory>/scripts/</outputDirectory>
+       <includes>
+         <include>**/*</include>
+       </includes>
+    </fileSet>     
     <fileSet>
        <directory>src/llt-war/</directory>
        <outputDirectory>/war/</outputDirectory>
