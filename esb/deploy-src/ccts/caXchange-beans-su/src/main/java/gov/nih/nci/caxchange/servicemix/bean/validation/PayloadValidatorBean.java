@@ -38,6 +38,7 @@ public class PayloadValidatorBean implements MessageExchangeListener {
     private GMESchemaFactory gmeSchemaFactory = null;
     private List<String> messageTypesEligibleForValidation = new ArrayList<String>();
     private String messageTypesForValidation;
+    static private java.util.Map<String, CaxchangeMetadata> metadataCache = new java.util.HashMap<String, CaxchangeMetadata>(6);
     
 	public String getMessageTypesForValidation() {
 		return messageTypesForValidation;
@@ -113,8 +114,12 @@ public class PayloadValidatorBean implements MessageExchangeListener {
 	}
 	
 	public String getPayloadNamespace(String messageType) throws Exception {
-		CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
-		CaxchangeMetadata metadata =metadataDAO.getMetadata(messageType);
+		CaxchangeMetadata metadata = metadataCache.get(messageType);
+		if (metadata == null){
+		    CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
+		    metadata =metadataDAO.getMetadata(messageType);
+		    metadataCache.put(messageType, metadata);
+		}
 		if (metadata != null) {
 			return metadata.getPayloadNamespace();
 		}
