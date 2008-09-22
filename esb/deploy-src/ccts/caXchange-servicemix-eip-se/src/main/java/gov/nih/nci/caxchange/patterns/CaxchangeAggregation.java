@@ -2,6 +2,7 @@ package gov.nih.nci.caxchange.patterns;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.jbi.messaging.NormalizedMessage;
 /**
@@ -14,8 +15,17 @@ public class CaxchangeAggregation {
     protected int count=0;
     protected List messages;
     protected String correlationId;
-    
-    /**
+    //This is the set of service identifiers from which exchanges are expected.
+    protected Set exchangesToReceive = null;    
+    public Set getExchangesToReceive() {
+		return exchangesToReceive;
+	}
+
+	public void setExchangesToReceive(Set exchangesToReceive) {
+		this.exchangesToReceive = exchangesToReceive;
+	}
+
+	/**
      * Constructor for the class 
      * @param correlationId
      */

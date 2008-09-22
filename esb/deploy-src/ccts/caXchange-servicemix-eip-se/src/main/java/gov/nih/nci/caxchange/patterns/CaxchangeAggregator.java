@@ -41,8 +41,7 @@ import org.xml.sax.SAXException;
 public class CaxchangeAggregator extends AbstractAggregator {
     static final String EXCHANGE_CORRELATIONID="org.apache.servicemix.correlationId";
     protected  long timeOut=5*60*1000;
-    //This is the set of service identifiers from which exchanges are expected.
-    protected Set exchangesToReceive = null;
+
     static Logger logger=LogManager.getLogger(CaxchangeAggregator.class);
     
     /**
@@ -96,6 +95,7 @@ public class CaxchangeAggregator extends AbstractAggregator {
      * @return
      */
     protected Set initializeExchangesToReceive(String targetServiceIdentifiers){
+    	Set exchangesToReceive = null;
     	if (targetServiceIdentifiers == null) {
     		exchangesToReceive =  new HashSet(0);
     		return exchangesToReceive;
@@ -169,9 +169,11 @@ public class CaxchangeAggregator extends AbstractAggregator {
         if (count!=null) {
             caxchangeAggregate.setCount(new Integer(count).intValue());
         }
+        Set exchangesToReceive = caxchangeAggregate.getExchangesToReceive();
         if (exchangesToReceive == null) {
         	String targetServiceIdentifiers = (String)message.getProperty(CaxchangeEIPConstants.CAXCHANGE_RECIPIENTS);
-        	initializeExchangesToReceive(targetServiceIdentifiers);
+        	exchangesToReceive = initializeExchangesToReceive(targetServiceIdentifiers);
+        	caxchangeAggregate.setExchangesToReceive(exchangesToReceive);
         }
         String targetServiceIdentifier = getTargetServiceIdentifier(message);
         //Remove the targetServiceIdentifier from the set of service identifiers from which exchanges are expected.
@@ -194,7 +196,8 @@ public class CaxchangeAggregator extends AbstractAggregator {
         logger.debug("Building aggregate");
         CaxchangeAggregation caxchangeAggregate = (CaxchangeAggregation)aggregate;
         List messages= caxchangeAggregate.getMessages();
-        Document document =AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout, exchangesToReceive);        
+        logger.error("*********"+messages.size()+"  "+timeout+"  "+caxchangeAggregate.getExchangesToReceive() );
+        Document document = AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout, caxchangeAggregate.getExchangesToReceive());        
         message.setContent(new DOMSource(document));
         message.setProperty(CaxchangeEIPConstants.ORIGINAL_EXCHANGE_CORRELATIONID, caxchangeAggregate.getCorrelationId());
        return;

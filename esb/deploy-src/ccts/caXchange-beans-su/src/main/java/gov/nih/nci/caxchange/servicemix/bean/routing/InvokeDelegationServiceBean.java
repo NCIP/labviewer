@@ -159,15 +159,15 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			util.initialize();
 			
 			//TODO: this is a temporary arrangement for Lab Loader
-			if("CT_LAB_DATA".equals(util.getMessageType()))
+			/*if("CT_LAB_DATA".equals(util.getMessageType()))
 				return;
-			
+			*/
 			
 			String delegationEPR = util.getDelegatedCredentialReference();
 			
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try{
-				logger.error("****"+delegationEPR);
+				logger.debug("****"+delegationEPR);
 				delegatedCredentialReference =  
 					(DelegatedCredentialReference)
 					                     Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, DelegatedCredentialUserClient.class.getResourceAsStream("client-config.wsdd"));
@@ -180,8 +180,7 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			DelegatedCredentialUserClient delegatedCredentialUserClient = null;
 
 			try{
-				logger.error("**** delegatedCredentialReference.getEndpointReference"+delegatedCredentialReference.getEndpointReference());
-				logger.error("**** delegatedCredentialReference.getEndpointReference.getAddress"+delegatedCredentialReference.getEndpointReference().getAddress());
+				logger.debug("**** delegatedCredentialReference.getEndpointReference"+delegatedCredentialReference.getEndpointReference());
 				delegatedCredentialUserClient = new DelegatedCredentialUserClient(
 						delegatedCredentialReference, hostCredential);
 			}catch (Exception e){

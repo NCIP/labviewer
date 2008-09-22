@@ -638,7 +638,7 @@
       <groupId>cagrid</groupId>
       <artifactId>gme-stubs</artifactId>
       <version>1.2</version>
-    </dependency>    
+    </dependency>     
   </dependencies>
   <properties>
     <servicemix-version>3.1.2</servicemix-version>
