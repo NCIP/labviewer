@@ -110,7 +110,12 @@ public class HomeAction extends Action {
 		ActionErrors errors = new ActionErrors();
 		ActionForward forward = null;
 		HttpSession session = request.getSession();
-		String userEmail = (String) session.getAttribute("CAGRID_SSO_EMAIL_ID");
+		//String userEmail = (String) session.getAttribute("CAGRID_SSO_EMAIL_ID");
+		String gridIDentity = (String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
+		int beginIndex = gridIDentity.lastIndexOf("=");
+		int endIndex = gridIDentity.length();
+		String userEmail = gridIDentity.substring(beginIndex+1, endIndex);
+		
 		LoginForm loginForm = (LoginForm) session
 				.getAttribute(DisplayConstants.LOGIN_OBJECT);
 
