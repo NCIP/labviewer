@@ -139,6 +139,9 @@
 				<include name="**/LabViewerAuthorizationHelper.class" />
 			</fileset>
 		</jar>
+		<copy todir="${env.CATALINA_HOME}/conf/cabig" overwrite="true">
+				<fileset file="${build.home}/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml" />
+		</copy>
 	</target>
 
 	<target name="cleanup" depends="dist" description="Delete the Build directory">
@@ -210,9 +213,6 @@
 		<copy todir="${env.CATALINA_HOME}/conf" overwrite="true">
 			<fileset file="${dist.home}/login.config" />
 		</copy>
-		<copy todir="${env.CATALINA_HOME}/conf/cabig" overwrite="true">
-					<fileset file="${build.home}/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml" />
-				</copy>
 		<echo message="================================================================================" />
 		<echo message="Edit your Tomcat startup or set your CATALINA_OPTS environment variable with the" />
 		<echo message="following." />
