@@ -64,6 +64,8 @@
 		</ant>
 	</target>
 
+	<!-- Builds the staging directory -->
+	
 	<target name="build-stage" depends="pre-stage" description="">
 		<echo>Building  stage temp directory</echo>
 		<mkdir dir="${stage.dir}" />
@@ -173,16 +175,22 @@
 		</copy>
 	</target>
 
+	<!-- Builds the cTOM-wsrf -->
+	
 	<target name="build-ctom-wsrf" depends="build-stage" description="Builds the ctom wsrf">
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
 		<war destfile="${war-dist.dir}/${war.name}.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
 	</target>
 
+
+	<!-- Builds the cTOMDataPersistencw jar file -->
+	
 	<target name="build-db-jars" description="Builds the database jars">
 		<echo>Creating cTOMPersistence jar</echo>
 		<ant antfile="${unZip.dir}/CTOMDataPersistence/build.xml" dir="${unZip.dir}/CTOMDataPersistence" target="dist" inheritall="true" />
 	</target>
+	
 	<!-- Deploys the cTOM-wsrf and cTODSLabViewer war files -->
 	<target name="deploy_cTODS" depends="build-db-jars,build-ctom-wsrf" description="Deploys the cTOM-wsrf and cTODSLabViewer war files">
 		<echo>Deploying cTODSLabViewer to Tomcat webapps</echo>
