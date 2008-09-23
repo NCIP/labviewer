@@ -10,6 +10,9 @@ CATALINA_HOME(Your tomcat home directory)
 3)Please replce the #REPLACE_THIS_VALUE# in install.properties files with the values 
 specific to your environment
 
+4)Please set the properties in the service-deploy.properties to the correct values for your environment. 
+These properties are for registering the index service.
+
 4)Do ant -p for available targets 
 
 
