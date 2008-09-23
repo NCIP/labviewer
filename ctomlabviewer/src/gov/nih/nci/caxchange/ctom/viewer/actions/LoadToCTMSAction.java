@@ -85,7 +85,6 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -110,7 +109,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-//import gov.nih.nci.cagrid.common.Utils;
 import org.hibernate.Session;
 
 import webservices.Documentation;
@@ -328,6 +326,7 @@ public class LoadToCTMSAction extends Action
 		numOfLabs = labResults.length; 
 	 	//PrintWriter writer = new PrintWriter("c3dmessage.xml");
 		 QName lab = new QName("http://c3d.nci.nih.gov/webservices","LoadLabsRequest");
+		//QName lab = new QName("LoadLabsRequest");
          //Utils.serializeObject(labRequest, lab, writer);
         
 		// Create the caxchange message
@@ -347,7 +346,7 @@ public class LoadToCTMSAction extends Action
 	    requestMessage.setRequest(caxchangeRequest);
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
-        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs");
         messagePayload.setXmlSchemaDefinition(uri);
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});

@@ -61,12 +61,6 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.cabig.ccts.domain.Documentation;
-import gov.nih.nci.cabig.ccts.domain.LabResult;
-import gov.nih.nci.cabig.ccts.domain.Participant;
-import gov.nih.nci.cabig.ccts.domain.PerformedActivity;
-import gov.nih.nci.cabig.ccts.domain.PerformedStudy;
-import gov.nih.nci.cabig.ccts.domain.StudySubject;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm;
@@ -96,6 +90,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
+import webservices.Documentation;
+import webservices.LabResult;
+import webservices.Participant;
+import webservices.PerformedActivity;
+import webservices.PerformedStudy;
+import webservices.StudySubject;
 
 /**
  * This class Saves the Lab data Search results to a CSV file. 
@@ -224,11 +225,11 @@ public class SaveToCSVAction extends Action
 			if (studyId != null)
 			{
 				// Set the study identifier on the document
-				gov.nih.nci.cabig.ccts.domain.II ii = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii = new webservices.II();
 				ii.setExtension("STUDY:" + studyId);
 				ii.setAssigningAuthorityName("CTODS");
 				ii.setRoot("C3D");
-				gov.nih.nci.cabig.ccts.domain.II[] iis = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
 				documentation.setII(iis);
 			}
@@ -245,18 +246,18 @@ public class SaveToCSVAction extends Action
 			{
 				Iterator<II> idIterator = studySubjectIds.iterator();
 				II ssII = idIterator.next();
-				gov.nih.nci.cabig.ccts.domain.II ii = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii = new webservices.II();
 				ii.setAssigningAuthorityName("CTODS");
 				ii.setRoot("C3D");
 				ii.setExtension("MRN:" + ssII.getExtension());
-				gov.nih.nci.cabig.ccts.domain.II[] iis = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
 				participant.setII(iis);
-				gov.nih.nci.cabig.ccts.domain.II ii2 = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii2 = new webservices.II();
 				ii2.setAssigningAuthorityName("CTODS");
 				ii2.setRoot("C3D");
 				ii2.setExtension("PATIENTPOSITION:" + ssII.getExtension());
-				gov.nih.nci.cabig.ccts.domain.II[] iis2 = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis2 = new webservices.II[1];
 				iis2[0] = ii2;
 				studySubject.setII(iis2);
 			}

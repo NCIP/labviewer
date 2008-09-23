@@ -58,13 +58,6 @@
  **/
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.cabig.ccts.domain.Documentation;
-import gov.nih.nci.cabig.ccts.domain.LabResult;
-import gov.nih.nci.cabig.ccts.domain.LoadLabsRequest;
-import gov.nih.nci.cabig.ccts.domain.Participant;
-import gov.nih.nci.cabig.ccts.domain.PerformedActivity;
-import gov.nih.nci.cabig.ccts.domain.PerformedStudy;
-import gov.nih.nci.cabig.ccts.domain.StudySubject;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
@@ -104,9 +97,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.namespace.QName;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
@@ -120,7 +110,14 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Session;
-import org.w3c.dom.Document;
+
+import webservices.Documentation;
+import webservices.LabResult;
+import webservices.LoadLabsRequest;
+import webservices.Participant;
+import webservices.PerformedActivity;
+import webservices.PerformedStudy;
+import webservices.StudySubject;
 
 /**
  * This class performs the Load to caAERS action. It loads the selected form data to caAERS.
@@ -244,11 +241,11 @@ public class LoadTocaAERSAction extends Action
 			if (studyId != null)
 			{
 				// Set the study identifier on the document
-				gov.nih.nci.cabig.ccts.domain.II ii = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii = new webservices.II();
 				ii.setExtension(studyId);
 				ii.setAssigningAuthorityName("CTODS");
 				ii.setRoot("caAERS");
-				gov.nih.nci.cabig.ccts.domain.II[] iis = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
 				documentation.setII(iis);
 			}
@@ -265,18 +262,18 @@ public class LoadTocaAERSAction extends Action
 			{
 				Iterator<II> idIterator = studySubjectIds.iterator();
 				II ssII = idIterator.next();
-				gov.nih.nci.cabig.ccts.domain.II ii = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii = new webservices.II();
 				ii.setAssigningAuthorityName("CTODS");
 				ii.setRoot("caAERS");
 				ii.setExtension(ssII.getExtension());
-				gov.nih.nci.cabig.ccts.domain.II[] iis = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis = new webservices.II[1];
 				iis[0] = ii;
 				participant.setII(iis);
-				gov.nih.nci.cabig.ccts.domain.II ii2 = new gov.nih.nci.cabig.ccts.domain.II();
+				webservices.II ii2 = new webservices.II();
 				ii2.setAssigningAuthorityName("CTODS");
 				ii2.setRoot("caAERS");
 				ii2.setExtension(ssII.getExtension());
-				gov.nih.nci.cabig.ccts.domain.II[] iis2 = new gov.nih.nci.cabig.ccts.domain.II[1];
+				webservices.II[] iis2 = new webservices.II[1];
 				iis2[0] = ii2;
 				studySubject.setII(iis2);
 			}
@@ -328,6 +325,7 @@ public class LoadTocaAERSAction extends Action
 		numOfLabs = labResults.length; 
 		//PrintWriter writer = new PrintWriter("caAERSmessage.xml");
 		QName lab = new QName("http://integration/caaers.nci.nih.gov/services","LoadLabsRequest");
+		//QName lab = new QName("LoadLabsRequest");
 		//Utils.serializeObject(labRequest, lab, writer);
         
 		// Create the caxchange message
@@ -347,7 +345,7 @@ public class LoadTocaAERSAction extends Action
 	    requestMessage.setRequest(caxchangeRequest);
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
-        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.loadlabs.domain");
         messagePayload.setXmlSchemaDefinition(uri);
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
