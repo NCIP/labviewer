@@ -41,9 +41,13 @@
 	values(2,2,2,now());
 	select nextval('CSM_USER_PE_USER_PROTECTIO_SEQ');
 	
-insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
+	insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
 	values (3, 'ccts@nih.gov','CCTS','Demo','7n9/VP+v3XYWD5UHP32oFQ==',now());
 	select nextval('CSM_USER_USER_ID_SEQ');
+	
+	insert into csm_user_pe(USER_PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_ID,USER_ID,UPDATE_DATE)
+		values(3,2,3,now());
+	select nextval('CSM_USER_PE_USER_PROTECTIO_SEQ');
 
 COMMIT;
 --  

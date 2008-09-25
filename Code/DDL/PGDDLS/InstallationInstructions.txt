@@ -11,8 +11,11 @@
    6. migration4.0.0.sql
    7. PG_Views.sql
    8. InstallationInstructions.txt
+   9. CleanDB.sql
 
 2. Unzip the LatestDDLS zip file.
+ 
+******************* Using perl script to perform DB installation ***************
 
 3. Open the install_db.pl file and edit the Database Env properties
 
@@ -37,4 +40,14 @@
        > enter password: ctods
        >\d          --->should list all the tables/seq/views created.
  
-   
+******************* Running individual script(s) to perform DB installation ***************   
+ 
+ Please run the sql scripts in the given order using the admin tool - SQL prompt
+
+ 1. ClearDB.sql
+ 2. DataModel.sql
+ 3. AuthSchemaPostgres.sql
+ 4. migration4.0.0.sql
+ 5. PG_Seq.sql
+ 6. PG_Views.sql
+ 7. DataPrimingPostgres.sql
