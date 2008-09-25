@@ -17,6 +17,10 @@ $DATABASE="ctods";
 $DATABASE_OWNER="ctods";
 $DB_IP="cbiodb590.nci.nih.gov";
 $DB_PORT="5455";
+#$DATABASE="postgres";
+#$DATABASE_OWNER="postgres";
+#$DB_IP="localhost";
+#$DB_PORT="5432";
 
 
 #print "Dropping database $DATABASE...\n";
@@ -25,7 +29,7 @@ $DB_PORT="5455";
 #print "Dropping database user $DATABASE_OWNER...\n";
 #system("\"$PGBINDIR/dropuser\" -U postgres -p $DB_PORT -h $DB_IP -e $DATABASE_OWNER");
 
-#print "Creating database user caxchange...\n";
+#print "Creating database user $DATABASE_OWNER...\n";
 #system("\"$PGBINDIR/createuser\" -U postgres -a -p 5432 -h $DB_IP -d -P $DATABASE_OWNER");
 
 #print "Creating database $DATABASE...\n";
@@ -34,18 +38,20 @@ print "Working, please wait...\n";
 
 
 #---------------------------------Drop the plpgsql language---------------------------------#
-$cmd_string = "\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -c \"drop language plpgsql cascade;\"";
+#$cmd_string = "\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -c \"drop language plpgsql cascade;\"";
 #print $cmd_string;
-system("$cmd_string");
+#system("$cmd_string");
 #---------------------------------Create the plpgsql language---------------------------------#
-$cmd_string = "\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -c \"create language plpgsql;\"";
+#$cmd_string = "\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -c \"create language plpgsql;\"";
 #print $cmd_string;
-system("$cmd_string");
+#system("$cmd_string");
 
 
 #---------------------------------Create the caxchange role/schema---------------------------------#
 #print "Creating schema auth...\n";
 #system("\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -c \"create schema $DATABASE authorization $DATABASE_OWNER;\"");
+print "Tearing down DB...\n";
+system("\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -f \"$DDL_DIR/ClearDB.sql\" $REDIRECT");
 print "Creating schema tables...\n";
 system("\"$PGBINDIR/psql\" -a -U $DATABASE_OWNER -p $DB_PORT -h $DB_IP -d $DATABASE -f \"$DDL_DIR/DataModel.sql\" $REDIRECT");
 print "Creating sequences...\n";
