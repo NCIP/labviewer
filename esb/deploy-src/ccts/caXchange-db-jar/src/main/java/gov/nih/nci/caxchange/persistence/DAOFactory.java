@@ -2,6 +2,8 @@ package gov.nih.nci.caxchange.persistence;
 
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * This class process CaxchangeMessage.xml file to send and get
@@ -11,7 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class DAOFactory {
    static ClassPathXmlApplicationContext appContext = new ClassPathXmlApplicationContext("CaxchangeMessage.xml");
-
+   static Logger logger = LogManager.getLogger(DAOFactory.class);
    /**
     * Default constructor
     */
