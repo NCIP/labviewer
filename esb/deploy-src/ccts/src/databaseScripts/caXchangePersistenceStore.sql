@@ -14,5 +14,10 @@ CREATE TABLE  IF NOT EXISTS CAXCHANGE_MESSAGE_TYPES
    PAYLOAD_NAMESPACE  VARCHAR(500),
    CONSTRAINT PRIMARY KEY (MESSAGE_TYPE(500))
 );
-INSERT INTO `CAXCHANGE_MESSAGE_TYPES`(`MESSAGE_TYPE`,`PAYLOAD_NAMESPACE`) VALUES('STUDY_CREATION','ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),('REGISTER_SUBJECT','ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain');
+INSERT INTO `CAXCHANGE_MESSAGE_TYPES`(`MESSAGE_TYPE`,`PAYLOAD_NAMESPACE`) 
+VALUES ('STUDY_CREATION','ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
+       ('REGISTER_SUBJECT','ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
+       ('LAB_BASED_AE','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs'),
+       ('LOAD_LAB_TO_CDMS','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs'),
+       ('SCHEDULE_MODIFICATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain');
 
