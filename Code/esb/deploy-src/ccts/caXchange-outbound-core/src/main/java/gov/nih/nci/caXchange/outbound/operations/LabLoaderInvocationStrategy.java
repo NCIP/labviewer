@@ -47,15 +47,15 @@ public class LabLoaderInvocationStrategy extends GridInvocationStrategy {
 
 		try {
 			GlobusCredential cred=null;
-  /*		Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
+     		Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
 
 			if(s.size()>0){
 				cred=s.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
-			*/
-			LabLoaderClient client = new LabLoaderClient(serviceUrl);//, cred);
+
+			LabLoaderClient client = new LabLoaderClient(serviceUrl, cred);
 
 			String xml=(new SourceTransformer()).toString(message.getPayload());
 			client.loadLab(xml);
