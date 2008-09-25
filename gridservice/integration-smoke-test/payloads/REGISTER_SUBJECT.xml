@@ -10,7 +10,7 @@
     <studyRef gridId="51bd374c-d8b5-4759-84b3-ac6259d58648">
      <shortTitleText>Smoke Test</shortTitleText>
      <longTitleText>Smoke Test long title</longTitleText>
-     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SMOKE_TEST" xsi:type="OrganizationAssignedIdentifierType">
+     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:type="OrganizationAssignedIdentifierType">
       <type>Coordinating Center Identifier</type>
       <value>SMOKE_TEST</value>
       <primaryIndicator>true</primaryIndicator>
@@ -20,7 +20,6 @@
      </identifier>
     </studyRef>
     <participant gridId="91dd4580-801b-4874-adeb-a174361bacea">
-     <gridId>91dd4580-801b-4874-adeb-a174361bacea</gridId>
      <firstName>John</firstName>
      <lastName>Smith</lastName>
      <address/>
@@ -28,7 +27,7 @@
      <birthDate>1970-01-02</birthDate>
      <ethnicGroupCode>Non Hispanic or Latino</ethnicGroupCode>
      <raceCode>White</raceCode>
-     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="00-00-00-0" xsi:type="OrganizationAssignedIdentifierType">
+     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="OrganizationAssignedIdentifierType">
       <type>MRN</type>
       <value>00-00-00-0</value>
       <primaryIndicator>true</primaryIndicator>

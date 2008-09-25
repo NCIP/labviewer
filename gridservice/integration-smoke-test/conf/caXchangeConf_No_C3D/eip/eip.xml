@@ -28,8 +28,21 @@
          <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
       </eip:faultsTarget>
       <eip:target>
-        <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+        <eip:exchange-target service="caxchange:validatePayloadPipeline" />
       </eip:target>
+  </eip:pipeline>  
+  
+  <!-- Pipeline to validate payload -->
+  <eip:pipeline service="caxchange:validatePayloadPipeline" endpoint="validatePayloadPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:payloadValidationService" />
+        </eip:transformer>
+        <eip:faultsTarget>
+           <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+        </eip:faultsTarget>
+        <eip:target>
+          <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+        </eip:target>
   </eip:pipeline>  
   
   <!-- Pipeline to store original message -->

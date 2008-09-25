@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
    <ns2:LoadLabsRequest xmlns:ns2="http://integration/caaers.nci.nih.gov/services">
-    <ns3:LabResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-     <ns3:comment xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:confidentiality xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:reportedDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">2008-04-30T02:28:00.000Z</ns3:reportedDateTime>
-     <ns3:uncertainty xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:asCollectedIndicator xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">false</ns3:asCollectedIndicator>
-     <ns3:numericPrecision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">0</ns3:numericPrecision>
-     <ns3:numericResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">11.0</ns3:numericResult>
-     <ns3:numericUnit xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">mg/dL</ns3:numericUnit>
-     <ns3:referenceRangeComment xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:referenceRangeHigh xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">22.0</ns3:referenceRangeHigh>
-     <ns3:referenceRangeLow xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">8.0</ns3:referenceRangeLow>
-     <ns3:referenceTextList xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:reportedResultStatus xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:textResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-     <ns3:StudySubject xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-      <ns3:informedConsentSignatureText xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:status xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:statusEndDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:statusStartDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:studySubjectState xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:studySubjectStateDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:subgroup xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:PerformedActivity xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-       <ns3:category  xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:name xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">BUN</ns3:name>
-       <ns3:status xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:statusEndDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:statusStartDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:performedEndDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:performedReason xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:performedStartDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:ScheduledActivity xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:scheduledActivity2 xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+    <ns3:LabResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+     <ns3:comment xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:confidentiality xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:reportedDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">2008-04-30T02:28:00.000Z</ns3:reportedDateTime>
+     <ns3:uncertainty xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:asCollectedIndicator xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">false</ns3:asCollectedIndicator>
+     <ns3:numericPrecision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">0</ns3:numericPrecision>
+     <ns3:numericResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">11.0</ns3:numericResult>
+     <ns3:numericUnit xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">mg/dL</ns3:numericUnit>
+     <ns3:referenceRangeComment xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:referenceRangeHigh xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">22.0</ns3:referenceRangeHigh>
+     <ns3:referenceRangeLow xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">8.0</ns3:referenceRangeLow>
+     <ns3:referenceTextList xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:reportedResultStatus xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:textResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+     <ns3:StudySubject xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+      <ns3:informedConsentSignatureText xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:status xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:statusEndDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:statusStartDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:studySubjectState xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:studySubjectStateDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:subgroup xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:PerformedActivity xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+       <ns3:category  xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:name xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">BUN</ns3:name>
+       <ns3:status xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:statusEndDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:statusStartDate xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:performedEndDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:performedReason xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:performedStartDateTime xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:ScheduledActivity xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:scheduledActivity2 xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
       </ns3:PerformedActivity>
-      <ns3:PerformedStudy xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-       <ns3:documentationType xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:revision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:title xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:Documentation xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-        <ns3:documentationType xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-        <ns3:revision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-        <ns3:title xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-        <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-         <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">CTODS</ns3:assigningAuthorityName>
-         <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">false</ns3:displayble>
-         <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">SMOKE_TEST</ns3:extension>
-         <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">caAERS</ns3:root>
+      <ns3:PerformedStudy xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+       <ns3:documentationType xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:revision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:title xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:Documentation xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+        <ns3:documentationType xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <ns3:revision xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <ns3:title xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+         <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">CTODS</ns3:assigningAuthorityName>
+         <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">false</ns3:displayble>
+         <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">SMOKE_TEST</ns3:extension>
+         <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">caAERS</ns3:root>
         </ns3:II>
        </ns3:Documentation>
-       <ns3:actualAccrualNumber xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">0</ns3:actualAccrualNumber>
-       <ns3:PlannedStudy xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:actualAccrualNumber xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">0</ns3:actualAccrualNumber>
+       <ns3:PlannedStudy xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
       </ns3:PerformedStudy>
-      <ns3:StudySite xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-      <ns3:Participant xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-       <ns3:confidentialityIndicator xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">false</ns3:confidentialityIndicator>
-       <ns3:paymentMethod xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
-       <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-        <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">CTODS</ns3:assigningAuthorityName>
-        <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">false</ns3:displayble>
-        <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">00-00-00-0</ns3:extension>
-        <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">caAERS</ns3:root>
+      <ns3:StudySite xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      <ns3:Participant xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+       <ns3:confidentialityIndicator xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">false</ns3:confidentialityIndicator>
+       <ns3:paymentMethod xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+       <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+        <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">CTODS</ns3:assigningAuthorityName>
+        <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">false</ns3:displayble>
+        <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">00-00-00-0</ns3:extension>
+        <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">caAERS</ns3:root>
        </ns3:II>
       </ns3:Participant>
-      <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">
-       <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">CTODS</ns3:assigningAuthorityName>
-       <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">false</ns3:displayble>
-       <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">00-00-00-0</ns3:extension>
-       <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain">caAERS</ns3:root>
+      <ns3:II xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
+       <ns3:assigningAuthorityName xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">CTODS</ns3:assigningAuthorityName>
+       <ns3:displayble xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">false</ns3:displayble>
+       <ns3:extension xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">00-00-00-0</ns3:extension>
+       <ns3:root xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">caAERS</ns3:root>
       </ns3:II>
      </ns3:StudySubject>
     </ns3:LabResult>

@@ -1,4 +1,4 @@
-   <AENotification xmlns="http://semanticbits.com/aeNotification" registrationGridId="48a14190-04d8-4c50-b594-588bb4fe8a7d">
+   <aeNotification xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain" registrationGridId="6115c43c-851e-425c-8312-fd78367aaef3">
     <detectionDate>2008-08-01</detectionDate>
     <description>Grade 3 adverse event with term Serum sickness</description>
-   </AENotification>
+   </aeNotification>
