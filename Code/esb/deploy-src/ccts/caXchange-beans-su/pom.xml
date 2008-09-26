@@ -48,9 +48,9 @@
             <exclude>**/StoreOriginalMessageServiceBeanTest.*</exclude>
             <exclude>**/HandleErrorResponseBeanTest.*</exclude>
             <exclude>**/GenerateResponseBeanTest.*</exclude>
-            <!-- <exclude>**/CaxchangeAggregatorListenerTest.*</exclude> -->
+            <exclude>**/CaxchangeAggregatorListenerTest.*</exclude> 
              <exclude>**/InvokeDelegationServiceBeanTest.*</exclude>
-            <exclude>**/XPathUtilTest.*</exclude>  
+            <!-- <exclude>**/XPathUtilTest.*</exclude> -->  
             <exclude>**/PayloadValidationTest.*</exclude>
           </excludes>
         </configuration>

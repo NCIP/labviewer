@@ -331,7 +331,9 @@ public class XPathUtil {
     public Source getRollbackMessage() throws Exception {
     	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "operation");
         if (elements.getLength()==1){
-        	elements.item(0).setNodeValue("ROLLBACK");
+        	elements.item(0).setTextContent("ROLLBACK");
+        }else {
+        	throw new Exception("Error generating rollback message. No operation element found.");
         }
        return new DOMSource(document);
     }
