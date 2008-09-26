@@ -31,7 +31,7 @@
 	
 	<target name="version-check" depends="system-init,assert" description="checks the software version used in your system">
 		<echo message="###########################################"/>
-		<echo message="#Welcome To caxchange v1.1 Installation   #"/>
+		<echo message="#Welcome To caxchange  Installation       #"/>
 		<echo message="###########################################"/>
 		<echo message="Current Setup: "/>
                 <echo message="JDK Version       : ${java.version}"/>
@@ -666,8 +666,8 @@
 	<!--Deploys the service assembly and the service engine to servicemix container-->
     <target name="sa-deploy"  depends="assert,system-init,servicemix-configure" description="deploys the servicemix assembly">
 			<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
-		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-1.1-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
-        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-1.1.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-${CAXCHANGE_VERSION}-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-${CAXCHANGE_VERSION}.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
     </target>
 
 	<!--Caxchange complete install with servicemix -->
@@ -690,14 +690,14 @@
 		</copy>
 		<java
            dir="${cax.home}/verifyRouting"
-           jar="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.1.jar"
+           jar="${cax.home}/verifyRouting/caXchange-verify-routing-jar-${CAXCHANGE_VERSION}.jar"
            fork="true"
            failonerror="true"
            maxmemory="128m"
            >
          <arg value="-jar"/>
          <classpath>
-           <pathelement location="${cax.home}/verifyRouting/caXchange-verify-routing-jar-1.1.jar"/>
+           <pathelement location="${cax.home}/verifyRouting/caXchange-verify-routing-jar-${CAXCHANGE_VERSION}.jar"/>
            <pathelement path="${java.class.path}"/>
          </classpath>
        </java>

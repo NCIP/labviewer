@@ -362,7 +362,7 @@
   <!-- End EIP Components for invoking the cTOM -->  
   
   <!-- EIP Aggregator -->
-  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="caxchangeResponseAggregatorEndpoint" timeOut="22000">
+  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="caxchangeResponseAggregatorEndpoint" timeOut="300000">
          <eip:target>
            <eip:exchange-target service="caxchange:aggregatorListener"  />
         </eip:target>
