@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import javax.jbi.messaging.InOnly;
 import javax.jbi.messaging.InOut;
+import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -115,6 +116,25 @@ public class XPathUtilTest extends SpringTestSupport {
 		  }
 		}	
 
+	public void testRollback() {
+		  try {
+	    	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
+	    	InOnly me = client.createInOnlyExchange();
+	    	me.getInMessage().setContent(new StreamSource(fis));
+	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	util.setIn(me.getMessage("in"));
+	    	util.initialize();
+	    	Source source = util.getRollbackMessage();
+	    	Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	    	transformer.transform(source, new StreamResult(System.out));
+	    	assertNotNull(source);
+		  }catch(Exception e) {
+			  throw new RuntimeException(e);
+		  }
+		}	
+	
+	
 	@Override
 	protected AbstractXmlApplicationContext createBeanFactory() {
 		// TODO Auto-generated method stub
