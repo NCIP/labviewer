@@ -102,7 +102,7 @@
 	<target name="setGlobus" if="env.GLOBUS_LOCATION">
 		<!-- GT4 build files and directories-->
 		<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
-		<property name="build.stubs" location="${ext.globus.dir}/share/globus_wsrf_tools/build-stubs.xml" />
+		<property name="build.stubs" location="build-stubs.xml" />
 		<property name="schema.src" location="${ext.globus.dir}/share/schema" />
 		<property name="build.packages" location="${ext.globus.dir}/share/globus_wsrf_common/build-packages.xml" />
 		<!-- Copied from build.stubs file, as there is no way to "append" to the value in the remote file -->
@@ -141,6 +141,7 @@
 
 	<target name="defineClasspaths" depends="checkGlobus">
 		<runtarget target="defineExtendedClasspaths" />
+		<path id="tasks.run.extended.classpath"/>
 		<path id="base.classpath">
 			<fileset dir="${lib.dir}">
 				<include name="*.jar" />
@@ -183,11 +184,26 @@
 			<path refid="service.build.classpath" />
 			<pathelement location="${ext.globus.dir}" />
 		</path>
-		<path id="processor.run.classpath">
+		<path id="tasks.run.classpath">
+			<path refid="tasks.run.extended.classpath" />
 			<fileset dir="${tools.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
-			<path refid="run.classpath" />
+			<fileset dir="${lib.dir}">
+				<include name="caGrid-core*.jar" />
+				<include name="jdom*.jar"/>
+			</fileset>
+			<fileset dir="${ext.globus.dir}/lib">
+				<include name="axis.jar" />
+				<include name="addressing-1.0.jar" />
+				<include name="xercesImpl.jar" />
+				<include name="jaxrpc.jar" />
+				<include name="wsrf_core.jar" />
+				<include name="cog-jglobus.jar" />
+				<include name="saaj.jar" />
+				<include name="commons-discovery.jar" />
+				<include name="wsrf_core_stubs.jar" />
+			</fileset>
 		</path>
 	</target>
 
@@ -240,9 +256,9 @@
 	</target>
 
 	<target name="stubGenerationPostProcessor">
-		<java classname="gov.nih.nci.cagrid.introduce.axis.FixSoapBindingStub" classpathref="processor.run.classpath" fork="no">
-			<arg value="${basedir}" />
-		</java>
+		<taskdef name="fixSoapBindingStubs" classname="gov.nih.nci.cagrid.introduce.servicetasks.axis.FixSoapBindingStub" classpathref="tasks.run.classpath">
+		</taskdef>
+		<fixSoapBindingStubs />
 	</target>
 
 

@@ -26,10 +26,12 @@
 	
 	<property name="jboss.dir" value="${env.JBOSS_HOME}" />
 	
-
-
+	<!--added by ccts. To support multiple globus installs in the same container-->
+		    <property name="webapp.name" value="ctom-wsrf"/>
+	
 	<target name="setDeploymentProperties">
 		<property file="deploy.properties" />
+		<property name="globus.webapp" value="${webapp.name}" />
 		<property name="service.deployment.path" value="${service.deployment.prefix}/${introduce.skeleton.service.name}" />
 		<pathconvert dirsep="_" property="service.deployment.dir.name">
 			<path>
@@ -43,9 +45,9 @@
 		<property name="service.properties.file" value="service.properties" />
 	</target>
 
-	<target name="prepareDeploymentTmp" depends="">
+	<target name="prepareDeploymentTmp" depends="checkGlobus,init">
 
-		<copy todir="${build.lib.dir}">
+		<copy overwrite="true" todir="${build.lib.dir}">
 			<fileset dir="${basedir}/lib">
 				<include name="*.jar" />
 			</fileset>
@@ -79,6 +81,9 @@
 			<replacefilter token="REGISTRATION_REFRESH" value="${index.service.registration.refresh_seconds}" />
 			<replacefilter token="INDEX_REFRESH" value="${index.service.index.refresh_milliseconds}" />
 		</replace>
+		
+		<taskdef name="createDeploymentFile" classname="gov.nih.nci.cagrid.introduce.servicetasks.deployment.DeploymentFileGeneratorTask" classpathref="tasks.run.classpath" />
+		
 	</target>
 
 
@@ -86,14 +91,14 @@
 	<target name="deployTomcat" depends="all,setDeploymentProperties" description="Deploys to CATALINA_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${tomcat.dir}" />
 
-		<property name="webapp.dir" value="${tomcat.dir}" />
-		<property name="webapp.deploy.dir" value="${webapp.dir}/webapps/wsrf/WEB-INF" />
-		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
-		<property name="webapp.wsrf.schema.dir" value="${webapp.dir}/webapps/wsrf/share/schema" />
+		<property name="webapp.deploy.dir" value="${tomcat.dir}/webapps/${globus.webapp}" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
+		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc/" />
 
-		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${webapp.dir}" />
+		<echo message="Deploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
 
-		<property name="service.deployment.dir" value="${webapp.deploy.dir}/etc/${service.deployment.dir.name}" />
+		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
 		<!-- prepare the server-config file -->
@@ -107,14 +112,14 @@
 	<!-- deploy service to jboss -->
 	<target name="deployJBoss" depends="all,setDeploymentProperties" description="Deploys to JBOSS_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
-		<property name="webapp.dir" value="${jboss.dir}/server/default/deploy/wsrf.war" />
-		<property name="webapp.deploy.dir" value="${webapp.dir}/WEB-INF" />
-		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
-		<property name="webapp.wsrf.schema.dir" value="${webapp.dir}/share/schema" />
+		<property name="webapp.deploy.dir" value="${jboss.dir}/server/default/deploy/${webapp.name}.war" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
+        <property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
+		
+		<echo message="Deploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
-		<echo message="Deploying service ${service.deployment.path} under JBoss at ${webapp.dir}" />
-
-		<property name="service.deployment.dir" value="${webapp.deploy.dir}/etc/${service.deployment.dir.name}" />
+		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
 		<!-- prepare the deployment directory -->
 		<mkdir dir="${service.deployment.dir}" />
 		<!-- prepare the server-config file -->
@@ -132,6 +137,7 @@
 
 		<runtarget target="prepareDeploymentTmp" />
 
+		<createDeploymentFile/>
 
 		<copy overwrite="true" toDir="${service.deployment.dir}">
 			<fileset dir="tmp">
@@ -163,7 +169,7 @@
 			</fileset>
 		</copy>
 		<!--copy over the schema service files-->
-		<copy overwrite="true" toDir="${webapp.wsrf.schema.dir}/${introduce.skeleton.service.name}">
+		<copy overwrite="true" toDir="${webapp.deploy.schema.dir}/${introduce.skeleton.service.name}">
 			<fileset dir="build/schema/${introduce.skeleton.service.name}">
 				<include name="**\*" />
 			</fileset>
@@ -171,7 +177,7 @@
 	</target>
 
 	<!-- make deployment configured gar -->
-	<target name="createDeploymentGar" depends="all,setDeploymentProperties">
+	<target name="createDeploymentGar" depends="all,setDeploymentProperties" description="creates a gar file that can be deployed or moved around">
 
 		<!-- prepare the server-config file -->
 		<mkdir dir="tmp" />
@@ -181,7 +187,7 @@
 		<runtarget target="preDeployGlobus" />
 
 		<runtarget target="prepareDeploymentTmp" />
-
+		<createDeploymentFile/>
 
 		<!-- make the gar file -->
 		<ant antfile="${build.packages}" target="makeGar">
@@ -222,4 +228,54 @@
 		<delete dir="${gar.name}" />
 		<!-- deploy the gar -->
 	</target>
+	
+	
+	<target name="undeployGlobus" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a globus container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+		
+		<property name="webapp.deploy.dir" value="${ext.globus.dir}" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/lib" />
+		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
+		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/etc" />
+
+		<echo message="Deploying service ${service.deployment.path} under Globus at ${webapp.deploy.dir}" />
+
+		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
+		
+		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
+		<undeployTool/>	
+		<runtarget target="postUndeployGlobus" />
+	</target>
+	
+	<target name="undeployTomcat" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a tomcat container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+		
+		<property name="webapp.deploy.dir" value="${tomcat.dir}/webapps/${globus.webapp}" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
+		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
+
+		<echo message="Uneploying service ${service.deployment.path} under Tomcat at ${webapp.deploy.dir}" />
+
+		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
+		
+		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
+		<undeployTool/>	
+		<runtarget target="postUndeployTomcat" />
+	</target>
+
+	<target name="undeployJBoss" depends="checkGlobus,setDeploymentProperties" description="undeploy a service from a jboss container (to set the services properties file set the ant command line variable -Dservice.properties.file)">
+
+		<property name="webapp.deploy.dir" value="${jboss.dir}/server/default/deploy/${webapp.name}.war" />
+		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
+		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
+		<property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
+
+		<echo message="Unploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
+
+		<property name="service.deployment.dir" value="${webapp.deploy.etc.dir}/${service.deployment.dir.name}" />
+		
+		<taskdef name="undeployTool" classname="gov.nih.nci.cagrid.introduce.servicetasks.undeployment.UndeployServiceTask" classpathref="tasks.run.classpath" />
+		<undeployTool/>		
+		<runtarget target="postUndeployJBoss" />
+	</target>
+	
 </project>
