@@ -136,7 +136,7 @@ div.row div.value {
   margin-left: 11em;
   /* In Mac the Help (?) button is wrapping */
   white-space:nowrap;
-  width: 60em;
+  width: 50em;
 }
 
 /*
@@ -151,7 +151,7 @@ div.row div.value {
 
 .leftpanel {
     float: left;
-    width:48%;
+    width:52%;
     margin: 0 5px 5px -2em;
     padding: 5px;
 }

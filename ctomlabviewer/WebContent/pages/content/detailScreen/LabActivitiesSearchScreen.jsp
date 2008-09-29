@@ -24,6 +24,7 @@
 	        <div class="interior"> <!-- interior -->
 	            <div class="content">
 <!-- laf box 1st half -->
+
 <div>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
 		width="90%" height="50%">

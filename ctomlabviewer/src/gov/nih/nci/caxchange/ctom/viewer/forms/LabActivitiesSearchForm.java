@@ -214,6 +214,10 @@ public class LabActivitiesSearchForm extends ActionForm implements
 				//errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "PatientId is required"));
 				errors.add("patientId", new ActionError(
 						"error.patientId.value"));
+			if (getPatientId().length() > 100)
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(patientId, "PatientId is required"));
+				//errors.add("patientId", new ActionError(
+				//		"errors.maxlength"));
 		
 			if ((getStudyId() == null) || (getStudyId().length() < 1))
 				//errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "StudyId is required"));

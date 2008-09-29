@@ -106,6 +106,7 @@ public class LabViewerAuthorizationHelper
 			{
 				protectionElementPrivilegeContextSet =
 					userProvisioningManager.getProtectionElementPrivilegeContextForUser(user.getUserId().toString());
+				
 			}
 		}
 		catch (CSConfigurationException e)
