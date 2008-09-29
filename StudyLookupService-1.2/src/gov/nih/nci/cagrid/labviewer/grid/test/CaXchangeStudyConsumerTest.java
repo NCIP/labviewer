@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 public class CaXchangeStudyConsumerTest {
 
 	
-		 //String serviceUrl="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyLookupService";
+		 //String serviceUrl="https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/StudyLookupService";
 		 String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyLookupService";
 		 String sampleFile = "/SampleRegistrationMessage.xml";
 		
