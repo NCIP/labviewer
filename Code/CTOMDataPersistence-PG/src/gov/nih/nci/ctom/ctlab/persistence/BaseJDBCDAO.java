@@ -35,12 +35,10 @@ public abstract class BaseJDBCDAO
 	    catch (FileNotFoundException e1) 
 		{
 	    	log.error("The config file not found: " + CONFIG_FILE);
-	    	throw(e1);
-		} 
+	    			} 
 		catch (IOException e1) 
 		{
 			log.error("Error reading the config file: " + CONFIG_FILE);
-			throw(e1);
 		}
 	    //Read the properties from the properties file
 		String fDriverName = (String)props.getProperty("driver");
@@ -55,8 +53,7 @@ public abstract class BaseJDBCDAO
 	    catch (Exception ex)
 	    {
 	    	log.error("Check classpath. Cannot load db driver: " + fDriverName);
-	    	throw(ex);
-	    }
+	     }
 
 	    try
 	    {
