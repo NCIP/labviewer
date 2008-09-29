@@ -61,6 +61,7 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
@@ -85,6 +86,7 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -325,20 +327,22 @@ public class LoadToCTMSAction extends Action
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length; 
 	 	//PrintWriter writer = new PrintWriter("c3dmessage.xml");
-		 QName lab = new QName("http://c3d.nci.nih.gov/webservices","LoadLabsRequest");
-		//QName lab = new QName("LoadLabsRequest");
-         //Utils.serializeObject(labRequest, lab, writer);
+	 	QName lab = new QName( "gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs", "LoadLabsRequest");
+	 	//QName lab = new QName("LoadLabsRequest");
+       
         
 		// Create the caxchange message
 		Message requestMessage = new Message();
 		Metadata metadata = new Metadata();
 	    metadata.setExternalIdentifier("CTODS");
+	    
 	    Credentials creds = new Credentials();
 	    creds.setUserName(username);
 	    String credentialEpr = (String)request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
 	    logDB.info("The credential EPR: "+ credentialEpr);
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
+	    
 	    metadata.setCredentials(creds);
 	    metadata.setMessageType(MessageTypes._LOAD_LAB_TO_CDMS);
 	    requestMessage.setMetadata(metadata);
@@ -351,7 +355,8 @@ public class LoadToCTMSAction extends Action
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
-		
+        
+      //  Utils.serializeObject(requestMessage, lab, writer);
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
         CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
         
