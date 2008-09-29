@@ -24,8 +24,8 @@ import org.xml.sax.SAXException;
  */
 public class LabViewerRegistrationTest
 {
-	String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	//String serviceUrl ="https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer"; //"https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/RegistrationConsumer";
 	//https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian 
 	//String serviceUrl= "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/RegistrationConsumer";
 	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
@@ -59,7 +59,7 @@ public class LabViewerRegistrationTest
 			//GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);
 			
 			 // Create the client
-			 RegistrationConsumerClient client = new RegistrationConsumerClient(this.serviceUrl);//,gb);//,gb);
+			 RegistrationConsumerClient client = new RegistrationConsumerClient(this.serviceUrl);//,gb);
 			
 			// Create the Registration object
 			Registration reg = getRegistration();

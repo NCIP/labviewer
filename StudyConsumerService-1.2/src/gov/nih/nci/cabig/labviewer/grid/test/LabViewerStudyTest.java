@@ -24,8 +24,9 @@ import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
  */
 public class LabViewerStudyTest
 {
-	String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyConsumer";
-	//String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyConsumer";
+	//String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyConsumer";
+	//String serviceUrl ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
+	String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl= "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/StudyConsumer";
 	String sampleFile = "/SampleStudyMessage.xml";
