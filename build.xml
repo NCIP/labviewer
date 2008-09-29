@@ -89,6 +89,7 @@
 				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
 				<filter token="hotLink_Type" value="${hotLink_Type}" />
 				<filter token="testEnabled" value="${testEnabled}" />
+				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
 			</filterset>
 		</copy>
 	</target>
