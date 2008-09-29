@@ -1,6 +1,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%> 
-
+<%@ page import="gov.nih.nci.caxchange.ctom.viewer.smokeTests.TestPing" %>
 <div id="main">
    <div class="pane">
      <div class="box ">
@@ -32,12 +32,14 @@
             <tr>
             <td>HOTLINK_TYPE</td><td><%=hotLinkType %></td>
             	</tr>           	
-       <tr><th colspan="2"><h3>caExchange handshake</h3> </th></tr>
-      <tr><td>Sample message to caAERS</td>
-                	<td>fail </td></tr>
-        <tr><td>Error</td><td>Connection time out .... </td></tr>
-            	<tr><td>Sample message to CDMS</td><td>Pass </td></tr>
-            	
+       <tr><th colspan="2"><h3>Invoking Happy Grid Service</h3> </th></tr>
+      <tr><td> Status</td><td>
+      <%
+       TestPing test = new TestPing();
+        String status =test.test();
+       %>
+       <%=status %>
+      </td></tr>
            </table>
  	<!-- laf box 2nd half -->
 	        </div>  <!-- content -->
