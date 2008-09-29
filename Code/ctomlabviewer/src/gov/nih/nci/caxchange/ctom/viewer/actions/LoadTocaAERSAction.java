@@ -324,7 +324,8 @@ public class LoadTocaAERSAction extends Action
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length; 
 		//PrintWriter writer = new PrintWriter("caAERSmessage.xml");
-		QName lab = new QName("http://integration/caaers.nci.nih.gov/services","LoadLabsRequest");
+		//QName lab = new QName("http://integration/caaers.nci.nih.gov/services","LoadLabsRequest");
+		QName lab = new QName( "gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs", "LoadLabsRequest");
 		//QName lab = new QName("LoadLabsRequest");
 		//Utils.serializeObject(labRequest, lab, writer);
         
@@ -345,7 +346,7 @@ public class LoadTocaAERSAction extends Action
 	    requestMessage.setRequest(caxchangeRequest);
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
-        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.loadlabs.domain");
+        uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs");
         messagePayload.setXmlSchemaDefinition(uri);
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
