@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="LabLoader" targetNamespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.ctlab/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.ctlab/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.ctlab/bindings" location="LabLoader_bindings.wsdl"/>
+  <wsdl:service name="LabLoaderService">
+    <wsdl:port name="LabLoaderPortTypePort" binding="binding:LabLoaderPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

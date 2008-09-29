@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/LabLoader">
-    <resource name="configuration" type="gov.nih.nci.cagrid.labviewer.service.globus.resource.ResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.cagrid.labviewer.service.globus.resource.LabLoaderResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -17,22 +17,21 @@
           <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the registration parameters template file (ignored if performRegistration is false) -->
           <value>ETC-PATH/LabLoader_registration.xml</value>
         </parameter>
-        <parameter>
-          <name>serviceMetadataFile</name>
-          <!-- Set this to the relative path (from the container root, e.g GLOBUS_LOCATION for globus container) of the serviceMetadata extract -->
-          <value>ETC-PATH/serviceMetadata.xml</value>
-        </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.labviewer.service.ServiceConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.cagrid.labviewer.service.LabLoaderConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
           <value>org.globus.wsrf.jndi.BeanFactory</value>
         </parameter>
+        <parameter>
+          <name>etcDirectoryPath</name>
+          <value>ETC-PATH</value>
+        </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.cagrid.labviewer.service.globus.resource.BaseResourceHome">
+    <resource name="home" type="gov.nih.nci.cagrid.labviewer.service.globus.resource.LabLoaderResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
