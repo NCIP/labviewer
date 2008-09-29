@@ -105,8 +105,8 @@ public class TestClient {
 			out.close();
 		}
 		catch(Exception ex){
-			ex.printStackTrace();
-			System.out.println("Test client throws Exception = "+ ex);
+			//ex.printStackTrace();
+			logger.error("Test client throws Exception = "+ ex);
 		}
 	}
     
