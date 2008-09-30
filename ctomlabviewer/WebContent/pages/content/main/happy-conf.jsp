@@ -6,7 +6,7 @@
      <div class="box ">
 		<!-- header -->
 		<div class="header"><div class="background-L"><div class="background-R">
-			<h2>CTODS Labviewer : 1.2</h2>
+			<h2>CTODS LabViewer : 1.5</h2>
 		</div>
 	 </div>
    </div> 
@@ -27,7 +27,7 @@
            <td> caAERS URL </td><td> <%=caAERSurl%> </td>
            </tr>
            <tr>
-        	<td>caExchange URL</td>	<td><%=caXchangeurl%></td>
+        	<td>caXchange URL</td>	<td><%=caXchangeurl%></td>
             </tr>
             <tr>
             <td>HOTLINK_TYPE</td><td><%=hotLinkType %></td>
