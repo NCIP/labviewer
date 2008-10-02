@@ -97,42 +97,63 @@
    <ns8:ResourcePropertiesList xsi:type="ns8:ResourcePropertiesListType" xmlns:ns8="gme://gov.nih.nci.cagrid.introduce/1/Resources">
     <ns8:ResourceProperty qName="ns9:ServiceMetadata" description="" fileLocation="serviceMetadata.xml" populateFromFile="true" register="true" xsi:type="ns8:ResourcePropertyType" xmlns:ns9="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata"/>
    </ns8:ResourcePropertiesList>
+   <ns10:ServiceSecurity xsi:type="ns10:ServiceSecurity" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns10:SecuritySetting xsi:type="ns10:SecuritySetting">Custom</ns10:SecuritySetting>
+    <ns10:TransportLevelSecurity xsi:type="ns10:TransportLevelSecurity">
+     <ns10:CommunicationMethod xsi:type="ns10:CommunicationMethod">Privacy</ns10:CommunicationMethod>
+    </ns10:TransportLevelSecurity>
+    <ns10:RunAsMode xsi:type="ns10:RunAsMode">System</ns10:RunAsMode>
+    <ns10:AnonymousClients xsi:type="ns10:AnonymousCommunication">No</ns10:AnonymousClients>
+    <ns10:ServiceAuthorization xsi:type="ns10:ServiceAuthorization">
+     <ns10:NoAuthorization xsi:type="ns10:NoAuthorization"/>
+    </ns10:ServiceAuthorization>
+   </ns10:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
-    <ns3:Main xsi:type="ns3:Main"/>
     <ns3:Singleton xsi:type="ns3:Singleton"/>
     <ns3:Identifiable xsi:type="ns3:Identifiable"/>
     <ns3:Secure xsi:type="ns3:Secure"/>
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
   <ns3:Service name="CaXchangeResponseService" namespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context" packageName="gov.nih.nci.cagrid.caxchange.context" xsi:type="ns3:ServiceType">
-   <ns10:Methods xsi:type="ns10:MethodsType" xmlns:ns10="gme://gov.nih.nci.cagrid.introduce/1/Methods">
-    <ns10:Method description="Get the response for the submitted request" isImported="false" isProvided="false" name="getResponse" xsi:type="ns10:MethodType">
-     <ns10:Inputs/>
-     <ns10:Output qName="ns11:caXchangeResponseMessage" description="" isArray="false" xmlns:ns11="http://caXchange.nci.nih.gov/messaging"/>
-     <ns10:Exceptions/>
-    </ns10:Method>
-    <ns10:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns10:MethodType">
-     <ns10:Output qName="ns12:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns12="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns10:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
-     <ns10:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
-    </ns10:Method>
-    <ns10:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns10:MethodType">
-     <ns10:Output qName="void" isArray="false"/>
-     <ns10:ImportInformation fromIntroduce="false" inputMessage="ns13:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns13:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns13="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns10:ProviderInformation providerClass="DestroyProvider"/>
-    </ns10:Method>
-    <ns10:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns10:MethodType">
-     <ns10:Output qName="void" isArray="false"/>
-     <ns10:ImportInformation fromIntroduce="false" inputMessage="ns14:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns14:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns14="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
-     <ns10:ProviderInformation providerClass="SetTerminationTimeProvider"/>
-    </ns10:Method>
-   </ns10:Methods>
-   <ns15:ResourcePropertiesList xsi:type="ns15:ResourcePropertiesListType" xmlns:ns15="gme://gov.nih.nci.cagrid.introduce/1/Resources">
-    <ns15:ResourceProperty qName="ns16:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns15:ResourcePropertyType" xmlns:ns16="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns15:ResourceProperty qName="ns17:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns15:ResourcePropertyType" xmlns:ns17="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
-    <ns15:ResourceProperty qName="ns18:caXchangeResponseMessage" description="" fileLocation="CaXchangeResponseService_caXchangeResponseMessage.xml" populateFromFile="false" register="false" xsi:type="ns15:ResourcePropertyType" xmlns:ns18="http://caXchange.nci.nih.gov/messaging"/>
-   </ns15:ResourcePropertiesList>
+   <ns11:Methods xsi:type="ns11:MethodsType" xmlns:ns11="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns11:Method description="Get the response for the submitted request" isImported="false" isProvided="false" name="getResponse" xsi:type="ns11:MethodType">
+     <ns11:Inputs/>
+     <ns11:Output qName="ns12:caXchangeResponseMessage" description="" isArray="false" xmlns:ns12="http://caXchange.nci.nih.gov/messaging"/>
+     <ns11:Exceptions/>
+    </ns11:Method>
+    <ns11:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns11:MethodType">
+     <ns11:Output qName="ns13:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns13="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns11:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns11:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns11:Method>
+    <ns11:Method isImported="true" isProvided="true" name="Destroy" xsi:type="ns11:MethodType">
+     <ns11:Output qName="void" isArray="false"/>
+     <ns11:ImportInformation fromIntroduce="false" inputMessage="ns14:DestroyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns14:DestroyResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ImmediateResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns14="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns11:ProviderInformation providerClass="DestroyProvider"/>
+    </ns11:Method>
+    <ns11:Method isImported="true" isProvided="true" name="SetTerminationTime" xsi:type="ns11:MethodType">
+     <ns11:Output qName="void" isArray="false"/>
+     <ns11:ImportInformation fromIntroduce="false" inputMessage="ns15:SetTerminationTimeRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" outputMessage="ns15:SetTerminationTimeResponse" packageName="org.oasis.wsrf.lifetime" portTypeName="ScheduledResourceTermination" wsdlFile="../wsrf/lifetime/WS-ResourceLifetime.wsdl" xmlns:ns15="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl"/>
+     <ns11:ProviderInformation providerClass="SetTerminationTimeProvider"/>
+    </ns11:Method>
+   </ns11:Methods>
+   <ns16:ResourcePropertiesList xsi:type="ns16:ResourcePropertiesListType" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Resources">
+    <ns16:ResourceProperty qName="ns17:CurrentTime" description="" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns17="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns16:ResourceProperty qName="ns18:TerminationTime" description="" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns18="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd"/>
+    <ns16:ResourceProperty qName="ns19:caXchangeResponseMessage" description="" fileLocation="CaXchangeResponseService_caXchangeResponseMessage.xml" populateFromFile="false" register="false" xsi:type="ns16:ResourcePropertyType" xmlns:ns19="http://caXchange.nci.nih.gov/messaging"/>
+   </ns16:ResourcePropertiesList>
+   <ns20:ServiceSecurity xsi:type="ns20:ServiceSecurity" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns20:SecuritySetting xsi:type="ns20:SecuritySetting">Custom</ns20:SecuritySetting>
+    <ns20:TransportLevelSecurity xsi:type="ns20:TransportLevelSecurity">
+     <ns20:CommunicationMethod xsi:type="ns20:CommunicationMethod">Privacy</ns20:CommunicationMethod>
+    </ns20:TransportLevelSecurity>
+    <ns20:RunAsMode xsi:type="ns20:RunAsMode">System</ns20:RunAsMode>
+    <ns20:AnonymousClients xsi:type="ns20:AnonymousCommunication">No</ns20:AnonymousClients>
+    <ns20:ServiceAuthorization xsi:type="ns20:ServiceAuthorization">
+     <ns20:NoAuthorization xsi:type="ns20:NoAuthorization"/>
+    </ns20:ServiceAuthorization>
+   </ns20:ServiceSecurity>
    <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
    <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
     <ns3:Lifetime xsi:type="ns3:Lifetime"/>
@@ -141,12 +162,12 @@
    </ns3:ResourceFrameworkOptions>
   </ns3:Service>
  </ns3:Services>
- <ns19:Extensions xsi:type="ns19:ExtensionsType" xmlns:ns19="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns19:Extension name="cagrid_metadata" version="1.2" xsi:type="ns19:ExtensionType"/>
- </ns19:Extensions>
- <ns20:ServiceProperties xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Property">
-  <ns20:Property description="URL to the jms inbound component for caXchange." isFromETC="false" key="caXchangeInboundBrokerURL" value="tcp://localhost:61618"/>
-  <ns20:Property description="Destination to which requests are send." isFromETC="false" key="caXchangeInboundDestination" value="caxchangeInboundQueue"/>
-  <ns20:Property description="Destination on which the listener listens for responses." isFromETC="false" key="caXchangeResponseDestination" value="caxchangeOutboundQueue"/>
- </ns20:ServiceProperties>
+ <ns21:Extensions xsi:type="ns21:ExtensionsType" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns21:Extension name="cagrid_metadata" version="1.2" xsi:type="ns21:ExtensionType"/>
+ </ns21:Extensions>
+ <ns22:ServiceProperties xmlns:ns22="gme://gov.nih.nci.cagrid.introduce/1/Property">
+  <ns22:Property description="URL to the jms inbound component for caXchange." isFromETC="false" key="caXchangeInboundBrokerURL" value="tcp://localhost:61618"/>
+  <ns22:Property description="Destination to which requests are send." isFromETC="false" key="caXchangeInboundDestination" value="caxchangeInboundQueue"/>
+  <ns22:Property description="Destination on which the listener listens for responses." isFromETC="false" key="caXchangeResponseDestination" value="caxchangeOutboundQueue"/>
+ </ns22:ServiceProperties>
 </ns1:ServiceDescription>
