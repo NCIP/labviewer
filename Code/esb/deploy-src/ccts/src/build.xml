@@ -774,7 +774,7 @@
 					<echo message="Please restart servicemix to take orginal config take effect..............."/>
                 </target>
                 
-    <target name="configure-gme-database" description="Imports the CCTS message schemas into the GME database" >
+    <target name="configure-gme-database-using-mySQL" description="Imports the CCTS message schemas into the GME database. This requires mySQL installed." >
           <copy todir="${temp.dir}/scripts" >
               <fileset dir="${cax.home}/scripts" />
           </copy>
@@ -794,6 +794,84 @@
 		     <arg value="gmeImportDB.sh" />
 		 </exec>	   
     </target>
+    
+        <target name="configure-gme-database" description="Imports the CCTS message schemas into the GME database. This does not require mySQL installed." >
+                  <copy todir="${temp.dir}/scripts" >
+                      <fileset dir="${cax.home}/scripts" />
+                  </copy>
+                  <gunzip src="${temp.dir}/scripts/GME_REGISTRY.sql.gz" dest="${temp.dir}/scripts">
+                  </gunzip>
+                  <echo message="Importing gme database table data into GME_REGISTRY" />
+    	      <sql 
+    		driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://${GME_DATABASE_HOST}:${GME_DATABASE_PORT}/${GME_DATABASE_PREFIX}_GME_REGISTRY"
+    		userid="${GME_DATABASE_USER}"
+    		password="${GME_DATABASE_PASSWORD}"
+    		onerror="abort">
+    		<transaction src="${temp.dir}/scripts/GME_REGISTRY.sql"/>
+    		<transaction>commit;</transaction>
+    			<classpath>
+    				<fileset dir="${lib.dir}">
+    					<include name="*.jar"/>
+    				</fileset>
+    			</classpath>
+    	     </sql>     
+                  <gunzip src="${temp.dir}/scripts/GME_SCHEMA_STORE.sql.gz" dest="${temp.dir}/scripts">
+                  </gunzip>
+                  <echo message="Importing gme database table data into GME_SCHEMA_STORE" />
+    	      <sql 
+    		driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://${GME_DATABASE_HOST}:${GME_DATABASE_PORT}/${GME_DATABASE_PREFIX}_GME_SCHEMA_STORE"
+    		userid="${GME_DATABASE_USER}"
+    		password="${GME_DATABASE_PASSWORD}"
+    		onerror="abort"
+    		escapeprocessing="false">
+    		<transaction src="${temp.dir}/scripts/GME_SCHEMA_STORE.sql"/>
+    		<transaction>commit;</transaction>
+    			<classpath>
+    				<fileset dir="${lib.dir}">
+    					<include name="*.jar"/>
+    				</fileset>
+    			</classpath>
+    	      </sql>
+                  <gunzip src="${temp.dir}/scripts/GME_SCHEMA_CACHE.sql.gz" dest="${temp.dir}/scripts">
+                  </gunzip>
+                  <echo message="Importing gme database table data into GME_SCHEMA_CACHE" />
+    	      <sql 
+    		driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://${GME_DATABASE_HOST}:${GME_DATABASE_PORT}/${GME_DATABASE_PREFIX}_GME_SCHEMA_CACHE"
+    		userid="${GME_DATABASE_USER}"
+    		password="${GME_DATABASE_PASSWORD}"
+    		onerror="abort">
+    		<transaction src="${temp.dir}/scripts/GME_SCHEMA_CACHE.sql"/>
+    		<transaction>commit;</transaction>
+    			<classpath>
+    				<fileset dir="${lib.dir}">
+    					<include name="*.jar"/>
+    				</fileset>
+    			</classpath>
+    	      </sql> 
+    	      <echo message="Finished Importing databases." />
+    	      <echo message="Changing hostname to ${gme_url}." />
+    	      <sql 
+    		driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://${GME_DATABASE_HOST}:${GME_DATABASE_PORT}/${GME_DATABASE_PREFIX}_GME_REGISTRY"
+    		userid="${GME_DATABASE_USER}"
+    		password="${GME_DATABASE_PASSWORD}"
+    		onerror="abort">
+    		<transaction>
+    		update NAMESPACES set SERVICE_ID='${gme_url}' where SERVICE_id='http://localhost:8090/wsrf/services/cagrid/GlobalModelExchange';
+    		commit;
+    		</transaction>
+    		<transaction>commit;</transaction>
+    			<classpath>
+    				<fileset dir="${lib.dir}">
+    					<include name="*.jar"/>
+    				</fileset>
+    			</classpath>
+    	      </sql> 	      
+    </target>
+    
     <target name="createServiceWar" description="Creates the inbound service war file." >
          <copy tofile="${cax.home}/gridservice/caXchangeInboundService/deploy.properties" overwrite="true"
                 file="service-deploy.properties" />

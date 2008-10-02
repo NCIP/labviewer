@@ -131,6 +131,7 @@ public class TestCaXchangeGridService extends TestCase {
 	   delegatedReference =  authManager.getSerializedDelegationEpr();
 	   creds.setDelegatedCredentialReference(delegatedReference);
    	   client = new CaXchangeRequestProcessorClient(url, authManager.getCredentials());
+   	   userCredentials = authManager.getCredentials();
 
       }
       catch(Exception e) {
