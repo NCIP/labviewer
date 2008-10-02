@@ -118,8 +118,6 @@ public abstract class CaXchangeRequestProcessorResourceBase extends ReflectionRe
 	    super.initialize(resourceBean,resourceElementQName,id);
 		this.desc = null;
 
-		// this loads the metadata from XML files if this is the main service
-		populateResourceProperties();
 
 		// register the service to the index service
 		refreshRegistration(true);
@@ -347,29 +345,6 @@ public abstract class CaXchangeRequestProcessorResourceBase extends ReflectionRe
     }
     
     
-    
-    	private void populateResourceProperties() {
-	
-		loadServiceMetadataFromFile();
-	
-	}
-
-
-		
-	private void loadServiceMetadataFromFile() {
-      if(getServiceMetadata()==null){
-		try {
-			File dataFile = new File(ContainerConfig.getBaseDirectory() + File.separator
-					+ getConfiguration().getServiceMetadataFile());
-			((CaXchangeRequestProcessorResourceProperties) this.getResourceBean()).setServiceMetadata((gov.nih.nci.cagrid.metadata.ServiceMetadata) Utils.deserializeDocument(dataFile.getAbsolutePath(),
-				gov.nih.nci.cagrid.metadata.ServiceMetadata.class));
-		} catch (Exception e) {
-			logger.error("ERROR: problem populating metadata from file: " + e.getMessage(), e);
-		}
-	  }
-	}		
-	
-		
 
 
 
