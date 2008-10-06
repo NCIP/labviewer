@@ -51,6 +51,21 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.servicemix</groupId>
+      <artifactId>servicemix-jbi</artifactId>
+      <version>${servicemix-version}</version>
+    </dependency>  
+    <dependency>
+      <groupId>org.apache.servicemix</groupId>
+      <artifactId>jbi</artifactId>
+      <version>${servicemix-version}</version>
+    </dependency>     
+        <dependency>
+              <groupId>org.apache.xbean</groupId> 
+              <artifactId>xbean-spring</artifactId> 
+              <version>3.0.1</version> 
+    </dependency>     
+    <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <scope>provided</scope>
