@@ -34,7 +34,7 @@
 	<!-- replaces the tokens with the property values -->
 	<target name="replace"  >
 		<replace dir="${integration_smoke_test_home}" includes="start_servicemix.sh,stop_servicemix.sh" propertyFile="${integration_smoke_test_home}/build.properties">
-			<replacefilter token="@servicemix.integration_smoke_test_home@" property="servicemix.integration_smoke_test_home"/>
+			<replacefilter token="@servicemix.home@" property="servicemix.home"/>
 		</replace>
 	</target>	
 
