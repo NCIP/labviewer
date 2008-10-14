@@ -872,6 +872,28 @@
     	      </sql> 	      
     </target>
     
+    <target name="update-gme-url" description="Updates the GME url for the ccts.cabig namespace" >
+    	      <echo message="Updating the URL to ${gme_url}." />
+    	      <sql 
+    		driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://${GME_DATABASE_HOST}:${GME_DATABASE_PORT}/${GME_DATABASE_PREFIX}_GME_REGISTRY"
+    		userid="${GME_DATABASE_USER}"
+    		password="${GME_DATABASE_PASSWORD}"
+    		onerror="abort">
+    		<transaction>
+    		update NAMESPACES set SERVICE_ID='${gme_url}' where NAMESPACE='ccts.cabig';
+    		commit;
+    		</transaction>
+    		<transaction>commit;</transaction>
+    			<classpath>
+    				<fileset dir="${lib.dir}">
+    					<include name="*.jar"/>
+    				</fileset>
+    			</classpath>
+    	      </sql> 	      
+    
+    </target>
+    
     <target name="createServiceWar" description="Creates the inbound service war file." >
          <copy tofile="${cax.home}/gridservice/caXchangeInboundService/deploy.properties" overwrite="true"
                 file="service-deploy.properties" />
