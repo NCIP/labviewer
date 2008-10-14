@@ -18,5 +18,6 @@ public interface GridMessage {
     public Element getPayload();
     
     public Element getSchemaDefinition();
+    
 
 }

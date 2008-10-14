@@ -50,7 +50,8 @@
             <exclude>**/GenerateResponseBeanTest.*</exclude>
             <exclude>**/CaxchangeAggregatorListenerTest.*</exclude> 
              <exclude>**/InvokeDelegationServiceBeanTest.*</exclude>
-            <!-- <exclude>**/XPathUtilTest.*</exclude> -->  
+             <exclude>**/XPathUtilTest.*</exclude>
+             <exclude>**/CaxchangeConsumerInvocationTest.*</exclude>  
             <exclude>**/PayloadValidationTest.*</exclude>
           </excludes>
         </configuration>

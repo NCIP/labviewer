@@ -569,11 +569,26 @@
       <artifactId>lab-loader-common</artifactId> 
       <version>1.1</version> 
     </dependency>
-	<dependency>
+    <dependency>
       <groupId>cagrid.outbound.lab-loader-consumer</groupId> 
       <artifactId>lab-loader-stubs</artifactId> 
       <version>1.1</version> 
     </dependency>
+    <dependency>
+      <groupId>cagrid.outbound.caxchange-consumer</groupId> 
+      <artifactId>caxchange-consumer-stubs</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.outbound.caxchange-consumer</groupId> 
+      <artifactId>caxchange-consumer-common</artifactId> 
+      <version>1.0</version> 
+    </dependency>
+    <dependency>
+      <groupId>cagrid.outbound.caxchange-consumer</groupId> 
+      <artifactId>caxchange-consumer-client</artifactId> 
+      <version>1.0</version> 
+    </dependency>    
     <dependency>
       <groupId>gov.nih.nci.caxchange</groupId>
       <artifactId>caXchange-common-jar</artifactId>

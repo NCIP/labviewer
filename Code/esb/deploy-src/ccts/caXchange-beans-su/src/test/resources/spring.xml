@@ -14,7 +14,8 @@
   			<bean:endpoint service="caxchange:handleErrorResponse" endpoint="endPoint" bean="#handleErrorResponseBean"/>
   			<bean:endpoint service="caxchange:storeOriginalMessage" endpoint="endPoint" bean="#storeOriginalMessageBean"/>
   			<bean:endpoint service="caxchange:payloadValidator"    endpoint="endPoint" bean="#payloadValidatorBean" />
-  			  <bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />			
+  			<bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />
+  			<bean:endpoint service="caxchange:caXchangeConsumer" endpoint="caXchangeConsumerEndpoint" bean="#caXchangeConsumer" />
             </bean:endpoints>
           </bean:component>
         </sm:component>
@@ -56,6 +57,30 @@
             </list>
        </property>                 
  </bean>
+ 
+   <bean
+    id="caXchangeConsumer"
+    class="gov.nih.nci.caXchange.outbound.GridSU">
+    <property name="strategy">
+      <ref bean="caXchangeConsumerInvocationStrategy" />
+    </property>
+    <property
+      name="targetId"
+      value="CaXchangeConsumer" />
+    <property
+      name="targetOperation"
+      value="PROCESS" />
+  </bean>
+
+  <bean
+    id="caXchangeConsumerInvocationStrategy"
+    class="gov.nih.nci.caXchange.outbound.operations.CaXchangeConsumerInvocationStrategy">
+
+    <property
+      name="serviceUrl"
+      value="${caXchangeConsumer.url}" />
+  </bean>
+  
 </beans>
 
 

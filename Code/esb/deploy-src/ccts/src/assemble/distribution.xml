@@ -76,7 +76,7 @@
        <directory>${inbound-service-location}</directory>
        <outputDirectory>/gridservice/</outputDirectory>
        <includes>
-                <include>**/*</include>
+                <include>caXchangeInboundService/**/*</include>
        </includes>
     </fileSet>
   </fileSets>  
