@@ -38,7 +38,6 @@
     <module>caxchange-metadata-service</module>
   </modules>
   <!-- Add ServiceMix repository -->
-<!--
 <pluginRepositories>
     <pluginRepository>
       <id>apache.incubating</id>
@@ -53,7 +52,6 @@
       <url>http://people.apache.org/repo/m2-incubating-repository</url>
     </repository>
   </repositories>
-  -->
   <dependencies>
     <dependency>
       <groupId>org.springframework</groupId>
