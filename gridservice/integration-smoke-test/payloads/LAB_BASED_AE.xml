@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-   <ns2:LoadLabsRequest xmlns:ns2="http://integration/caaers.nci.nih.gov/services">
+   <ns2:LoadLabsRequest xmlns:ns2="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
     <ns3:LabResult xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs">
      <ns3:comment xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
      <ns3:confidentiality xmlns:ns3="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
