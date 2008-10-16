@@ -1,7 +1,13 @@
 package gov.nih.nci.caxchange.consumer;
 
 import java.rmi.RemoteException;
-
+/**
+ * An Exception condition consuming a caXchange request.
+ * 
+ * 
+ * @author Ekagra Software Technologies
+ *
+ */
 public class CaXchangeConsumerException extends RemoteException {
 
 	public CaXchangeConsumerException() {
