@@ -33,8 +33,8 @@
 		<echo message="Current Setup: "/>
                 <echo message="JDK Version       : ${java.version}"/>
 		<echo message="ANT Version       : ${ant.version}"/>
-		<echo message="JAVA_integration_smoke_test_home is      : ${env.JAVA_integration_smoke_test_home}"/>
-		<echo message="ANT_integration_smoke_test_home is       : ${env.ANT_integration_smoke_test_home}"/>
+		<echo message="JAVA_HOME is      : ${env.JAVA_HOME}"/>
+		<echo message="ANT_HOME is       : ${env.ANT_HOME}"/>
 		<echo message="GLOBUS_LOCATION is : ${env.GLOBUS_LOCATION}"/>
 		<echo message="Type ant -p for targets available"/>
     </target>
@@ -73,11 +73,17 @@
 	<!--Initializes the logs-->
 	<target name="init" >
 		<mkdir dir="${log.dir}" />
+		<mkdir dir="${integration_smoke_test_home}/resources" />
 		<record name="${log.dir}/CaXchange-Integration-Test-${touch.time}.log" action="start"/>
 	</target>
 	
 	<!-- replaces the tokens with the property values -->
 	<target name="replace" depends="init"  >
+	        <copy todir="${integration_smoke_test_home}/resources">
+			<fileset dir="${integration_smoke_test_home}/resources_org">
+				<include name="*.*"/>
+			</fileset>			
+		</copy>	
 		<replace dir="${integration_smoke_test_home}/resources" propertyFile="${integration_smoke_test_home}/build.properties">
 			<replacefilter token="@ccts.grid.userName@" property="ccts.grid.userName"/>
 			<replacefilter token="@ccts.grid.password@" property="ccts.grid.password"/>
@@ -178,6 +184,18 @@
 				        </target>  
 	
 	
-
+	<target name="testNewMessageType" depends="init,replace" description="Sends a new message type message to caXchange">
+				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
+					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+					        	<sysproperty key="payload.file.name" value="${payload.file.name}" />
+					        	<sysproperty key="message.type" value="${message.type}" />
+					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+					            <classpath refid="testClassPath" />
+					            <formatter type="xml" />
+					            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestNewMessageType" />
+					        </junit>
+				        </target>  
 	
 </project>
