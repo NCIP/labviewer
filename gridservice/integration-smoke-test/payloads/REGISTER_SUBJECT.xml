@@ -1,5 +1,5 @@
-<registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" gridId="6115c43c-851e-425c-8312-fd78367aaef3a">
-    <studySite gridId="9a147f4c-3a94-4883-a9b0-1926dda426beaa">
+<registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" gridId="6115c43c-851e-425c-8312-fd78367aaef3">
+    <studySite gridId="9a147f4c-3a94-4883-a9b0-1926dda426be">
      <healthcareSite gridId="NCI GRID ID">
       <nciInstituteCode>NCI</nciInstituteCode>
      </healthcareSite>
@@ -19,7 +19,7 @@
       </healthcareSite>
      </identifier>
     </studyRef>
-    <participant gridId="91dd4580-801b-4874-adeb-a174361baceaa">
+    <participant gridId="91dd4580-801b-4874-adeb-a174361bacea">
      <firstName>John</firstName>
      <lastName>Smith</lastName>
      <address/>
@@ -27,7 +27,7 @@
      <birthDate>1970-01-02</birthDate>
      <ethnicGroupCode>Non Hispanic or Latino</ethnicGroupCode>
      <raceCode>White</raceCode>
-     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:type="OrganizationAssignedIdentifierType">
+     <identifier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="OrganizationAssignedIdentifierType">
       <type>MRN</type>
       <value>00-00-00-0</value>
       <primaryIndicator>true</primaryIndicator>
