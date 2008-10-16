@@ -79,6 +79,9 @@
 	
 	<!-- replaces the tokens with the property values -->
 	<target name="replace" depends="init"  >
+	        <delete includeemptydirs="true" quiet="true">
+			<fileset dir="${integration_smoke_test_home}/resources" includes="**/*" />
+		</delete>
 	        <copy todir="${integration_smoke_test_home}/resources">
 			<fileset dir="${integration_smoke_test_home}/resources_org">
 				<include name="*.*"/>
