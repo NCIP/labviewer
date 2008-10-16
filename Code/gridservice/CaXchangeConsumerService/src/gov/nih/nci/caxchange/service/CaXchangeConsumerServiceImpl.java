@@ -15,7 +15,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /** 
- * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
+ * Implements the caXchange consumer service. It extracts the payload from the caXchange Request
+ * and invokes the caXchange consumer 
  * 
  * @created by Introduce Toolkit version 1.2
  * 
@@ -26,7 +27,13 @@ public class CaXchangeConsumerServiceImpl extends CaXchangeConsumerServiceImplBa
 	public CaXchangeConsumerServiceImpl() throws RemoteException {
 		super();
 	}
-	
+  /**
+   * Processes a caXchange Request.
+   * 
+   * @param caXchangeRequestMessage
+   * @return
+   * @throws RemoteException
+   */	
   public gov.nih.nci.caxchange.ConsumerResponseMessage process(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
      String messageType = getMessageType(caXchangeRequestMessage);
      CaXchangeMessageConsumer consumer = getConsumer(messageType);
@@ -50,21 +57,37 @@ public class CaXchangeConsumerServiceImpl extends CaXchangeConsumerServiceImplBa
      }
      return consumerResponseMessage;
   }
-
+  /**
+   * Commit a caXchange Request.
+   * 
+   * @param caXchangeRequestMessage
+   * @throws RemoteException
+   */
   public void commit(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
 	     String messageType = getMessageType(caXchangeRequestMessage);
 	     CaXchangeMessageConsumer consumer = getConsumer(messageType);
 	     Node node = extractPayload(caXchangeRequestMessage);
 	     consumer.commit(node);
   }
-
+  /**
+   * Rollback a caXchange Request.
+   * 
+   * @param caXchangeRequestMessage
+   * @throws RemoteException
+   */
   public void rollback(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
 	     String messageType = getMessageType(caXchangeRequestMessage);
 	     CaXchangeMessageConsumer consumer = getConsumer(messageType);
 	     Node node = extractPayload(caXchangeRequestMessage);
 	     consumer.rollback(node);
   }
-  
+  /**
+   * Extracts payload from the caXchange request message.
+   * 
+   * @param caXchangeRequestMessage
+   * @return
+   * @throws CaXchangeConsumerException
+   */
   public Node extractPayload(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws CaXchangeConsumerException {
 	  try {
 	     MessagePayload messagePayload = caXchangeRequestMessage.getRequest().getBusinessMessagePayload();
@@ -79,7 +102,13 @@ public class CaXchangeConsumerServiceImpl extends CaXchangeConsumerServiceImplBa
 		 throw new CaXchangeConsumerException("Error extracting payload.");
 	  }
   }
-  
+  /**
+   * Gets the message type from the caXchange Request message.
+   * 
+   * @param caXchangeRequestMessage
+   * @return
+   * @throws CaXchangeConsumerException
+   */
   public String getMessageType(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws CaXchangeConsumerException {
 	  try {
 		  String messageType = caXchangeRequestMessage.getMetadata().getMessageType();
@@ -90,8 +119,18 @@ public class CaXchangeConsumerServiceImpl extends CaXchangeConsumerServiceImplBa
 	  }
 
   }
-  
+  /**
+   * Gets the consumer configured for the given message type.
+   * 
+   * @param messageType
+   * @return
+   * @throws CaXchangeConsumerException
+   */
   public CaXchangeMessageConsumer getConsumer(String messageType) throws CaXchangeConsumerException {
+	  CaXchangeMessageConsumer consumer = CaXchangeConsumerFactory.getConsumer(messageType);
+	  if (consumer == null) {
+		  throw new CaXchangeConsumerException("No consumer configured for :"+messageType);
+	  }
 	  return CaXchangeConsumerFactory.getConsumer(messageType);
 	  
   }

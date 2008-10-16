@@ -16,16 +16,26 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-
+/**
+ * Implements a default implementation of the caXchange Consumer Service. Each of the method logs
+ * the payload received and returns a success response.
+ * 
+ * @author Ekagra Software Technologies
+ *
+ */
 public class CaXchangeMessageConsumerTestImpl implements CaXchangeMessageConsumer {
 	Logger logger = LogManager.getLogger(CaXchangeMessageConsumerTestImpl.class);
     String returnMessage = "<result>Success from CaXchangeMessageConsumerTestImpl</result>";
-    
+    /**
+     * Implements the commit method.
+     */
 	public void commit(Node payload) throws CaXchangeConsumerException {
        	logger.info("Commit method invoked.");	
        	logger.info("Payload:" + getNodeAsString(payload));
 	}
-
+     /**
+      * Implements the process method. Returns a success response.
+      */
 	public Node process(Node payload) throws CaXchangeConsumerException {
        	logger.info("Process method invoked.");	
        	logger.info("Payload:" + getNodeAsString(payload));
