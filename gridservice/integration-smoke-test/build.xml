@@ -116,7 +116,7 @@
 				<include name="*.*"/>
 			</fileset>			
 		</copy>
-		<copy todir="${dist.dir}/resources">
+		<copy todir="${dist.dir}/resources_org">
 			<fileset dir="${home}/resources">
 				<include name="*.*"/>
 			</fileset>			
