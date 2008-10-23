@@ -10,7 +10,7 @@ SERVICEMIX_HOME=@servicemix.home@
 PATH=$PATH:$SERVICEMIX_HOME/bin:$HOME/bin
 
 export PATH SERVICEMIX_HOME
-SERVICEMIX_COUNT=`ps -ef|grep servicemix|grep org.codehaus.classworlds.Launcher|wc -l`
+SERVICEMIX_COUNT=`ps -ef|grep $SERVICEMIX_HOME|grep org.codehaus.classworlds.Launcher|wc -l`
 if [ $SERVICEMIX_COUNT -gt 0 ]
 then
    SERVICEMIX_PID=`ps -ef|grep servicemix|grep org.codehaus.classworlds.Launcher|cut -c8-15`
