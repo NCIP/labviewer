@@ -3,7 +3,12 @@ package gov.nih.nci.caxchange.servicemix.bean.validation;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
+/**
+ * Accumulates the validation errors occurring during payload validation.
+ * 
+ * @author marwahah
+ *
+ */
 public class ValidatingErrorHandler implements ErrorHandler {
 	
 	private java.util.Set<String> errorMessages = new java.util.HashSet<String>();

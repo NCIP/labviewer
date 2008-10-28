@@ -1,5 +1,10 @@
 package gov.nih.nci.caxchange.servicemix.bean.validation;
-
+/**
+ * An exception thrown for payload validation.
+ * 
+ * @author marwahah
+ *
+ */
 public class PayloadValidationException extends Exception {
 
 	public PayloadValidationException() {
