@@ -109,7 +109,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager;
+import org.globus.gsi.GlobusCredential;
 import org.hibernate.Session;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -149,12 +153,13 @@ public class LoadTocaAERSAction extends Action
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 		String username = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
+		String password = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getPassword();
 		UserInfoHelper.setUserInfo(username, session.getId());		
 		int numOfLabs =0;
 		
 		try
 		{  //calls the loadTocaAERS method
-			numOfLabs = loadTocaAERS(request, lForm, username);
+			numOfLabs = loadTocaAERS(request, lForm, username,password);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, numOfLabs+" Message(s) Submitted to caAERS Successfully"));
 			updateLabResult(request);
 			updateLabResultForUI(request);
@@ -182,7 +187,7 @@ public class LoadTocaAERSAction extends Action
 	 * @return numOfLabs number of labs laoded
 	 * @throws Exception
 	 */
-	private int loadTocaAERS(HttpServletRequest request,ActionForm form, String username) throws Exception
+	private int loadTocaAERS(HttpServletRequest request,ActionForm form, String username,String password) throws Exception
 	{
 		HttpSession session = request.getSession();
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
@@ -221,12 +226,8 @@ public class LoadTocaAERSAction extends Action
 			 logDB.error("Error reading the config file: " + CONFIG_FILE);
 		 }
 		 
-		// Then create the request
-		String url = (String)props.getProperty("url");
-		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
 		
-		LoadLabsRequest labRequest = new LoadLabsRequest();
-		
+		LoadLabsRequest labRequest = new LoadLabsRequest();		
 		// Then for each lab selected set the lab information
 		LabResult labResults[]= new LabResult[labResultsMap.size()];
 		int i = 0;
@@ -335,10 +336,14 @@ public class LoadTocaAERSAction extends Action
 	    metadata.setExternalIdentifier("CTODS");
 	    Credentials creds = new Credentials();
 	    creds.setUserName(username);
+	    creds.setPassword(password);
 	    String credentialEpr = (String)request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
 	    logDB.info("The credential EPR: "+ credentialEpr);
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
+	    GlobusCredential gridCreds = (GlobusCredential) session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+	    if (gridCreds != null)	
+	    logDB.info("The credential : "+ gridCreds.getIdentity());
 	    metadata.setCredentials(creds);
 	    metadata.setMessageType(MessageTypes._LAB_BASED_AE);
 	    requestMessage.setMetadata(metadata);
@@ -351,9 +356,13 @@ public class LoadTocaAERSAction extends Action
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
+        
+       // Then create the request
+		String url = (String)props.getProperty("url");
+		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url,gridCreds);
 		
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
-        CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
+        CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference(),gridCreds);
         
         boolean gotResponse=false;
         int responseCount = 0;
@@ -369,7 +378,7 @@ public class LoadTocaAERSAction extends Action
 	        {
 	        	logDB.info("No response from caxchange", e);
 	        	responseCount++;
-	        	if (responseCount > 60)
+	        	if (responseCount > 25)
 	        	{
 	        		logDB.error("Never got a response from caxchange hub");
 	        		throw new Exception("No response from hub");

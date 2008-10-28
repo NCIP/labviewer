@@ -1,6 +1,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%> 
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.smokeTests.TestPing" %>
+<%@ page import="org.globus.gsi.GlobusCredential"%>
 <div id="main">
    <div class="pane">
      <div class="box ">
@@ -15,7 +16,8 @@
 		  String caAERSurl=(String)session.getAttribute("BaseURLcaAERS");
 		  String caXchangeurl =(String)session.getAttribute("caXchangeURL");
 		  String hotLinkType= (String)session.getAttribute("hotLinkType");
-		  
+		  GlobusCredential gc = (GlobusCredential)session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+		  String status ="";
 		 %>
           <div class="border-T"><div class="border-L"><div class="border-R"><div class="border-B"><div class="border-TL"><div class="border-TR"><div class="border-BL"><div class="border-BR">
 	        <div class="interior"> <!-- interior -->
@@ -35,8 +37,12 @@
        <tr><th colspan="2"><h3>Invoking Happy Grid Service</h3> </th></tr>
       <tr><td> Status</td><td>
       <%
-       TestPing test = new TestPing();
-        String status =test.test();
+       if(gc!=null){
+        TestPing test = new TestPing();
+        status =test.test(gc);
+       }else{
+         status ="No grid credentials available to test the Happy service";
+       }
        %>
        <%=status %>
       </td></tr>

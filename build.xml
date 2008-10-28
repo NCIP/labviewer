@@ -90,6 +90,8 @@
 				<filter token="hotLink_Type" value="${hotLink_Type}" />
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
+				<filter token="websso.enabled" value="${websso.enabled}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />	
 			</filterset>
 		</copy>
 	</target>
@@ -107,7 +109,13 @@
 	</target>
 
 	<target name="configureWebSSOAuthentication" if="websso.enabled">
-		<copy file="conf/web.xml.sso.template" toFile="${build.home}/WEB-INF/web.xml" overwrite="true" />
+		<copy file="conf/web.xml.sso.template" toFile="${build.home}/WEB-INF/web.xml" overwrite="true" filtering="true">
+		<filterset begintoken="@" endtoken="@">
+				<filter token="cert.path" value="${cert.path}" />
+				<filter token="key.path" value="${key.path}" />
+				<filter token="cas_server" value="${websso.cas.server}" />			
+		</filterset>
+		</copy>
 		<copy file="conf/cas-client.properties.template" toFile="${build.home}/WEB-INF/cas-client.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="cas_server" value="${websso.cas.server}" />
