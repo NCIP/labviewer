@@ -15,16 +15,16 @@
 package gov.nih.nci.caxchange.ctom.viewer.smokeTests;
 
 
+import gov.nih.nci.ccts.grid.smoketest.client.SmokeTestServiceClient;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import gov.nih.nci.caxchange.ctom.viewer.actions.HappyAction;
-import gov.nih.nci.ccts.grid.smoketest.client.SmokeTestServiceClient;
-
 import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
+
 
 /**
  * @author asharma
@@ -35,21 +35,22 @@ public class TestPing {
 	
 	private static final Logger log = Logger.getLogger(TestPing.class);
 	private static final String CONFIG_FILE = "/baseURL.properties";
-	String serviceUrl ="";//"https://cbvapp-d1017.nci.nih.gov:28445/wsrf-smoketestservice/services/cagrid/SmokeTestService";
-	//String proxyFile ="D:/proxy";
+	String serviceUrl ="";
 	public static void main(String[] args)
 	{
+		GlobusCredential gc =null;
 		TestPing tester = new TestPing();
-		tester.test();
+		tester.test(gc);
 	}
 	
 	/**
 	 * test method performs the test by creating the registration object and calling
 	 * the service
 	 */
-	public String test()
+	public String test(GlobusCredential gc )
 	{
 		System.out.println("Beginning test to call Smoke Test Grid Service");
+		log.debug("Beginning test to call Smoke Test Grid Service");
 		String status ="";
 		try
 		 {   Properties props = new Properties();
@@ -66,20 +67,22 @@ public class TestPing {
 		 {
 			 log.error("Error reading the config file: " + CONFIG_FILE);
 		 }
-		 System.out.println("Beginning test to call Smoke Test Grid Service"+serviceUrl);		 
+		 System.out.println("Beginning test to call Smoke Test Grid Service"+serviceUrl);	
+		log.debug("Beginning test to call Smoke Test Grid Service"+serviceUrl);	
 		try
 		{
-			// Setup the credentials
-		//	GlobusCredential gb =new GlobusCredential(proxyFile);//
-						 
-			SmokeTestServiceClient sclient = 
+			SmokeTestServiceClient sclient= 
         		new SmokeTestServiceClient(serviceUrl);
+			if(gc != null){
+				sclient.setProxy(gc);
+			}
 			sclient.ping();
 			status ="Ping returned with no exceptions";
 		}catch(Exception e){
 			log.error(e);
 			status = e.getLocalizedMessage();
 		}
+		 log.debug("Smoke test status"+status);	
 		return status;
 }
 	

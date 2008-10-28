@@ -1,5 +1,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%> 
+
 <br>
 <div align="left">
 <h1 align="left">CCTS Single Sign On</h1>
@@ -41,4 +42,3 @@
 	</div>
 </div>
 <!-- laf box 2nd half -->
-

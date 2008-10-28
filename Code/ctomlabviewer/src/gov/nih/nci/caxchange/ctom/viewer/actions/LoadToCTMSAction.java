@@ -61,7 +61,6 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
-import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
@@ -86,7 +85,6 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -111,6 +109,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.globus.gsi.GlobusCredential;
 import org.hibernate.Session;
 
 import webservices.Documentation;
@@ -151,12 +150,13 @@ public class LoadToCTMSAction extends Action
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 		String username = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
+		String password = ((LoginForm)session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getPassword();
 		UserInfoHelper.setUserInfo(username, session.getId());		
 		int numOfLabs =0;
 		
 		try
 		{  //calls the loadToCTMS method
-			numOfLabs = loadToCTMS(request, lForm, username);
+			numOfLabs = loadToCTMS(request, lForm, username,password);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(DisplayConstants.MESSAGE_ID, numOfLabs+" Message(s) Submitted to CDMS Successfully"));
 			updateLabResult(request);
 			updateLabResultForUI(request);
@@ -184,7 +184,7 @@ public class LoadToCTMSAction extends Action
 	 * @return numOfLabs number of labs loaded
 	 * @throws Exception
 	 */
-	private int loadToCTMS(HttpServletRequest request,ActionForm form, String username) throws Exception
+	private int loadToCTMS(HttpServletRequest request,ActionForm form, String username,String password) throws Exception
 	{
 		HttpSession session = request.getSession();
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
@@ -223,9 +223,6 @@ public class LoadToCTMSAction extends Action
 			 logDB.error("Error reading the config file: " + CONFIG_FILE);
 		 }
 		 
-		// Then create the request
-		String url = (String)props.getProperty("url");
-		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url);
 		
 		LoadLabsRequest labRequest = new LoadLabsRequest();
 		
@@ -338,11 +335,14 @@ public class LoadToCTMSAction extends Action
 	    
 	    Credentials creds = new Credentials();
 	    creds.setUserName(username);
+	    creds.setPassword(password);
 	    String credentialEpr = (String)request.getSession().getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
 	    logDB.info("The credential EPR: "+ credentialEpr);
 	    if (credentialEpr != null)
 	    	creds.setDelegatedCredentialReference(credentialEpr);
-	    
+	    GlobusCredential gridCreds = (GlobusCredential) session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+	    if (gridCreds != null)	
+	    logDB.info("The credential : "+ gridCreds.getIdentity());
 	    metadata.setCredentials(creds);
 	    metadata.setMessageType(MessageTypes._LOAD_LAB_TO_CDMS);
 	    requestMessage.setMetadata(metadata);
@@ -355,10 +355,15 @@ public class LoadToCTMSAction extends Action
         MessageElement messageElement = new MessageElement(lab, labRequest);
         messagePayload.set_any(new MessageElement[]{messageElement});
         requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
+       
+        // Then create the request
+		String url = (String)props.getProperty("url");
+		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(url,gridCreds);
+		
         
       //  Utils.serializeObject(requestMessage, lab, writer);
         CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(requestMessage);
-        CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference());
+        CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(crsr.getEndpointReference(),gridCreds);
         
         boolean gotResponse=false;
         int responseCount = 0;
@@ -374,7 +379,7 @@ public class LoadToCTMSAction extends Action
 	        {
 	        	logDB.info("No response from caxchange", e);
 	        	responseCount++;
-	        	if (responseCount > 60)
+	        	if (responseCount > 25)
 	        	{
 	        		logDB.error("Never got a response from caxchange hub");
 	        		throw new Exception("No response from hub");
