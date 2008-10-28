@@ -17,10 +17,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 	/**
-	 * This class generates the response and put in response jms queue to the GRID node 
+	 * This class generates the response and puts in response jms queue to the GRID node 
 	 * for the client to pick up the response
 	 *  
-	 * @author hmarwaha
+	 * @author Ekagra Software Technologies
 	 *
 	 */
 public class GenerateResponseBean implements MessageExchangeListener{ 
