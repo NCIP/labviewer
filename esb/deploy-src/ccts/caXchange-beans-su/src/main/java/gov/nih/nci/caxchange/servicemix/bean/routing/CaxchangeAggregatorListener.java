@@ -31,7 +31,7 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
 	 * eligible for rollback.
 	 * 
 	 *  
-	 * @author hmarwaha
+	 * @author Ekagra Software Technologies
 	 *
 	 */
 public class CaxchangeAggregatorListener  implements MessageExchangeListener {
