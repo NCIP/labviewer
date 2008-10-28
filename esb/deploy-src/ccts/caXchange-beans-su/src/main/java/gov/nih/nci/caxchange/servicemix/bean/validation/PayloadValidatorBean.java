@@ -27,7 +27,13 @@ import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
 import org.w3c.dom.Node;
-
+/**
+ * MessageExchange for validating caXchange payloads. This uses the PayloadValidator, GMESchemaFactory
+ * to validate the input payloads. The payloads are extracted from the caXchang request for validation.
+ * 
+ * @author marwahah
+ *
+ */
 public class PayloadValidatorBean implements MessageExchangeListener {
 
 	@javax.annotation.Resource
