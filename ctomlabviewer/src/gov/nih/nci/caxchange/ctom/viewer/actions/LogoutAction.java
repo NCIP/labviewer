@@ -106,11 +106,13 @@ public class LogoutAction extends Action
 		{
 			// Since they may have come from another app but logged in through webSSO let's check auth
 			//String userEmail = (String)session.getAttribute("CAGRID_SSO_EMAIL_ID");
+			String userEmail=null;
 			String gridIDentity = (String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
+			if(gridIDentity!=null){
 			int beginIndex = gridIDentity.lastIndexOf("=");
 			int endIndex = gridIDentity.length();
-			String userEmail = gridIDentity.substring(beginIndex+1, endIndex);
-			
+			userEmail = gridIDentity.substring(beginIndex+1, endIndex);
+			}
 			if (userEmail != null)
 			{
 				loggedInthroWEBSSO = true;

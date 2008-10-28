@@ -61,20 +61,30 @@
         <filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSOAttributeLoaderFilter</filter-class>
     </filter>
 
-	<!-- Currently there are trust fabric issues so this step in the filtering is disabled
+	<!-- Currently there are trust fabric issues so this step in the filtering is disabled -->
     <filter>
         <filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
         <filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
         <init-param>
             <param-name>certificate-file-path</param-name>
-            <param-value>/conf/manav.local-cert.pem</param-value>
+            <param-value>@cert.path@</param-value>
         </init-param>
         <init-param>
             <param-name>key-file-path</param-name>
-            <param-value>/conf/manav.local-key.pem</param-value>
+            <param-value>@key.path@</param-value>
+        </init-param>
+    </filter>
+    <!--
+     <filter>
+        <filter-name>caGRID WebSSO Logout Filter</filter-name>
+        <filter-class>org.cagrid.gaards.websso.client.filter.CaGridWebSSOLogoutFilter</filter-class>
+        <init-param>
+            <param-name>logout-landing-url</param-name>
+            <param-value>/pages/content/main/Logout.jsp</param-value>
         </init-param>
     </filter>
     -->
+   
 
     <filter-mapping>
         <filter-name>CAS Authentication Filter</filter-name>
@@ -91,12 +101,17 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-	<!--
+	<!-- -->
     <filter-mapping>
         <filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    -->
+ <!--
+   <filter-mapping>
+        <filter-name>caGRID WebSSO Logout Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+   -->
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
