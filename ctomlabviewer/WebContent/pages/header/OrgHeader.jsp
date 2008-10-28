@@ -58,7 +58,7 @@ function MM_swapImage() { //v3.0
 			session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,DisplayConstants.HOME_ID);
 		}
 		if(session.getAttribute("testEnabled")==null)
-		   session.setAttribute("testEnabled","false");
+		   session.setAttribute("testEnabled","true");
 	}
 	catch (Exception e)
 	{
@@ -78,8 +78,15 @@ function MM_swapImage() { //v3.0
         <img src="images/ctom_txt_1.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>
     <!-- Add log out link -->
+    
     <div id="login-action">
-        <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')">Log out</a>
+       <!--   -->
+       <% if(session.getAttribute("webssoEnabled")!= null){ %>
+       <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
+         <a href="https://<%=session.getAttribute("webssoCasServer")%>/cas/logout">Log out</a>
+       <%}}else{ %>
+   		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')">Log out</a>    
+       <%} %>
     </div>
 
 	<!-- if log in, enable menu and login id -->
