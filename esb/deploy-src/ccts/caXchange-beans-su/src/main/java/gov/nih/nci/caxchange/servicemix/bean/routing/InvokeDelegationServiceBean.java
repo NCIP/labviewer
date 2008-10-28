@@ -48,7 +48,7 @@ import org.globus.wsrf.encoding.DeserializationException;
  * It includes two components: a pipeline, which invokes a bean component that calls 
  * delegation service for authorization and authentication
  *  
- * @author hmarwaha
+ * @author Ekagra Software Technologies
  *
  */
 public class InvokeDelegationServiceBean implements MessageExchangeListener {

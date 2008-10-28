@@ -18,9 +18,9 @@ import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
 
 /**
- * This class generates the error response if any while processsing client request
+ * This class generates the error response if any while processing client request
  *  
- * @author hmarwaha
+ * @author Ekagra Software Technologies
  *
  */
 public class HandleErrorResponseBean implements MessageExchangeListener{ 

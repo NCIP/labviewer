@@ -19,7 +19,7 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
  * appropriate error properties and sends the exchange back for the 
  * error response to be generated.
  * 
- * @author hmarwaha
+ * @author Ekagra Software Technologies
  *
  */
 public class UnhandledMessageTypeBean implements MessageExchangeListener {
