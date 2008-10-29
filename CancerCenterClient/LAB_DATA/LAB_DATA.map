@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mapping version="1.2">
    <components>
-      <component kind="scs" location="C:/Documents and Settings/asharma/Desktop/LAB_DATA/LAB_DATA.scs" type="source"/>
-      <component kind="h3s" location="C:/Documents and Settings/asharma/Desktop/LAB_DATA/PORT_MT030001.h3s" type="target"/>
+      <component kind="scs" location="LAB_DATA.scs" type="source"/>
+      <component kind="h3s" location="PORT_MT030001.h3s" type="target"/>
       <component group="string" kind="core" name="Concatenate" type="function" id="28"/>
       <component group="date" kind="core" name="changeFormat" type="function" id="29"/>
       <component group="date" kind="core" name="changeFormat" type="function" id="30"/>
