@@ -748,11 +748,12 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			System.exit(0);
 		}else if ("Help".equals(e.getActionCommand())) {
 			try{ 
-			 Properties props = new Properties();
+			  Properties props = new Properties();
 			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
 			 props.load(stream);
 			 String fileName = (String)props.getProperty("helpDoc");
-			 Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL \""+fileName);
+			 File file = new File(fileName);
+			 Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL \""+file.getAbsolutePath());
 			}catch (IOException e1){ logger.error("IOException"
 					+ e1.getLocalizedMessage()); }
         }else if ("Accept".equals(e.getActionCommand())) {
@@ -764,7 +765,7 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 			int delay = 10; //milliseconds
 			try {
 				FileReader fipStream = new FileReader(
-						"../log/CancerCenterClient.log");
+						"CancerCenterClient.log");
 				buffReader = new BufferedReader(fipStream);
 				ActionListener taskPerformer = new ActionListener() {
 					public synchronized void actionPerformed(ActionEvent evt) {
@@ -931,8 +932,9 @@ public class TestCancerCenterClientUI extends JPanel implements ActionListener {
 	private void changeLoggingLevel(Level level){			
 		Logger clientLogger = Logger.getLogger("client");
 		clientLogger.setLevel(level);
-		clientLogger.debug("Debug Message");
-		clientLogger.info("Info Message");
+		
+		/*clientLogger.debug("Debug Message");
+		clientLogger.info("Info Message");*/
 	}	
 	
 	 

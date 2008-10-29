@@ -61,16 +61,12 @@ package gov.nih.nci.caxchange.client;
  */
 
 
-import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
-import gov.nih.nci.cagrid.authentication.bean.Credential;
-import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
-import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.MessageTypes;
@@ -81,15 +77,25 @@ import gov.nih.nci.caxchange.ResponseMessage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.Properties;
+
+import javax.xml.namespace.QName;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
 import org.apache.log4j.Logger;
+import org.cagrid.gaards.cds.client.DelegationUserClient;
+import org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager;
+import org.cagrid.gaards.websso.exception.AuthenticationConfigurationException;
 import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.GlobusCredentialException;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 
 /**
@@ -99,7 +105,8 @@ import org.globus.gsi.GlobusCredentialException;
 public class InvokeGridService {
 	
 	CancerCenterClient cancerCenterClient;
-
+	GlobusCredential gb;
+	CaXchangeRequestProcessorClient caXclient;
 	// Logging File
 	static Logger logger = Logger
 			.getLogger("client");
@@ -107,6 +114,8 @@ public class InvokeGridService {
 
 	public InvokeGridService(CancerCenterClient client) {
 		cancerCenterClient = client;
+		caXclient=null;
+		gb=null;
 	}
 
 	/**
@@ -126,21 +135,23 @@ public class InvokeGridService {
 			InputStream istream = getClass().getResourceAsStream(InvokeGridService.CONFIG_FILE);
 			props.load(istream);
 			String proxyFile = (String)props.getProperty("proxyFile");
-			GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);
-			CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(
-					cancerCenterClient.getHubURL(),gb);
+			//GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);
+			 caXclient = new CaXchangeRequestProcessorClient(
+					cancerCenterClient.getHubURL());
 			// creates the caXchange Message
 			Message requestMessage = new Message();
 			MessagePayload messagePayload = this.createMessage(requestMessage);
-	
-				messagePayload.set_any(new MessageElement[] { messageElement });
+			messagePayload.set_any(new MessageElement[] { messageElement });
 				requestMessage.getRequest().setBusinessMessagePayload(
 						messagePayload);
-	            CaXchangeResponseServiceReference crsr = client
+			/*PrintWriter writer = new PrintWriter("ctlabmessage.xml");
+			Utils.serializeObject(requestMessage, lab, writer);	*/
+				
+	            CaXchangeResponseServiceReference crsr = caXclient
 						.processRequestAsynchronously(requestMessage);
-	
-				CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(
-						crsr.getEndpointReference());
+	            
+	            CaXchangeResponseServiceClient responseService = new CaXchangeResponseServiceClient(
+						crsr.getEndpointReference(),gb);
 	
 				int responseCount = 0;
 				ResponseMessage responseMessage = null;
@@ -151,7 +162,7 @@ public class InvokeGridService {
 						if (responseMessage.getResponse().getResponseStatus()
 								.toString().equalsIgnoreCase("Success")) {
 	
-							InvokeGridService.logger.info("Response:Success -Moving File "
+							InvokeGridService.logger.info("Response:Success - Moving File "
 									+ hl7v3XML.getName()
 									+ Messages
 											.getString("CancerCenterClient.65")
@@ -164,7 +175,7 @@ public class InvokeGridService {
 								.getResponseStatus().toString()
 								.equalsIgnoreCase("Failure")) {
 	
-							InvokeGridService.logger.info("Response Failure: -Moving File "
+							InvokeGridService.logger.info("Response Failure: - Moving File "
 									+ hl7v3XML.getName() + " To "
 									+ cancerCenterClient.getProcessedDir());
 							hl7v3move = hl7v3XML.renameTo(new File(
@@ -172,7 +183,7 @@ public class InvokeGridService {
 											.getName()));
 							gotResponse = true;
 						} else {
-							InvokeGridService.logger.info("Error Moving File "
+							InvokeGridService.logger.info("Error in Response:- Moving File "
 									+ hl7v3XML.getName() + " To "
 									+ cancerCenterClient.getProcessedDir());
 							hl7v3move = hl7v3XML.renameTo(new File(
@@ -185,7 +196,7 @@ public class InvokeGridService {
 						InvokeGridService.logger.info(
 								Messages.getString("CancerCenterClient.71"), e);
 						responseCount++;
-						if (responseCount > 1) {
+						if (responseCount > 25) {
 							InvokeGridService.logger.error(Messages
 									.getString("CancerCenterClient.72"));
 							throw new Exception(Messages
@@ -201,7 +212,7 @@ public class InvokeGridService {
 									.toString());
 				}
 			if (!hl7v3move) {
-				InvokeGridService.logger.info("Error Moving File"+ hl7v3XML.getName());
+				InvokeGridService.logger.info("Error moving the file"+ hl7v3XML.getName());
 			}
 		} catch (MalformedURIException e) {
 			InvokeGridService.logger.error("MalformedURIException" + e.getLocalizedMessage());
@@ -230,13 +241,30 @@ public class InvokeGridService {
 		// Create the caXchange message
 		Metadata metadata = new Metadata();
 		metadata.setExternalIdentifier("CTODS");
-		metadata.setMessageType(MessageTypes.CT_LAB_DATA);
+		metadata.setMessageType(MessageTypes._CT_LAB_DATA);
 		
-		//  Credentials creds = new Credentials();// Optional Credentials - for
+		  Credentials creds = new Credentials();// Optional Credentials - for
+		  String delegatedReference ="";
 		// testing purposes comment out the creds.
-		// creds.setUserName(userName);
-		// creds.setPassword(userPasswd);
-		
+		  creds.setUserName(cancerCenterClient.getUserName());
+	      creds.setPassword(cancerCenterClient.getUserPasswd());
+	      try{
+	     org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager authManager = new org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager();
+		  UsernamePasswordCredentials credentials = new UsernamePasswordCredentials();
+		   credentials.setUsername(cancerCenterClient.getUserName().trim());
+		   credentials.setPassword(cancerCenterClient.getUserPasswd().trim());
+		   Authentication auth = authManager.authenticate(credentials);
+		   String tempEPR = authManager.getSerializedDelegationEpr();
+		   System.out.println(tempEPR);
+		   creds.setDelegatedCredentialReference(tempEPR);
+		   caXclient.setProxy(authManager.getCredentials());
+	       gb = authManager.getCredentials();
+	         
+	      } catch (AuthenticationException e1) {
+				InvokeGridService.logger.error("Exception " + e1);
+				e1.printStackTrace();
+			}
+        metadata.setCredentials(creds);
 		requestMessage.setMetadata(metadata);
 		Request caxchangeRequest = new Request();
 		requestMessage.setRequest(caxchangeRequest);
@@ -252,11 +280,50 @@ public class InvokeGridService {
 		return messagePayload;
 	}
 	
+	
+	/**
+	 * @param delegatedCredentialReference
+	 * @return
+	 */
+	private String serializeEPR(String delegatedCredentialReference) throws AuthenticationConfigurationException {
+		String serializedDelegatedCredentialReference = null;
+
+		try
+
+		{
+
+			StringWriter stringWriter = new StringWriter();
+			
+			Utils.serializeObject(
+							delegatedCredentialReference,
+							new QName(
+									"http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types",
+									"DelegatedCredentialReference"),
+							stringWriter, getClass().getResourceAsStream("/resources/client-config.wsdd"));
+		
+			serializedDelegatedCredentialReference = stringWriter.toString();
+
+		}
+
+		catch (Exception e)
+
+		{
+
+			throw new AuthenticationConfigurationException(
+					"Unable to serialize the message Delegated Credentials : "
+							+ e.getMessage(), e);
+
+		}
+
+		return serializedDelegatedCredentialReference;
+
+	}
+	
 	/**
 	 * Obtains grid credentials directly from Dorian.
 	 * @return GlobusCredential
 	 */
-	private GlobusCredential obtainCredentials(){
+	/*private GlobusCredential obtainCredentials(){
 		
 		GlobusCredential proxy =null;
 		try{
@@ -289,6 +356,6 @@ public class InvokeGridService {
 			 }
 			 return proxy;
 
-	}
+	}*/
 
 }

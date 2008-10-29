@@ -61,17 +61,17 @@ package gov.nih.nci.caxchange.client;
  */
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import gov.nih.nci.cagrid.common.Utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.FieldPosition;
-import java.text.SimpleDateFormat;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -126,8 +126,8 @@ public class LoadV3Labs {
 						for (int i = 0; i < fileList.length; i++) {
 							File hl7v3XML = fileList[i];
 							Document document = getDocument(hl7v3XML);
-							Element root = document.getDocumentElement();
-							messageElement = new MessageElement(root);
+							//Element root = document.getDocumentElement();
+							 messageElement = new MessageElement(document.getDocumentElement());
 							// invokes the GridService to load the HL7V3.
 							InvokeGridService invokeGridService = new InvokeGridService(cancerCenterClient);	
 						    invokeGridService.invokeGridService(messageElement,hl7v3XML);
