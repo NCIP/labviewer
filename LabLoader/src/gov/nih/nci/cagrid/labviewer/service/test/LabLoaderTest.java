@@ -9,6 +9,7 @@ import gov.nih.nci.cagrid.labviewer.client.LabLoaderClient;
 
 import java.io.FileInputStream;
 
+import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
@@ -16,6 +17,7 @@ public class LabLoaderTest
 {
 	String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/LabLoader";
 	//String serviceUrl="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/LabLoader";
+	//String serviceUrl="https://cbvapp-q1009.nci.nih.gov:8080/ctom-wsrf/services/cagrid/LabLoader";
 	//String serviceUrl = "http://localhost:8080/wsrf/services/cagrid/LabLoader";
 	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/LabLoader";
 	//String serviceUrl="http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/LabLoader";
@@ -23,8 +25,9 @@ public class LabLoaderTest
 	//String serviceUrl= "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/LabLoader";
 	//String sampleFile = "C:/Documents and Settings/asharma/Desktop/Temp/processedFolder/TER_2008_04_28_13_23_00_V2TOV3_v2-18-hl7v3.xml";
 	//String sampleFile="D:/Development/LabLoader/src/TER_2008_07_03_09_27_20_V2TOV3_v2-1-hl7v3.xml";
-	 String sampleFile="D:/Development/LabLoader-1.2-cvs/src/HL7V3-1.xml";
+	 String sampleFile="D:/Development/LabLoader-1.2-cvs/src/HL7V3-1a.xml";
 	String proxyFile ="D:/proxy";
+	private Logger logger = Logger.getLogger(getClass());
 	/**
 	 * @param args 
 	 */
@@ -41,11 +44,11 @@ public class LabLoaderTest
 	public void test()
 	{
 		System.out.println("Beginning test to call Lab Loader at " + serviceUrl);
-		
+		logger.debug("Beginning test to call Lab Loader at " + serviceUrl);
 		try
 		{
 			// Setup the credentials
-			GlobusCredential gb =new GlobusCredential(proxyFile);//this.obtainCredentials();//
+			GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);//
 						 
 			// Create the client
 			LabLoaderClient client = new LabLoaderClient(this.serviceUrl,gb);
@@ -54,9 +57,9 @@ public class LabLoaderTest
 			//URL fileLoc = getClass().getResource(sampleFile);
 			
 			// Read the file from disk
-			/*for(int i=1;i<42;i++)
-			{
-			String sampleFile="D:/DEMOTEST/mrn-2/HL7v3-"+i+".xml";	*/
+			//for(int i=1;i<42;i++)
+			//{
+			//String sampleFile="D:/DEMOTEST/mrn-2/HL7v3-"+i+".xml";	
 			System.out.println(sampleFile);
 			FileInputStream fis = new FileInputStream(sampleFile);
 			int x= fis.available();
@@ -85,6 +88,7 @@ public class LabLoaderTest
 	private GlobusCredential obtainCredentials(){
 		
 		GlobusCredential proxy =null;
+		logger.debug("Obtaining Globus Proxy");
 		try{
 			   
 			   //Create credential		
