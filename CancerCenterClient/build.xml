@@ -1,10 +1,12 @@
 <project name="Caxchange Routing and Workflow Client" default="createClientZip" basedir=".">
 
 	<!-- Sets the properties -->
+	<property environment="env" />
 	<property file="build.properties" />
 	<property name="src.dir" value="src/java/main" />
 	<property name="v2.dir" value="v2tov3" />
 	<property name="v2Meta.dir" value="v2Meta" />
+	<property name="LAB_DATA.dir" value="LAB_DATA" />
 	<property name="junit.dir" value="junit" />
 	<property name="lib.home" value="lib" />
 	<property name="classes.dir" value="classes" />
@@ -16,14 +18,27 @@
 	<property name="doc.dir" location="${basedir}/javadoc" />
 	<property name="artifacts.dir" location="${basedir}/artifacts" />
 	<property name="temp.dir" location="${basedir}/tmp" />
+	<property name="resources.dir" location="${basedir}/resources" />
+	<property name="resources.org" location="${basedir}/resources-org" />
+	<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	
 	<path id="cp">
 		<fileset dir="${lib.home}">
 			<include name="**/*.jar" />
 		</fileset>
 		<pathelement path="${classes.dir}" />
+		<fileset dir="${ext.globus.dir}/lib" >
+			  <include name="*.jar"/>
+			  <include name="*.zip"/>
+		</fileset>
+		<fileset dir="${resources.dir}" >
+		      <include name="*.*"/>
+		 </fileset>
 	</path>
+	
+	    	
 	<!-- Filters the project properties -->
-	<target name="init" depends="clean">
+	<target name="init" depends="clean,replace">
 	<copy file="conf/project.properties.template" toFile="${src.dir}/project.properties" filtering="true" overwrite="true">
 				<filterset begintoken="@" endtoken="@">
 					<filter token="HELPDOC" value="${helpdocs}" />
@@ -40,6 +55,23 @@
 			<classpath refid="cp" />
 		</javac>
 	</target>
+	 <!-- replaces the tokens with the property values -->
+	        <target name="replace">
+	         <copy file="${resources.org}/security-properties.xml" toFile="${resources.dir}/security-properties.xml" filtering="true" overwrite="true">
+	         	<filterset begintoken="@" endtoken="@">           
+	         	          <filter token="dorian.url" value="${dorian.url}"/>
+	                        <filter token="cds.url" value="${cds.url}"/>
+	                        <filter token="authentication.url" value="${authentication.url}"/>
+	                        <filter token="app.node.identity" value="${app.node.identity}"/>
+	                </filterset>
+	         </copy>
+	        <copy todir="${resources.dir}">
+	        	<resources>
+	        	      <file file="${resources.org}/security-beans.xml"/>
+	        		<file file="${resources.org}/security-properties.xsd"/>
+	        	</resources>		
+	        </copy>	
+	  </target>
 
 	<!-- Creates batch file -->
 	<target name="batch" depends="compilebatch" description="Creates batch file">
@@ -49,6 +81,19 @@
 		<copy todir="${dist.home}">
 			<fileset dir="${src.dir}" includes="**/*.properties" />
 		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${resources.dir}" />
+		</copy>
+		<mkdir dir="${classes.dir}/resources"/>
+		<copy todir="${classes.dir}/resources">
+			<fileset dir="${resources.dir}"/>
+		</copy>
+		<jar jarfile="${lib.home}/websso.jar" basedir="${classes.dir}"
+						 includes="**/websso/**">
+					<manifest>
+						<attribute name="Class-Path" value=".."/>
+					</manifest>
+				</jar>
 		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}" />
 	</target>
 
@@ -63,6 +108,13 @@
 		<copy todir="${dist.home}\v2Meta\">
 			<fileset dir="${v2Meta.dir}" includes="**/*.*" />
 		</copy>
+		<copy todir="${dist.home}\LAB_DATA\">
+			<fileset dir="${LAB_DATA.dir}" includes="**/*.*" />
+		</copy>
+		<mkdir dir="${dist.home}/resources"/>
+			<copy todir="${dist.home}/resources">
+				<fileset dir="${resources.dir}"/>
+			</copy>
 		<copy todir="${dist.home}">
 			<fileset dir="${conf}" includes="**/*.*" />
 		</copy>
