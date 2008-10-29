@@ -265,9 +265,9 @@ public class CancerCenterClient {
 	 */
 	public void process(ArrayList<ScheduledExecutorService>threadList) {
 
-		 HL7V3Transformation v3Transformation = new HL7V3Transformation(getInstance());
+		 /*HL7V3Transformation v3Transformation = new HL7V3Transformation(getInstance());
 		 v3Transformation.process(threadList);
-		
+		*/
 		 HL7V2ToHL7V3Tranformation v2Transformation = new HL7V2ToHL7V3Tranformation(getInstance());
 		 v2Transformation.process(threadList);
 		 
