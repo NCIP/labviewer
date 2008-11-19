@@ -133,6 +133,8 @@ public class HomeAction extends Action {
 		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
 		session.removeAttribute(DisplayConstants.CURRENT_FORM);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 				DisplayConstants.HOME_ID);

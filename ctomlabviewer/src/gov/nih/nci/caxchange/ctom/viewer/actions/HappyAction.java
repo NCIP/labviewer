@@ -88,8 +88,7 @@ import org.apache.struts.action.ActionMapping;
 
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
- * 
- */
+ * */
 public class HappyAction extends Action {
 
 	private static final Logger log = Logger.getLogger(HappyAction.class);
@@ -134,6 +133,8 @@ public class HappyAction extends Action {
 		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
 		session.removeAttribute(DisplayConstants.CURRENT_FORM);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 				DisplayConstants.TEST_ID);
@@ -191,7 +192,7 @@ public class HappyAction extends Action {
 				 } 
 				 catch (IOException e1) 
 				 {
-					 log.error("Error reading the config file: " + CONFIG_FILE_1);
+					 log.error("Error reading the config file: "+CONFIG_FILE_1);
 				 }	   
 				 
 				 try{

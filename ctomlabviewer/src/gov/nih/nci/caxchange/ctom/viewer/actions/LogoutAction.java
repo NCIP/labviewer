@@ -138,6 +138,8 @@ public class LogoutAction extends Action
 		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
 		session.removeAttribute(DisplayConstants.CURRENT_FORM);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 		
 		session.invalidate();
 		if(loggedInthroWEBSSO)
