@@ -96,6 +96,47 @@ function MM_swapImage() { //v3.0
 				<!-- link 1 ends -->
 				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
 					/>
+			  <!-- link Study begins -->
+				<%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
+				<td height="16" class="mainMenuItemOver"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">STUDY</a>
+				<%}if (!tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
+				<td height="16" class="mainMenuItem"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">STUDY</a>
+				<%}%>
+				
+				<!-- link Study ends -->
+				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
+					/>
+				
+				<!-- link Participant begins -->
+				<%if (tableId.equalsIgnoreCase(DisplayConstants.PARTICIPANTSEARCH_ID)){%>
+				<td height="16" class="mainMenuItemOver"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">PARTICIPANT</a>
+				<%}if (!tableId.equalsIgnoreCase(DisplayConstants.PARTICIPANTSEARCH_ID)){%>
+				<td height="16" class="mainMenuItem"
+					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
+					onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
+					onclick="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')"><a
+					class="mainMenuLink"
+					href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">PARTICIPANT</a>
+				<%}%>
+				<!-- link Particiant ends -->	
+					<!-- link Study ends -->
+				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
+					/>	
 				<!-- link 7 begins -->
 				<%if (tableId.equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID)){%>
 				<td height="16" class="mainMenuItemOver"
@@ -103,14 +144,14 @@ function MM_swapImage() { //v3.0
 					onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()"
 					onclick="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')"><a
 					class="mainMenuLink"
-					href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">LAB ACTIVITIES</a>
+					href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">LABS</a>
 				<%}if (!tableId.equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID)){%>
 				<td height="16" class="mainMenuItem"
 					onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
 					onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()"
 					onclick="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')"><a
 					class="mainMenuLink"
-					href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">LAB ACTIVITIES</a>
+					href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">LABS</a>
 				<%}%>
 				<!-- link 7 ends -->
 				<td height="16"><img src="images/mainMenuSeparator.gif" width="1" height="16"
