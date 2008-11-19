@@ -46,7 +46,7 @@
 			</classpath>
 		</javac>
 		<copy file="${build.source.dir}/dataConnection.properties" toFile="${build.classes.dir}/dataConnection.properties"/>
-		
+		<copy file="${build.source.dir}/log4j.properties" toFile="${build.classes.dir}/log4j.properties"/>
 	</target>
 
 	<target name="dist" depends="compile,createConnectionProperties,changectomlabapiormjar">
