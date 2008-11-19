@@ -14,6 +14,9 @@
  */
 package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
+import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
+import gov.nih.nci.caxchange.ctom.viewer.beans.ProtocolStatus;
+import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.forms.StudySearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.StudySearchResult;
@@ -43,6 +46,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -138,6 +142,7 @@ public class StudySearchDAO extends HibernateDaoSupport{
 				Study study = (Study) resultsIterator.next();
             			
 				StudySearchResult studySearchResult = new StudySearchResult();
+				studySearchResult.setId(study.getId());
 				//retrieve the short title
 				studySearchResult.setShortTitle(study.getShortTitle());
 				//retrieve the extension and root for the study
@@ -151,14 +156,14 @@ public class StudySearchDAO extends HibernateDaoSupport{
 				studySearchResult.setPhaseCode(study.getPhaseCode());
 				//retrieve the sponsor code
 				studySearchResult.setSponsorCode(study.getSponsorCode());
-				//TO DO:retrieve the status
-				studySearchResult.setStatus("Active");
 				//TO DO: set the details link
 				String details ="https://cbvapp-d1017.nci.nih.gov:28443/c3pr/pages/study/viewStudy?studyId=14";
 				studySearchResult.setDetails(details);
 				list.add(studySearchResult);
 			}
-	    }	
+	    }
+		//updates the list with the protocol status
+		checkProtocolStatus(list);
 		return list;
 	}
 	
@@ -176,5 +181,37 @@ public class StudySearchDAO extends HibernateDaoSupport{
 		
 		return identifier;
 	}
+	
+	/**
+	 * Checks and sets the Protocol/Study Status
+	 * @param allLarList
+	 */
+	private void checkProtocolStatus(List studySearchResultList)
+	{
+		Session session=null;
+		try{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			for (int j = 0; j < studySearchResultList.size(); j++)
+			{
+				StudySearchResult studyResult = null;
+				studyResult = (StudySearchResult) studySearchResultList.get(j);
+				int studyId =studyResult.getId().intValue();
+				List<ProtocolStatus> result =session.createQuery("from ProtocolStatus where protocol_Id=? order by ctom_insert_date desc").setLong(0, studyId).list();
+		        if(result!=null)
+		        {
+		        	for(ProtocolStatus lvs: result){
+		        		studyResult.setStatus(lvs.getStatus_code());
+		        		break;
+		        	}		
+		        }
+			
+		   }
+		  session.getTransaction().commit();
+		}catch (Exception se){
+			logDB.error("Error looking up Lab result",se);
+			
+	    }
+	}	
 
 }
