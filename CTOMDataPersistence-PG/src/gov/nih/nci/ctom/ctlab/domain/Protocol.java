@@ -38,12 +38,14 @@ public class Protocol {
 	private HealthCareSite healthCareSite=null;
 	private Investigator investigator=null;
 	private Identifier identifier =null;
+	private ProtocolStatus status =null;
 	
 	public Protocol()
 	{
 		healthCareSite = new HealthCareSite();
 		investigator = new Investigator();
 		identifier = new Identifier();
+		status = new ProtocolStatus();
 	}
 	
 	/**
@@ -453,6 +455,20 @@ public class Protocol {
 	 */
 	public void setIdentifier(Identifier identifier) {
 		this.identifier = identifier;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public ProtocolStatus getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(ProtocolStatus status) {
+		this.status = status;
 	}
 	
 }
