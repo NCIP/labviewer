@@ -86,6 +86,9 @@ public class DisplayConstants
 	public static final String PASSWORD = "PASSWORD";
 	
 	public static final String SEARCH_RESULT = "SEARCH_RESULT";
+	public static final String ALL_SEARCH_RESULT = "ALL_SEARCH_RESULT";
+	public static final String SEARCH_RESULT_STUDY = "SEARCH_RESULT_STUDY";
+	public static final String SEARCH_RESULT_PART = "SEARCH_RESULT_PART";
 	public static final String CURRENT_TABLE_ID = "CURRENT_TABLE_ID";
 	public static final String CURRENT_FORM = "CURRENT_FORM";
 	public static final String CURRENT_ACTION = "CURRENT_ACTION";
@@ -110,6 +113,8 @@ public class DisplayConstants
 	public static final String HOME_ID = "Home";
 	public static final String ADMIN_HOME_ID = "AdminHome";
 	public static final String LABACTIVITES_ID = "LabActivities";
+	public static final String STUDYSEARCH_ID = "StudySearch";
+	public static final String PARTICIPANTSEARCH_ID = "ParticipantSearch";
 	public static final String TEST_ID = "Happy";
 	public static final String LOGOUT_ID = "Logout";
 	
@@ -138,8 +143,8 @@ public class DisplayConstants
 
 	public static final String ONLY_ROLES = "ONLY_ROLES";	
 	
-	public static byte ONE = 1;
-	public static byte ZERO = 0;
+	public static final byte ONE = 1;
+	public static final byte ZERO = 0;
 
 
 
