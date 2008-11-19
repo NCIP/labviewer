@@ -27,5 +27,6 @@
 		<mapping resource="gov/nih/nci/labhub/domain/Activity.hbm.xml" />
 <!--CCTS Additions -->		
         <mapping resource="LabViewerStatus.hbm.xml"/>
+         <mapping resource="ProtocolStatus.hbm.xml"/>
         </session-factory>
 </hibernate-configuration>

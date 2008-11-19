@@ -140,6 +140,7 @@
 			<fileset file="${src.home}/applicationContext.xml" />
 			<fileset file="${src.home}/applicationContext-service.xml" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
+			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
 		</copy>
 	</target>
 
