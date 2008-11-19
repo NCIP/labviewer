@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="gov.nih.nci.caxchange.ctom.viewer.beans">
+	<class name="ProtocolStatus" table="Protocol_Status" lazy="true" polymorphism="explicit">
+		<cache usage="read-write" />
+		  <id name="id" type="integer" column="ID">
+            <generator class="sequence">
+                <param name="sequence">PROTOCOL_STATUS_SEQ</param>
+            </generator>
+        </id>
+		<!-- Attributes mapping for the LaboratoryResult class -->
+		<property name="status_code" type="string" column="STATUS_CODE"/>
+		<property name="status_date" type="timestamp" column="STATUS_DATE"/>
+		<property name="status_date_orig" type="string" column="STATUS_DATE_ORIG"/>
+		<property name="protocol_id"  type="integer" column="PROTOCOL_ID"/>
+		<property name="security_key" type="integer" column="SECURITY_KEY"/>
+		<property name="source" type="integer" column="SOURCE"/>
+		<property name="source_extract_date" type="timestamp" column="SOURCE_EXTRACT_DATE"/>
+		<property name="ctom_insert_date"  type="timestamp" column="CTOM_INSERT_DATE"/>
+		<property name="ctom_update_date"  type="timestamp" column="CTOM_UPDATE_DATE"/>
+	</class>
+</hibernate-mapping>
