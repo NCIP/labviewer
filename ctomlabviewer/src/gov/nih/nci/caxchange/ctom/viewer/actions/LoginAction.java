@@ -119,14 +119,7 @@ public class LoginAction extends Action
 		
 		String username = loginForm.getLoginId();
 		String password = loginForm.getPassword();
-        /*String studySubjectGridId = loginForm.getStudySubjectGridId();
-        if (studySubjectGridId !=null)
-        {
-        	session.setAttribute(DisplayConstants.HOT_LINK,"true"); 
-			session.setAttribute("studySubjectGridId", (String)request.getParameter("studySubjectGridId"));
-			log.info("studySubjectGridId"+studySubjectGridId);
-        }*/
-		AuthenticationManager authenticationManager = null;
+        AuthenticationManager authenticationManager = null;
 		boolean loggedIn = false;
 		
 		try
