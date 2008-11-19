@@ -1,3 +1,4 @@
+<%@ page isELIgnored="false"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean"
 	prefix="bean"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html"
@@ -16,7 +17,7 @@
 	<div class="pane" align=center>
 	    <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
-	      <h2>Enter The Lab Activity Search Criteria</h2>
+	      <h2>Filter The Lab Activity Search Criteria</h2>
 	    </div></div></div>
 	    <!-- end header -->
 	    <!-- inner border -->
@@ -27,12 +28,11 @@
 
 <div>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		width="90%" height="50%">
+		width="100%" height="50%">
 		<tr>
-			<td>
+			<td align="center">
 				<font size="2" face="verdana">
-					Search for an existing Lab Activity by entering the Study Id,
-					Patient Id, Begin Date, and End Date.
+					Filter Search Criteria
 				</font>
 			</td>
 		</tr>
@@ -51,65 +51,77 @@
 								<tr>
 									<td>
 										<html:form action="search.do" method="post">
-											<table cellpadding="0" cellspacing="0" border="0"
+											<table cellpadding="5" cellspacing="5" border="0"
 												width="100%" height="100%">
 												<tr>
-													<td align=right>
+													<td >
 													<font size="2" face="verdana">
 													<b>
-														* Study Identifier
+														Lab Test
 													</b>
 													</td>
-													<td width=10>
-													</td>
-													<td>
-														<html:text property="studyId"/>
-													</td>
-												</tr>
-												<tr>
-													<td align=right>
+													<td >
 													<font size="2" face="verdana">
 													<b>
-														* Patient Identifier
+														Site
 													</b>
 												    </font>
 													</td>
-													<td width=10>
-													</td>
-													<td>
-														<html:text property="patientId" />
-													</td>
-												</tr>
-												<tr>
-													<td align=right>
+														<td>
 													<font size="2" face="verdana">
 													<b>
-														* Begin Date (MM/DD/YYYY)
+														Numeric Result
 													</b>
 												    </font>
 													</td>
-													<td width=10>
-													</td>
-													<td>
-														<html:text property="beginDate" />
-													</td>
-												</tr>
-												<tr>
-													<td align=right>
+													<td >
 													<font size="2" face="verdana">
 													<b>
-														* End Date (MM/DD/YYYY)
+														Date Range
 													</b>
 												    </font>
 													</td>
-													<td width=10>
+													
+													</tr>
+													<tr>
+													<tr>
+													<td >
+													<html:select property="selectedLabTest" >
+													<html:options name="LabActivitiesForm" property="labTestFilter"/>
+													</html:select>
 													</td>
-													<td>
-														<html:text property="endDate" />
+													<td >
+													<html:select property="selectedSite" >
+													<html:options name="LabActivitiesForm" property="siteFilter"/>
+													</html:select>
 													</td>
-												</tr>
-						     								<tr>
-													<td align="right" class="actionSection">
+													<td >
+													<html:select property="selectedNumericResult" >
+													<html:options name="LabActivitiesForm" property="numericResultFilter"/>
+													</html:select>
+													</td>
+													<td >
+													<html:select property="selectedDateRange" onchange="handleCustomDates(this)">
+													<html:options name="LabActivitiesForm" property="dateRangeFilter"/>
+													</html:select>
+													</td>
+													<td  valign="top">
+														<div id="addTable" style="display:none">
+														<table>
+														<tr>
+														<td ><font size="2" face="verdana"><b>Begin Date<b></font></td>
+														<td ><font size="2" face="verdana"><b>End Date</b></font></td>
+														</tr>
+														<tr>
+														<td><html:text property="beginDate" value="(MM/DD/YYYY)"/></td>
+														<td><html:text property="endDate" value="(MM/DD/YYYY)"/></td>
+														</tr>	
+														</table>
+														</div>
+													</td>
+													</tr>
+													<tr>
+													<td colspan="5" align="center" class="actionSection">
 														<!-- action buttons begins -->
 														<table cellpadding="4" cellspacing="0" border="0">
 															<tr>
@@ -122,11 +134,9 @@
 															</tr>
 														</table>
 														</td></tr>
-														<tr>
-														<td align="left">
-														<h5> * indicates the fields required </h5>
-														</td></tr>
+														
 											</table>
+											
 											</html:form>
 									</td>
 								</tr>
@@ -143,3 +153,18 @@
 	</div>
 </div>
 <!-- laf box 2nd half -->
+<head>
+<script type="text/javascript">
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 240);
+
+	function handleCustomDates(element){
+	
+    if(element.value=="Custom dates/times"){
+     document.getElementById("addTable").style.display = "block";
+    }else {
+     document.getElementById("addTable").style.display = "none";
+    }
+    
+  }
+  </script>    
+</head>
