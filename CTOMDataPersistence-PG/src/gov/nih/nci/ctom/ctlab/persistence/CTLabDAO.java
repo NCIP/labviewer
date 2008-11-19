@@ -154,7 +154,7 @@ public class CTLabDAO extends BaseJDBCDAO
             // insert into STUDY_TIME_POINT
             ps = con.prepareStatement("insert into PROTOCOL_STATUS (ID, PROTOCOL_ID, STATUS_CODE,CTOM_INSERT_DATE)  values(?,?,?,?)");
             ps.setLong(1, protoStatus.getId());
-            ps.setLong(2, protoStatus.getProtocol_id());
+            ps.setLong(2, id);
             ps.setString(3, protoStatus.getStatus_code());
             ps.setDate(4, new java.sql.Date(protoStatus.getCtom_insert_date().getTime()));
             ps.execute();
@@ -204,9 +204,10 @@ public class CTLabDAO extends BaseJDBCDAO
                 ps = con.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE, NAME, CTOM_INSERT_DATE)  values(?,?,?,?)");
 
                 ps.setLong(1, hsId);
-                ps.setString(2, hcSite.getNciInstituteCd());
-                ps.setString(3, hcSite.getName());
-                ps.setDate(4, new java.sql.Date(hcSite.getCtomInsertDt().getTime()));
+                ps.setString(2, hcSite.getNciInstituteCd()!=null?hcSite.getNciInstituteCd():"");
+                ps.setString(3, hcSite.getName()!=null?hcSite.getName():"");
+                Date insertDt = hcSite.getCtomInsertDt()!=null?hcSite.getCtomInsertDt():new Date();
+                ps.setDate(4, new java.sql.Date(insertDt.getTime()));
                 ps.execute();
             }
             ssId = null;
@@ -1379,9 +1380,9 @@ public class CTLabDAO extends BaseJDBCDAO
                 ps = con.prepareStatement("insert into investigator (ID, NCI_IDENTIFIER, LAST_NAME, FIRST_NAME)  values(?,?,?,?)");
 
                 ps.setLong(1, id);
-                ps.setString(2, String.valueOf(inv.getNciId()));
-                ps.setString(3, String.valueOf(inv.getLastName()));
-                ps.setString(4, String.valueOf(inv.getFirstName()));
+                ps.setString(2, String.valueOf(inv.getNciId()!=null?inv.getNciId():""));
+                ps.setString(3, String.valueOf(inv.getLastName()!=null?inv.getLastName():""));
+                ps.setString(4, String.valueOf(inv.getFirstName()!=null?inv.getFirstName():""));
                 ps.execute();
 
             }
