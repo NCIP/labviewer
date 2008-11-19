@@ -71,7 +71,24 @@
     <bean id="labActivityResultComparator" class="gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResultComparator">
     	<property name="order" value="DESCENDING"/>
     </bean>
-
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+    </bean>
+        
+    <bean id="sessionFactory" 
+        class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!-- 
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+        -->
+        <property name="configLocation">
+            <value>cTODSlabviewer.hibernate.cfg.xml</value>
+        </property>
+        
+    </bean>
 
 </beans>
 
