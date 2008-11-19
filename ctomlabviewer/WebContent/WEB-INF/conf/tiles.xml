@@ -82,6 +82,12 @@
 	<definition name="Tiles.LabActivities.Detail.Screen" extends="Base">
 		<put name="Content" value="/pages/content/detailScreen/LabActivitiesSearchScreen.jsp" />
 	</definition>	
+	<definition name="Tiles.StudySearch.Detail.Screen" extends="Base">
+		<put name="Content" value="/pages/content/detailScreen/StudySearchScreen.jsp" />
+	</definition>	
+	<definition name="Tiles.ParticipantSearch.Detail.Screen" extends="Base">
+		<put name="Content" value="/pages/content/detailScreen/ParticipantSearchScreen.jsp" />
+	</definition>	
 	
 	<!-- Search Result Pages -->
 	<definition name="Tiles.LabActivities.Search.Result" extends="BaseSearchResults">
