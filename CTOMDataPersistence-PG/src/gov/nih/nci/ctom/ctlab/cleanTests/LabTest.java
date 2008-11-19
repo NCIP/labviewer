@@ -16,7 +16,10 @@ import org.apache.log4j.Logger;
  */
 public class LabTest extends TestCase
 {
-	Logger logger = Logger.getLogger(getClass());
+	// Logging File
+	private static Logger logger = Logger
+			.getLogger("client"); 
+
 	private  CTTestDAO dao = new CTTestDAO();
 	private  Connection con;
 	

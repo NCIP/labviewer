@@ -16,10 +16,11 @@ import org.apache.log4j.Logger;
  */
 public class CTTestDAO extends BaseJDBCDAO
 {
-	Logger logger = Logger.getLogger(getClass());
+	// Logging File
+	private static Logger logger = Logger
+			.getLogger("client"); 
 
-	
-	/**
+  /**
 	 * @param con
 	 * @throws Exception
 	 */
@@ -28,7 +29,7 @@ public class CTTestDAO extends BaseJDBCDAO
 		logger.info("Cleaning smoke study");
 
 		String sql = "delete from STUDY_SITE where "
-		           + "(PROTOCOL_ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='db762d64-e213-4bf9-9f9b-bccd36be56e733' and EXTENSION='04_C_0133')) "
+		           + "(PROTOCOL_ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='51bd374c-d8b5-4759-84b3-ac6259d58648' and EXTENSION='SMOKE_TEST')) "
                    + "and HEALTHCARE_SITE_ID = (select ID from HEALTHCARE_SITE where NCI_INSTITUTE_CODE='NCI'))";
         deleteFromTable(con, sql);
 
@@ -36,17 +37,17 @@ public class CTTestDAO extends BaseJDBCDAO
         deleteFromTable(con, sql);
 
         sql = "delete from STUDY_INVESTIGATOR where "
-            + "(PROTOCOL_ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='db762d64-e213-4bf9-9f9b-bccd36be56e733' and EXTENSION='04_C_0133')) "
+            + "(PROTOCOL_ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='51bd374c-d8b5-4759-84b3-ac6259d58648' and EXTENSION='SMOKE_TEST')) "
             + "and INVESTIGATOR_ID = (select ID from INVESTIGATOR where NCI_IDENTIFIER='04_C_0133'))";
         deleteFromTable(con, sql);
 
         sql = "delete from INVESTIGATOR where NCI_IDENTIFIER = '04_C_0133'";
         deleteFromTable(con, sql);
 
-        sql = "delete from PROTOCOL where ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='db762d64-e213-4bf9-9f9b-bccd36be56e733' and EXTENSION='04_C_0133'))";
+        sql = "delete from PROTOCOL where ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='51bd374c-d8b5-4759-84b3-ac6259d58648' and EXTENSION='SMOKE_TEST'))";
         deleteFromTable(con, sql);
 
-        sql = "delete from IDENTIFIER where (ROOT='db762d64-e213-4bf9-9f9b-bccd36be56e733' and EXTENSION='04_C_0133')"; //  at this point, this row was already deleted
+        sql = "delete from IDENTIFIER where (ROOT='51bd374c-d8b5-4759-84b3-ac6259d58648' and EXTENSION='SMOKE_TEST')"; //  at this point, this row was already deleted
         deleteFromTable(con, sql);
 	}
 
@@ -60,17 +61,17 @@ public class CTTestDAO extends BaseJDBCDAO
 
 		String sql = "delete from STUDY_PARTICIPANT_ASSIGNMENT where ID = "
                    + "(select STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where "
-                   + "ROOT='2.16.840.1.113883.19' and EXTENSION='00-00-00-0' and STUDY_PARTICIPANT_ASSIGNMNT_ID is not null)";
+                   + "ROOT='6115c43c-851e-425c-8312-fd78367aaef3a' and EXTENSION='00-00-00-0' and STUDY_PARTICIPANT_ASSIGNMNT_ID is not null)";
 	    deleteFromTable(con, sql);
 
 		sql = "delete from PARTICIPANT where ID = "
-            + "(select PARTICIPANT_ID from IDENTIFIER where ROOT='2.16.840.1.113883.19' and EXTENSION='32-71-13-38' and PARTICIPANT_ID is not null)";
+            + "(select PARTICIPANT_ID from IDENTIFIER where ROOT='91dd4580-801b-4874-adeb-a174361bacea' and EXTENSION='00-00-00-0' and PARTICIPANT_ID is not null)";
 	    deleteFromTable(con, sql);
 
-	    sql = "delete from IDENTIFIER where (ROOT='2.16.840.1.113883.19' and EXTENSION='32-71-13-38')"; // at this point, this row was already deleted
+	    sql = "delete from IDENTIFIER where (ROOT='6115c43c-851e-425c-8312-fd78367aaef3a' and EXTENSION='00-00-00-0')"; // at this point, this row was already deleted
 	    deleteFromTable(con, sql);
 
-	    sql = "delete from IDENTIFIER where (ROOT='2.16.840.1.113883.19' and EXTENSION='32-71-13-38')"; // at this point, this row was already deleted
+	    sql = "delete from IDENTIFIER where (ROOT='91dd4580-801b-4874-adeb-a174361bacea' and EXTENSION='00-00-00-0')"; // at this point, this row was already deleted
 	    deleteFromTable(con, sql);
 	}
 
@@ -113,7 +114,7 @@ public class CTTestDAO extends BaseJDBCDAO
 		deleteFromTable(con, sql);*/
 
 		String sql = "delete from ACTIVITY where STUDY_PARTICIPANT_ASSIGNMNT_ID = "
-            + "(select STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where ROOT='2.16.840.1.113883.19' and EXTENSION='32-71-13-38' "
+            + "(select STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where ROOT='6115c43c-851e-425c-8312-fd78367aaef3a' and EXTENSION='00-00-00-0' "
             + "and STUDY_PARTICIPANT_ASSIGNMNT_ID is not null)";
 		deleteFromTable(con, sql);
 	}
@@ -126,7 +127,7 @@ public class CTTestDAO extends BaseJDBCDAO
 	public void  verifySmokeStudyData(Connection con) throws Exception
 	{
 		logger.info("Verifying smoke study data");
-		String sql="select ID from PROTOCOL where ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='db762d64-e213-4bf9-9f9b-bccd36be56e734' and EXTENSION='04_C_0134'))";
+		String sql="select ID from PROTOCOL where ID = (select PROTOCOL_ID from IDENTIFIER where (ROOT='51bd374c-d8b5-4759-84b3-ac6259d58648' and EXTENSION='SMOKE_TEST'))";
 		verifyData(con,sql,"Study");
 		
 	}
