@@ -17,10 +17,11 @@
    	<link rel="stylesheet" href="laf/src/main/resources/gov/nih/nci/cabig/ctms/lookandfeel/assets/css/common.css" type="text/css" />
    	<link rel="stylesheet" href="laf/src/main/resources/gov/nih/nci/cabig/ctms/lookandfeel/assets/css/tabbedflow.css" type="text/css" />
 	<script language="JavaScript" src="scripts/script.js"></script>
+	<script language="JavaScript" src="scripts/sorttable.js"></script>
 	<!-- Page Title begins -->
 	<title><tiles:get name="Title"/></title>
 	<!-- Page Title ends -->
-</head>
+	</head>
 <body>
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
 

@@ -1,3 +1,4 @@
+<%@ page isELIgnored="false"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
@@ -12,6 +13,7 @@
 
 <script type="text/javascript" src="prototype.js"></script>
 <script type="text/javascript" src="ccts-hotlinks.js"></script>
+<script type="text/javascript" src="scripts/sorttable.js"></script>
 <script type="text/javascript">
     CCTS.appShortName = 'labviewer'
 </script>
@@ -135,13 +137,22 @@ function SelectAll()
 		else
 			alert("Atleast one check box should be checked.");
  	}
+ 	
+ 	function handleCustomDates(element){
+	
+    if(element.value=="Custom dates/times"){
+     document.getElementById("addTable").style.display = "block";
+    }else {
+     document.getElementById("addTable").style.display = "none";
+    }
+    
+  }
 </script>
 
  
 <body onload="javaScript:setUp();">
-
-
 <!-- laf box 1st half -->
+<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 <div class="box" >
 	<div class="pane" align="center">
     <!-- header -->
@@ -194,12 +205,11 @@ function SelectAll()
 					<tr>
 						<td>
 							<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
-								<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 									<bean:define name="<%=DisplayConstants.SEARCH_RESULT%>" property="searchResultObjects" id="searchResultObjects" />
 									<bean:define id="oddRow" value="true" />
 									<tr>
 										<td>
-											<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" class="dataTable" width="100%">
+											<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" class="sortable dataTable" width="100%">
 												<tr>
 												   <th class="dataTableHeader" scope="col" align="center" width="5%">
 													<a href="javascript:SelectAll();">
@@ -208,6 +218,9 @@ function SelectAll()
 													</th>
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Patient Id
+													</th>
+													<th class="dataTableHeader" scope="col" align="center" width="9%">
+														Site
 													</th>
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Date / Time
@@ -252,6 +265,10 @@ function SelectAll()
 														</td>
 														<td class="dataCellText" width="9%">
 															<bean:write name="searchResultObject" property="patientId" />
+															&nbsp;
+														</td>
+														<td class="dataCellText" width="9%">
+															<bean:write name="searchResultObject" property="siteId" />
 															&nbsp;
 														</td>
 														<td class="dataCellText" width="9%">
@@ -346,6 +363,10 @@ function SelectAll()
 														</td>
 														<td class="dataCellText" width="9%">
 															<bean:write name="searchResultObject" property="patientId" />
+															&nbsp;
+														</td>
+														<td class="dataCellText" width="9%">
+															<bean:write name="searchResultObject" property="siteId" />
 															&nbsp;
 														</td>
 														<td class="dataCellText" width="9%">
@@ -454,7 +475,7 @@ function SelectAll()
 											<!-- action buttons end -->
 										</td>
 									</tr>
-								</logic:present>
+								
 							</table>
 						</td>
 					</tr>
@@ -472,7 +493,7 @@ function SelectAll()
 	</div>
 </div>
 <!-- laf box 2nd half -->
-
+</logic:present>
 
 
 
