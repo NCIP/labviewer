@@ -22,7 +22,10 @@ import org.apache.log4j.Logger;
 public abstract class BaseJDBCDAO
 {
 	private static final String CONFIG_FILE = "/dataConnection.properties";
-	private static final Logger log = Logger.getLogger(BaseJDBCDAO.class);
+	// Logging File
+	private static Logger log = Logger
+			.getLogger("client"); 
+
 	public Connection getConnection()
 	{
 	    Connection result = null;
