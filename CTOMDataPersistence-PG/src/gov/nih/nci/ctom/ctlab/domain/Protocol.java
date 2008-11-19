@@ -42,10 +42,6 @@ public class Protocol {
 	
 	public Protocol()
 	{
-		healthCareSite = new HealthCareSite();
-		investigator = new Investigator();
-		identifier = new Identifier();
-		status = new ProtocolStatus();
 	}
 	
 	/**
