@@ -27,8 +27,9 @@ p { margin: 1em 0; }
 /**** COMMON TEMPLATE ELEMENTS */
 
 #header {
+
   background: url(../images/chrome/header_BG.gif) repeat-x top;
-  min-width: 770px;
+  min-width: 800px;
 }
 
 #header .background-R {
@@ -78,7 +79,7 @@ ul.tabs li {
 
 #sections {
   position: absolute;
-  top: 22px; left: 131px;
+  top: 44px; left: 281px;
   background: url(../images/chrome/section_L1.gif) no-repeat top left;
   padding-left: 1px;
   font-size: .85em;
