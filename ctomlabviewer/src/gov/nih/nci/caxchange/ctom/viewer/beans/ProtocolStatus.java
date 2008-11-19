@@ -1,5 +1,5 @@
 /**
- * Copyright Notice.  Copyright 2008  Scenpro, Inc (“caBIG™ Participant”).caXchange
+ * Copyright Notice.  Copyright 2008  Scenpro, Inc (“caBIG™ Participant”). caXchange
  * was created with NCI funding and is part of the caBIG™ initiative. 
  * The software subject to this notice and license includes both human readable source code form and 
  * machine readable, binary, object code form (the “caBIG™ Software”).
@@ -55,152 +55,148 @@
  * 		PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
  * 		ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
  * 		OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * 
- */
-
-package gov.nih.nci.caxchange.ctom.viewer.viewobjects;
+ **/
+package gov.nih.nci.caxchange.ctom.viewer.beans;
 
 import java.util.Date;
 
-import gov.nih.nci.labhub.domain.LaboratoryResult;
-import gov.nih.nci.labhub.domain.SubjectAssignment;
-
-
-public class StudySearchResult
-{
-	private Integer id;
-	private String studyId = "";
-	private String shortTitle = "";
-	private String sponsorCode = "";
-	private String phaseCode = "";
-	private String status = "";
-	private String gridId = "";
-	private String details="";
-	private String index;
+/**
+ * @author asharma
+ *
+ */
+public class ProtocolStatus {
 	
-	/**
-	 * @return the details
-	 */
-	public String getDetails() {
-		return details;
-	}
-
-	/**
-	 * @param details the details to set
-	 */
-	public void setDetails(String details) {
-		this.details = details;
-	}
-
-	public String getStudyId()
-	{
-		return studyId;
-	}
-
-	public void setStudyId(String studyId)
-	{
-		this.studyId = studyId;
-	}
-
-	/**
-	 * @return the shortTitle
-	 */
-	public String getShortTitle() {
-		return shortTitle;
-	}
-
-	/**
-	 * @param shortTitle the shortTitle to set
-	 */
-	public void setShortTitle(String shortTitle) {
-		this.shortTitle = shortTitle;
-	}
-
-	/**
-	 * @return the sponsorCode
-	 */
-	public String getSponsorCode() {
-		return sponsorCode;
-	}
-
-	/**
-	 * @param sponsorCode the sponsorCode to set
-	 */
-	public void setSponsorCode(String sponsorCode) {
-		this.sponsorCode = sponsorCode;
-	}
-
-	/**
-	 * @return the phaseCode
-	 */
-	public String getPhaseCode() {
-		return phaseCode;
-	}
-
-	/**
-	 * @param phaseCode the phaseCode to set
-	 */
-	public void setPhaseCode(String phaseCode) {
-		this.phaseCode = phaseCode;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	/**
-	 * @return the gridId
-	 */
-	public String getGridId() {
-		return gridId;
-	}
-
-	/**
-	 * @param gridId the gridId to set
-	 */
-	public void setGridId(String gridId) {
-		this.gridId = gridId;
-	}
-
-	/**
-	 * @return the index
-	 */
-	public String getIndex() {
-		return index;
-	}
-
-	/**
-	 * @param index the index to set
-	 */
-	public void setIndex(String index) {
-		this.index = index;
-	}
-
+	private Integer id;
+	private String status_code;
+	private Date  status_date;
+	private String status_date_orig;
+	private Integer protocol_id;
+	private Integer security_key;
+	private String  source ;
+	private Date  source_extract_date;
+	private Date  ctom_insert_date; 
+	private Date  ctom_update_date;
 	/**
 	 * @return the id
 	 */
 	public Integer getId() {
 		return id;
 	}
-
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	/**
+	 * @return the status_code
+	 */
+	public String getStatus_code() {
+		return status_code;
+	}
+	/**
+	 * @param status_code the status_code to set
+	 */
+	public void setStatus_code(String status_code) {
+		this.status_code = status_code;
+	}
+	/**
+	 * @return the status_date
+	 */
+	public Date getStatus_date() {
+		return status_date;
+	}
+	/**
+	 * @param status_date the status_date to set
+	 */
+	public void setStatus_date(Date status_date) {
+		this.status_date = status_date;
+	}
+	/**
+	 * @return the status_date_orig
+	 */
+	public String getStatus_date_orig() {
+		return status_date_orig;
+	}
+	/**
+	 * @param status_date_orig the status_date_orig to set
+	 */
+	public void setStatus_date_orig(String status_date_orig) {
+		this.status_date_orig = status_date_orig;
+	}
+	/**
+	 * @return the protocol_id
+	 */
+	public Integer getProtocol_id() {
+		return protocol_id;
+	}
+	/**
+	 * @param protocol_id the protocol_id to set
+	 */
+	public void setProtocol_id(Integer protocol_id) {
+		this.protocol_id = protocol_id;
+	}
+	/**
+	 * @return the security_key
+	 */
+	public Integer getSecurity_key() {
+		return security_key;
+	}
+	/**
+	 * @param security_key the security_key to set
+	 */
+	public void setSecurity_key(Integer security_key) {
+		this.security_key = security_key;
+	}
+	/**
+	 * @return the source
+	 */
+	public String getSource() {
+		return source;
+	}
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(String source) {
+		this.source = source;
+	}
+	/**
+	 * @return the source_extract_date
+	 */
+	public Date getSource_extract_date() {
+		return source_extract_date;
+	}
+	/**
+	 * @param source_extract_date the source_extract_date to set
+	 */
+	public void setSource_extract_date(Date source_extract_date) {
+		this.source_extract_date = source_extract_date;
+	}
+	/**
+	 * @return the ctom_insert_date
+	 */
+	public Date getCtom_insert_date() {
+		return ctom_insert_date;
+	}
+	/**
+	 * @param ctom_insert_date the ctom_insert_date to set
+	 */
+	public void setCtom_insert_date(Date ctom_insert_date) {
+		this.ctom_insert_date = ctom_insert_date;
+	}
+	/**
+	 * @return the ctom_update_date
+	 */
+	public Date getCtom_update_date() {
+		return ctom_update_date;
+	}
+	/**
+	 * @param ctom_update_date the ctom_update_date to set
+	 */
+	public void setCtom_update_date(Date ctom_update_date) {
+		this.ctom_update_date = ctom_update_date;
+	} 
 
-	
-		
 }
+
+ 
