@@ -13,6 +13,19 @@
         <property name="current_session_context_class">thread</property>
         <property name="dialect">@database_dialect@</property>
 
+<!-- Mapped Resources -->
+		<mapping resource="gov/nih/nci/labhub/domain/Specimen.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/StudySite.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/SubjectAssignment.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/LaboratoryTest.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/Person.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/LaboratoryResult.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/Study.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/CD.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/Organization.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/II.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/Activity.hbm.xml" />
+<!--CCTS Additions -->		
         <mapping resource="LabViewerStatus.hbm.xml"/>
         </session-factory>
 </hibernate-configuration>
