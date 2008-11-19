@@ -78,6 +78,7 @@
 				<filter token="log_dir" value="${log.dir}" />
 			</filterset>
 		</copy>
+		
 		<copy file="conf/loadLabURLS.properties.template" toFile="${build.home}/WEB-INF/classes/loadLabURLS.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="loadLabURLS" value="${loadLabURLS}" />				
@@ -137,6 +138,7 @@
 			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties" />
 			<fileset file="${src.home}/applicationContext.xml" />
+			<fileset file="${src.home}/applicationContext-service.xml" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 		</copy>
 	</target>
