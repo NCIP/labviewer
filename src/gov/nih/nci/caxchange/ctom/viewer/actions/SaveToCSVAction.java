@@ -180,7 +180,7 @@ public class SaveToCSVAction extends Action
 	 */
 	private void saveToCSV(HttpServletRequest request,ActionForm form, String username, HttpServletResponse response) throws Exception
 	{
-		System.out.println("In Save to CSV");
+		logDB.info("In Save to CSV");
 		getFileName(response);
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
 	    HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
@@ -310,7 +310,7 @@ public class SaveToCSVAction extends Action
 		String heading=" Patient Id,Date / Time,Lab Test,Text Result,Numeric Result,Unit Of Measure,Lower Limit,Upper Limit";
 		out.write(heading);
 		out.write("\n");
-		System.out.println("Selected Lab results:"+labResults.length);
+		logDB.info("Selected Lab results:"+labResults.length);
 		for(int ii=0; ii<labResults.length;ii++)
 		{
 			LabResult result = labResults[ii];
