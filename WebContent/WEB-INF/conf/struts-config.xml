@@ -127,7 +127,7 @@
 			<forward name="ReadFailure"
 				path="Tiles.LabActivities.Search.Result" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="/LabActivitiesDB.do" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 		</action>
