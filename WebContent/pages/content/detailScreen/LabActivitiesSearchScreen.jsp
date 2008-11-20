@@ -155,7 +155,6 @@
 <!-- laf box 2nd half -->
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 240);
 
 	function handleCustomDates(element){
 	
