@@ -167,7 +167,7 @@ public class StudySubjectAction extends Action
 			try
 			{
 				log.info("Get Patient info");
-				getPatientIdRoot((String)session.getAttribute("studySubjectGridId"),labFm);
+				getPatientIdRoot((String)session.getAttribute("studySubjectGridId"),session);
 				
 			}
 			catch (Exception e)
@@ -175,7 +175,7 @@ public class StudySubjectAction extends Action
 				log.error("Error retreiving patient information",e);
 			}
 			
-			if(labFm.getStudyId()==null)
+			if((String)session.getAttribute("studyId")==null)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						DisplayConstants.ERROR_ID,
@@ -186,7 +186,6 @@ public class StudySubjectAction extends Action
 				forward = mapping.findForward(ForwardConstants.SEARCH_FAILURE);
 			}
 			
-			session.setAttribute("CURRENT_FORM", labFm);
 			forward = mapping.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK);
 		}
 		else
@@ -208,7 +207,7 @@ public class StudySubjectAction extends Action
 	 * @param labFm
 	 * @throws Exception
 	 */
-	private void getPatientIdRoot(String studyGridId,LabActivitiesSearchForm labFm) throws Exception
+	private void getPatientIdRoot(String studyGridId,HttpSession session) throws Exception
 	{
 		
 		try
@@ -252,22 +251,29 @@ public class StudySubjectAction extends Action
 			finalgroup.setLogicOperator(CQLLogicalOperator.AND);
 			target.setGroup(finalgroup);
 			query.setTarget(target);
-			
+
 			List resultList = appService.query(query);
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
 				SubjectAssignment ii = (SubjectAssignment) resultsIterator.next();
+				String pageTitle= "";
+				String participantName = ii.getParticipant().getFirstName()!=null? ii.getParticipant().getFirstName():" "+" "+ ii.getParticipant().getLastName()!=null?ii.getParticipant().getLastName():"";
+				String studyName = ii.getStudySite().getStudy().getShortTitle()!=null?ii.getStudySite().getStudy().getShortTitle():"";
+				pageTitle="Study:"+ studyName+":: Participant: "+ participantName;
+				session.setAttribute("pageTitle", pageTitle);
 				for(Iterator i = ii.getStudySubjectIdentifier().iterator();i.hasNext();)
 				{	
 					II ident = (II)i.next();
-					labFm.setPatientId(ident.getExtension());
+					//labFm.setPatientId(ident.getExtension());
+					session.setAttribute("patientId",ident.getExtension());
 					log.debug(ident.getExtension());
 					log.debug("Study gridid"+studyGridId);
 				}
 				for(Iterator i = ii.getStudySite().getStudy().getStudyIdentifier().iterator();i.hasNext();)
 				{	
 					II ident = (II)i.next();
-					labFm.setStudyId(ident.getExtension());
+					//labFm.setStudyId(ident.getExtension());
+					session.setAttribute("studyId",ident.getExtension());
 					log.debug(ident.getExtension());
 				}
 			}		
