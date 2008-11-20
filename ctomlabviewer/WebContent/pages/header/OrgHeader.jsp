@@ -83,6 +83,9 @@ function MM_swapImage() { //v3.0
     <!-- Add log out link -->
     
     <div id="login-action">
+     	<% if(session.getAttribute("version")!= null){ %>
+         	<font color=blue>CTODS LabViewer V<%=session.getAttribute("version")%></font> ||
+         <%} %>
        <a href="helpdocs/CTODS Lab Viewer End User Guide.doc"> <font color=blue>Help</font></a> ||
        <!--   -->
        <% if(session.getAttribute("webssoEnabled")!= null){ %>
@@ -91,8 +94,7 @@ function MM_swapImage() { //v3.0
        <%}}else{ %>
    		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')"> <font color=blue>Log out</font></a>    
        <%} %>
-     
-    </div>
+     </div>
 
 	<!-- if log in, enable menu and login id -->
 	<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
@@ -152,7 +154,7 @@ function MM_swapImage() { //v3.0
 			    <font color=blue><%=session.getAttribute("pageTitle")%></font>
 			<%}else{%>Tasks: <font color=blue>Participant Search</font>
 			<%}}%>
-		</logic:present>
+		   </logic:present>
     </div>
     
 </div>

@@ -197,6 +197,8 @@ public class HomeAction extends Action {
 			 session.setAttribute("webssoEnabled", webssoEnabled);
 			 String webssoCasServer = (String)props.getProperty("websso.cas.server");
 			 session.setAttribute("webssoCasServer", webssoCasServer);
+			 String version = (String)props.getProperty("version");
+			 session.setAttribute("version", version);
 		 }catch (FileNotFoundException e1) 
 		 {
 		     log.error("The config file not found: " + CONFIG_FILE);
