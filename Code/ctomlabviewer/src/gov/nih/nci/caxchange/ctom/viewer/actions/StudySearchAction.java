@@ -243,7 +243,7 @@ public class StudySearchAction extends DispatchAction
 		for(StudySearchResult ssr: studiesList){
 			if(ssr.getIndex().equals("T")){
 				//change the title to include patient information
-			     String titleString = "Study: "+ssr.getStudyId();
+			     String titleString = "Study: "+ssr.getStudyId()+" ["+ssr.getStudyId()+"]";
 			     session.setAttribute("studyId", ssr.getStudyId());
 			     session.setAttribute("pageTitle",titleString);
 			     ssr.setIndex("");
