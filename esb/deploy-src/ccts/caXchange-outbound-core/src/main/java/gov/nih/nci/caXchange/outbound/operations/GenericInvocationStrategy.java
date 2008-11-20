@@ -39,7 +39,7 @@ import gov.nih.nci.cagrid.common.Utils;
 /**
  * A generic class that can be configured to invoke an operation on a grid service.
  * 
- * @author Harsh Marwaha
+ * @author Ekagra Software Technologies
  *
  */
 public class GenericInvocationStrategy extends GridInvocationStrategy {
@@ -210,7 +210,9 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 			throw new GridInvocationException("Illegal access to "+operationName,iae);
 		}catch(InvocationTargetException ite) {
 			logger.error("Exception invoking "+operationName,ite);
-			throw new GridInvocationException("Exception invoking "+operationName+" on "+gridClientClassName+"."+ite.getMessage(),ite);
+			Throwable cause = ite.getCause();
+			String errorDetails = ite.getMessage()+":"+((cause==null)?"":cause.getMessage());
+			throw new GridInvocationException("Exception invoking "+operationName+" on "+gridClientClassName+"."+errorDetails,ite);
 		}
 	}
 	

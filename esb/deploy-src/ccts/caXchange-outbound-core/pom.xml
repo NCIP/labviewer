@@ -492,17 +492,17 @@
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-client</artifactId> 
-      <version>1.6</version> 
+      <version>1.8</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-common</artifactId> 
-      <version>1.6</version> 
+      <version>1.8</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.study-consumer</groupId> 
       <artifactId>study-stubs</artifactId> 
-      <version>1.6</version> 
+      <version>1.8</version> 
     </dependency>
     <dependency>
       <groupId>cagrid.outbound.registration-consumer</groupId> 
