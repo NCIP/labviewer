@@ -3,36 +3,27 @@
  */
 package gov.nih.nci.caXchange.outbound.operations;
 
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.Set;
-
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.MessageExchange;
-import javax.xml.namespace.QName;
-
-import org.apache.axis.AxisFault;
-import org.apache.log4j.Category;
-import org.apache.servicemix.jbi.jaxp.SourceTransformer;
-import org.apache.servicemix.jbi.jaxp.StringSource;
-import org.globus.gsi.GlobusCredential;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.caXchange.outbound.GridInvocationResult;
 import gov.nih.nci.caXchange.outbound.GridInvocationStrategy;
 import gov.nih.nci.caXchange.outbound.GridMessage;
-import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cabig.ccts.domain.CoordinatingCenterStudyStatusType;
-import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
-import gov.nih.nci.cabig.ccts.domain.IdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
-import gov.nih.nci.cabig.ccts.domain.StudyRefType;
-import gov.nih.nci.cabig.ccts.domain.StudySiteType;
-import gov.nih.nci.cabig.ccts.domain.SystemAssignedIdentifierType;
-import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
+import gov.nih.nci.cagrid.common.Utils;
+import gov.nih.nci.ccts.grid.studyconsumer.client.StudyConsumerClient;
+
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.Set;
+
+import javax.jbi.messaging.DeliveryChannel;
+import javax.jbi.messaging.MessageExchange;
+
+import org.apache.axis.AxisFault;
+import org.apache.log4j.Category;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.globus.gsi.GlobusCredential;
+import org.w3c.dom.Node;
+
 
 /**
  * @author stevec
