@@ -64,6 +64,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 	{
 		
 		List siteList = new ArrayList();
+		siteList.add("All");
 		try
 		{
 			String studyId = (String)session.getAttribute("studyId")!=null?(String)session.getAttribute("studyId"):"";
@@ -132,7 +133,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 		throws ParseException
 	{
 		ArrayList list = new ArrayList();
-		list.add("All");
+		
 		if (hcs == null)
 			return null;
 
