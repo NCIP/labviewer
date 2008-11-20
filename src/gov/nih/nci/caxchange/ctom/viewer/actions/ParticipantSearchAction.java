@@ -247,7 +247,7 @@ public class ParticipantSearchAction extends DispatchAction
 		for(ParticipantSearchResult psr: participantsList){
 			if(psr.getIndex().equals("T")){
 				//change the title to include patient information
-			     String titleString = session.getAttribute("pageTitle")+" : "+"Participant:"+psr.getFirstName() + " "+psr.getLastName();
+			     String titleString = session.getAttribute("pageTitle")+" :: "+"Participant:"+psr.getFirstName() + " "+psr.getLastName();
 			     session.setAttribute("participantId", psr.getGridId());
 			     session.setAttribute("patientId", psr.getPatientId());
 			     session.setAttribute("pageTitle",titleString);
