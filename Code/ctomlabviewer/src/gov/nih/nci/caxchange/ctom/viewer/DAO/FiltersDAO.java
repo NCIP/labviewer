@@ -147,7 +147,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 				for (Iterator ssIterator = siteCollection.iterator(); ssIterator.hasNext();)
 				{
 					StudySite ss = (StudySite) ssIterator.next();
-					list.add(ss.getHealthCareSite().getIdentifier());
+					list.add(ss.getHealthCareSite().getName());
 
 				}	
 		}
