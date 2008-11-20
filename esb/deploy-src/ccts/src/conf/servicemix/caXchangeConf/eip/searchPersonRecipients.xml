@@ -19,21 +19,24 @@
 -->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
-
-  <!-- static recipient list for register subject -->
-    <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="registerSubjectRecipientsEndpoint">
+  
+  <!-- static recipient list for SEARCH_PERSON -->
+  <eip:caxchange-static-recipient-list service="caxchange:searchPerson" endpoint="searchPersonEndpoint">
       <eip:recipients>
-	<eip:exchange-target service="caxchange:pscRegisterSubjectRouter" /> 
-        <eip:exchange-target service="caxchange:caaersRegisterSubjectRouter"  /> 
-        <eip:exchange-target service="caxchange:ctomRegisterSubjectRouter" /> 
-        <eip:exchange-target service="caxchange:c3DRegisterSubjectRouter" />
-      </eip:recipients>
-      <eip:targetServiceIdentifiers>
-           <value>psc</value> 
-           <value>caAERS</value> 
-           <value>LabViewer</value> 
-               <value>C3D</value>
-      </eip:targetServiceIdentifiers>
+        <eip:exchange-target service="caxchange:callSearchPersonPipeline" />
+      </eip:recipients>     
   </eip:caxchange-static-recipient-list>
   
-</beans>
+  <eip:pipeline service="caxchange:callSearchPersonPipeline" endpoint="callSearchPersonPipelineEndpoint">
+	<eip:transformer>
+	    <eip:exchange-target service="caxchange:queryCoppaPersonService" />
+	</eip:transformer>
+	<eip:target>
+	    <eip:exchange-target service="caxchange:ResponseQueueService" />
+	</eip:target>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+      </eip:faultsTarget>	
+  </eip:pipeline>
+  
+</beans> 

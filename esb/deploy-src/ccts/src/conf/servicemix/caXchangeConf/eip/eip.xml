@@ -21,6 +21,7 @@
        xmlns:caxchange="http://nci.nih.gov/caXchange">
        
   <!-- Pipeline to invoke the delegation service -->
+  <!--
   <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="invokeDelegationPipelineEndpoint">
       <eip:transformer>
         <eip:exchange-target service="caxchange:setSubjectService" />
@@ -32,8 +33,20 @@
         <eip:exchange-target service="caxchange:validatePayloadPipeline" />
       </eip:target>
   </eip:pipeline>  
-  
+  -->
+    <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="invokeDelegationPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:payloadValidationService" />
+        </eip:transformer>
+        <eip:faultsTarget>
+           <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+        </eip:faultsTarget>
+        <eip:target>
+          <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
+        </eip:target>
+  </eip:pipeline> 
   <!-- Pipeline to validate payload -->
+  <!--
   <eip:pipeline service="caxchange:validatePayloadPipeline" endpoint="validatePayloadPipelineEndpoint">
         <eip:transformer>
           <eip:exchange-target service="caxchange:payloadValidationService" />
@@ -45,7 +58,7 @@
           <eip:exchange-target service="caxchange:storeOriginalMessagePipeline" />
         </eip:target>
   </eip:pipeline>     
-  
+  -->
   <!-- Pipeline to store original message -->
   <eip:pipeline service="caxchange:storeOriginalMessagePipeline" endpoint="storeOriginalMessagePipelineEndpoint">
       <eip:transformer>
@@ -96,6 +109,10 @@
   <import resource="classpath:/caXchangeConf/eip/labDataRecipients.xml" /> 
   
   <import resource="classpath:/caXchangeConf/eip/labBasedAeRecipients.xml" /> 
+  
+  <import resource="classpath:/caXchangeConf/eip/newMessageTypeRecipients.xml" /> 
+  
+  <import resource="classpath:/caXchangeConf/eip/searchPersonRecipients.xml" />   
     
   <!--- EIP components for invoking the PSC  -->
   

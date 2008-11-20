@@ -70,7 +70,23 @@
         <eip:target>
           <eip:exchange-target service="caxchange:labBasedAe" />
         </eip:target>
-      </eip:routing-rule>      
+      </eip:routing-rule> 
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='NEW_MESSAGE_TYPE']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:newMessageType" />
+        </eip:target>
+      </eip:routing-rule>    
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:messageType='SEARCH_PERSON']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:callSearchPersonPipeline" />
+        </eip:target>
+      </eip:routing-rule>        
       <eip:routing-rule>
         <eip:target>
           <eip:exchange-target service="caxchange:callUnhandledMessageType" />
