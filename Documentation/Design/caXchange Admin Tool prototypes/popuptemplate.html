@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<title>caXchange Admin Tool - Add Target Services</title>
+<link rel="stylesheet" type="text/css" href="styleSheet.css" />
+<script type="text/javascript">
+        function newwindow()
+    {
+        window.opener.location='NewServiceTypeExistingTS.html'
+        window.close();
+    }
+    function popup()
+    {
+        tables.disabled=false;
+    }
+</script>
+</head>
+<body>
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+
+	<!-- nci hdr begins -->
+  <tr>
+    <td>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="hdrBG">
+        <tr>
+          <td width="283" height="37" align="left"><a href="http://www.cancer.gov"><img alt="National Cancer Institute" src="images/logotype.gif" width="283" height="37" border="0"></a></td>
+          <td>&nbsp;</td>
+          <td width="295" height="37" align="right"><a href="http://www.cancer.gov"><img alt="U.S. National Institutes of Health | www.cancer.gov" src="images/tagline.gif" width="295" height="37" border="0"></a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <!-- nci hdr ends -->
+	
+  <tr>
+    <td height="100%" valign="top">
+      <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" >
+			
+				<!-- application hdr begins -->
+				<tr>
+					<td colspan="2" height="50">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="subhdrBG">
+							<tr>
+								<td height="50" align="left"><a href="#"><img src="images/appLogo.gif" alt="Application Logo" hspace="10" border="0"></a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<!-- application hdr ends -->
+				
+        <tr>
+          <td width="190" valign="top" class="subMenu">
+          
+            <!-- submenu begins -->
+            <!-- submenu ends -->
+            
+          </td>
+          <td valign="top" width="100%">
+          </td>
+        </tr>
+        
+         <tr><td valign="top"> <br/><input type="checkbox" name="list" value="New" checked="checked"><label>Configure new target service</label></input>
+          <table summary="Target service" cellpadding="0" cellspacing="0" border="0">
+          <tr><td><br/></td></tr>
+          
+          <tr>
+              <td class="standardTextGeneral">&nbsp;&nbsp;<label id="name">Name:</label></td>
+                <td>&nbsp;&nbsp;<input id="namebox" type="text" name="NAME:" value="" /></td>
+                </tr>
+                <tr><td><br/></td></tr>
+                <tr class="standardTextGeneral">
+                    <td>&nbsp;&nbsp;<label id="url">URL:</label></td>
+                    <td>&nbsp;&nbsp;<input id="urlbox" type="text" name="URL" value="" /></td>
+                </tr> 
+    </table></td></tr>
+    
+    <tr>
+        <td valign="top">
+            <input type="checkbox" name="list" value="Existing" onclick="popup()"><label>Select from existing target services</label>
+        <br/>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+        <table border="1" disabled="disabled" id="tables">
+      
+             <tr>
+                <th class="dataTablePrimaryLabel"></th>
+                <th class="dataTablePrimaryLabel">Name</th>
+                <th class="dataTablePrimaryLabel">URL</th>
+            </tr>
+            
+            <tbody>
+            <tr>
+                <td><input type="checkbox" name="list" value="c1" /></td>
+                <td class="dataCellText">caERSStudyConsumerService</td>
+                <td class="dataCellText">http://localhost:8080/wsrf-consumer/services/cagrid/caAERSStudyConsumerService</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="list" value="c2" /></td>
+                <td class="dataCellText">PSCStudyConsumerService</td>
+                <td class="dataCellText">http://localhost:8080/wsrf-consumer/services/cagrid/PSCtudyConsumerService</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" name="list" value="c3" /></td>
+                <td class="dataCellText">LabViewConsumerService</td>
+                <td class="dataCellText">http://localhost:8080/wsrf-consumer/services/cagrid/LabViewConsumerService</td>
+            </tr>
+
+            <tr>
+                <td  align="center">
+                <input class="actionButton" type="submit" value="Select All" name="Select" onclick="selectall()"/></td>
+            </tr>
+            </tbody>
+          </table>
+      </td>
+  </tr>
+    <tr>              
+             <td align="center" valign="top">
+                <input class="actionButton" type="submit" value="Add" name="Add" onclick="newwindow()"/>
+             
+                &nbsp;&nbsp;<input class="actionButton" type="submit" value="Cancel" onclick="window.close()"/>                        
+             </td>
+         
+     </tr>
+  </table>
+  <tr>
+    <td>
+      <!-- footer begins -->
+      <!-- footer ends -->
+    </td>
+  </tr>
+</table>
+</body>
+</html>
