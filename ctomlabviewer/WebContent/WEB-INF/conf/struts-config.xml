@@ -91,7 +91,7 @@
 			<forward name="ApplicationHomePage"
 				path="Tiles.Application.Home" />
 			<forward name="LoadSearchSuccess"
-				path="Tiles.LabActivities.Detail.Screen" />
+				path="/LabActivitiesDBOperation.do" />
 			<forward name="LoadStudySearchSuccess"
 				path="Tiles.StudySearch.Detail.Screen" />
 			<forward name="LoadPartSearchSuccess"
