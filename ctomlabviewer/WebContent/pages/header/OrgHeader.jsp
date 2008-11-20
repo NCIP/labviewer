@@ -83,7 +83,7 @@ function MM_swapImage() { //v3.0
     <!-- Add log out link -->
     
     <div id="login-action">
-   
+       <a href="helpdocs/CTODS Lab Viewer End User Guide.doc"> <font color=blue>Help</font></a> ||
        <!--   -->
        <% if(session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
