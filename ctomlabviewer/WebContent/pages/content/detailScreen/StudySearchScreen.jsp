@@ -124,8 +124,7 @@
             <th class="dataTableHeader" scope="col" align="center" width="15%">Sponsor code</th>
             <th class="dataTableHeader" scope="col" align="center" width="15%">Phase code</th>
             <th class="dataTableHeader" scope="col" align="center" width="15%">Status</th>
-            <th class="dataTableHeader" scope="col" align="center" width="15%">View Study Details</th> 
-     </tr>
+            </tr>
      </thead>
      <tbody>   
      <nested:iterate  name="StudySearchForm" id="studiesList" property="studiesList" type="gov.nih.nci.caxchange.ctom.viewer.viewobjects.StudySearchResult" indexId="iterateId">
@@ -144,12 +143,9 @@
                         </td>
                         <td class="dataCellText" width="15%">&nbsp;
                             <nested:write name="studiesList" property="status"/>
-                        </td>
-                         <td class="dataCellText" width="15%">&nbsp;
-                            <a href="">Details</a>
                             <nested:hidden name="studiesList" property="index" indexed="true"/>
                         </td>
-                        
+                                      
                     </tr>  
          </nested:iterate>
        </tbody>
