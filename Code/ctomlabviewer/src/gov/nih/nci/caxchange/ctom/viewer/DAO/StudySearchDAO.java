@@ -153,11 +153,14 @@ public class StudySearchDAO extends HibernateDaoSupport{
 				studySearchResult.setGridId(studyGridId);
 				request.getSession().setAttribute("studySubjectGridId", studyGridId);
 				//retrieve the phase code
-				studySearchResult.setPhaseCode(study.getPhaseCode());
+				studySearchResult.setPhaseCode(study.getPhaseCode()!=null?study.getPhaseCode():"");
 				//retrieve the sponsor code
-				studySearchResult.setSponsorCode(study.getSponsorCode());
-				//TO DO: set the details link
-				String details ="https://cbvapp-d1017.nci.nih.gov:28443/c3pr/pages/study/viewStudy?studyId=14";
+				String sponsorCd =""; 
+				if(study.getSponsorCode()!=null && !study.getSponsorCode().equals("null"))
+					sponsorCd = study.getSponsorCode();
+				studySearchResult.setSponsorCode(sponsorCd);
+				//TO DO: set the details link:https://cbvapp-d1017.nci.nih.gov:28443/c3pr/pages/study/viewStudy?studyId=14
+				String details ="";
 				studySearchResult.setDetails(details);
 				list.add(studySearchResult);
 			}
