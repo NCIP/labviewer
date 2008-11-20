@@ -108,7 +108,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
 				HealthCareSite hcs = (HealthCareSite) resultsIterator.next();
-				siteList = printRecordHealthCareSite(hcs);
+				siteList.addAll(printRecordHealthCareSite(hcs));
          
 			}
 		}	
@@ -166,7 +166,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 	{
 		
 		List labTestList = new ArrayList();
-		
+		labTestList.add("All");
 		try
 		{
 	
@@ -227,7 +227,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();)
 			{
 				SubjectAssignment sa = (SubjectAssignment) resultsIterator.next();
-				labTestList = printRecord(sa);
+				labTestList.addAll(printRecord(sa));
          
 			}
 		}	
@@ -252,7 +252,7 @@ public class FiltersDAO extends HibernateDaoSupport{
 		throws ParseException
 	{
 		ArrayList list = new ArrayList();
-		list.add("All");
+		
 		SortedSet labSet = new TreeSet();
 		if (sa == null)
 			return null;
