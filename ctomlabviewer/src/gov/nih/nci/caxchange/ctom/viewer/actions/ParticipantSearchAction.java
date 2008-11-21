@@ -103,8 +103,7 @@ import org.apache.struts.actions.DispatchAction;
 public class ParticipantSearchAction extends DispatchAction
 {
 	private static final Logger logDB = Logger.getLogger(ParticipantSearchAction.class);
-	private static final String CONFIG_FILE = "/baseURL.properties";
-
+	
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -187,31 +186,6 @@ public class ParticipantSearchAction extends DispatchAction
 		}
 		
 		//if search result is not null; forward to searchresults page
-		//get the base url for caAERS and C3D from the properties file
-		try
-		 {   Properties props = new Properties();
-			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
-			 props.load(stream);
-			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
-			 String hotLinkType = (String)props.getProperty("hotLink_Type");
-		     //String C3Durl = (String)props.getProperty("BaseURLC3D");
-		     session.setAttribute("BaseURLcaAERS", caAERSurl);
-		     //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
-		     session.setAttribute("hotLinkType", hotLinkType);
-		     //change the title to include patient information
-		     String titleString = "CTODS Lab Viewer :  Participant Search:"+ pForm.getParticipantPhrase()+"";
-		    // session.setAttribute("pageTitle",titleString); 
-		     //session.setAttribute("BaseURLC3D", C3Durl);
-		 } 
-		 catch (FileNotFoundException e1) 
-		 {
-		     logDB.error("The config file not found: " + CONFIG_FILE);
-		 } 
-		 catch (IOException e1) 
-		 {
-			 logDB.error("Error reading the config file: " + CONFIG_FILE);
-		 }
-		//if search result is not null; forward to searchresults page
 		session.setAttribute(DisplayConstants.CURRENT_FORM, pForm);
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()
@@ -226,6 +200,7 @@ public class ParticipantSearchAction extends DispatchAction
 	}
 
 	/**
+	 * Forwards the control to the Lab Search page.
 	 * @param mapping
 	 * @param form
 	 * @param request

@@ -71,8 +71,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class LabSearchDAO extends HibernateDaoSupport{
 	
 	private static final Logger logDB = Logger.getLogger(LabSearchDAO.class);
-	private static final String CONFIG_FILE = "/baseURL.properties";
-	
+		
 	/**
 	 * SearchObjects queries the database with the user entered search criteria.
 	 * returns the search results
