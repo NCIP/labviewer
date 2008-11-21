@@ -68,9 +68,9 @@
    <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
-  <ns2:Namespace location="./StudyConsumerTypes.xsd" namespace="http://grid.ccts.nci.nih.gov/StudyConsumer/types" packageName="gov.nih.nci.ccts.grid.stubs.types" xsi:type="ns2:NamespaceType">
-   <ns2:SchemaElement type="StudyConsumerReference" xsi:type="ns2:SchemaElementType"/>
+  <ns2:Namespace location="./StudyConsumerTypes.xsd" namespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types" packageName="gov.nih.nci.ccts.grid.studyconsumer.stubs.types" xsi:type="ns2:NamespaceType">
    <ns2:SchemaElement type="InvalidStudyException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StudyConsumerReference" xsi:type="ns2:SchemaElementType"/>
    <ns2:SchemaElement type="StudyCreationException" xsi:type="ns2:SchemaElementType"/>
   </ns2:Namespace>
   <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
@@ -85,7 +85,7 @@
   </ns2:Namespace>
  </ns2:Namespaces>
  <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ns3:Service name="StudyConsumer" namespace="http://grid.ccts.nci.nih.gov/StudyConsumer" packageName="gov.nih.nci.ccts.grid" xsi:type="ns3:ServiceType">
+  <ns3:Service name="StudyConsumer" namespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer" packageName="gov.nih.nci.ccts.grid.studyconsumer" xsi:type="ns3:ServiceType">
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
     <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
      <ns4:Output qName="void" isArray="false"/>
@@ -119,8 +119,8 @@
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="InvalidStudyException" qname="ns11:InvalidStudyException" xmlns:ns11="http://grid.ccts.nci.nih.gov/StudyConsumer/types"/>
-      <ns4:Exception description="" name="StudyCreationException" qname="ns12:StudyCreationException" xmlns:ns12="http://grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns11:InvalidStudyException" xmlns:ns11="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+      <ns4:Exception description="" name="StudyCreationException" qname="ns12:StudyCreationException" xmlns:ns12="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="commit" xsi:type="ns4:MethodType">
@@ -129,7 +129,7 @@
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="InvalidStudyException" qname="ns14:InvalidStudyException" xmlns:ns14="http://grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns14:InvalidStudyException" xmlns:ns14="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
      </ns4:Exceptions>
     </ns4:Method>
     <ns4:Method description="" isImported="false" isProvided="false" name="rollback" xsi:type="ns4:MethodType">
@@ -138,7 +138,7 @@
      </ns4:Inputs>
      <ns4:Output qName="void" description="" isArray="false"/>
      <ns4:Exceptions>
-      <ns4:Exception description="" name="InvalidStudyException" qname="ns16:InvalidStudyException" xmlns:ns16="http://grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns16:InvalidStudyException" xmlns:ns16="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
      </ns4:Exceptions>
     </ns4:Method>
    </ns4:Methods>
