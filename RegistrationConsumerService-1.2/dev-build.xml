@@ -10,9 +10,8 @@
 	<!-- ============================================================== -->
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
-	
-	  <property name="artifacts.dir" value="../artifacts" />
 
+ 	<property name="artifacts.dir" value="../artifacts" />
 
 
 	<!-- ============================================================== -->
@@ -96,13 +95,16 @@
 	<!-- ============================================================== -->
 	<!-- Pre Compile Build Target                                       -->
 	<!-- ============================================================== -->
+	
 	<target name="preCompile">
-			<copy todir="${lib.dir}">
-				<fileset dir="${artifacts.dir}">
-					<include name="*.jar"/>
-				</fileset>
-			</copy>
-		</target>
+				<copy todir="${lib.dir}">
+					<fileset dir="${artifacts.dir}">
+						<include name="*.jar"/>
+					</fileset>
+				</copy>
+			</target>
+
+	
 
 	<!-- ============================================================== -->
 	<!-- Post Compile Build Target                                       -->
