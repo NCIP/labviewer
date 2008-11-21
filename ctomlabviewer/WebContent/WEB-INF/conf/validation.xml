@@ -40,6 +40,12 @@
   			<arg0 key="MenuForm.tableId.displayLabel"/>
   		</field>
 	</form>
+	
+	<form name="ParticipantSearchForm">
+ 		<field property="studyId" depends="required">
+  			<arg0 key="ParticipantSearchForm.studyId.displayLabel"/>
+  		</field>
+	</form>
 
     <form name="LabActivitiesForm">
 		<field property="studyId" depends="required,maxlength">
