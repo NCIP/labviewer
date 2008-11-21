@@ -1,13 +1,15 @@
 package gov.nih.nci.cabig.labviewer.grid;
 
 
-import gov.nih.nci.ccts.grid.HealthcareSiteType;
-import gov.nih.nci.ccts.grid.IdentifierType;
-import gov.nih.nci.ccts.grid.ParticipantType;
-import gov.nih.nci.ccts.grid.Registration;
-import gov.nih.nci.ccts.grid.StudyRefType;
-import gov.nih.nci.ccts.grid.StudySiteType;
+import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
+import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.ParticipantType;
+import gov.nih.nci.cabig.ccts.domain.Registration;
+import gov.nih.nci.cabig.ccts.domain.StudyRefType;
+import gov.nih.nci.cabig.ccts.domain.StudySiteType;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumerI;
+import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 import gov.nih.nci.ccts.grid.stubs.types.InvalidRegistrationException;
 import gov.nih.nci.ccts.grid.stubs.types.RegistrationConsumptionException;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
@@ -23,8 +25,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 /**
  * LabViewerRegistrationConsumer is the implementing class for this grid service
@@ -36,8 +37,8 @@ import org.apache.commons.logging.LogFactory;
 public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 {
 	private static final int MILLIS_PER_MINUTE = 60 * 1000;
-	private static final int THRESHOLD_MINUTE = 2;
-	private static final Log logger = LogFactory.getLog(LabViewerRegistrationConsumer.class);
+	private static final int THRESHOLD_MINUTE = 1;
+	private static final Logger logger = Logger.getLogger(LabViewerRegistrationConsumer.class);
 	private HashMap<String,ParticipantPersistTime> map = new HashMap<String,ParticipantPersistTime>();
 	private CTLabDAO dao = new CTLabDAO();
 	private Connection con;
@@ -69,13 +70,15 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	 */
 	public void rollback(Registration registration) throws RemoteException, InvalidRegistrationException
 	{
+		logger.debug("Received a rollback for participant");
 		ParticipantType participant = registration.getParticipant();
 		String participantGridId = participant.getGridId();
+		String participantExtension = participant.getIdentifier(0).getValue();
 		 con = dao.getConnection();
 		 //method returns the ctominsertdate if the participantGridId is found in the database
 		 try
 			{ 
-				java.util.Date insertdate = dao.checkParticipantForRollback(con,participantGridId);
+				java.util.Date insertdate = dao.checkParticipantForRollback(con,participantGridId, participantExtension);
 				if(insertdate!=null)
 				{	
 					java.util.Date currdate = new Date();
@@ -85,7 +88,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				
 					if( insertdate.before(currdate) && diffInMin < THRESHOLD_MINUTE )
 					{	
-						dao.rollbackParticipant(con, participantGridId);
+						dao.rollbackParticipant(con, participantGridId,participantExtension);
+						logger.info("deleted participant");
 					}else {
 						logger.info("There is no participant within the threshold time for rollback");
 					}
@@ -114,7 +118,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 					logger.error("Error closing connection",e);
 				}
 			}
-			logger.info("deleted participant");
+			
 		}
 		
 	
@@ -124,13 +128,13 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	public Registration register(Registration registration)
 		throws RemoteException, InvalidRegistrationException, RegistrationConsumptionException
 	{
-		logger.info("Lab Viewer Registration message received");
+		logger.debug("Lab Viewer Registration message received");
 		java.util.Date now = new Date();
 		StudyRefType studyRef = registration.getStudyRef();
 		
-		/*// Authorization code 
+		// Authorization code 
 		String username = RegistrationConsumerAuthorization.getCallerIdentity();
-		
+		String user = "";
 		if (username == null)
 		{
 			logger.error("Error saving participant no username provided");
@@ -140,11 +144,16 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		}
 		else
 		{
-			logger.info("User who called was " + username);
+			logger.info("User " + username);
 			
 			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
+			if(username!=null){
+				int beginIndex = username.lastIndexOf("=");
+				int endIndex = username.length();
+				user = username.substring(beginIndex+1, endIndex);
+				}
 			
-			boolean authorized = lvaHelper.isAuthorized(username);
+			boolean authorized = lvaHelper.isAuthorized(user);
 			
 			if (!authorized)
 			{
@@ -154,7 +163,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				throw rce;
 			}
 			else
-			{*/
+			{
 				// save the study data
 				Protocol protocol = new Protocol();
 				protocol.setLongTxtTitle(studyRef.getLongTitleText());
@@ -274,8 +283,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 					}
 				}
 			 logger.info("Lab Viewer Registration message stored");
-			/*}
-		   }*/
+			}
+		   }
 		return registration;
 	}
 	
