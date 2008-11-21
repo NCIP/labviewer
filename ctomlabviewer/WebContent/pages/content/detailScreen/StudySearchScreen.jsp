@@ -113,11 +113,11 @@
  	<table summary="" cellpadding="0" cellspacing="0" border="0" width="95%" height="100%" >
  	<tr>
 			<td valign="top">
-				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="contentBegins">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="contentBegins" >
 					<tr>
 						<td>
-						<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" class="dataTable sortable" width="100%" height="100%">
-      				<thead >
+						<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" id="myScrollTable" class="dataTable sortable" width="100%" height="100%">
+      				<thead class="scrollbar">
       					 <tr>
         	<th class="dataTableHeader" scope="col" align="center" width="15%"> ID</th>
             <th class="dataTableHeader" scope="col" align="center" width="15%">Short Title</th>
@@ -167,6 +167,7 @@
 </html:form>
 <head>
 <script type="text/javascript">
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 240);
 //handles load action
 function loadParticipant(indexValue){
  
