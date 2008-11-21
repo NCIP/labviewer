@@ -179,8 +179,7 @@ public class LoadTocaAERSAction extends Action
 	}
 	
 	/**
-	 * Collects the selected form data and calls the EvenManager sendLabActivitiesmethod to
-	 * load the data to CTMS
+	 * Collects the selected form data and loads the labs to caAERS
 	 * @param request
 	 * @param form
 	 * @param username
