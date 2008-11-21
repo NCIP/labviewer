@@ -299,8 +299,7 @@
 		</action>
 		<action path="/participantSearch"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.ParticipantSearchAction"
-			name="ParticipantSearchForm" scope="session" 
-			validate="false"
+			name="ParticipantSearchForm" scope="session" input="Tiles.ParticipantSearch.Detail.Screen"
 			parameter="operation" >
 			<forward name="LoginPage" path="Tiles.Login.Page" />
 			<forward name="LoadStudySearchSuccess"
