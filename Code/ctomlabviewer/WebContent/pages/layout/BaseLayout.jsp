@@ -18,6 +18,7 @@
    	<link rel="stylesheet" href="laf/src/main/resources/gov/nih/nci/cabig/ctms/lookandfeel/assets/css/tabbedflow.css" type="text/css" />
 	<script language="JavaScript" src="scripts/script.js"></script>
 	<script language="JavaScript" src="scripts/sorttable.js"></script>
+	<script type="text/javascript" src="scripts/webtoolkit.scrollabletable.js"></script>
 	<!-- Page Title begins -->
 	<title><tiles:get name="Title"/></title>
 	<!-- Page Title ends -->
