@@ -199,6 +199,13 @@ public class HomeAction extends Action {
 			 session.setAttribute("webssoCasServer", webssoCasServer);
 			 String version = (String)props.getProperty("version");
 			 session.setAttribute("version", version);
+			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
+			 String hotLinkType = (String)props.getProperty("hotLink_Type");
+			 //String C3Durl = (String)props.getProperty("BaseURLC3D");
+			 session.setAttribute("BaseURLcaAERS", caAERSurl);
+			 //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
+			 session.setAttribute("hotLinkType", hotLinkType);
+				   
 		 }catch (FileNotFoundException e1) 
 		 {
 		     log.error("The config file not found: " + CONFIG_FILE);
