@@ -67,6 +67,7 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -110,10 +111,13 @@ BaseAssociationForm {
 	public ActionErrors validate(ActionMapping mapping,
 			HttpServletRequest request) {
 		ActionErrors errors = super.validate(mapping, request);
+		HttpSession session = request.getSession();
+
+		String studyIdent = (String)session.getAttribute("studyId")!=null?(String)session.getAttribute("studyId"):"";
 		if(errors == null) errors = new ActionErrors();
-				
-			if ((getParticipantPhrase() == null) || (getParticipantPhrase().length() < 1))
-				errors.add("participantPhrase", new ActionError("error.participantPhrase.value"));
+		if ((studyIdent == null) || (studyIdent.length() < 1))
+			//errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(DisplayConstants.ERROR_ID, "StudyId is required"));
+			errors.add("studyIdent", new ActionError("error.studyId.value"));
 		
 		return errors;
 	  
