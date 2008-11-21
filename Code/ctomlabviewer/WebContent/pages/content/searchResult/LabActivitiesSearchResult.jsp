@@ -11,9 +11,8 @@
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
 
 
-<script type="text/javascript" src="prototype.js"></script>
-<script type="text/javascript" src="ccts-hotlinks.js"></script>
-<script type="text/javascript" src="scripts/sorttable.js"></script>
+<script type="text/javascript" src="scripts/prototype.js"></script>
+<script type="text/javascript" src="scripts/ccts-hotlinks.js"></script>
 <script type="text/javascript">
     CCTS.appShortName = 'labviewer'
 </script>
@@ -137,22 +136,13 @@ function SelectAll()
 		else
 			alert("Atleast one check box should be checked.");
  	}
- 	
- 	function handleCustomDates(element){
-	
-    if(element.value=="Custom dates/times"){
-     document.getElementById("addTable").style.display = "block";
-    }else {
-     document.getElementById("addTable").style.display = "none";
-    }
-    
-  }
-</script>
+ </script>
 
  
 <body onload="javaScript:setUp();">
+
+
 <!-- laf box 1st half -->
-<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 <div class="box" >
 	<div class="pane" align="center">
     <!-- header -->
@@ -205,11 +195,13 @@ function SelectAll()
 					<tr>
 						<td>
 							<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+								<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 									<bean:define name="<%=DisplayConstants.SEARCH_RESULT%>" property="searchResultObjects" id="searchResultObjects" />
 									<bean:define id="oddRow" value="true" />
 									<tr>
 										<td>
-											<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" class="sortable dataTable" width="100%">
+											<table summary="Enter summary of data here" cellpadding="3" cellspacing="0" border="0" id="myScrollTable" class="dataTable" width="100%">
+											<thead class="scrollbar">	
 												<tr>
 												   <th class="dataTableHeader" scope="col" align="center" width="5%">
 													<a href="javascript:SelectAll();">
@@ -255,6 +247,8 @@ function SelectAll()
 													</th>
 													-->
 												</tr>
+											</thead>
+											<tbody>	
 												<logic:iterate name="searchResultObjects" id="searchResultObject" type="LabActivityResult">
 													<%if (oddRow.equals("true"))
 													{
@@ -450,8 +444,9 @@ function SelectAll()
 													</tr>
 													<%}%>
 												</logic:iterate>
+											</tbody>	
 											</table>
-										</td>
+									</td>
 									</tr>
 									<tr>
 										<td align="right" class="actionSection">
@@ -475,7 +470,7 @@ function SelectAll()
 											<!-- action buttons end -->
 										</td>
 									</tr>
-								
+							</logic:present>
 							</table>
 						</td>
 					</tr>
@@ -493,8 +488,12 @@ function SelectAll()
 	</div>
 </div>
 <!-- laf box 2nd half -->
-</logic:present>
 
+<head>
+<script type="text/javascript">
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 150);
+</script>
+</head>
 
 
 
