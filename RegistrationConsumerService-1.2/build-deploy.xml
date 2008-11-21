@@ -26,7 +26,7 @@
 	
 	<property name="jboss.dir" value="${env.JBOSS_HOME}" />
 	<property name="webapp.name" value="ctom-wsrf"/>
-
+	
 	<target name="setDeploymentProperties">
 		<property file="deploy.properties" />
 		<property name="globus.webapp" value="${webapp.name}" />
