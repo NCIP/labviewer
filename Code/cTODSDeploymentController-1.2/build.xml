@@ -29,10 +29,10 @@
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
-			<zipfileset dir="${studyLookupService.dir}" prefix="StudyLookupService">
+			<!--<zipfileset dir="${studyLookupService.dir}" prefix="StudyLookupService">
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
-			</zipfileset>
+			</zipfileset>-->
 			<zipfileset dir="${ddl.dir}" prefix="DDL" />
 		</zip>
 	</target>
@@ -54,10 +54,10 @@
 		<ant antfile="${unZip.dir}/StudyConsumerService/build-ctms.xml" dir="${unZip.dir}/StudyConsumerService" target="deploySkeletonService" inheritall="true">
 
 		</ant>
-		<echo>Pre stage  StudyLookup Service </echo>
+	<!--	<echo>Pre stage  StudyLookup Service </echo>
 		<ant antfile="${unZip.dir}/StudyLookupService/build-ctms.xml" dir="${unZip.dir}/StudyLookupService" target="deploySkeletonService" inheritall="true">
 
-		</ant>
+		</ant> -->
 		<echo>Pre stage  Lab Loader Service </echo>
 		<ant antfile="${unZip.dir}/LabLoader/build-ctms.xml" dir="${unZip.dir}/LabLoader" target="deploySkeletonService" inheritall="true">
 
@@ -76,9 +76,9 @@
 			<fileset dir="${unZip.dir}/StudyConsumerService/build/">
 				<include name="*.zip" />
 			</fileset>
-			<fileset dir="${unZip.dir}/StudyLookupService/build/">
+		<!--	<fileset dir="${unZip.dir}/StudyLookupService/build/">
 				<include name="*.zip" />
-			</fileset>
+			</fileset> -->
 			<fileset dir="${unZip.dir}/LabLoader/build/">
 				<include name="*.zip" />
 			</fileset>
@@ -173,6 +173,15 @@
 		<copy todir="${webapps.dir}/WEB-INF/classes">
 			<fileset dir="wsrf-folder/classes" />
 		</copy>
+		<copy file="labviewer.hibernate.cfg.xml.template" toFile="${webapps.dir}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
+		 <filterset begintoken="@" endtoken="@">
+		  <filter token="database_dialect" value="${database.dialect}" />
+		  <filter token="database_driver" value="${database.driver}" />
+		  <filter token="database_url" value="${database.url}" />
+		  <filter token="database_user" value="${database.username}" />
+		  <filter token="database_passwd" value="${database.password}" />
+		</filterset>
+		</copy>
 	</target>
 
 	<!-- Builds the cTOM-wsrf -->
@@ -199,5 +208,6 @@
 		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
 			<fileset file="${war-dist.dir}/${war.name}.war" />
 		</copy>
+		
 	</target>
 </project>
