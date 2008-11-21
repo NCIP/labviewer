@@ -202,31 +202,6 @@ public class SearchAction extends DispatchAction
 		}
 		
 		//if search result is not null; forward to searchresults page
-		//get the base url for caAERS and C3D from the properties file
-		try
-		 {   Properties props = new Properties();
-			 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
-			 props.load(stream);
-			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
-			 String hotLinkType = (String)props.getProperty("hotLink_Type");
-		     //String C3Durl = (String)props.getProperty("BaseURLC3D");
-		     session.setAttribute("BaseURLcaAERS", caAERSurl);
-		     //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
-		     session.setAttribute("hotLinkType", hotLinkType);
-		     //change the title to include patient information
-		   //  String titleString = "CTODS Lab Viewer : "+ session.getAttribute("patientName")+ " ("+ lForm.getPatientId() +") Study:"+session.getAttribute("studyName") +" ("+lForm.getStudyId()+")";
-		 //    session.setAttribute("pageTitle",titleString); 
-		     //session.setAttribute("BaseURLC3D", C3Durl);
-		 } 
-		 catch (FileNotFoundException e1) 
-		 {
-		     logDB.error("The config file not found: " + CONFIG_FILE);
-		 } 
-		 catch (IOException e1) 
-		 {
-			 logDB.error("Error reading the config file: " + CONFIG_FILE);
-		 }
-		//if search result is not null; forward to searchresults page
 		session.setAttribute(DisplayConstants.CURRENT_FORM, lForm);
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()
@@ -243,6 +218,7 @@ public class SearchAction extends DispatchAction
 	
 			
 	/**
+	 * Queries the search results with the user selected filters.
 	 * @param lForm
 	 * @param searchResult
 	 * @return
@@ -254,7 +230,7 @@ public class SearchAction extends DispatchAction
 	 logDB.debug("the selected lab test is " +lForm.getSelectedLabTest());
 	 logDB.debug("the selected numeric result is " +lForm.getSelectedNumericResult());
 	 logDB.debug("the selected site is " +lForm.getSelectedSite());
-	 
+	 //get the filters selected.
 	 String labTest =lForm.getSelectedLabTest();
 	 String site=lForm.getSelectedSite();
 	 String dateRange=lForm.getSelectedDateRange();
@@ -264,6 +240,7 @@ public class SearchAction extends DispatchAction
 	 boolean cond2 = true;
 	 boolean cond3 = true;
 	 boolean cond4 = true;
+	//serach in the results list for the selected filters 
 	 for(LabActivityResult lar: searchResult)
 	 {   
 		 //filters set to defaults return the results
@@ -273,7 +250,6 @@ public class SearchAction extends DispatchAction
 		 }
 		 else
 		 {
-		  
 		  if(!labTest.equals("All"))
 			   cond1 = lar.getLabTestId().equals(labTest);
 		  if(!site.equals("All"))
@@ -295,7 +271,9 @@ public class SearchAction extends DispatchAction
 	 
 	 return queryRes;
 	}
-	/**
+	
+	/** 
+	 * Builds the numeric range query
 	 * @param numericResult
 	 * @param session
 	 */

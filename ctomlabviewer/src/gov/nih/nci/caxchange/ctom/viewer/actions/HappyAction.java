@@ -92,7 +92,6 @@ import org.apache.struts.action.ActionMapping;
 public class HappyAction extends Action {
 
 	private static final Logger log = Logger.getLogger(HappyAction.class);
-	private static final String CONFIG_FILE_1 = "/baseURL.properties";
 	private static final String CONFIG_FILE_2 = "/loadLabURLS.properties";
 
 	/*
@@ -174,28 +173,7 @@ public class HappyAction extends Action {
 					return (mapping
 							.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK));
 				}
-				try
-				 {   Properties props = new Properties();
-					 InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_1);
-					 props.load(stream);
-					 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
-					 String hotLinkType = (String)props.getProperty("hotLink_Type");
-				     //String C3Durl = (String)props.getProperty("BaseURLC3D");
-				     session.setAttribute("BaseURLcaAERS", caAERSurl);
-				     //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
-				     session.setAttribute("hotLinkType", hotLinkType);
-				       
-				     
-				 } catch (FileNotFoundException e1) 
-				 {
-				     log.error("The config file not found: " + CONFIG_FILE_1);
-				 } 
-				 catch (IOException e1) 
-				 {
-					 log.error("Error reading the config file: "+CONFIG_FILE_1);
-				 }	   
-				 
-				 try{
+				try{
 					 Properties props2 = new Properties();
 					 InputStream stream2 = getClass().getResourceAsStream(CONFIG_FILE_2);
 					 props2.load(stream2);

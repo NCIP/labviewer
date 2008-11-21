@@ -176,8 +176,7 @@ public class LoadToCTMSAction extends Action
 	}
 	
 	/**
-	 * Collects the selected form data and calls the EvenManager sendLabActivitiesmethod to
-	 * load the data to CTMS
+	 * Collects the selected form data and loads the labs to CTMS
 	 * @param request
 	 * @param form
 	 * @param username
