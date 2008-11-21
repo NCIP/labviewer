@@ -143,9 +143,8 @@
                         </td>
                         <td class="dataCellText" width="15%">&nbsp;
                             <nested:write name="studiesList" property="status"/>
-                            <nested:hidden name="studiesList" property="index" indexed="true"/>
                         </td>
-                                      
+                        <nested:hidden name="studiesList" property="index" indexed="true"/>         
                     </tr>  
          </nested:iterate>
        </tbody>
@@ -167,7 +166,7 @@
 </html:form>
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 240);
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 72);
 //handles load action
 function loadParticipant(indexValue){
  
