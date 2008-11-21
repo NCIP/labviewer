@@ -20,7 +20,7 @@
       <none />
     </auth-method>
   </method>
-  <authz value="studyconsumer:gov.nih.nci.ccts.grid.service.globus.StudyConsumerAuthorization" />
+  <authz value="studyconsumer:gov.nih.nci.ccts.grid.studyconsumer.service.globus.StudyConsumerAuthorization" />
   <auth-method>
     <GSITransport>
       <protection-level>

@@ -1,12 +1,6 @@
 package gov.nih.nci.cabig.labviewer.grid.test;
 
-import java.io.InputStream;
-import java.io.InputStreamReader; 
-
-import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.encoding.DeserializationException;
-import org.xml.sax.SAXException;
-
+import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
@@ -14,8 +8,15 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
-import gov.nih.nci.ccts.grid.Study;
-import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
+import gov.nih.nci.ccts.grid.studyconsumer.client.StudyConsumerClient;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.log4j.Logger;
+import org.globus.gsi.GlobusCredential;
+import org.globus.wsrf.encoding.DeserializationException;
+import org.xml.sax.SAXException;
 
 /**
  * Test class to test the Study Consumer for lab viewer
@@ -24,13 +25,15 @@ import gov.nih.nci.ccts.grid.client.StudyConsumerClient;
  */
 public class LabViewerStudyTest
 {
-	//String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyConsumer";
+	String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
-	String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/StudyConsumer";
+	//String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer";
 	//String serviceUrl= "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/StudyConsumer";
 	String sampleFile = "/SampleStudyMessage.xml";
+	//String sampleFile = "/StudyMessage.xml";
 	String proxyFile ="D:/proxy";
+	private Logger log = Logger.getLogger(getClass());
 	/**
 	 * main method just creates this class and calls the test method which performs all
 	 * the work
@@ -52,12 +55,13 @@ public class LabViewerStudyTest
 		try
 		{
 			System.out.println("Calling study service at " + serviceUrl);
+			log.debug("Calling study service at " + serviceUrl);
 			
 			// Setup the credentials
-			//GlobusCredential gb =this.obtainCredentials();//new GlobusCredential(proxyFile);
+			GlobusCredential gb =new GlobusCredential(proxyFile);//this.obtainCredentials();//
 						 
 			// Create the client
-			StudyConsumerClient client = new StudyConsumerClient(this.serviceUrl);//,gb);
+			StudyConsumerClient client = new StudyConsumerClient(this.serviceUrl,gb);
 			
 			// Create the Study object
 			Study study = getStudy();
@@ -82,7 +86,7 @@ public class LabViewerStudyTest
 		
 		GlobusCredential proxy =null;
 		try{
-			   
+			log.debug("Obtaining globus Proxy"); 
 			   //Create credential		
 
 			   Credential cred = new Credential();
@@ -128,10 +132,10 @@ public class LabViewerStudyTest
 	{
     	InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
         InputStreamReader reader = new InputStreamReader(sampleIs);
-        InputStream wsddIs = getClass().getResourceAsStream("/gov/nih/nci/ccts/grid/client/client-config.wsdd");
+        InputStream wsddIs = getClass().getResourceAsStream("/gov/nih/nci/ccts/grid/studyconsumer/client/client-config.wsdd");
 
-        Study study = (gov.nih.nci.ccts.grid.Study)
-        	Utils.deserializeObject(reader, gov.nih.nci.ccts.grid.Study.class, wsddIs);
+        Study study = (gov.nih.nci.cabig.ccts.domain.Study)
+        	Utils.deserializeObject(reader, gov.nih.nci.cabig.ccts.domain.Study.class, wsddIs);
         
         return study;
     }
