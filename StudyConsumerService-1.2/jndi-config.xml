@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jndiConfig xmlns="http://wsrf.globus.org/jndi/config">
   <service name="SERVICE-INSTANCE-PREFIX/StudyConsumer">
-    <resource name="configuration" type="gov.nih.nci.ccts.grid.service.globus.resource.StudyConsumerResourceConfiguration">
+    <resource name="configuration" type="gov.nih.nci.ccts.grid.studyconsumer.service.globus.resource.StudyConsumerResourceConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -19,7 +19,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="serviceconfiguration" type="gov.nih.nci.ccts.grid.service.StudyConsumerConfiguration">
+    <resource name="serviceconfiguration" type="gov.nih.nci.ccts.grid.studyconsumer.service.StudyConsumerConfiguration">
       <resourceParams>
         <parameter>
           <name>factory</name>
@@ -31,7 +31,7 @@
         </parameter>
       </resourceParams>
     </resource>
-    <resource name="home" type="gov.nih.nci.ccts.grid.service.globus.resource.StudyConsumerResourceHome">
+    <resource name="home" type="gov.nih.nci.ccts.grid.studyconsumer.service.globus.resource.StudyConsumerResourceHome">
       <resourceParams>
         <parameter>
           <name>factory</name>
