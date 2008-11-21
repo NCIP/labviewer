@@ -92,7 +92,8 @@
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
 				<filter token="websso.enabled" value="${websso.enabled}" />	
-				<filter token="websso.cas.server" value="${websso.cas.server}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />
+				<filter token="version" value="${version}" />
 			</filterset>
 		</copy>
 	</target>
@@ -138,7 +139,6 @@
 			<fileset dir="${sdkclient.home}" excludes="**/*.java" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/resources/ApplicationResources.properties" />
 			<fileset file="${src.home}/applicationContext.xml" />
-			<fileset file="${src.home}/applicationContext-service.xml" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
 		</copy>
