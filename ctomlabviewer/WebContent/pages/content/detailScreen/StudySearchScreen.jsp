@@ -17,8 +17,12 @@
 
 <html:form action="studySearch.do?operation=doStudySearch" method="post">
 <!-- laf box 1st half -->
-<div class="box" align="center">
-	<div class="pane" align="center">
+<div style="margin-top: 0; padding-top: 0;">
+  <logic:present name="StudySearchForm" property="studiesList">
+  
+   <!-- laf box 1st half -->
+  <div class="box">
+	<div  align="center">
 	    <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
 	      <h2>Study Search</h2>
@@ -28,32 +32,15 @@
 	    <div class="border-T"><div class="border-L"><div class="border-R"><div class="border-B"><div class="border-TL"><div class="border-TR"><div class="border-BL"><div class="border-BR">
 	        <div class="interior"> <!-- interior -->
 	            <div class="content">
-<!-- laf box 1st half -->
-
-<div>
-	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		width="100%" height="100%">
-		<tr>
-			<td>
-			<br><br>	
-			</td>
-		</tr>
-		<tr>
-		<td>
-		 <html:errors />
-		</td>
-		</tr> 
-		<tr>
-		<td valign="top" align="center">
-				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
-					<tr >
-						<td align="center" >
-							<table summary="" cellpadding="0" cellspacing="0" border="0"
-								width="100%" height="100%">
-								<tr>
-									<td >
-										<table cellpadding="0" cellspacing="0" border="0"
-												width="100%" height="100%">
+     <!-- laf box 1st half -->      
+ 	<table summary="" cellpadding="0" cellspacing="0" border="0" width="95%" height="100%" >
+ 	<tr>
+			<td valign="top">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="contentBegins">
+					<tr>
+						<td>
+																<center>
+										<table cellpadding="0" cellspacing="0" border="0">
 												<tr>
 													<td>
 														<html:text style="width: 4in" property="studyPhrase"/>
@@ -72,17 +59,10 @@
 												</font>
 												</td></tr>
 											</table>
-										 
-											</td></tr>
-										</table>
-									
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					</table>
-</div>
+											</center>
+  </td></tr></table>
+  </td></tr></table>
+ 
 
 <!-- laf box 2nd half -->
 	        </div>  <!-- content -->
@@ -91,9 +71,10 @@
     <!-- end inner border -->
 	</div>
 </div>
-<!-- laf box 2nd half -->
-<br><br><br><br><br><br><br><br>
-<br><br><br>
+<!-- laf box 2nd half -->    
+  </logic:present>
+</div>
+<div style="height: 1em; white-space: nowrap;"></div>
 <div>
   <logic:present name="StudySearchForm" property="studiesList">
   
