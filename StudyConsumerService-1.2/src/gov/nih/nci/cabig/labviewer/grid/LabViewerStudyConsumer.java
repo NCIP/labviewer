@@ -2,6 +2,7 @@ package gov.nih.nci.cabig.labviewer.grid;
 
 import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
 import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
@@ -20,7 +21,6 @@ import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
@@ -119,15 +119,20 @@ public class LabViewerStudyConsumer implements StudyConsumerI {
 
 		// save the identifier data	
 		//IdentifierType ident: identifiers
-
+		String assignedBy="";
 		for (int i = 0; i < identifiers.length; i++) {
 			IdentifierType ident = identifiers[i];
 
 			if (ident.getPrimaryIndicator().booleanValue()) {
 				Identifier id = new Identifier();
+				if (ident instanceof OrganizationAssignedIdentifierType)
+					 assignedBy = "organization";
+				else
+					 assignedBy = "system";
 				id.setExtension(ident.getValue());
 				id.setSource(ident.getSource());
 				id.setRoot(study.getGridId());
+				id.setAssigningAuthorityName(assignedBy);
 				protocol.setIdentifier(id);
 				protocol.setNciIdentifier(id.getRoot() + "."
 						+ id.getExtension());
