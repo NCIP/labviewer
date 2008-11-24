@@ -3,6 +3,7 @@ package gov.nih.nci.cabig.labviewer.grid;
 
 import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
 import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.ParticipantType;
 import gov.nih.nci.cabig.ccts.domain.Registration;
 import gov.nih.nci.cabig.ccts.domain.StudyRefType;
@@ -188,9 +189,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				StudySiteType studySite = registration.getStudySite();
 				HealthcareSiteType hcsType = studySite.getHealthcareSite(0);
 				HealthCareSite healthCare = new HealthCareSite();
-				//String tmpstr = studySite.getGridId()+"."+hcsType.getNciInstituteCode();
-				String tmpstr = hcsType.getNciInstituteCode();
-				healthCare.setNciInstituteCd(tmpstr);
+				healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
+				healthCare.setName(hcsType.getName());
 				
 				//save participant data
 				ParticipantType participant = registration.getParticipant();
@@ -210,13 +210,22 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				IdentifierType[] ids = participant.getIdentifier();
 				IdentifierType id = null;
 				Identifier partIdent = new Identifier();
+				String type ="";
+				String assignedBy="";
 				if (ids != null && ids.length > 0)
 				{
 					id = ids[0];
+					if(id instanceof OrganizationAssignedIdentifierType)
+						 assignedBy = "organization";
+					else
+						 assignedBy = "system";
+					type=id.getType();
 					partIdent.setExtension(id.getValue());
 					partIdent.setSource(id.getSource());
 					partIdent.setRoot(participant.getGridId());
+					partIdent.setAssigningAuthorityName(assignedBy);
 					part.setIdentifier(partIdent);
+					
 				}
 				else
 				{
@@ -237,6 +246,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				regIdent.setExtension(partIdent.getExtension());
 				regIdent.setRoot(registration.getGridId());
 				studyPartAssig.setIdentifier(regIdent);
+				studyPartAssig.setType(type);
+				
 				
 				healthCare.setStudyParticipantAssignment(studyPartAssig);
 				protocol.setHealthCareSite(healthCare);
