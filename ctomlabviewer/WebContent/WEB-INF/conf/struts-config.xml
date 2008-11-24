@@ -126,10 +126,10 @@
 				path="Tiles.LabActivities.Search.Result" />
 			<forward name="ReadFailure"
 				path="Tiles.LabActivities.Search.Result" />
-			<!--  <forward name="SearchSuccess"
-				path="/LabActivitiesDB.do" />-->
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Detail.Screen" />	
+				path="/LabActivitiesDB.do" />
+			<!--  <forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />	-->
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 		</action>
@@ -138,18 +138,17 @@
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadSearchResultSetupAction"
 			name="LabActivitiesSearchResultForm" 
 			scope="session"
-			parameter="operation"
-			input="Tiles.LabActivities.Search.Result">
+			parameter="operation">
 			<forward name="LoadHomeSuccess"
 				path="Tiles.LabActivities.Home" />
 			<forward name="LoadSearchSuccess"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="LoadSearchResultSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="ReadFailure"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 				<forward name="LoadToCTMSSuccess"
