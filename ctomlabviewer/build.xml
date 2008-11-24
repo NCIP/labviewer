@@ -88,6 +88,7 @@
 			<filterset begintoken="@" endtoken="@">
 				<filter token="BaseURLcaAERS" value="${BaseURLcaAERS}" />
 				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
+				<filter token="BaseURLC3PR" value="${BaseURLC3PR}" />
 				<filter token="hotLink_Type" value="${hotLink_Type}" />
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
@@ -141,6 +142,7 @@
 			<fileset file="${src.home}/applicationContext.xml" />
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
+			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/HealthCareSitePart.hbm.xml"/>
 		</copy>
 	</target>
 
@@ -163,44 +165,36 @@
 	<target name="test" depends="all" description="Tests the CTOM Lab Domain model API">
 		<javac srcdir="${test.home}/src" destdir="${test.home}/classes" debug="true" deprecation="true">
 					<classpath>
-						<pathelement path="${libext.home}/ctodslabviewer.jar" />
 						<pathelement path="test/resources"/>
+						<pathelement path="bin"/>
 						<fileset dir="${lib.home}" includes="*" />
 						<fileset dir="${otherlib.home}" includes="*" />
 						<fileset dir="${libext.home}" includes="*" />
 						<fileset dir="lib-ext" includes="*" />
 						<pathelement path="otherlib/servlet.jar"/>
 						<fileset dir="WebContent/WEB-INF/lib" includes="*" />
-						<pathelement path="WebContent/WEB-INF/lib/activation.jar"/>
-						<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
 						<pathelement path="dist/ctodslabviewer.war"/>
 						<pathelement path="build/WEB-INF/classes"/>
-						<pathelement path="test/resources/ctodslabviewer.jar"/>
-					</classpath>
+						</classpath>
 				</javac>
 		
 		<junit printsummary="yes" haltonfailure="yes" showoutput="yes">
 			<classpath>
-				<pathelement path="${libext.home}/ctodslabviewer.jar" />
-				<pathelement path="test/resources"/>
 				<pathelement path="test/classes"/>
+				<pathelement path="bin"/>
 				<fileset dir="${lib.home}" includes="*" />
 				<fileset dir="${otherlib.home}" includes="*" />
 				<fileset dir="${libext.home}" includes="*" />
 				<fileset dir="lib-ext" includes="*" />
 				<pathelement path="otherlib/servlet.jar"/>
 				<fileset dir="WebContent/WEB-INF/lib" includes="*" />
-				<pathelement path="WebContent/WEB-INF/lib/activation.jar"/>
-				<pathelement path="C:/Documents and Settings/khanaly/workspace/Code/CancerCenterClient/lib/acegi-security-1.0.4.jar"/>	
 				<pathelement path="dist/ctodslabviewer.war"/>
-				<pathelement path="build/WEB-INF/classes"/>
-				<pathelement path="test/resources/ctodslabviewer.jar"/>
 			</classpath>
 			<formatter type="plain"/>
 			<batchtest fork="yes" todir="${report.dir}">
 			    <fileset dir="${src.home}" includes="*Test.java"/>
 			</batchtest>
-			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.CTODSLabDomainModelAPITest" haltonfailure="no" outfile="${test.home}/testresults"/>
+			  <test name="gov.nih.nci.caxchange.ctom.viewer.apitest.StudySearchDAOTest" haltonfailure="no" outfile="${test.home}/testresults"/>
 		</junit>
 	</target>
 	
