@@ -78,33 +78,30 @@ function MM_swapImage() { //v3.0
         <img src="images/ctom_txt_1.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>-->
     <div>
-    <img src="images/lab_view_header_new.jpg" alt="cTODS LabViewer" >
+    <img src="images/lab_view_header_new.jpg" alt="cTODS LabViewer" style="height: 44px; width: 1024px;">
     </div>
     <!-- Add log out link -->
     
-    <div id="login-action">
-     	<% if(session.getAttribute("version")!= null){ %>
-         	<font color=blue>CTODS LabViewer V<%=session.getAttribute("version")%></font> ||
-         <%} %>
-       <a href="helpdocs/CTODS Lab Viewer End User Guide.doc"> <font color=blue>Help</font></a> ||
-       <!--   -->
+    <div id="login-action" style="font-size: .8em; margin-top: 0; margin-bottom: 0; padding-top:0; padding-bottom: 0;">
+       <a href="helpdocs/CTODS Lab Viewer End User Guide.doc" style="color: blue; font-size: .8em;">Help</a> ||
        <% if(session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
-         <a href="https://<%=session.getAttribute("webssoCasServer")%>/cas/logout"><font color=blue>Log out</font></a>
+         <a href="https://<%=session.getAttribute("webssoCasServer")%>/cas/logout" style="font-size: .8em; color: blue;">Log out</a>
        <%}}else{ %>
-   		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')"> <font color=blue>Log out</font></a>    
+   		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>    
        <%} %>
      </div>
 
 	<!-- if log in, enable menu and login id -->
 	<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
 	    <!-- display login id using smaller font below log out link -->
-	    <div id="login-id">
+	    <div id="login-id" style="color: blue; margin-top: -6px; padding-top: 0;">
 			<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
-	        <font color=blue>Login ID: <bean:write name="loginObject" property="loginId" /></font>
+	        Login ID: <bean:write name="loginObject" property="loginId" />
 	    </div>
 		<!-- add menu items, 2 only here -->
-	    <ul id="sections" class="tabs" align=center>
+		<div style="border-bottom: 1px solid black; height: 17px;">
+	    <ul id="sections" class="tabs" style="position: relative; top: 0; left: 0; text-align: left;">
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.HOME_ID)){%>
 		    	<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.HOME_ID%>')">Home</a></div></li>
 			<%} else {%>
@@ -133,10 +130,11 @@ function MM_swapImage() { //v3.0
 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
 			<%}}%>
 	    </ul>
+	    </div>
 	</logic:present>
 
 	<!-- Add task bar, menu tips, under menu -->
-    <div id="taskbar">
+    <div id="taskbar" style="clear: both; border-bottom: 1px solid black; ">
 		<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.HOME_ID)){%>
 	            Tasks: <font color=blue> Greeting screen </font>
@@ -154,7 +152,7 @@ function MM_swapImage() { //v3.0
 			    <font color=blue><%=session.getAttribute("pageTitle")%></font>
 			<%}else{%>Tasks: <font color=blue>Participant Search</font>
 			<%}}%>
-		   </logic:present>
+		</logic:present>
     </div>
     
 </div>
