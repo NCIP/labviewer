@@ -200,9 +200,11 @@ public class HomeAction extends Action {
 			 String version = (String)props.getProperty("version");
 			 session.setAttribute("version", version);
 			 String caAERSurl = (String)props.getProperty("BaseURLcaAERS");
+			 String c3prurl = (String)props.getProperty("BaseURLC3PR");
 			 String hotLinkType = (String)props.getProperty("hotLink_Type");
 			 //String C3Durl = (String)props.getProperty("BaseURLC3D");
 			 session.setAttribute("BaseURLcaAERS", caAERSurl);
+			 session.setAttribute("BaseURLC3PR", c3prurl);
 			 //hotlink type can be _blank,_self,${hotLink_NAME}:value set in properties file
 			 session.setAttribute("hotLinkType", hotLinkType);
 				   
