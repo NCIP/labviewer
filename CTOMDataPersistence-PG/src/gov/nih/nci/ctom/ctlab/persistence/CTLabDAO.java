@@ -200,16 +200,17 @@ public class CTLabDAO extends BaseJDBCDAO
                 rs = stmt.executeQuery("select nextval('ORGANIZATION_SEQ')");
                 rs.next();
                 hsId = rs.getLong(1);
-                // insert into HealthCare_Site
+                 // insert into HealthCare_Site
                 ps = con.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE, NAME, CTOM_INSERT_DATE)  values(?,?,?,?)");
 
                 ps.setLong(1, hsId);
                 ps.setString(2, hcSite.getNciInstituteCd()!=null?hcSite.getNciInstituteCd():"");
-                ps.setString(3, hcSite.getName()!=null?hcSite.getName():"");
+                ps.setString(3, hcSite.getNciInstituteCd()!=null?hcSite.getNciInstituteCd():"");
                 Date insertDt = hcSite.getCtomInsertDt()!=null?hcSite.getCtomInsertDt():new Date();
                 ps.setDate(4, new java.sql.Date(insertDt.getTime()));
                 ps.execute();
             }
+            hcSite.setId(hsId);
             ssId = null;
             ps = con.prepareStatement("select id from study_site where HEALTHCARE_SITE_ID = ? and PROTOCOL_ID = ?");
             ps.setLong(1, hsId);
@@ -247,7 +248,8 @@ public class CTLabDAO extends BaseJDBCDAO
         if (hcSite.getStudyParticipantAssignment() != null)
 		{
 			//saveParticipant(con, hcSite.getStudyParticipantAssignment().getParticipant());
-			saveStudyParticipantAssignment(con, ssId, hcSite.getStudyParticipantAssignment());
+			//saveStudyParticipantAssignment(con, ssId, hcSite.getStudyParticipantAssignment());
+			saveStudyParticipantAssignment(con, ssId, hcSite);
 		}
 
 	}
@@ -259,13 +261,14 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @throws SQLException
 	 */
 	private void saveStudyParticipantAssignment(Connection con, Long ssId,
-			StudyParticipantAssignment spa) throws SQLException
+			HealthCareSite  hcs) throws SQLException
 	{
 		logger.debug("Saving the StudyParticipantAssignment");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long spaId = null;
 		boolean identifierUpdInd=false;
+		StudyParticipantAssignment spa = hcs.getStudyParticipantAssignment();
 		
 		try {
             ps = con
@@ -290,11 +293,12 @@ public class CTLabDAO extends BaseJDBCDAO
                     saveParticipant(con, spa.getParticipant());
                     // insert into STUDY_PARTICIPANT_ASSIGNMENT
                     ps = con
-                                    .prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID)  values(?,?,?,?)");
+                                    .prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID,type)  values(?,?,?,?,?)");
                     ps.setLong(1, spaId);
                     ps.setString(2, spa.getStudyPartIdOrig());
                     ps.setLong(3, ssId);
                     ps.setLong(4, spa.getParticipant().getId());
+                    ps.setString(5, spa.getType());
                     ps.execute();
                     con.commit();
                     if (identifierUpdInd && spa.getParticipant().getIdentifier() != null) {
@@ -313,12 +317,60 @@ public class CTLabDAO extends BaseJDBCDAO
                 rs.close();
             }
         }
+        
+        //save healthCare-participant
+        if(hcs.getId()!=null && spa.getParticipant().getId()!=null){
+        	saveHealthCareSiteParticipant(con,hcs.getId(),spa.getParticipant().getId());
+        }
+        //Save Activity
         Activity act = spa.getActivity();
 		if (act != null)
 			saveActivity(con, spaId, act);
 
 	}
+	
+		
+	
+	/**
+	 * @param con
+	 * @param hcsId
+	 * @param participantId
+	 */
+	public void saveHealthCareSiteParticipant(Connection con,Long hcsId ,Long participantId) throws SQLException
+	{
+		logger.debug("Saving the HealthCareSite - participant join ");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Statement stmt = null;
 
+		try {
+            // Get Id from sequence
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("select nextval('healthcare_site_prtcpnt_seq')");
+            rs.next();
+            // insert into healthcare_site_prtcpnt
+            ps = con.prepareStatement("insert into healthcare_site_prtcpnt (ID, healthcare_site_id, participant_id,ctom_insert_date)  values(?,?,?,?)");
+            ps.setLong(1, rs.getLong(1));
+            ps.setLong(2, hcsId);
+            ps.setLong(3, participantId);
+            Date insertDt = new Date();
+            ps.setDate(4, new java.sql.Date(insertDt.getTime()));
+            ps.execute();
+        } finally {
+            if(ps != null) {
+                ps.close();
+            }
+            if(stmt != null) {
+                stmt.close();
+            }            
+            if(rs != null) {
+                rs.close();
+            }
+        }
+	}
+	
+	
+	
 	/**
 	 * saveParticipant is used to save a Pariticpant object to the CTOM data
 	 * model
@@ -487,12 +539,13 @@ public class CTLabDAO extends BaseJDBCDAO
                     }
                     // insert new into identifier get the identifierid and insert
                     // into participant table
-                    ps = con.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
+                    ps = con.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT,assigning_authority_name) values (?,?,?,?,?)");
                     // need to set the participantid into the identifier table
                     ps.setLong(1, identifierId);
                     ps.setString(2, participant.getIdentifier().getExtension());
                     ps.setString(3, participant.getIdentifier().getSource());
                     ps.setString(4, participant.getIdentifier().getRoot());
+                    ps.setString(5, participant.getIdentifier().getAssigningAuthorityName());
                     ps.executeUpdate();
                     con.commit();
 
@@ -551,12 +604,13 @@ public class CTLabDAO extends BaseJDBCDAO
                     }
                     // insert new into identifier get the identifierid and insert
                     // into participant table
-                    ps = con.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT) values (?,?,?,?)");
+                    ps = con.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT,assigning_authority_name) values (?,?,?,?,?)");
                     // need to set the participantid into the identifier table
                     ps.setLong(1, identifierId);
                     ps.setString(2, protocol.getIdentifier().getExtension());
                     ps.setString(3, protocol.getIdentifier().getSource());
                     ps.setString(4, protocol.getIdentifier().getRoot());
+                    ps.setString(5, protocol.getIdentifier().getAssigningAuthorityName());
                     ps.executeUpdate();
                     con.commit();
 
