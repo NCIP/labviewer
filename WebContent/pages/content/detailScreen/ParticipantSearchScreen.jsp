@@ -120,7 +120,7 @@
             <th class="dataTableHeader" scope="col" align="center" width="15%">First Name</th>
             <th class="dataTableHeader" scope="col" align="center" width="15%">Last Name</th>
             <th class="dataTableHeader" scope="col" align="center" width="15%">Study Id</th>
-            <th class="dataTableHeader" scope="col" align="center" width="15%">View Participant Details</th> 
+           <!--  <th class="dataTableHeader" scope="col" align="center" width="15%">View Participant Details</th> --> 
      </tr>
      </thead>
      <tbody>   
@@ -138,10 +138,10 @@
                        <td class="dataCellText" width="15%">
                             <nested:write name="participantsList" property="studyId"/>
                         </td>
-                       <td class="dataCellText" width="15%">
+                        <nested:hidden name="participantsList" property="index" indexed="true"/>
+                       <!--  <td class="dataCellText" width="15%">
                             <a href="">Details</a>
-                              <nested:hidden name="participantsList" property="index" indexed="true"/>
-                        </td>
+		                  </td>-->
                     </tr>  
          </nested:iterate>
        </tbody>
