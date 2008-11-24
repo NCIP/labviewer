@@ -254,7 +254,7 @@ function SelectAll()
 													{
 														oddRow = "false";%>
 													<tr class="dataRowLight">
-														<td class="dataCellNumerical" width="5%">
+														<td class="dataCellNumerical" width="9%">
 															<html:multibox style="formFieldSized" property="recordIds" value="<%=searchResultObject.getRecordId()%>"></html:multibox>
 														</td>
 														<td class="dataCellText" width="9%">
