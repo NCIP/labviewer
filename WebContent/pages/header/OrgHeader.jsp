@@ -71,13 +71,13 @@ function MM_swapImage() { //v3.0
 
 <!-- end copy from CTOM MainMenu.jsp -->
 <!-- combination of laf header.tag and CTOM MainMenu.jsp -->
-<div id="header">
+<div>
 	<!-- Render logo, header background and logo text 
-    <div class="background-R">
+    <div class="background-R" style="background: #55E2F7;">
         <img src="images/CTOM.gif" alt="UPT Home" id="logo" width="129" height="40">
         <img src="images/ctom_txt_1.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>-->
-    <div>
+    <div style="background: #4FD5EE;">
     <img src="images/lab_view_header_new.jpg" alt="cTODS LabViewer" style="height: 44px; width: 1024px;">
     </div>
     <!-- Add log out link -->
