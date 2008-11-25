@@ -133,7 +133,7 @@ public class SearchAction extends DispatchAction
 			List filteredSearchResult = new ArrayList();
 			//search based on the given search criteria
 			LabSearchDAO labSearch = new LabSearchDAO();
-			if(request.getSession().getAttribute("SEARCH_RESULT")==null)
+			if(request.getSession().getAttribute("ALL_SEARCH_RESULT")==null)
 			{	
 			  searchResult = labSearch.searchObjects(mapping, lForm, request, errors, messages);
 			  session.setAttribute(DisplayConstants.ALL_SEARCH_RESULT, searchResult);
@@ -144,8 +144,13 @@ public class SearchAction extends DispatchAction
 			}
 			//filter the results based on the user selected criteria
 			filteredSearchResult = queryResult(lForm,searchResult.getSearchResultObjects());
-			//set the filtered results back into search result.
-			searchResult.setSearchResultObjects(filteredSearchResult);
+			if(!filteredSearchResult.isEmpty())
+				//set the filtered results back into search result.
+				searchResult.setSearchResultObjects(filteredSearchResult);
+			else
+				//if the filter returns no results set null into search result.
+				searchResult.setSearchResultObjects(null);
+					
 		    //if the search returned nothing/null; display message  	
 			if (searchResult.getSearchResultObjects() == null
 					|| searchResult.getSearchResultObjects().isEmpty())
@@ -165,6 +170,7 @@ public class SearchAction extends DispatchAction
 									+ "|search|Failure|No Records found for "
 									+ lForm.getFormName() + " object|"
 									+ form.toString() + "|");
+				session.setAttribute(DisplayConstants.SEARCH_RESULT, null);
 				return (mapping.findForward(ForwardConstants.SEARCH_FAILURE));
 			}
 			
