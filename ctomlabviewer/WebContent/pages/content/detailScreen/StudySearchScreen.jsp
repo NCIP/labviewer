@@ -18,9 +18,7 @@
 <html:form action="studySearch.do?operation=doStudySearch" method="post">
 <!-- laf box 1st half -->
 <div style="margin-top: 0; padding-top: 0;">
-  <logic:present name="StudySearchForm" property="studiesList">
-  
-   <!-- laf box 1st half -->
+ <!-- laf box 1st half -->
   <div class="box">
 	<div  align="center">
 	    <!-- header -->
@@ -72,7 +70,6 @@
 	</div>
 </div>
 <!-- laf box 2nd half -->    
-  </logic:present>
 </div>
 <div style="height: 1em; white-space: nowrap;"></div>
 <div>
