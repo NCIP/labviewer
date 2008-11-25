@@ -76,6 +76,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -185,18 +186,21 @@ public class SaveToCSVAction extends Action
 	    LabActivitiesSearchResultForm lForm = (LabActivitiesSearchResultForm)form;
 	    HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
 		ArrayList list = new ArrayList();
-		String[] test = lForm.getRecordIds();
-		//StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
-		int count=0;
-		if(test!=null)
+		String test = lForm.getRecordId();
+		StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
+		int count = stringTokenizer.countTokens();
+		
+		// Create the list of results to send
+		if (count >= 1)
 		{
-			count = test.length;
-			for(int i=0;i<count;i++)
+			while (stringTokenizer.hasMoreTokens())
 			{
-				if(map.get(test[i]) != null){
-					list.add(map.get(test[i]));	
-				}
+				list.add(map.get(stringTokenizer.nextToken()));
 			}
+		}
+		else
+		{
+			list.add(map.get(lForm.getRecordId()));
 		}
 		int numOfLabs=0;
 		// Create the list of results to send
