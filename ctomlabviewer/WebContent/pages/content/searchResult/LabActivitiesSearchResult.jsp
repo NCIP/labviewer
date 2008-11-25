@@ -21,7 +21,7 @@
 
 function setUp()
 {
-   var numRows2 = document.LabActivitiesSearchResultForm.recordIds.length;
+   var numRows2 = document.getElementsByName("recordIds").length;
     if(numRows2 >0)
      SelectAllOn =false;
     else
@@ -30,14 +30,13 @@ function setUp()
 
 function SelectAll()
   {
-    var numRows2 = document.LabActivitiesSearchResultForm.recordIds.length;
+    var numRows2 = document.getElementsByName("recordIds").length;
     
     if(SelectAllOn == false)
     {
       for(k=0; k<numRows2; k++)
       {
-         
-        formObj= eval(document.LabActivitiesSearchResultForm.recordIds[k]);
+        formObj= eval(document.getElementsByName("recordIds")[k]);
         if(formObj && formObj.checked == false)
         {
           formObj.checked=true;
@@ -51,8 +50,7 @@ function SelectAll()
     { 
       for(m=0; m<numRows2; m++)
       {
-        
-        formObj= eval(document.LabActivitiesSearchResultForm.recordIds[m]);
+        formObj= eval(document.getElementsByName("recordIds")[m]);
         if(formObj && formObj.checked==true)
         {
           formObj.checked=false;
@@ -98,19 +96,19 @@ function SelectAll()
   		}
   		else
   		{   
-	  		var radioLen = document.LabActivitiesSearchResultForm.recordIds.length;
+	  		var radioLen = document.getElementsByName("recordIds").length;
 	
 	  		if(radioLen == undefined)
 	  		{
-	 			if (document.LabActivitiesSearchResultForm.recordIds.checked) 
-				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordIds.value;
+	 			if (document.getElementsByName("recordIds").checked) 			
+				{	document.LabActivitiesSearchResultForm.recordId.value = document.getElementsByName("recordIds").value;
 					ischecked = true;
 				}
 	  		}
 			for (var i = 0; i <radioLen; i++)
 			{   
-				if (document.LabActivitiesSearchResultForm.recordIds[i].checked) 
-				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordId.value + "," + document.LabActivitiesSearchResultForm.recordIds[i].value;
+				if (document.getElementsByName("recordIds")[i].checked) 
+				{	document.LabActivitiesSearchResultForm.recordId.value = document.LabActivitiesSearchResultForm.recordId.value + "," + document.getElementsByName("recordIds")[i].value;
 					ischecked = true;
 				}
 			}
@@ -204,9 +202,7 @@ function SelectAll()
 											<thead class="scrollbar">	
 												<tr>
 												   <th class="dataTableHeader" scope="col" align="center" width="5%">
-													<a href="javascript:SelectAll();">
-													<img id="CheckGif" src="images/CheckBox.gif" border="0" alt="Select All" >
-													</a>
+													<img id="CheckGif" src="images/CheckBox.gif" border="0" alt="Select All" onclick="SelectAll();" style="cursor: pointer;">
 													</th>
 													<th class="dataTableHeader" scope="col" align="center" width="9%">
 														Patient Id
@@ -353,7 +349,7 @@ function SelectAll()
 														oddRow = "true";%>
 													<tr class="dataRowDark">
 														<td class="dataCellNumerical" width="5%">
-															<html:multibox style="formFieldSized" property="recordIds" value="<%=searchResultObject.getRecordId()%>"></html:multibox>
+														    <html:multibox style="formFieldSized" property="recordIds" value="<%=searchResultObject.getRecordId()%>"></html:multibox>
 														</td>
 														<td class="dataCellText" width="9%">
 															<bean:write name="searchResultObject" property="patientId" />
