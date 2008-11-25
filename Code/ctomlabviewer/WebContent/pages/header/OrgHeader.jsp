@@ -83,6 +83,9 @@ function MM_swapImage() { //v3.0
     <!-- Add log out link -->
     
     <div id="login-action" style="font-size: .8em; margin-top: 0; margin-bottom: 0; padding-top:0; padding-bottom: 0;">
+       <% if(session.getAttribute("version")!= null){ %>
+         	<font color=blue>CTODS LabViewer V<%=session.getAttribute("version")%></font> ||
+         <%} %>
        <a href="helpdocs/CTODS Lab Viewer End User Guide.doc" style="color: blue; font-size: .8em;">Help</a> ||
        <% if(session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
