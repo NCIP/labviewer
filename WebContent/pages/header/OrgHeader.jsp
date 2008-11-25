@@ -78,7 +78,7 @@ function MM_swapImage() { //v3.0
         <img src="images/ctom_txt_1.gif" alt="ctom txt" id="tagline" width="268" height="22">
     </div>-->
     <div style="background: #4FD5EE;">
-    <img src="images/lab_view_header_new.jpg" alt="cTODS LabViewer" style="height: 44px; width: 1024px;">
+    <img src="images/nci.JPG" alt="cTODS LabViewer" style="height: 44px; width: 1024px;">
     </div>
     <!-- Add log out link -->
     
