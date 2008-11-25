@@ -166,15 +166,15 @@
 			<forward name="LoadSearchSuccess"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="LoadSearchResultSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="ReadFailure"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="TilesLabActivities.Detail.Screen" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SubmitAdverseEventSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="LoadToCTMSSuccess"
 				path="/loadToCTMS.do" />
 		</action>
@@ -188,17 +188,17 @@
 			<forward name="LoadSearchSuccess"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="LoadSearchResultSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="ReadFailure"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SubmitAdverseEventSuccess"
 				path="/submitAdverseEvent.do" />
 			<forward name="LoadToCTMSSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 		</action>
 		
 		<action path="/loadTocaAERS"
@@ -210,17 +210,17 @@
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
 			<forward name="LoadSearchResultSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="ReadFailure"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SubmitAdverseEventSuccess"
 				path="/submitAdverseEvent.do" />
 			<forward name="LoadTocaAERSSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 		</action>
 		
 		<action path="/saveToCSV"
@@ -232,19 +232,19 @@
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
 			<forward name="LoadSearchResultSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="ReadFailure"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SearchFailure"
 				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SubmitAdverseEventSuccess"
 				path="/submitAdverseEvent.do" />
 			<forward name="LoadToCTMSSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 			<forward name="SaveToCSVSuccess"
-				path="Tiles.LabActivities.Search.Result" />
+				path="Tiles.LabActivities.Detail.Screen" />
 		</action>
         
         <action path="/studysubject"
