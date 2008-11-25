@@ -92,6 +92,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -193,22 +194,30 @@ public class LoadTocaAERSAction extends Action
 		HashMap map = (HashMap) request.getSession().getAttribute("RESULT_SET");
 		HashMap<String,LabActivityResult> labResultsMap = new HashMap<String,LabActivityResult>();
 		HashMap<String,String> labResultIds = new HashMap<String,String>();
-		String[] test = lForm.getRecordIds();
-		int count =0;
+		String test = lForm.getRecordId();
+		StringTokenizer stringTokenizer = new StringTokenizer(test, ",");
+		int count = stringTokenizer.countTokens();
 		int numOfLabs=0;
 		// Create the list of results to send
 		if(test!=null)
 		{
-			count = test.length;
-			for(int i=0;i<count;i++)
+			if (count >= 1)
 			{
-				if(map.get(test[i]) != null){
-					LabActivityResult lar = (LabActivityResult)map.get(test[i]);
-					labResultsMap.put(test[i],lar);
-					labResultIds.put(test[i],lar.getLabResultId());
+				while (stringTokenizer.hasMoreTokens()){
+					String temp = stringTokenizer.nextToken();
+					LabActivityResult lar = (LabActivityResult)map.get(temp);
+					labResultsMap.put(temp,lar);
+					labResultIds.put(temp,lar.getLabResultId());
 				}
 			}
-		}
+			else
+			{
+				LabActivityResult lar = (LabActivityResult)map.get(lForm.getRecordId());
+				labResultsMap.put(lForm.getRecordId(),lar);
+				labResultIds.put(lForm.getRecordId(),lar.getLabResultId());
+				
+			}
+		}	
 		 Properties props = new Properties();
 		 //Get the file input stream
 		 try
