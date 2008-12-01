@@ -1,5 +1,5 @@
 /**
- * Copyright Notice.  Copyright 2008  Scenpro, Inc (“caBIG™ Participant”).caXchange
+ * Copyright Notice.  Copyright 2008  ScenPro, Inc (“caBIG™ Participant”).caXchange
  * was created with NCI funding and is part of the caBIG™ initiative. 
  * The software subject to this notice and license includes both human readable source code form and 
  * machine readable, binary, object code form (the “caBIG™ Software”).
@@ -28,10 +28,10 @@
  * 		Your redistributions in object code form must reproduce the above copyright notice, this list of conditions and 
  * 		the disclaimer of Article 6 in the documentation and/or other materials provided with the distribution, if any.
  * 2.	Your end-user documentation included with the redistribution, if any, must include the following acknowledgment: 
- * 		“This product includes software developed by Scenpro, Inc.”  
+ * 		“This product includes software developed by ScenPro, Inc.”  
  * 		If You do not include such end-user documentation, You shall include this acknowledgment in the caBIG™ Software itself, 
  * 		wherever such third-party acknowledgments normally appear.
- * 3.	You may not use the names  “Scenpro, Inc”, 
+ * 3.	You may not use the names  “ScenPro, Inc”, 
  * 		“The National Cancer Institute”, “NCI”, “Cancer Bioinformatics Grid” or “caBIG™” to endorse or promote products 
  * 		derived from this caBIG™ Software.  This License does not authorize You to use any trademarks, service marks, trade names,
  * 		logos or product names of either caBIG™ Participant, NCI or caBIG™, except as required to comply with the terms of this 
@@ -50,7 +50,7 @@
  * 		and distribution of the Work otherwise complies with the conditions stated in this License.
  * 6.	THIS caBIG™ SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES (INCLUDING, BUT NOT LIMITED TO, 
  * 		THE IMPLIED WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED.  
- * 		IN NO EVENT SHALL THE Scenpro, Inc OR ITS AFFILIATES 
+ * 		IN NO EVENT SHALL THE ScenPro, Inc OR ITS AFFILIATES 
  * 		BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
  * 		PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
  * 		ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY 
@@ -58,7 +58,6 @@
  *
  * 
  */
-
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
