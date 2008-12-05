@@ -3,8 +3,8 @@ package gov.nih.nci.caxchange.servicemix.bean.util;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import java.util.Map;
+
 import javax.xml.namespace.NamespaceContext;
 
 public class CaXchangeNamespaceContext implements NamespaceContext{

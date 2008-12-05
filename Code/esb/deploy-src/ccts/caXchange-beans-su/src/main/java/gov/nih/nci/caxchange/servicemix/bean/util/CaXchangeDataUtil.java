@@ -1,36 +1,27 @@
 package gov.nih.nci.caxchange.servicemix.bean.util;
 
 
-import gov.nih.nci.caXchange.messaging.CaXchangeRequestMessageDocument;
+import java.util.Map;
+
+import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
-import gov.nih.nci.caXchange.messaging.Credentials;
 import gov.nih.nci.caXchange.messaging.ErrorDetails;
 import gov.nih.nci.caXchange.messaging.MessagePayload;
 import gov.nih.nci.caXchange.messaging.MessageStatuses;
-import gov.nih.nci.caXchange.messaging.Metadata;
-import gov.nih.nci.caXchange.messaging.Operations;
 import gov.nih.nci.caXchange.messaging.Response;
 import gov.nih.nci.caXchange.messaging.ResponseMessage;
 import gov.nih.nci.caXchange.messaging.ResponseMetadata;
 import gov.nih.nci.caXchange.messaging.Statuses;
 import gov.nih.nci.caXchange.messaging.TargetResponseMessage;
-import java.io.StringReader;
-import java.io.StringWriter;
 
 import javax.jbi.messaging.NormalizedMessage;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
@@ -38,18 +29,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 /**
  * This is a utility class for methods to return caXchange Request data and generate 
  * caXchange Response.
  * 
- * @author hmarwaha
+ * @author Ekagra Software Technologies
  *
  */
-public class XPathUtil {
+public class CaXchangeDataUtil {
  
     public static final String CAXCHANGE_URI="http://caXchange.nci.nih.gov/messaging";
-    static Logger logger=LogManager.getLogger(XPathUtil.class);
+    static Logger logger=LogManager.getLogger(CaXchangeDataUtil.class);
       
     private NormalizedMessage in;
     private Document document;
@@ -57,7 +47,7 @@ public class XPathUtil {
     /**
      * Default constructor
      */
-    public XPathUtil() {
+    public CaXchangeDataUtil() {
     }
     /**
      * Initialize and get input caxchnge request message document
@@ -142,6 +132,7 @@ public class XPathUtil {
         return messageType; 
     }   
     
+
     /**
      * Gets business payload included in the caXchange request.
 	 * @param 
@@ -175,12 +166,17 @@ public class XPathUtil {
 	 * @return new DOMSource(responseDocument.getDomNode())
 	 * @throws Exception
 	 */    
-    public Source generateResponseFromErroredRequest(String errCode, String errMessage) throws Exception {
+    public Source generateResponseFromErroredRequest(String errCode, String errMessage, Map<String,String> metadata) throws Exception {
         CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance();
         ResponseMessage responseMessage = responseDocument.addNewCaXchangeResponseMessage();
         ResponseMetadata responseMetadata = responseMessage.addNewResponseMetadata();
-        responseMetadata.setExternalIdentifier(getExternalIdentifier());
-        responseMetadata.setCaXchangeIdentifier(getCaXchangeIdentifier());
+        if (metadata!=null) {
+           responseMetadata.setExternalIdentifier(metadata.get(CaxchangeConstants.EXTERNAL_IDENTIFIER));
+           responseMetadata.setCaXchangeIdentifier(metadata.get(CaxchangeConstants.CAXCHANGE_IDENTIFIER));
+        }else {
+            responseMetadata.setExternalIdentifier(getExternalIdentifier());
+            responseMetadata.setCaXchangeIdentifier(getCaXchangeIdentifier());        	
+        }
         Response response = responseMessage.addNewResponse();
         response.setResponseStatus(Statuses.FAILURE);
         ErrorDetails errorDetails = response.addNewCaXchangeError();
@@ -211,6 +207,8 @@ public class XPathUtil {
         return new DOMSource(responseDocument.getDomNode());
         
     }    
+    
+    
     /**
      * This method generates a CaXchangeResponseMessageDocument from the aggregated Response.
      * 
@@ -245,7 +243,7 @@ public class XPathUtil {
         XPathExpression tsiExp = xpath.compile("targetServiceIdentifier");
         XPathExpression tsoExp = xpath.compile("targetServiceOperation");
         XPathExpression msExp = xpath.compile("targetMessageStatus");
-        XPathExpression mpExp = xpath.compile("messagePayload");
+        XPathExpression mpExp = xpath.compile("targetBusinessMessage");
         XPathExpression teExp = xpath.compile("targetError");
         XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
         NodeList nodes = (NodeList)expression.evaluate(node,XPathConstants.NODESET);
@@ -301,12 +299,11 @@ public class XPathUtil {
         return response;
     }
     /**
-     * This method cheks if the rollback is required
+     * This method checks if the rollback is required
 	 * @param aggregatedResponse
 	 * @return false
 	 * @throws Exception
 	 */
-    /*No references*/
     public boolean isRollbackRequired(Source aggregatedResponse) throws Exception{
         XPath xpath = XPathFactory.newInstance().newXPath();
         Node node = ((DOMSource)aggregatedResponse).getNode();
@@ -357,65 +354,6 @@ public class XPathUtil {
     public NormalizedMessage getIn() {
         return in;
     }
-    
-    public static void main(String [] args) {
-        try  {
-            XPathUtil util = new XPathUtil();
-            DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document= db.parse(new InputSource(new StringReader(util.myDocumentAgg)));
-            DOMSource ds = new DOMSource(document);
-            Response response = Response.Factory.newInstance();
-            util.buildResponse(ds, response);
-            System.out.println(response);
-        } catch (Exception ex)  {
-            ex.printStackTrace();
-        } finally  {
-        }
         
-    }
-    
-    String myDocument = "<caXchangeRequestMessage xmlns=\"http://caXchange.nci.nih.gov/mes\n" + 
-    "saging\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" + 
-    "  <metaData>\n" + 
-    "    <messageType>STUDY_CREATION</messageType>\n" + 
-    "    <externalIdentifier>myExternalIdentifier</externalIdentifier>\n" + 
-    "    <caXchangeIdentifier>0da440a0-8ff5-11dc-babe-d4801775f7f7</caXchangeIdentifi\n" + 
-    "er>\n" + 
-    "    <credentials>\n" + 
-    "      <groupName xsi:nil=\"true\"/>\n" + 
-    "      <gridIdentifier xsi:nil=\"true\"/>\n" + 
-    "    </credentials>\n" + 
-    "  </metaData>\n" + 
-    "  <request>\n" + 
-    "    <businessMessagePayload>\n" + 
-    "      <xmlSchemaDefinition>http://test</xmlSchemaDefinition>\n" + 
-    "      <mytest1 xmlns=\"\">\n" + 
-    "        <first1>harsh</first1>\n" + 
-    "        <last1>marwaha</last1>\n" + 
-    "      </mytest1>\n" + 
-    "    </businessMessagePayload>\n" + 
-    "  </request>\n" + 
-    "</caXchangeRequestMessage>";
-    
-    String myDocumentAgg = "<aggregateResponse>"+
-    " <targetResponse xmlns=\"http://caXchange.nci.nih.gov/messaging\">\n" + 
-    "                <targetServiceIdentifier>targetServiceIdentifier0</targetServiceIdentifier>\n" + 
-    "                <targetServiceOperation>targetServiceOperation0</targetServiceOperation>\n" + 
-    "                <targetMessageStatus>RESPONSE</targetMessageStatus>\n" + 
-    "                <messagePayload>\n" + 
-    "                    <xmlSchemaDefinition>http://www.oxygenxml.com/</xmlSchemaDefinition>\n" + 
-    "<mytest1>\n" + 
-    "   <first>Harsh</first>\n" + 
-    "   <last>Marwaha</last>\n" + 
-    "</mytest1> "+
-    "                </messagePayload>\n" + 
-    "            </targetResponse>\n" + 
-    "<targetResponse> " + 
-    " <targetServiceIdentifier>PROCESS</targetServiceIdentifier> " + 
-    " <targetServiceOperation>STUDY_CREATION</targetServiceOperation> " + 
-    " <targetMessageStatus>ERROR</targetMessageStatus> " + 
-    " <targetError><errorCode>NA</errorCode><errorDescription>Invalid element in gov.nih.nci.ccts.grid.Study - systemAssignedIdentifier</errorDescription></targetError> " + 
-    " </targetResponse>"+
-    "    </aggregateResponse>"; 
  
 }

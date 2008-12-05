@@ -1,5 +1,6 @@
 <beans xmlns:sm="http://servicemix.apache.org/config/1.0"
   xmlns:bean="http://servicemix.apache.org/bean/1.0"
+  xmlns:eip="http://servicemix.apache.org/eip/1.0"
   xmlns:caxchange="http://nci.nih.gov/caXchange">
 
   <sm:container id="jbi" embedded="true" createMBeanServer="false">
@@ -16,30 +17,36 @@
   			<bean:endpoint service="caxchange:payloadValidator"    endpoint="endPoint" bean="#payloadValidatorBean" />
   			<bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />
   			<bean:endpoint service="caxchange:caXchangeConsumer" endpoint="caXchangeConsumerEndpoint" bean="#caXchangeConsumer" />
+  			<bean:endpoint service="caxchange:ResponseQueueService" endpoint="caxchangeOutboundJmsProviderEndpoint" bean="#caxchangeMessagingTestBean" />
+  			<bean:endpoint service="caxchange:generateResponseService" endpoint="cgenerateResponseEndpoint" bean="#generateResponseBean" />
             </bean:endpoints>
           </bean:component>
         </sm:component>
       </sm:activationSpec>
     </sm:activationSpecs>
   </sm:container>
-
- <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean"/>
+  <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:caxchange.properties</value>
+		</property>
+</bean>
+	
+ <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean" init-method="init">
+    <property name="certificateFilePath" value="${delegation.certificateFilePath}"/>
+    <property name="keyFilePath" value="${delegation.keyFilePath}"/>
+ </bean>
  <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
+ <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean" />
  <bean id="storeOriginalMessageBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
- <bean id="xpathUtil" class="gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil" />
- <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" >
-  
-      <property name="messageTypesEligibleForRollback" >
-            <list>
-                <value>STUDY_CREATION</value>
-                <value>REGISTER_SUBJECT</value>
-            </list>
-      </property>
-  </bean>
+ <bean id="xpathUtil" class="gov.nih.nci.caxchange.servicemix.bean.util.CaXchangeDataUtil" />
+ <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" > 
+      <property name="transactionControlServiceTypes" value="STUDY_CREATION,REGISTER_SUBJECT" />
+   </bean>
  <bean id="payloadValidator" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidator" init-method="init"/>
  <bean id="gmeSchemaFactory" class="gov.nih.nci.caxchange.servicemix.bean.validation.GMESchemaFactory" init-method="init">
        <property name="GMEGridServiceLocation"
-                 value="http://localhost:8080/wsrf/services/cagrid/GlobalModelExchange"/>
+                 value="http://localhost:8090/wsrf/services/cagrid/GlobalModelExchange"/>
        <property name="cacheDirectoryLocation"
                  value="c:/gme_cache_directory" />
  </bean>
@@ -50,13 +57,10 @@
        <property name="gmeSchemaFactory">
           <ref bean="gmeSchemaFactory" />
        </property>
-       <property name="messageTypesEligibleForValidation" >
-            <list>
-                <value>STUDY_CREATION</value>
-                <value>REGISTER_SUBJECT</value>
-            </list>
-       </property>                 
+       <property name="eligibleServiceTypes" value="STUDY_CREATION,REGISTER_SUBJECT" />
  </bean>
+ 
+    <bean id="caxchangeMessagingTestBean" class="gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBeanTest" />
  
    <bean
     id="caXchangeConsumer"

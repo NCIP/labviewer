@@ -28,7 +28,7 @@
 		<businessMessagePayload>
 			<xmlSchemaDefinition>http://www.altova.com</xmlSchemaDefinition>
 <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" gridId="6115c43c-851e-425c-8312-fd78367aaef3">
-    <studySite gridId="9a147f4c-3a94-4883-a9b0-1926dda426be">
+    <studySite fdgjfkgf="gkfgjkf" gridId="9a147f4c-3a94-4883-a9b0-1926dda426be">
      <healthcareSite gridId="NCI GRID ID">
       <nciInstituteCode>NCI</nciInstituteCode>
      </healthcareSite>
