@@ -7,50 +7,26 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>caXchange-common-jar</artifactId>
   <packaging>jar</packaging>
-  <description>Jar file for storing caxchange messages.</description>
    <dependencies>
-	<dependency>
+    <dependency>
+      <groupId>org.apache.servicemix</groupId>
+      <artifactId>servicemix-bean</artifactId>
+      <version>${servicemix-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix</groupId>
+      <artifactId>servicemix-core</artifactId>
+      <version>${servicemix-version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
           <groupId>xmlbeans</groupId> 
            <artifactId>xmlbeans</artifactId> 
 	    <version>2.3.0</version>
-	</dependency> 
-    </dependencies>
-      <repositories>
-         <repository>
-                <id>apache-com</id>
-                <url>http://www.mvnrepository.com</url>
-        </repository> 
-        <repository>
-          <id>apache-ibiblio</id>
-          <url>http://people.apache.org/repo/m2-ibiblio-rsync-repository</url>
-        </repository>
-       <repository>
-          <id>apache-incubating</id>
-          <url>http://people.apache.org/repo/m2-incubating-repository</url>
-        </repository>        
-      </repositories>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>apache-com</id>
-          <url>http://www.mvnrepository.com</url>
-        </pluginRepository>      
-        <pluginRepository>
-          <id>apache-ibiblio</id>
-          <url>http://people.apache.org/repo/m2-ibiblio-rsync-repository</url>
-        </pluginRepository>
-        <pluginRepository>
-          <id>apache-incubating</id>
-          <url>http://people.apache.org/repo/m2-incubating-repository</url>
-        </pluginRepository>        
-      </pluginRepositories> 
-   <build>
-    <outputDirectory>target/classes</outputDirectory>
-     <sourceDirectory>src/main/java</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>     
+	</dependency>     
+   </dependencies>  
+  <description>Jar file for storing caxchange messages.</description>
+   <build> 
      <plugins>
       <plugin>
     <groupId>org.codehaus.mojo</groupId>
@@ -71,7 +47,16 @@
     </configuration>
   </plugin>
     </plugins>
+    <outputDirectory>target/classes</outputDirectory>
+     <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>      
   </build>
+    
+
     
 
 </project>

@@ -1,20 +1,20 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import java.util.Map;
+
 import gov.nih.nci.caXchange.CaxchangeConstants;
-import gov.nih.nci.caxchange.servicemix.bean.util.*;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
-import javax.annotation.Resource;
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.ExchangeStatus;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.transform.Source;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
 
 /**
@@ -23,9 +23,7 @@ import org.apache.servicemix.jbi.util.MessageUtil;
  * @author Ekagra Software Technologies
  *
  */
-public class HandleErrorResponseBean implements MessageExchangeListener{ 
-    @Resource
-    private DeliveryChannel channel;
+public class HandleErrorResponseBean extends CaXchangeMessagingBean{ 
     
     public static final String DEFAULT_ERROR_CODE= "CAXCHANGE_ERROR";
     public static final String DEFAULT_ERROR_MESSAGE="An error occurred processing request.";
@@ -45,13 +43,7 @@ public class HandleErrorResponseBean implements MessageExchangeListener{
 	 * @return
 	 * @throws MessagingException
 	 */	
-    public void onMessageExchange(MessageExchange exchange) throws MessagingException {
-        if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-            return;
-        }
-        if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-           throw new MessagingException("An error occurred sending error response to the queue.", exchange.getError());
-        }
+    public void processMessageExchange(MessageExchange exchange) throws MessagingException {
         logger.debug("Received exchange: " + exchange);
         NormalizedMessage in = exchange.getMessage("in");
         NormalizedMessage out = exchange.createMessage();
@@ -81,14 +73,12 @@ public class HandleErrorResponseBean implements MessageExchangeListener{
     
     public Source getErrorResponse(MessageExchange exchange) throws Exception {
         NormalizedMessage in = exchange.getMessage("in");
-        XPathUtil util = new XPathUtil();
-        util.setIn(in);
-        util.initialize();
         String errCode =  (String)in.getProperty(CaxchangeConstants.ERROR_CODE);
         String errMessage =  (String)in.getProperty(CaxchangeConstants.ERROR_MESSAGE);
+        Map<String,String> metadata = (Map<String,String>)in.getProperty(CaxchangeConstants.REQUEST_METADATA);
         errCode = (errCode==null)?DEFAULT_ERROR_CODE:errCode;
         errMessage = (errMessage==null)?DEFAULT_ERROR_MESSAGE:errMessage;
-        Source response = util.generateResponseFromErroredRequest(errCode, errMessage);
+        Source response = caXchangeDataUtil.generateResponseFromErroredRequest(errCode, errMessage, metadata);
         return response;        
     }
     /**

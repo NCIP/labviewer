@@ -6,8 +6,15 @@ import gov.nih.nci.caXchange.messaging.Statuses;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+import gov.nih.nci.caxchange.servicemix.bean.util.CaXchangeDataUtil;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import javax.annotation.Resource;
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
@@ -18,12 +25,11 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.jbi.messaging.RobustInOnly;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.jaxp.StringSource;
-
-import gov.nih.nci.caxchange.servicemix.bean.util.*;
 	/**
 	 * Listens to the aggregated response from EIP aggregator and creates 
 	 * a response message for the response queue. Optionally if one of the 
@@ -34,13 +40,11 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
 	 * @author Ekagra Software Technologies
 	 *
 	 */
-public class CaxchangeAggregatorListener  implements MessageExchangeListener {
+public class CaxchangeAggregatorListener  extends CaXchangeMessagingBean {
 
-    @Resource
-    private DeliveryChannel channel;
 
     static Logger logger = LogManager.getLogger(CaxchangeAggregatorListener.class);
-    List<String> messageTypesEligibleForRollback = new ArrayList<String>();
+    protected Set<String> transactionControlServiceTypes = new HashSet<String>();
     /**
      * Default constructor
      */
@@ -53,20 +57,14 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
 	 * @return
 	 * @throws MessagingException
 	 */
-    public void onMessageExchange(MessageExchange messageExchange) throws MessagingException{
+    public void processMessageExchange(MessageExchange messageExchange) throws MessagingException{
         String correlationID=null;
         try {
-            if (messageExchange.getStatus().equals(ExchangeStatus.DONE)) {
-                return;
-            }
-            if (messageExchange.getStatus().equals(ExchangeStatus.ERROR)) {
-                throw new MessagingException("An error occurred in the aggregator listener.",messageExchange.getError());
-            }
             NormalizedMessage in = messageExchange.getMessage("in");
 			logger.debug("Aggregated message :" +messageExchange);
             correlationID= (String)in.getProperty(CaxchangeConstants.ORIGINAL_EXCHANGE_CORRELATIONID);
             Source originalSource = getOriginalMessage(correlationID);
-            XPathUtil originalUtil = new XPathUtil();
+            CaXchangeDataUtil originalUtil = new CaXchangeDataUtil();
             NormalizedMessage original = messageExchange.createMessage();
             original.setContent(originalSource);
             originalUtil.setIn(original);
@@ -82,19 +80,15 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
                 logger.info("No rollback required for "+correlationID);
             }
             Source response = new DOMSource(responseDocument.getDomNode());
-            sendResponse(response);
-            messageExchange.setStatus(ExchangeStatus.DONE);
-            
-            
+           
             logger.debug("caXchange aggregated responseDocument: "+responseDocument);
             
             logger.debug("caXchange aggregatedResponse: "+aggregatedResponse);
-    		
-    		
-            
-            
-            
-            channel.send(messageExchange);
+            NormalizedMessage out = messageExchange.createMessage();
+            out.setContent(response);
+            copyPropertiesAndAttachments(in, out);
+            messageExchange.setMessage(out, "out");
+            channel.sendSync(messageExchange);
             if (!(messageExchange.getStatus().equals(ExchangeStatus.ERROR))) {
                deleteMessage(messageExchange);
             }
@@ -118,8 +112,6 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
         String originalMessage = message.getMessage();
         logger.debug("original message "+originalMessage);
         StringSource source = new StringSource(originalMessage); 
-        CaXchangeRequestMessageDocument orgDoc= CaXchangeRequestMessageDocument.Factory.parse(originalMessage);
-
         return source;
     }
     /**
@@ -138,7 +130,7 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        if (Statuses.FAILURE.equals(status)) {
            logger.debug("Response has failed.");
            logger.debug("Verifying the message type "+ messageType);
-           if (messageTypesEligibleForRollback.contains(messageType)) {
+           if (transactionControlServiceTypes.contains(messageType)) {
                return true;
            }
        }
@@ -158,24 +150,10 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
        rollbackMessage.setContent(rollback);
        inOnly.setInMessage(rollbackMessage);
        inOnly.setService(CaxchangeConstants.ROLLBACK_PIPELINE);
+       inOnly.setStatus(ExchangeStatus.ACTIVE);
        channel.send(inOnly);
    }
 
-    /**
-     * Send the caXchange response back to the response queue.
-     * @param response
-     * @return
-     * @throws MessagingException
-     */
-    public void sendResponse(Source response) throws MessagingException {
-       RobustInOnly robustInOnly =channel.createExchangeFactory().createRobustInOnlyExchange();
-       NormalizedMessage resp= robustInOnly.createMessage();
-       resp.setContent(response);
-       robustInOnly.setInMessage(resp);
-       robustInOnly.setService(CaxchangeConstants.RESPONSE_QUEUE);
-	   logger.info("Sending response:"+robustInOnly);
-       channel.sendSync(robustInOnly, 1000);
-    }
     /**
      * delete the original message in the database.
      * @param exchange
@@ -199,16 +177,11 @@ public class CaxchangeAggregatorListener  implements MessageExchangeListener {
      * @return
      * @throws
      */
-    public void setMessageTypesEligibleForRollback(List<String> messageTypesEligibleForRollback) {
-        this.messageTypesEligibleForRollback = messageTypesEligibleForRollback;
+    public void setTransactionControlServiceTypes(String messageTypesEligibleForRollback) {
+		StringTokenizer stringTokenizer = new StringTokenizer(messageTypesEligibleForRollback,",");
+		while (stringTokenizer.hasMoreTokens()) {
+			this.transactionControlServiceTypes.add(stringTokenizer.nextToken());
+		}
     }
-    /**
-     *Gets the message types eligible for rollback
-     * @param 
-     * @return messageTypesEligibleForRollback
-     * @throws
-     */
-    public List<String> getMessageTypesEligibleForRollback() {
-        return messageTypesEligibleForRollback;
-    }
+
 }

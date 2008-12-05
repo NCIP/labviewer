@@ -1,16 +1,16 @@
 package gov.nih.nci.caxchange.servicemix.bean.metadata;
 
-import java.io.StringReader;
-import java.net.URL;
-
 import gov.nih.nci.caXchange.CaxchangeConstants;
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.eip.EipConfig;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMetadata;
 import gov.nih.nci.caxchange.persistence.CaxchangeMetadataDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
 
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.ExchangeStatus;
+import java.io.StringReader;
+import java.net.URL;
+
 import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
@@ -18,21 +18,14 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import java.io.File;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.MessageExchangeListener;
-import org.apache.servicemix.jbi.jaxp.StringSource;
 import org.apache.servicemix.jbi.util.MessageUtil;
 import org.springframework.core.io.Resource;
-import org.w3c.dom.Node;
 
-public class CaXchangeRoutingMetadataBean implements MessageExchangeListener {
-    @javax.annotation.Resource
-    private DeliveryChannel channel;
+public class CaXchangeRoutingMetadataBean extends CaXchangeMessagingBean {
 
-    private Resource location;
+	private Resource location;
 
     private EipConfig eipRoutingConfig=null;
     private Logger logger = LogManager.getLogger(CaXchangeRoutingMetadataBean.class);
@@ -42,25 +35,17 @@ public class CaXchangeRoutingMetadataBean implements MessageExchangeListener {
                                               "</messageTypeMetadata> ";
 
 
-	public void onMessageExchange(MessageExchange exchange)
+	public void processMessageExchange(MessageExchange exchange)
 			throws MessagingException {
-		if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-			return;
-		}
-		if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-			return;
-		}
         logger.debug("Received exchange: " + exchange);
-        NormalizedMessage in = exchange.getMessage("in");
         NormalizedMessage out = exchange.createMessage();
-        MessageUtil.transfer(in,out);
         try {
           String metadata = getRoutingMetadata();
           Source source = new StreamSource(new StringReader(metadata));
           out.setContent(source);
         }catch(Exception e){
             logger.error("An error occurred getting metadata.", e);
-			Fault fault = getFault("500","Error occurred getting metadata."+e.getMessage(), exchange);
+			Fault fault = getFault(CaxchangeErrors.ERROR_GETTING_METADATA,"Error occurred getting metadata."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;
@@ -109,16 +94,6 @@ public class CaXchangeRoutingMetadataBean implements MessageExchangeListener {
 		return buffer.toString();
 	}
 
-	public Fault getFault(String errorCode, String errorMessage, MessageExchange exchange) throws MessagingException {
-		NormalizedMessage in = exchange.getMessage("in");
-		Fault fault = exchange.createFault();
-		MessageUtil.transfer(in, fault);
-		fault.setProperty(CaxchangeConstants.ERROR_CODE,
-		errorCode);
-		fault.setProperty(CaxchangeConstants.ERROR_MESSAGE,
-		errorMessage);
-        return fault;
-	}
 
 	public void setLocation(Resource location) {
 		this.location=location;

@@ -2,17 +2,15 @@ package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
-import javax.annotation.Resource;
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.ExchangeStatus;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
-import gov.nih.nci.caxchange.servicemix.bean.util.*;
 /**
  * CaXchange received a message for a message type for which routing 
  * has not yet been defined. This bean handles such messages. It sets 
@@ -22,9 +20,7 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
  * @author Ekagra Software Technologies
  *
  */
-public class UnhandledMessageTypeBean implements MessageExchangeListener {
-    @Resource
-    private DeliveryChannel channel;
+public class UnhandledMessageTypeBean  extends CaXchangeMessagingBean {
     
     static Logger logger = LogManager.getLogger(UnhandledMessageTypeBean.class);
     /**
@@ -42,21 +38,12 @@ public class UnhandledMessageTypeBean implements MessageExchangeListener {
 	 * @return
 	 * @throws MessagingException
 	 */
-    public void onMessageExchange(MessageExchange exchange) throws MessagingException {
-        if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-            return;
-        }
-        if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-            throw new MessagingException("Error sending unhandled message type error.", exchange.getError());
-        }
+    public void processMessageExchange(MessageExchange exchange) throws MessagingException {
         logger.debug("Received exchange: " + exchange); 
         NormalizedMessage out = exchange.createMessage();
         MessageUtil.transfer(exchange.getMessage("in"), out);
         try {
-           XPathUtil xpathUtil = new XPathUtil();
-           xpathUtil.setIn(exchange.getMessage("in"));
-           xpathUtil.initialize();
-           String messageType = xpathUtil.getMessageType();
+           String messageType = caXchangeDataUtil.getMessageType();
            out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxchange does not handle this message type :"+messageType);
         }catch(Exception e) {
