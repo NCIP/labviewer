@@ -12,6 +12,7 @@ import java.io.StringWriter;
 
 import java.rmi.RemoteException;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,11 +39,11 @@ import org.apache.log4j.Logger;
 
 import org.globus.wsrf.ResourceKey;
 
-/** 
+/**
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
- * 
+ *
  * @created by Introduce Toolkit version 1.1
- * 
+ *
  */
 public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImplBase {
     protected static String brokerURL=null; //"tcp://localhost:61618";
@@ -54,34 +55,37 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
     protected static ConnectionFactory connectionFactory = null;
     protected static Connection connection = null;
     public static Map<CaxchangeResponseExceptionListener,Connection> responseListeners = null;
-	
+
 	public CaXchangeRequestProcessorImpl() throws RemoteException {
 		super();
  	}
   /**
      * Processes a request by sending it to the caXchange inbound queue.
-     * 
+     *
      * @param caXchangeRequestMessage
      * @return
      * @throws RemoteException
      */
   public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
-	  logger.debug("caxchange gridservice: rcvd msg "+caXchangeRequestMessage);
+	  logger.debug("request:"+caXchangeRequestMessage);
       try {
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
           ResourceKey resKey = ctxResourceHome.createResource();
+          logger.info("Performance Request Received,"+resKey.getValue()+","+caXchangeRequestMessage.getMetadata().getMessageType()+","+new java.util.Date().getTime());
           caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(resKey.getValue().toString());
           try { //Sending the request to the caXchange inbound queue
+        	 logger.info("Before sending messge "+new Date().getTime());
              sendMessage(caXchangeRequestMessage);
+             logger.info("Before sending messge "+new Date().getTime());
           }catch(Exception e) {
               updateErrorResponse(caXchangeRequestMessage, resKey);
           }
-          
+
           if ((responseListeners==null)||(responseListeners.size()==0)) {
               registerResponseListeners();
           }
-          logger.info("Request send to ESB for key "+resKey);
-                   
+          logger.debug("Request send to ESB for key "+resKey);
+
           return ctxResourceHome.getResourceReference(resKey);
       }
       catch(Exception e) {
@@ -91,7 +95,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
   }
     /**
      * Send the message to the caXchange inbound JMS component.
-     * 
+     *
      * @param caXchangeRequestMessage
      * @throws Exception
      */
@@ -110,7 +114,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
             if (destination == null) {
                 destination = new ActiveMQQueue(destinationName);
             }
-            if (connection == null) {  
+            if (connection == null) {
                connection = connectionFactory.createConnection();
             }
             try {
@@ -131,17 +135,16 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
         } catch (Exception ex)  {
             logger.error("Error sending message to the ESB.", ex);
             responseListeners= null;
-            ex.printStackTrace();
             throw new Exception("Error sending message to the ESB.", ex);
         } finally  {
            if (session != null){
                session.close();
            }
-        }    
+        }
     }
   /**
      * Updating the Resource with the error Response.
-     * 
+     *
      * @param caXchangeRequestMessage
      * @throws Exception
      */
@@ -149,7 +152,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
        try {
           ResponseHandler responseHandler = new ResponseHandler();
           ResponseMessage response = responseHandler.getResponseFromError(caXchangeRequestMessage, "ERROR_SENDING_REQUEST", "An error happened sending the request to the inbound queue.");
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();         
+          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
           CaXchangeResponseServiceResource resource= (CaXchangeResponseServiceResource)ctxResourceHome.find(resKey);
           resource.setCaXchangeResponseMessage(response);
        }catch(Exception e) {
@@ -157,10 +160,10 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
            throw e;
        }
    }
-    
+
     /**
      * Register listeners for the response queue to update the Resources.
-     * 
+     *
      * @throws Exception
      */
     public void registerResponseListeners() throws Exception {
@@ -170,13 +173,13 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
             String outboundJmsBrokerUrl = properties.getProperty("outbound.jms.brokerURL");
             if (outboundJmsBrokerUrl==null) {
             	outboundJmsBrokerUrl = configuration.getCaXchangeInboundBrokerURL();
-            }            
+            }
             if (connectionFactory == null) {
                 connectionFactory = new ActiveMQConnectionFactory(outboundJmsBrokerUrl);
             }
             if (replyDestination == null) {
                 replyDestination = new ActiveMQQueue(replyDestinationName);
-            }          
+            }
             Connection connection = connectionFactory.createConnection();
             connection.start();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -193,11 +196,10 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
             }
         }catch (Exception ex)  {
             logger.error("Error registering response listeners.", ex);
-            ex.printStackTrace();
             throw new Exception("Error registers response listeners.", ex);
         } finally  {
         }
-    }    
+    }
 
 }
 
