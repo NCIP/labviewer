@@ -43,13 +43,13 @@ public class CaxchangeAggregator extends AbstractAggregator {
     protected  long timeOut=5*60*1000;
 
     static Logger logger=LogManager.getLogger(CaxchangeAggregator.class);
-    
+
     /**
      * Default constructor
      */
     public CaxchangeAggregator() {
     }
-    
+
     /**
      * This method gets the correlation id
      * @param exchange
@@ -57,40 +57,40 @@ public class CaxchangeAggregator extends AbstractAggregator {
      * @return correlationId
      * @throws
      */
-    protected String getCorrelationID(MessageExchange exchange, 
+    protected String getCorrelationID(MessageExchange exchange,
                                       NormalizedMessage message) {
        String correlationId=(String)exchange.getProperty("org.apache.servicemix.correlationId");
        String count = (String)message.getProperty("caxchange.targetservices.count");
        logger.debug("Got the count "+count);
         return correlationId;
     }
-    
+
     /**
-     * This methods creates the aggregation 
+     * This methods creates the aggregation
      * @param correlationID
      * @return aggregation
      * @throws
      */
     protected Object createAggregation(String correlationID) {
         CaxchangeAggregation aggregation = new CaxchangeAggregation(correlationID);
-        
+
         return aggregation;
     }
-    
+
     /**
-     * This method gets the timeout time 
+     * This method gets the timeout time
      * @param aggregate
      * @return date
-     * @throws 
+     * @throws
      */
     protected Date getTimeout(Object aggregate) {
         long currentTime = System.currentTimeMillis();
-        
+
         return new Date(currentTime+timeOut);
     }
     /**
      * Initializes the aggregator to anticipate responses from which target services.
-     * 
+     *
      * @param targetServiceIdentifiers
      * @return
      */
@@ -101,7 +101,7 @@ public class CaxchangeAggregator extends AbstractAggregator {
     		return exchangesToReceive;
     	}
     	StringTokenizer st = new StringTokenizer(targetServiceIdentifiers,",");
-    	exchangesToReceive = new HashSet(st.countTokens()); 
+    	exchangesToReceive = new HashSet(st.countTokens());
     	while(st.hasMoreTokens()) {
     		exchangesToReceive.add(st.nextToken());
     	}
@@ -114,7 +114,7 @@ public class CaxchangeAggregator extends AbstractAggregator {
      * @return
      */
     protected String getTargetServiceIdentifier(NormalizedMessage message) {
-       try {	
+       try {
     	Source content = message.getContent();
     	SourceTransformer sourceTransformer = new SourceTransformer();
     	Node node = sourceTransformer.toDOMNode(content);
@@ -146,17 +146,17 @@ public class CaxchangeAggregator extends AbstractAggregator {
     	   return null;
        }
     }
-    
+
     /**
      * This method add the message to the aggregator and return if the aggregation is complete or not
-     * 
+     *
      * @param aggregate
      * @param message
      * @param exchange
      * @return true or false
      * @throws
      */
-    protected boolean addMessage(Object aggregate, NormalizedMessage message, 
+    protected boolean addMessage(Object aggregate, NormalizedMessage message,
                                  MessageExchange exchange) {
         CaxchangeAggregation caxchangeAggregate = (CaxchangeAggregation)aggregate;
         logger.debug("Adding message");
@@ -180,9 +180,9 @@ public class CaxchangeAggregator extends AbstractAggregator {
         exchangesToReceive.remove(targetServiceIdentifier);
         return caxchangeAggregate.isAggregationComplete();
     }
-    
+
     /**
-     * This methods checks if some services timeout during the building of 
+     * This methods checks if some services timeout during the building of
      * aggregated response and build aggregate response
      * @param aggregate
      * @param message
@@ -191,13 +191,13 @@ public class CaxchangeAggregator extends AbstractAggregator {
      * @return
      * @throws Exception
      */
-    protected void buildAggregate(Object aggregate, NormalizedMessage message, 
+    protected void buildAggregate(Object aggregate, NormalizedMessage message,
                                   MessageExchange exchange, boolean timeout) throws Exception{
         logger.debug("Building aggregate");
         CaxchangeAggregation caxchangeAggregate = (CaxchangeAggregation)aggregate;
         List messages= caxchangeAggregate.getMessages();
-        logger.error("*********"+messages.size()+"  "+timeout+"  "+caxchangeAggregate.getExchangesToReceive() );
-        Document document = AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout, caxchangeAggregate.getExchangesToReceive());        
+        logger.debug("*********"+messages.size()+"  "+timeout+"  "+caxchangeAggregate.getExchangesToReceive() );
+        Document document = AggregatedResponseBuilder.buildAggregatedDocument(messages, timeout, caxchangeAggregate.getExchangesToReceive());
         message.setContent(new DOMSource(document));
         message.setProperty(CaxchangeEIPConstants.ORIGINAL_EXCHANGE_CORRELATIONID, caxchangeAggregate.getCorrelationId());
        return;
@@ -208,17 +208,17 @@ public class CaxchangeAggregator extends AbstractAggregator {
      * @param timeOut
      * @return
      * @throws
-     */ 
+     */
     public void setTimeOut(long timeOut) {
         this.timeOut = timeOut;
     }
-    
+
     /**
      * Gets the time out duration
-     * @param 
+     * @param
      * @return timeOut
      * @throws
-     */ 
+     */
     public long getTimeOut() {
         return timeOut;
     }

@@ -26,6 +26,8 @@
   
   <bean:endpoint service="caxchange:handleErrorResponseService" endpoint="handleErrorResponseEndpoint" bean="#handleErrorResponseBean"/>
   
+  <bean:endpoint service="caxchange:generateResponseService" endpoint="generateResponseEndpoint" bean="#generateResponseBean" />
+  
   <bean:endpoint service="caxchange:unhandledMessageType" endpoint="unhandledMessageTypeEndpoint" bean="#unhandledMessageType" />
   
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />

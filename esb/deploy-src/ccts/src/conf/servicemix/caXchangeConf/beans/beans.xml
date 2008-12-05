@@ -42,20 +42,18 @@
     <property name="keyFilePath" value="${delegation.keyFilePath}"/>
   </bean>
   
-  <bean id="storeOriginalMessageServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean"/>
+  <bean id="storeOriginalMessageServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.StoreOriginalMessageServiceBean">
+      <property name="eligibleServiceTypes" value="${messageTypes.for.transaction.control}" />
+  </bean>
   
   <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
+  
+   <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean" />
 
   <bean id="unhandledMessageType" class="gov.nih.nci.caxchange.servicemix.bean.routing.UnhandledMessageTypeBean" />
   
   <bean id="aggregatorListener" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaxchangeAggregatorListener" >
-  
-      <property name="messageTypesEligibleForRollback" >
-            <list>
-                <value>STUDY_CREATION</value>
-                <value>REGISTER_SUBJECT</value>
-            </list>
-      </property>
+        <property name="transactionControlServiceTypes" value="${messageTypes.for.transaction.control}"  />
   </bean>
   
   <bean

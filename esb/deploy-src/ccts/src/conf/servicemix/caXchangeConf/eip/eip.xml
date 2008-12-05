@@ -80,7 +80,32 @@
       </eip:target>
   </eip:pipeline>
   
-
+    <!-- Pipeline for Generating response -->
+    <eip:pipeline service="caxchange:generateResponsePipeline" endpoint="generateResponsePipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:generateResponseService" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:ResponseQueueService" />
+        </eip:target>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+       </eip:faultsTarget>        
+  </eip:pipeline>
+  
+    <!-- Pipeline for Aggregating response -->
+    <eip:pipeline service="caxchange:aggregateResponsePipeline" endpoint="aggregateResponsePipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:aggregatorListener" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:ResponseQueueService" />
+        </eip:target>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+       </eip:faultsTarget>        
+  </eip:pipeline>
+  
   <import resource="classpath:/caXchangeConf/eip/messageTypeRouter.xml" /> 
   
   <!-- Static recipient lists for each type of message -->
@@ -185,8 +210,11 @@
       <eip:exchange-target service="caxchange:pscAdverseEvent" />
     </eip:transformer>
     <eip:target>
-      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+	    <eip:exchange-target service="caxchange:generateResponsePipeline" />
     </eip:target>
+    <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+    </eip:faultsTarget>
   </eip:pipeline> 
   
   <!-- End EIP Components for invoking the PSC -->
@@ -197,8 +225,11 @@
         <eip:exchange-target service="caxchange:loadLab" />
       </eip:transformer>
       <eip:target>
-        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+	    <eip:exchange-target service="caxchange:generateResponsePipeline" />
       </eip:target>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+      </eip:faultsTarget>
      </eip:pipeline> 
   <!-- End EIP Components for invoking the load lab to CDMS  -->
   
@@ -354,8 +385,11 @@
       <eip:exchange-target service="caxchange:labLoader" />
     </eip:transformer>
     <eip:target>
-      <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
+	    <eip:exchange-target service="caxchange:generateResponsePipeline" />
     </eip:target>
+    <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+    </eip:faultsTarget>
   </eip:pipeline> 
 
   
@@ -364,7 +398,7 @@
   <!-- EIP Aggregator -->
   <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="caxchangeResponseAggregatorEndpoint" timeOut="300000">
          <eip:target>
-           <eip:exchange-target service="caxchange:aggregatorListener"  />
+           <eip:exchange-target service="caxchange:aggregateResponsePipeline"  />
         </eip:target>
   </eip:caxchangeAggregator>
   
@@ -415,10 +449,13 @@
         <eip:transformer>
           <eip:exchange-target service="caxchange:caaersLoadLab" />
         </eip:transformer>
-        <eip:target>
-          <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
-        </eip:target>
-       </eip:pipeline>
+       <eip:target>
+	    <eip:exchange-target service="caxchange:generateResponsePipeline" />
+      </eip:target>
+      <eip:faultsTarget>
+         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+       </eip:faultsTarget>
+    </eip:pipeline>
 
 
 </beans>

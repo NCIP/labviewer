@@ -131,7 +131,7 @@
 		    <include>cagrid:jdom</include>
 		    <include>cagrid:jgss</include>
 		    <include>cagrid.mobius:common-client</include>
-			 <include>cagrid.mobius:mobius-castor</include>
+		    <include>cagrid.mobius:mobius-castor</include>
 		    <include>cagrid.mobius:factories</include>
 		    <include>cagrid.mobius:gme-client</include>
 		    <include>cagrid.mobius:mako-client</include>

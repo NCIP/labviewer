@@ -122,5 +122,21 @@ public class GridMessageImpl implements GridMessage {
 			return null;
 		}
 	}
+	
+    public String getExternalIdentifier(){
+    	NodeList nodes = getMetaData().getElementsByTagNameNS(GridSU.NS, GridSU.EXTERNAL_IDENTIFIER);
+    	if (nodes.getLength() == 1) {
+    		return ((Element)nodes.item(0)).getTextContent();
+    	}
+    	return "";
+    }
+    
+    public String getCaxchangeIdentifier(){
+    	NodeList nodes = getMetaData().getElementsByTagNameNS(GridSU.NS, GridSU.CAXCHANGE_IDENTIFIER);
+    	if (nodes.getLength() == 1) {
+    		return ((Element)nodes.item(0)).getTextContent();
+    	}
+    	return "";
+    }
 
 }
