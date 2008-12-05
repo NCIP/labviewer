@@ -20,13 +20,13 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
-		<param name="threshold" value="INFO"/>
+		<param name="threshold" value="WARN"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p - %-30c{1} - %m%n"/>
 		</layout>
 	</appender>
 	<appender name="FILE" class="org.apache.log4j.FileAppender">
-		<param name="threshold" value="DEBUG"/>
+		<param name="threshold" value="WARN"/>
 		<param name="File" value="data/log/servicemix.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ABSOLUTE} | %-5p | %-10t | %-24.24c{1} | %-30.30C %4L | %m%n"/>
@@ -62,7 +62,7 @@
 	</logger>
 	<logger name="org.apache.servicemix">
 		<!-- To enable debug logging, replace the INFO by DEBUG -->
-		<level value="INFO"/>
+		<level value="WARN"/>
 	</logger>
 	<logger name="org.apache.servicemix.jbi.config">
 		<level value="WARN"/>

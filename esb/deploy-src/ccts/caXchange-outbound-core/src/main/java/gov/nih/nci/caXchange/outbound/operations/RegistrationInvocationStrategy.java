@@ -16,11 +16,13 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.ConnectException;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.MessageExchange;
+import javax.security.auth.Subject;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.AxisFault;
@@ -54,10 +56,14 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 
 		try {
 			GlobusCredential cred=null;
-			Set <GlobusCredential> s = exchange.getMessage("in").getSecuritySubject().getPrivateCredentials(GlobusCredential.class);
+			Subject subject = exchange.getMessage("in").getSecuritySubject();
+			Set<GlobusCredential> globusCredentials = new HashSet<GlobusCredential>();
+			if (subject != null) {
+				globusCredentials = subject.getPrivateCredentials(GlobusCredential.class);
+			}
 
-			if(s.size()>0){
-				cred=s.iterator().next();
+			if(globusCredentials.size()>0){
+				cred=globusCredentials.iterator().next();
 			}else{
 				throw new GridInvocationException("no credentials found");
 			}
@@ -66,10 +72,14 @@ public class RegistrationInvocationStrategy extends GridInvocationStrategy {
 			if(isItineraryBased){
 				url=caxchangeProps.getProperty(exchange.getMessage("in").getProperty(CaxchangeConstants.TARGET_ID)+".registration.url");
 			}
-
-			RegistrationConsumerClient client = new RegistrationConsumerClient(
+			RegistrationConsumerClient client=null;
+            if (cred != null) {
+			   client = new RegistrationConsumerClient(
 					url, cred);
-
+            }else {
+            	client = new RegistrationConsumerClient(
+    					url);
+            }
 			SourceTransformer transformer = new SourceTransformer();
 			InputStream deseralizeStream = client.getClass().getResourceAsStream(
 							"/registration/client-config.wsdd");

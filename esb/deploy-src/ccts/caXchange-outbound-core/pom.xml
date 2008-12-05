@@ -595,5 +595,54 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
+    <!-- Authentication for testing related dependencies -->
+    <dependency>
+      <groupId>cagrid.dorian</groupId>
+      <artifactId>cagrid-dorian-client</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>    
+    <dependency>
+      <groupId>cagrid.dorian</groupId>
+      <artifactId>cagrid-dorian-common</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>    
+    <dependency>
+      <groupId>cagrid.dorian</groupId>
+      <artifactId>cagrid-dorian-stubs</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency> 
+    <dependency>
+      <groupId>cagrid.authentication</groupId>
+      <artifactId>cagrid-authentication-service-client</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>    
+    <dependency>
+      <groupId>cagrid.authentication</groupId>
+      <artifactId>cagrid-authentication-service-common</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>    
+    <dependency>
+      <groupId>cagrid.authentication</groupId>
+      <artifactId>cagrid-authentication-service-stubs</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+       <groupId>cagrid</groupId>
+       <artifactId>cagrid-opensaml</artifactId>
+       <version>1.1</version>
+       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-security-jar</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>    
   </dependencies>
 </project>

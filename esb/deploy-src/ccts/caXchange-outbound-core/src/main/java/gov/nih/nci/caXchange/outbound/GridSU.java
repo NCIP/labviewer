@@ -2,16 +2,24 @@ package gov.nih.nci.caXchange.outbound;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
 import gov.nih.nci.caXchange.CaxchangeErrors;
+import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
+import gov.nih.nci.caXchange.messaging.Response;
+import gov.nih.nci.caXchange.messaging.ResponseMessage;
+import gov.nih.nci.caXchange.messaging.ResponseMetadata;
+import gov.nih.nci.caXchange.messaging.Statuses;
 import gov.nih.nci.caXchange.outbound.impl.GridMessageImpl;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.rmi.RemoteException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
+import javax.jbi.messaging.InOnly;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
@@ -46,6 +54,10 @@ public class GridSU implements MessageExchangeListener {
 	public static final String REQUEST_PAYLOAD_ELEMENT = "businessMessagePayload";
 
 	public static final String META_DATA_ELEMENT = "metadata";
+	
+	public static final String EXTERNAL_IDENTIFIER = "externalIdentifier";
+	
+	public static final String CAXCHANGE_IDENTIFIER = "caXchangeIdentifier";
 
 	public static final String RESPONSE_ELEMENT = "targetResponse";
 
@@ -61,7 +73,7 @@ public class GridSU implements MessageExchangeListener {
 
 	public static final String TARGET_STATUS_ELEMENT = "targetMessageStatus";
 
-	public static final String RESPONSE_PAYLOAD_ELEMENT = "messagePayload";
+	public static final String RESPONSE_PAYLOAD_ELEMENT = "targetBusinessMessage";
 
 	public static final String SCHEMA_DEFINITION_ELEMENT = "xmlSchemaDefinition";
 
@@ -104,6 +116,9 @@ public class GridSU implements MessageExchangeListener {
 		} catch (Exception e) {
 			log.error("Failed to process exchange.", e);
 			exchange.setError(e);
+		}
+		if (exchange instanceof InOnly) {
+			exchange.setStatus(ExchangeStatus.DONE);
 		}
 		channel.send(exchange);
 	}
@@ -187,12 +202,12 @@ public class GridSU implements MessageExchangeListener {
 	 * @throws Exception
 	 */
 	public void executeStrategy(MessageExchange exchange) throws Exception {
-
+		NormalizedMessage in = exchange.getMessage("in");
+		Document input = new SourceTransformer().toDOMDocument(in);
+		GridMessage gridMessage = new GridMessageImpl(input);
+		
 		for (int i = 0; i <= retries; i++) {
 			try {
-				NormalizedMessage in = exchange.getMessage("in");
-				Document input = new SourceTransformer().toDOMDocument(in);
-				GridMessage gridMessage = new GridMessageImpl(input);
 				GridInvocationResult result = strategy.invokeGridService(
 						channel, exchange, gridMessage);
 
@@ -224,9 +239,23 @@ public class GridSU implements MessageExchangeListener {
 			}
 		}
 		if (exchange.getMessage("out") != null) {
+			copyRequestMetadata(gridMessage, exchange
+					.getMessage("out") );
 			copyPropertiesAndAttachments(exchange.getMessage("in"), exchange
 					.getMessage("out"));
 		}
+	}
+	
+	protected void copyRequestMetadata(GridMessage gridMessage, NormalizedMessage out) throws Exception {
+		Map<String, String> metadata = new HashMap<String, String>();
+		metadata.put(CaxchangeConstants.EXTERNAL_IDENTIFIER, gridMessage.getExternalIdentifier());
+		metadata.put(CaxchangeConstants.CAXCHANGE_IDENTIFIER, gridMessage.getCaxchangeIdentifier());
+		
+		if (out != null) {
+			out.setProperty(CaxchangeConstants.REQUEST_METADATA, metadata);
+		}
+		return;
+		
 	}
 
 	/**
@@ -427,6 +456,7 @@ public class GridSU implements MessageExchangeListener {
 		root.appendChild(payloadElement);
 		return output;
 	}
+	
 	/**
 	 * This method creates the error code document with the description of 
 	 * the causes of error
@@ -495,6 +525,7 @@ public class GridSU implements MessageExchangeListener {
 			
 		return errorCode;
 	}
+
 	/**
 	 * This method checks the shows the status of the inactive exchanges
 	 * @param exchange
