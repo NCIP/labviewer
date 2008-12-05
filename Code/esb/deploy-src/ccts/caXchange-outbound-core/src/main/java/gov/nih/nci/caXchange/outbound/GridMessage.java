@@ -19,5 +19,9 @@ public interface GridMessage {
     
     public Element getSchemaDefinition();
     
+    public String getExternalIdentifier();
+    
+    public String getCaxchangeIdentifier();
+    
 
 }
