@@ -16,26 +16,24 @@
  */
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
-import gov.nih.nci.caXchange.CaxchangeConstants;
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.security.CaXchangePrincipal;
-import gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+
 import java.io.StringReader;
 import java.security.Principal;
-import javax.annotation.Resource;
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.ExchangeStatus;
+
 import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.security.auth.Subject;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.util.MessageUtil;
-import org.cagrid.gaards.cds.client.CredentialDelegationServiceClient;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
 import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
@@ -51,25 +49,13 @@ import org.globus.wsrf.encoding.DeserializationException;
  * @author Ekagra Software Technologies
  *
  */
-public class InvokeDelegationServiceBean implements MessageExchangeListener {
-
-	@Resource
-	private DeliveryChannel channel;
-
-	public static final String USERNAME_XPATH = "/caxchange:caXchangeRequestMessage/metaData/credentials/userName";
-	public static final String GROUPNAME_XPATH = "/caxchange:caXchangeRequestMessage/metaData/credentials/groupName";
-	public static final String GRIDIDENTIFIER_XPATH = "/caxchange:caXchangeRequestMessage/metaData/credentials/gridIdentifier";
-
-	public static final String USERNAME = "userName";
-	public static final String GROUPNAME = "groupName";
-	public static final String GRIDIDENTIFIER = "gridIdentifier";
+public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	
 	private String certificateFilePath, keyFilePath;
 
 	private static GlobusCredential hostCredential = null;
 	
-	public static Logger logger = LogManager
-	.getLogger(InvokeDelegationServiceBean.class);
+	public static Logger logger = LogManager.getLogger(InvokeDelegationServiceBean.class);
 	
 	/**
      * Default constructor
@@ -100,14 +86,8 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 	 * @return
 	 * @throws MessagingException
 	 */	
-	public void onMessageExchange(MessageExchange exchange)
+	public void processMessageExchange(MessageExchange exchange)
 	throws MessagingException {
-		if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-			return;
-		}
-		if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-			return;
-		}
 		
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
@@ -117,23 +97,23 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			invokeDelegationService(exchange);
 		}
 		catch (CDSInternalFault e){
-			Fault fault = getFault("401","Internal error invoking delegation service."+e.getMessage(), exchange);
+			Fault fault = getFault(CaxchangeErrors.CDS_INTERNAL_FAULT,"Internal error invoking delegation service."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;			
 		}catch (DelegationFault e){
-			Fault fault = getFault("402","Delegation fault invoking delegation service."+e.getMessage(), exchange);
+			Fault fault = getFault(CaxchangeErrors.DELEGATION_FAULT,"Delegation fault invoking delegation service."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;	
 		}catch (PermissionDeniedFault e){
-			Fault fault = getFault("403","Permission denied fault invoking delegation service."+e.getMessage(), exchange);
+			Fault fault = getFault(CaxchangeErrors.PERMISSION_DENIED_FAULT,"Permission denied fault invoking delegation service."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;	
 		}
 		catch (Throwable e) {
-			Fault fault = getFault("400","Error invoking delegation service."+e.getMessage(), exchange);
+			Fault fault = getFault(CaxchangeErrors.UNKNOWN,"Error invoking delegation service."+e.getMessage(), exchange);
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;
@@ -154,16 +134,7 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 		try {
 			NormalizedMessage in = exchange.getMessage("in");
 	
-			XPathUtil util = new XPathUtil();
-			util.setIn(in);
-			util.initialize();
-			
-			//TODO: this is a temporary arrangement for Lab Loader
-			/*if("CT_LAB_DATA".equals(util.getMessageType()))
-				return;
-			*/
-			
-			String delegationEPR = util.getDelegatedCredentialReference();
+			String delegationEPR = caXchangeDataUtil.getDelegatedCredentialReference();
 			
 			DelegatedCredentialReference delegatedCredentialReference = null;
 			try{
@@ -220,16 +191,6 @@ public class InvokeDelegationServiceBean implements MessageExchangeListener {
 			throw e;
 		}
 
-	}
-	public Fault getFault(String errorCode, String errorMessage, MessageExchange exchange) throws MessagingException {
-		NormalizedMessage in = exchange.getMessage("in");
-		Fault fault = exchange.createFault();
-		MessageUtil.transfer(in, fault);
-		fault.setProperty(CaxchangeConstants.ERROR_CODE,
-		errorCode);
-		fault.setProperty(CaxchangeConstants.ERROR_MESSAGE,
-		errorMessage);
-        return fault;
 	}
 	
    /*No references*/

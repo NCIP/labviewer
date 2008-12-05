@@ -5,10 +5,10 @@ import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
-import org.apache.servicemix.MessageExchangeListener;
-import javax.annotation.Resource;
-import javax.jbi.messaging.DeliveryChannel;
-import javax.jbi.messaging.ExchangeStatus;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+
+import java.io.StringWriter;
+
 import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
@@ -17,11 +17,10 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.jbi.util.MessageUtil;
-import gov.nih.nci.caxchange.servicemix.bean.util.*;
 /**
  * This class stores original message in the database to use it later 
  * for generating response and or sending roll back
@@ -29,13 +28,9 @@ import gov.nih.nci.caxchange.servicemix.bean.util.*;
  * @author Ekagra Software Technologies 
  *
  */
-public class StoreOriginalMessageServiceBean implements MessageExchangeListener {
+public class StoreOriginalMessageServiceBean  extends CaXchangeMessagingBean {
 
-    @Resource
-    private DeliveryChannel channel;
-
-
-    public static Logger logger= LogManager.getLogger(InvokeDelegationServiceBean.class);
+    public static Logger logger= LogManager.getLogger(StoreOriginalMessageServiceBean.class);
 
 	/**
 	 * When the POJO Implements the MessageExchangeListener interface of servicemix-bean component
@@ -44,13 +39,7 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
 	 * @return
 	 * @throws MessagingException
 	 */	
-    public void onMessageExchange(MessageExchange exchange) throws MessagingException {
-        if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-            return;
-        }
-        if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-            return;
-        }
+    public void processMessageExchange(MessageExchange exchange) throws MessagingException {
         logger.debug("Received exchange: " + exchange);
         NormalizedMessage in = exchange.getMessage("in");
         NormalizedMessage out= exchange.createMessage();
@@ -59,12 +48,15 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
             logger.debug("Storing original message");
             storeOriginalMessage(exchange);
         }catch(Exception e) {
-        	e.printStackTrace();
-            logger.error("Error occurred storing original message.", e);
-            Fault fault = exchange.createFault();
-            MessageUtil.transfer(in, fault);
-            fault.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.ERROR_STORING_MESSAGE);
-            fault.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Error occurred storing original message.");
+            logger.error("Error occurred storing original message. Sending fault.", e);
+            Fault fault = getFault(CaxchangeErrors.ERROR_STORING_MESSAGE, "Error occurred storing original message.", exchange );
+            exchange.setFault(fault);
+            channel.send(exchange);
+            logger.debug("Sending fault.");
+            return;
+        }catch(Throwable t) {
+            logger.error("Runtime error occurred storing original message.", t);
+            Fault fault = getFault(CaxchangeErrors.ERROR_STORING_MESSAGE, "Error occurred storing original message.", exchange );
             exchange.setFault(fault);
             channel.send(exchange);
             return;
@@ -89,9 +81,6 @@ public class StoreOriginalMessageServiceBean implements MessageExchangeListener 
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         StreamResult stringResult= new StreamResult(sw);
         transformer.transform(source, stringResult);
-        XPathUtil util = new XPathUtil();
-        util.setIn(in);
-        util.initialize();
         String correlationId = (String)exchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
         logger.debug("Correlation id is:"+correlationId);
         String message = sw.getBuffer().toString();

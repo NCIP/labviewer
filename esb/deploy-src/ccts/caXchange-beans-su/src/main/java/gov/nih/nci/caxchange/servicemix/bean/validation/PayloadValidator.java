@@ -1,12 +1,8 @@
 package gov.nih.nci.caxchange.servicemix.bean.validation;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.validation.Schema;
@@ -17,7 +13,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /**
  * Validates the payload against a given schema.
@@ -27,7 +22,6 @@ import org.xml.sax.XMLReader;
  */
 public class PayloadValidator {
 	private SAXParserFactory parserFactory=null;
-	private SchemaFactory schemaFactory=null;
 	private Logger logger = LogManager.getLogger(PayloadValidator.class);
 	
     public void init() {
@@ -35,7 +29,6 @@ public class PayloadValidator {
     	parserFactory.setValidating(false);
     	parserFactory.setNamespaceAware(true);
     	
-    	schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         logger.info("Payload validator initialized.");
     }
     /**

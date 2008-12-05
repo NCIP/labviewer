@@ -22,9 +22,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
-import gov.nih.nci.caxchange.servicemix.bean.util.XPathUtil;
+import gov.nih.nci.caxchange.servicemix.bean.util.CaXchangeDataUtil;
+import gov.nih.nci.nih.servicemix.bean.CaxchangeBeanServiceUnitTest;
 
-public class XPathUtilTest extends SpringTestSupport {
+public class CaXchangeDataUtilTest extends CaxchangeBeanServiceUnitTest {
 
 	public void testBuildResponse() {
 	  try {
@@ -32,7 +33,7 @@ public class XPathUtilTest extends SpringTestSupport {
     	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
     	InOnly me = client.createInOnlyExchange();
     	me.getInMessage().setContent(new StreamSource(fis));
-    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
     	util.setIn(me.getMessage("in"));
     	util.initialize();
     	InputStream aggregatedResponse = getClass().getClassLoader().getResourceAsStream("aggregatemessage.xml");
@@ -55,7 +56,7 @@ public class XPathUtilTest extends SpringTestSupport {
 	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
 	    	InOnly me = client.createInOnlyExchange();
 	    	me.getInMessage().setContent(new StreamSource(fis));
-	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
 	    	String delegationReference = util.getDelegatedCredentialReference();
@@ -72,7 +73,7 @@ public class XPathUtilTest extends SpringTestSupport {
 	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
 	    	InOnly me = client.createInOnlyExchange();
 	    	me.getInMessage().setContent(new StreamSource(fis));
-	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
 	    	String userName = util.getUserName();
@@ -85,14 +86,13 @@ public class XPathUtilTest extends SpringTestSupport {
 	public void testMessageType() {
 		  try {
 	    	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
-	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
 	    	InOnly me = client.createInOnlyExchange();
-	    	me.getInMessage().setContent(new StreamSource(fis));
-	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	me.getInMessage().setContent(getSource("testmessage.xml"));
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
 	    	String messageType = util.getMessageType();
-	    	assertEquals(messageType,"STUDY_CREATION");
+	    	assertEquals(messageType,"REGISTER_SUBJECT");
 		  }catch(Exception e) {
 			  throw new RuntimeException(e);
 		  }
@@ -104,7 +104,7 @@ public class XPathUtilTest extends SpringTestSupport {
 	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
 	    	InOnly me = client.createInOnlyExchange();
 	    	me.getInMessage().setContent(new StreamSource(fis));
-	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
 	    	Node node = util.getBusinessPayload();
@@ -122,7 +122,7 @@ public class XPathUtilTest extends SpringTestSupport {
 	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
 	    	InOnly me = client.createInOnlyExchange();
 	    	me.getInMessage().setContent(new StreamSource(fis));
-	    	XPathUtil util = (XPathUtil)context.getBean("xpathUtil");
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
 	    	Source source = util.getRollbackMessage();
@@ -134,11 +134,5 @@ public class XPathUtilTest extends SpringTestSupport {
 		  }
 		}	
 	
-	
-	@Override
-	protected AbstractXmlApplicationContext createBeanFactory() {
-		// TODO Auto-generated method stub
-		return new ClassPathXmlApplicationContext("spring.xml");
-	}
 
 }

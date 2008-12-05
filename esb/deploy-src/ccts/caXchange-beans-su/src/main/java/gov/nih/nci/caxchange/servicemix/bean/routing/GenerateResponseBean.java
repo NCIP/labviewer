@@ -1,10 +1,20 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import java.util.Map;
+
 import gov.nih.nci.caXchange.CaxchangeConstants;
-import gov.nih.nci.caxchange.servicemix.bean.util.*;
+import gov.nih.nci.caXchange.messaging.CaXchangeResponseMessageDocument;
+import gov.nih.nci.caXchange.messaging.MessageStatuses;
+import gov.nih.nci.caXchange.messaging.Response;
+import gov.nih.nci.caXchange.messaging.ResponseMessage;
+import gov.nih.nci.caXchange.messaging.ResponseMetadata;
+import gov.nih.nci.caXchange.messaging.Statuses;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+import gov.nih.nci.caxchange.servicemix.bean.util.CaXchangeDataUtil;
+
 import javax.annotation.Resource;
 import javax.jbi.messaging.DeliveryChannel;
 import javax.jbi.messaging.ExchangeStatus;
@@ -13,17 +23,27 @@ import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.jbi.messaging.RobustInOnly;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.apache.servicemix.jbi.util.MessageUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 	/**
-	 * This class generates the response and puts in response jms queue to the GRID node 
+	 * This class generates the caXchange response forwards it to the JMS queue. 
 	 * for the client to pick up the response
 	 *  
 	 * @author Ekagra Software Technologies
 	 *
 	 */
-public class GenerateResponseBean implements MessageExchangeListener{ 
+public class GenerateResponseBean extends CaXchangeMessagingBean { 
     @Resource
     private DeliveryChannel channel;
     
@@ -42,67 +62,74 @@ public class GenerateResponseBean implements MessageExchangeListener{
 	 * @throws MessagingException
 	 */
     
-    public void onMessageExchange(MessageExchange exchange) throws MessagingException {
-        if (exchange.getStatus().equals(ExchangeStatus.DONE)) {
-            return;
-        }
-        if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-           throw new MessagingException("An error occurred sending error response to the queue.", exchange.getError());
-        }
+    public void processMessageExchange(MessageExchange exchange) throws MessagingException {
         logger.debug("Received exchange: " + exchange);
         try {
-          NormalizedMessage in= exchange.getMessage("in");
-          String errorMessage = (String)in.getProperty(CaxchangeConstants.ERROR_MESSAGE);
-          if (errorMessage != null) {
-             handleErrorResponse(exchange);
-          }
+        	NormalizedMessage in = exchange.getMessage("in");
+        	Source inSource = in.getContent();
+        	Document document = new SourceTransformer().toDOMDocument(inSource);
+        	if (isTargetResponse(document)) {
+        	   Map<String, String> metadata = (Map<String,String>)in.getProperty(CaxchangeConstants.REQUEST_METADATA);
+        	   Node caXchangeResponse = generateResponseFromTargetResponse(metadata,document);
+        	   Source response = new DOMSource(caXchangeResponse);
+        	   NormalizedMessage out = exchange.createMessage();
+     	       MessageUtil.transfer(in,out);
+     	      copyPropertiesAndAttachments(in,out);
+        	   out.setContent(response);
+        	   exchange.setMessage(out, "out");
+        	}else {
+         	   NormalizedMessage out = exchange.createMessage();
+     	       MessageUtil.transfer(in,out);  
+       	       copyPropertiesAndAttachments(in,out);
+     	       exchange.setMessage(out, "out");
+        	}
+        	channel.send(exchange);
         }catch(Exception e){
-            logger.error("An error occurred sending error response to the queue.", e);
-            throw new MessagingException("An error occurred sending error response to the queue.", e);
+            logger.error("An error occurred generating caxchange response.", e);
+            throw new MessagingException("An error occurred generating caxchange response.", e);
         }
-        exchange.setStatus(ExchangeStatus.DONE);
-        channel.send(exchange);
-        deleteMessage(exchange);
     }
-    /**
-	 * This method create the error response in case of any error to send to jms queue to GRID Node
-	 * @param exchange
-	 * @return
-	 * @throws Exception
-	 */
-    public void handleErrorResponse(MessageExchange exchange) throws Exception {
-        NormalizedMessage in = exchange.getMessage("in");
-        XPathUtil util = new XPathUtil();
-        util.setIn(in);
-        util.initialize();
-        String errCode =  (String)in.getProperty(CaxchangeConstants.ERROR_CODE);
-        String errMessage =  (String)in.getProperty(CaxchangeConstants.ERROR_MESSAGE);
-        Source response = util.generateResponseFromErroredRequest(errCode, errMessage);
-        RobustInOnly robustInOnly = channel.createExchangeFactory().createRobustInOnlyExchange();
-        NormalizedMessage resp= robustInOnly.createMessage();
-        resp.setContent(response);
-        robustInOnly.setInMessage(resp);
-        robustInOnly.setService(CaxchangeConstants.RESPONSE_QUEUE);
-        channel.sendSync(robustInOnly, 1000);
+    
+    public boolean isCaXchangeResponse(Document document) throws Exception {
+    	String localName = document.getDocumentElement().getNodeName();
+    	if (localName.equals("caXchangeResponseMessage")) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public boolean isTargetResponse(Document document) throws Exception {
+    	String localName = document.getDocumentElement().getNodeName();
+    	logger.debug(localName);
+    	if (localName.equals("targetResponse")) {
+    		return true;
+    	}
+    	return false;
+    }
         
-    }
-    /**
-	 * This method deletes the original message once the response is sent to jms queue of GRID node
-	 * @param exchange
-	 * @return
-	 * @throws 
-	 */
-    public void deleteMessage(MessageExchange exchange)  {
-      try {
-        CaxchangeMessageDAO caxchangeMessageDAO = DAOFactory.getCaxchangeMessageDAO();
-        String correlationId = (String)exchange.getProperty(CaxchangeConstants.EXCHANGE_CORRELATIONID);
-        CaxchangeMessage caxchangeMessage = new CaxchangeMessage();
-        caxchangeMessage.setMessageId(correlationId);
-        caxchangeMessageDAO.deleteMessage(caxchangeMessage);
-      }catch(Exception e) {
-        logger.error("Error deleting original message.",e);
-      }
+    
+    public Node generateResponseFromTargetResponse(Map<String, String> metadata, Document document) throws Exception {
+        CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance();
+        ResponseMessage responseMessage = responseDocument.addNewCaXchangeResponseMessage();
+        ResponseMetadata responseMetaData= responseMessage.addNewResponseMetadata();
+        responseMetaData.setCaXchangeIdentifier(metadata.get(CaxchangeConstants.CAXCHANGE_IDENTIFIER));
+        responseMetaData.setExternalIdentifier(metadata.get(CaxchangeConstants.EXTERNAL_IDENTIFIER));
+        Response response = responseMessage.addNewResponse();
+        response.setResponseStatus(Statuses.SUCCESS);
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        XPathExpression msExp = xpath.compile("/targetResponse/targetMessageStatus");        
+        String targetMessageStatus = (String)msExp.evaluate(document, XPathConstants.STRING);
+        if ((MessageStatuses.FAULT.toString().equals(targetMessageStatus))||
+        	(MessageStatuses.ERROR.toString().equals(targetMessageStatus))) {
+        	response.setResponseStatus(Statuses.FAILURE);
+        }
+        Document responseOwnerDocument = response.getDomNode().getOwnerDocument();
+        Node importedDocument  = responseOwnerDocument.importNode(document.getFirstChild(), true);
+        response.getDomNode().appendChild(importedDocument);
+        
+        return responseDocument.getDomNode();
     }    
+
     
     
 }
