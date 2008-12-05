@@ -65,22 +65,20 @@ public class CaxchangeResponseListener implements MessageListener {
     public void onMessage(Message message) {
        try {
            TextMessage textMessage = (TextMessage)message;
-           Transformer tr = TransformerFactory.newInstance().newTransformer();
-           StreamSource ss = new StreamSource(new StringReader(textMessage.getText()));
-           tr.transform(ss, new StreamResult(System.out));
            logger.debug("Got the message.."+textMessage.getText());
            ResponseHandler responseHandler = new ResponseHandler();
            responseHandler.setResponseText(textMessage.getText());
            ResponseMessage responseMessage = responseHandler.getResponse();
            String caXchangeIdentifier = responseMessage.getResponseMetadata().getCaXchangeIdentifier();
-           logger.info("Got response for caXchangeIdentifier."+caXchangeIdentifier);
+           logger.debug("Got response for caXchangeIdentifier."+caXchangeIdentifier);
            ResourceKey resourceKey = new SimpleResourceKey(resourceHome.getKeyTypeName(), caXchangeIdentifier);
            logger.debug("ressourceKey created "+resourceKey.getName()+" "+resourceKey.getValue());
              CaXchangeResponseServiceResource resource = resourceHome.getResource(resourceKey);
              if (resource != null) {
                  resource.setCaXchangeResponseMessage(responseMessage);
-                 logger.info("Updated the Resource with the response for :"+caXchangeIdentifier);
+                 logger.debug("Updated the Resource with the response for :"+caXchangeIdentifier);
              }
+           logger.info("Performance Resource Update,"+caXchangeIdentifier+","+new java.util.Date().getTime());
        }
        catch(Exception e) {
            logger.error("Error occurred getting response and setting to the resource ",e);
