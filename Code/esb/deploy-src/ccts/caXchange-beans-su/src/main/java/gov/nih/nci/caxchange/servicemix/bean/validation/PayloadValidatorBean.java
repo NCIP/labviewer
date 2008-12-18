@@ -66,7 +66,7 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
                  long timeBefore = new java.util.Date().getTime();
         	     payloadValidator.validatePayload(payload, schema);
         	     long timeAfter = new java.util.Date().getTime();
-        	     logger.warn("Time for validation:"+(timeAfter-timeBefore));
+        	     logger.debug("Time for validation:"+(timeAfter-timeBefore));
               }else {
             	  throw new PayloadValidationException("Schema not found for namespace:"+namespace+"  and message type:"+messageType+" GME url:"+gmeSchemaFactory.getGMEGridServiceLocation());
               }
