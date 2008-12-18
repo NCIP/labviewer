@@ -130,7 +130,7 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 		exchange.setMessage(out, "out");
 		channel.send(exchange);
 		long timeAfter = new java.util.Date().getTime();
-		logger.warn("Timer for set subject service:"+(timeAfter-timeBefore));
+		logger.debug("Timer for set subject service:"+(timeAfter-timeBefore));
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 			GlobusCredential userCredential=null;
             userCredential = getCachedGlobusCredential(exchange);
             if (userCredential==null) {
-            	logger.warn("User credential not found in cache.");
+            	logger.debug("User credential not found in cache.");
             	userCredential = getGlobusCredentialFromDelgationService(exchange);
             }
             if (!(userCredential.getIdentity().equals(caXchangeDataUtil.getGridIdentifier()))) {
