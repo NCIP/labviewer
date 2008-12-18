@@ -51,9 +51,10 @@ public abstract class CaXchangeMessagingBean implements MessageExchangeListener 
         		   return;
         	   }
         	   if (exchange.getStatus().equals(ExchangeStatus.ERROR)) {
-        		   logger.error("Error exchange recieved.");
-        		   throw new MessagingException("Error exchange received.");
+        		   logger.error("Error exchange recieved."+exchange);
+        		   //throw new MessagingException("Error exchange received.");
         	   }
+        	   logger.debug("In bean:"+this.getClass().getName()+":"+new java.util.Date().getTime());
         	   if (exchange.getStatus().equals(ExchangeStatus.ACTIVE)) { 
         		  caXchangeDataUtil.setIn(exchange.getMessage("in"));
         		  caXchangeDataUtil.initialize();
@@ -69,7 +70,7 @@ public abstract class CaXchangeMessagingBean implements MessageExchangeListener 
         	        channel.send(exchange);		
         	      }
         	   }
-        	   
+        	   logger.debug("Out bean:"+this.getClass().getName()+":"+new java.util.Date().getTime());
                return;
            }catch(Exception e){
               logger.error("Error occurred processing exchange."+e.getMessage(), e);

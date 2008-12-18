@@ -12,8 +12,8 @@
 	 <property name="tom.home" value="${env.CATALINA_HOME}" />
 	 <property name="lib.dir" value="${cax.home}/lib"/>
 	 <property name="temp.dir" value="${cax.home}/temp" />
-	<property name="log.dir" value="${cax.home}/logs" />
-	<property name="tomcat.prop" value="${cax.home}/conf/tomcat" />	
+	 <property name="log.dir" value="${cax.home}/logs" />
+	 <property name="tomcat.prop" value="${cax.home}/conf/tomcat" />	
 	
 	<!--Validates the CATALINA_HOME and JDK version-->
 	<target name="assert"  description="Uses ant to detect current jdk version and validates CATALINA_HOME is set">
@@ -291,7 +291,14 @@
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 		 propertyFile="install.properties">
 			<replacefilter token="@MESSAGETYPES_FOR_VALIDATION@" property="messageTypes_for_validation"/>
+			<replacefilter token="@user.proxy.cache.time.to.live@" property="user.proxy.cache.time.to.live"/>
 		</replace>
+
+	</target>
+	
+	<target name="servicemix-configure-no-auditor" depends="assert,db-init,configure-caxchange-properties,servicemix-configure" description="config servicemix container without auditor logging">
+	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/servicemix.xml"/>
+	        <copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml"/>
 	</target>
 	
 
@@ -302,12 +309,9 @@
 		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
 		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		
-		
-		
-		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		
-
-
+		<copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml"/>
+	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/servicemix.xml"/>
+	        
 		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
 		 propertyFile="install.properties">
@@ -580,6 +584,7 @@
 	<target name="auditor-configure" depends="assert,servicemix-configure" description="config to make Auditor ready for its deployment">
 		<!-- servicemix.xml is already copied as part of servicemix-configure target -->
 		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
 		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>

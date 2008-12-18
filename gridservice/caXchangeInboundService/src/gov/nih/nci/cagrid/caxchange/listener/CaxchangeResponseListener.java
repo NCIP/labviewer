@@ -78,7 +78,7 @@ public class CaxchangeResponseListener implements MessageListener {
                  resource.setCaXchangeResponseMessage(responseMessage);
                  logger.debug("Updated the Resource with the response for :"+caXchangeIdentifier);
              }
-           logger.info("Performance Resource Update,"+caXchangeIdentifier+","+new java.util.Date().getTime());
+           logger.debug("Performance Resource Update,"+caXchangeIdentifier+", ,"+new java.util.Date().getTime());
        }
        catch(Exception e) {
            logger.error("Error occurred getting response and setting to the resource ",e);
