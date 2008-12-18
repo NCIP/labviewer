@@ -94,6 +94,7 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	throws MessagingException {
 		long timeBefore = new java.util.Date().getTime();
 		NormalizedMessage in = exchange.getMessage("in");
+		in.setContent(caXchangeDataUtil.getDOMSource());
 		NormalizedMessage out = exchange.createMessage();
 		try {
 			invokeDelegationService(exchange);
@@ -149,7 +150,7 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
             	userCredential = getGlobusCredentialFromDelgationService(exchange);
             }
             if (!(userCredential.getIdentity().equals(caXchangeDataUtil.getGridIdentifier()))) {
-                throw new InvalidDelegatedCredentialsException("Identity of the grid user:"+userCredential.getIdentity()+ " does not match the identity of the delegated user:"+caXchangeDataUtil.getGridIdentifier());          	
+                throw new InvalidDelegatedCredentialsException("Identity of the delegated grid user:"+userCredential.getIdentity()+ " does not match the identity of the grid user:"+caXchangeDataUtil.getGridIdentifier());          	
             }
  			Subject subject = new Subject();
 
