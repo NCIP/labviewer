@@ -35,6 +35,14 @@
  <bean id="invokeDelegationServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.InvokeDelegationServiceBean" init-method="init">
     <property name="certificateFilePath" value="${delegation.certificateFilePath}"/>
     <property name="keyFilePath" value="${delegation.keyFilePath}"/>
+    <property name="userProxyCache">
+      <ref bean="userProxyCache" />
+    </property>
+ </bean>
+ <bean id="userProxyCache" class="gov.nih.nci.caxchange.servicemix.bean.cache.UserProxyCacheImpl" init-method="init" >
+    <property name="maxTimeToLive">
+       <value>3600</value>
+    </property>
  </bean>
  <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
  <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean" />

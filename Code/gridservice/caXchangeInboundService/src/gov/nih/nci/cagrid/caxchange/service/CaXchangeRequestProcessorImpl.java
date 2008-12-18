@@ -1,6 +1,9 @@
 package gov.nih.nci.cagrid.caxchange.service;
 
+import gov.nih.nci.caXchange.CaxchangeConstants;
+import gov.nih.nci.caXchange.CaxchangeErrors;
 import gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResource;
+import gov.nih.nci.cagrid.caxchange.listener.CaxchangeConnectedListeners;
 import gov.nih.nci.cagrid.caxchange.listener.CaxchangeResponseExceptionListener;
 import gov.nih.nci.cagrid.caxchange.listener.CaxchangeResponseListener;
 
@@ -38,6 +41,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import org.globus.wsrf.ResourceKey;
+import org.globus.wsrf.security.SecurityManager;
 
 /**
  * TODO:I am the service side implementation class.  IMPLEMENT AND DOCUMENT ME
@@ -73,12 +77,17 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
           ResourceKey resKey = ctxResourceHome.createResource();
           logger.info("Performance Request Received,"+resKey.getValue()+","+caXchangeRequestMessage.getMetadata().getMessageType()+","+new java.util.Date().getTime());
           caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(resKey.getValue().toString());
+  		  String caller = SecurityManager.getManager().getCaller();
+  		  if ((caller == null) || (caller.equals("<anonymous>"))) {
+  			updateErrorResponse(caXchangeRequestMessage, resKey, CaxchangeErrors.PERMISSION_DENIED_FAULT, "Unable to get the identity of the caller.Caller identity:"+caller);
+		  }
+          caXchangeRequestMessage.getMetadata().getCredentials().setGridIdentifier(caller);
           try { //Sending the request to the caXchange inbound queue
         	 logger.info("Before sending messge "+new Date().getTime());
              sendMessage(caXchangeRequestMessage);
              logger.info("Before sending messge "+new Date().getTime());
           }catch(Exception e) {
-              updateErrorResponse(caXchangeRequestMessage, resKey);
+              updateErrorResponse(caXchangeRequestMessage, resKey, CaxchangeErrors.UNKNOWN, "An error occured sending message to the caXchange hub."+e.getMessage());
           }
 
           if ((responseListeners==null)||(responseListeners.size()==0)) {
@@ -142,24 +151,25 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
            }
         }
     }
-  /**
-     * Updating the Resource with the error Response.
-     *
-     * @param caXchangeRequestMessage
-     * @throws Exception
-     */
-   public void updateErrorResponse(gov.nih.nci.caxchange.Message caXchangeRequestMessage, ResourceKey resKey) throws Exception {
-       try {
-          ResponseHandler responseHandler = new ResponseHandler();
-          ResponseMessage response = responseHandler.getResponseFromError(caXchangeRequestMessage, "ERROR_SENDING_REQUEST", "An error happened sending the request to the inbound queue.");
-          gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
-          CaXchangeResponseServiceResource resource= (CaXchangeResponseServiceResource)ctxResourceHome.find(resKey);
-          resource.setCaXchangeResponseMessage(response);
-       }catch(Exception e) {
-           logger.error("Error updating resource with the error response.", e);
-           throw e;
-       }
-   }
+   
+   /**
+    * Updating the Resource with the error Response.
+    *
+    * @param caXchangeRequestMessage
+    * @throws Exception
+    */
+  public void updateErrorResponse(gov.nih.nci.caxchange.Message caXchangeRequestMessage, ResourceKey resKey, String errorCode, String errorMessage) throws Exception {
+      try {
+         ResponseHandler responseHandler = new ResponseHandler();
+         ResponseMessage response = responseHandler.getResponseFromError(caXchangeRequestMessage, errorCode, errorMessage);
+         gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
+         CaXchangeResponseServiceResource resource= (CaXchangeResponseServiceResource)ctxResourceHome.find(resKey);
+         resource.setCaXchangeResponseMessage(response);
+      }catch(Exception e) {
+          logger.error("Error updating resource with the error response.", e);
+          throw e;
+      }
+  }   
 
     /**
      * Register listeners for the response queue to update the Resources.

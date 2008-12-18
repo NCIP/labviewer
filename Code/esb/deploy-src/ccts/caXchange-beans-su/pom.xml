@@ -57,7 +57,7 @@
 						<!-- <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>-->
 						<exclude>
 							**/InvokeDelegationServiceBeanTest.*
-						</exclude>
+						</exclude> 
 						<!-- <exclude>**/InvokeDelegationServiceBeanInvalidCredentialsTest.*</exclude>-->
 						<!-- <exclude>**/CaXchangeDataUtilTest.*</exclude>  -->
 						<exclude>
@@ -109,6 +109,13 @@
 			<version>${servicemix-version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Proxy caching dependencies -->
+		<dependency>
+		    <groupId>org.apache.jcs</groupId>
+		    <artifactId>jcs-jar</artifactId>
+		    <version>1.3</version>
+		</dependency>
+		<!-- End Proxy caching dependencies -->
 		<dependency>
 			<groupId>cagrid.cds</groupId>
 			<artifactId>cds-client</artifactId>
