@@ -100,13 +100,13 @@ public class GridSU implements MessageExchangeListener {
 	 */
 	public void onMessageExchange(MessageExchange exchange)
 			throws MessagingException {
-
 		if (ExchangeStatus.DONE == exchange.getStatus() || ExchangeStatus.ERROR == exchange.getStatus()) {
 			log.debug("returning done status recvd:"+exchange.getStatus());
 			exchange.setStatus(ExchangeStatus.DONE);
 			return;
 		}
-		
+        log.debug("In GridSU:"+new java.util.Date().getTime());
+
 		if (ExchangeStatus.ACTIVE != exchange.getStatus()) {
 			failInactiveExchange(exchange);
 		}
@@ -121,6 +121,7 @@ public class GridSU implements MessageExchangeListener {
 			exchange.setStatus(ExchangeStatus.DONE);
 		}
 		channel.send(exchange);
+		log.debug("Out GridSU:"+new java.util.Date().getTime());
 	}
 
 	/**
@@ -208,8 +209,11 @@ public class GridSU implements MessageExchangeListener {
 		
 		for (int i = 0; i <= retries; i++) {
 			try {
+				long timeBefore = new java.util.Date().getTime();
 				GridInvocationResult result = strategy.invokeGridService(
 						channel, exchange, gridMessage);
+				long timeAfter = new java.util.Date().getTime();
+				log.debug("Time for invocation "+(timeAfter-timeBefore));
 
 				if (!isRollback()) {
 					NormalizedMessage out = exchange.createMessage();

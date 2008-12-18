@@ -21,6 +21,7 @@ import gov.nih.nci.caXchange.outbound.GridInvocationException;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.security.CaXchangePrincipal;
 import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
+import gov.nih.nci.caxchange.servicemix.bean.cache.UserProxyCache;
 
 import java.io.StringReader;
 import java.security.Principal;
@@ -30,9 +31,11 @@ import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
 import javax.security.auth.Subject;
+import javax.xml.transform.dom.DOMSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.apache.servicemix.jbi.util.MessageUtil;
 import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
 import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
@@ -52,6 +55,7 @@ import org.globus.wsrf.encoding.DeserializationException;
 public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	
 	private String certificateFilePath, keyFilePath;
+	private UserProxyCache userProxyCache;
 
 	private static GlobusCredential hostCredential = null;
 	
@@ -88,11 +92,9 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	 */	
 	public void processMessageExchange(MessageExchange exchange)
 	throws MessagingException {
-		
+		long timeBefore = new java.util.Date().getTime();
 		NormalizedMessage in = exchange.getMessage("in");
 		NormalizedMessage out = exchange.createMessage();
-		
-		
 		try {
 			invokeDelegationService(exchange);
 		}
@@ -111,6 +113,11 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 			exchange.setFault(fault);
 			channel.send(exchange);
 			return;	
+		}catch (InvalidDelegatedCredentialsException idc){
+			Fault fault = getFault(CaxchangeErrors.PERMISSION_DENIED_FAULT,"Invalid delegated credentials grid Id."+idc.getMessage(), exchange);
+			exchange.setFault(fault);
+			channel.send(exchange);
+			return;				
 		}
 		catch (Throwable e) {
 			Fault fault = getFault(CaxchangeErrors.UNKNOWN,"Error invoking delegation service."+e.getMessage(), exchange);
@@ -119,8 +126,11 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 			return;
 		}
 		MessageUtil.transfer(in, out);
+        out.setContent(caXchangeDataUtil.getDOMSource());
 		exchange.setMessage(out, "out");
 		channel.send(exchange);
+		long timeAfter = new java.util.Date().getTime();
+		logger.warn("Timer for set subject service:"+(timeAfter-timeBefore));
 	}
 
 	/**
@@ -132,58 +142,24 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	public void invokeDelegationService(MessageExchange exchange)
 	throws Exception {
 		try {
-			NormalizedMessage in = exchange.getMessage("in");
-	
-			String delegationEPR = caXchangeDataUtil.getDelegatedCredentialReference();
-			
-			DelegatedCredentialReference delegatedCredentialReference = null;
-			try{
-				logger.debug("****"+delegationEPR);
-				delegatedCredentialReference =  
-					(DelegatedCredentialReference)
-					                     Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, DelegatedCredentialUserClient.class.getResourceAsStream("client-config.wsdd"));
-
-			}catch (DeserializationException e){
-				throw new GridInvocationException(
-						"Unable to deserialize the Delegation Reference", e);
-			}
-
-			DelegatedCredentialUserClient delegatedCredentialUserClient = null;
-
-			try{
-				logger.debug("**** delegatedCredentialReference.getEndpointReference"+delegatedCredentialReference.getEndpointReference());
-				delegatedCredentialUserClient = new DelegatedCredentialUserClient(
-						delegatedCredentialReference, hostCredential);
-			}catch (Exception e){
-				throw new GridInvocationException(
-						"Unable to Initialize the Delegation Lookup Client", e);
-			}
-
-			GlobusCredential userCredential;
-
-			try{
-				userCredential = delegatedCredentialUserClient
-				.getDelegatedCredential();
-			}catch (CDSInternalFault e){
-				logger.error("Internal error getting delegated credentials.",e); 
-				throw e;
-			}catch (DelegationFault e){
-				logger.error("Delegation fault occurred getting delegated credentials.", e);
-				throw e;
-			}catch (PermissionDeniedFault e){
-				logger.error("Permission denied fault getting delegated credentials.", e);
-				throw e;
-			}
-
-			Subject subject = new Subject();
+			GlobusCredential userCredential=null;
+            userCredential = getCachedGlobusCredential(exchange);
+            if (userCredential==null) {
+            	logger.warn("User credential not found in cache.");
+            	userCredential = getGlobusCredentialFromDelgationService(exchange);
+            }
+            if (!(userCredential.getIdentity().equals(caXchangeDataUtil.getGridIdentifier()))) {
+                throw new InvalidDelegatedCredentialsException("Identity of the grid user:"+userCredential.getIdentity()+ " does not match the identity of the delegated user:"+caXchangeDataUtil.getGridIdentifier());          	
+            }
+ 			Subject subject = new Subject();
 
 			CaXchangePrincipal principal = new CaXchangePrincipal();
 			principal.setName(userCredential.getIdentity());
 			subject.getPrincipals().add((Principal) principal);
 
 			subject.getPrivateCredentials().add(userCredential);
+			NormalizedMessage in = exchange.getMessage("in");
 			in.setSecuritySubject(subject);
-			
 			logger.debug("usercredential="+userCredential.toString());
 		
 		} catch (Exception e) {
@@ -191,6 +167,81 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 			throw e;
 		}
 
+	}
+	
+	public GlobusCredential getCachedGlobusCredential(MessageExchange exchange)
+	throws Exception {
+		String delegationEPR = null;
+	    try {
+			delegationEPR = caXchangeDataUtil.getDelegatedCredentialReference();
+			GlobusCredential userCredentials = null;
+			if (userProxyCache !=null) {
+				userCredentials = userProxyCache.get(delegationEPR);
+			}
+			try {
+				if (userCredentials !=null) {
+					userCredentials.verify();
+				}
+			}catch(GlobusCredentialException gce) {
+				userProxyCache.remove(delegationEPR);
+				userCredentials = null;
+			}
+
+			return userCredentials;
+	    }catch(Exception e) {
+	    	logger.error("Error retreiving user credentials from cache for:"+delegationEPR,e);
+	    	throw new Exception("Error retreiving user credentials from cache for:"+delegationEPR,e);
+	    }
+	}
+	
+	public GlobusCredential getGlobusCredentialFromDelgationService(MessageExchange exchange)
+	throws Exception {
+	  try {
+		String delegationEPR = caXchangeDataUtil.getDelegatedCredentialReference();
+		DelegatedCredentialReference delegatedCredentialReference = null;
+		try{
+			logger.debug("**** Delegated EPR:"+delegationEPR);
+			delegatedCredentialReference =  
+				(DelegatedCredentialReference)
+				                     Utils.deserializeObject(new StringReader(delegationEPR), DelegatedCredentialReference.class, DelegatedCredentialUserClient.class.getResourceAsStream("client-config.wsdd"));
+		}catch (DeserializationException e){
+			throw new GridInvocationException(
+					"Unable to deserialize the Delegation Reference", e);
+		}
+		DelegatedCredentialUserClient delegatedCredentialUserClient = null;
+		try{
+			logger.debug("**** delegatedCredentialReference.getEndpointReference"+delegatedCredentialReference.getEndpointReference());
+			delegatedCredentialUserClient = new DelegatedCredentialUserClient(
+					delegatedCredentialReference, hostCredential);
+		}catch (Exception e){
+			throw new GridInvocationException(
+					"Unable to Initialize the Delegation Lookup Client", e);
+		}
+		GlobusCredential userCredential;
+		try{
+			long startTime = new java.util.Date().getTime();
+			userCredential = delegatedCredentialUserClient
+			.getDelegatedCredential();
+			long endTime = new java.util.Date().getTime();
+			logger.debug("Time for delegation service:"+ (endTime-startTime));
+		}catch (CDSInternalFault e){
+			logger.error("Internal error getting delegated credentials.",e); 
+			throw e;
+		}catch (DelegationFault e){
+			logger.error("Delegation fault occurred getting delegated credentials.", e);
+			throw e;
+		}catch (PermissionDeniedFault e){
+			logger.error("Permission denied fault getting delegated credentials.", e);
+			throw e;
+		}
+		if (userProxyCache !=null) {
+			userProxyCache.put(delegationEPR, userCredential);
+		}		
+		return userCredential;
+	  }catch(Exception e) {
+		  logger.error("Error getting user credentials from the delegation service.",e);
+		  throw new Exception("Error getting user credentials from the delegation service.",e);
+	  }
 	}
 	
    /*No references*/
@@ -208,6 +259,37 @@ public class InvokeDelegationServiceBean extends CaXchangeMessagingBean {
 	/*No references*/
 	public void setKeyFilePath(String keyFilePath) {
 		this.keyFilePath = keyFilePath;
+	}
+	public UserProxyCache getUserProxyCache() {
+		return userProxyCache;
+	}
+	public void setUserProxyCache(UserProxyCache userProxyCache) {
+		this.userProxyCache = userProxyCache;
+	}
+	
+	public class InvalidDelegatedCredentialsException extends Exception {
+
+		public InvalidDelegatedCredentialsException() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public InvalidDelegatedCredentialsException(String message,
+				Throwable cause) {
+			super(message, cause);
+			// TODO Auto-generated constructor stub
+		}
+
+		public InvalidDelegatedCredentialsException(String message) {
+			super(message);
+			// TODO Auto-generated constructor stub
+		}
+
+		public InvalidDelegatedCredentialsException(Throwable cause) {
+			super(cause);
+			// TODO Auto-generated constructor stub
+		}
+		
 	}
 
 }

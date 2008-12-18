@@ -56,8 +56,12 @@ public class CaXchangeDataUtil {
 	 * @throws Exception
 	 */ 
     public void initialize() throws Exception{
+      try {
     	document =
     		new SourceTransformer().toDOMDocument(in);
+      }catch(Exception e){
+    	  logger.error("Error parsing input document.",e);
+      }
     }
     /**
      * Get user name 
@@ -103,6 +107,22 @@ public class CaXchangeDataUtil {
     	}
         return caXchangeIdentifier;  
     }
+    
+    /**
+     * Gets the grid identifier
+	 * @param 
+	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getExternalIdentifier()
+	 * @throws Exception
+	 */ 
+    public String getGridIdentifier() throws Exception {
+    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "gridIdentifier");
+    	String gridIdentifier=null;
+    	if (elements.getLength()==1) {
+    		gridIdentifier = elements.item(0).getTextContent();
+    	}
+        return gridIdentifier;  
+    }
+    
     /**
      * Gets message type
 	 * @param 
@@ -343,6 +363,10 @@ public class CaXchangeDataUtil {
 	 */
     public void setIn(NormalizedMessage in) {
         this.in = in;
+    }
+    
+    public DOMSource getDOMSource() {
+    	return new DOMSource(document);
     }
     /**
      * This method gets the normalized message
