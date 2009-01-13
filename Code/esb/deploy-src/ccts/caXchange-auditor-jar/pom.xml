@@ -22,19 +22,20 @@
 	    </dependency>
 	    <dependency>
 	        <groupId>org.apache.servicemix</groupId>
-	        <artifactId>core</artifactId>
+	        <artifactId>servicemix-core</artifactId>
                 <version>${servicemix-version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
 	        <groupId>org.apache.servicemix</groupId>
-	        <artifactId>jbi</artifactId>
-                <version>${servicemix-version}</version>
+	        <artifactId>servicemix-jbi</artifactId>
+                <!--<version>${servicemix-version}</version>-->
+				<version>3.2.3</version>
                 <scope>provided</scope>
             </dependency>  
             <dependency>
 	        <groupId>org.apache.servicemix</groupId>
-	        <artifactId>audit</artifactId>
+	        <artifactId>servicemix-audit</artifactId>
                 <version>${servicemix-version}</version>
                 <scope>provided</scope>
             </dependency>   
