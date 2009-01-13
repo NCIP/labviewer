@@ -105,11 +105,11 @@
        
 		<!--<echo message="Setting environment variable to ${SERVICEMIX_HOME}"/>-->
 		<mkdir dir="${SERVICEMIX_HOME}"/>
-		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip"
+		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.3.zip"
 		 verbose="true"
 		 usetimestamp="true"/>		
-		 <unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>	
-		 <chmod dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/bin/servicemix" perm="755"  />
+		 <unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.3.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>	
+		 <chmod dir="${SERVICEMIX_HOME}/apache-servicemix-3.3/bin/servicemix" perm="755"  />
 		
 	</target>
 	
@@ -128,24 +128,26 @@
 		
 		<!--<echo message="Setting environment variable to ${SERVICEMIX_HOME}"/>-->
 		<mkdir dir="${SERVICEMIX_HOME}"/>
-		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip"
+		<get src="${SMX_URL}" dest="${SERVICEMIX_HOME}/apache-servicemix-3.3.zip"
 		     verbose="true"
 		     usetimestamp="true"/>		
-		<unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.1.2.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>
+		<unzip src="${SERVICEMIX_HOME}/apache-servicemix-3.3.zip" dest="${SERVICEMIX_HOME}" overwrite="false"/>
 		
 	</target>
 
-
+	
+	<!-- COMMENTED OUT BECAUSE NOT NEEDED IN SERVICEMIX 3.3
 	<target name="servicemix-components-install" depends="assert,system-init" description="install servicemix components used for caxchange">
-		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-bean-3.1.2-installer.zip"
-		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-bean-3.1.2-installer.zip"/>
-		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-jms-3.1.2-installer.zip"
-		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-jms-3.1.2-installer.zip"/>
-		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-shared-3.1.2-installer.zip"
-		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-shared-3.1.2-installer.zip"/>
-		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/components/servicemix-http-3.1.2-installer.zip"
-		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy/servicemix-http-3.1.2-installer.zip"/>
+		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-bean-2008.01-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-bean-2008.01-installer.zip"/>
+		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-jms-2008.01-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-jms-2008.01-installer.zip"/>
+		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"/>
+		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-http-2008.01-installer.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-http-2008.01-installer.zip"/>
 	</target>
+	-->
 
 	<target name="configure-caxchange-properties" depends="assert,system-init" description="Copy and update the caxchange.properties file based on the setup in install.properties" >
 	        <copy file="${cax.home}/conf/servicemix/caxchange.properties" tofile="${cax.home}/temp/caxchange.properties" />
@@ -297,20 +299,20 @@
 	</target>
 	
 	<target name="servicemix-configure-no-auditor" depends="assert,db-init,configure-caxchange-properties,servicemix-configure" description="config servicemix container without auditor logging">
-	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/servicemix.xml"/>
-	        <copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml"/>
+	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/servicemix.xml"/>
+	        <copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml"/>
 	</target>
 	
 
 
 	<!--Configures the jndi.xml, activemq.xml, grid-caxchange.propertie and other configuration files-->
 	<target name="servicemix-configure" depends="assert,db-init,configure-caxchange-properties" description="config servicemix container">
-		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/activemq.xml"/>
-		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/jndi.xml"/>
-		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
+		<copy file="${cax.home}/temp/activemq.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/activemq.xml"/>
+		<copy file="${cax.home}/temp/jndi.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/jndi.xml"/>
+		<copy file="${cax.home}/temp/servicemix.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf"/>
 		
-		<copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml"/>
-	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/servicemix.xml"/>
+		<copy file="${cax.home}/conf/servicemix/log4j-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml"/>
+	        <copy file="${cax.home}/conf/servicemix/servicemix-no-auditor.xml" tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/servicemix.xml"/>
 	        
 		<copy file="${cax.home}/conf/grid/grid-caxchange.properties" tofile="${cax.home}/temp/grid-caxchange.properties" />
 		<replace  file="${cax.home}/temp/grid-caxchange.properties" 
@@ -365,12 +367,12 @@
 		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
 
 
-	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/lib/optional">
+	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/lib/optional">
 			<fileset dir="${cax.home}/lib"/>
 		</copy>
 	
 
-		<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+		<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf">
 			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
 		</copy>
 
@@ -583,25 +585,25 @@
 
 	<target name="auditor-configure" depends="assert,servicemix-configure" description="config to make Auditor ready for its deployment">
 		<!-- servicemix.xml is already copied as part of servicemix-configure target -->
-		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf"/>
-		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		<copy file="${cax.home}/conf/servicemix/log4j.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf"/>
+		<copy file="${cax.home}/conf/servicemix/servicemix.xml" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf"/>
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE@" property="llt_db_name"/>
 		</replace>
-		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PORT@" property="llt_db_port"/>
 		</replace>
-		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_HOST@" property="llt_db_host"/>
 		</replace>
-		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_USERNAME@" property="llt_db_username"/>
 		</replace>
-		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/log4j.xml" 
+		<replace  file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/log4j.xml" 
 		 propertyFile="install.properties">
 			<replacefilter token="@LLT_DATABASE_PASSWORD@" property="llt_db_password"/>
 		</replace>
@@ -670,9 +672,9 @@
 	</target>
 	<!--Deploys the service assembly and the service engine to servicemix container-->
     <target name="sa-deploy"  depends="assert,system-init,servicemix-configure" description="deploys the servicemix assembly">
-			<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
-		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-${CAXCHANGE_VERSION}-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
-        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-${CAXCHANGE_VERSION}.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/deploy" overwrite="true"/>
+			<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf" overwrite="true"/>
+		<copy file="${cax.home}/serviceAssemblies/caXchange-servicemix-eip-se-${CAXCHANGE_VERSION}-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy" overwrite="true"/>
+        <copy file="${cax.home}/serviceAssemblies/caXchange-ccts-sa-${CAXCHANGE_VERSION}.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy" overwrite="true"/>
     </target>
 
 	<!--Caxchange complete install with servicemix -->
@@ -681,7 +683,7 @@
 	</target>
 
 	<!--Caxchange hub install with servicemix -->
-	<target name="hub-install"   depends="assert,system-init,clean,servicemix-components-install,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
+	<target name="hub-install"   depends="assert,system-init,clean,servicemix-configure,sa-deploy"  description="install srevicemix and caxchnge with necessary database and other configuration">
 	<echo message="caxchange-complete-installation complete"/>
 	</target>
 
@@ -718,13 +720,13 @@
                 <equals arg1="n" arg2="${ifyesrouting}"/>
                 </condition>
                 <fail if="ifnorouting">Please stop servicemix using CTRL+C to update routing configuration  and run script again</fail>
-				<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_routing" failonerror="false">
-				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+				<move todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf_original_before_routing" failonerror="false">
+				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf"/>
 				</move>
-	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" overwrite="true">
+	<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf" overwrite="true">
 			<fileset dir="${cax.home}/conf/servicemix/caXchangeConf"/>
 		</copy>
-		<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf" overwrite="true"/>
+		<copy file="${cax.home}/temp/caxchange.properties" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf" overwrite="true"/>
 	</target>
 
 
@@ -734,7 +736,7 @@
    
 	<condition property="isSmoke">
         <not>
-            <available file="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke"/>
+            <available file="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf_original_before_smoke"/>
             
         </not>
     </condition>
@@ -754,10 +756,10 @@
                 <equals arg1="n" arg2="${ifyessmoke}"/>
                 </condition>
                 <fail if="ifnosmoke">Please stop servicemix using CTRL+C to do caxchange smoke test  and run script again</fail>
-                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke" failonerror="false" preservelastmodified="yes" verbose="yes">
-				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf"/>
+                <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf_original_before_smoke" failonerror="false" preservelastmodified="yes" verbose="yes">
+				<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf"/>
 				</move>
-  				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf">
+  				<copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf">
 				<fileset dir="${cax.home}/conf/servicemix/caXchangeConf_test"/>
                 </copy>
 				<echo message="Please start servicemix and send CaXchangeRequestMessage to initiate smoke test..............."/>
@@ -773,8 +775,8 @@
                  <equals arg1="n" arg2="${ifyesorgi}"/>
                  </condition>
                  <fail if="ifnoorgi">Please finish the smoke test and comeback</fail>
-                 <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf" failonerror="false">
-					<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.1.2/conf/caXchangeConf_original_before_smoke"/>
+                 <move todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf" failonerror="false">
+					<fileset dir="${SERVICEMIX_HOME}/apache-servicemix-3.3/conf/caXchangeConf_original_before_smoke"/>
 				</move>
 					<echo message="Please restart servicemix to take orginal config take effect..............."/>
                 </target>
