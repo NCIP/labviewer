@@ -22,22 +22,26 @@
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
-        <version>${servicemix-version}</version>
+			<!--<version>${servicemix-version}</version>-->
+			<version>3.2.3</version>
         <extensions>true</extensions>
         <configuration>
-          <useServiceUnitAnalyzer>false</useServiceUnitAnalyzer>
+          <useServiceUnitAnalyzer>false</useServiceUnitAnalyzer>		 
         </configuration>
       </plugin>
     </plugins>
   </build>
+  
   <dependencies>
+  
     <dependency>
       <groupId>gov.nih.nci.caxchange</groupId>
       <artifactId>caXchange-servicemix-eip-se</artifactId>
       <version>1.5</version>
-    </dependency>
+    </dependency>	
   </dependencies>
+  
   <properties>
-    <servicemix-version>3.1.2</servicemix-version>
+    <servicemix-version>3.3</servicemix-version>
   </properties>
 </project>

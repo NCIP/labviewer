@@ -78,13 +78,14 @@
     </repository>
   </repositories>
   <properties>
-    <servicemix-version>3.1.2</servicemix-version>
+    <servicemix-version>3.3</servicemix-version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-jms</artifactId>
-      <version>${servicemix-version}</version>      
+      <!--<version>${servicemix-version}</version>  -->
+	  <version>2008.01</version>  
     </dependency>
   </dependencies>
   <build>
@@ -101,7 +102,8 @@
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
         <inherited>true</inherited>
-        <version>${servicemix-version}</version>      
+        <!--<version>${servicemix-version}</version>-->
+		<version>3.2.3</version>
         <extensions>true</extensions>
         <configuration>
           <generateJbiDescriptor>false</generateJbiDescriptor>

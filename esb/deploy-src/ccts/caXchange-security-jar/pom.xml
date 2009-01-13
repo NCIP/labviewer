@@ -51,7 +51,8 @@
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
-        <version>${servicemix-version}</version>
+        <!--<version>${servicemix-version}</version>-->
+		<version>3.2.3</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
@@ -65,6 +66,6 @@
     </dependency>
   </dependencies>
   <properties>
-    <servicemix-version>3.1.2</servicemix-version>
+    <servicemix-version>3.3</servicemix-version>
   </properties>
 </project>
