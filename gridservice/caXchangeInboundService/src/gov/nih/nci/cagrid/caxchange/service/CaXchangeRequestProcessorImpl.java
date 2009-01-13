@@ -140,7 +140,15 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
             TextMessage message = session.createTextMessage();
             logger.debug("Sending message:"+req);
             message.setText(req);
+            
+            //commented lines below can be used for simulating synchronous response to the client
+            //TemporaryQueue outDest = session.createTemporaryQueue();
+            //message.setJMSReplyTo(outDest);
             producer.send(message);
+            
+            //MessageConsumer consumer = session.createConsumer(outDest);
+            //Message msgBack = null;
+            //msgBack = consumer.receive(12000);
         } catch (Exception ex)  {
             logger.error("Error sending message to the ESB.", ex);
             responseListeners= null;
