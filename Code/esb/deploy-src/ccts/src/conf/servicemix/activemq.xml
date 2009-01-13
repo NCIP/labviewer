@@ -19,7 +19,7 @@
 -->
 <beans xmlns:amq="http://activemq.org/config/1.0">
 	<!-- ActiveMQ JMS Broker configuration -->
-	<amq:broker depends-on="jmxServer">
+	<amq:broker id="broker" depends-on="jmxServer" useShutdownHook="false" persistent="true">
 		<!-- Disable creation of the jmx connector 
          which is created in the jmx.xml configuration file -->
 		<amq:managementContext>
@@ -29,11 +29,11 @@
 		</amq:managementContext>
 		<!-- Use journaled JDBC persistence -->
 		<amq:persistenceAdapter>
-			<amq:journaledJDBC journalLogFiles="5" dataDirectory="./data/amq"/>
+			<!--<amq:journaledJDBC journalLogFiles="5" dataDirectory="./data/amq"/>-->
 			<!-- To use a different datasource, use th following syntax : -->
-			<!-- 
-      <amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#postgres-ds"/>
-       -->
+			
+      <amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#mysql-ds"/>
+       
 		</amq:persistenceAdapter>
 		<amq:transportConnectors>
 			<!-- Activate a TCP connector with multicast discovery.
@@ -41,7 +41,7 @@
             is not on a network, which may prevent the broker to start.
             In such a case, just remove the discoveryUri attribute.  
          -->
-			<amq:transportConnector uri="tcp://@AMQ_HOST@:@AMQ_PORT@" discoveryUri="multicast://default"/>
+			<amq:transportConnector uri="tcp://localhost:62618" discoveryUri="multicast://default"/>
 		</amq:transportConnectors>
 		<amq:networkConnectors>
 			<!-- by default just auto discover the other brokers -->
@@ -96,9 +96,9 @@
   -->
 	<bean id="mysql-ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://@AMQ_DATABASE_HOST@:@AMQ_DATABASE_PORT@/@AMQ_DATABASE@"/>
-		<property name="username" value="@AMQ_DATABASE_USER@"/>
-		<property name="password" value="@AMQ_DATABASE_PASS@"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/amq"/>
+		<property name="username" value="amqadmin"/>
+		<property name="password" value="changeme"/>
 		<property name="poolPreparedStatements" value="true"/>
 	</bean>
 </beans>
