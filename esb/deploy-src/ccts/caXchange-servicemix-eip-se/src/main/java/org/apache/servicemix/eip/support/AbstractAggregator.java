@@ -33,7 +33,7 @@ import org.apache.servicemix.timers.TimerListener;
 
 import edu.emory.mathcs.backport.java.util.concurrent.ConcurrentHashMap;
 import edu.emory.mathcs.backport.java.util.concurrent.ConcurrentMap;
-import edu.emory.mathcs.backport.java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Aggregator can be used to wait and combine several messages.
@@ -46,7 +46,7 @@ import edu.emory.mathcs.backport.java.util.concurrent.locks.Lock;
  * TODO: persistent / transactional timer
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class AbstractAggregator extends EIPEndpoint {
 
