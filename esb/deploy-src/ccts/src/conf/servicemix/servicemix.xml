@@ -40,9 +40,14 @@
 	<import resource="classpath:tx.xml"/>
 	<import resource="classpath:jndi.xml"/>
 	<!-- the JBI container -->
-	<sm:container id="jbi" rootDir="./data/smx" MBeanServer="#jmxServer" installationDirPath="./install" deploymentDirPath="./deploy" monitorInterval="1" transactionManager="#transactionManager" createJmxConnector="false" depends-on="jndi">
+	<sm:container id="jbi" rootDir="./data/smx" MBeanServer="#jmxServer" installationDirPath="./hotdeploy" monitorInterval="1" transactionManager="#transactionManager" createJmxConnector="false" depends-on="broker">
 		<!-- Use a secured broker (see security.xml)
          and define the 3 standard flows -->
+		 <sm:flows>
+			<sm:sedaFlow/>
+			<sm:jmsFlow jmsURL="${activemq.url}"/>
+			<sm:jcaFlow connectionManager="#connectionManager" jmsURL="${activemq.url}"/>
+		</sm:flows>
 		<sm:broker>
 			<sm:securedBroker authorizationMap="#authorizationMap">
 				<sm:flows>
@@ -83,7 +88,7 @@
 	<bean id="caXchangeLogger" class="gov.nih.nci.caxchange.servicemix.jbi.audit.CommonLoggingListener" init-method="doStart">
 		
 		<property name="container" ref="jbi"/>
-		<property name="logExchangesSent" value="true"/>
+		<property name="logExchangesSent" value="false"/>
 		<property name="logExchangesAccepted" value="false"/>
 	</bean>
 </beans>

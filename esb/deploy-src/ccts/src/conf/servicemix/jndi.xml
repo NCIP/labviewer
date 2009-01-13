@@ -19,7 +19,7 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <!-- START SNIPPET: jndi -->
-<beans xmlns:jencks="http://jencks.org/2.0" xmlns:amq="http://activemq.org/config/1.0" xmlns:amqra="http://activemq.org/ra/1.0" xmlns:util="http://www.springframework.org/schema/util">
+<beans xmlns:jencks="http://jencks.org/2.0" xmlns:amq="http://activemq.org/config/1.0" xmlns:amqra="http://activemq.apache.org/schema/ra" xmlns:util="http://www.springframework.org/schema/util">
 	<bean id="jndi" class="org.apache.xbean.spring.jndi.SpringInitialContextFactory" factory-method="makeInitialContext" singleton="true">
 		<property name="entries" ref="jndiEntries"/>
 	</bean>
