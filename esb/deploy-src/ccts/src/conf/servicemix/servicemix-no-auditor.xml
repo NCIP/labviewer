@@ -40,7 +40,7 @@
 	<import resource="classpath:tx.xml"/>
 	<import resource="classpath:jndi.xml"/>
 	<!-- the JBI container -->
-	<sm:container id="jbi" rootDir="./data/smx" MBeanServer="#jmxServer" installationDirPath="./install" deploymentDirPath="./deploy" monitorInterval="1" transactionManager="#transactionManager" createJmxConnector="false" depends-on="jndi">
+	<sm:container id="jbi" rootDir="./data/smx" MBeanServer="#jmxServer" installationDirPath="./hotdeploy" monitorInterval="1" transactionManager="#transactionManager" createJmxConnector="false" depends-on="jndi">
 		<!-- Use a secured broker (see security.xml)
          and define the 3 standard flows -->
 		<sm:broker>
