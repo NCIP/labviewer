@@ -1,0 +1,85 @@
+<project name="LabViewer" default="ci" basedir=".">
+	<property file="LabViewer-build-CI.properties" />
+	<property environment="env" />
+	
+	
+  <!-- ******************************************************************* -->
+  <!-- ** CONTINUOUS INTEGRATION TARGETS                                 ** -->
+  <!-- ******************************************************************* -->
+
+	<target name="ci" depends="artDir,compile"/>
+	
+	<!-- Creates the artifacts directory -->  
+	<target name="artDir">
+		 <echo> Creating artifacts directory</echo>
+		<mkdir dir="${basedir}/artifacts"/>	
+    </target>		
+	
+	<!-- Compiles all the modules -->
+		<target name="compile" description="Compiles all the modules">
+			
+			<echo>Compiling  CTOMDataPersistence </echo>
+			 <ant antfile="${basedir}/CTOMDataPersistence-PG/build.xml" dir="${basedir}/CTOMDataPersistence-PG" target="compile" inheritall="true" />
+		
+			<echo>Compiling  Registration Service </echo>
+			<ant antfile="${basedir}/RegistrationConsumerService-1.2/build.xml" dir="${basedir}/RegistrationConsumerService-1.2" target="compile" inheritall="true"/>
+			
+
+			<echo>Compiling  StudyConsumer Service </echo>
+			<ant antfile="${basedir}/StudyConsumerService-1.2/build.xml" dir="${basedir}/StudyConsumerService-1.2" target="compile" inheritall="true"/>
+			
+			<!--	<echo>Compiling StudyLookup Service </echo>
+			<ant antfile="${basedir}/StudyLookupService-1.2/build.xml" dir="${basedir}/StudyLookupService-1.2" target="compile" inheritall="true"/>
+			 -->
+
+			<echo>Compiling  Lab Loader Service </echo>
+			<ant antfile="${basedir}/LabLoader-1.2/build.xml" dir="${basedir}/LabLoader-1.2" target="compile" inheritall="true"/>
+			
+			
+			<echo>Compiling  cTODSLabViewer </echo>
+			<ant antfile="${basedir}/ctomlabviewer/build.xml" dir="${basedir}/ctomlabviewer" target="compile" inheritall="true" />
+			
+	</target>
+	
+	<!-- ******************************************************************* -->
+		 <!-- **           DISTRIBUTION ZIP TARGET	                           ** -->
+		  <!-- ******************************************************************* -->
+		<!--
+		TARGET: Zip
+			Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService, StudyLookUpService
+		-->
+
+		<target name="build_zip">
+			<mkdir dir="${dest.dir}" />
+			<zip destfile="${dest.dir}/${module.name}.zip">
+				<zipfileset dir="${artifacts.dir}" prefix="artifacts" />
+				<zipfileset dir="${basedir}/cTODSDeploymentController-1.2" prefix="cTODSDeploymentController" />
+				<zipfileset dir="${basedir}/CTOMDataPersistence-PG" prefix="CTOMDataPersistence">
+						<exclude name="**/bin/**" />
+				</zipfileset>
+				<zipfileset dir="${basedir}/ctomlabviewer" prefix="cTODSLabViewer">
+					<exclude name="**/build/**" />
+				</zipfileset>
+				<zipfileset dir="${basedir}/LabLoader-1.2" prefix="LabLoader">
+					<exclude name="**/build/**" />
+					<exclude name="**/bin/**" />
+				</zipfileset>
+				<zipfileset dir="${basedir}/RegistrationConsumerService-1.2" prefix="RegistrationConsumerService">
+					<exclude name="**/build/**" />
+					<exclude name="**/bin/**" />
+				</zipfileset>
+				<zipfileset dir="${basedir}/StudyConsumerService-1.2" prefix="StudyConsumerService">
+					<exclude name="**/build/**" />
+					<exclude name="**/bin/**" />
+				</zipfileset>
+				<!--<zipfileset dir="${basedir}/StudyLookupService-1.2" prefix="StudyLookupService">
+					<exclude name="**/build/**" />
+					<exclude name="**/bin/**" />
+				</zipfileset>-->
+				<zipfileset dir="${basedir}/DDL" prefix="DDL" />
+			</zip>
+		</target>
+
+		
+	
+</project>	
