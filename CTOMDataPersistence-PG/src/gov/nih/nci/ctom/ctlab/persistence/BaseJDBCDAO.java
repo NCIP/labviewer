@@ -26,6 +26,10 @@ public abstract class BaseJDBCDAO
 	private static Logger log = Logger
 			.getLogger("client"); 
 
+	/**
+	 * Gets the database Connection
+	 * @return Connection
+	 */
 	public Connection getConnection()
 	{
 	    Connection result = null;
@@ -51,7 +55,7 @@ public abstract class BaseJDBCDAO
 	    try
 	    {
 	       Class.forName(fDriverName).newInstance();
-	       System.out.println("Check classpath. loaded db driver: " + fDriverName);
+	       log.debug("Check classpath. loaded db driver: " + fDriverName);
 	    }
 	    catch (Exception ex)
 	    {
@@ -59,16 +63,15 @@ public abstract class BaseJDBCDAO
 	     }
 
 	    try
-	    {
+	    {   //get the Connection
 	    	result = DriverManager.getConnection(fDbName, fUserName, fPassword);
 	    	if(result!=null)
 	    	{
 	    		log.info("Connection to db obtained");
-	    		System.out.println("Connection to db obtained");
+	    		
 	    	}else
 	    	{
 	    		log.error("Unable to obtain connection to the db");
-	    		System.out.println("Unable to obtain connection to the db");
 	    		throw(new NullPointerException("Null Connection object"));
 	    	}
 	    	
