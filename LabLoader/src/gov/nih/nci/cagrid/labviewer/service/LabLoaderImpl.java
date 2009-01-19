@@ -25,7 +25,11 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		super(); 
 	}
 	
-  public void loadLab(java.lang.String string) throws RemoteException {
+ /** loadLab method saves the Lab Data
+ * @param string
+ * @throws RemoteException
+ */
+public void loadLab(java.lang.String string) throws RemoteException {
 	  logger.info("LabLoader loadLab method called.");
 	  
 	  // Authorization code : note No Specific exception for LabLoader
@@ -39,19 +43,20 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		}
 		else
 		{
-			logger.info("User who called was " + username);
-			
+			logger.info("User who is trying to access the service " + username);
+			//instantiate LabViewerAuthorizationHelper 
 			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
 			if(username!=null){
 				int beginIndex = username.lastIndexOf("=");
 				int endIndex = username.length();
 				user = username.substring(beginIndex+1, endIndex);
 				}
+			//call the authorization method
 			boolean authorized = lvaHelper.isAuthorized(user);
 			
 			if (!authorized)
 			{
-				logger.error("User not authorized for this operation");
+				logger.error("User "+username+" not authorized for this operation");
 				
 			}else
 			{
@@ -63,15 +68,18 @@ public class LabLoaderImpl extends LabLoaderImplBase
 				  {
 					  obj = unMarshaller.parseXmlToObject(string);
 				
-					  // Now save the lab
+					  // Now save the lab 
 					  CTLabDAO dao = new CTLabDAO();
+					  //obtain the connection
 				 	  con = dao.getConnection();
 					  con.setAutoCommit(false);
 					  
 					  if (obj != null)
 					  {
+						  //Call into the DAO save Protocol method.
 						  dao.saveProtocol(con, (gov.nih.nci.ctom.ctlab.domain.Protocol)obj);
 					  }
+					  //call connection commit
 					  con.commit();
 					  logger.debug("Message succussfully saved to the CTODS Database");
 				  }//end of try
@@ -80,10 +88,12 @@ public class LabLoaderImpl extends LabLoaderImplBase
 					  logger.debug(ex.getMessage());
 					  try
 					  {
+						  //issue rollback in case of exception
 						  con.rollback();
 					  }
 					  catch (Exception e)
 					  {
+						  //throw the remote exception
 						  RemoteException re = new RemoteException(e.getMessage());
 						  throw re;
 					  }
