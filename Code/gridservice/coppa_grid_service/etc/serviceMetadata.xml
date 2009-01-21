@@ -1,0 +1,101 @@
+<ns1:ServiceMetadata xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata">
+ <ns1:serviceDescription>
+  <ns2:Service description="" name="CoppaPersonService" version="1.2" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
+   <ns2:pointOfContactCollection>
+    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role="" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   </ns2:pointOfContactCollection>
+   <ns2:serviceContextCollection>
+    <ns2:ServiceContext description="" name="CoppaPersonService">
+     <ns2:operationCollection>
+      <ns2:Operation description="" name="GetMultipleResourceProperties">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="GetResourceProperty">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="QueryResourceProperties">
+       <ns2:inputParameterCollection/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getServiceSecurityMetadata">
+       <ns2:inputParameterCollection/>
+       <ns2:Output qName="ns4:ServiceSecurityMetadata" dimensionality="1" isArray="false" xmlns:ns4="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+       <ns2:faultCollection/>
+      </ns2:Operation>
+      <ns2:Operation description="" name="search">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns5:Person" dimensionality="1" index="0" isArray="false" isRequired="false" name="person" xmlns:ns5="http://coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns6:Person" dimensionality="1" isArray="true" xmlns:ns6="http://coppa.nci.nih.gov"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="CoppaPersonServiceFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="getPerson">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns7:Ii" dimensionality="1" index="0" isArray="false" isRequired="false" name="ii" xmlns:ns7="http://isodatatypes.coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns8:Person" dimensionality="1" isArray="false" xmlns:ns8="http://coppa.nci.nih.gov"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="CoppaPersonServiceFault"/>
+        <ns2:Fault description="" name="NullifiedEntityFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="createPerson">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns9:Person" dimensionality="1" index="0" isArray="false" isRequired="false" name="person" xmlns:ns9="http://coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns10:Ii" dimensionality="1" isArray="false" xmlns:ns10="http://isodatatypes.coppa.nci.nih.gov"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="CoppaPersonServiceFault"/>
+        <ns2:Fault description="" name="EntityValidationFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updatePerson">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns11:Person" dimensionality="1" index="0" isArray="false" isRequired="false" name="person" xmlns:ns11="http://coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="CoppaPersonServiceFault"/>
+        <ns2:Fault description="" name="EntityValidationFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="updatePersonStatus">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns12:Ii" dimensionality="1" index="0" isArray="false" isRequired="false" name="ii" xmlns:ns12="http://isodatatypes.coppa.nci.nih.gov"/>
+        <ns2:InputParameter qName="ns13:Cd" dimensionality="1" index="1" isArray="false" isRequired="false" name="cd" xmlns:ns13="http://isodatatypes.coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="EntityValidationFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+      <ns2:Operation description="" name="validate">
+       <ns2:inputParameterCollection>
+        <ns2:InputParameter qName="ns14:Person" dimensionality="1" index="0" isArray="false" isRequired="false" name="person" xmlns:ns14="http://coppa.nci.nih.gov"/>
+       </ns2:inputParameterCollection>
+       <ns2:Output qName="ns15:Map" dimensionality="1" isArray="false" xmlns:ns15="http://isodatatypes.coppa.nci.nih.gov"/>
+       <ns2:faultCollection>
+        <ns2:Fault description="" name="CoppaPersonServiceFault"/>
+       </ns2:faultCollection>
+      </ns2:Operation>
+     </ns2:operationCollection>
+     <ns2:contextPropertyCollection>
+      <ns2:ContextProperty description="" name="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
+     </ns2:contextPropertyCollection>
+    </ns2:ServiceContext>
+   </ns2:serviceContextCollection>
+   <ns16:SemanticMetadata conceptCode="C63541" conceptDefinition="A service available on a system that coordinates resources that are not subject to central control, using open, general purpose protocols and interfaces to deliver nontrivial qualities of services." conceptName="Grid Service" order="0" xmlns:ns16="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+   <ns17:SemanticMetadata conceptCode="C63543" conceptDefinition="A published API which receives data in the form of objects, performs computations based upon the input data, and returns information to a client via caGrid in the form of one or more objects." conceptName="Analytical Grid Service" order="1" xmlns:ns17="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+  </ns2:Service>
+ </ns1:serviceDescription>
+ <ns1:hostingResearchCenter>
+  <ns18:ResearchCenter displayName="" shortName="" xmlns:ns18="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns18:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+   <ns18:pointOfContactCollection>
+    <ns18:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+   </ns18:pointOfContactCollection>
+  </ns18:ResearchCenter>
+ </ns1:hostingResearchCenter>
+</ns1:ServiceMetadata>
