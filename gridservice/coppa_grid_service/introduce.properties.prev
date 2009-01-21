@@ -1,0 +1,11 @@
+#Introduce Properties
+#Mon Jan 19 21:41:03 EST 2009
+introduce.skeleton.services.list=CoppaPersonService
+introduce.skeleton.extensions=cagrid_metadata
+introduce.skeleton.timestamp=1232419219484
+introduce.skeleton.service.name=CoppaPersonService
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=C\:\\coppa_grid_service
+introduce.skeleton.namespace.domain=http\://person.coppa.cagrid.nci.nih.gov/CoppaPersonService
+introduce.soap.binding.excludes=\ 
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common

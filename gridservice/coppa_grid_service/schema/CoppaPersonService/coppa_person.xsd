@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ISO="http://isodatatypes.coppa.nci.nih.gov" xmlns:COPPA="http://coppa.nci.nih.gov" targetNamespace="http://coppa.nci.nih.gov">
+	<xs:import namespace="http://isodatatypes.coppa.nci.nih.gov" schemaLocation="coppa_st_iso_types.xsd"/>
+	<xs:element name="Person" type="COPPA:Person"/>
+	<xs:complexType name="Person">
+		<xs:annotation>
+			<xs:documentation>A human being.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="identifier" type="ISO:Ii"/>
+			<xs:element name="name" type="ISO:EnPn">
+				<xs:annotation>
+					<xs:documentation>A non-unique textual identifier or moniker of a person. 
+
+For example, proper names, nicknames, legal names of persons, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postalAddress" type="ISO:Ad">
+				<xs:annotation>
+					<xs:documentation>The postal and/or residential address of a person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="statusCode" type="ISO:Cd"/>
+			<xs:element name="sexCode" type="ISO:Cd"/>
+			<xs:element name="telecomAddress" type="ISO:DSet">
+				<xs:annotation>
+					<xs:documentation>The value for the particular telecommunication address.  
+
+For example, the set of digits that serves as the address for a telephone device.  Included in the phone number are country, city, and area codes needed to uniquely address the telephone.  A URL or e-mail would be similarly described. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Organization" type="COPPA:Organization"/>
+	<xs:complexType name="Organization">
+		<xs:annotation>
+			<xs:documentation>A formalized group of persons or other organizations collected together for a common purpose (such as administrative, legal, political) and the infrastructure to carry out that purpose.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="identifier" type="ISO:Ii">
+				<xs:annotation>
+					<xs:documentation>The unique identifier assigned to an organization by some assigning body. 
+
+For example, in cases of laboratories this is the Clinical Laboratory Improvement Act/Amendment (CLIA) ID.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="name" type="ISO:EnOn">
+				<xs:annotation>
+					<xs:documentation>A non-unique textual identifier or moniker of the organization or an institution. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="postalAddress" type="ISO:Ad">
+				<xs:annotation>
+					<xs:documentation>The location for where the organization can be found or the information used to identify where to send physical items.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="statusCode" type="ISO:Cd">
+				<xs:annotation>
+					<xs:documentation>A value representing whether the organization is currently active or inactive. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="telecomAddress" type="ISO:DSet">
+				<xs:annotation>
+					<xs:documentation>The value for the particular telecommunication address.  
+
+For example, the set of digits that serves as the address for a telephone device.  Included in the phone number are country, city, and area codes needed to uniquely address the telephone.  A URL or e-mail would be similarly described.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
