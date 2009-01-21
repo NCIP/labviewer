@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:iso="http://isodatatypes.coppa.nci.nih.gov" targetNamespace="http://isodatatypes.coppa.nci.nih.gov">
+	<xs:element name="TelPhone" type="iso:TelPhone"/>
+	<xs:complexType name="TelPhone">
+		<xs:annotation>
+			<xs:documentation>Constrains TelPerson
+
+TelPhone constrains TelPerson so it must refer to some telephone based communication system with a person.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:TelPerson">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TelEmail" type="iso:TelEmail"/>
+	<xs:complexType name="TelEmail">
+		<xs:annotation>
+			<xs:documentation>Constrains TelPerson
+
+TelEmail constriains the TelPerson type to be an email address.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:TelPerson">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AdxpZip" type="iso:AdxpZip"/>
+	<xs:complexType name="AdxpZip">
+		<xs:annotation>
+			<xs:documentation>A postal code designating a region defined by the postal service.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Any" type="iso:Any"/>
+	<xs:complexType name="Any">
+		<xs:annotation>
+			<xs:documentation>Specializes HXIT
+
+Defines the basic properties of every data value. This is conceptually an abstract type,meaning that no proper value can be just a data value without belonging to any concrete type. Every public concrete type is a specialization of this general abstract DataValue type.
+
+However exceptional values (null values) may be of type ANY, except for the exceptional values that imply the nullFlavor INV, since this requires a type to be meaningful.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nullFlavor" type="iso:NullFlavor" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If the value is null, indicates the reason.  
+
+If populated, the value of this attribute SHALL be taken from the HL7 NullFlavor code system.  
+
+type NullFlavor = enumerated (NI, INV, OTH, NINF, PINF, UNC,
+DER, UNK, ASKU, NAV, QS, NASK, TRC, MSK, NA)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AdxpCty" type="iso:AdxpCty"/>
+	<xs:complexType name="AdxpCty">
+		<xs:annotation>
+			<xs:documentation>The name of the city, town, village, or other community or delivery center.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Ii" type="iso:Ii"/>
+	<xs:complexType name="Ii">
+		<xs:annotation>
+			<xs:documentation>Instance Identifier (II)
+
+Specializes ANY
+
+An identifier that uniquely identifies a thing or object. 
+
+Examples are object identifier for HL7 RIM objects, medical record number, order id, service catalog item id, Vehicle Identification Number (VIN), etc. Instance identifiers are defined based on ISO object identifiers.
+
+An identifier allows someone to select one record, object or thing from a set of candidates. Usually an identifier alone without any context is not usable. Identifiers are distinguished from concept descriptors as concept descriptors never identify an individual thing, although there may sometimes be an individual record or object that represents the concept.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="displayable" type="xs:boolean" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies if the identifier is intended for human display
+and data entry (displayable = true) as opposed to pure machine interoperation (displayable = false).</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="extension" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A character string as a unique identifier within the scope of the identifier root.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="identifierName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>This is a human-readable name for the namespace
+represented in the root.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="reliability" type="iso:IdentifierReliability" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the reliability with which this identifier
+is known. This attribute may be used to assist with identifier matching algorithms.
+
+If populated, the value of this attribute SHALL be taken from the HL7 IdentifierReliability code system.
+
+type IdentifierReliability = enumeration (ISS, VRF, USE)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="root" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A unique identifier that guarantees the global uniqueness of the instance identifier.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="scope" type="iso:IdentifierScope" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the scope in which the identifier applies to the
+object with which it is associated.
+
+If populated, the value of this attribute SHALL be taken from the HL7 IdentifierScope code system.
+
+type IdentifierScope = enumeration (BUSN, OBJ, VER, VW)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="EntityNamePartQualifier">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="LS"/>
+			<xs:enumeration value="AC"/>
+			<xs:enumeration value="NB"/>
+			<xs:enumeration value="PR"/>
+			<xs:enumeration value="VV"/>
+			<xs:enumeration value="AD"/>
+			<xs:enumeration value="BR"/>
+			<xs:enumeration value="SP"/>
+			<xs:enumeration value="CL"/>
+			<xs:enumeration value="IN"/>
+			<xs:enumeration value="TITTLE"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IntegrityCheckAlgorithm">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SHA1"/>
+			<xs:enumeration value="SHA256"/>
+		</xs:restriction>
+	</xs:simpleType>
+		<!--
+	<xs:complexType name="SetOfEntityNamePartQualifier">
+		<xs:sequence>
+			<xs:element name="entityNamePartQualifier" type="iso:EntityNamePartQualifier" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	
+		<xs:complexContent>
+			<xs:restriction base="iso:Set">
+				<xs:sequence>
+					<xs:element name="entityNamePartQualifier" type="iso:EntityNamePartQualifier" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType> -->
+	<!--
+	<xs:complexType name="SetOfENXP">
+		<xs:sequence>
+			<xs:element ref="iso:Enxp" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:complexContent>
+			<xs:restriction base="iso:Set">
+				<xs:sequence>
+					<xs:element ref="iso:ENXP" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent> 
+	</xs:complexType>
+	-->
+	<!--
+	<xs:complexType name="SetOfADXP">
+		<xs:sequence>
+			<xs:element ref="iso:Adxp" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+-->
+	<xs:complexType name="Set">
+		<xs:sequence>
+			<xs:any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SetOfAny">
+		<xs:complexContent>
+			<xs:restriction base="iso:Set">
+				<xs:sequence>
+					<xs:element ref="iso:Any" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="EntityNameUse">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="I"/>
+			<xs:enumeration value="L"/>
+			<xs:enumeration value="P"/>
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="R"/>
+			<xs:enumeration value="OR"/>
+			<xs:enumeration value="ASGN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="EntityNamePartType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FAM"/>
+			<xs:enumeration value="GIV"/>
+			<xs:enumeration value="PFX"/>
+			<xs:enumeration value="SFX"/>
+			<xs:enumeration value="DEL"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Cd" type="iso:Cd"/>
+	<xs:complexType name="Cd">
+		<xs:annotation>
+			<xs:documentation>Concept Descriptor (CD)
+
+Specializes ANY
+
+A CD may contain a simple code - that is, a reference to a concept defined directly by the referenced code system, or it may contain an expression in some syntax defined by the  referenced code system that can be meaningfully evaluated. e.g., the concept of a "left foot" as a postcoordinated term built from the primary code "FOOT" and the qualifier "LEFT". A CD may also contain an original text or phrase that served as the basis of the coding. This is preserved to allow for validation of the representation of the concept in various fashions. If the concept (the intent of the original text) cannot be properly represented, then the nullFlavor of the CD should be set to "OTH" (other) and either a reference to a code system or a value set (which may refer to multiple code systems) SHALL be provided.
+A CD can contain one or more translations into multiple coding systems. The translations are all representations of the same concept in various code systems. There is only one concept, and only the first CD may contain an original text. It is possible to represent the translation chain - which CD was translated from which - if desired. Each CD may also carry a rationale to indicate why it is represented.
+
+A CD with no nullFlavor attribute SHALL have a code attribute or nonNull originalText attribute. A CD that has a code, codeSystem or originalText attribute but does not meet external constraints on the codeSystem SHALL have a nullFlavor attribute with a value of "OTH". Attributes with type CD are generally bound by externally specified constraints which constrain the coded concepts to which a CD may refer. These constraints may be qualified as "extensible“ (CWE) or "not extensible“ (CNE). If the constraint is not extensible (CNE), then the CD that does not have a nullFlavor SHALL contain a code that conforms to the constraint. If the constraint is extensible (CWE) then a CD that does not have a nullFlavor SHALL contain either a code that exists in the domain with which the attribute is associated, a code from a locally defined code system, or just some originalText that describes the concept. If the code is taken from a locally defined code system, then the codeSystem property SHALL specify the local code system.
+
+For both CNE and CWE constraint types, the translations may contain nonNull codes from any source unless otherwise specified by the constraining model.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="code" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The plain code symbol defined by the code system, or an
+expression in a syntax defined by the code system which describes the concept.
+If a code is provided, it SHALL be an exact match to a plain code symbol or expression
+defined by the code system. If the code system defines a code or expression that includes
+whitespace, the code SHALL include the whitespace. An expression can only be used where
+the codeSystem either defines an expression syntax, or there is a generally accepted syntax for the codeSystem. A code system may be defined that only defines an expression syntax with bindings to other code Systems for the elements of the expression.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="codeSystem" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the code system that defines the code, or if no
+code was found, the codeSystem in which no code was found.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="codeSystemName" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The common name of the coding system.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="codeSystemVersion" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>If applicable, a version descriptor defined specifically for the given code system.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="displayName" type="iso:St" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A name or title for the code, under which the sending system shows the code value to its users.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="originalText" type="iso:EdText" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The text as seen and/or selected by the user who entered the data.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Enxp" type="iso:Enxp"/>
+	<xs:complexType name="Enxp">
+		<xs:annotation>
+			<xs:documentation>Entity Name Part (ENXP)
+
+A character string token representing a part of a name.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A code assigned to the part by some coding system, if appropriate.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="codeSystem" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The code system from which the code is taken. The choice of coding system depends on the part type.
+
+The codeSystem SHALL be populated if a code is populated.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="codeSystemVersion" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The version of the coding system, if required.
+
+The codeSystem SHALL be populated if a codeSystemVersion is populated.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="qualifier"  type="iso:EntityNamePartQualifier" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The qualifier is a set of codes each of which specifies a certain subcategory of the name part in addition to the main name part type. Example, a given name may be flagged as a nickname (CL), a family name may be a name acquired by marriage (SP) or a name from birth (BR).
+
+If populated, the values contained in this attribute SHALL be taken from the HL7 EntityNamePartQualifier code system.
+
+type EntityNamePartQualifier = enumeration (LS, AC, NB,
+PR, VV, AD, BR, SP, CL, IN, TITLE)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="type" type="iso:EntityNamePartType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates whether the name part is a given name, family name, prefix, suffix, etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="value" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The actual string value of the part.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AdxpDal" type="iso:AdxpDal"/>
+	<xs:complexType name="AdxpDal">
+		<xs:annotation>
+			<xs:documentation>A delivery address line is frequently used instead of breaking out delivery mode, delivery installation, etc. An address generally has only a delivery address line or a street address
+line, but not both.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="AdxpSta" type="iso:AdxpSta"/>
+	<xs:complexType name="AdxpSta">
+		<xs:annotation>
+			<xs:documentation>A sub-unit of a country with limited sovereignty in a federally organized country.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Adxp" type="iso:Adxp"/>
+	<xs:complexType name="Adxp">
+		<xs:annotation>
+			<xs:documentation>Address Part (ADXP)
+
+A character string that may have a type-tag signifying its role in the address. Typical parts that exist in about every address are street, house number, or post box, postal code, city, country but other roles may be defined regionally, nationally, or on an enterprise level (e.g. in military addresses).
+
+Addresses are usually broken up into lines, which may be indicated by special line-breaking delimiter elements (e.g., DEL).</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A code assigned to the part by some coding system, if appropriate.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="type" type="iso:AddressPartType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies whether an address part names the street,
+city, country, postal code, post box, etc.
+
+If the type is NULL the address part is unclassified and would simply appear on an address
+label as is.
+
+If populated, the value of this attribute SHALL be taken from the HL7 AddressPartType code system.
+
+type AddressPartType = enumeration (AL, ADL, UNID, UNIT, DAL, DINST, DINSTA, DINSTQ, DMOD,  MODID, SAL, BNR, BNN, BNS, STR, STB, STTYP, DIR, INT, CAR, CEN, CNT, CPA, CTY, DEL, POB, PRE, STA, ZIP)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="value" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The actual string value of the part.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="AdxpAl" type="iso:AdxpAl"/>
+	<xs:complexType name="AdxpAl">
+		<xs:annotation>
+			<xs:documentation>An address line is for either an additional locator, a delivery address or a street address. An address generally has only a delivery address line or a street address line, but not both.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TelUrl" type="iso:TelUrl"/>
+	<xs:complexType name="TelUrl">
+		<xs:annotation>
+			<xs:documentation>Constrains TEL
+
+TEL.URL constrains TEL so that it must point to a locatable resource that returns binary content.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Tel">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="DSet" type="iso:DSet"/>
+	<xs:complexType name="DSet">
+		<xs:annotation>
+			<xs:documentation>Discrete Set (DSET)
+
+Specializes COLL
+
+Parameter: T : ANY
+
+A collection that contains other distinct and discrete values in no particular order.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="item" type="iso:SetOfAny">
+				<xs:annotation>
+					<xs:documentation>The contents of the Set.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Ad" type="iso:Ad"/>
+	<xs:complexType name="Ad">
+		<xs:annotation>
+			<xs:documentation>Address (AD)
+
+Specializes ANY
+
+Mailing and home or office addresses.
+
+AD is primarily used to communicate data that will allow printing mail labels, or that will allow a person to physically visit that address. The postal address datatype is not supposed to be a container for additional information that might be useful for finding geographic locations (e.g.,
+GPS coordinates) or for performing epidemiological studies. Such additional information should be captured by other, more appropriate data structures. 
+
+Addresses are essentially sequences of address parts, but add a "use" code and a valid</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="part" type="iso:Adxp" nillable="true" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>A sequence of address parts, such as street or post office Box, city, postal code, country, etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="St" type="iso:St"/>
+	<xs:complexType name="St">
+		<xs:annotation>
+			<xs:documentation>Character String (ST)
+
+Specializes ANY
+
+The character string datatype stands for text data, primarily intended for machine processing (e.g., sorting, querying, indexing, etc.). Used for names, symbols, and formal expressions.
+
+A ST SHALL have at least one character or else be NULL.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="value" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The actual content of the string. Refer to section 6.7.4 for
+discussion on String character encodings.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="En" type="iso:En"/>
+	<xs:complexType name="En">
+		<xs:annotation>
+			<xs:documentation>Specializes ANY
+
+A name for a person, organization, place or thing.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="part" type="iso:Enxp" nillable="true" minOccurs="0" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>A sequence of name parts, such as given name or
+family name, prefix, suffix, etc.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="AddressPartType">
+		<xs:annotation>
+			<xs:documentation>Specifies the address part, such as street, city, country, postal code, etc. as defined in AD.Part.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AL"/>
+			<xs:enumeration value="ADL"/>
+			<xs:enumeration value="UNID"/>
+			<xs:enumeration value="UNIT"/>
+			<xs:enumeration value="DAL"/>
+			<xs:enumeration value="DINST"/>
+			<xs:enumeration value="DINSTA"/>
+			<xs:enumeration value="DINSTQ"/>
+			<xs:enumeration value="DMOD"/>
+			<xs:enumeration value="DMODID"/>
+			<xs:enumeration value="SAL"/>
+			<xs:enumeration value="BNR"/>
+			<xs:enumeration value="BNN"/>
+			<xs:enumeration value="BNS"/>
+			<xs:enumeration value="STR"/>
+			<xs:enumeration value="STB"/>
+			<xs:enumeration value="STTYP"/>
+			<xs:enumeration value="DIR"/>
+			<xs:enumeration value="INT"/>
+			<xs:enumeration value="CAR"/>
+			<xs:enumeration value="CEN"/>
+			<xs:enumeration value="CNT"/>
+			<xs:enumeration value="CPA"/>
+			<xs:enumeration value="CTY"/>
+			<xs:enumeration value="DEL"/>
+			<xs:enumeration value="POB"/>
+			<xs:enumeration value="PRE"/>
+			<xs:enumeration value="STA"/>
+			<xs:enumeration value="ZIP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Tel" type="iso:Tel"/>
+	<xs:complexType name="Tel">
+		<xs:annotation>
+			<xs:documentation>Telecommunication Address (TEL)
+
+Specializes ANY
+
+A locatable resource that is identified by a URI, such as a web page, a telephone number (voice, fax or some other resource mediated by telecommunication equipment), an e-mail address, or any other locatable resource that can be specified by a URL.
+
+The address is specified as a Universal Resource Locator (URL) qualified by time specification and use codes that help in deciding which address to use for a given time and purpose.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="value" type="xs:anyURI" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A uniform resource identifier  (URI) specified according to IETF RFC 2396.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="NullFlavor">
+		<xs:annotation>
+			<xs:documentation>The list of valid  reasons for a null value in an attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NI"/>
+			<xs:enumeration value="INV"/>
+			<xs:enumeration value="OTH"/>
+			<xs:enumeration value="NINF"/>
+			<xs:enumeration value="PINF"/>
+			<xs:enumeration value="UNC"/>
+			<xs:enumeration value="DER"/>
+			<xs:enumeration value="UNK"/>
+			<xs:enumeration value="ASKU"/>
+			<xs:enumeration value="NAV"/>
+			<xs:enumeration value="QS"/>
+			<xs:enumeration value="NASK"/>
+			<xs:enumeration value="TRC"/>
+			<xs:enumeration value="MSK"/>
+			<xs:enumeration value="NA"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IdentifierScope">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BUSN"/>
+			<xs:enumeration value="OBJ"/>
+			<xs:enumeration value="VER"/>
+			<xs:enumeration value="VW"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="EdText" type="iso:EdText"/>
+	<xs:complexType name="EdText">
+		<xs:annotation>
+			<xs:documentation>Constrains ED
+
+ED.TEXT constrains ED so that it may only contain plain text.
+
+Note: This is useful because there is sometimes a need to allow for references, but the content must be a simple string. In addition, no translations are allowed.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Ed">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="Ed" type="iso:Ed"/>
+	<xs:complexType name="Ed">
+		<xs:annotation>
+			<xs:documentation>Encapsulated Data (ED)
+
+Specializes ANY
+
+Data that is primarily intended for human interpretation or for further machine processing outside the scope of this specification. This includes unformatted or formatted written language, multimedia data, or structured information as defined by a different standard (e.g., XML-signatures.)</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Any">
+				<xs:sequence>
+					<xs:element name="charset" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>For character-based encoding types, this attribute specifies the character set and character encoding used in the attribute that contains the content of the ED.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="compression" type="iso:Compression" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Indicates whether the raw byte data is compressed, and what compression algorithm was used.
+
+type Compression = enumeration (DF, GZ, ZL, Z, BZ, Z7)</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="data" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A simple sequence of byte values that contains the content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="description" type="iso:St" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A stand-in for the full media for use as an alternative description of the media where the media is not able to be rendered.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="integrityCheck" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The integrity check is a short binary value representing a cryptographically strong checksum that is calculated over the binary content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="integrityCheckAlgorithm" type="iso:IntegrityCheckAlgorithm" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Specifies the algorithm used to compute the integrityCheck value.
+
+If populated, the value of this attribute SHALL be taken from the HL7 IntegrityCheckAlgorithm
+code system.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="mediaType" type="xs:string" default="text/plain" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Identifies the type of the encapsulated data and identifies a method to interpret or render the content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="reference" type="iso:TelUrl" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>A telecommunication address such as a URL for HTTP or FTP, which will resolve to precisely the same binary content that could as well have been provided as inline content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="thumbnail" type="iso:Ed" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>An abbreviated rendition of the full content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>A simple sequence of characters that contains the content.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="xml" type="xs:string" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The content represented in plain XML form.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="IdentifierReliability">
+		<xs:annotation>
+			<xs:documentation>Specifies the reliability with which this identifier
+is known. This attribute may be used to assist with identifier matching algorithms.
+
+If populated, the value of this attribute SHALL be taken from the HL7 IdentifierReliability code
+system.  Values:  ISS = issued by system, VRF = verified by system, UNV = unverified by system.
+
+type IdentifierReliability = enumeration (ISS, VRF, USE)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ISS">
+				<xs:annotation>
+					<xs:documentation>The identifier was issued by the system responsible for constructing the instance.
+</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="VER">
+				<xs:annotation>
+					<xs:documentation>The identifier was not issued by the system responsible for constructing the instance, but the system that captured the id has verified the identifier with the issuing authority, or with another system that has verified the identifier.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="UNV">
+				<xs:annotation>
+					<xs:documentation>The identifier was provided to the system that constructed the instance, but has not been be verified. e.g. a Driver's license entered manually into a system by a user.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="AdxpCnt" type="iso:AdxpCnt"/>
+	<xs:complexType name="AdxpCnt">
+		<xs:annotation>
+			<xs:documentation>Country.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Adxp">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="TelPerson" type="iso:TelPerson"/>
+	<xs:complexType name="TelPerson">
+		<xs:annotation>
+			<xs:documentation>Constrains TEL
+
+TelPerson constrains TEL so that it must refer to a method of communication with a person.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:Tel">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="EnPn" type="iso:EnPn"/>
+	<xs:complexType name="EnPn">
+		<xs:annotation>
+			<xs:documentation>Person Name
+
+Constrains EN
+
+A restriction of EN used when the named Entity is a Person. A sequence of name parts, such as given name or family name, prefix, suffix, etc.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:En">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="EnOn" type="iso:EnOn"/>
+	<xs:complexType name="EnOn">
+		<xs:annotation>
+			<xs:documentation>Organization Name
+			
+Constrains EN</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="iso:En">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="Compression">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DF"/>
+			<xs:enumeration value="GZ"/>
+			<xs:enumeration value="ZL"/>
+			<xs:enumeration value="Z"/>
+			<xs:enumeration value="BZ"/>
+			<xs:enumeration value="Z7"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Map" type="iso:Map"/>
+	<xs:complexType name="Map">
+		<xs:sequence>
+			<xs:element name="item" type="iso:mapItem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="mapItem">
+		<xs:sequence>
+			<xs:element name="key" type="xs:anyType" nillable="true"/>
+			<xs:element name="value" type="xs:anyType" nillable="true"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

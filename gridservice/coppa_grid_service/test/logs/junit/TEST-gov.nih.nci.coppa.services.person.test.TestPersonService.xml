@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" name="gov.nih.nci.coppa.services.person.test.TestPersonService" tests="1" time="5.171">
+  <properties>
+    <property name="file.encoding.pkg" value="sun.io"></property>
+    <property name="env.PROMPT" value="$P$G"></property>
+    <property name="env.RoxioCentral" value="C:\Program Files\Common Files\Roxio Shared\9.0\Roxio Central33\"></property>
+    <property name="java.home" value="C:\jdk15015\jre"></property>
+    <property name="test.src.dir" value="test/src"></property>
+    <property name="java.endorsed.dirs" value="C:\jdk15015\jre\lib\endorsed"></property>
+    <property name="env.USERNAME" value="Harsh Marwaha"></property>
+    <property name="src.dir" value="src"></property>
+    <property name="ext.globus.dir" value="C:\Globus12\ws-core-4.0.3"></property>
+    <property name="sun.os.patch.level" value="Service Pack 3"></property>
+    <property name="java.vendor.url" value="http://java.sun.com/"></property>
+    <property name="env.COMPUTERNAME" value="HARSHLAPTOP"></property>
+    <property name="java.version" value="1.5.0_15"></property>
+    <property name="ant.file.Developer Modified Build File" value="C:\coppa_grid_service\dev-build.xml"></property>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"></property>
+    <property name="env.USERPROFILE" value="C:\Documents and Settings\Harsh Marwaha"></property>
+    <property name="javadoc.dir" value="C:\coppa_grid_service\build/javadoc"></property>
+    <property name="introduce.skeleton.namespace.domain" value="http://person.coppa.cagrid.nci.nih.gov/CoppaPersonService"></property>
+    <property name="test.lib.dir" value="test/lib"></property>
+    <property name="env.SystemRoot" value="C:\WINDOWS"></property>
+    <property name="introduce.ns.excludes" value=" -x gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service -x gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security -x gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"></property>
+    <property name="user.name" value="Harsh Marwaha"></property>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"></property>
+    <property name="env.PERL5LIB" value="C:\oracle\product\10.2.0\db_1\perl\5.8.3\lib\MSWin32-x86;C:\oracle\product\10.2.0\db_1\perl\5.8.3\lib;C:\oracle\product\10.2.0\db_1\perl\5.8.3\lib\MSWin32-x86;C:\oracle\product\10.2.0\db_1\perl\site\5.8.3;C:\oracle\product\10.2.0\db_1\perl\site\5.8.3\lib;C:\oracle\product\10.2.0\db_1\sysman\admin\scripts;"></property>
+    <property name="sun.jnu.encoding" value="Cp1252"></property>
+    <property name="java.runtime.name" value="Java(TM) 2 Runtime Environment, Standard Edition"></property>
+    <property name="schema.dest" value="C:\coppa_grid_service\build\schema"></property>
+    <property name="lib.dir" value="lib"></property>
+    <property name="tools.lib.dir" value="tools/lib"></property>
+    <property name="java.specification.name" value="Java Platform API Specification"></property>
+    <property name="test.jar.name" value="CoppaPersonService-tests.jar"></property>
+    <property name="user.timezone" value=""></property>
+    <property name="path.separator" value=";"></property>
+    <property name="client.jar.name" value="CoppaPersonService-client.jar"></property>
+    <property name="env.PROCESSOR_IDENTIFIER" value="x86 Family 6 Model 15 Stepping 13, GenuineIntel"></property>
+    <property name="env._JAVACMD" value="C:\jdk15015\bin\java.exe"></property>
+    <property name="file.encoding" value="Cp1252"></property>
+    <property name="jar.prefix" value="CoppaPersonService"></property>
+    <property name="junit.results.dir" value="test/logs/junit"></property>
+    <property name="introduce.soap.binding.excludes" value=" "></property>
+    <property name="env.NUMBER_OF_PROCESSORS" value="2"></property>
+    <property name="env.APPDATA" value="C:\Documents and Settings\Harsh Marwaha\Application Data"></property>
+    <property name="ant.file" value="C:\coppa_grid_service\build.xml"></property>
+    <property name="test.log.dir" value="test/logs"></property>
+    <property name="java.io.tmpdir" value="C:\DOCUME~1\HARSHM~1\LOCALS~1\Temp\"></property>
+    <property name="user.language" value="en"></property>
+    <property name="env.SystemDrive" value="C:"></property>
+    <property name="line.separator" value="
+"></property>
+    <property name="garjars.id" value="garjars"></property>
+    <property name="java.debug" value="on"></property>
+    <property name="ant.file.build-deploy file" value="C:\coppa_grid_service\build-deploy.xml"></property>
+    <property name="introduce.skeleton.service.name" value="CoppaPersonService"></property>
+    <property name="tools.dir" value="tools"></property>
+    <property name="schema.src" value="C:\Globus12\ws-core-4.0.3\share\schema"></property>
+    <property name="java.vm.info" value="mixed mode"></property>
+    <property name="sun.desktop" value="windows"></property>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"></property>
+    <property name="ant.file.run-tools file" value="C:\coppa_grid_service\run-tools.xml"></property>
+    <property name="common.jar.name" value="CoppaPersonService-common.jar"></property>
+    <property name="env.CATALINA_OPTS" value="-Djava.security.auth.login.config=C:\tomcat\jakarta-tomcat-5.0.28\conf\login.config"></property>
+    <property name="ant.file.Introduce Master Build File" value="C:\coppa_grid_service\build.xml"></property>
+    <property name="env.PATHEXT" value=".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH"></property>
+    <property name="build.stubs" value="C:\coppa_grid_service\build-stubs.xml"></property>
+    <property name="env.LOGONSERVER" value="\\HARSHLAPTOP"></property>
+    <property name="introduce.skeleton.timestamp" value="1232419284812"></property>
+    <property name="stubs.src" value="C:\coppa_grid_service\build\stubs-CoppaPersonService\src"></property>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"></property>
+    <property name="build.dest" value="C:\coppa_grid_service\build\classes"></property>
+    <property name="test.build.dest" value="C:\coppa_grid_service\build/test/classes"></property>
+    <property name="ant.version" value="Apache Ant version 1.6.5 compiled on June 2 2005"></property>
+    <property name="env.USERDOMAIN" value="HARSHLAPTOP"></property>
+    <property name="env.PROCESSOR_LEVEL" value="6"></property>
+    <property name="env.windir" value="C:\WINDOWS"></property>
+    <property name="os.name" value="Windows XP"></property>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."></property>
+    <property name="stubs.dest" value="C:\coppa_grid_service\build\stubs-CoppaPersonService\classes"></property>
+    <property name="env.TMP" value="C:\DOCUME~1\HARSHM~1\LOCALS~1\Temp"></property>
+    <property name="java.vm.name" value="Java HotSpot(TM) Client VM"></property>
+    <property name="env.OS" value="Windows_NT"></property>
+    <property name="java.library.path" value="C:\jdk15015\jre\bin;.;C:\WINDOWS\system32;C:\WINDOWS;C:\oracle\product\10.2.0\db_1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files\Wave Systems Corp\Gemalto\Access Client\v5\;C:\Program Files\Gemplus\GemSafe Libraries\BIN;C:\Program Files\Common Files\Roxio Shared\DLLShared\;C:\Program Files\MySQL\MySQL Server 5.0\bin;C:\Program Files\TortoiseSVN\bin;C:\ant\apache-ant-1.6.5\bin;C:\cygwin\bin;C:\Program Files\CVSNT\;C:\jdk15015\bin;C:\apache-maven-2.0.9\bin"></property>
+    <property name="ant.file.developers-build-deploy file" value="C:\coppa_grid_service\dev-build-deploy.xml"></property>
+    <property name="ant.java.version" value="1.5"></property>
+    <property name="basedir" value="C:\coppa_grid_service"></property>
+    <property name="java.class.version" value="49.0"></property>
+    <property name="ant.home" value="C:\ant\apache-ant-1.6.5\bin\.."></property>
+    <property name="introduce.skeleton.services.list" value="CoppaPersonService"></property>
+    <property name="env.Path" value="C:\oracle\product\10.2.0\db_1\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\NTRU Cryptosystems\NTRU TCG Software Stack\bin\;C:\Program Files\Wave Systems Corp\Gemalto\Access Client\v5\;C:\Program Files\Gemplus\GemSafe Libraries\BIN;C:\Program Files\Common Files\Roxio Shared\DLLShared\;C:\Program Files\MySQL\MySQL Server 5.0\bin;C:\Program Files\TortoiseSVN\bin;C:\ant\apache-ant-1.6.5\bin;C:\cygwin\bin;C:\Program Files\CVSNT\;C:\jdk15015\bin;C:\apache-maven-2.0.9\bin"></property>
+    <property name="env.HOMEDRIVE" value="C:"></property>
+    <property name="build.packages" value="C:\Globus12\ws-core-4.0.3\share\globus_wsrf_common\build-packages.xml"></property>
+    <property name="sun.boot.library.path" value="C:\jdk15015\jre\bin"></property>
+    <property name="build.dir" value="C:\coppa_grid_service\build"></property>
+    <property name="env.PROCESSOR_REVISION" value="0f0d"></property>
+    <property name="sun.management.compiler" value="HotSpot Client Compiler"></property>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"></property>
+    <property name="user.variant" value=""></property>
+    <property name="stubs.jar.name" value="CoppaPersonService-stubs.jar"></property>
+    <property name="ant.project.name" value="Introduce Master Build File"></property>
+    <property name="schema.dir" value="schema"></property>
+    <property name="GT4.ns.excludes" value="-x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd -x http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl -x http://schemas.xmlsoap.org/ws/2004/04/trust -x http://schemas.xmlsoap.org/ws/2002/12/policy -x http://schemas.xmlsoap.org/ws/2002/07/utility -x http://schemas.xmlsoap.org/ws/2004/04/sc -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd -x http://www.w3.org/2000/09/xmldsig# -x http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd -x http://schemas.xmlsoap.org/ws/2004/09/enumeration"></property>
+    <property name="introduce.skeleton.destination.dir" value="C:\coppa_grid_service"></property>
+    <property name="java.vm.specification.version" value="1.0"></property>
+    <property name="env.GLOBUS_LOCATION" value="C:\Globus12\ws-core-4.0.3"></property>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"></property>
+    <property name="introduce.skeleton.extensions" value="cagrid_metadata"></property>
+    <property name="build.lib.dir" value="C:\coppa_grid_service\build\lib"></property>
+    <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"></property>
+    <property name="java.ext.dirs" value="C:\jdk15015\jre\lib\ext"></property>
+    <property name="garschema.id" value="garschema"></property>
+    <property name="os.version" value="5.1"></property>
+    <property name="user.home" value="C:\Documents and Settings\Harsh Marwaha"></property>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."></property>
+    <property name="mappings.file" value="C:\coppa_grid_service/namespace2package.mappings"></property>
+    <property name="garetc.id" value="garetc"></property>
+    <property name="env.JAVA_HOME" value="C:\jdk15015"></property>
+    <property name="stubs.dir" value="C:\coppa_grid_service\build\stubs-CoppaPersonService"></property>
+    <property name="user.dir" value="C:\coppa_grid_service"></property>
+    <property name="schema.path" value="CoppaPersonService"></property>
+    <property name="env.FP_NO_HOST_CHECK" value="NO"></property>
+    <property name="test.dir" value="test"></property>
+    <property name="tomcat.dir" value="C:\tomcat\jakarta-tomcat-5.0.28"></property>
+    <property name="sun.cpu.endian" value="little"></property>
+    <property name="env._USE_CLASSPATH" value="yes"></property>
+    <property name="env.ALLUSERSPROFILE" value="C:\Documents and Settings\All Users"></property>
+    <property name="env.PROCESSOR_ARCHITECTURE" value="x86"></property>
+    <property name="java.vm.version" value="1.5.0_15-b04"></property>
+    <property name="java.class.path" value="C:\coppa_grid_service\build\test\classes;C:\coppa_grid_service\build\classes;C:\coppa_grid_service\build\stubs-CoppaPersonService\classes;C:\coppa_grid_service\lib\caGrid-Introduce-serviceTools-1.2.jar;C:\coppa_grid_service\lib\caGrid-ServiceSecurityProvider-client-1.2.jar;C:\coppa_grid_service\lib\caGrid-ServiceSecurityProvider-common-1.2.jar;C:\coppa_grid_service\lib\caGrid-ServiceSecurityProvider-service-1.2.jar;C:\coppa_grid_service\lib\caGrid-ServiceSecurityProvider-stubs-1.2.jar;C:\coppa_grid_service\lib\caGrid-advertisement-1.2.jar;C:\coppa_grid_service\lib\caGrid-core-1.2.jar;C:\coppa_grid_service\lib\caGrid-metadata-common-1.2.jar;C:\coppa_grid_service\lib\caGrid-metadata-data-1.2.jar;C:\coppa_grid_service\lib\caGrid-metadata-security-1.2.jar;C:\coppa_grid_service\lib\caGrid-metadatautils-1.2.jar;C:\coppa_grid_service\lib\castor-0.9.9.jar;C:\coppa_grid_service\lib\globus_wsrf_mds_aggregator.jar;C:\coppa_grid_service\lib\globus_wsrf_mds_aggregator_stubs.jar;C:\coppa_grid_service\lib\globus_wsrf_servicegroup.jar;C:\coppa_grid_service\lib\globus_wsrf_servicegroup_stubs.jar;C:\coppa_grid_service\lib\iso-datatypes-1.0-SNAPSHOT.jar;C:\coppa_grid_service\lib\jboss-aop-jdk50-client-4.0.5.jar;C:\coppa_grid_service\lib\jboss-aspect-jdk50-client-4.0.5.jar;C:\coppa_grid_service\lib\jboss-ejb3-client-4.0.5.jar;C:\coppa_grid_service\lib\jboss-ejb3x.jar;C:\coppa_grid_service\lib\jbossall-client-4.0.5.jar;C:\coppa_grid_service\lib\jdom-1.0.jar;C:\coppa_grid_service\lib\po-services-1.0-SNAPSHOT-client.jar;C:\Globus12\ws-core-4.0.3\lib\StockManager-client.jar;C:\Globus12\ws-core-4.0.3\lib\StockManager-common.jar;C:\Globus12\ws-core-4.0.3\lib\StockManager-service.jar;C:\Globus12\ws-core-4.0.3\lib\StockManager-stubs.jar;C:\Globus12\ws-core-4.0.3\lib\StockManager-tests.jar;C:\Globus12\ws-core-4.0.3\lib\addressing-1.0.jar;C:\Globus12\ws-core-4.0.3\lib\axis.jar;C:\Globus12\ws-core-4.0.3\lib\bootstrap.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-Introduce-serviceTools-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-ServiceSecurityProvider-client-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-ServiceSecurityProvider-common-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-ServiceSecurityProvider-service-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-ServiceSecurityProvider-stubs-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-advertisement-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-core-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-metadata-common-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-metadata-data-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-metadata-security-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\caGrid-metadatautils-1.2.jar;C:\Globus12\ws-core-4.0.3\lib\castor-0.9.9.jar;C:\Globus12\ws-core-4.0.3\lib\cog-axis.jar;C:\Globus12\ws-core-4.0.3\lib\cog-jglobus.jar;C:\Globus12\ws-core-4.0.3\lib\cog-tomcat.jar;C:\Globus12\ws-core-4.0.3\lib\cog-url.jar;C:\Globus12\ws-core-4.0.3\lib\commonj.jar;C:\Globus12\ws-core-4.0.3\lib\commons-beanutils.jar;C:\Globus12\ws-core-4.0.3\lib\commons-cli-2.0.jar;C:\Globus12\ws-core-4.0.3\lib\commons-collections-3.2.1.jar;C:\Globus12\ws-core-4.0.3\lib\commons-digester.jar;C:\Globus12\ws-core-4.0.3\lib\commons-discovery.jar;C:\Globus12\ws-core-4.0.3\lib\commons-logging.jar;C:\Globus12\ws-core-4.0.3\lib\concurrent.jar;C:\Globus12\ws-core-4.0.3\lib\cryptix-asn1.jar;C:\Globus12\ws-core-4.0.3\lib\cryptix.jar;C:\Globus12\ws-core-4.0.3\lib\cryptix32.jar;C:\Globus12\ws-core-4.0.3\lib\globus_resolution_service.jar;C:\Globus12\ws-core-4.0.3\lib\globus_resolution_stubs_java.jar;C:\Globus12\ws-core-4.0.3\lib\globus_resolution_test.jar;C:\Globus12\ws-core-4.0.3\lib\globus_transfer_service.jar;C:\Globus12\ws-core-4.0.3\lib\globus_transfer_stubs_java.jar;C:\Globus12\ws-core-4.0.3\lib\globus_transfer_test.jar;C:\Globus12\ws-core-4.0.3\lib\globus_usage_core.jar;C:\Globus12\ws-core-4.0.3\lib\globus_usage_packets_common.jar;C:\Globus12\ws-core-4.0.3\lib\globus_wsrf_mds_aggregator.jar;C:\Globus12\ws-core-4.0.3\lib\globus_wsrf_mds_aggregator_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\globus_wsrf_servicegroup.jar;C:\Globus12\ws-core-4.0.3\lib\globus_wsrf_servicegroup_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\globus_wsrf_tools_test.jar;C:\Globus12\ws-core-4.0.3\lib\iso-datatypes.jar;C:\Globus12\ws-core-4.0.3\lib\jaxrpc.jar;C:\Globus12\ws-core-4.0.3\lib\jce-jdk13-125.jar;C:\Globus12\ws-core-4.0.3\lib\jdom-1.0.jar;C:\Globus12\ws-core-4.0.3\lib\jgss.jar;C:\Globus12\ws-core-4.0.3\lib\junit.jar;C:\Globus12\ws-core-4.0.3\lib\log4j-1.2.8.jar;C:\Globus12\ws-core-4.0.3\lib\naming-common.jar;C:\Globus12\ws-core-4.0.3\lib\naming-factory.jar;C:\Globus12\ws-core-4.0.3\lib\naming-java.jar;C:\Globus12\ws-core-4.0.3\lib\naming-resources.jar;C:\Globus12\ws-core-4.0.3\lib\opensaml.jar;C:\Globus12\ws-core-4.0.3\lib\po-services-client.jar;C:\Globus12\ws-core-4.0.3\lib\puretls.jar;C:\Globus12\ws-core-4.0.3\lib\quotes.jar;C:\Globus12\ws-core-4.0.3\lib\resolver.jar;C:\Globus12\ws-core-4.0.3\lib\saaj.jar;C:\Globus12\ws-core-4.0.3\lib\servlet.jar;C:\Globus12\ws-core-4.0.3\lib\wsdl4j.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_common.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_registry.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_registry_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_authzService.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_authzService_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_counter.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_counter_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_mgmt.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_samples_mgmt_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_core_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_provider_jce.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_test.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_test_interop.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_test_interop_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_test_unit.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_test_unit_stubs.jar;C:\Globus12\ws-core-4.0.3\lib\wsrf_tools.jar;C:\Globus12\ws-core-4.0.3\lib\wss4j.jar;C:\Globus12\ws-core-4.0.3\lib\xalan.jar;C:\Globus12\ws-core-4.0.3\lib\xercesImpl.jar;C:\Globus12\ws-core-4.0.3\lib\xml-apis.jar;C:\Globus12\ws-core-4.0.3\lib\xmlsec.jar;C:\ant\apache-ant-1.6.5\lib\junit.jar;C:\ant\apache-ant-1.6.5\lib\ant-launcher.jar;C:\ant\apache-ant-1.6.5\lib\ant.jar;C:\ant\apache-ant-1.6.5\lib\ant-junit.jar"></property>
+    <property name="env.HOMEPATH" value="\Documents and Settings\Harsh Marwaha"></property>
+    <property name="ant.library.dir" value="C:\ant\apache-ant-1.6.5\lib"></property>
+    <property name="os.arch" value="x86"></property>
+    <property name="env.SESSIONNAME" value="Console"></property>
+    <property name="sun.java.launcher" value="SUN_STANDARD"></property>
+    <property name="env.CommonProgramFiles" value="C:\Program Files\Common Files"></property>
+    <property name="env.ProgramFiles" value="C:\Program Files"></property>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."></property>
+    <property name="file.separator" value="\"></property>
+    <property name="introduce.skeleton.resource.options" value="main,singleton,identifiable,resourcePropertyManagement"></property>
+    <property name="env.ANT_CMD_LINE_ARGS" value="test"></property>
+    <property name="java.runtime.version" value="1.5.0_15-b04"></property>
+    <property name="sun.boot.class.path" value="C:\jdk15015\jre\lib\rt.jar;C:\jdk15015\jre\lib\i18n.jar;C:\jdk15015\jre\lib\sunrsasign.jar;C:\jdk15015\jre\lib\jsse.jar;C:\jdk15015\jre\lib\jce.jar;C:\jdk15015\jre\lib\charsets.jar;C:\jdk15015\jre\classes"></property>
+    <property name="env.ComSpec" value="C:\WINDOWS\system32\cmd.exe"></property>
+    <property name="env.TEMP" value="C:\DOCUME~1\HARSHM~1\LOCALS~1\Temp"></property>
+    <property name="env.ANT_HOME" value="C:\ant\apache-ant-1.6.5\bin\.."></property>
+    <property name="user.country" value="US"></property>
+    <property name="etc.dir" value="etc"></property>
+    <property name="env.CLIENTNAME" value="Console"></property>
+    <property name="service.jar.name" value="CoppaPersonService-service.jar"></property>
+    <property name="service.name" value="CoppaPersonService"></property>
+    <property name="java.vendor" value="Sun Microsystems Inc."></property>
+    <property name="env.CATALINA_HOME" value="C:\tomcat\jakarta-tomcat-5.0.28"></property>
+    <property name="java.specification.version" value="1.5"></property>
+    <property name="jboss.dir" value="${env.JBOSS_HOME}"></property>
+    <property name="sun.arch.data.model" value="32"></property>
+  </properties>
+  <testcase classname="gov.nih.nci.coppa.services.person.test.TestPersonService" name="testCreatePerson" time="4.937"></testcase>
+  <system-out><![CDATA[2009-01-19 21:56:43,750 DEBUG test.TestPersonService [main,<clinit>:36] url is:{coppa.services.url=http://localhost:8082/wsrf/services/cagrid/CoppaPersonService}
+2009-01-19 21:56:43,984 DEBUG test.TestPersonService [main,setUp:44] url is:http://localhost:8082/wsrf/services/cagrid/CoppaPersonService
+2009-01-19 21:56:44,281 WARN  utils.JavaUtils [main,isAttachmentSupported:1218] Unable to find required classes (javax.activation.DataHandler and javax.mail.internet.MimeMultipart). Attachment support is disabled.
+2009-01-19 21:56:48,906 DEBUG test.TestPersonService [main,testCreatePerson:192] <ns1:Ii xmlns:ns1="http://isodatatypes.coppa.nci.nih.gov">
+ <displayable>true</displayable>
+ <extension>9176</extension>
+ <identifierName>NCI person entity identifier</identifierName>
+ <reliability>ISS</reliability>
+ <root>UID.for.nci.entity.person</root>
+ <scope>OBJ</scope>
+</ns1:Ii>
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
