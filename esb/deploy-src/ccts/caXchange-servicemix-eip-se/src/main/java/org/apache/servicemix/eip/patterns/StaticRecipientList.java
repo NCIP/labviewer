@@ -35,11 +35,15 @@ import org.apache.servicemix.jbi.util.MessageUtil;
  * pattern, with the limitation that the recipient list is static.
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @org.apache.xbean.XBean element="static-recipient-list"
  *                  description="A static Recipient List"
  */
 public class StaticRecipientList extends EIPEndpoint {
+
+    public static final String RECIPIENT_LIST_COUNT = "org.apache.servicemix.eip.recipientList.count";
+    public static final String RECIPIENT_LIST_INDEX = "org.apache.servicemix.eip.recipientList.index";
+    public static final String RECIPIENT_LIST_CORRID = "org.apache.servicemix.eip.recipientList.corrid";
 
     /**
      * List of recipients
@@ -58,7 +62,7 @@ public class StaticRecipientList extends EIPEndpoint {
     /**
      * The correlation property used by this component
      */
-    private String correlation;
+    //private String correlation;
 
     /**
      * @return Returns the recipients.
@@ -94,19 +98,19 @@ public class StaticRecipientList extends EIPEndpoint {
     public void validate() throws DeploymentException {
         super.validate();
         // Check recipients
-        //if (recipients == null || recipients.length == 0) {
-          //  throw new IllegalArgumentException("recipients should contain at least one ExchangeTarget");
-        //}
+        if (recipients == null || recipients.length == 0) {
+            throw new IllegalArgumentException("recipients should contain at least one ExchangeTarget");
+        }
         // Create correlation property
-        correlation = "StaticRecipientList.Correlation." + getService() + "." + getEndpoint();
+        //correlation = "StaticRecipientList.Correlation." + getService() + "." + getEndpoint();
     }
     
     /* (non-Javadoc)
      * @see org.apache.servicemix.eip.EIPEndpoint#processSync(javax.jbi.messaging.MessageExchange)
      */
     protected void processSync(MessageExchange exchange) throws Exception {
-        if (exchange instanceof InOnly == false &&
-            exchange instanceof RobustInOnly == false) {
+        if (!(exchange instanceof InOnly)
+            && !(exchange instanceof RobustInOnly)) {
             fail(exchange, new UnsupportedOperationException("Use an InOnly or RobustInOnly MEP"));
             return;
         }
@@ -114,6 +118,9 @@ public class StaticRecipientList extends EIPEndpoint {
         for (int i = 0; i < recipients.length; i++) {
             MessageExchange me = getExchangeFactory().createExchange(exchange.getPattern());
             recipients[i].configureTarget(me, getContext());
+            in.setProperty(RECIPIENT_LIST_COUNT, new Integer(recipients.length));
+            in.setProperty(RECIPIENT_LIST_INDEX, new Integer(i));
+            in.setProperty(RECIPIENT_LIST_CORRID, exchange.getExchangeId());
             MessageUtil.transferToIn(in, me);
             sendSync(me);
             if (me.getStatus() == ExchangeStatus.ERROR && reportErrors) {
@@ -142,8 +149,8 @@ public class StaticRecipientList extends EIPEndpoint {
                 return;
             } else if (exchange.getStatus() == ExchangeStatus.ERROR) {
                 return;
-            } else if (exchange instanceof InOnly == false &&
-                       exchange instanceof RobustInOnly == false) {
+            } else if (!(exchange instanceof InOnly)
+                       && !(exchange instanceof RobustInOnly)) {
                 fail(exchange, new UnsupportedOperationException("Use an InOnly or RobustInOnly MEP"));
             } else if (exchange.getFault() != null) {
                 done(exchange);
@@ -152,6 +159,9 @@ public class StaticRecipientList extends EIPEndpoint {
                 for (int i = 0; i < recipients.length; i++) {
                     MessageExchange me = getExchangeFactory().createExchange(exchange.getPattern());
                     recipients[i].configureTarget(me, getContext());
+                    in.setProperty(RECIPIENT_LIST_COUNT, new Integer(recipients.length));
+                    in.setProperty(RECIPIENT_LIST_INDEX, new Integer(i));
+                    in.setProperty(RECIPIENT_LIST_CORRID, exchange.getExchangeId());
                     MessageUtil.transferToIn(in, me);
                     send(me);
                 }

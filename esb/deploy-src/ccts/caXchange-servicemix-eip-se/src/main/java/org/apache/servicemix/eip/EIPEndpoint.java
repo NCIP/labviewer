@@ -17,20 +17,29 @@
 package org.apache.servicemix.eip;
 
 import java.net.URL;
+import java.util.Set;
 
+import javax.activation.DataHandler;
 import javax.jbi.JBIException;
 import javax.jbi.messaging.ExchangeStatus;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessageExchange.Role;
+import javax.jbi.messaging.MessagingException;
+import javax.jbi.messaging.NormalizedMessage;
 import javax.jbi.servicedesc.ServiceEndpoint;
 import javax.wsdl.Definition;
 import javax.wsdl.WSDLException;
 import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 
+import org.w3c.dom.Document;
+
+import com.ibm.wsdl.Constants;
+
 import org.apache.servicemix.JbiConstants;
 import org.apache.servicemix.common.endpoints.ProviderEndpoint;
 import org.apache.servicemix.eip.support.ExchangeTarget;
+import org.apache.servicemix.jbi.messaging.PojoMarshaler;
 import org.apache.servicemix.locks.LockManager;
 import org.apache.servicemix.locks.impl.SimpleLockManager;
 import org.apache.servicemix.store.Store;
@@ -39,20 +48,17 @@ import org.apache.servicemix.store.memory.MemoryStoreFactory;
 import org.apache.servicemix.timers.TimerManager;
 import org.apache.servicemix.timers.impl.TimerManagerImpl;
 import org.springframework.core.io.Resource;
-import org.w3c.dom.Document;
-
-import com.ibm.wsdl.Constants;
 
 /**
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class EIPEndpoint extends ProviderEndpoint {
 
     /**
      * The resource pointing to the WSDL for this endpoint
      */
-    private Resource wsdlResource;
+    protected Resource wsdlResource;
     
     /**
      * The store to keep pending exchanges
@@ -165,12 +171,13 @@ public abstract class EIPEndpoint extends ProviderEndpoint {
      * @return Returns the description.
      */
     public Document getDescription() {
-        if( description == null ) {
+        if (description == null) {
             definition = getDefinition();
-            if( definition!=null ) {
+            if (definition != null) {
                 try {
                     description = WSDLFactory.newInstance().newWSDLWriter().getDocument(definition);
                 } catch (WSDLException e) {
+                    // Ignore
                 }
             }
         }
@@ -185,11 +192,11 @@ public abstract class EIPEndpoint extends ProviderEndpoint {
      * @return Returns the definition.
      */
     public Definition getDefinition() {
-        if( definition == null ) {
+        if (definition == null) {
             definition = getDefinitionFromDescription();
-            if( definition == null ) {
+            if (definition == null) {
                 definition = getDefinitionFromWsdlResource();
-                if( definition == null ) {
+                if (definition == null) {
                     definition = getDefinitionFromWsdlExchangeTarget();
                 }
             }
@@ -198,38 +205,41 @@ public abstract class EIPEndpoint extends ProviderEndpoint {
     }
     
     protected Definition getDefinitionFromDescription() {
-        if( description!=null ) {
+        if (description != null) {
             try {
                 WSDLReader reader = WSDLFactory.newInstance().newWSDLReader(); 
                 reader.setFeature(Constants.FEATURE_VERBOSE, false);
                 return reader.readWSDL(null, description);
             } catch (WSDLException ignore) {
+                // Ignore
             }
         }
         return null;
     }
 
     protected Definition getDefinitionFromWsdlResource() {
-        if( wsdlResource!=null ) {
+        if (wsdlResource != null) {
             try {
                 URL resource = wsdlResource.getURL();
                 WSDLReader reader = WSDLFactory.newInstance().newWSDLReader();
                 reader.setFeature(Constants.FEATURE_VERBOSE, false);
                 return reader.readWSDL(null, resource.toString());
             } catch (Throwable ignore) {
+                // Ignore
             }
         }
         return null;
     }
         
     protected Definition getDefinitionFromWsdlExchangeTarget() {
-        if( wsdlExchangeTarget != null ) {
+        if (wsdlExchangeTarget != null) {
             try {
                 Document description = getDescriptionForExchangeTarget(wsdlExchangeTarget);
                 WSDLReader reader = WSDLFactory.newInstance().newWSDLReader(); 
                 reader.setFeature(Constants.FEATURE_VERBOSE, false);
                 return reader.readWSDL(null, description);
             } catch (Throwable ignore) {
+                // Ignore
             }
         }
         return null;
@@ -270,7 +280,7 @@ public abstract class EIPEndpoint extends ProviderEndpoint {
             if (endpoint == null) {
                 endpoints = new ServiceEndpoint[0];
             } else {
-                endpoints = new ServiceEndpoint[] { endpoint };
+                endpoints = new ServiceEndpoint[] {endpoint };
             }
         } else if (match.getService() != null) {
             endpoints = getContext().getEndpointsForService(match.getService());
@@ -302,5 +312,37 @@ public abstract class EIPEndpoint extends ProviderEndpoint {
     public void setWsdlExchangeTarget(ExchangeTarget wsdlExchangeTarget) {
         this.wsdlExchangeTarget = wsdlExchangeTarget;
     }
-    
+
+    /**
+     * Copies properties from one message to another that do not already exist
+     *
+     * @param from the message containing the properties
+     * @param to the destination message where the properties are set
+     */
+    protected void copyProperties(NormalizedMessage from, NormalizedMessage to) {
+        for (String propertyName : (Set<String>) from.getPropertyNames()) {
+            // Do not copy existing properties or transient properties
+            if (to.getProperty(propertyName) == null && !PojoMarshaler.BODY.equals(propertyName)) {
+                Object value = from.getProperty(propertyName);
+                to.setProperty(propertyName, value);
+            }
+        }
+    }
+
+    /**
+     * Copies attachments from one message to another that do not already exist
+     *
+     * @param from the message with the attachments
+     * @param to the destination message where the attachments are to be added
+     * @throws javax.jbi.messaging.MessagingException if an attachment could not be added
+     */
+    protected void copyAttachments(NormalizedMessage from, NormalizedMessage to) throws MessagingException {
+        for (String attachmentName : (Set<String>) from.getAttachmentNames()) {
+            // Do not copy existing attachments
+            if (to.getAttachment(attachmentName) == null) {
+                DataHandler value = from.getAttachment(attachmentName);
+                to.addAttachment(attachmentName, value);
+            }
+        }
+    }   
 }

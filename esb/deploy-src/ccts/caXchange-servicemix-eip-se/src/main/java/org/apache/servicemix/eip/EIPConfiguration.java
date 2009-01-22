@@ -22,7 +22,7 @@ import org.apache.servicemix.common.PersistentConfiguration;
  * EIP component configuration
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class EIPConfiguration extends PersistentConfiguration implements EIPConfigurationMBean {
 

@@ -26,7 +26,7 @@ import javax.management.ObjectName;
  * Base class for components bootstrap.
  * 
  * @author Guillaume Nodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @since 3.0
  */
 public class EIPBootstrap implements Bootstrap {

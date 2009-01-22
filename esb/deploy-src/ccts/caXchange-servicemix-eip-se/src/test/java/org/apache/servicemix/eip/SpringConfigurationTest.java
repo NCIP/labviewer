@@ -39,7 +39,8 @@ public class SpringConfigurationTest extends SpringTestSupport {
         for (int i = 0; i < nbMsgs; i++) {
             InOnly me = client.createInOnlyExchange();
             me.setService(new QName("http://test", "entryPoint"));
-            me.getInMessage().setContent(new StringSource("<test xmlns=\"http://test\"><echo/><world/><earth/></test>"));
+            me.getInMessage().setContent(new StringSource(
+                    "<test xmlns=\"http://test\"><echo/><world/><earth/></test>"));
             client.sendSync(me);
         }        
         ((Receiver) getBean("trace1")).getMessageList().assertMessagesReceived(1 * nbMsgs);
@@ -56,17 +57,21 @@ public class SpringConfigurationTest extends SpringTestSupport {
         ActivationSpec as = new ActivationSpec();
         as.setComponentName("client");
         ServiceMixClient client = new DefaultServiceMixClient(jbi, as);
-        
+
+        Thread.sleep(2000);
         int nbMsgs = 100;
         for (int i = 0; i < nbMsgs; i++) {
             InOnly me = client.createInOnlyExchange();
             me.setService(new QName("http://test", "entryPoint"));
-            me.getInMessage().setContent(new StringSource("<test xmlns=\"http://test\"><echo/><world/><earth/></test>"));
+            me.getInMessage().setContent(new StringSource(
+                    "<test xmlns=\"http://test\"><echo/><world/><earth/></test>"));
             client.send(me);
         }
+        Thread.sleep(2000);
         for (int i = 0; i < nbMsgs; i++) {
             client.receive();
         }
+        Thread.sleep(2000);
         ((Receiver) getBean("trace1")).getMessageList().assertMessagesReceived(1 * nbMsgs);
         ((Receiver) getBean("trace2")).getMessageList().assertMessagesReceived(1 * nbMsgs);
         ((Receiver) getBean("trace3")).getMessageList().assertMessagesReceived(1 * nbMsgs);
@@ -74,7 +79,7 @@ public class SpringConfigurationTest extends SpringTestSupport {
         ((Receiver) getBean("trace5")).getMessageList().assertMessagesReceived(1 * nbMsgs);
         
         // Wait for all messages to be processed
-        Thread.sleep(50);
+        Thread.sleep(2000);
     }
 
     protected AbstractXmlApplicationContext createBeanFactory() {

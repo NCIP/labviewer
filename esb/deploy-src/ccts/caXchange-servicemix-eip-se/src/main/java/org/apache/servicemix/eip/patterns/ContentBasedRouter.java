@@ -31,7 +31,7 @@ import org.apache.servicemix.eip.support.RoutingRule;
  * pattern.
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @org.apache.xbean.XBean element="content-based-router"
  *                  description="A Content-Based Router"
  */
@@ -75,8 +75,8 @@ public class ContentBasedRouter extends AbstractContentBasedRouter {
      */
     protected ExchangeTarget getDestination(MessageExchange exchange) throws Exception {
         for (int i = 0; i < rules.length; i++) {
-            if (rules[i].getPredicate() == null ||
-                rules[i].getPredicate().matches(exchange)) {
+            if (rules[i].getPredicate() == null
+                || rules[i].getPredicate().matches(exchange)) {
                 return rules[i].getTarget();
             }
         }

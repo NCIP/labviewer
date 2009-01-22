@@ -63,7 +63,7 @@ public abstract class AbstractEIPTest extends TestCase {
 
         client = new DefaultServiceMixClient(jbi);
 
-        //LogManager.getLogger(DeliveryChannel.class).setLevel(Level.OFF);
+        //LogManager.getLogger(DeliveryChannel.class).setLevel(Level.DEBUG);
     }
     
     protected void tearDown() throws Exception {
@@ -101,7 +101,7 @@ public abstract class AbstractEIPTest extends TestCase {
         EIPComponent eip = new EIPComponent();
         endpoint.setService(new QName(name));
         endpoint.setEndpoint("ep");
-        eip.setEndpoints(new EIPEndpoint[] { endpoint });
+        eip.setEndpoints(new EIPEndpoint[] {endpoint });
         jbi.activateComponent(eip, name);
     }
     
@@ -118,7 +118,8 @@ public abstract class AbstractEIPTest extends TestCase {
     protected static class ReturnOutComponent extends ComponentSupport implements MessageExchangeListener {
         public void onMessageExchange(MessageExchange exchange) throws MessagingException {
             if (exchange.getStatus() == ExchangeStatus.ACTIVE) {
-                boolean txSync = exchange.isTransacted() && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
+                boolean txSync = exchange.isTransacted()
+                    && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
                 if (exchange.getMessage("out") == null) {
                     NormalizedMessage out = exchange.createMessage();
                     out.setContent(createSource("<outMsg/>"));
@@ -145,15 +146,26 @@ public abstract class AbstractEIPTest extends TestCase {
     }
     
     protected static class ReturnMockComponent extends ComponentSupport implements MessageExchangeListener {
+
+        //message property (name, value) to be set on the generated message
+        public static final String PROPERTY_NAME = "ReturnMockComponentPropName";
+        public static final String PROPERTY_VALUE = "ReturnMockComponentPropValue";
+
         private String response;
+
         public ReturnMockComponent(String response) {
             this.response = response;
         }
         public void onMessageExchange(MessageExchange exchange) throws MessagingException {
             if (exchange.getStatus() == ExchangeStatus.ACTIVE) {
-                boolean txSync = exchange.isTransacted() && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
+                boolean txSync = exchange.isTransacted()
+                    && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
                 NormalizedMessage out = exchange.createMessage();
                 out.setContent(createSource(response));
+
+                //add some message properties
+                out.setProperty(PROPERTY_NAME, PROPERTY_VALUE);
+
                 exchange.setMessage(out, "out");
                 if (txSync) {
                     sendSync(exchange);
@@ -168,7 +180,8 @@ public abstract class AbstractEIPTest extends TestCase {
         public void onMessageExchange(MessageExchange exchange) throws MessagingException {
             if (exchange.getStatus() == ExchangeStatus.ACTIVE) {
                 if (exchange.getMessage("out") == null) {
-                    boolean txSync = exchange.isTransacted() && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
+                    boolean txSync = exchange.isTransacted()
+                        && Boolean.TRUE.equals(exchange.getProperty(JbiConstants.SEND_SYNC));
                     NormalizedMessage out = exchange.createMessage();
                     out.setContent(createSource("<outMsg/>"));
                     exchange.setMessage(out, "out");
