@@ -41,7 +41,7 @@ import org.apache.servicemix.store.Store;
  * full HA and recovery for clustered / persistent flows. 
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @org.apache.xbean.XBean element="wire-tap"
  *                  description="A WireTap"
  */
@@ -162,6 +162,10 @@ public class WireTap extends EIPEndpoint {
      * @see org.apache.servicemix.eip.EIPEndpoint#processSync(javax.jbi.messaging.MessageExchange)
      */
     protected void processSync(MessageExchange exchange) throws Exception {
+        if (null == target.getOperation()) {
+            //not specify operation for the target, so save the src one by default
+            target.setOperation(exchange.getOperation());
+        }
         // Create exchange for target
         MessageExchange tme = getExchangeFactory().createExchange(exchange.getPattern());
         target.configureTarget(tme, getContext());
@@ -178,7 +182,8 @@ public class WireTap extends EIPEndpoint {
             done(tme);
         } else {
             done(tme);
-            throw new IllegalStateException("Exchange status is " + ExchangeStatus.ACTIVE + " but has no Out nor Fault message");
+            throw new IllegalStateException("Exchange status is " + ExchangeStatus.ACTIVE
+                    + " but has no Out nor Fault message");
         }
     }
     
@@ -186,8 +191,12 @@ public class WireTap extends EIPEndpoint {
      * @see org.apache.servicemix.eip.EIPEndpoint#processAsync(javax.jbi.messaging.MessageExchange)
      */
     protected void processAsync(MessageExchange exchange) throws Exception {
-        if (exchange.getRole() == MessageExchange.Role.PROVIDER &&
-            exchange.getProperty(correlation) == null) {
+        if (null == target.getOperation()) {
+            //not specify operation for the target, so save the src one by default
+            target.setOperation(exchange.getOperation());
+        }
+        if (exchange.getRole() == MessageExchange.Role.PROVIDER
+            && exchange.getProperty(correlation) == null) {
             // Create exchange for target
             MessageExchange tme = getExchangeFactory().createExchange(exchange.getPattern());
             if (store.hasFeature(Store.CLUSTERED)) {
@@ -206,8 +215,8 @@ public class WireTap extends EIPEndpoint {
         } else {
             String id = (String) exchange.getProperty(correlation);
             if (id == null) {
-                if (exchange.getRole() == MessageExchange.Role.CONSUMER &&
-                    exchange.getStatus() != ExchangeStatus.ACTIVE) {
+                if (exchange.getRole() == MessageExchange.Role.CONSUMER
+                    && exchange.getStatus() != ExchangeStatus.ACTIVE) {
                     // This must be a listener status, so ignore
                     return;
                 }
@@ -232,7 +241,8 @@ public class WireTap extends EIPEndpoint {
                 store.store(exchange.getExchangeId(), exchange);
                 sendToListenerAndTarget(exchange, org, outListener, "out", isCopyProperties());
             } else {
-                throw new IllegalStateException("Exchange status is " + ExchangeStatus.ACTIVE + " but has no Out nor Fault message");
+                throw new IllegalStateException("Exchange status is " + ExchangeStatus.ACTIVE
+                        + " but has no Out nor Fault message");
             }
         }
     }
@@ -241,7 +251,7 @@ public class WireTap extends EIPEndpoint {
                                          MessageExchange dest, 
                                          ExchangeTarget listener,
                                          String message,
-                                         boolean copyProperties) throws Exception {
+                                         boolean copy) throws Exception {
         if (listener != null) {
             NormalizedMessage msg = MessageUtil.copy(source.getMessage(message));
             InOnly lme = getExchangeFactory().createInOnlyExchange();
@@ -252,13 +262,13 @@ public class WireTap extends EIPEndpoint {
             MessageUtil.transferToIn(msg, lme);
             send(lme);
             MessageUtil.transferTo(msg, dest, message);
-            if (copyProperties) {
+            if (copy) {
                 copyExchangeProperties(dest, "in", message);
             }
             send(dest);
         } else {
             MessageUtil.transferTo(source, dest, message);
-            if (copyProperties) {
+            if (copy) {
                 copyExchangeProperties(dest, "in", message);
             }
             send(dest);
@@ -269,7 +279,7 @@ public class WireTap extends EIPEndpoint {
                                              MessageExchange dest, 
                                              ExchangeTarget listener,
                                              String message,
-                                             boolean copyProperties) throws Exception {
+                                             boolean copy) throws Exception {
         if (listener != null) {
             NormalizedMessage msg = MessageUtil.copy(source.getMessage(message));
             InOnly lme = getExchangeFactory().createInOnlyExchange();
@@ -280,13 +290,13 @@ public class WireTap extends EIPEndpoint {
             MessageUtil.transferToIn(msg, lme);
             sendSync(lme);
             MessageUtil.transferTo(msg, dest, message);
-            if (copyProperties) {
+            if (copy) {
                 copyExchangeProperties(dest, "in", message);
             }
             sendSync(dest);
         } else {
             MessageUtil.transferTo(source, dest, message);
-            if (copyProperties) {
+            if (copy) {
                 copyExchangeProperties(dest, "in", message);
             }
             sendSync(dest);

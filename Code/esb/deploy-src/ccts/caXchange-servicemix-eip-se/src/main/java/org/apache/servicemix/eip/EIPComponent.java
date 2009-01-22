@@ -22,7 +22,7 @@ import org.apache.servicemix.common.DefaultComponent;
 
 /**
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @org.apache.xbean.XBean element="component"
  *                  description="An EIP component"
  */
@@ -81,7 +81,7 @@ public class EIPComponent extends DefaultComponent {
     }
 
     protected Class[] getEndpointClasses() {
-        return new Class[] { EIPEndpoint.class };
+        return new Class[] {EIPEndpoint.class };
     }
 
 }

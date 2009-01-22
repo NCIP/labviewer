@@ -23,7 +23,7 @@ package org.apache.servicemix.eip.support;
  * the given MessageExchange.
  *  
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @org.apache.xbean.XBean element="routing-rule" 
  */
 public class RoutingRule {

@@ -20,10 +20,10 @@ import javax.jbi.messaging.MessageExchange;
 
 /**
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface Predicate {
 
-    public boolean matches(MessageExchange exchange);
+    boolean matches(MessageExchange exchange);
 
 }
