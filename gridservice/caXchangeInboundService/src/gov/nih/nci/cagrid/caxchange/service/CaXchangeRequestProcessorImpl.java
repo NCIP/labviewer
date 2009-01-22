@@ -81,6 +81,7 @@ public class CaXchangeRequestProcessorImpl extends CaXchangeRequestProcessorImpl
   		  if ((caller == null) || (caller.equals("<anonymous>"))) {
   			updateErrorResponse(caXchangeRequestMessage, resKey, CaxchangeErrors.PERMISSION_DENIED_FAULT, "Unable to get the identity of the caller.Caller identity:"+caller);
 		  }
+  		  logger.debug("Sending message for the caller:"+caller);
           caXchangeRequestMessage.getMetadata().getCredentials().setGridIdentifier(caller);
           try { //Sending the request to the caXchange inbound queue
         	 logger.info("Before sending messge "+new Date().getTime());
