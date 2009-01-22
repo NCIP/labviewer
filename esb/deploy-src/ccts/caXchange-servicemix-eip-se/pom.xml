@@ -31,7 +31,7 @@
   <artifactId>caXchange-servicemix-eip-se</artifactId>  
   <packaging>jbi-component</packaging>
   <name>ServiceMix :: EIP customized for CaXchange</name>
-  <version>3.3</version>
+  <version>1.5</version>
   <description>EIP Service Engine</description>
   
     
