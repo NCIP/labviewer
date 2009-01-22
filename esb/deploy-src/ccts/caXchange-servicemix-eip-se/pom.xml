@@ -22,170 +22,74 @@
 
   
   <parent>
-      <groupId>org.apache.servicemix</groupId>
-      <artifactId>components-pom</artifactId>
-      <version>1</version>
+    <groupId>org.apache.servicemix</groupId>
+    <artifactId>common</artifactId>
+    <version>3.3</version>
   </parent>
     
   <groupId>gov.nih.nci.caxchange</groupId>
   <artifactId>caXchange-servicemix-eip-se</artifactId>  
   <packaging>jbi-component</packaging>
   <name>ServiceMix :: EIP customized for CaXchange</name>
-  <version>1.5</version>
-
+  <version>3.3</version>
   <description>EIP Service Engine</description>
   
-  <scm> 
-     <connection>
-        scm:svn:http://svn.apache.org/repos/asf/servicemix/components/engines/servicemix-eip/tags/servicemix-eip-2008.01
-     </connection>
-     <developerConnection>
-        scm:svn:https://svn.apache.org/repos/asf/servicemix/components/engines/servicemix-eip/tags/servicemix-eip-2008.01
-     </developerConnection>
-     <url>
-        http://svn.apache.org/viewcvs.cgi/servicemix/components/engines/servicemix-eip/tags/servicemix-eip-2008.01
-     </url>
-  </scm>
-  
-  <properties>
-  	<previous.releases>3.1.2,3.2,3.2.1</previous.releases>
-  	<servicemix-version>3.2.1</servicemix-version>
-  	<servicemix-shared-version>2008.01</servicemix-shared-version>
-  	<servicemix.osgi.import>  
-  			org.apache.commons.jexl*;resolution:=optional,
-			        org.apache.servicemix;resolution:=optional,
-			        org.apache.servicemix.client*;resolution:=optional,
-			        org.apache.servicemix.common,
-			        org.apache.servicemix.common.osgi,
-			        org.apache.servicemix.components*;resolution:=optional,
-			        org.apache.servicemix.executors.impl,
-			        org.apache.servicemix.expression*;resolution:=optional,
-			        org.apache.servicemix.jbi*;resolution:=optional,
-			        org.apache.xbean.spring.context.v2,
-			        org.springframework.beans.factory.xml,*    
-  	</servicemix.osgi.import>
-  	<servicemix.osgi.export>
-  
-  			org.apache.servicemix.eip*;version=${project.version},
-  			META-INF.services.org.apache.xbean.spring.http.servicemix.apache.org.eip
-  		
-  	</servicemix.osgi.export>
-  	<servicemix.osgi.bundles>
-  
-  			org.springframework.bundle.spring.core,
-  			org.springframework.bundle.spring.beans,
-  			org.springframework.bundle.spring.context,
-  		
-  	</servicemix.osgi.bundles>
-  </properties>
-  
+    
   <dependencies>
 
     <dependency>
       <groupId>org.apache.servicemix</groupId>
-      <artifactId>servicemix-shared</artifactId>
-      <version>${servicemix-shared-version}</version>
-    </dependency>
-    <!--
-    <dependency>
-      <groupId>org.apache.servicemix</groupId>
-      <artifactId>servicemix-services</artifactId>
-      <scope>provided</scope>
-    </dependency>
-	-->
-    <dependency>
-      <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-core</artifactId>
-	  <version>${servicemix-version}</version>
+      <version>3.3</version>
       <scope>provided</scope>
-      <exclusions>
-         <exclusion>
-      	 <groupId>org.springframework</groupId>
-      	 <artifactId>spring-jmx</artifactId>
-      	</exclusion>
-      </exclusions>
+    </dependency>
+     <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <scope>provided</scope>
+    </dependency>
+      <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.13</version>
+            <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.servicemix</groupId>
-      <artifactId>servicemix-jbi</artifactId>
-      <!--<version>${servicemix-version}</version>-->
-	  <version>3.2.3</version>
-    </dependency> 
-	<!--
+      <groupId>gov.nih.nci.caxchange</groupId>
+      <artifactId>caXchange-common-jar</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
+    </dependency>    
     <dependency>
-      <groupId>org.apache.servicemix</groupId>
-      <artifactId>jbi</artifactId>
-      <version>${servicemix-version}</version>
-    </dependency>
-	   
-    <dependency>
-              <groupId>org.apache.xbean</groupId> 
-              <artifactId>xbean-spring</artifactId> 
-              <version>3.0.1</version> 
-    </dependency>
-    -->  
-    <dependency>
-                  <groupId>backport-util-concurrent</groupId> 
-                  <artifactId>backport-util-concurrent</artifactId> 
-                  <version>2.2</version>    
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-ra</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.apache.servicemix.specs</groupId>
-    <artifactId>org.apache.servicemix.specs.jbi-api-1.0</artifactId>
-    <scope>provided</scope>
-</dependency>
-	<dependency>
-	  <groupId>commons-logging</groupId>
-	  <artifactId>commons-logging</artifactId>
-	  <scope>provided</scope>
-	</dependency>
-	  <dependency>
-		<groupId>log4j</groupId>
-		<artifactId>log4j</artifactId>
-		<version>1.2.13</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.apache.activemq</groupId>
-	  <artifactId>activemq-ra</artifactId>
-	  <version>5.1.0</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>tranql</groupId>
-	  <artifactId>tranql-connector</artifactId>
-	  <version>1.2</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.apache.derby</groupId>
-	  <artifactId>derby</artifactId>
-	  <version>10.4.1.3</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	<groupId>org.jencks</groupId>
-	<artifactId>jencks</artifactId>
-	<version>2.1</version>
-	<scope>test</scope>
-</dependency>
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-jms</artifactId>
-	  <version>${spring-version}</version>
-	  <scope>provided</scope>
-	</dependency>
-	<dependency>
-		<groupId>org.apache.geronimo.specs</groupId>
-		<artifactId>geronimo-jta_1.1_spec</artifactId>
-		<version>1.1</version>
-		<scope>provided</scope>
-	</dependency>
-	<dependency>
-	  <groupId>gov.nih.nci.caxchange</groupId>
-	  <artifactId>caXchange-common-jar</artifactId>
-	  <version>${project.version}</version>
-	  <scope>compile</scope>
+      <groupId>tranql</groupId>
+      <artifactId>tranql-connector</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit-version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -195,6 +99,7 @@
           <groupId>org.apache.servicemix.tooling</groupId>
           <artifactId>jbi-maven-plugin</artifactId>
           <configuration>
+            <version>3.3</version>
             <type>service-engine</type>
             <bootstrap>org.apache.servicemix.eip.EIPBootstrap</bootstrap>
             <component>org.apache.servicemix.eip.EIPComponent</component>
@@ -223,9 +128,10 @@
 	    <excludes>
 	       <!-- exclude abstract test cases -->
 	       <exclude>**/Abstract*.*</exclude>
+	       <exclude>**/Deploy*.*</exclude>
 	    </excludes>  
           </configuration>
-        </plugin>
+        </plugin>    
       </plugins>
   </build>
 

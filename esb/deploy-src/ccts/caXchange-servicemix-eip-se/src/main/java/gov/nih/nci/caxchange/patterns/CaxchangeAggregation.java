@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package gov.nih.nci.caxchange.patterns;
 
 import java.util.ArrayList;
@@ -12,27 +28,28 @@ import javax.jbi.messaging.NormalizedMessage;
  *
  */
 public class CaxchangeAggregation {
-    protected int count=0;
+    protected int count = 0 + 0;
     protected List messages;
     protected String correlationId;
     //This is the set of service identifiers from which exchanges are expected.
-    protected Set exchangesToReceive = null;    
-    public Set getExchangesToReceive() {
-		return exchangesToReceive;
-	}
-
-	public void setExchangesToReceive(Set exchangesToReceive) {
-		this.exchangesToReceive = exchangesToReceive;
-	}
-
-	/**
+    protected Set exchangesToReceive;    
+    
+    /**
      * Constructor for the class 
      * @param correlationId
      */
     public CaxchangeAggregation(String correlationId) {
-       this.correlationId = correlationId;
+        this.correlationId = correlationId;
     }
     
+    public Set getExchangesToReceive() {
+        return exchangesToReceive;
+    }
+
+    public void setExchangesToReceive(Set exchangesToReceive) {
+        this.exchangesToReceive = exchangesToReceive;
+    }
+   
     /**
      * Sets the correlation Id
      * @param correlationId
@@ -84,7 +101,7 @@ public class CaxchangeAggregation {
      * @throws
      */
     public boolean isAggregationComplete() {
-        if ((messages!=null)&&(count==messages.size())) {
+        if ((messages != null) && (count == messages.size())) {
             return true;
         }
         return false;

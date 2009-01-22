@@ -20,7 +20,7 @@ package org.apache.servicemix.eip;
  * MBean interface for the EIP component configuration
  * 
  * @author gnodet
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface EIPConfigurationMBean {
 

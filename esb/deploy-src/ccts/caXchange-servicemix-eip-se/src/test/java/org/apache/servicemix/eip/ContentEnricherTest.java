@@ -23,11 +23,12 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.xml.namespace.QName;
 import javax.xml.transform.dom.DOMSource;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import org.apache.servicemix.eip.patterns.ContentEnricher;
 import org.apache.servicemix.jbi.util.DOMUtil;
 import org.apache.servicemix.tck.ReceiverComponent;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 public class ContentEnricherTest extends AbstractEIPTest {
 
@@ -91,5 +92,37 @@ public class ContentEnricherTest extends AbstractEIPTest {
 
         assertEquals(ExchangeStatus.ERROR, me.getStatus());
 
+    }
+
+    public void testMsgProperties() throws Exception {
+
+        String propName1 = "propName1";
+        String propName2 = "propName2";
+        String propVal1 = "propVal1";
+        String propVal2 = "propVal2";
+
+        enricher.setCopyProperties(true);
+        
+        activateComponent(new ReturnMockComponent("<helloMock/>"), "enricherTarget");
+
+        ReceiverComponent rec = activateReceiver("target");
+
+        InOnly me = client.createInOnlyExchange();
+
+        me.setService(new QName("enricher"));
+        me.getInMessage().setContent(createSource("<hello/>"));
+        me.getInMessage().setProperty(propName1, propVal1);
+        me.getInMessage().setProperty(propName2, propVal2);
+        client.sendSync(me);
+                
+        NormalizedMessage msg = (NormalizedMessage) rec.getMessageList()
+            .getMessages().get(0);
+
+        //assertions
+        assertEquals(ExchangeStatus.DONE, me.getStatus());
+        assertEquals(1, rec.getMessageList().getMessageCount());
+        assertEquals(propVal1, msg.getProperty(propName1));
+        assertEquals(propVal2, msg.getProperty(propName2));
+        assertEquals(ReturnMockComponent.PROPERTY_VALUE, msg.getProperty(ReturnMockComponent.PROPERTY_NAME));
     }
 }

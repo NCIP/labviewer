@@ -18,15 +18,15 @@ package org.apache.servicemix.eip;
 
 import org.apache.activemq.broker.BrokerService;
 
-
 public class WireTapJmsFlowTest extends WireTapTest {
 
     protected BrokerService broker;
+    private String jmsURL;
     
     protected void setUp() throws Exception {
         broker = new BrokerService();
         broker.setPersistent(false);
-        broker.addConnector("tcp://localhost:61616");
+        jmsURL = broker.addConnector("tcp://localhost:0").getUri().toString();
         broker.start();
         
         super.setUp();
@@ -38,7 +38,7 @@ public class WireTapJmsFlowTest extends WireTapTest {
     }
     
     protected void configureContainer() throws Exception {
-        jbi.setFlowName("jms?jmsURL=tcp://localhost:61616");
+        jbi.setFlowName("jms?jmsURL=" + jmsURL);
     }
     
 }
