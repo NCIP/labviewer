@@ -18,7 +18,7 @@ import gov.nih.nci.ctom.ctlab.domain.Identifier;
 import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
-import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 
 import java.rmi.RemoteException;
 import java.sql.Connection;
@@ -41,7 +41,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	private static final int THRESHOLD_MINUTE = 1;
 	private static final Logger logger = Logger.getLogger(LabViewerRegistrationConsumer.class);
 	private HashMap<String,ParticipantPersistTime> map = new HashMap<String,ParticipantPersistTime>();
-	private CTLabDAO dao = new CTLabDAO();
+	private ProtocolHandler dao = new ProtocolHandler();
 	private Connection con;
 	
 	/**
@@ -75,10 +75,12 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		ParticipantType participant = registration.getParticipant();
 		String participantGridId = participant.getGridId();
 		String participantExtension = participant.getIdentifier(0).getValue();
+		//obtain Connection
 		 con = dao.getConnection();
 		 //method returns the ctominsertdate if the participantGridId is found in the database
 		 try
 			{ 
+			 	//check if Participant exists for rollback
 				java.util.Date insertdate = dao.checkParticipantForRollback(con,participantGridId, participantExtension);
 				if(insertdate!=null)
 				{	
@@ -89,6 +91,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				
 					if( insertdate.before(currdate) && diffInMin < THRESHOLD_MINUTE )
 					{	
+						//issue Participant roll back
 						dao.rollbackParticipant(con, participantGridId,participantExtension);
 						logger.info("deleted participant");
 					}else {
@@ -100,6 +103,8 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 					InvalidRegistrationException ire = new InvalidRegistrationException();
 					ire.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
 					logger.fatal(ire);
+					throw(ire);					
+					
 				}
 			}
 			catch(SQLException se)
@@ -146,14 +151,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		else
 		{
 			logger.info("User " + username);
-			
+			//call the LabViewer Authorization Helper
 			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
 			if(username!=null){
 				int beginIndex = username.lastIndexOf("=");
 				int endIndex = username.length();
 				user = username.substring(beginIndex+1, endIndex);
 				}
-			
+			//check if authorized
 			boolean authorized = lvaHelper.isAuthorized(user);
 			
 			if (!authorized)
@@ -252,21 +257,23 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				healthCare.setStudyParticipantAssignment(studyPartAssig);
 				protocol.setHealthCareSite(healthCare);
 				protocol.setCtomInsertDt(now);
+				//obtain Connection
 				con = dao.getConnection();
 				logger.info("Lab Viewer Registration message validated");
 				
 				try
 				{
 					//Perform the check to see if the patient exists - Demo case where labs are loaded prior to registering a patient.
-					 
 					Long spaid = dao.checkParticipantExists(con,protocol,mrn);
 					if(spaid!=null){
 					//	protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().setRoot(root);
-						System.out.println(protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().getRoot());
+						logger.debug(protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().getRoot());
+						//update Participant Grid Id
 						dao.updateParticipantGridId(con,registration.getGridId(),spaid,mrn);
 					}
 					else{
-					dao.saveProtocol(con, protocol);
+						//Save Protocol.
+						dao.persist(con, protocol);
 					}
 				}catch (SQLException e)
 				{
