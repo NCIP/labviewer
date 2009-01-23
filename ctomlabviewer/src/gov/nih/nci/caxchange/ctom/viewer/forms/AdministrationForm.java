@@ -78,159 +78,158 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import java.util.Date;
+package gov.nih.nci.caxchange.ctom.viewer.forms;
 
+import javax.servlet.http.HttpServletRequest;
+
+import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+
+/**
+ * The AdmininstrationForm is the class for Admin configuration.
+ * 
+ * @author asharma
+ */
 /**
  * @author asharma
  */
-public class LabViewerStatus
+public class AdministrationForm extends ActionForm implements
+		BaseAssociationForm
 {
 
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
+	private String caxUrl;
 
-	/**
-	 * @return the id
+	private String caaersUrl;
+
+	private String c3dUrl;
+
+	private String tissueUrl;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseDBForm#resetForm()
 	 */
-	public Integer getId()
+	public void resetForm()
 	{
-		return id;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseAssociationForm#getAssociatedIds()
+	 */
+	public String[] getAssociatedIds()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseDBForm#getFormName()
+	 */
+	public String getFormName()
+	{
+		return DisplayConstants.ADMIN_ID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping,
+	 *      javax.servlet.http.HttpServletRequest)
+	 */
+	public ActionErrors validate(ActionMapping mapping,
+			HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
+		if (errors == null)
+			errors = new ActionErrors();
+
+		if ((getCaxUrl() == null) || (getCaxUrl().length() < 1))
+			errors.add("caXchangeURL", new ActionError(
+					"error.caXchangeURL.value"));
+		if ((getCaaersUrl() == null) || (getCaaersUrl().length() < 1))
+			errors.add("caaersURL", new ActionError("error.caaersUrl.value"));
+
+		return errors;
+
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @return the caxUrl
 	 */
-	public void setId(Integer id)
+	public String getCaxUrl()
 	{
-		this.id = id;
+		return caxUrl;
 	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * @param caxUrl
+	 *            the caxUrl to set
 	 */
-	public String isAdverseEventIndicator()
+	public void setCaxUrl(String caxUrl)
 	{
-		return adverseEventIndicator;
+		this.caxUrl = caxUrl;
 	}
 
 	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
+	 * @return the caaersUrl
 	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
+	public String getCaaersUrl()
 	{
-		this.adverseEventIndicator = adverseEventIndicator;
+		return caaersUrl;
 	}
 
 	/**
-	 * @return the adverseEventSentDate
+	 * @param caaersUrl
+	 *            the caaersUrl to set
 	 */
-	public Date getAdverseEventSentDate()
+	public void setCaaersUrl(String caaersUrl)
 	{
-		return adverseEventSentDate;
+		this.caaersUrl = caaersUrl;
 	}
 
 	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
+	 * @return the c3dUrl
 	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
+	public String getC3dUrl()
 	{
-		this.adverseEventSentDate = adverseEventSentDate;
+		return c3dUrl;
 	}
 
 	/**
-	 * @return the cdmsIndicator
+	 * @param url
+	 *            the c3dUrl to set
 	 */
-	public String isCdmsIndicator()
+	public void setC3dUrl(String url)
 	{
-		return cdmsIndicator;
+		c3dUrl = url;
 	}
 
 	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
+	 * @return the tissueUrl
 	 */
-	public void setCdmsIndicator(String cdmsIndicator)
+	public String getTissueUrl()
 	{
-		this.cdmsIndicator = cdmsIndicator;
+		return tissueUrl;
 	}
 
 	/**
-	 * @return the cdmsSentDate
+	 * @param tissueUrl
+	 *            the tissueUrl to set
 	 */
-	public Date getCdmsSentDate()
+	public void setTissueUrl(String tissueUrl)
 	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
+		this.tissueUrl = tissueUrl;
 	}
 
 }

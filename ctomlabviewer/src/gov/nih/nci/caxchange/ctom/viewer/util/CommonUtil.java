@@ -78,159 +78,137 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
+package gov.nih.nci.caxchange.ctom.viewer.util;
 
-import java.util.Date;
+import gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction;
+import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
+import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author asharma
  */
-public class LabViewerStatus
+public class CommonUtil
 {
-
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
+	private static final String CONFIG_FILE_1 = "/baseURL.properties";
+	private static final String CONFIG_FILE_2 = "/labviewer.properties";
+	private static final Logger log = Logger.getLogger(CommonUtil.class);
 
 	/**
-	 * @return the id
+	 * Get the properties from properties file
+	 * 
+	 * @param session
 	 */
-	public Integer getId()
+	public void getProperties(HttpSession session)
 	{
-		return id;
+		
+		try
+		{
+			Properties props1 = new Properties();
+			InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_1);
+			props1.load(stream);
+					
+			String caAERSurl = (String) props1.getProperty("BaseURLcaAERS");
+			String c3prurl = (String) props1.getProperty("BaseURLC3PR");
+			String C3Durl = (String)props1.getProperty("BaseURLC3D");
+			String url = (String) props1.getProperty("url");
+			
+			session.setAttribute("BaseURLcaAERS", caAERSurl);
+			session.setAttribute("BaseURLC3PR", c3prurl);
+			session.setAttribute("caXchangeURL", url);
+			session.setAttribute("BaseURLC3D", C3Durl);
+		}
+		catch (FileNotFoundException e1)
+		{
+			log.error("The config file not found: " + CONFIG_FILE_1);
+		}
+		catch (IOException e1)
+		{
+			log.error("Error reading the config file: " + CONFIG_FILE_1);
+		}
+		
+		try
+		{
+			Properties props = new Properties();
+			InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_2);
+			props.load(stream);
+			String testEnabled = (String) props.getProperty("testEnabled");
+			session.setAttribute("testEnabled", testEnabled);
+			String webssoEnabled = (String) props.getProperty("websso.enabled");
+			session.setAttribute("webssoEnabled", webssoEnabled);
+			String webssoCasServer =
+					(String) props.getProperty("websso.cas.server");
+			session.setAttribute("webssoCasServer", webssoCasServer);
+			String version = (String) props.getProperty("version");
+			session.setAttribute("version", version);
+			// hotlink type can be _blank,_self,${hotLink_NAME}:value set in
+			// properties file
+			String hotLinkType = (String) props.getProperty("hotLink_Type");
+			session.setAttribute("hotLinkType", hotLinkType);
+			String propertyFilePath = (String) props.getProperty("propertyFilePath");
+			session.setAttribute("propertyFilePath", propertyFilePath);
+
+
+		}
+		catch (FileNotFoundException e1)
+		{
+			log.error("The config file not found: " + CONFIG_FILE_2);
+		}
+		catch (IOException e1)
+		{
+			log.error("Error reading the config file: " + CONFIG_FILE_2);
+		}
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param session
+	 * @return
 	 */
-	public void setId(Integer id)
+	public String checkUserLogin(HttpSession session)
 	{
-		this.id = id;
+		String userEmail = null;
+		// If logged in via WEBSSO
+		String gridIDentity =
+				(String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
+		if (gridIDentity != null)
+		{
+			int beginIndex = gridIDentity.lastIndexOf("=");
+			int endIndex = gridIDentity.length();
+			userEmail = gridIDentity.substring(beginIndex + 1, endIndex);
+		}
+		// if logged in via CSM
+		if (userEmail == null)
+		{
+			LoginForm loginForm =
+					(LoginForm) session
+							.getAttribute(DisplayConstants.LOGIN_OBJECT);
+			if (loginForm != null)
+			{
+				userEmail = loginForm.getLoginId();
+			}
+
+		}
+		return userEmail;
 	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * @param session
 	 */
-	public String isAdverseEventIndicator()
+	public void clearSessionData(HttpSession session)
 	{
-		return adverseEventIndicator;
-	}
-
-	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
-	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
-	{
-		this.adverseEventIndicator = adverseEventIndicator;
-	}
-
-	/**
-	 * @return the adverseEventSentDate
-	 */
-	public Date getAdverseEventSentDate()
-	{
-		return adverseEventSentDate;
-	}
-
-	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
-	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
-	{
-		this.adverseEventSentDate = adverseEventSentDate;
-	}
-
-	/**
-	 * @return the cdmsIndicator
-	 */
-	public String isCdmsIndicator()
-	{
-		return cdmsIndicator;
-	}
-
-	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
-	 */
-	public void setCdmsIndicator(String cdmsIndicator)
-	{
-		this.cdmsIndicator = cdmsIndicator;
-	}
-
-	/**
-	 * @return the cdmsSentDate
-	 */
-	public Date getCdmsSentDate()
-	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
+		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
+		session.removeAttribute(DisplayConstants.CURRENT_FORM);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 	}
 
 }

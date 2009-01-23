@@ -78,159 +78,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import java.util.Date;
+package gov.nih.nci.caxchange.ctom.viewer.junits.actions;
 
-/**
- * @author asharma
- */
-public class LabViewerStatus
+import static org.junit.Assert.*;
+import junit.framework.TestCase;
+
+import org.junit.Test;
+
+public class HappyActionTest extends TestCase
 {
-
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
-
-	/**
-	 * @return the id
-	 */
-	public Integer getId()
+	public HappyActionTest()
 	{
-		return id;
 	}
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id)
+	public HappyActionTest(String name)
 	{
-		this.id = id;
+		super(name);
 	}
 
-	/**
-	 * @return the adverseEventIndicator
-	 */
-	public String isAdverseEventIndicator()
+	protected void setUp() throws Exception
 	{
-		return adverseEventIndicator;
 	}
 
-	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
-	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
+	protected void tearDown() throws Exception
 	{
-		this.adverseEventIndicator = adverseEventIndicator;
-	}
 
-	/**
-	 * @return the adverseEventSentDate
-	 */
-	public Date getAdverseEventSentDate()
-	{
-		return adverseEventSentDate;
-	}
-
-	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
-	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
-	{
-		this.adverseEventSentDate = adverseEventSentDate;
-	}
-
-	/**
-	 * @return the cdmsIndicator
-	 */
-	public String isCdmsIndicator()
-	{
-		return cdmsIndicator;
-	}
-
-	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
-	 */
-	public void setCdmsIndicator(String cdmsIndicator)
-	{
-		this.cdmsIndicator = cdmsIndicator;
-	}
-
-	/**
-	 * @return the cdmsSentDate
-	 */
-	public Date getCdmsSentDate()
-	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
 	}
 
 }
