@@ -78,164 +78,88 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
-import java.util.Date;
-
-public class Identifier
+/**
+ * HL7V3MessageHandlerFactory creates the handlers for persisting different
+ * objects in HL7V3 message
+ * 
+ * @author asharma
+ */
+public class HL7V3MessageHandlerFactory
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
+	private static final HL7V3MessageHandlerFactory hl7v3factory =
+			new HL7V3MessageHandlerFactory();
 
-	public void setAssigningAuthorityName(String assigningAuthorityName)
+	/**
+	 * Singleton private constructor
+	 */
+	private HL7V3MessageHandlerFactory()
 	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
 
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
 	}
 
 	/**
-	 * @return the ctomInsertDate
+	 * Returns the instance of HL7V3MessageHandlerFactory 
+	 * @return
 	 */
-	public Date getCtomInsertDate()
+	public static HL7V3MessageHandlerFactory getInstance()
 	{
-		return ctomInsertDate;
+		return hl7v3factory;
 	}
 
 	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
+	 * Returns handlers for persisting different objects in HL7V3 message
+	 * based on the string type passed in as parameter. 
+	 * @param type 
+	 * @return
 	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
+	public HL7V3MessageHandler getHandler(String type)
 	{
-		this.ctomInsertDate = ctomInsertDate;
+		switch (HandlerConstants.handleName(type))
+		{
+		case ACTIVITY:
+			return new ActivityHandler();
+		case CENTRALLABORATORY:
+			return new CentralLaboratoryHandler();
+		case CLINICALRESULT:
+			return new ClinicalResultHandler();
+		case HEALTHCARESITE:
+			return new HealthCareSiteHandler();
+		case HEALTHCARESITEPARTICIPANT:
+			return new HealthCareSiteParticipantHandler();
+		case PROTOCOLIDENTIFIER:
+			return new ProtocolIdentifierHandler();
+		case PARTICIPANTIDENTIFIER:
+			return new ParticipantIdentifierHandler();
+		case SPAIDENTIFIER:
+			return new SPAIdentifierHandler();
+		case INVESTIGATOR:
+			return new InvestigatorHandler();
+		case OBSERVATION:
+			return new ObservationHandler();
+		case PARTICIPANT:
+			return new ParticipantHandler();
+		case PERFORMINGLABORATORY:
+			return new PerformingLaboratoryHandler();
+		case PROCEDURE:
+			return new ProcedureHandler();
+		case PROTOCOL:
+			return new ProtocolHandler();
+		case PROTOCOLSTATUS:
+			return new ProtocolStatusHandler();
+		case SPECIMENCOLLECTION:
+			return new SpecimenCollectionHandler();
+		case SPECIMEN:
+			return new SpecimenHandler();
+		case STUDYPARTICIPANTASSIGNMENT:
+			return new StudyParticipantAssignmentHandler();
+		case STUDYTIMEPOINT:
+			return new StudyTimePointHandler();
+		default:
+			return null;
+		}
 	}
 
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }
