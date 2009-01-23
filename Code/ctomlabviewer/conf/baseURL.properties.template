@@ -2,9 +2,4 @@
 BaseURLcaAERS=@BaseURLcaAERS@
 BaseURLC3D=@BaseURLC3D@
 BaseURLC3PR=@BaseURLC3PR@
-hotLink_Type=@hotLink_Type@
-testEnabled=@testEnabled@
-SmokeTestGridURL=@SmokeTestGridURL@
-websso.enabled=@websso.enabled@
-websso.cas.server=@websso.cas.server@
-version=@version@
+url=@loadLabURLS@
