@@ -78,159 +78,146 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import java.util.Date;
+package gov.nih.nci.caxchange.ctom.viewer.actions;
+
+import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
+import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
+import gov.nih.nci.caxchange.ctom.viewer.forms.AdministrationForm;
+import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.logging.api.user.UserInfoHelper;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 /**
+ * This class Saves the Lab data Search results to a CSV file. It checks if
+ * valid login information is in session; if not it redirects the user to login
+ * page.
+ * 
  * @author asharma
  */
-public class LabViewerStatus
+public class SaveAdminConfgAction extends Action
 {
+	private static final Logger logDB =
+			Logger.getLogger(SaveAdminConfgAction.class);
+	private static final String CONFIG_FILE = "baseURL.properties";
 
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
-
-	/**
-	 * @return the id
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
+	 *      org.apache.struts.action.ActionForm,
+	 *      javax.servlet.http.HttpServletRequest,
+	 *      javax.servlet.http.HttpServletResponse)
 	 */
-	public Integer getId()
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		return id;
+		ActionErrors errors = new ActionErrors();
+		ActionMessages messages = new ActionMessages();
+		
+		HttpSession session = request.getSession();
+		AdministrationForm aForm = (AdministrationForm) form;
+
+		// if the session is new or the login object is null; redirects the user
+		// to login page
+		if (session.isNew()
+				|| (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null))
+		{
+			logDB
+					.error("No Session or User Object Forwarding to the Login Page");
+			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
+		}
+
+		String username =
+				((LoginForm) session
+						.getAttribute(DisplayConstants.LOGIN_OBJECT))
+						.getLoginId();
+
+		UserInfoHelper.setUserInfo(username, session.getId());
+
+		try
+		{
+			saveToPropertiesFile(aForm,session);
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					DisplayConstants.MESSAGE_ID,
+					"Configuration Saved Successfully"));
+			saveMessages(request, messages);
+			logDB.info(new ActionMessage(DisplayConstants.MESSAGE_ID,
+					"Configuration Saved Successfully"));
+
+		}
+		catch (Exception cse)
+		{
+			String msg = cse.getMessage();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					DisplayConstants.ERROR_ID,
+					"Error in Saving Configuration: " + msg));
+			saveErrors(request, errors);
+			logDB.error("Error saving lConfiguration", cse);
+		}
+		session.setAttribute(DisplayConstants.CURRENT_FORM, aForm);
+
+		// if the login is valid and the selected form data is successfully
+		// saved to a csv file;
+		// it returns to the search results page and displays the save
+		// successful message
+		return (mapping.findForward(ForwardConstants.UPDATE_SUCCESS));
 	}
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Integer id)
-	{
-		this.id = id;
-	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * Saves the Properties updated/entered by the user
+	 * @param aForm
+	 * @param session
 	 */
-	public String isAdverseEventIndicator()
+	private void saveToPropertiesFile(AdministrationForm aForm,HttpSession session)
 	{
-		return adverseEventIndicator;
-	}
-
-	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
-	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
-	{
-		this.adverseEventIndicator = adverseEventIndicator;
-	}
-
-	/**
-	 * @return the adverseEventSentDate
-	 */
-	public Date getAdverseEventSentDate()
-	{
-		return adverseEventSentDate;
-	}
-
-	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
-	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
-	{
-		this.adverseEventSentDate = adverseEventSentDate;
-	}
-
-	/**
-	 * @return the cdmsIndicator
-	 */
-	public String isCdmsIndicator()
-	{
-		return cdmsIndicator;
-	}
-
-	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
-	 */
-	public void setCdmsIndicator(String cdmsIndicator)
-	{
-		this.cdmsIndicator = cdmsIndicator;
-	}
-
-	/**
-	 * @return the cdmsSentDate
-	 */
-	public Date getCdmsSentDate()
-	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
+		try
+		{
+			//get the path of the BaseURL properties file from the session
+			String path = (String) session.getAttribute("propertyFilePath");
+			
+			File file = new File(session.getServletContext().getRealPath(path));
+			Properties propsToUpdate = new Properties();
+			propsToUpdate.put("BaseURLcaAERS", aForm.getCaaersUrl());
+			propsToUpdate.put("BaseURLC3D", aForm.getC3dUrl());
+			propsToUpdate.put("BaseURLC3PR", aForm.getTissueUrl());
+			propsToUpdate.put("url", aForm.getCaxUrl());
+			OutputStream oStream =
+					new BufferedOutputStream(new FileOutputStream(file));
+			propsToUpdate.store(oStream, "");
+			oStream.close();
+		}
+		catch (FileNotFoundException e1)
+		{
+			logDB.error("The config file not found: " + CONFIG_FILE);
+		}
+		catch (IOException e1)
+		{
+			logDB.error("Error writing to the config file: " + CONFIG_FILE);
+		}
 	}
 
 }
