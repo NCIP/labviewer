@@ -78,164 +78,125 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
-import java.util.Date;
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
-public class Identifier
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.apache.log4j.Logger;
+
+/**
+ * StudyParticipantAssignmentHandler persists Study Participant Assignment to
+ * CTODS database
+ * 
+ * @author asharma
+ */
+public class StudyParticipantAssignmentHandler extends CTLabDAO implements
+		HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
 
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		logger.debug("Saving the StudyParticipantAssignment");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long spaId = null;
+		boolean identifierUpdInd = false;
+		// retrieve the SPA from protocol
+		StudyParticipantAssignment spa =
+				protocol.getHealthCareSite().getStudyParticipantAssignment();
+		Long ssId = spa.getStudySiteId();
+		try
+		{
+			ps =
+					con
+							.prepareStatement("select spa.id from STUDY_PARTICIPANT_ASSIGNMENT spa, identifier ii where ii.STUDY_PARTICIPANT_ASSIGNMNT_ID = spa.id AND spa.STUDY_SITE_ID = ? AND ii.extension=?");
+			ps.setLong(1, ssId);
+			ps.setString(2, spa.getIdentifier().getExtension());
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				spaId = rs.getLong(1);
+			}
+			else
+			{
+				// Check study participant identifier, if it exists, then don't
+				// insert new SPA or Participant
+
+				HL7V3MessageHandlerFactory.getInstance().getHandler(
+						"SPAIDENTIFIER").persist(con, protocol);
+
+				if (spa.getId() == null)
+				{
+					// Get Id from sequence
+					spaId = getNextVal(con, "STUDY_PARTICIPANT_ASSGNMNT_SEQ");
+					identifierUpdInd = true;
+
+					// Save Participant
+					HL7V3MessageHandlerFactory.getInstance().getHandler(
+							"PARTICIPANT").persist(con, protocol);
+
+					// insert into STUDY_PARTICIPANT_ASSIGNMENT
+					ps =
+							con
+									.prepareStatement("insert into STUDY_PARTICIPANT_ASSIGNMENT (ID, STUDY_PARTICIPANT_IDENTFR_ORIG, STUDY_SITE_ID, PARTICIPANT_ID,type)  values(?,?,?,?,?)");
+					ps.setLong(1, spaId);
+					ps.setString(2, spa.getStudyPartIdOrig());
+					ps.setLong(3, ssId);
+					ps.setLong(4, spa.getParticipant().getId());
+					ps.setString(5, spa.getType());
+					ps.execute();
+					con.commit();
+					if (identifierUpdInd
+							&& spa.getParticipant().getIdentifier() != null)
+					{
+						spa.setId(spaId);
+						updateIdentifier(con, spa, spa.getIdentifier().getId());
+					}
+				}
+
+			}
+		}
+		finally
+		{
+			if (ps != null)
+			{
+				ps.close();
+			}
+			if (rs != null)
+			{
+				rs.close();
+			}
+		}
+
+		// save healthCare-participant
+		if (protocol.getHealthCareSite().getId() != null
+				&& spa.getParticipant().getId() != null)
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler(
+					"HEALTHCARESITEPARTICIPANT").persist(con, protocol);
+
+		}
+		// Save Activity
+		if (spa.getActivity() != null)
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler("ACTIVITY")
+					.persist(con, protocol);
+		}
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }

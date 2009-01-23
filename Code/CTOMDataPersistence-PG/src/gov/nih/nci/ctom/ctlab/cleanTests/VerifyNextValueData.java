@@ -78,164 +78,75 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.cleanTests;
 
-import java.util.Date;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
-public class Identifier
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
+import org.apache.log4j.Logger;
+
+/**
+ * @author asharma
+ */
+public class VerifyNextValueData extends TestCase
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
+	private CTLabDAO dao = new CTLabDAO();
+	private Connection con;
 
-	public void setAssigningAuthorityName(String assigningAuthorityName)
+	public VerifyNextValueData(String name)
 	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
+		super(name);
 	}
 
 	/**
-	 * @return the ctomInsertDate
+	 * Verify next value from sequence
 	 */
-	public Date getCtomInsertDate()
+	public void testVerifyNextValData()
 	{
-		return ctomInsertDate;
+		try
+		{
+			System.out.println("Test Next Value");
+			con = dao.getConnection();
+			Long id = dao.getNextVal(con, "protocol_seq");
+			System.out.println(id);
+			logger.info("Verified smoke study data");
+
+		}
+		catch (Exception e)
+		{
+			logger.error("Error verifying smoke study data", e);
+		}
+		finally
+		{
+			try
+			{
+				if (con != null)
+				{
+					con.close();
+				}
+			}
+			catch (SQLException e)
+			{
+				logger.error("Error closing connection", e);
+			}
+		}
+
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
+	public static Test suite()
 	{
-		this.ctomInsertDate = ctomInsertDate;
+		TestSuite suite = new TestSuite();
+		suite.addTest(new VerifyNextValueData("testVerifyStudyData"));
+		return suite;
 	}
 
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }

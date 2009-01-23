@@ -78,164 +78,124 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
-import java.util.Date;
+import gov.nih.nci.ctom.ctlab.domain.ClinicalResult;
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
-public class Identifier
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+import org.apache.log4j.Logger;
+
+/**
+ * ClinicalResultHandler persists the Clinical Result data to CTODS database.
+ * @author asharma
+ */
+public class ClinicalResultHandler extends CTLabDAO implements
+		HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
-
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		Long valUOMCdId = null;
+		Long labTestCdId = null;
+		logger.debug("Saving the clinical Result");
+
+		// retrieve the clinical result data from Protocol
+		ClinicalResult clinicalResult =
+				protocol.getHealthCareSite().getStudyParticipantAssignment()
+						.getActivity().getObservation().getClinicalResult();
+
+		if (clinicalResult.getPerformingLaboratory() != null)
+		{
+			// Save Performing Laboratory
+			HL7V3MessageHandlerFactory.getInstance().getHandler(
+					"PERFORMINGLABORATORY").persist(con, protocol);
+		
+			// update/insert ConceptDescriptor with UOM
+			valUOMCdId =
+					insertOrsaveConceptDescriptor(con, clinicalResult
+							.getValueUnitOfMeasureCd(), clinicalResult
+							.getValueUnitOfMeasureCdSystem(), clinicalResult
+							.getValueUnitOfMeasureCdSystemName(), null, null);
+			
+			// update/insert ConceptDescriptor with Clinical result codes
+			labTestCdId =
+					insertOrsaveConceptDescriptor(con, clinicalResult
+							.getCrCode(), clinicalResult.getCrCodeSystem(),
+							clinicalResult.getCrCodeSystemName(),
+							clinicalResult.getCrCodeSystemVersion(),
+							clinicalResult.getCrCodeDisplayText());
+
+		}
+
+		if (labTestCdId == null) // This is a required field in the database
+			return;
+		PreparedStatement ps = null;
+
+		try
+		{
+			boolean val = false;
+			boolean lt = false;
+			if (valUOMCdId != null)
+				val = true;
+			if (labTestCdId != null)
+				lt = true;
+			if (lt && val)
+			{
+				ps =
+						con
+								.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, VALUEUOM_CONCEPT_DESCRIPTOR_ID, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?,?)");
+				ps.setLong(9, valUOMCdId);
+				ps.setLong(10, labTestCdId);
+			}
+			else if (!lt && !val)
+			{
+				ps =
+						con
+								.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH)  values(?,?,?,?,?,?,?,?)");
+			}
+			else if (!lt)
+			{
+				ps =
+						con
+								.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, VALUEUOM_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?)");
+				ps.setLong(9, valUOMCdId);
+			}
+			else if (!val)
+			{
+				ps =
+						con
+								.prepareStatement("insert into CLINICAL_RESULT (ID, LAB_TECHNIQUE_CODE, PANEL_NAME, PERFORMING_LABORATORY_ID, REFERENCE_FLAG, VALUE, REFERENCE_RANGE_LOW, REFERENCE_RANGE_HIGH, LAB_TEST_CONCEPT_DESCRIPTOR_ID)  values(?,?,?,?,?,?,?,?,?)");
+				ps.setLong(9, labTestCdId);
+			}
+			ps.setLong(1, clinicalResult.getObservationId());
+			ps.setString(2, clinicalResult.getLabTechCd());
+			ps.setString(3, clinicalResult.getPanelName());
+			ps.setLong(4, clinicalResult.getPerformingLaboratory()
+					.getOrganizationId());
+			ps.setString(5, clinicalResult.getRefFlag());
+			ps.setString(6, clinicalResult.getValue());
+			ps.setDouble(7, clinicalResult.getRefRangeLow());
+			ps.setDouble(8, clinicalResult.getRefRangeHigh());
+			ps.execute();
+		}
+		finally
+		{
+			if (ps != null)
+			{
+				ps.close();
+			}
+		}
+
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }

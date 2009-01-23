@@ -78,164 +78,100 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
-import java.util.Date;
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
-public class Identifier
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.apache.log4j.Logger;
+
+/**
+ * Persists the identifier object into the database. The identifier is
+ * associated with the protocol object.If the identifier object is
+ * already present, the method updates the identifier else insert the
+ * identifier.
+ * @author asharma
+ */
+public class ProtocolIdentifierHandler extends CTLabDAO implements
+		HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
-
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
-
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
+	
+	
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long id = null;
+		Long identifierId = null;
+		logger.debug("Saving Protocol Identifier");
+		// check if the protocol is associated with identifier
+		try
+		{
+			if (protocol.getIdentifier() != null)
+			{
+				ps =
+						con
+								.prepareStatement("select ID,PROTOCOL_ID from IDENTIFIER where EXTENSION = ? AND PROTOCOL_ID IS NOT NULL");
+				ps.setString(1, protocol.getIdentifier().getExtension());
+				rs = ps.executeQuery();
+
+				// check if identifier is in DB
+				if (rs.next() && !rs.isBeforeFirst()
+						&& rs.getLong("PROTOCOL_ID") != 0)
+				{
+					// already present;update the identifier table
+					id = rs.getLong("PROTOCOL_ID");
+					protocol.setId(id);
+					protocol.getIdentifier().setId(rs.getLong("ID"));
+				}
+				else
+				{
+					// get the identifier id
+					identifierId = getNextVal(con, "IDENTIFIER_SEQ");
+				
+					// insert new into identifier get the identifierid and
+					// insert
+					// into participant table
+					ps =
+							con
+									.prepareStatement("insert into IDENTIFIER (Id,EXTENSION, SOURCE,ROOT,assigning_authority_name) values (?,?,?,?,?)");
+					// need to set the participantid into the identifier table
+					ps.setLong(1, identifierId);
+					ps.setString(2, protocol.getIdentifier().getExtension());
+					ps.setString(3, protocol.getIdentifier().getSource());
+					ps.setString(4, protocol.getIdentifier().getRoot());
+					ps.setString(5, protocol.getIdentifier()
+							.getAssigningAuthorityName());
+					ps.executeUpdate();
+					con.commit();
+
+					protocol.setId(id);
+					protocol.getIdentifier().setId(identifierId);
+				}
+			}
+		}
+		finally
+		{
+			if (rs != null)
+			{
+				rs.close();
+			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+			
+		}
+
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }
