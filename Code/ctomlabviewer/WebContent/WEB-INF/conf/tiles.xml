@@ -98,5 +98,21 @@
 	<definition name="Tiles.Happy.Page" extends="Base">
 		<put name="Content" value="/pages/content/main/happy.jsp" />
 	</definition>
-
+	<!-- Admin Page -->
+	<definition name="Tiles.Admin.Page" extends="Base">
+		<put name="Content" value="/pages/content/main/AdminScreen.jsp" />
+	</definition>
+		<!-- Users Page -->
+	<definition name="Tiles.Users.Page" extends="Base">
+		<put name="Content" value="/pages/content/main/UserConfigScreen.jsp" />
+	</definition>
+		<!-- Add User Page -->
+	<definition name="Tiles.AddUser.Page" extends="Base">
+		<put name="Content" value="/pages/content/main/UserScreen.jsp" />
+	</definition>
+			<!-- Modify User Page -->
+	<definition name="Tiles.ModifyUser.Page" extends="Base">
+		<put name="Content" value="/pages/content/main/ModifyUserScreen.jsp" />
+	</definition>
+	
 </tiles-definitions>
