@@ -78,159 +78,117 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import java.util.Date;
+package gov.nih.nci.caxchange.ctom.viewer.forms;
+
+import gov.nih.nci.caxchange.ctom.viewer.beans.Users;
+import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 /**
+ * The UserConfigForm is the class for User configuration.
+ * 
  * @author asharma
  */
-public class LabViewerStatus
+public class UserConfigForm extends ActionForm implements BaseAssociationForm
 {
 
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
+	private Users userBean;
+
+	private List<Users> usersList;
 
 	/**
-	 * @return the id
+	 * @return the userBean
 	 */
-	public Integer getId()
+	public Users getUserBean()
 	{
-		return id;
+		return userBean;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param userBean
+	 *            the userBean to set
 	 */
-	public void setId(Integer id)
+	public void setUserBean(Users userBean)
 	{
-		this.id = id;
+		this.userBean = userBean;
 	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * @return the usersList
 	 */
-	public String isAdverseEventIndicator()
+	public List<Users> getUsersList()
 	{
-		return adverseEventIndicator;
+		return usersList;
 	}
 
 	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
+	 * @param usersList
+	 *            the usersList to set
 	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
+	public void setUsersList(List<Users> usersList)
 	{
-		this.adverseEventIndicator = adverseEventIndicator;
+		this.usersList = usersList;
 	}
 
-	/**
-	 * @return the adverseEventSentDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseDBForm#resetForm()
 	 */
-	public Date getAdverseEventSentDate()
+	public void resetForm()
 	{
-		return adverseEventSentDate;
+
 	}
 
-	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseAssociationForm#getAssociatedIds()
 	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
+	public String[] getAssociatedIds()
 	{
-		this.adverseEventSentDate = adverseEventSentDate;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/**
-	 * @return the cdmsIndicator
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.caxchange.ctom.viewer.forms.BaseDBForm#getFormName()
 	 */
-	public String isCdmsIndicator()
+	public String getFormName()
 	{
-		return cdmsIndicator;
+		return DisplayConstants.USER_CONFG_ID;
 	}
 
-	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping,
+	 *      javax.servlet.http.HttpServletRequest)
 	 */
-	public void setCdmsIndicator(String cdmsIndicator)
-	{
-		this.cdmsIndicator = cdmsIndicator;
-	}
-
-	/**
-	 * @return the cdmsSentDate
+	/*
+	 * public ActionErrors validate(ActionMapping mapping, HttpServletRequest
+	 * request) { ActionErrors errors = super.validate(mapping, request); if
+	 * (errors == null) errors = new ActionErrors(); if
+	 * ((userBean.getLoginName() == null) || (userBean.getLoginName().length() <
+	 * 1)) errors.add("loginName", new ActionError("error.loginName.value")); if
+	 * ((userBean.getFirstName() == null) || (userBean.getFirstName().length() <
+	 * 1)) errors.add("firstName", new ActionError("error.firstName.value")); if
+	 * ((userBean.getLastName() == null) || (userBean.getLastName().length() <
+	 * 1)) errors.add("lastName", new ActionError("error.lastName.value")); if
+	 * ((userBean.getPassword() == null) || (userBean.getPassword().length() <
+	 * 1)) errors.add("password", new ActionError("error.password.value"));
+	 * return errors; }
 	 */
-	public Date getCdmsSentDate()
-	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
 
 }

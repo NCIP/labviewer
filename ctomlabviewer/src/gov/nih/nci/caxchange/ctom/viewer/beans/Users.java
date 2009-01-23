@@ -85,17 +85,89 @@ import java.util.Date;
 /**
  * @author asharma
  */
-public class LabViewerStatus
+public class Users
 {
+	private Integer id;
 
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
+	private String loginName;
+
+	private String firstName;
+
+	private String lastName;
+
+	private String organization;
+
+	private String department;
+
+	private String title;
+
+	private String phoneNumber;
+
+	private String emailId;
+
+	private String password;
+
+	private Date startDate;
+	private Date endDate;
+	private Date updateDate;
+
+	// added for UI
+	private String selectedId;
+
+	private String modifyFlag;
+
+	private String deleteFlag;
+
+	/**
+	 * @return the selectedId
+	 */
+	public String getSelectedId()
+	{
+		return selectedId;
+	}
+
+	/**
+	 * @param selectedId
+	 *            the selectedId to set
+	 */
+	public void setSelectedId(String selectedId)
+	{
+		this.selectedId = selectedId;
+	}
+
+	/**
+	 * @return the modifyFlag
+	 */
+	public String getModifyFlag()
+	{
+		return modifyFlag;
+	}
+
+	/**
+	 * @param modifyFlag
+	 *            the modifyFlag to set
+	 */
+	public void setModifyFlag(String modifyFlag)
+	{
+		this.modifyFlag = modifyFlag;
+	}
+
+	/**
+	 * @return the deleteFlag
+	 */
+	public String getDeleteFlag()
+	{
+		return deleteFlag;
+	}
+
+	/**
+	 * @param deleteFlag
+	 *            the deleteFlag to set
+	 */
+	public void setDeleteFlag(String deleteFlag)
+	{
+		this.deleteFlag = deleteFlag;
+	}
 
 	/**
 	 * @return the id
@@ -115,122 +187,207 @@ public class LabViewerStatus
 	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * @return the loginName
 	 */
-	public String isAdverseEventIndicator()
+	public String getLoginName()
 	{
-		return adverseEventIndicator;
+		return loginName;
 	}
 
 	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
+	 * @param loginName
+	 *            the loginName to set
 	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
+	public void setLoginName(String loginName)
 	{
-		this.adverseEventIndicator = adverseEventIndicator;
+		this.loginName = loginName;
 	}
 
 	/**
-	 * @return the adverseEventSentDate
+	 * @return the firstName
 	 */
-	public Date getAdverseEventSentDate()
+	public String getFirstName()
 	{
-		return adverseEventSentDate;
+		return firstName;
 	}
 
 	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
+	 * @param firstName
+	 *            the firstName to set
 	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
+	public void setFirstName(String firstName)
 	{
-		this.adverseEventSentDate = adverseEventSentDate;
+		this.firstName = firstName;
 	}
 
 	/**
-	 * @return the cdmsIndicator
+	 * @return the lastName
 	 */
-	public String isCdmsIndicator()
+	public String getLastName()
 	{
-		return cdmsIndicator;
+		return lastName;
 	}
 
 	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
+	 * @param lastName
+	 *            the lastName to set
 	 */
-	public void setCdmsIndicator(String cdmsIndicator)
+	public void setLastName(String lastName)
 	{
-		this.cdmsIndicator = cdmsIndicator;
+		this.lastName = lastName;
 	}
 
 	/**
-	 * @return the cdmsSentDate
+	 * @return the organization
 	 */
-	public Date getCdmsSentDate()
+	public String getOrganization()
 	{
-		return cdmsSentDate;
+		return organization;
 	}
 
 	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
+	 * @param organization
+	 *            the organization to set
 	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
+	public void setOrganization(String organization)
 	{
-		this.cdmsSentDate = cdmsSentDate;
+		this.organization = organization;
 	}
 
 	/**
-	 * @return the clinicalResultId
+	 * @return the department
 	 */
-	public int getClinicalResultId()
+	public String getDepartment()
 	{
-		return clinicalResultId;
+		return department;
 	}
 
 	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
+	 * @param department
+	 *            the department to set
 	 */
-	public void setClinicalResultId(int clinicalResultId)
+	public void setDepartment(String department)
 	{
-		this.clinicalResultId = clinicalResultId;
+		this.department = department;
 	}
 
 	/**
-	 * @return the ctomInsertDate
+	 * @return the title
 	 */
-	public Date getCtomInsertDate()
+	public String getTitle()
 	{
-		return ctomInsertDate;
+		return title;
 	}
 
 	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
+	 * @param title
+	 *            the title to set
 	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
+	public void setTitle(String title)
 	{
-		this.ctomInsertDate = ctomInsertDate;
+		this.title = title;
 	}
 
 	/**
-	 * @return the ctomUpdateDate
+	 * @return the phoneNumber
 	 */
-	public Date getCtomUpdateDate()
+	public String getPhoneNumber()
 	{
-		return ctomUpdateDate;
+		return phoneNumber;
 	}
 
 	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
+	 * @param phoneNumber
+	 *            the phoneNumber to set
 	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
+	public void setPhoneNumber(String phoneNumber)
 	{
-		this.ctomUpdateDate = ctomUpdateDate;
+		this.phoneNumber = phoneNumber;
+	}
+
+	/**
+	 * @return the emailId
+	 */
+	public String getEmailId()
+	{
+		return emailId;
+	}
+
+	/**
+	 * @param emailId
+	 *            the emailId to set
+	 */
+	public void setEmailId(String emailId)
+	{
+		this.emailId = emailId;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword()
+	{
+		return password;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+
+	/**
+	 * @return the startDate
+	 */
+	public Date getStartDate()
+	{
+		return startDate;
+	}
+
+	/**
+	 * @param startDate
+	 *            the startDate to set
+	 */
+	public void setStartDate(Date startDate)
+	{
+		this.startDate = startDate;
+	}
+
+	/**
+	 * @return the endDate
+	 */
+	public Date getEndDate()
+	{
+		return endDate;
+	}
+
+	/**
+	 * @param endDate
+	 *            the endDate to set
+	 */
+	public void setEndDate(Date endDate)
+	{
+		this.endDate = endDate;
+	}
+
+	/**
+	 * @return the updateDate
+	 */
+	public Date getUpdateDate()
+	{
+		return updateDate;
+	}
+
+	/**
+	 * @param updateDate
+	 *            the updateDate to set
+	 */
+	public void setUpdateDate(Date updateDate)
+	{
+		this.updateDate = updateDate;
 	}
 
 }
