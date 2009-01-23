@@ -8,7 +8,7 @@
 	        PROP.FILE = ${PROP.FILE}</echo>
 	<property name="test.dir" value="test" />
 	<property name="report.dir"  value="${test.dir}/junitreport"/>
-	
+	<property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties"/>
 	<target name="init">
 		<property name="webinf.home" value="${web.home}/WEB-INF" />
 		<property name="lib.home" value="${webinf.home}/lib" />
@@ -79,9 +79,15 @@
 			</filterset>
 		</copy>
 		
-		<copy file="conf/loadLabURLS.properties.template" toFile="${build.home}/WEB-INF/classes/loadLabURLS.properties" filtering="true" overwrite="true">
+		<copy file="conf/labviewer.properties.template" toFile="${build.home}/WEB-INF/classes/labviewer.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
-				<filter token="loadLabURLS" value="${loadLabURLS}" />				
+				<filter token="hotLink_Type" value="${hotLink_Type}" />
+				<filter token="testEnabled" value="${testEnabled}" />
+				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
+				<filter token="websso.enabled" value="${websso.enabled}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />
+				<filter token="version" value="${version}" />
+				<filter token="propertyFilePath" value="${propertyFilePath}" />
 			</filterset>
 		</copy>
 		<copy file="conf/baseURL.properties.template" toFile="${build.home}/WEB-INF/classes/baseURL.properties" filtering="true" overwrite="true">
@@ -89,12 +95,7 @@
 				<filter token="BaseURLcaAERS" value="${BaseURLcaAERS}" />
 				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
 				<filter token="BaseURLC3PR" value="${BaseURLC3PR}" />
-				<filter token="hotLink_Type" value="${hotLink_Type}" />
-				<filter token="testEnabled" value="${testEnabled}" />
-				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
-				<filter token="websso.enabled" value="${websso.enabled}" />	
-				<filter token="websso.cas.server" value="${websso.cas.server}" />
-				<filter token="version" value="${version}" />
+				<filter token="loadLabURLS" value="${loadLabURLS}" />	
 			</filterset>
 		</copy>
 	</target>
@@ -143,6 +144,7 @@
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
 			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/HealthCareSitePart.hbm.xml"/>
+			<fileset file="${src.home}/gov/nih/nci/caxchange/ctom/viewer/beans/Users.hbm.xml"/>
 		</copy>
 	</target>
 
