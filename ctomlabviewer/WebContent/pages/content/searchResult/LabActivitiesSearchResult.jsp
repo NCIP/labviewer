@@ -145,7 +145,7 @@ function SelectAll()
 	<div class="pane" align="center">
     <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
-	      <h2>Lab Activities - Search Results</h2>
+	      <h2>Lab Activities - Search Results [${SEARCH_RESULT_COUNT} record(s) found]</h2>
 	    </div></div></div>
 	    <!-- inner border -->
 	    <div class="border-T"><div class="border-L"><div class="border-R"><div class="border-B"><div class="border-TL"><div class="border-TR"><div class="border-BL"><div class="border-BR">
@@ -487,7 +487,7 @@ function SelectAll()
 
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 150);
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 200);
 </script>
 </head>
 

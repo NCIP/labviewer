@@ -5,8 +5,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-template"	prefix="template"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested" prefix="nested"%>
-
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
 
@@ -87,12 +85,17 @@ function MM_swapImage() { //v3.0
          	<font color=blue>CTODS LabViewer V<%=session.getAttribute("version")%></font> ||
          <%} %>
        <a href="helpdocs/CTODS Lab Viewer End User Guide.doc" style="color: blue; font-size: .8em;">Help</a> ||
-       <% if(session.getAttribute("webssoEnabled")!= null){ %>
+       <logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
+       <% if(session.getAttribute("CAGRID_SSO_GRID_IDENTITY")!=null && session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
          <a href="https://<%=session.getAttribute("webssoCasServer")%>/cas/logout" style="font-size: .8em; color: blue;">Log out</a>
        <%}}else{ %>
    		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>    
        <%} %>
+       </logic:present>
+       <logic:notPresent name="<%=DisplayConstants.LOGIN_OBJECT%>">
+       <a href="javascript: set('<%=DisplayConstants.HOME_ID%>')" style="font-size: .8em; color: blue;">Log in</a>    
+       </logic:notPresent>
      </div>
 
 	<!-- if log in, enable menu and login id -->
@@ -110,7 +113,7 @@ function MM_swapImage() { //v3.0
 			<%} else {%>
 	    		<li class=""><div><a href="javascript: set('<%=DisplayConstants.HOME_ID%>')">Home</a></div></li>
 			<%}%>
-		<%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
+			<%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
  	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
  			<%} else {%>
  		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
@@ -132,6 +135,11 @@ function MM_swapImage() { //v3.0
 			<%} else {%>
 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
 			<%}}%>
+			<%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID)){%>
+	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')">Administration</a></div></li>
+			<%} else {%>
+		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')">Administration</a></div></li>
+			<%}%>
 	    </ul>
 	    </div>
 	</logic:present>
@@ -140,21 +148,24 @@ function MM_swapImage() { //v3.0
     <div id="taskbar" style="clear: both; border-bottom: 1px solid black; ">
 		<logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.HOME_ID)){%>
-	            Tasks: <font color=blue> Greeting screen </font>
+	            Tasks: <font color="blue" size="2"> Greeting screen </font>
 			<%}%>
 			<%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
-	            Tasks: <font color=blue> Study Search </font>
+	            Tasks: <font color="blue" size="2"> Study Search </font>
 			<%}%>
 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID)){%>
 	            <% if(session.getAttribute("pageTitle")!= null){ %>
-			    <font color=blue><%=session.getAttribute("pageTitle")%></font>
-			<%}else{%>Tasks: <font color=blue> Search lab activities </font>
+			    <font color="blue" size="2"><%=session.getAttribute("pageTitle")%></font>
+			<%}else{%>Tasks: <font color="blue" size="2"> Search lab activities </font>
 			<%}}%>
 			<%if (tableId.equalsIgnoreCase(DisplayConstants.PARTICIPANTSEARCH_ID)){%>
 			    <% if(session.getAttribute("pageTitle")!= null){ %>
-			    <font color=blue><%=session.getAttribute("pageTitle")%></font>
-			<%}else{%>Tasks: <font color=blue>Participant Search</font>
+			    <font color="blue" size="2"><%=session.getAttribute("pageTitle")%></font>
+			<%}else{%>Tasks: <font color="blue" size="2">Participant Search</font>
 			<%}}%>
+			<%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID)){%>
+	            	 <font color="blue" size="2" ><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')" class="favBtn"> Admin Configuration</a> </font>::<a href="javascript: set('<%=DisplayConstants.USER_CONFG_ID%>')" style="font-size: .9em; color: blue;" class="favBtn">User Configuration</a> 
+			<%}%>
 		</logic:present>
     </div>
     

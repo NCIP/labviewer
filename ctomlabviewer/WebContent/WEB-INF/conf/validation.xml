@@ -46,7 +46,14 @@
   			<arg0 key="ParticipantSearchForm.studyId.displayLabel"/>
   		</field>
 	</form>
-
+	<form name="AdministrationForm">
+ 		<field property="caxUrl" depends="required">
+  			<arg0 key="AdministrationForm.caxUrl.displayLabel"/>
+  		</field>
+  		<field property="caaersUrl" depends="required">
+  			<arg0 key="AdministrationForm.caaersUrl.displayLabel"/>
+  		</field>
+	</form>
     <form name="LabActivitiesForm">
 		<field property="studyId" depends="required,maxlength">
   			<arg0 key="LabActivitiesForm.studyId.displayLabel"/>

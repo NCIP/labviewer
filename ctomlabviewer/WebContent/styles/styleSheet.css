@@ -486,6 +486,9 @@ p,.p{ /* for paragraphs */
 /*###############
 MISCELLANEOUS BEGINS
 ###############*/
+.favBtn{border:3px blue outset;background-color:#ccc; margin-left:0;margin-right:0.1em; color:#000; font-weight:bold; text-decoration:none; padding:0 0.2em 0 0.2em}
+.favBtn:hover{border:3px blue inset;background-color:#ccc; margin-left:0.1em;margin-right:0; background-color:white}
+
 .bannerHome{ /* for the banner area of the home page */
   background-color:#475B82; /* darker*/
 }
