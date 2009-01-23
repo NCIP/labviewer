@@ -17,6 +17,7 @@
         <mapping resource="LabViewerStatus.hbm.xml"/>
          <mapping resource="ProtocolStatus.hbm.xml"/>
          <mapping resource="HealthCareSitePart.hbm.xml"/>
+         <mapping resource="Users.hbm.xml"/>
          
          <!-- Mapped Resources -->
 	 		<mapping resource="gov/nih/nci/labhub/domain/Specimen.hbm.xml" />
