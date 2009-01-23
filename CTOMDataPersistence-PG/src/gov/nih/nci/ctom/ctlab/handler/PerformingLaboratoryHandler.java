@@ -78,164 +78,83 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
-import java.util.Date;
+import gov.nih.nci.ctom.ctlab.domain.PerformingLaboratory;
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
-public class Identifier
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.apache.log4j.Logger;
+
+/**
+ * PerformingLaboratoryHandler persists Performing Laboratory object to the
+ * CTODS database
+ * 
+ * @author asharma
+ */
+public class PerformingLaboratoryHandler extends CTLabDAO implements
+		HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
-
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist()
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		logger.debug("Saving Performing Laboratory");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		// retrieve Performing Lab data from Protocol
+		PerformingLaboratory performingLaboratory =
+				protocol.getHealthCareSite().getStudyParticipantAssignment()
+						.getActivity().getObservation().getClinicalResult()
+						.getPerformingLaboratory();
+
+		try
+		{
+			ps =
+					con
+							.prepareStatement("select ID from PERFORMING_LABORATORY where IDENTIFIER = ?");
+			ps.setString(1, performingLaboratory.getPlIdentifier());
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				performingLaboratory.setOrganizationId(rs.getLong(1));
+			}
+			else
+			{
+				// get the id from sequence
+				Long id = getNextVal(con, "ORGANIZATION_SEQ");
+				performingLaboratory.setOrganizationId(id);
+				ps =
+						con
+								.prepareStatement("insert into PERFORMING_LABORATORY (ID, IDENTIFIER, NAME)  values(?,?,?)");
+				ps.setLong(1, performingLaboratory.getOrganizationId());
+				ps.setString(2, performingLaboratory.getPlIdentifier());
+				ps.setString(3, performingLaboratory.getPlName());
+				ps.execute();
+			}
+		}
+		finally
+		{
+			if (rs != null)
+			{
+				rs.close();
+			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+		}
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }

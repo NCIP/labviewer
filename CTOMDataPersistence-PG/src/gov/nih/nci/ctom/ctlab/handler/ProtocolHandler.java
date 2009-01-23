@@ -78,164 +78,159 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 
-public class Identifier
+import org.apache.log4j.Logger;
+
+/**
+ * ProtocolHandler persists Protocol object to the
+ * CTODS database
+ * @author asharma
+ */
+public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
-
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
-
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
+	
+	
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		logger.debug("Saving Protocol");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long id = null;
+		boolean identifierUpdInd = false;
+
+		if (protocol.getNciIdentifier() == null)
+		{	
+			throw new Exception(
+					"Invalid Data, Protocol Identifier Cannot Be Null");
+		}
+		try
+		{
+			// Check if the protocol already exists using identifier
+			ps =
+					con
+							.prepareStatement("select p.ID from protocol p, identifier ii where p.ID = ii.PROTOCOL_ID and ii.extension=?");
+			ps.setString(1, protocol.getIdentifier().getExtension());
+			rs = ps.executeQuery();
+			// If it exists get the ID
+			if (rs.next())
+			{
+				id = rs.getLong(1);
+				protocol.setId(id);
+				ps =
+						con
+								.prepareStatement("select ID from IDENTIFIER where PROTOCOL_ID = ?");
+				ps.setLong(1, id);
+				rs = ps.executeQuery();
+
+				if (rs.next())
+				{
+					protocol.getIdentifier().setId(rs.getLong(1));
+				}
+				logger.debug("Protocol existed");
+			}
+			else
+			{
+				// Save/update Identifier
+				HL7V3MessageHandlerFactory.getInstance().getHandler(
+						"PROTOCOLIDENTIFIER").persist(con, protocol);
+				if (protocol.getId() == null)
+				{
+					identifierUpdInd = true;
+					//get ID from sequence	
+					id = getNextVal(con, "protocol_seq");
+					ps =
+							con
+									.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT, SHORT_TITLE_TEXT, CTOM_INSERT_DATE, SPONSOR_CODE)  values(?,?,?,?,?,?,?)");
+					ps.setLong(1, id);
+					ps
+							.setString(2, String.valueOf(protocol
+									.getNciIdentifier()));
+					ps.setString(3, String.valueOf(protocol
+							.getIdAssigningAuth()));
+					ps.setString(4, String.valueOf(protocol.getLongTxtTitle()));
+					ps
+							.setString(5, String.valueOf(protocol
+									.getShortTxtTitle()));
+					if (protocol.getCtomInsertDt() == null)
+					{
+						ps.setTimestamp(6, new java.sql.Timestamp(new Date()
+								.getTime()));
+					}
+					else
+					{
+						ps.setTimestamp(6, new java.sql.Timestamp(protocol
+								.getCtomInsertDt().getTime()));
+					}
+					ps.setString(7, String.valueOf(protocol.getSponsorCode()));
+					ps.execute();
+					if (identifierUpdInd && protocol.getIdentifier() != null)
+					{
+						protocol.setId(id);
+						updateIdentifier(con, protocol);
+					}
+				} // update into participant if there was a participant
+					// associated
+				// with identifier.
+				else
+				{
+					ps =
+							con
+									.prepareStatement("update PROTOCOL set NCI_IDENTIFIER = ?, IDENTIFIER_ASSIGNING_AUTHORITY = ?, LONG_TITLE_TEXT = ? where ID = ?");
+					ps
+							.setString(1, String.valueOf(protocol
+									.getNciIdentifier()));
+					ps.setString(2, String.valueOf(protocol
+							.getIdAssigningAuth()));
+					ps.setString(3, String.valueOf(protocol.getLongTxtTitle()));
+					ps.setLong(4, protocol.getId());
+					ps.executeUpdate();
+					con.commit();
+				}
+			}
+		}
+		finally
+		{
+			if (rs != null)
+			{
+				rs.close();
+			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+		}
+		// save protocol status
+		if (protocol.getStatus() != null)
+		{	
+			HL7V3MessageHandlerFactory.getInstance().getHandler(
+					"PROTOCOLSTATUS").persist(con, protocol);
+		}	
+		// save investigator
+		if (protocol.getInvestigator() != null)
+		{	
+			HL7V3MessageHandlerFactory.getInstance().getHandler("INVESTIGATOR")
+					.persist(con, protocol);
+		}
+		// save healthcaresite
+		if (protocol.getHealthCareSite() != null)
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler(
+							"HEALTHCARESITE").persist(con, protocol);
+		}	
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }

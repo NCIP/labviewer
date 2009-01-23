@@ -78,164 +78,143 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.ctom.ctlab.domain;
+package gov.nih.nci.ctom.ctlab.handler;
 
+import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
+import gov.nih.nci.ctom.ctlab.domain.Protocol;
+import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Date;
 
-public class Identifier
+import org.apache.log4j.Logger;
+
+/**
+ * HealthCareSiteHandler class persists the HealthCasre Site data to CTODS database
+ * @author asharma
+ */
+public class HealthCareSiteHandler extends CTLabDAO implements
+		HL7V3MessageHandler
 {
-	private Long id;
-	private String root;
-	private String extension;
-	private String assigningAuthorityName;
-	private String displayableIndicator;
-	private Long protocolId;
-	private Long participantId;
-	private Long studyParticipantAssignmentId;
-	private String source;
-	private Date ctomInsertDate = null;
-	private Date ctomUpdateDate = null;
-	private HealthCareSite healthCareSite = null;
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
 
-	public String getAssigningAuthorityName()
-	{
-		return assigningAuthorityName;
-	}
-
-	public void setAssigningAuthorityName(String assigningAuthorityName)
-	{
-		this.assigningAuthorityName = assigningAuthorityName;
-	}
-
-	public String getDisplayableIndicator()
-	{
-		return displayableIndicator;
-	}
-
-	public void setDisplayableIndicator(String displayableIndicator)
-	{
-		this.displayableIndicator = displayableIndicator;
-	}
-
-	public String getExtension()
-	{
-		return extension;
-	}
-
-	public void setExtension(String extension)
-	{
-		this.extension = extension;
-	}
-
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public Long getParticipantId()
-	{
-		return participantId;
-	}
-
-	public void setParticipantId(Long participantId)
-	{
-		this.participantId = participantId;
-	}
-
-	public Long getProtocolId()
-	{
-		return protocolId;
-	}
-
-	public void setProtocolId(Long protocolId)
-	{
-		this.protocolId = protocolId;
-	}
-
-	public String getRoot()
-	{
-		return root;
-	}
-
-	public void setRoot(String root)
-	{
-		this.root = root;
-	}
-
-	public String getSource()
-	{
-		return source;
-	}
-
-	public void setSource(String source)
-	{
-		this.source = source;
-	}
-
-	public Long getStudyParticipantAssignmentId()
-	{
-		return studyParticipantAssignmentId;
-	}
-
-	public void setStudyParticipantAssignmentId(
-			Long studyParticipantAssignmentId)
-	{
-		this.studyParticipantAssignmentId = studyParticipantAssignmentId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
+	
+	/* (non-Javadoc)
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
-	public Date getCtomInsertDate()
+	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		return ctomInsertDate;
+		logger.debug("Saving the HealthCareSite");
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Long hsId = null;
+		Statement stmt = null;
+		Long ssId = null;
+
+		// retrieve HealthCareSite from Protocol
+		HealthCareSite hcSite = protocol.getHealthCareSite();
+		Long protId = protocol.getId();
+
+		try
+		{
+			// check if there exists a healthcare site with the NCI Institue
+			// code
+			ps =
+					con
+							.prepareStatement("select id from healthcare_site where NCI_INSTITUTE_CODE = ?");
+			ps.setString(1, hcSite.getNciInstituteCd());
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				// use the existing Id
+				hsId = rs.getLong(1);
+			}
+			else
+			{
+
+				// new HealthCare Site - Get Id from sequence
+				hsId = getNextVal(con, "ORGANIZATION_SEQ");
+
+				// insert into HealthCare_Site
+				ps =
+						con
+								.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE, NAME, CTOM_INSERT_DATE)  values(?,?,?,?)");
+
+				ps.setLong(1, hsId);
+				ps.setString(2, hcSite.getNciInstituteCd() != null ? hcSite
+						.getNciInstituteCd() : "");
+				ps.setString(3, hcSite.getNciInstituteCd() != null ? hcSite
+						.getNciInstituteCd() : "");
+				Date insertDt =
+						hcSite.getCtomInsertDt() != null ? hcSite
+								.getCtomInsertDt() : new Date();
+				ps.setDate(4, new java.sql.Date(insertDt.getTime()));
+				ps.execute();
+			}
+			// set the id
+			hcSite.setId(hsId);
+
+			// Check if the Study Site exits for that healthcaresite Id and
+			// Protocol Id
+			ps =
+					con
+							.prepareStatement("select id from study_site where HEALTHCARE_SITE_ID = ? and PROTOCOL_ID = ?");
+			ps.setLong(1, hsId);
+			ps.setLong(2, protId);
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				// If exists - use that Study site Id
+				ssId = rs.getLong(1);
+			}
+			else
+			{
+				// create a new Study Site id
+
+				// get the next Id value
+				ssId = getNextVal(con, "STUDY_SITE_SEQ");
+
+				// insert into Study_Site
+				ps =
+						con
+								.prepareStatement("insert into study_site (ID, HEALTHCARE_SITE_ID, PROTOCOL_ID)  values(?,?,?)");
+
+				ps.setLong(1, ssId);
+				ps.setLong(2, hsId);
+				ps.setLong(3, protId);
+				ps.execute();
+
+			}
+
+		}
+		finally
+		{
+			if (rs != null)
+			{
+				rs.close();
+			}
+			if (stmt != null)
+			{
+				stmt.close();
+			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+
+		}
+		if (hcSite.getStudyParticipantAssignment() != null)
+		{
+			protocol.getHealthCareSite().getStudyParticipantAssignment()
+					.setStudySiteId(ssId);
+			// saves the StudyParticipant Assignment
+			HL7V3MessageHandlerFactory.getInstance().getHandler(
+					"STUDYPARTICIPANTASSIGNMENT").persist(con, protocol);
+		}
 	}
 
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDAte
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDAte
-	 *            the ctomUpdateDAte to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
-	/**
-	 * @return the healthCareSite
-	 */
-	public HealthCareSite getHealthCareSite()
-	{
-		return healthCareSite;
-	}
-
-	/**
-	 * @param healthCareSite
-	 *            the healthCareSite to set
-	 */
-	public void setHealthCareSite(HealthCareSite healthCareSite)
-	{
-		this.healthCareSite = healthCareSite;
-	}
 }
