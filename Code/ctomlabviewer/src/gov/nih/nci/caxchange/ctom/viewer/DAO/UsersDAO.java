@@ -78,159 +78,147 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import java.util.Date;
+package gov.nih.nci.caxchange.ctom.viewer.DAO;
+
+import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
+import gov.nih.nci.caxchange.ctom.viewer.beans.Users;
+import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * @author asharma
  */
-public class LabViewerStatus
+public class UsersDAO extends HibernateDaoSupport
 {
 
-	Integer id;
-	String adverseEventIndicator = "false";
-	Date adverseEventSentDate = null;
-	String cdmsIndicator = "false";
-	Date cdmsSentDate = null;
-	int clinicalResultId;
-	Date ctomInsertDate = null;
-	Date ctomUpdateDate = null;
+	private static final Logger log = Logger.getLogger(UsersDAO.class);
 
 	/**
-	 * @return the id
+	 * Retrieves all the users who have access to LabViewer application
+	 * 
+	 * @return users list
 	 */
-	public Integer getId()
+	public List<Users> retrieveUsers()
 	{
-		return id;
+		List<Users> users = new ArrayList<Users>();
+		Session session = null;
+		try
+		{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			users = session.createQuery("from Users").list();
+
+		}
+		catch (Exception se)
+		{
+			log.error("Error retrieving users", se);
+		}
+
+		return users;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * Retrieves the user for a given Id
+	 * 
+	 * @return users list
 	 */
-	public void setId(Integer id)
+	public Users retrieveUser(int id)
 	{
-		this.id = id;
+		Users user = new Users();
+		Session session = null;
+		try
+		{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			List usersList =
+					session.createQuery("from Users where id=" + id).list();
+			if (usersList != null && !usersList.isEmpty())
+				user = (Users) usersList.get(0);
+
+		}
+		catch (Exception se)
+		{
+			log.error("Error retrieving users", se);
+		}
+
+		return user;
 	}
 
 	/**
-	 * @return the adverseEventIndicator
+	 * Add a new user.
+	 * 
+	 * @return successfulAdd
 	 */
-	public String isAdverseEventIndicator()
+	public boolean addUser(Users user)
 	{
-		return adverseEventIndicator;
+		boolean successfulAdd = false;
+		Session session = null;
+		try
+		{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.save(user);
+			session.getTransaction().commit();
+		}
+		catch (Exception se)
+		{
+			log.error("Error adding users", se);
+		}
+
+		return successfulAdd;
 	}
 
 	/**
-	 * @param adverseEventIndicator
-	 *            the adverseEventIndicator to set
+	 * Deletes user.
+	 * 
+	 * @return successfulDelete
 	 */
-	public void setAdverseEventIndicator(String adverseEventIndicator)
+	public boolean deleteUser(Users user)
 	{
-		this.adverseEventIndicator = adverseEventIndicator;
+		boolean successfulDelete = false;
+		Session session = null;
+		try
+		{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.delete(user);
+			session.getTransaction().commit();
+		}
+		catch (Exception se)
+		{
+			log.error("Error deleting users", se);
+		}
+		return successfulDelete;
 	}
 
 	/**
-	 * @return the adverseEventSentDate
+	 * Update user details.
+	 * 
+	 * @return successfulUpdate
 	 */
-	public Date getAdverseEventSentDate()
+	public boolean modifyUser(Users user)
 	{
-		return adverseEventSentDate;
-	}
+		boolean successfulUpdate = false;
+		Session session = null;
+		try
+		{
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			session.saveOrUpdate(user);
+			session.getTransaction().commit();
+		}
+		catch (Exception se)
+		{
+			log.error("Error modifying users details", se);
+		}
 
-	/**
-	 * @param adverseEventSentDate
-	 *            the adverseEventSentDate to set
-	 */
-	public void setAdverseEventSentDate(Date adverseEventSentDate)
-	{
-		this.adverseEventSentDate = adverseEventSentDate;
+		return successfulUpdate;
 	}
-
-	/**
-	 * @return the cdmsIndicator
-	 */
-	public String isCdmsIndicator()
-	{
-		return cdmsIndicator;
-	}
-
-	/**
-	 * @param cdmsIndicator
-	 *            the cdmsIndicator to set
-	 */
-	public void setCdmsIndicator(String cdmsIndicator)
-	{
-		this.cdmsIndicator = cdmsIndicator;
-	}
-
-	/**
-	 * @return the cdmsSentDate
-	 */
-	public Date getCdmsSentDate()
-	{
-		return cdmsSentDate;
-	}
-
-	/**
-	 * @param cdmsSentDate
-	 *            the cdmsSentDate to set
-	 */
-	public void setCdmsSentDate(Date cdmsSentDate)
-	{
-		this.cdmsSentDate = cdmsSentDate;
-	}
-
-	/**
-	 * @return the clinicalResultId
-	 */
-	public int getClinicalResultId()
-	{
-		return clinicalResultId;
-	}
-
-	/**
-	 * @param clinicalResultId
-	 *            the clinicalResultId to set
-	 */
-	public void setClinicalResultId(int clinicalResultId)
-	{
-		this.clinicalResultId = clinicalResultId;
-	}
-
-	/**
-	 * @return the ctomInsertDate
-	 */
-	public Date getCtomInsertDate()
-	{
-		return ctomInsertDate;
-	}
-
-	/**
-	 * @param ctomInsertDate
-	 *            the ctomInsertDate to set
-	 */
-	public void setCtomInsertDate(Date ctomInsertDate)
-	{
-		this.ctomInsertDate = ctomInsertDate;
-	}
-
-	/**
-	 * @return the ctomUpdateDate
-	 */
-	public Date getCtomUpdateDate()
-	{
-		return ctomUpdateDate;
-	}
-
-	/**
-	 * @param ctomUpdateDate
-	 *            the ctomUpdateDate to set
-	 */
-	public void setCtomUpdateDate(Date ctomUpdateDate)
-	{
-		this.ctomUpdateDate = ctomUpdateDate;
-	}
-
 }
