@@ -111,7 +111,7 @@ public class CaXchangeConsumerServiceImpl extends CaXchangeConsumerServiceImplBa
    */
   public String getMessageType(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws CaXchangeConsumerException {
 	  try {
-		  String messageType = caXchangeRequestMessage.getMetadata().getMessageType();
+		  String messageType = caXchangeRequestMessage.getMetadata().getServiceType();
 		  return messageType;
 	  }catch(Exception e){
 			 logger.error("Error getting message type.");

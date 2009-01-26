@@ -1,8 +1,8 @@
 #Introduce Properties
-#Fri Oct 03 15:08:21 EDT 2008
+#Mon Jan 26 13:10:13 EST 2009
 introduce.skeleton.services.list=CaXchangeConsumerService
 introduce.skeleton.extensions=cagrid_metadata
-introduce.skeleton.timestamp=1223060783014
+introduce.skeleton.timestamp=1232987957436
 introduce.skeleton.service.name=CaXchangeConsumerService
 introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
 introduce.skeleton.destination.dir=C\:\\caxchange\\caxchange\\Code\\gridservice\\CaXchangeConsumerService
