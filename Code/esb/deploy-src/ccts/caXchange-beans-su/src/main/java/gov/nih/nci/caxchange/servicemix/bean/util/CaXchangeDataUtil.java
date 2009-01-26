@@ -138,21 +138,36 @@ public class CaXchangeDataUtil {
         return externalIdentifier;     
     }    
     /**
-     * Gets message type
+     * Gets service type
 	 * @param 
-	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getMessageType().toString()
+	 * @return requestDocument.getCaXchangeRequestMessage().getMetadata().getServiceType().toString()
 	 * @throws Exception
 	 */  
-    public String getMessageType() throws Exception {
-    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "messageType");
-    	String messageType=null;
+    public String getServiceType() throws Exception {
+    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "serviceType");
+    	String serviceType=null;
     	if (elements.getLength()==1) {
-    		messageType = elements.item(0).getTextContent();
+    		serviceType = elements.item(0).getTextContent();
     	}
-        return messageType; 
+        return serviceType; 
     }   
     
-
+    /**
+     * Gets operation name
+	 * @param 
+	 * @return Operation name associated with the service type
+	 * @throws Exception
+	 */  
+    public String getOperationName() throws Exception {
+    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "operationName");
+    	String operationName=null;
+    	if (elements.getLength()==1) {
+    		operationName = elements.item(0).getTextContent();
+    	}
+        return operationName; 
+    } 
+    
+    
     /**
      * Gets business payload included in the caXchange request.
 	 * @param 
@@ -346,11 +361,11 @@ public class CaXchangeDataUtil {
 	 * @throws Exception
 	 */
     public Source getRollbackMessage() throws Exception {
-    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "operation");
+    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "transactionControl");
         if (elements.getLength()==1){
         	elements.item(0).setTextContent("ROLLBACK");
         }else {
-        	throw new Exception("Error generating rollback message. No operation element found.");
+        	throw new Exception("Error generating rollback message. No transactionControl element found.");
         }
        return new DOMSource(document);
     }

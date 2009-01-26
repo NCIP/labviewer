@@ -34,7 +34,7 @@ public class TestCtLabData extends TestCaXchangeGridService{
     public void testCtLabData() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/CT_LAB_DATA.xml");
-          message.getMetadata().setMessageType("CT_LAB_DATA");
+          message.getMetadata().setServiceType("CT_LAB_DATA");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

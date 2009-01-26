@@ -34,7 +34,7 @@ public class TestUnknownMessageType extends TestCaXchangeGridService{
     public void testUnknownMessageType() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/LAB_BASED_AE.xml");
-          message.getMetadata().setMessageType("fjekjfkej");
+          message.getMetadata().setServiceType("fjekjfkej");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

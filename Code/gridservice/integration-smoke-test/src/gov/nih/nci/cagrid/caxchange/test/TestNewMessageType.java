@@ -35,7 +35,7 @@ public class TestNewMessageType extends TestCaXchangeGridService {
         	 messageType = System.getProperty("message.type");
         	 payloadFileName =  System.getProperty("payload.file.name");
       	  InputStream testMessage = getResourceInputStream("/payloads/"+payloadFileName);
-            message.getMetadata().setMessageType(messageType);
+            message.getMetadata().setServiceType(messageType);
           MessagePayload messagePayload = new MessagePayload();
           DocumentBuilder db =dbf.newDocumentBuilder();
           Document payload = db.parse(testMessage);

@@ -31,7 +31,7 @@ public class TestStudyCreation extends TestCaXchangeGridService {
             throw new RuntimeException("Test message does not exist.");
         }
         InputStream testMessage = cpr.getInputStream();
-        message.getMetadata().setMessageType("STUDY_CREATION");
+        message.getMetadata().setServiceType("STUDY_CREATION");
         MessagePayload messagePayload = new MessagePayload();
         URI  uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

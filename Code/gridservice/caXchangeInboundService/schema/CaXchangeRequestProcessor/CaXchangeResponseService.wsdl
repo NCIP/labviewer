@@ -49,6 +49,12 @@
   <message name="GetResponseResponse">
     <part name="parameters" element="tns:GetResponseResponse" />
   </message>
+  <message name="CaXchangeFaultFaultMessage">
+    <part name="fault" element="ns4:CaXchangeFault" />
+  </message>
+  <message name="CaXchangeResponseNotReadyFaultFaultMessage">
+    <part name="fault" element="ns1:CaXchangeResponseNotReadyFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -58,6 +64,8 @@
     <operation name="getResponse">
       <input message="tns:GetResponseRequest" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/GetResponseRequest" />
       <output message="tns:GetResponseResponse" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/GetResponseResponse" />
+      <fault name="CaXchangeFault" message="tns:CaXchangeFaultFaultMessage" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/CaXchangeFaultFaultMessage" />
+      <fault name="CaXchangeResponseNotReadyFault" message="tns:CaXchangeResponseNotReadyFaultFaultMessage" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/CaXchangeResponseNotReadyFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

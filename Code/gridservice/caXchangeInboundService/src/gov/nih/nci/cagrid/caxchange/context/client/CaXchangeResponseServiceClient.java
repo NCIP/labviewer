@@ -107,7 +107,7 @@ public class CaXchangeResponseServiceClient extends ServiceSecurityClient implem
 		}
 	}
 
-  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException {
+  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeResponseNotReadyFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"getResponse");
     gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest params = new gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest();
