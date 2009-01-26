@@ -59,7 +59,7 @@ public abstract class CaXchangeMessagingBean implements MessageExchangeListener 
         		  caXchangeDataUtil.setIn(exchange.getMessage("in"));
         		  caXchangeDataUtil.initialize();
         		  //Process the exchange if the all service types are eligible or the message type is eligible.
-        		  if ((eligibleServiceTypes.isEmpty())||(eligibleServiceTypes.contains(caXchangeDataUtil.getMessageType()))) {
+        		  if ((eligibleServiceTypes.isEmpty())||(eligibleServiceTypes.contains(caXchangeDataUtil.getServiceType()))) {
                      processMessageExchange(exchange);
         		  }else {
         		    NormalizedMessage in = exchange.getMessage("in");

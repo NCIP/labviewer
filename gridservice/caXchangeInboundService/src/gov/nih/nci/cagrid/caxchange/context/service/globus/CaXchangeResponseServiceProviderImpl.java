@@ -26,7 +26,7 @@ public class CaXchangeResponseServiceProviderImpl{
 	}
 	
 
-    public gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse getResponse(gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest params) throws RemoteException {
+    public gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse getResponse(gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest params) throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeResponseNotReadyFault {
     gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse boxedResult = new gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse();
     boxedResult.setCaXchangeResponseMessage(impl.getResponse());
     return boxedResult;

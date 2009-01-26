@@ -36,8 +36,9 @@
 	</xs:complexType>
 	<xs:complexType name="metadata">
 		<xs:sequence>
-			<xs:element name="operation" type="caXchange:operations"/>
-			<xs:element name="messageType" type="xs:string"/>
+			<xs:element name="transactionControl" type="caXchange:transactionControls"/>
+			<xs:element name="serviceType" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="operationName" type="xs:string" nillable="true" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="externalIdentifier" type="xs:string"/>
 			<xs:element name="caXchangeIdentifier" type="xs:string" minOccurs="0">
 				<xs:annotation>
@@ -135,7 +136,7 @@
 			<xs:enumeration value="FAILURE"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="operations">
+	<xs:simpleType name="transactionControls">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="PROCESS"/>
 			<xs:enumeration value="COMMIT"/>

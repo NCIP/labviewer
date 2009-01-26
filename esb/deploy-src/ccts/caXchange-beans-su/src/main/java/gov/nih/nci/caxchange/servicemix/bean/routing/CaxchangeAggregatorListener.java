@@ -69,7 +69,7 @@ public class CaxchangeAggregatorListener  extends CaXchangeMessagingBean {
             original.setContent(originalSource);
             originalUtil.setIn(original);
             originalUtil.initialize();
-            String messageType = originalUtil.getMessageType();
+            String messageType = originalUtil.getServiceType();
             Source aggregatedResponse = in.getContent();
             CaXchangeResponseMessageDocument responseDocument = originalUtil.generateResponseFromAggregatedResponse(aggregatedResponse);
             if (isRollbackRequired(messageType, responseDocument)) {

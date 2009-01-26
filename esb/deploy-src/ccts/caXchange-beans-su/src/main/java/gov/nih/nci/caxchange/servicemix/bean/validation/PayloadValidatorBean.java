@@ -50,7 +50,7 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
         NormalizedMessage out = exchange.createMessage();
         MessageUtil.transfer(in,out);
         try {
-        	  String messageType = caXchangeDataUtil.getMessageType();
+        	  String messageType = caXchangeDataUtil.getServiceType();
               String namespace = getPayloadNamespace(messageType);
               Schema schema = null;
               if (gmeSchemaFactory == null) {

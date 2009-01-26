@@ -247,7 +247,7 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 			            Message requestMessage = new Message();
 			            Metadata metaData = new Metadata();
 			            metaData.setExternalIdentifier("myExternalIdentifier");
-			            metaData.setMessageType("STUDY_CREATION");
+			            metaData.setServiceType("STUDY_CREATION");
 			            Credentials creds = new Credentials();
 			            metaData.setCredentials(creds);
 			            requestMessage.setMetadata(metaData);
@@ -298,7 +298,7 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
 		}
 	}
 
-  public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException {
+  public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
     synchronized(portTypeMutex){
       configureStubSecurity((Stub)portType,"processRequestAsynchronously");
     gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyRequest params = new gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyRequest();
@@ -307,6 +307,18 @@ public class CaXchangeRequestProcessorClient extends ServiceSecurityClient imple
     params.setCaXchangeRequestMessage(caXchangeRequestMessageContainer);
     gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyResponse boxedResult = portType.processRequestAsynchronously(params);
     return boxedResult.getCaXchangeResponseServiceReference();
+    }
+  }
+
+  public gov.nih.nci.caxchange.ResponseMessage processRequestSynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
+    synchronized(portTypeMutex){
+      configureStubSecurity((Stub)portType,"processRequestSynchronously");
+    gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyRequest params = new gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyRequest();
+    gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyRequestCaXchangeRequestMessage caXchangeRequestMessageContainer = new gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyRequestCaXchangeRequestMessage();
+    caXchangeRequestMessageContainer.setCaXchangeRequestMessage(caXchangeRequestMessage);
+    params.setCaXchangeRequestMessage(caXchangeRequestMessageContainer);
+    gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyResponse boxedResult = portType.processRequestSynchronously(params);
+    return boxedResult.getCaXchangeResponseMessage();
     }
   }
 

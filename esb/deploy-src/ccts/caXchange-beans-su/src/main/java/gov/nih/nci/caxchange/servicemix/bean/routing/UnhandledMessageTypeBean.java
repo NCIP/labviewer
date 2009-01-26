@@ -43,7 +43,7 @@ public class UnhandledMessageTypeBean  extends CaXchangeMessagingBean {
         NormalizedMessage out = exchange.createMessage();
         MessageUtil.transfer(exchange.getMessage("in"), out);
         try {
-           String messageType = caXchangeDataUtil.getMessageType();
+           String messageType = caXchangeDataUtil.getServiceType();
            out.setProperty(CaxchangeConstants.ERROR_CODE, CaxchangeErrors.UNHANDLED_MESSAGE_TYPE);
            out.setProperty(CaxchangeConstants.ERROR_MESSAGE, "Caxchange does not handle this message type :"+messageType);
         }catch(Exception e) {

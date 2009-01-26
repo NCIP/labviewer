@@ -46,12 +46,13 @@ import gov.nih.nci.cagrid.common.Utils;
  */
 public class GenericInvocationStrategy extends GridInvocationStrategy {
 
-	private Properties caxchangeProps;
-	private String gridClientClassName;
-	private String requestPayloadClassName;
-	private String operationName;
-	private String returnTypeNameSpace;
-	private String returnTypeElement;
+	protected Properties caxchangeProps;
+	protected String gridClientClassName;
+	protected String requestPayloadClassName;
+	protected String operationName;
+	protected String returnTypeNameSpace;
+	protected String returnTypeElement;
+	protected boolean useCredentials=true;
 
 	private static Logger logger = LogManager.getLogger(GenericInvocationStrategy.class); 
 	
@@ -69,7 +70,7 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 
 			if(globusCredentials.size()>0){
 				cred=globusCredentials.iterator().next();
-			}else{
+			}else if(isUseCredentials()){
 				throw new GridInvocationException("no credentials found");
 			}
 			String url=getServiceUrl();
@@ -128,7 +129,12 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 		Object client=null;
 		boolean secureConstructor=true;
 		try {
-		  gridClientConstructor = gridClientClass.getConstructor(String.class, GlobusCredential.class);
+		  if (isUseCredentials()) {	
+		     gridClientConstructor = gridClientClass.getConstructor(String.class, GlobusCredential.class);
+		  } else {
+			  gridClientConstructor = gridClientClass.getConstructor(String.class);
+			  secureConstructor=false;
+		  }
 		}catch(NoSuchMethodException nsme) {
 			try {
 			  gridClientConstructor = gridClientClass.getConstructor(String.class);
@@ -304,6 +310,12 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 	}
 	public void setReturnTypeElement(String returnTypeElement) {
 		this.returnTypeElement = returnTypeElement;
+	}
+	public boolean isUseCredentials() {
+		return useCredentials;
+	}
+	public void setUseCredentials(boolean useCredentials) {
+		this.useCredentials = useCredentials;
 	}
 
 }

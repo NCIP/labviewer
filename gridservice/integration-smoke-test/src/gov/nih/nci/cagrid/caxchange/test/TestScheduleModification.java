@@ -32,7 +32,7 @@ public class TestScheduleModification extends TestCaXchangeGridService{
     public void testScheduleModification() {
       try {
     	  InputStream testMessage = getResourceInputStream("/payloads/SCHEDULE_MODIFICATION.xml");
-          message.getMetadata().setMessageType("SCHEDULE_MODIFICATION");
+          message.getMetadata().setServiceType("SCHEDULE_MODIFICATION");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

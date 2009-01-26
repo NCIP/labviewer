@@ -33,7 +33,7 @@ public class TestLoadLab extends TestCaXchangeGridService{
       try {
 
     	  InputStream testMessage = getResourceInputStream("/payloads/LOAD_LAB_TO_CDMS.xml");
-          message.getMetadata().setMessageType("LOAD_LAB_TO_CDMS");
+          message.getMetadata().setServiceType("LOAD_LAB_TO_CDMS");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
