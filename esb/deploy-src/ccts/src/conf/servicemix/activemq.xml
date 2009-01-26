@@ -96,9 +96,9 @@
   -->
 	<bean id="mysql-ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/amq"/>
-		<property name="username" value="amqadmin"/>
-		<property name="password" value="changeme"/>
+		<property name="url" value="jdbc:mysql://@AMQ_DATABASE_HOST@:@AMQ_DATABASE_PORT@/@AMQ_DATABASE@"/>
+		<property name="username" value="@AMQ_DATABASE_USER@"/>
+		<property name="password" value="@AMQ_DATABASE_PASS@"/>
 		<property name="poolPreparedStatements" value="true"/>
 	</bean>
 </beans>

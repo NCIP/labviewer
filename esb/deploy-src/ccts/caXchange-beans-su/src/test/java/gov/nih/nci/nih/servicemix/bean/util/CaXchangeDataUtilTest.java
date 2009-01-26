@@ -91,7 +91,7 @@ public class CaXchangeDataUtilTest extends CaxchangeBeanServiceUnitTest {
 	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
 	    	util.setIn(me.getMessage("in"));
 	    	util.initialize();
-	    	String messageType = util.getMessageType();
+	    	String messageType = util.getServiceType();
 	    	assertEquals(messageType,"REGISTER_SUBJECT");
 		  }catch(Exception e) {
 			  throw new RuntimeException(e);

@@ -16,8 +16,19 @@ public interface CaXchangeRequestProcessorI {
    * Process an incoming request asynchronously.
    *
    * @param caXchangeRequestMessage
+   * @throws CaXchangeFault
+   *	
    */
-  public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException ;
+  public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault ;
+
+  /**
+   * Process a request for caXchange synchronously.
+   *
+   * @param caXchangeRequestMessage
+   * @throws CaXchangeFault
+   *	
+   */
+  public gov.nih.nci.caxchange.ResponseMessage processRequestSynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault ;
 
 }
 

@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema targetNamespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/types"
-            xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:tns="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/types" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:tns="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/types" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/types" elementFormDefault="qualified" attributeFormDefault="unqualified">
   <element name="CaXchangeResponseServiceReference">
     <complexType>
-      <sequence >
-        <element ref="wsa:EndpointReference"></element>
+      <sequence>
+        <element ref="wsa:EndpointReference" />
       </sequence>
     </complexType>
   </element>
-
+  <element name="CaXchangeFault" type="tns:CaXchangeFault" />
+  <complexType name="CaXchangeFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
+  <element name="CaXchangeResponseNotReadyFault" type="tns:CaXchangeResponseNotReadyFault" />
+  <complexType name="CaXchangeResponseNotReadyFault">
+    <complexContent>
+      <extension base="wsrbf:BaseFaultType" />
+    </complexContent>
+  </complexType>
 </schema>
+

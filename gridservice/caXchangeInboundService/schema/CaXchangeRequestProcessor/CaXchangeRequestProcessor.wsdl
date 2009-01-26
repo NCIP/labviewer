@@ -38,6 +38,26 @@
           </sequence>
         </complexType>
       </element>
+      <element name="ProcessRequestSynchronouslyRequest">
+        <complexType>
+          <sequence>
+            <element name="caXchangeRequestMessage">
+              <complexType>
+                <sequence>
+                  <element ref="ns0:caXchangeRequestMessage" minOccurs="1" maxOccurs="1" />
+                </sequence>
+              </complexType>
+            </element>
+          </sequence>
+        </complexType>
+      </element>
+      <element name="ProcessRequestSynchronouslyResponse">
+        <complexType>
+          <sequence>
+            <element ref="ns0:caXchangeResponseMessage" minOccurs="1" maxOccurs="1" />
+          </sequence>
+        </complexType>
+      </element>
       <element name="CaXchangeRequestProcessorResourceProperties">
         <complexType>
           <sequence>
@@ -54,6 +74,15 @@
   <message name="ProcessRequestAsynchronouslyResponse">
     <part name="parameters" element="tns:ProcessRequestAsynchronouslyResponse" />
   </message>
+  <message name="ProcessRequestSynchronouslyRequest">
+    <part name="parameters" element="tns:ProcessRequestSynchronouslyRequest" />
+  </message>
+  <message name="ProcessRequestSynchronouslyResponse">
+    <part name="parameters" element="tns:ProcessRequestSynchronouslyResponse" />
+  </message>
+  <message name="CaXchangeFaultFaultMessage">
+    <part name="fault" element="ns1:CaXchangeFault" />
+  </message>
   <!--============================================================
 
                        P O R T T Y P E
@@ -63,6 +92,12 @@
     <operation name="processRequestAsynchronously">
       <input message="tns:ProcessRequestAsynchronouslyRequest" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestAsynchronouslyRequest" />
       <output message="tns:ProcessRequestAsynchronouslyResponse" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestAsynchronouslyResponse" />
+      <fault name="CaXchangeFault" message="tns:CaXchangeFaultFaultMessage" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/CaXchangeFaultFaultMessage" />
+    </operation>
+    <operation name="processRequestSynchronously">
+      <input message="tns:ProcessRequestSynchronouslyRequest" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestSynchronouslyRequest" />
+      <output message="tns:ProcessRequestSynchronouslyResponse" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestSynchronouslyResponse" />
+      <fault name="CaXchangeFault" message="tns:CaXchangeFaultFaultMessage" wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/CaXchangeFaultFaultMessage" />
     </operation>
     <operation name="getServiceSecurityMetadata">
       <input message="wns0:GetServiceSecurityMetadataRequest" wsa:Action="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest" />

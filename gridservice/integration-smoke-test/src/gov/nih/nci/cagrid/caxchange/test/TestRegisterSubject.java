@@ -37,7 +37,7 @@ public class TestRegisterSubject extends TestCaXchangeGridService {
     public void testRegisterSubject() {
       try {
     	InputStream testMessage = getResourceInputStream("/payloads/REGISTER_SUBJECT.xml");
-        message.getMetadata().setMessageType("REGISTER_SUBJECT");
+        message.getMetadata().setServiceType("REGISTER_SUBJECT");
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
         uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");

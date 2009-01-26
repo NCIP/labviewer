@@ -26,9 +26,15 @@ public class CaXchangeRequestProcessorProviderImpl{
 	}
 	
 
-    public gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyResponse processRequestAsynchronously(gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyRequest params) throws RemoteException {
+    public gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyResponse processRequestAsynchronously(gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyRequest params) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
     gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyResponse boxedResult = new gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestAsynchronouslyResponse();
     boxedResult.setCaXchangeResponseServiceReference(impl.processRequestAsynchronously(params.getCaXchangeRequestMessage().getCaXchangeRequestMessage()));
+    return boxedResult;
+  }
+
+    public gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyResponse processRequestSynchronously(gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyRequest params) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
+    gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyResponse boxedResult = new gov.nih.nci.cagrid.caxchange.stubs.ProcessRequestSynchronouslyResponse();
+    boxedResult.setCaXchangeResponseMessage(impl.processRequestSynchronously(params.getCaXchangeRequestMessage().getCaXchangeRequestMessage()));
     return boxedResult;
   }
 
