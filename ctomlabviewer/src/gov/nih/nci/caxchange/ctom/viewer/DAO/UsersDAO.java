@@ -114,7 +114,7 @@ public class UsersDAO extends HibernateDaoSupport
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
 			users = session.createQuery("from Users").list();
-
+			session.getTransaction().commit();
 		}
 		catch (Exception se)
 		{
@@ -140,8 +140,10 @@ public class UsersDAO extends HibernateDaoSupport
 			List usersList =
 					session.createQuery("from Users where id=" + id).list();
 			if (usersList != null && !usersList.isEmpty())
+			{	
 				user = (Users) usersList.get(0);
-
+			}	
+			session.getTransaction().commit();
 		}
 		catch (Exception se)
 		{
