@@ -13,6 +13,7 @@
 	prefix="nested"%>
 
 <html:form action="/UserConfig.do" method="post">
+<div style="margin-top: 0; padding-top: 0;">
 	<!-- laf box 1st half -->
 		<div class="box">
 			<div align=center>
@@ -47,14 +48,12 @@
 																	<table cellpadding="0" cellspacing="0" border="0"
 																		width="100%" class="contentBegins">
 																		<tr>
-																			<td>
-																			<div> Please enter all data marked (<font color="red">*</font>)</div>
+																			<td align="middle">
+																			 <font size="2" color="blue">Please enter all data marked (<font color="red">*</font>)</font>
 																				<table summary="Enter summary of data here"
 																					cellpadding="2" cellspacing="0" border="0"
-																					id="myScrollTable" class="dataTable"
-																					width="75%">
-																					<tbody>
-																						<tr>
+																					width="55%" style="font-family:verdana; font-size:13px" align="center">
+																					<tr>
 																						   <td>
 																						   <font color="red">*</font> Login Name:
 																						   </td>
@@ -88,7 +87,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Organization:
+																						   &nbsp; Organization:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.organization"/>
@@ -96,7 +95,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Department:
+																						   &nbsp;  Department:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.department"/>
@@ -104,7 +103,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Title:
+																						 &nbsp;   Title:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.title"/>
@@ -127,20 +126,20 @@
 																							</td>
 																							</tr>
 																							
-																					</tbody>
 																				</table>
 																			</td>
 																		</tr>
 																		<tr>
 																		<td>
 																		<div align="center">
+																		<html:reset style="actionButton">Reset</html:reset>
+																		
 																		<input name="saveUser" type="button" class="button" id="save"
 																			value="Save User" onclick="handleSaveUser()" />
 							
 																		</div>
 																		</td>
 																		</tr>
-																		
 																	</table>
 																</td>
 															</tr>
@@ -163,11 +162,13 @@
 				<!-- end inner border -->
 			</div>
 		</div>
+	</div>	
 		<!-- laf box 2nd half -->
+
 	</html:form>
+	
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 250);
 
 //handles Save User action
 function handleSaveUser(){

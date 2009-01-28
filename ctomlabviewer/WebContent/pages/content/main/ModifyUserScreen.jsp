@@ -49,10 +49,9 @@
 																		width="100%" class="contentBegins">
 																		<tr>
 																			<td>
-																			<table summary="Enter summary of data here"
+																		<table summary="Enter summary of data here"
 																					cellpadding="2" cellspacing="0" border="0"
-																					id="myScrollTable" class="dataTable"
-																					width="75%">
+																					width="55%" style="font-family:verdana; font-size:13px" align="center">
 																					<tbody>
 																						<tr>
 																						   <td>
@@ -88,7 +87,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Organization:
+																						   &nbsp; Organization:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.organization"/>
@@ -96,7 +95,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Department:
+																						  &nbsp; Department:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.department"/>
@@ -104,7 +103,7 @@
 																							</tr>
 																							<tr>
 																						   <td>
-																						    Title:
+																						   &nbsp; Title:
 																						   </td>
 																					    	<td>
 																					       	<html:text style="width: 2in" name="UserConfigForm" property="userBean.title"/>
