@@ -105,6 +105,22 @@
 		<runtarget target="preDeployTomcat" />
 		<runtarget target="deployWebApp" />
 	</target>
+	
+	<target name="createWar" depends="setDeploymentProperties" description="Creates a wsrf-coppa.war file for deployment to tomcat">
+	               <delete dir="${tomcat.dir}" />
+	               <mkdir dir="${tomcat.dir}" />
+		       <ant antfile="${env.GLOBUS_LOCATION}/share/globus_wsrf_common/tomcat/tomcat.xml" inheritAll="false" target="deploySecureTomcat">
+		          <property name="tomcat.dir" value="${tomcat.dir}"/>
+		          <property name="webapp.name" value="${globus.webapp}"/>
+		       </ant>
+		       <antcall target="deployTomcat" />
+		       <mkdir dir="dist" />
+		       <copy file="deploy-log4j.properties" tofile="${tomcat.dir}/webapps/${globus.webapp}/WEB-INF/classes/log4j.properties" overwrite="true"/>
+		       <war destfile="dist/${globus.webapp}.war" 
+		            webxml="${tomcat.dir}/webapps/${globus.webapp}/WEB-INF/web.xml"
+		            basedir="${tomcat.dir}/webapps/${globus.webapp}" />
+	</target>
+	
 
 	<!-- deploy service to jboss -->
 	<target name="deployJBoss" depends="all,setDeploymentProperties" description="Deploys to JBOSS_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
