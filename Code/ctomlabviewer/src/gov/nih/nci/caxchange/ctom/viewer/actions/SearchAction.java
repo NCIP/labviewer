@@ -159,17 +159,19 @@ public class SearchAction extends DispatchAction
 			LabSearchDAO labSearch = new LabSearchDAO();
 			if (request.getSession().getAttribute("ALL_SEARCH_RESULT") == null)
 			{
-				searchResult =
+				SearchResult allSearchResult = new SearchResult();
+				allSearchResult =
 						labSearch.searchObjects(mapping, lForm, request,
 								errors, messages);
 				session.setAttribute(DisplayConstants.ALL_SEARCH_RESULT,
-						searchResult);
+						allSearchResult.getSearchResultObjects());
+				searchResult = allSearchResult;
 			}
 			else
 			{
-				SearchResult retreivedResults =
-						(SearchResult) request.getSession().getAttribute(
-								"ALL_SEARCH_RESULT");
+				SearchResult retreivedResults = new SearchResult();
+				retreivedResults.setSearchResultObjects((List) request.getSession().getAttribute(
+								"ALL_SEARCH_RESULT"));
 				searchResult.setSearchResultObjects(retreivedResults
 						.getSearchResultObjects());
 			}
