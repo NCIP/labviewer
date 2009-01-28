@@ -120,11 +120,13 @@ public class CommonUtil
 			String c3prurl = (String) props1.getProperty("BaseURLC3PR");
 			String C3Durl = (String)props1.getProperty("BaseURLC3D");
 			String url = (String) props1.getProperty("url");
+			String tissueurl = (String) props1.getProperty("tissueURL");
 			
 			session.setAttribute("BaseURLcaAERS", caAERSurl);
 			session.setAttribute("BaseURLC3PR", c3prurl);
 			session.setAttribute("caXchangeURL", url);
 			session.setAttribute("BaseURLC3D", C3Durl);
+			session.setAttribute("tissueURL", tissueurl);
 		}
 		catch (FileNotFoundException e1)
 		{
@@ -209,6 +211,8 @@ public class CommonUtil
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
 	}
 
 }
