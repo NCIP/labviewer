@@ -103,6 +103,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 
@@ -234,8 +235,8 @@ public class UserConfigAction extends DispatchAction
 				
 		if (deleted)
 		{
-			messages.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					DisplayConstants.ERROR_ID, "The user was deleted"));
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					DisplayConstants.MESSAGE_ID,"The user was deleted"));
 			saveMessages(request, messages);
 			if (logDB.isDebugEnabled())
 				logDB.debug(session.getId()
@@ -318,9 +319,8 @@ public class UserConfigAction extends DispatchAction
 		userAdded = userDAO.addUser(user);
 		if (userAdded)
 		{
-			messages.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					DisplayConstants.ERROR_ID,
-					"The user was successfully added"));
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					DisplayConstants.MESSAGE_ID,"The user was successfully added"));
 			saveMessages(request, messages);
 			if (logDB.isDebugEnabled())
 				logDB
@@ -474,8 +474,8 @@ public class UserConfigAction extends DispatchAction
 		}
 		if (userToModify)
 		{
-			messages.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					DisplayConstants.ERROR_ID, "The user was deleted"));
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+					DisplayConstants.MESSAGE_ID,"The user details were successfully modified"));
 			saveMessages(request, messages);
 			if (logDB.isDebugEnabled())
 				logDB
