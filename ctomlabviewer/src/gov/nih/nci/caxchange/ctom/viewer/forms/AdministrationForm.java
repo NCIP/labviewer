@@ -109,6 +109,24 @@ public class AdministrationForm extends ActionForm implements
 	private String c3dUrl;
 
 	private String tissueUrl;
+	
+	private String c3prUrl;
+
+	/**
+	 * @return the c3prUrl
+	 */
+	public String getC3prUrl()
+	{
+		return c3prUrl;
+	}
+
+	/**
+	 * @param url the c3prUrl to set
+	 */
+	public void setC3prUrl(String url)
+	{
+		c3prUrl = url;
+	}
 
 	/*
 	 * (non-Javadoc)
