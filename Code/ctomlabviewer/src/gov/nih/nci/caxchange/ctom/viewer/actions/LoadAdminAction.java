@@ -207,9 +207,17 @@ public class LoadAdminAction extends Action
 						.getAttribute("BaseURLcaAERS")
 						: "");
 		baseDBForm
-				.setC3dUrl((String) session.getAttribute("BaseURLC3PR") != null ? (String) session
-						.getAttribute("BaseURLC3PR")
+				.setC3dUrl((String) session.getAttribute("BaseURLC3D") != null ? (String) session
+						.getAttribute("BaseURLC3D")
 						: "");
+		baseDBForm
+		.setC3prUrl((String) session.getAttribute("BaseURLC3PR") != null ? (String) session
+				.getAttribute("BaseURLC3PR")
+				: "");
+		baseDBForm
+		.setTissueUrl((String) session.getAttribute("tissueURL") != null ? (String) session
+				.getAttribute("tissueURL")
+				: "");
 		baseDBForm
 				.setCaxUrl((String) session.getAttribute("caXchangeURL") != null ? (String) session
 						.getAttribute("caXchangeURL")
