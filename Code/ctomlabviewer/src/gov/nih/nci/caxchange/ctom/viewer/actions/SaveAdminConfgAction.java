@@ -203,7 +203,8 @@ public class SaveAdminConfgAction extends Action
 			Properties propsToUpdate = new Properties();
 			propsToUpdate.put("BaseURLcaAERS", aForm.getCaaersUrl());
 			propsToUpdate.put("BaseURLC3D", aForm.getC3dUrl());
-			propsToUpdate.put("BaseURLC3PR", aForm.getTissueUrl());
+			propsToUpdate.put("BaseURLC3PR", aForm.getC3prUrl());
+			propsToUpdate.put("tissueURL",aForm.getTissueUrl());
 			propsToUpdate.put("url", aForm.getCaxUrl());
 			OutputStream oStream =
 					new BufferedOutputStream(new FileOutputStream(file));
@@ -218,6 +219,12 @@ public class SaveAdminConfgAction extends Action
 		{
 			logDB.error("Error writing to the config file: " + CONFIG_FILE);
 		}
+		//after saving the properties to the file,load it into session.
+		session.setAttribute("BaseURLcaAERS", aForm.getCaaersUrl());
+		session.setAttribute("BaseURLC3PR", aForm.getC3prUrl());
+		session.setAttribute("caXchangeURL", aForm.getCaxUrl());
+		session.setAttribute("BaseURLC3D", aForm.getC3dUrl());
+		session.setAttribute("tissueURL", aForm.getTissueUrl());
 	}
 
 }
