@@ -141,10 +141,14 @@ function SelectAll()
 
 
 <!-- laf box 1st half -->
-<div class="box" >
-	<div class="pane" align="center">
-    <!-- header -->
-	    <div class="header"><div class="background-L"><div class="background-R">
+<div style="margin-top: 0; padding-top: 0;">
+	<!-- laf box 1st half -->
+	<div class="box">
+		<div align="center">
+			<!-- header -->
+			<div class="header">
+				<div class="background-L">
+					<div class="background-R">
 	      <h2>Lab Activities - Search Results [${SEARCH_RESULT_COUNT} record(s) found]</h2>
 	    </div></div></div>
 	    <!-- inner border -->
@@ -483,11 +487,12 @@ function SelectAll()
     <!-- end inner border -->
 	</div>
 </div>
+</div>
 <!-- laf box 2nd half -->
 
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 200);
+var t = new ScrollableTable(document.getElementById('myScrollTable'), 90);
 </script>
 </head>
 

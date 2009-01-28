@@ -65,14 +65,23 @@
 												<tr>
 													<tr>
 													<td>
+													<font size="2" face="arial">C3PR Base URL</font>
+													</td>
+													<td>
+														<html:text style="width: 4in" property="c3prUrl"/>
+													</td>
+												</tr>
+												<tr>
+													<tr>
+													<td>
 													<font size="2" face="arial">caTissue Base URL</font>
 													</td>
 													<td>
 														<html:text style="width: 4in" property="tissueUrl"/>
 													</td>
 												</tr>
-												<tr>
-												<td align="center">
+												<tr colspan="2">
+												<td colspan="2" align="center">
 														<!-- action buttons begins -->
 														<html:reset style="actionButton">Reset</html:reset>
 														<html:submit style="actionButton">Save</html:submit>
