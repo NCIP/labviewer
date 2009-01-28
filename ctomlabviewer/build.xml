@@ -96,6 +96,7 @@
 				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
 				<filter token="BaseURLC3PR" value="${BaseURLC3PR}" />
 				<filter token="loadLabURLS" value="${loadLabURLS}" />	
+				<filter token="tissueURL" value="${tissueURL}" />
 			</filterset>
 		</copy>
 	</target>
