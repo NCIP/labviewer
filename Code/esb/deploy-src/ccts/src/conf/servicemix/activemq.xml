@@ -45,7 +45,7 @@
 		</amq:transportConnectors>
 		<amq:networkConnectors>
 			<!-- by default just auto discover the other brokers -->
-			<amq:networkConnector uri="multicast://default"/>
+			<!-- <amq:networkConnector uri="multicast://default"/> -->
 			<!--  
       <amq:networkConnector uri="static://(tcp://host1:61616,tcp://host2:61616)"/>
       -->
