@@ -26,17 +26,91 @@ public class LabLoaderImpl extends LabLoaderImplBase
 	}
 
 	/**
-	 * loadLab method saves the Lab Data
-	 * 
+	 * loadLab method unmarshalls Lab message and calls into the 
+	 * DAO to the persist the Lab message data
 	 * @param string
 	 * @throws RemoteException
 	 */
 	public void loadLab(java.lang.String string) throws RemoteException
 	{
 		logger.info("LabLoader loadLab method called.");
-
-		// Authorization code : note No Specific exception for LabLoader
 		String username = LabLoaderAuthorization.getCallerIdentity();
+		if (!authorized(username))
+		{
+			logger.error("User " + username
+					+ " not authorized for this operation");
+			RemoteException re =
+					new RemoteException("User " + username
+							+ " not authorized for this operation");
+			throw re;
+
+		}
+		else
+		{
+			// Now unmarshall the HL7v3 message
+			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
+			Object obj = null;
+			Connection con = null;
+			try
+			{
+				obj = unMarshaller.parseXmlToObject(string);
+
+				// Now save the lab
+				ProtocolHandler dao = new ProtocolHandler();
+				// obtain the connection
+				con = dao.getConnection();
+				con.setAutoCommit(false);
+
+				if (obj != null)
+				{
+					// Call into the DAO save Protocol method.
+					dao.persist(con,
+							(gov.nih.nci.ctom.ctlab.domain.Protocol) obj);
+				}
+				// call connection commit
+				con.commit();
+				logger
+						.debug("Message succussfully saved to the CTODS Database");
+			}// end of try
+			catch (Exception ex)
+			{
+				logger.debug(ex.getMessage());
+				try
+				{
+					// issue rollback in case of exception
+					con.rollback();
+				}
+				catch (Exception e)
+				{
+					// throw the remote exception
+					RemoteException re1 = new RemoteException(e.getMessage());
+					throw re1;
+				}
+			}
+			finally
+			{
+				try
+				{
+					con.close();
+				}
+				catch (Exception ex)
+				{
+					logger.error("Error closing connection",ex);
+				}
+			}// end of finally
+		}// end of else
+	}
+
+	/**
+	 * @param username
+	 * @return
+	 * @throws RemoteException
+	 */
+	private boolean authorized(String username) throws RemoteException
+	{
+		boolean userAuthorized = false;
+		// Authorization code : note No Specific exception for LabLoader
+
 		String user = "";
 		if (username == null)
 		{
@@ -58,80 +132,20 @@ public class LabLoaderImpl extends LabLoaderImplBase
 				user = username.substring(beginIndex + 1, endIndex);
 			}
 			// call the authorization method
-			boolean authorized = lvaHelper.isAuthorized(user);
+			userAuthorized = lvaHelper.isAuthorized(user);
+		}
 
-			if (!authorized)
-			{
-				logger.error("User " + username
-						+ " not authorized for this operation");
-				RemoteException re =
-						new RemoteException("User " + username
-								+ " not authorized for this operation");
-				throw re;
-
-			}
-			else
-			{
-				// Now unmarshall the HL7v3 message
-				HL7v3CtLabUnMarshaller unMarshaller =
-						new HL7v3CtLabUnMarshaller();
-				Object obj = null;
-				Connection con = null;
-				try
-				{
-					obj = unMarshaller.parseXmlToObject(string);
-
-					// Now save the lab
-					ProtocolHandler dao = new ProtocolHandler();
-					// obtain the connection
-					con = dao.getConnection();
-					con.setAutoCommit(false);
-
-					if (obj != null)
-					{
-						// Call into the DAO save Protocol method.
-						dao.persist(con,
-								(gov.nih.nci.ctom.ctlab.domain.Protocol) obj);
-					}
-					// call connection commit
-					con.commit();
-					logger
-							.debug("Message succussfully saved to the CTODS Database");
-				}// end of try
-				catch (Exception ex)
-				{
-					logger.debug(ex.getMessage());
-					try
-					{
-						// issue rollback in case of exception
-						con.rollback();
-					}
-					catch (Exception e)
-					{
-						// throw the remote exception
-						RemoteException re =
-								new RemoteException(e.getMessage());
-						throw re;
-					}
-				}
-				finally
-				{
-					try
-					{
-						con.close();
-					}
-					catch (Exception ex)
-					{
-					}
-				}// end of finally
-			}// end of else
-		}// end of else
+		return userAuthorized;
 
 	}
 
+	/**
+	 * @param string
+	 * @throws RemoteException
+	 */
 	public void rollback(java.lang.String string) throws RemoteException
 	{
-		logger.info("LabLoader rollback method called.");
+		logger.info("LabLoader rollback method called: Not Implemented");
 	}
 
 }
