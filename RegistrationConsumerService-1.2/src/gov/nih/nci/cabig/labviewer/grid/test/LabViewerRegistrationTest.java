@@ -21,56 +21,70 @@ import org.xml.sax.SAXException;
 /**
  * Test class to test the Registration Consumer for lab viewer
  * <P>
+ * 
  * @author Michael Holck
  */
 public class LabViewerRegistrationTest
 {
-	String serviceUrl ="https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer"; //"https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	//private String serviceUrl= "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	//https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian 
-	//String serviceUrl= "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	//String serviceUrl = "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl = "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl ="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	private String sampleFile = "/SampleRegistrationMessage.xml";
-	private String proxyFile ="D:/proxy";
+	String serviceUrl =
+			"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // "https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	// private String serviceUrl=
+	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	// https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian
+	// String serviceUrl=
+	// "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	// String serviceUrl =
+	// "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
+	// String serviceUrl =
+	// "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	// String serviceUrl
+	// ="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
+	private String sampleFile = "/RegistrationMessage.xml";
+	private String proxyFile = "D:/proxy";
 	private Logger logger = Logger.getLogger(getClass());
+
 	/**
-	 * main method just creates this class and calls the test method which performs all
-	 * the work
+	 * main method just creates this class and calls the test method which
+	 * performs all the work
 	 * <P>
-	 * @param args not needed
+	 * 
+	 * @param args
+	 *            not needed
 	 */
 	public static void main(String[] args)
 	{
 		LabViewerRegistrationTest tester = new LabViewerRegistrationTest();
 		tester.test();
 	}
-	
+
 	/**
-	 * test method performs the test by creating the registration object and calling
-	 * the service
+	 * test method performs the test by creating the registration object and
+	 * calling the service
 	 */
 	public void test()
 	{
 		try
 		{
-			System.out.println("Calling patient registration service at " + serviceUrl);
-			logger.debug("Calling patient registration service at " + serviceUrl);
-			
+			System.out.println("Calling patient registration service at "
+					+ serviceUrl);
+			logger.debug("Calling patient registration service at "
+					+ serviceUrl);
+
 			// Setup the credentials
-			GlobusCredential gb =new GlobusCredential(proxyFile);//this.obtainCredentials();//new GlobusCredential(proxyFile);
-			
-			 // Create the client
-			 RegistrationConsumerClient client = new RegistrationConsumerClient(this.serviceUrl,gb);
-			
+			GlobusCredential gb = new GlobusCredential(proxyFile);// this.obtainCredentials();//new
+																	// GlobusCredential(proxyFile);
+
+			// Create the client
+			RegistrationConsumerClient client =
+					new RegistrationConsumerClient(this.serviceUrl, gb);
+
 			// Create the Registration object
 			Registration reg = getRegistration();
-			
+
 			// Call the service
 			client.register(reg);
-			//client.rollback(reg);
-			
+			// client.rollback(reg);
+
 			System.out.println("Returned from calling service");
 		}
 		catch (Exception e)
@@ -78,66 +92,86 @@ public class LabViewerRegistrationTest
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * Obtains grid credentials directly from Dorian.
+	 * 
 	 * @return GlobusCredential
 	 */
-	private GlobusCredential obtainCredentials(){
-		
-		GlobusCredential proxy =null;
-		try{
+	private GlobusCredential obtainCredentials()
+	{
+
+		GlobusCredential proxy = null;
+		try
+		{
 			logger.debug("Obtaining globus Proxy");
-			   //Create credential		
+			// Create credential
 
-			   Credential cred = new Credential();
-			   BasicAuthenticationCredential bac = new BasicAuthenticationCredential();
-			   bac.setUserId("ccts@nih.gov");
-			   bac.setPassword("!Ccts@nih.gov1");
-			   cred.setBasicAuthenticationCredential(bac);
-					
-			   //Authenticate to the IdP (DorianIdP) using credential
-			   AuthenticationClient authClient = new AuthenticationClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",cred);
-			   SAMLAssertion saml = authClient.authenticate();
-					
+			Credential cred = new Credential();
+			BasicAuthenticationCredential bac =
+					new BasicAuthenticationCredential();
+			bac.setUserId("ccts@nih.gov");
+			bac.setPassword("!Ccts@nih.gov1");
+			cred.setBasicAuthenticationCredential(bac);
 
-			   //Requested Grid Credential lifetime (12 hours)
-					    
-			   ProxyLifetime lifetime = new ProxyLifetime();
-			   lifetime.setHours(12);
+			// Authenticate to the IdP (DorianIdP) using credential
+			AuthenticationClient authClient =
+					new AuthenticationClient(
+							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
+							cred);
+			SAMLAssertion saml = authClient.authenticate();
 
-			   //Delegation Path Length
-					
-			   int delegationLifetime = 0;
+			// Requested Grid Credential lifetime (12 hours)
 
-			   //Request Grid Credential
+			ProxyLifetime lifetime = new ProxyLifetime();
+			lifetime.setHours(12);
 
-			    IFSUserClient dorian = new IFSUserClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian");
-			    proxy = dorian.createProxy(saml, lifetime,delegationLifetime);
-					
-			 }catch (Exception e) {
-			   e.printStackTrace();
-			 }
-			 return proxy;
+			// Delegation Path Length
+
+			int delegationLifetime = 0;
+
+			// Request Grid Credential
+
+			IFSUserClient dorian =
+					new IFSUserClient(
+							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian");
+			proxy = dorian.createProxy(saml, lifetime, delegationLifetime);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return proxy;
 
 	}
-	
+
 	/**
-	 * getRegistration reads the XML file and creates a registration object from it for testing
+	 * getRegistration reads the XML file and creates a registration object from
+	 * it for testing
 	 * <P>
+	 * 
 	 * @return
 	 * @throws DeserializationException
 	 * @throws SAXException
 	 */
-	private Registration getRegistration() throws DeserializationException, SAXException
+	private Registration getRegistration() throws DeserializationException,
+			SAXException
 	{
-    	InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
-        InputStreamReader reader = new InputStreamReader(sampleIs);
-        InputStream wsddIs = getClass().getResourceAsStream("/gov/nih/nci/ccts/grid/client/client-config.wsdd");
+		InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
+		InputStreamReader reader = new InputStreamReader(sampleIs);
+		InputStream wsddIs =
+				getClass().getResourceAsStream(
+						"/gov/nih/nci/ccts/grid/client/client-config.wsdd");
 
-        Registration reg = (gov.nih.nci.cabig.ccts.domain.Registration)
-        	Utils.deserializeObject(reader, gov.nih.nci.cabig.ccts.domain.Registration.class, wsddIs);
-        
-        return reg;
-    }
+		Registration reg =
+				(gov.nih.nci.cabig.ccts.domain.Registration) Utils
+						.deserializeObject(
+								reader,
+								gov.nih.nci.cabig.ccts.domain.Registration.class,
+								wsddIs);
+
+		return reg;
+	}
 
 }
