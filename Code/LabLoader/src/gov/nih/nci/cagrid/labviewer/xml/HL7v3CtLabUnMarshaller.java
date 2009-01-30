@@ -171,6 +171,25 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 
 		} catch (NullPointerException ex) {
 		}
+		try {
+
+			expression = "//enrolledSubject/subjectPerson/name/family";
+			Node xNode = (Node) xpath.evaluate(expression, doc,
+					XPathConstants.NODE);
+			participant.setLastName(xNode.getFirstChild().getNodeValue());
+
+		} catch (NullPointerException ex) {
+		}
+		
+		try {
+
+			expression = "//enrolledSubject/subjectPerson/name/given";
+			Node xNode = (Node) xpath.evaluate(expression, doc,
+					XPathConstants.NODE);
+			participant.setFirstName(xNode.getFirstChild().getNodeValue());
+
+		} catch (NullPointerException ex) {
+		}
 
 		try {
 
