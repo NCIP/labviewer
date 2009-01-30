@@ -23,5 +23,9 @@ public interface GridMessage {
     
     public String getCaxchangeIdentifier();
     
+    public String getOperationName();
+    
+    public String getServiceType();
+    
 
 }

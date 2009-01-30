@@ -16,10 +16,12 @@ import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+import javax.xml.transform.dom.DOMSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
 import org.apache.servicemix.jbi.util.MessageUtil;
 /**
  * An abstract servicemix bean component which can be implemented to add new beans to 
@@ -58,6 +60,11 @@ public abstract class CaXchangeMessagingBean implements MessageExchangeListener 
         	   if (exchange.getStatus().equals(ExchangeStatus.ACTIVE)) { 
         		  caXchangeDataUtil.setIn(exchange.getMessage("in"));
         		  caXchangeDataUtil.initialize();
+        			NormalizedMessage inMessage = exchange.getMessage("in");
+        			//Because of the servicemix issue of StreamSource can be read only once.
+        			if (!(inMessage.getContent() instanceof DOMSource)) {
+        				inMessage.setContent(caXchangeDataUtil.getDOMSource());
+        			}
         		  //Process the exchange if the all service types are eligible or the message type is eligible.
         		  if ((eligibleServiceTypes.isEmpty())||(eligibleServiceTypes.contains(caXchangeDataUtil.getServiceType()))) {
                      processMessageExchange(exchange);
