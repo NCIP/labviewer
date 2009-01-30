@@ -34,6 +34,28 @@
     </property>
   </bean>
   
+   <bean id="payloadValidator" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidator" init-method="init"/>
+   <bean id="gmeSchemaFactory" class="gov.nih.nci.caxchange.servicemix.bean.validation.GMESchemaFactory" init-method="init">
+         <property name="GMEGridServiceLocation"
+                   value="${gme.url}"/>
+         <property name="cacheDirectoryLocation"
+                   value="${gme.cache.directory}" />
+   </bean>
+   <bean id="fileSystemSchemaFactory" class="gov.nih.nci.caxchange.servicemix.bean.validation.FileSystemSchemaFactory" init-method="init">
+         <property name="schemaDirectoryLocation"
+                   value="${gme.cache.directory}" />
+   </bean>   
+   <bean id="payloadValidatorBean" class="gov.nih.nci.caxchange.servicemix.bean.validation.PayloadValidatorBean" >
+         <property name="payloadValidator">
+             <ref bean="payloadValidator"/>
+         </property>
+         <property name="caxchangeSchemaFactory">
+            <ref bean="gmeSchemaFactory" />
+         </property>
+         <property name="eligibleServiceTypes" value="${messageTypes.for.validation}" />                 
+ </bean>
+   
+  
   <import resource="classpath:/caXchangeConf/beans/endpoints.xml" /> 
   
 
@@ -479,6 +501,5 @@
       <property      name="targetId"      value="caAERS" />
       <property   name="targetOperation"   value="loadLabs" />
     </bean>
-
 
 </beans>

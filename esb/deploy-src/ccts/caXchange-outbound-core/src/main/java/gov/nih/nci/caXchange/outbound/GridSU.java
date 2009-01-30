@@ -76,6 +76,10 @@ public class GridSU implements MessageExchangeListener {
 	public static final String RESPONSE_PAYLOAD_ELEMENT = "targetBusinessMessage";
 
 	public static final String SCHEMA_DEFINITION_ELEMENT = "xmlSchemaDefinition";
+	
+	public static final String OPERATION_NAME_ELEMENT = "operationName";
+	
+	public static final String SERVICE_TYPE_ELEMENT = "serviceType";
 
 	@Resource
 	private DeliveryChannel channel;
@@ -206,7 +210,10 @@ public class GridSU implements MessageExchangeListener {
 		NormalizedMessage in = exchange.getMessage("in");
 		Document input = new SourceTransformer().toDOMDocument(in);
 		GridMessage gridMessage = new GridMessageImpl(input);
-		
+		String operationName = gridMessage.getOperationName();
+		if (!((operationName == null)&&("".equals(operationName)))) {
+			targetOperation = operationName;
+		}
 		for (int i = 0; i <= retries; i++) {
 			try {
 				long timeBefore = new java.util.Date().getTime();
