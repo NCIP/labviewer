@@ -82,5 +82,8 @@
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/saaj.jar"/>
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/wsdl4j.jar"/>
 	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/wss4j.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/addressing-1.0.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/cog-jglobus.jar"/>
+	<classpathentry kind="var" path="GLOBUS_LOCATION/lib/wsrf_core.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

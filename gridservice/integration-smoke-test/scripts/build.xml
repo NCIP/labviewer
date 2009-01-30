@@ -12,6 +12,7 @@
 	 <property name="lib.dir" value="${integration_smoke_test_home}/lib"/>
 	 <property name="log.dir" value="${integration_smoke_test_home}/logs" />
 	 <property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	 <property name="synchronous" value="false" />
 	
        <target name="assert"  >
 	<fail message="Not running ant with JDK 1.5 - this will result in differing class versions">
@@ -102,6 +103,7 @@
                 <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+	            <sysproperty key="synchronous" value="${synchronous}" />
 	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 	            <classpath refid="testClassPath" />
@@ -114,6 +116,7 @@
                 <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 	        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 	            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+	            <sysproperty key="synchronous" value="${synchronous}" />
 	            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 	            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 	            <classpath refid="testClassPath" />
@@ -126,6 +129,7 @@
 	                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 		        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 		            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+		            <sysproperty key="synchronous" value="${synchronous}" />
 		            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 		            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 		            <classpath refid="testClassPath" />
@@ -138,6 +142,7 @@
 		                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 			        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 			            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+			            <sysproperty key="synchronous" value="${synchronous}" />
 			            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 			            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 			            <classpath refid="testClassPath" />
@@ -145,11 +150,14 @@
 			            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestAENotification" />
 			        </junit>
 		        </target>  
+		        
+		        
 	
 	<target name="testCtLabData" depends="init,replace" description="Sends a CT_LAB_DATA message to caXchange">
 			                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 				        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 				            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+				            <sysproperty key="synchronous" value="${synchronous}" />
 				            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 				            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 				            <classpath refid="testClassPath" />
@@ -163,6 +171,7 @@
 				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+					            <sysproperty key="synchronous" value="${synchronous}" />
 					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 					            <classpath refid="testClassPath" />
@@ -178,6 +187,7 @@
 				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+					            <sysproperty key="synchronous" value="${synchronous}" />
 					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
 					            <classpath refid="testClassPath" />
@@ -187,11 +197,13 @@
 				        </target>  
 	
 	
-	<target name="testNewMessageType" depends="init,replace" description="Sends a new message type message to caXchange">
+	       <target name="testNewMessageType" depends="init,replace" description="Sends a new message type message to caXchange">
 				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					        	<sysproperty key="payload.file.name" value="${payload.file.name}" />
-					        	<sysproperty key="message.type" value="${message.type}" />
+					        	<sysproperty key="message.type" value="${service.type}" />
+					        	<sysproperty key="operation.name" value="${operation.name}" />
+					        	<sysproperty key="synchronous" value="${synchronous}" />
 					            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
 					            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
 					            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
@@ -199,6 +211,23 @@
 					            <formatter type="xml" />
 					            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestNewMessageType" />
 					        </junit>
-				        </target>  
+				        </target>
+	
+           <target name="testCoppaService" depends="init,replace" description="Sends a COPPA person service  type message to caXchange">
+			                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
+				        <junit dir="${basedir}" printsummary="yes" showoutput="true">
+				        	<sysproperty key="payload.file.name" value="${payload.file.name}" />
+				        	<sysproperty key="message.type" value="${service.type}" />
+				        	<sysproperty key="operation.name" value="${operation.name}" />
+				        	<sysproperty key="synchronous" value="${synchronous}" />
+				            <sysproperty key="caxchange.url" value="${caxchange.url}"/>
+				            <sysproperty key="GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}" />
+				            <sysproperty key="axis.ClientConfigFile" value="${env.GLOBUS_LOCATION}/client-config.wsdd" />            
+				            <classpath refid="testClassPath" />
+				            <formatter type="xml" />
+				            <test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestCoppaServices" />
+				        </junit>
+			        </target>  
+	
 	
 </project>

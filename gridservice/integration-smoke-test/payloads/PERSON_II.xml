@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iso:Ii xmlns:iso="http://isodatatypes.coppa.nci.nih.gov" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" > 
+<displayable>true</displayable>
+<extension>1128</extension>
+<identifierName>NCI person entity identifier</identifierName>
+<reliability>ISS</reliability>
+<root>UID.for.nci.entity.person</root>
+<scope>OBJ</scope>
+</iso:Ii>
