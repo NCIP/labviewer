@@ -146,24 +146,31 @@ public class TestCaXchangeGridService extends TestCase {
      * @throws Exception
      */
     public ResponseMessage invokeService() throws Exception {
-        CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(message);
-        System.out.println("Message has been send.");
-        EndpointReferenceType endPointReference =crsr.getEndpointReference();
-        CaXchangeResponseServiceClient responsClient = new CaXchangeResponseServiceClient(endPointReference, userCredentials);
-        boolean gotResponse=false;
-        ResponseMessage getResponse=null;
-        while(!gotResponse) {
-        try {
-            getResponse = responsClient.getResponse();
-            gotResponse= true;
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        }
+    	String synchronousProcessing = System.getProperty("synchronous");
+    	if ("true".equals(synchronousProcessing)) {
+    		System.out.println("Invoking the service synchronously.");
+    		ResponseMessage gotResponse = client.processRequestSynchronously(message);
+    		return gotResponse;
+    	}else {
+           CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(message);
+           System.out.println("Message has been send.");
+           EndpointReferenceType endPointReference =crsr.getEndpointReference();
+           CaXchangeResponseServiceClient responsClient = new CaXchangeResponseServiceClient(endPointReference, userCredentials);
+           boolean gotResponse=false;
+           ResponseMessage getResponse=null;
+           while(!gotResponse) {
+            try {
+               getResponse = responsClient.getResponse();
+               gotResponse= true;
+             }catch (Exception e) {
+                System.out.println(e.getMessage());
+             }
+           }
         StringWriter stringWriter = new StringWriter();
         Utils.serializeObject(getResponse, new QName("http://caXchange.nci.nih.gov/messaging", "caXchangeResponseMessage"), stringWriter);
         System.out.println(stringWriter.toString());
         return getResponse;
+    	}
     }
 
 

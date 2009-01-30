@@ -5,7 +5,6 @@ import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
 
 import java.io.InputStream;
-import java.net.URI;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -15,23 +14,24 @@ import junit.framework.TestSuite;
 import org.apache.axis.message.MessageElement;
 import org.w3c.dom.Document;
 
-public class TestNewMessageType extends TestCaXchangeGridService {
+public class TestCoppaServices extends TestCaXchangeGridService {
 
 	private String messageType=null;
 	private String payloadFileName=null;
 	private String operationName=null;
 	
-	public TestNewMessageType() {
+	public TestCoppaServices() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public TestNewMessageType(String name) {
+	public TestCoppaServices(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
 	
-    public void testNewMessageType() {
+	
+    public void testCoppaService() {
         try {
           messageType = System.getProperty("message.type");
           payloadFileName =  System.getProperty("payload.file.name");
@@ -64,7 +64,7 @@ public class TestNewMessageType extends TestCaXchangeGridService {
     public static Test suite() {
         TestSuite suite = new TestSuite();
 
-       suite.addTest(new TestNewMessageType("testNewMessageType"));
+       suite.addTest(new TestCoppaServices("testCoppaService"));
 
         return suite;
      }
