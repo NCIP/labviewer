@@ -75,6 +75,184 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 
 		// Authorization code
 		String username = StudyConsumerAuthorization.getCallerIdentity();
+
+		if (!authorized(username))
+		{
+			logger.error("Error saving Study");
+			StudyCreationException rce = new StudyCreationException();
+			rce.setFaultString("User " + username
+					+ " not authorized for this operation");
+			throw rce;
+		}
+		else
+		{
+
+			// save the study data
+			logger.info("payload has Study information");
+			Protocol protocol = new Protocol();
+			// populate the Protocol object with Study message data
+			populateProtocol(protocol, study);
+			// obtain connection
+			con = dao.getConnection();
+			logger.info("Create Study message validated");
+			try
+			{
+				// save Protocol
+				dao.persist(con, protocol);
+				logger.info("Persisted the study");
+			}
+			catch (SQLException e)
+			{
+				logger.error("Error creating study", e);
+				StudyCreationException rce = new StudyCreationException();
+				rce.setFaultString(e.getMessage());
+				throw rce;
+			}
+			catch (Exception e)
+			{
+				logger.error("Error creating study", e);
+				StudyCreationException rce = new StudyCreationException();
+				rce.setFaultString(e.getMessage());
+				throw rce;
+			}
+			finally
+			{
+				try
+				{
+					con.close();
+				}
+				catch (SQLException e)
+				{
+					logger.error("Error closing connection", e);
+				}
+			}
+			logger.info("Study created");
+		}// end of else
+	}
+
+	/**
+	 * @param protocol
+	 * @param study
+	 */
+	private void populateProtocol(Protocol protocol, Study study)
+	{
+		java.util.Date now = new Date();
+		protocol.setLongTxtTitle(study.getLongTitleText());
+		protocol.setShortTxtTitle(study.getShortTitleText());
+		protocol.setPhaseCode(study.getPhaseCode());
+		if (study.getCoordinatingCenterStudyStatus() != null)
+		{
+			ProtocolStatus protocolStatus = new ProtocolStatus();
+			protocolStatus.setCtom_insert_date(now);
+			protocolStatus.setStatus_code(study
+					.getCoordinatingCenterStudyStatus().getValue());
+			protocol.setStatus(protocolStatus);
+		}
+		else
+		{
+			protocol.setStatus(null);
+		}
+		protocol.setCtomInsertDt(now);
+		IdentifierType identifiers[] = study.getIdentifier();
+
+		// save the identifier data
+		// IdentifierType ident: identifiers
+		String assignedBy = "";
+		for (int i = 0; i < identifiers.length; i++)
+		{
+			IdentifierType ident = identifiers[i];
+			if (ident.getPrimaryIndicator().booleanValue())
+			{
+				Identifier id = new Identifier();
+				if (ident instanceof OrganizationAssignedIdentifierType)
+					assignedBy = "organization";
+				else
+					assignedBy = "system";
+				id.setExtension(ident.getValue());
+				id.setSource(ident.getSource());
+				id.setRoot(study.getGridId());
+				id.setAssigningAuthorityName(assignedBy);
+				protocol.setIdentifier(id);
+				protocol.setNciIdentifier(id.getRoot() + "."
+						+ id.getExtension());
+			}
+		}// end of for
+
+		// save the study site data
+		if (study.getStudyOrganization() != null)
+		{
+			if (study.getStudyOrganization(0).getHealthcareSite() != null)
+			{
+				logger.info("payload has HealthcareSite information");
+				HealthcareSiteType hcsType =
+						study.getStudyOrganization(0).getHealthcareSite(0);
+				HealthCareSite healthCare = new HealthCareSite();
+				healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
+				healthCare.setName(hcsType.getName());
+				healthCare.setCtomInsertDt(now);
+				protocol.setHealthCareSite(healthCare);
+			}
+			else
+			{
+				logger.info("payload has no HealthcareSite information");
+				protocol.setHealthCareSite(null);
+			}
+			if (study.getStudyOrganization(0).getStudyInvestigator() != null)
+			{
+				StudyInvestigatorType investigator =
+						study.getStudyOrganization(0).getStudyInvestigator(0);
+				Investigator studyInvestigator = new Investigator();
+				if (investigator.getHealthcareSiteInvestigator() != null)
+				{
+					if (investigator.getHealthcareSiteInvestigator()
+							.getInvestigator() != null)
+					{
+						// save the investigator data
+						logger.info("payload has Investigator information");
+						studyInvestigator.setNciId(investigator
+								.getHealthcareSiteInvestigator()
+								.getInvestigator(0).getNciIdentifier());
+						String fullName =
+								investigator.getHealthcareSiteInvestigator()
+										.getInvestigator(0).getFullName();
+						String[] result = fullName.split("\\s");
+						if (result.length == 3)
+						{
+							studyInvestigator.setFirstName(result[0]);
+							studyInvestigator.setInitials(result[1]);
+							studyInvestigator.setLastName(result[2]);
+						}
+						else if (result.length == 2)
+						{
+							studyInvestigator.setFirstName(result[0]);
+							studyInvestigator.setLastName(result[1]);
+						}
+						else if (result.length == 1)
+						{
+							studyInvestigator.setFirstName(result[0]);
+						}
+						protocol.setInvestigator(studyInvestigator);
+
+					}
+					else
+					{
+						logger.info("payload has no Investigator information");
+						protocol.setInvestigator(null);
+					}
+				}// end if
+			}// end if
+		}
+
+	}
+
+	/**
+	 * @param username
+	 * @return
+	 * @throws StudyCreationException
+	 */
+	private boolean authorized(String username) throws StudyCreationException
+	{
+		boolean userAuthorized = false;
 		String user = "";
 		if (username == null)
 		{
@@ -96,172 +274,10 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				user = username.substring(beginIndex + 1, endIndex);
 			}
 			// check if authorized
-			boolean authorized = lvaHelper.isAuthorized(user);
+			userAuthorized = lvaHelper.isAuthorized(user);
+		}
+		return userAuthorized;
 
-			if (!authorized)
-			{
-				logger.error("Error saving Study");
-				StudyCreationException rce = new StudyCreationException();
-				rce.setFaultString("User " + username
-						+ " not authorized for this operation");
-				throw rce;
-			}
-			else
-			{
-				java.util.Date now = new Date();
-				// save the study data
-				logger.info("payload has Study information");
-				Protocol protocol = new Protocol();
-				protocol.setLongTxtTitle(study.getLongTitleText());
-				protocol.setShortTxtTitle(study.getShortTitleText());
-				protocol.setPhaseCode(study.getPhaseCode());
-				if (study.getCoordinatingCenterStudyStatus() != null)
-				{
-					ProtocolStatus protocolStatus = new ProtocolStatus();
-					protocolStatus.setCtom_insert_date(now);
-					protocolStatus.setStatus_code(study
-							.getCoordinatingCenterStudyStatus().getValue());
-					protocol.setStatus(protocolStatus);
-				}
-				else
-				{
-					protocol.setStatus(null);
-				}
-				protocol.setCtomInsertDt(now);
-				IdentifierType identifiers[] = study.getIdentifier();
-
-				// save the identifier data
-				// IdentifierType ident: identifiers
-				String assignedBy = "";
-				for (int i = 0; i < identifiers.length; i++)
-				{
-					IdentifierType ident = identifiers[i];
-					if (ident.getPrimaryIndicator().booleanValue())
-					{
-						Identifier id = new Identifier();
-						if (ident instanceof OrganizationAssignedIdentifierType)
-							assignedBy = "organization";
-						else
-							assignedBy = "system";
-						id.setExtension(ident.getValue());
-						id.setSource(ident.getSource());
-						id.setRoot(study.getGridId());
-						id.setAssigningAuthorityName(assignedBy);
-						protocol.setIdentifier(id);
-						protocol.setNciIdentifier(id.getRoot() + "."
-								+ id.getExtension());
-					}
-				}// end of for
-
-				// save the study site data
-				if (study.getStudyOrganization() != null)
-				{
-					if (study.getStudyOrganization(0).getHealthcareSite() != null)
-					{
-						logger.info("payload has HealthcareSite information");
-						HealthcareSiteType hcsType =
-								study.getStudyOrganization(0)
-										.getHealthcareSite(0);
-						HealthCareSite healthCare = new HealthCareSite();
-						healthCare.setNciInstituteCd(hcsType
-								.getNciInstituteCode());
-						healthCare.setName(hcsType.getName());
-						healthCare.setCtomInsertDt(now);
-						protocol.setHealthCareSite(healthCare);
-					}
-					else
-					{
-						logger
-								.info("payload has no HealthcareSite information");
-						protocol.setHealthCareSite(null);
-					}
-					if (study.getStudyOrganization(0).getStudyInvestigator() != null)
-					{
-						StudyInvestigatorType investigator =
-								study.getStudyOrganization(0)
-										.getStudyInvestigator(0);
-						Investigator studyInvestigator = new Investigator();
-						if (investigator.getHealthcareSiteInvestigator() != null)
-						{
-							if (investigator.getHealthcareSiteInvestigator()
-									.getInvestigator() != null)
-							{
-								// save th einvestigator data
-								logger
-										.info("payload has Investigator information");
-								studyInvestigator.setNciId(investigator
-										.getHealthcareSiteInvestigator()
-										.getInvestigator(0).getNciIdentifier());
-								String fullName =
-										investigator
-												.getHealthcareSiteInvestigator()
-												.getInvestigator(0)
-												.getFullName();
-								String[] result = fullName.split("\\s");
-								if (result.length == 3)
-								{
-									studyInvestigator.setFirstName(result[0]);
-									studyInvestigator.setInitials(result[1]);
-									studyInvestigator.setLastName(result[2]);
-								}
-								else if (result.length == 2)
-								{
-									studyInvestigator.setFirstName(result[0]);
-									studyInvestigator.setLastName(result[1]);
-								}
-								else if (result.length == 1)
-								{
-									studyInvestigator.setFirstName(result[0]);
-								}
-								protocol.setInvestigator(studyInvestigator);
-
-							}
-							else
-							{
-								logger
-										.info("payload has no Investigator information");
-								protocol.setInvestigator(null);
-							}
-						}// end if
-					}// end if
-				}
-				// obtain connection
-				con = dao.getConnection();
-				logger.info("Create Study message validated");
-				try
-				{
-					// save Protocol
-					dao.persist(con, protocol);
-					logger.info("Persisted the study");
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error creating study", e);
-					StudyCreationException rce = new StudyCreationException();
-					rce.setFaultString(e.getMessage());
-					throw rce;
-				}
-				catch (Exception e)
-				{
-					logger.error("Error creating study", e);
-					StudyCreationException rce = new StudyCreationException();
-					rce.setFaultString(e.getMessage());
-					throw rce;
-				}
-				finally
-				{
-					try
-					{
-						con.close();
-					}
-					catch (SQLException e)
-					{
-						logger.error("Error closing connection", e);
-					}
-				}
-				logger.info("Study created");
-			}// end of else
-		}// end of else
 	}
 
 	/*
