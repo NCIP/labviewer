@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
  * @author marwahah
  *
  */
-public class GMESchemaFactory {
+public class GMESchemaFactory implements CaxchangeSchemaFactory{
 	//The url to the GME from which schemas are retrieved
 	private String GMEGridServiceLocation;
 	//The directory location where the schemas are cached.
@@ -86,7 +86,7 @@ public class GMESchemaFactory {
 			logger.info("Cache directory does not exist. "+cacheDirectoryLocation);
 				if (!cacheDirectory.mkdir()) {
 				   logger.info("Error occurred creating Cache directory. "+cacheDirectoryLocation);
-				   throw new RuntimeException("Schema files cache location does not exist."+cacheDirectoryLocation);
+				   throw new IllegalStateException("Schema files cache location does not exist."+cacheDirectoryLocation);
 				 }
 				
 		}

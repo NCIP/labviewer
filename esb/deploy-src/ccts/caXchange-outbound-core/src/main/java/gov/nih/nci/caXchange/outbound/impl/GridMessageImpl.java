@@ -138,5 +138,21 @@ public class GridMessageImpl implements GridMessage {
     	}
     	return "";
     }
+    
+    public String getOperationName() {
+    	NodeList nodes = getMetaData().getElementsByTagNameNS(GridSU.NS, GridSU.OPERATION_NAME_ELEMENT);
+    	if (nodes.getLength() == 1) {
+    		return ((Element)nodes.item(0)).getTextContent();
+    	}
+    	return "";
+    }
 
+    
+    public String getServiceType() {
+    	NodeList nodes = getMetaData().getElementsByTagNameNS(GridSU.NS, GridSU.SERVICE_TYPE_ELEMENT);
+    	if (nodes.getLength() == 1) {
+    		return ((Element)nodes.item(0)).getTextContent();
+    	}
+    	return "";
+    }    
 }

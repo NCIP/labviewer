@@ -31,7 +31,7 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
 	
     private Logger logger = LogManager.getLogger(PayloadValidatorBean.class);
     private PayloadValidator payloadValidator = null;
-    private GMESchemaFactory gmeSchemaFactory = null;
+    private CaxchangeSchemaFactory caxchangeSchemaFactory = null;
     static private java.util.Map<String, CaxchangeMetadata> metadataCache = new java.util.HashMap<String, CaxchangeMetadata>(6);
     
 
@@ -53,13 +53,13 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
         	  String messageType = caXchangeDataUtil.getServiceType();
               String namespace = getPayloadNamespace(messageType);
               Schema schema = null;
-              if (gmeSchemaFactory == null) {
-            	  throw new PayloadValidationException("GME schema factory not initialized for payload validation.");
+              if (caxchangeSchemaFactory == null) {
+            	  throw new PayloadValidationException("Schema factory not initialized for payload validation.");
               }
               if (namespace != null){
-        	     schema = gmeSchemaFactory.getSchema(namespace);
+        	     schema = caxchangeSchemaFactory.getSchema(namespace);
               } else {
-            	  throw new PayloadValidationException("Namespace not configured for this message type:"+messageType+". Please configure the namespace to get the validating schema from GME.");
+            	  throw new PayloadValidationException("Namespace not configured for this message type:"+messageType+". Please configure the namespace to get the validating schema.");
               }
               if (schema != null){
                  Node payload = caXchangeDataUtil.getBusinessPayload();
@@ -68,7 +68,7 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
         	     long timeAfter = new java.util.Date().getTime();
         	     logger.debug("Time for validation:"+(timeAfter-timeBefore));
               }else {
-            	  throw new PayloadValidationException("Schema not found for namespace:"+namespace+"  and message type:"+messageType+" GME url:"+gmeSchemaFactory.getGMEGridServiceLocation());
+            	  throw new PayloadValidationException("Schema not found for namespace:"+namespace+"  and message type:"+messageType);
               }
         }catch(PayloadValidationException pve) {
             logger.error("Payload validation error.", pve);
@@ -103,12 +103,12 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
 	}
 	
 	
-	public GMESchemaFactory getGmeSchemaFactory() {
-		return gmeSchemaFactory;
+	public CaxchangeSchemaFactory getCaxchangeSchemaFactory() {
+		return caxchangeSchemaFactory;
 	}
 
-	public void setGmeSchemaFactory(GMESchemaFactory gmeSchemaFactory) {
-		this.gmeSchemaFactory = gmeSchemaFactory;
+	public void setCaxchangeSchemaFactory(CaxchangeSchemaFactory gmeSchemaFactory) {
+		this.caxchangeSchemaFactory = gmeSchemaFactory;
 	}
 
 	

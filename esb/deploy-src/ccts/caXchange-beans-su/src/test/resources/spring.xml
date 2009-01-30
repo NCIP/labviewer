@@ -62,7 +62,7 @@
        <property name="payloadValidator">
            <ref bean="payloadValidator"/>
        </property>
-       <property name="gmeSchemaFactory">
+       <property name="caxchangeSchemaFactory">
           <ref bean="gmeSchemaFactory" />
        </property>
        <property name="eligibleServiceTypes" value="STUDY_CREATION,REGISTER_SUBJECT" />
