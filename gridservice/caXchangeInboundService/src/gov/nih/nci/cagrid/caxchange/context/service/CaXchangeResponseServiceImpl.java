@@ -23,13 +23,13 @@ public class CaXchangeResponseServiceImpl extends CaXchangeResponseServiceImplBa
 		super();
 	}
 
-  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeResponseNotReadyFault {
+  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseNotReadyFault {
       try {
           gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome brh =getResourceHome();
           CaXchangeResponseServiceResource currentResource = brh.getAddressedResource();
           if (currentResource.getCaXchangeResponseMessage() == null) {
         	  CaXchangeResponseNotReadyFault caXchangeResponseNotReadyFault = new CaXchangeResponseNotReadyFault();
-        	  caXchangeResponseNotReadyFault.setFaultDetailString("CaXchange response not ready.");
+        	  caXchangeResponseNotReadyFault.setFaultString("CaXchange response not ready.");
         	  throw caXchangeResponseNotReadyFault;
           }
           ResponseMessage responseMessage = currentResource.getCaXchangeResponseMessage();
@@ -41,7 +41,7 @@ public class CaXchangeResponseServiceImpl extends CaXchangeResponseServiceImplBa
       catch (Exception e) {
           logger.error("Error in getting response.", e);
           CaXchangeFault caXchangeFault = new CaXchangeFault();
-          caXchangeFault.setFaultDetailString("Error in getting response."+e.getMessage());
+          caXchangeFault.setFaultString("Error in getting response."+e.getMessage());
           caXchangeFault.setStackTrace(e.getStackTrace());
           throw caXchangeFault;
       }
