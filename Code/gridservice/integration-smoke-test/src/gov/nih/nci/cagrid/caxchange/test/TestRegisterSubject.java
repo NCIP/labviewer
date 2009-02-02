@@ -53,8 +53,8 @@ public class TestRegisterSubject extends TestCaXchangeGridService {
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
-          throw new RuntimeException(e);
-      }
+          e.printStackTrace();
+          fail();      }
 
     }
 
