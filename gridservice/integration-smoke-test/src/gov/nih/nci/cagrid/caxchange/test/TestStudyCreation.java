@@ -48,7 +48,7 @@ public class TestStudyCreation extends TestCaXchangeGridService {
       catch(Exception e) {
           System.out.println("Error sending message .");
           e.printStackTrace();
-          throw new RuntimeException(e);
+          fail();
       }
 
     }

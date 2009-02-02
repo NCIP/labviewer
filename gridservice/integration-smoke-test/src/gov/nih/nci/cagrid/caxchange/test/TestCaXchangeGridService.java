@@ -162,8 +162,13 @@ public class TestCaXchangeGridService extends TestCase {
             try {
                getResponse = responsClient.getResponse();
                gotResponse= true;
-             }catch (Exception e) {
-                System.out.println(e.getMessage());
+             }
+            catch(org.apache.axis.AxisFault responseNotReady) {
+            	System.out.println(responseNotReady.getFaultString());
+            }
+            catch (Exception e) {
+                System.out.println("An error occurred getting caXchange response."+e.getClass().getName());
+                throw e;
              }
            }
         StringWriter stringWriter = new StringWriter();
