@@ -50,7 +50,8 @@ public class TestCtLabData extends TestCaXchangeGridService{
       }
       catch(Exception e) {
           System.out.println("Error sending message .");
-          throw new RuntimeException(e);
+          fail();
+          e.printStackTrace();
       }
 
     }

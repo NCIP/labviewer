@@ -13,9 +13,7 @@ import org.apache.axis.types.URI;
 import org.w3c.dom.Document;
 
 public class TestCoppaPersonService extends TestCoppaServices {
-	private String messageType=null;
-	private String payloadFileName=null;
-	private String operationName=null;
+
 	
 	public void testGetPerson() {
 	      try {
