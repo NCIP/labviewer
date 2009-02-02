@@ -36,6 +36,7 @@
     <module>caXchange-verify-routing-jar</module>
     <module>caXchange-auditor-jar</module>
     <module>caxchange-metadata-service</module>
+    <module>caXchange-sync-receiver-bc</module>
   </modules>
   <!-- Add ServiceMix repository -->
 <pluginRepositories>

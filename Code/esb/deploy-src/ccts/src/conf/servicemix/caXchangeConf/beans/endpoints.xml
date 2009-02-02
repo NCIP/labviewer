@@ -19,6 +19,16 @@
 -->
 <beans xmlns:bean="http://servicemix.apache.org/bean/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
+       
+  <!-- START CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+  
+  <bean:endpoint service="caxchange:unhandledServiceType" endpoint="unhandledServiceTypeEndpoint" bean="#unhandledServiceType" />
+  <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+  
+  
+  
+  
+  
 
   <bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndpoint" bean="#invokeDelegationServiceBean"/>
   

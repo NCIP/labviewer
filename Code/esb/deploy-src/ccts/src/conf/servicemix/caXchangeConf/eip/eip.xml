@@ -20,6 +20,37 @@
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
        
+  <!-- START - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+  	
+	<!--  import the router configuration file, which has configurations
+			based on the service type of the caxchange message header -->			
+	<import resource="classpath:/caXchangeConf/eip/serviceTypeRouter.xml" />
+
+	<eip:static-routing-slip service="caxchange:scheduleModificationRoute"
+		endpoint="caxchange:scheduleModificationEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:setSubjectService" />
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
+			<eip:exchange-target service="caxchange:pscAdverseEvent" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>		
+	</eip:static-routing-slip>
+
+	<eip:static-routing-slip service="caxchange:labBasedAeRoute"
+		endpoint="caxchange:labBasedAeEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:setSubjectService" />
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
+			<eip:exchange-target service="caxchange:caaersLoadLab" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>		
+	</eip:static-routing-slip>
+	
+	
+  <!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+       
   <!-- Pipeline to invoke the delegation service -->
   <eip:pipeline service="caxchange:invokeDelegationPipeline" endpoint="invokeDelegationPipelineEndpoint">
       <eip:transformer>
