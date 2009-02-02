@@ -47,6 +47,8 @@ public class CaXchangeRequestProcessorConfiguration implements ServiceConfigurat
 	
 	private String caXchangeInboundBrokerURL;
 	
+	private String caXchangeSynchronousServiceURL;
+	
 	private String caXchangeInboundDestination;
 	
 	private String caXchangeResponseDestination;
@@ -88,6 +90,15 @@ public class CaXchangeRequestProcessorConfiguration implements ServiceConfigurat
 	
 	public void setCaXchangeResponseDestination(String caXchangeResponseDestination) {
 		this.caXchangeResponseDestination = caXchangeResponseDestination;
+	}
+
+	public String getCaXchangeSynchronousServiceURL() {
+		return caXchangeSynchronousServiceURL;
+	}
+
+	public void setCaXchangeSynchronousServiceURL(
+			String caXchangeSynchronousServiceURL) {
+		this.caXchangeSynchronousServiceURL = caXchangeSynchronousServiceURL;
 	}
 
 	
