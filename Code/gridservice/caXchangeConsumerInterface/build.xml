@@ -1,8 +1,8 @@
 <!--
-   Build file for the Caxchange CLM Auditor
+   Build file for the Caxchange Consumer Interface
 -->
-<project name="CaxchangeCLMAuditor" default="dist" basedir=".">
-	<description>Build file for the Caxchange CLM Auditor</description>
+<project name="CaxchangeConsumerInterface" default="dist" basedir=".">
+	<description>Build file for the Caxchange Consumer Interface</description>
 
 	<!-- set global properties for this build -->
 	<property file="build.properties" />
