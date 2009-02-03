@@ -86,6 +86,7 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -95,8 +96,7 @@ import org.apache.log4j.Logger;
  * 
  * @author asharma
  */
-public class SpecimenCollectionHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class SpecimenCollectionHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
 
 	// Logging File
@@ -110,30 +110,35 @@ public class SpecimenCollectionHandler extends CTLabDAO implements
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		logger.debug("Saving the Specimen Collection");
 		PreparedStatement ps = null;
 
 		// retrieve the specimenCollection data from Protocol
 		SpecimenCollection specimenCollection =
-				protocol.getHealthCareSite().getStudyParticipantAssignment()
-						.getActivity().getProcedure().getSpecimenCollection();
+				protocol.getHealthCareSite().getStudyParticipantAssignment().getActivity()
+						.getProcedure().getSpecimenCollection();
 		try
 		{
 			if (specimenCollection.getCentralLaboratory() != null)
 			{
 				// save Central Laboratory data
-				HL7V3MessageHandlerFactory.getInstance().getHandler(
-						"CENTRALLABORATORY").persist(con, protocol);
+				HL7V3MessageHandlerFactory.getInstance().getHandler("CENTRAL_LABORATORY").persist(
+						con, protocol);
 				ps =
 						con
 								.prepareStatement("insert into SPECIMEN_COLLECTION (ID,CENTRAL_LABORATORY_ID)  values(?,?)");
 				ps.setLong(1, specimenCollection.getProcedureActivityId());
-				ps
-						.setLong(2, specimenCollection.getCentralLaboratory()
-								.getId());
+				ps.setLong(2, specimenCollection.getCentralLaboratory().getId());
 				ps.execute();
 
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Specimen Collection",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{
@@ -147,8 +152,7 @@ public class SpecimenCollectionHandler extends CTLabDAO implements
 			specimenCollection.getSpecimen().setProcedureActivityId(
 					specimenCollection.getProcedureActivityId());
 			// save Specimen
-			HL7V3MessageHandlerFactory.getInstance().getHandler("SPECIMEN")
-					.persist(con, protocol);
+			HL7V3MessageHandlerFactory.getInstance().getHandler("SPECIMEN").persist(con, protocol);
 
 		}
 	}

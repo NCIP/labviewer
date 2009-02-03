@@ -87,31 +87,35 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
 /**
  * InvestigatorHandler persists Investigator data into CTODS database
+ * 
  * @author asharma
  */
-public class InvestigatorHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
 
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
 
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		logger.debug("Saving the Investigator");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		Long id = null;
-		
+		Long investigatorId = null;
+
 		// retrieve the investigator from Protocol
 		Investigator inv = protocol.getInvestigator();
 		Long protId = protocol.getId();
@@ -119,33 +123,29 @@ public class InvestigatorHandler extends CTLabDAO implements
 		try
 		{
 			// Check if the investigator exists in the db -use the Id.
-			ps =
-					con
-							.prepareStatement("select ID from INVESTIGATOR  where NCI_IDENTIFIER = ?");
+			ps = con.prepareStatement("select ID from INVESTIGATOR  where NCI_IDENTIFIER = ?");
 			ps.setString(1, inv.getNciId());
 			rs = ps.executeQuery();
 			if (rs.next())
 			{
-				id = rs.getLong(1);
+				investigatorId = rs.getLong(1);
 			}
 			else
 			{
 
 				// Get Id from sequence
-				id = getNextVal(con, "PERSON_SEQ");
+				investigatorId = getNextVal(con, "PERSON_SEQ");
 
 				// insert into Investigator
 				ps =
 						con
 								.prepareStatement("insert into investigator (ID, NCI_IDENTIFIER, LAST_NAME, FIRST_NAME)  values(?,?,?,?)");
 
-				ps.setLong(1, id);
-				ps.setString(2, String.valueOf(inv.getNciId() != null ? inv
-						.getNciId() : ""));
-				ps.setString(3, String.valueOf(inv.getLastName() != null ? inv
-						.getLastName() : ""));
-				ps.setString(4, String.valueOf(inv.getFirstName() != null ? inv
-						.getFirstName() : ""));
+				ps.setLong(1, investigatorId);
+				ps.setString(2, String.valueOf(inv.getNciId() != null ? inv.getNciId() : ""));
+				ps.setString(3, String.valueOf(inv.getLastName() != null ? inv.getLastName() : ""));
+				ps.setString(4, String
+						.valueOf(inv.getFirstName() != null ? inv.getFirstName() : ""));
 				ps.execute();
 
 			}
@@ -154,7 +154,7 @@ public class InvestigatorHandler extends CTLabDAO implements
 					con
 							.prepareStatement("select id from study_investigator where PROTOCOL_ID = ? AND INVESTIGATOR_ID = ?");
 			ps.setLong(1, protId);
-			ps.setLong(2, id);
+			ps.setLong(2, investigatorId);
 			rs = ps.executeQuery();
 			if (rs.next())
 			{
@@ -163,7 +163,7 @@ public class InvestigatorHandler extends CTLabDAO implements
 			else
 			{
 
-				Long siId = id = getNextVal(con, "STUDY_INVESTIGATOR_SEQ");
+				Long siId = getNextVal(con, "STUDY_INVESTIGATOR_SEQ");
 				logger.debug("The study_Invest id is " + siId);
 				ps =
 						con
@@ -171,9 +171,15 @@ public class InvestigatorHandler extends CTLabDAO implements
 
 				ps.setLong(1, siId);
 				ps.setLong(2, protId);
-				ps.setLong(3, id);
+				ps.setLong(3, investigatorId);
 				ps.execute();
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the investigator",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{

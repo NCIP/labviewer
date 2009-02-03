@@ -81,34 +81,38 @@
 package gov.nih.nci.ctom.ctlab.handler;
 
 /**
- * HandlerConstants class defines all the handlers for persisting a HL7V3message
+ * HandlerConstants Enum defines all the handlers for persisting a HL7V3message
  * @author asharma
  *
  */
-public enum HandlerConstants
+public enum HandlerConstantsEnum
 {
 	ACTIVITY,
-	CENTRALLABORATORY,
-	CLINICALRESULT,
-	HEALTHCARESITE, 
-	HEALTHCARESITEPARTICIPANT,
-	PROTOCOLIDENTIFIER,
-	PARTICIPANTIDENTIFIER,
-	SPAIDENTIFIER,
+	CENTRAL_LABORATORY,
+	CLINICAL_RESULT,
+	HEALTH_CARE_SITE, 
+	HEALTH_CARE_SITE_PARTICIPANT,
+	PROTOCOL_IDENTIFIER,
+	PARTICIPANT_IDENTIFIER,
+	SPA_IDENTIFIER,
 	INVESTIGATOR,
 	OBSERVATION,
 	PARTICIPANT,
-	PERFORMINGLABORATORY,
+	PERFORMING_LABORATORY,
 	PROCEDURE,
 	PROTOCOL,
-	PROTOCOLSTATUS,
-	SPECIMENCOLLECTION,
+	PROTOCOL_STATUS,
+	SPECIMEN_COLLECTION,
 	SPECIMEN,
-	STUDYPARTICIPANTASSIGNMENT,
-	STUDYTIMEPOINT,
+	STUDY_PARTICIPANT_ASSIGNMENT,
+	STUDY_TIME_POINT,
 	NOVALUE;
 	
-	public static HandlerConstants handleName(String str)
+	/**
+	 * @param str
+	 * @return
+	 */
+	public static HandlerConstantsEnum handleName(String str)
     {
         try {
             return valueOf(str);
