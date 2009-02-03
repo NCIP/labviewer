@@ -86,28 +86,32 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
 /**
  * Persists the identifier object into the database. The identifier is
- * associated with the protocol object.If the identifier object is
- * already present, the method updates the identifier else insert the
- * identifier.
+ * associated with the protocol object.If the identifier object is already
+ * present, the method updates the identifier else insert the identifier.
+ * 
  * @author asharma
  */
-public class ProtocolIdentifierHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class ProtocolIdentifierHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
-	
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
@@ -125,8 +129,7 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements
 				rs = ps.executeQuery();
 
 				// check if identifier is in DB
-				if (rs.next() && !rs.isBeforeFirst()
-						&& rs.getLong("PROTOCOL_ID") != 0)
+				if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PROTOCOL_ID") != 0)
 				{
 					// already present;update the identifier table
 					id = rs.getLong("PROTOCOL_ID");
@@ -137,7 +140,7 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements
 				{
 					// get the identifier id
 					identifierId = getNextVal(con, "IDENTIFIER_SEQ");
-				
+
 					// insert new into identifier get the identifierid and
 					// insert
 					// into participant table
@@ -149,8 +152,7 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements
 					ps.setString(2, protocol.getIdentifier().getExtension());
 					ps.setString(3, protocol.getIdentifier().getSource());
 					ps.setString(4, protocol.getIdentifier().getRoot());
-					ps.setString(5, protocol.getIdentifier()
-							.getAssigningAuthorityName());
+					ps.setString(5, protocol.getIdentifier().getAssigningAuthorityName());
 					ps.executeUpdate();
 					con.commit();
 
@@ -158,6 +160,12 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements
 					protocol.getIdentifier().setId(identifierId);
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Protocol Identifier",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{
@@ -169,7 +177,7 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements
 			{
 				ps.close();
 			}
-			
+
 		}
 
 	}

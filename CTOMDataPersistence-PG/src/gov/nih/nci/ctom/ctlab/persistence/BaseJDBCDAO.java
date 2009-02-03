@@ -98,7 +98,9 @@ import org.apache.log4j.Logger;
  */
 public abstract class BaseJDBCDAO
 {
+
 	private static final String CONFIG_FILE = "/dataConnection.properties";
+
 	// Logging File
 	private static Logger log = Logger.getLogger("client");
 
@@ -109,6 +111,7 @@ public abstract class BaseJDBCDAO
 	 */
 	public Connection getConnection()
 	{
+
 		Connection result = null;
 		Properties props = new Properties();
 		// Get the file input stream
@@ -158,8 +161,7 @@ public abstract class BaseJDBCDAO
 		catch (SQLException e)
 		{
 			log.error("Driver loaded, but cannot connect to db: " + fDbName);
-			log.error("Driver loaded, but cannot connect to db: "
-					+ e.getLocalizedMessage());
+			log.error("Driver loaded, but cannot connect to db: " + e.getLocalizedMessage());
 		}
 		return result;
 	}
@@ -176,6 +178,7 @@ public abstract class BaseJDBCDAO
 	 */
 	public final Long getNextVal(Connection con, String seq) throws SQLException
 	{
+
 		Long nextValue = null;
 		Statement stmt = con.createStatement();
 		ResultSet rs = null;
@@ -184,6 +187,7 @@ public abstract class BaseJDBCDAO
 
 			DatabaseMetaData metaData = con.getMetaData();
 			String databaseName = metaData.getDatabaseProductName();
+			//retrieve the next id to insert into database table  for Oracle
 			if (databaseName.indexOf("Oracle") > 0)
 			{
 
@@ -191,6 +195,7 @@ public abstract class BaseJDBCDAO
 				rs.next();
 				nextValue = rs.getLong(1);
 			}
+			//retrieve the next id to insert into database table  for Postgres
 			else
 			{
 				rs = stmt.executeQuery("select nextval('" + seq + "')");

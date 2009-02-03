@@ -87,33 +87,41 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.log4j.Logger;
 
 /**
  * Persists the identifier object into the database. The identifier is
- * associated with the participant object.If the identifier object is
- * already present, the method updates the identifier else insert the
- * identifier.
+ * associated with the participant object.If the identifier object is already
+ * present, the method updates the identifier else insert the identifier.
+ * 
  * @author asharma
  */
-public class ParticipantIdentifierHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class ParticipantIdentifierHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
 
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+	// Logging File
+	private static Logger logger = Logger.getLogger("client");
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
 		Long identifierId = null;
 
+		logger.debug("Saving the Participant Identifier");
 		// retrieve the participant data from Protocol
 		Participant participant =
-				protocol.getHealthCareSite().getStudyParticipantAssignment()
-						.getParticipant();
+				protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant();
 
 		// check if the participant is associated with identifier
 		try
@@ -127,8 +135,7 @@ public class ParticipantIdentifierHandler extends CTLabDAO implements
 				rs = ps.executeQuery();
 
 				// check if identifier is in DB
-				if (rs.next() && !rs.isBeforeFirst()
-						&& rs.getLong("PARTICIPANT_ID") != 0)
+				if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PARTICIPANT_ID") != 0)
 				{
 					// already present;update the identifier table
 					id = rs.getLong("PARTICIPANT_ID");
@@ -150,8 +157,7 @@ public class ParticipantIdentifierHandler extends CTLabDAO implements
 					ps.setString(2, participant.getIdentifier().getExtension());
 					ps.setString(3, participant.getIdentifier().getSource());
 					ps.setString(4, participant.getIdentifier().getRoot());
-					ps.setString(5, participant.getIdentifier()
-							.getAssigningAuthorityName());
+					ps.setString(5, participant.getIdentifier().getAssigningAuthorityName());
 					ps.executeUpdate();
 					con.commit();
 
@@ -159,6 +165,12 @@ public class ParticipantIdentifierHandler extends CTLabDAO implements
 					participant.getIdentifier().setId(identifierId);
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Participant Identifier",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{

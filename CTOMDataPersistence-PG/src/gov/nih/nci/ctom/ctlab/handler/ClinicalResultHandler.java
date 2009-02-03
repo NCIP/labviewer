@@ -86,59 +86,64 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
 /**
  * ClinicalResultHandler persists the Clinical Result data to CTODS database.
+ * 
  * @author asharma
  */
-public class ClinicalResultHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class ClinicalResultHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
 
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		Long valUOMCdId = null;
 		Long labTestCdId = null;
 		logger.debug("Saving the clinical Result");
 
 		// retrieve the clinical result data from Protocol
 		ClinicalResult clinicalResult =
-				protocol.getHealthCareSite().getStudyParticipantAssignment()
-						.getActivity().getObservation().getClinicalResult();
+				protocol.getHealthCareSite().getStudyParticipantAssignment().getActivity()
+						.getObservation().getClinicalResult();
 
 		if (clinicalResult.getPerformingLaboratory() != null)
 		{
 			// Save Performing Laboratory
-			HL7V3MessageHandlerFactory.getInstance().getHandler(
-					"PERFORMINGLABORATORY").persist(con, protocol);
-		
+			HL7V3MessageHandlerFactory.getInstance().getHandler("PERFORMING_LABORATORY").persist(
+					con, protocol);
+
 			// update/insert ConceptDescriptor with UOM
 			valUOMCdId =
-					insertOrsaveConceptDescriptor(con, clinicalResult
-							.getValueUnitOfMeasureCd(), clinicalResult
-							.getValueUnitOfMeasureCdSystem(), clinicalResult
-							.getValueUnitOfMeasureCdSystemName(), null, null);
-			
+					insertOrsaveConceptDescriptor(con, clinicalResult.getValueUnitOfMeasureCd(),
+							clinicalResult.getValueUnitOfMeasureCdSystem(), clinicalResult
+									.getValueUnitOfMeasureCdSystemName(), null, null);
+
 			// update/insert ConceptDescriptor with Clinical result codes
 			labTestCdId =
-					insertOrsaveConceptDescriptor(con, clinicalResult
-							.getCrCode(), clinicalResult.getCrCodeSystem(),
-							clinicalResult.getCrCodeSystemName(),
-							clinicalResult.getCrCodeSystemVersion(),
-							clinicalResult.getCrCodeDisplayText());
+					insertOrsaveConceptDescriptor(con, clinicalResult.getCrCode(), clinicalResult
+							.getCrCodeSystem(), clinicalResult.getCrCodeSystemName(),
+							clinicalResult.getCrCodeSystemVersion(), clinicalResult
+									.getCrCodeDisplayText());
 
 		}
 
 		if (labTestCdId == null) // This is a required field in the database
+		{
 			return;
+		}
 		PreparedStatement ps = null;
 
 		try
@@ -146,9 +151,13 @@ public class ClinicalResultHandler extends CTLabDAO implements
 			boolean val = false;
 			boolean lt = false;
 			if (valUOMCdId != null)
+			{
 				val = true;
+			}
 			if (labTestCdId != null)
+			{
 				lt = true;
+			}
 			if (lt && val)
 			{
 				ps =
@@ -180,13 +189,18 @@ public class ClinicalResultHandler extends CTLabDAO implements
 			ps.setLong(1, clinicalResult.getObservationId());
 			ps.setString(2, clinicalResult.getLabTechCd());
 			ps.setString(3, clinicalResult.getPanelName());
-			ps.setLong(4, clinicalResult.getPerformingLaboratory()
-					.getOrganizationId());
+			ps.setLong(4, clinicalResult.getPerformingLaboratory().getOrganizationId());
 			ps.setString(5, clinicalResult.getRefFlag());
 			ps.setString(6, clinicalResult.getValue());
 			ps.setDouble(7, clinicalResult.getRefRangeLow());
 			ps.setDouble(8, clinicalResult.getRefRangeHigh());
 			ps.execute();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the clinical Result",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{

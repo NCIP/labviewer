@@ -87,7 +87,7 @@ import java.sql.Connection;
 /**
  * @author asharma
  */
-public interface HL7V3MessageHandler
+public interface HL7V3MessageHandlerInterface
 {
 
 	/**

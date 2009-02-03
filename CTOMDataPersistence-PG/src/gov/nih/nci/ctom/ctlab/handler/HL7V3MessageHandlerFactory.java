@@ -102,7 +102,7 @@ public class HL7V3MessageHandlerFactory
 
 	/**
 	 * Returns the instance of HL7V3MessageHandlerFactory 
-	 * @return
+	 * @return hl7v3factory
 	 */
 	public static HL7V3MessageHandlerFactory getInstance()
 	{
@@ -113,27 +113,27 @@ public class HL7V3MessageHandlerFactory
 	 * Returns handlers for persisting different objects in HL7V3 message
 	 * based on the string type passed in as parameter. 
 	 * @param type 
-	 * @return
+	 * @return HL7V3MessageHandlerInterface
 	 */
-	public HL7V3MessageHandler getHandler(String type)
+	public HL7V3MessageHandlerInterface getHandler(String type)
 	{
-		switch (HandlerConstants.handleName(type))
+		switch (HandlerConstantsEnum.handleName(type))
 		{
 		case ACTIVITY:
 			return new ActivityHandler();
-		case CENTRALLABORATORY:
+		case CENTRAL_LABORATORY:
 			return new CentralLaboratoryHandler();
-		case CLINICALRESULT:
+		case CLINICAL_RESULT:
 			return new ClinicalResultHandler();
-		case HEALTHCARESITE:
+		case HEALTH_CARE_SITE:
 			return new HealthCareSiteHandler();
-		case HEALTHCARESITEPARTICIPANT:
+		case HEALTH_CARE_SITE_PARTICIPANT:
 			return new HealthCareSiteParticipantHandler();
-		case PROTOCOLIDENTIFIER:
+		case PROTOCOL_IDENTIFIER:
 			return new ProtocolIdentifierHandler();
-		case PARTICIPANTIDENTIFIER:
+		case PARTICIPANT_IDENTIFIER:
 			return new ParticipantIdentifierHandler();
-		case SPAIDENTIFIER:
+		case SPA_IDENTIFIER:
 			return new SPAIdentifierHandler();
 		case INVESTIGATOR:
 			return new InvestigatorHandler();
@@ -141,21 +141,21 @@ public class HL7V3MessageHandlerFactory
 			return new ObservationHandler();
 		case PARTICIPANT:
 			return new ParticipantHandler();
-		case PERFORMINGLABORATORY:
+		case PERFORMING_LABORATORY:
 			return new PerformingLaboratoryHandler();
 		case PROCEDURE:
 			return new ProcedureHandler();
 		case PROTOCOL:
 			return new ProtocolHandler();
-		case PROTOCOLSTATUS:
+		case PROTOCOL_STATUS:
 			return new ProtocolStatusHandler();
-		case SPECIMENCOLLECTION:
+		case SPECIMEN_COLLECTION:
 			return new SpecimenCollectionHandler();
 		case SPECIMEN:
 			return new SpecimenHandler();
-		case STUDYPARTICIPANTASSIGNMENT:
+		case STUDY_PARTICIPANT_ASSIGNMENT:
 			return new StudyParticipantAssignmentHandler();
-		case STUDYTIMEPOINT:
+		case STUDY_TIME_POINT:
 			return new StudyTimePointHandler();
 		default:
 			return null;

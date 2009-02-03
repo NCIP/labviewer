@@ -87,6 +87,7 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -97,7 +98,7 @@ import org.apache.log4j.Logger;
  * @author asharma
  */
 public class StudyParticipantAssignmentHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+		HL7V3MessageHandlerInterface
 {
 
 	// Logging File
@@ -111,7 +112,8 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
-		logger.debug("Saving the StudyParticipantAssignment");
+
+		logger.debug("Saving the StudyParticipantAssignment (SPA)");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long spaId = null;
@@ -131,14 +133,15 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 			if (rs.next())
 			{
 				spaId = rs.getLong(1);
+				spa.setId(spaId);
 			}
 			else
 			{
 				// Check study participant identifier, if it exists, then don't
 				// insert new SPA or Participant
 
-				HL7V3MessageHandlerFactory.getInstance().getHandler(
-						"SPAIDENTIFIER").persist(con, protocol);
+				HL7V3MessageHandlerFactory.getInstance().getHandler("SPA_IDENTIFIER").persist(con,
+						protocol);
 
 				if (spa.getId() == null)
 				{
@@ -147,8 +150,8 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 					identifierUpdInd = true;
 
 					// Save Participant
-					HL7V3MessageHandlerFactory.getInstance().getHandler(
-							"PARTICIPANT").persist(con, protocol);
+					HL7V3MessageHandlerFactory.getInstance().getHandler("PARTICIPANT").persist(con,
+							protocol);
 
 					// insert into STUDY_PARTICIPANT_ASSIGNMENT
 					ps =
@@ -161,8 +164,7 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 					ps.setString(5, spa.getType());
 					ps.execute();
 					con.commit();
-					if (identifierUpdInd
-							&& spa.getParticipant().getIdentifier() != null)
+					if (identifierUpdInd && spa.getParticipant().getIdentifier() != null)
 					{
 						spa.setId(spaId);
 						updateIdentifier(con, spa, spa.getIdentifier().getId());
@@ -171,31 +173,36 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 
 			}
 		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Study Participant Assignment (SPA)",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
+		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
 			if (rs != null)
 			{
 				rs.close();
 			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+
 		}
 
 		// save healthCare-participant
-		if (protocol.getHealthCareSite().getId() != null
-				&& spa.getParticipant().getId() != null)
+		if (protocol.getHealthCareSite().getId() != null && spa.getParticipant().getId() != null)
 		{
-			HL7V3MessageHandlerFactory.getInstance().getHandler(
-					"HEALTHCARESITEPARTICIPANT").persist(con, protocol);
+			HL7V3MessageHandlerFactory.getInstance().getHandler("HEALTH_CARE_SITE_PARTICIPANT")
+					.persist(con, protocol);
 
 		}
 		// Save Activity
 		if (spa.getActivity() != null)
 		{
-			HL7V3MessageHandlerFactory.getInstance().getHandler("ACTIVITY")
-					.persist(con, protocol);
+			HL7V3MessageHandlerFactory.getInstance().getHandler("ACTIVITY").persist(con, protocol);
 		}
 	}
 
