@@ -87,6 +87,7 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
@@ -96,9 +97,9 @@ import org.apache.log4j.Logger;
  * 
  * @author asharma
  */
-public class PerformingLaboratoryHandler extends CTLabDAO implements
-		HL7V3MessageHandler
+public class PerformingLaboratoryHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
 
@@ -109,21 +110,19 @@ public class PerformingLaboratoryHandler extends CTLabDAO implements
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		logger.debug("Saving Performing Laboratory");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		// retrieve Performing Lab data from Protocol
 		PerformingLaboratory performingLaboratory =
-				protocol.getHealthCareSite().getStudyParticipantAssignment()
-						.getActivity().getObservation().getClinicalResult()
-						.getPerformingLaboratory();
+				protocol.getHealthCareSite().getStudyParticipantAssignment().getActivity()
+						.getObservation().getClinicalResult().getPerformingLaboratory();
 
 		try
 		{
-			ps =
-					con
-							.prepareStatement("select ID from PERFORMING_LABORATORY where IDENTIFIER = ?");
+			ps = con.prepareStatement("select ID from PERFORMING_LABORATORY where IDENTIFIER = ?");
 			ps.setString(1, performingLaboratory.getPlIdentifier());
 			rs = ps.executeQuery();
 			if (rs.next())
@@ -143,6 +142,12 @@ public class PerformingLaboratoryHandler extends CTLabDAO implements
 				ps.setString(3, performingLaboratory.getPlName());
 				ps.execute();
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Performing Laboratory",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{

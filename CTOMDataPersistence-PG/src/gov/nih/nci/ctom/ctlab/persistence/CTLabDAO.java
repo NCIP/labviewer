@@ -93,13 +93,14 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 /**
- * CTLabDAO has methods to persist clinical trial data to the CTODS database. 
+ * CTLabDAO has methods to persist clinical trial data to the CTODS database.
  * <P>
  * 
  * @author Anupama Sharma
  */
 public class CTLabDAO extends BaseJDBCDAO
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
 
@@ -112,20 +113,23 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Participant
 	 * @throws SQLException
 	 */
-	public void updateIdentifier(Connection con, Participant participant)
-			throws SQLException
+	public void updateIdentifier(Connection con, Participant participant) throws SQLException
 	{
+
 		PreparedStatement ps = null;
 		try
 		{
-			ps =
-					con
-							.prepareStatement("update IDENTIFIER set PARTICIPANT_ID = ? where ID= ?");
+			ps = con.prepareStatement("update IDENTIFIER set PARTICIPANT_ID = ? where ID= ?");
 			// need to set the participantid into the identifier table
 			ps.setLong(1, participant.getId());
 			ps.setLong(2, participant.getIdentifier().getId());
 			ps.executeUpdate();
 			con.commit();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the identifier with participant info",se);
+			throw se;
 		}
 		finally
 		{
@@ -138,7 +142,7 @@ public class CTLabDAO extends BaseJDBCDAO
 	}
 
 	/**
-	 * Updates Identifier with Study Participant Assignment Id.
+	 * Updates Identifier table with Study Participant Assignment Id.
 	 * 
 	 * @param con
 	 *            Connection
@@ -146,9 +150,8 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Participant
 	 * @throws SQLException
 	 */
-	public void updateIdentifier(Connection con,
-			StudyParticipantAssignment studypartAssign, Long identifierId)
-			throws SQLException
+	public void updateIdentifier(Connection con, StudyParticipantAssignment studypartAssign,
+			Long identifierId) throws SQLException
 	{
 
 		PreparedStatement ps = null;
@@ -164,6 +167,11 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.executeUpdate();
 			con.commit();
 		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the identifier with SPA info",se);
+			throw se;
+		}
 		finally
 		{
 			if (ps != null)
@@ -175,7 +183,7 @@ public class CTLabDAO extends BaseJDBCDAO
 	}
 
 	/**
-	 * Updates Identifier with Protocol Id
+	 * Updates Identifier table with Protocol Id
 	 * 
 	 * @param con
 	 *            Connection
@@ -183,21 +191,23 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Protocol
 	 * @throws SQLException
 	 */
-	public void updateIdentifier(Connection con, Protocol protocol)
-			throws SQLException
+	public void updateIdentifier(Connection con, Protocol protocol) throws SQLException
 	{
 
 		PreparedStatement ps = null;
 		try
 		{
-			ps =
-					con
-							.prepareStatement("update IDENTIFIER set PROTOCOL_ID = ? where ID= ?");
+			ps = con.prepareStatement("update IDENTIFIER set PROTOCOL_ID = ? where ID= ?");
 			// need to set the protocolid into the identifier table
 			ps.setLong(1, protocol.getId());
 			ps.setLong(2, protocol.getIdentifier().getId());
 			ps.executeUpdate();
 			con.commit();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the identifier with protocol info",se);
+			throw se;
 		}
 		finally
 		{
@@ -210,7 +220,7 @@ public class CTLabDAO extends BaseJDBCDAO
 	}
 
 	/**
-	 * Updates the participant with gender and race concept descriptor
+	 * Updates the participant table with gender and race concept descriptor
 	 * 
 	 * @param con
 	 *            Connection
@@ -218,31 +228,32 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Participant
 	 * @throws SQLException
 	 */
-	private void updateParticipant(Connection con, Participant participant)
-			throws SQLException
+	private void updateParticipant(Connection con, Participant participant) throws SQLException
 	{
+
 		PreparedStatement ps = null;
 		Long personId = null;
 
 		Long genderCDId =
-				insertOrsaveConceptDescriptor(con, participant
-						.getAdminGenderCode(), null, null);
-		Long raceCDId =
-				insertOrsaveConceptDescriptor(con, participant.getRaceCode(),
-						null, null);
+				insertOrsaveConceptDescriptor(con, participant.getAdminGenderCode(), null, null);
+		Long raceCDId = insertOrsaveConceptDescriptor(con, participant.getRaceCode(), null, null);
 
 		try
 		{
 			// get next Id from seq
 			personId = getNextVal(con, "PERSON_SEQ");
 			participant.setId(personId);
-			boolean gc = false;
-			boolean rc = false;
+			boolean genderCode = false;
+			boolean raceCode = false;
 			if (genderCDId != null)
-				gc = true;
+			{
+				genderCode = true;
+			}
 			if (raceCDId != null)
-				rc = true;
-			if (rc && gc)
+			{
+				raceCode = true;
+			}
+			if (raceCode && genderCode)
 			{
 
 				ps =
@@ -251,7 +262,7 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setLong(7, genderCDId);
 				ps.setLong(8, raceCDId);
 			}
-			else if (!rc && !gc)
+			else if (!raceCode && !genderCode)
 			{
 
 				ps =
@@ -259,7 +270,7 @@ public class CTLabDAO extends BaseJDBCDAO
 								.prepareStatement("update into PARTICIPANT set BIRTH_DATE = ?, BIRTH_DATE_ORIG = ?, INITIALS = ?, LAST_NAME = ?, FIRST_NAME = ?, MARITAL_STATUS_CODE = ?, ZIP_CODE = ?, COUNTRY_CODE = ?  where PERSON_ID = ?");
 
 			}
-			else if (!rc)
+			else if (!raceCode)
 			{
 				ps =
 						con
@@ -267,7 +278,7 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setLong(7, genderCDId);
 
 			}
-			else if (!gc)
+			else if (!genderCode)
 			{
 				ps =
 						con
@@ -276,10 +287,13 @@ public class CTLabDAO extends BaseJDBCDAO
 			}
 			ps.setLong(1, personId);
 			if (participant.getBirthDate() != null)
-				ps.setDate(1, new java.sql.Date(participant.getBirthDate()
-						.getTime()));
+			{
+				ps.setDate(1, new java.sql.Date(participant.getBirthDate().getTime()));
+			}
 			else
+			{
 				ps.setDate(1, null);
+			}
 			ps.setString(2, participant.getBirthDateOrig());
 			ps.setString(3, participant.getInitials());
 			ps.setString(4, participant.getLastName());
@@ -288,6 +302,11 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(7, participant.getZipCode());
 			ps.setString(8, participant.getCountryCode());
 			ps.execute();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the participant info",se);
+			throw se;
 		}
 		finally
 		{
@@ -332,6 +351,11 @@ public class CTLabDAO extends BaseJDBCDAO
 				return null;
 			}
 		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving person id from Study participant assignment",se);
+			throw se;
+		}
 		finally
 		{
 			if (rs != null)
@@ -361,21 +385,21 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @return Concept Descriptor Id
 	 * @throws SQLException
 	 */
-	public Long insertOrsaveConceptDescriptor(Connection con, String code,
-			String codeSystem, String codeSystemName, Double codeSystemVersion,
-			String displayText) throws SQLException
+	public Long insertOrsaveConceptDescriptor(Connection con, String code, String codeSystem,
+			String codeSystemName, Double codeSystemVersion, String displayText)
+			throws SQLException
 	{
 
 		if (code == null)
+		{
 			return null;
+		}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Long id = null;
 		try
 		{
-			ps =
-					con
-							.prepareStatement("select id from concept_descriptor where code = ?");
+			ps = con.prepareStatement("select id from concept_descriptor where code = ?");
 			ps.setString(1, code);
 			rs = ps.executeQuery();
 			if (rs.next())
@@ -395,15 +419,24 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setString(3, codeSystem);
 				ps.setString(4, codeSystemName);
 				if (codeSystemVersion != null)
+				{
 					ps.setDouble(5, codeSystemVersion);
+				}
 				else
+				{
 					ps.setDouble(5, 0);
+				}
 				ps.setString(6, displayText);
 				ps.execute();
 				con.commit();
 
 				return id;
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error inserting/updating the Concept descriptor");
+			throw se;
 		}
 		finally
 		{
@@ -445,9 +478,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		Long id = null;
 		try
 		{
-			ps =
-					con
-							.prepareStatement("select id from concept_descriptor where code = ?");
+			ps = con.prepareStatement("select id from concept_descriptor where code = ?");
 			ps.setString(1, code);
 			rs = ps.executeQuery();
 			if (rs.next())
@@ -464,19 +495,24 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setLong(1, id);
 				ps.setString(2, code);
 				if (codeSystemVersion != null)
-				{	
+				{
 					ps.setDouble(3, codeSystemVersion);
-				}		
+				}
 				else
-				{	
+				{
 					ps.setDouble(3, 0);
-				}	
+				}
 				ps.setString(4, displayText);
 				ps.execute();
 				con.commit();
 
 				return id;
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error inserting/updating the Concept descriptor",se);
+			throw se;
 		}
 		finally
 		{
@@ -503,14 +539,15 @@ public class CTLabDAO extends BaseJDBCDAO
 	public void rollbackParticipant(Connection con, String participantGridId,
 			String participantExtension) throws SQLException
 	{
+
 		logger.debug("Received a participant Rollback message");
 		PreparedStatement ps = null;
-		PreparedStatement ps1 = null;
-		PreparedStatement ps2 = null;
 		ResultSet rs = null;
 		Long id = null;
 		if (participantGridId == null || participantExtension == null)
+		{
 			return;
+		}
 		try
 		{
 			// String participantGridId = participant.getIdentifier().getRoot();
@@ -521,8 +558,7 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(2, participantExtension);
 			rs = ps.executeQuery();
 			// check if identifier is in DB
-			if (rs.next() && !rs.isBeforeFirst()
-					&& rs.getLong("PARTICIPANT_ID") != 0)
+			if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PARTICIPANT_ID") != 0)
 			{
 				// already present;update the identifier table
 				id = rs.getLong("PARTICIPANT_ID");
@@ -531,23 +567,27 @@ public class CTLabDAO extends BaseJDBCDAO
 			if (id != null)
 			{
 				logger.debug("Performing rollback of the participant " + id);
-
-				ps1 =
+				// delete from the identifier table
+				ps =
 						con
 								.prepareStatement("delete from identifier where extension = (select extension from identifier where"
 										+ " root = ? and extension = ?)");
 
-				ps1.setString(1, participantGridId);
-				ps1.setString(2, participantExtension);
-				ps1.executeUpdate();
+				ps.setString(1, participantGridId);
+				ps.setString(2, participantExtension);
+				ps.executeUpdate();
 
-				ps2 =
-						con
-								.prepareStatement("delete from PARTICIPANT where ID=?");
-				ps2.setLong(1, id);
-				ps2.executeUpdate();
+				// delete from the participant
+				ps = con.prepareStatement("delete from PARTICIPANT where ID=?");
+				ps.setLong(1, id);
+				ps.executeUpdate();
 				con.commit();
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error performing participant rollback",se);
+			throw se;
 		}
 		finally
 		{
@@ -559,15 +599,6 @@ public class CTLabDAO extends BaseJDBCDAO
 			{
 				ps.close();
 			}
-			if (ps1 != null)
-			{
-				ps1.close();
-			}
-			if (ps2 != null)
-			{
-				ps2.close();
-			}
-
 		}
 	}
 
@@ -580,12 +611,11 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Protocol
 	 * @throws SQLException
 	 */
-	public void rollbackStudy(Connection con, String studyGridId)
-			throws SQLException
+	public void rollbackStudy(Connection con, String studyGridId) throws SQLException
 	{
+
 		logger.debug("Received a Study Rollback message");
 		PreparedStatement ps = null;
-		PreparedStatement ps1 = null;
 		ResultSet rs = null;
 		Long id = null;
 		if (studyGridId == null)
@@ -599,28 +629,31 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(1, studyGridId);
 			rs = ps.executeQuery();
 			// check if identifier is in DB
-			if (rs.next() && !rs.isBeforeFirst()
-					&& rs.getLong("PROTOCOL_ID") != 0)
+			if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PROTOCOL_ID") != 0)
 			{
 				logger.debug("protocolID " + rs.getLong("PROTOCOL_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("PROTOCOL_ID");
 			}
-			rs.close();
-			ps.close();
 			if (id != null)
 			{
 				logger.debug("Performing rollback of the study " + id);
-				ps =
-						con
-								.prepareStatement("delete from IDENTIFIER where PROTOCOL_ID=?");
+				// delete from the identifier table
+				ps = con.prepareStatement("delete from IDENTIFIER where PROTOCOL_ID=?");
 				ps.setLong(1, id);
 				ps.executeUpdate();
-				ps1 = con.prepareStatement("delete from PROTOCOL where ID=?");
-				ps1.setLong(1, id);
-				ps1.executeUpdate();
+
+				// delete from the protocol table
+				ps = con.prepareStatement("delete from PROTOCOL where ID=?");
+				ps.setLong(1, id);
+				ps.executeUpdate();
 				con.commit();
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error performing study rollback",se);
+			throw se;
 		}
 		finally
 		{
@@ -632,11 +665,6 @@ public class CTLabDAO extends BaseJDBCDAO
 			{
 				ps.close();
 			}
-			if (ps1 != null)
-			{
-				ps1.close();
-			}
-
 		}
 	}
 
@@ -650,10 +678,10 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @return Insert Date
 	 * @throws SQLException
 	 */
-	public Date checkParticipantForRollback(Connection con,
-			String participantGridId, String participantExtension)
-			throws SQLException
+	public Date checkParticipantForRollback(Connection con, String participantGridId,
+			String participantExtension) throws SQLException
 	{
+
 		logger.debug("Checking if participant exists for Rollback");
 		Date insertDate = null;
 		PreparedStatement ps = null;
@@ -661,7 +689,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		ResultSet rs1 = null;
 		Long id = null;
 		if (participantGridId == null || participantExtension == null)
+		{
 			return insertDate;
+		}
 		try
 		{
 			ps =
@@ -671,29 +701,29 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(2, participantExtension);
 			rs = ps.executeQuery();
 			// check if identifier is in DB
-			if (rs.next() && !rs.isBeforeFirst()
-					&& rs.getLong("PARTICIPANT_ID") != 0)
+			if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PARTICIPANT_ID") != 0)
 			{
 				logger.debug("participantid " + rs.getLong("PARTICIPANT_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("PARTICIPANT_ID");
 			}
 			rs.close();
-			ps.close();
 			if (id != null)
 			{
-				ps =
-						con
-								.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
+				ps = con.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
 				ps.setLong(1, id);
 				rs1 = ps.executeQuery();
 				if (rs1.next() && !rs1.isBeforeFirst())
 				{
-					insertDate =
-							new java.util.Date(rs1.getTimestamp(1).getTime());
+					insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
 					logger.debug("insert date " + insertDate);
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error checking if participant exists for rollback",se);
+			throw se;
 		}
 		finally
 		{
@@ -725,9 +755,9 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @return Insert Date
 	 * @throws SQLException
 	 */
-	public Date checkStudyForRollback(Connection con, String studyGridId)
-			throws SQLException
+	public Date checkStudyForRollback(Connection con, String studyGridId) throws SQLException
 	{
+
 		logger.debug("Checking if study exists for rollback");
 		Date insertDate = null;
 		PreparedStatement ps = null;
@@ -744,30 +774,30 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setString(1, studyGridId);
 			rs = ps.executeQuery();
 			// check if identifier is in DB
-			if (rs.next() && !rs.isBeforeFirst()
-					&& rs.getLong("PROTOCOL_ID") != 0)
+			if (rs.next() && !rs.isBeforeFirst() && rs.getLong("PROTOCOL_ID") != 0)
 			{
 				logger.debug("protocolID " + rs.getLong("PROTOCOL_ID"));
 				// already present;update the identifier table
 				id = rs.getLong("PROTOCOL_ID");
 			}
 			rs.close();
-			ps.close();
 			// insert into Protocol the insert date
 			if (id != null)
 			{
-				ps =
-						con
-								.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
+				ps = con.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
 				ps.setLong(1, id);
 				rs1 = ps.executeQuery();
 				if (rs1.next() && !rs1.isBeforeFirst())
 				{
-					insertDate =
-							new java.util.Date(rs1.getTimestamp(1).getTime());
+					insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
 					logger.debug("insert date " + insertDate);
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error performing check if study exists rollback",se);
+			throw se;
 		}
 		finally
 		{
@@ -776,14 +806,15 @@ public class CTLabDAO extends BaseJDBCDAO
 			{
 				rs1.close();
 			}
-			if (ps != null)
-			{
-				ps.close();
-			}
 			if (rs != null)
 			{
 				rs.close();
 			}
+			if (ps != null)
+			{
+				ps.close();
+			}
+
 		}
 		return insertDate;
 	}
@@ -798,12 +829,11 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @return study Protocol
 	 * @throws SQLException
 	 */
-	public Protocol getStudy(Connection con, Participant part)
-			throws SQLException
+	public Protocol getStudy(Connection con, Participant part) throws SQLException
 	{
+
 		logger.debug("Inside getStudy method");
 		PreparedStatement ps = null;
-		PreparedStatement ps1 = null;
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		Protocol study = null;
@@ -825,22 +855,26 @@ public class CTLabDAO extends BaseJDBCDAO
 			}
 			if (protocolId != null)
 			{
-				ps1 =
+				ps =
 						con
 								.prepareStatement("select p.long_title_text,i.root,i.extension,i.assigning_authority_name from identifier i, protocol p where i.protocol_id=p.id and p.id=?");
-				ps1.setLong(1, protocolId);
-				rs1 = ps1.executeQuery();
+				ps.setLong(1, protocolId);
+				rs1 = ps.executeQuery();
 				if (rs1.next())
 				{
 					study = new Protocol();
 					study.setLongTxtTitle(rs1.getString("LONG_TITLE_TEXT"));
 					study.getIdentifier().setRoot(rs1.getString("ROOT"));
-					study.getIdentifier().setExtension(
-							rs1.getString("EXTENSION"));
+					study.getIdentifier().setExtension(rs1.getString("EXTENSION"));
 					study.getIdentifier().setAssigningAuthorityName(
 							rs1.getString("ASSIGNING_AUTHORITY_NAME"));
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving the study the participant is associated with",se);
+			throw se;
 		}
 		finally
 		{
@@ -848,17 +882,13 @@ public class CTLabDAO extends BaseJDBCDAO
 			{
 				rs.close();
 			}
-			if (ps != null)
-			{
-				ps.close();
-			}
 			if (rs1 != null)
 			{
 				rs1.close();
 			}
-			if (ps1 != null)
+			if (ps != null)
 			{
-				ps1.close();
+				ps.close();
 			}
 
 		}
@@ -877,11 +907,11 @@ public class CTLabDAO extends BaseJDBCDAO
 	 * @return StudyPArticipantAssignment Id
 	 * @throws SQLException
 	 */
-	public Long checkParticipantExists(Connection con, Protocol protocol,
-			String mrn) throws SQLException
+	public Long checkParticipantExists(Connection con, Protocol protocol, String mrn)
+			throws SQLException
 	{
+
 		PreparedStatement ps = null;
-		PreparedStatement ps1 = null;
 		ResultSet rs = null;
 		ResultSet rs1 = null;
 		Long spa_id = null;
@@ -904,20 +934,27 @@ public class CTLabDAO extends BaseJDBCDAO
 			if (spa_id != null)
 			{
 				String identOrg = root + "." + mrn;
-				ps1 =
+				ps =
 						con
 								.prepareStatement("select count(*) from identifier where protocol_id in (select protocol_id from study_site where id in( select study_site_id from study_participant_assignment where id = ? and STUDY_PARTICIPANT_IDENTFR_ORIG=? ))");
-				ps1.setLong(1, spa_id);
-				ps1.setString(2, identOrg);// get the participant root+mrn
-				rs1 = ps1.executeQuery();
+				ps.setLong(1, spa_id);
+				ps.setString(2, identOrg);// get the participant root+mrn
+				rs1 = ps.executeQuery();
 				if (rs1.next())
 				{
 					count = rs1.getInt(1);
 				}
 			}
 			if (count == 1 && root != null)
+			{
 				return spa_id;
+			}
 
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error performing if participant exists",se);
+			throw se;
 		}
 		finally
 		{
@@ -925,18 +962,15 @@ public class CTLabDAO extends BaseJDBCDAO
 			{
 				rs.close();
 			}
-			if (ps != null)
-			{
-				ps.close();
-			}
 			if (rs1 != null)
 			{
 				rs1.close();
 			}
-			if (ps1 != null)
+			if (ps != null)
 			{
-				ps1.close();
+				ps.close();
 			}
+
 		}
 		return spa_id;
 	}
@@ -954,10 +988,10 @@ public class CTLabDAO extends BaseJDBCDAO
 	 *            Medical Resource Number
 	 * @throws SQLException
 	 */
-	public void updateParticipantGridId(Connection con,
-			String participantGridId, Long spaId, String mrn)
-			throws SQLException
+	public void updateParticipantGridId(Connection con, String participantGridId, Long spaId,
+			String mrn) throws SQLException
 	{
+
 		PreparedStatement ps = null;
 		logger.debug(participantGridId + " " + spaId + " " + mrn);
 		try
@@ -970,6 +1004,11 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps.setLong(3, spaId);
 			ps.executeUpdate();
 			con.commit();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the participant grid id",se);
+			throw se;
 		}
 		finally
 		{

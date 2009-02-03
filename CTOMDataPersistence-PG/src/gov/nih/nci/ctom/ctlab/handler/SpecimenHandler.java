@@ -86,37 +86,40 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
 /**
- * SpecimenHandler persists the Specimen Data into CTODS
- * database.
+ * SpecimenHandler persists the Specimen Data into CTODS database.
+ * 
  * @author asharma
  */
-public class SpecimenHandler extends CTLabDAO implements HL7V3MessageHandler
+public class SpecimenHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
 
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		logger.debug("Saving the Specimen");
 		PreparedStatement ps = null;
 
 		// retrieve the specimen data from Protocol
 		Specimen specimen =
-				protocol.getHealthCareSite().getStudyParticipantAssignment()
-						.getActivity().getProcedure().getSpecimenCollection()
-						.getSpecimen();
+				protocol.getHealthCareSite().getStudyParticipantAssignment().getActivity()
+						.getProcedure().getSpecimenCollection().getSpecimen();
 
 		Long sampleTypeCDId =
-				insertOrsaveConceptDescriptor(con, specimen.getVolumeUOMCd(),
-						null, null);
+				insertOrsaveConceptDescriptor(con, specimen.getVolumeUOMCd(), null, null);
 
 		try
 		{
@@ -126,7 +129,9 @@ public class SpecimenHandler extends CTLabDAO implements HL7V3MessageHandler
 
 			boolean sc = false;
 			if (sampleTypeCDId != null)
+			{
 				sc = true;
+			}
 			if (sc)
 			{
 				ps =
@@ -148,6 +153,12 @@ public class SpecimenHandler extends CTLabDAO implements HL7V3MessageHandler
 			ps.setLong(6, specimen.getProcedureActivityId());
 			ps.setString(7, specimen.getSampleIdentifierOrig());
 			ps.execute();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Specimen",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{

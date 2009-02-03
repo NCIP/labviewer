@@ -86,26 +86,31 @@ import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 /**
- * ProtocolHandler persists Protocol object to the
- * CTODS database
+ * ProtocolHandler persists Protocol object to the CTODS database
+ * 
  * @author asharma
  */
-public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
+public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
 {
+
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
-	
-	
-	/* (non-Javadoc)
-	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection, gov.nih.nci.ctom.ctlab.domain.Protocol)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
+	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
 	public void persist(Connection con, Protocol protocol) throws Exception
 	{
+
 		logger.debug("Saving Protocol");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -113,9 +118,8 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 		boolean identifierUpdInd = false;
 
 		if (protocol.getNciIdentifier() == null)
-		{	
-			throw new Exception(
-					"Invalid Data, Protocol Identifier Cannot Be Null");
+		{
+			throw new Exception("Invalid Data, Protocol Identifier Cannot Be Null");
 		}
 		try
 		{
@@ -130,9 +134,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 			{
 				id = rs.getLong(1);
 				protocol.setId(id);
-				ps =
-						con
-								.prepareStatement("select ID from IDENTIFIER where PROTOCOL_ID = ?");
+				ps = con.prepareStatement("select ID from IDENTIFIER where PROTOCOL_ID = ?");
 				ps.setLong(1, id);
 				rs = ps.executeQuery();
 
@@ -145,35 +147,29 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 			else
 			{
 				// Save/update Identifier
-				HL7V3MessageHandlerFactory.getInstance().getHandler(
-						"PROTOCOLIDENTIFIER").persist(con, protocol);
+				HL7V3MessageHandlerFactory.getInstance().getHandler("PROTOCOL_IDENTIFIER").persist(
+						con, protocol);
 				if (protocol.getId() == null)
 				{
 					identifierUpdInd = true;
-					//get ID from sequence	
+					// get ID from sequence
 					id = getNextVal(con, "protocol_seq");
 					ps =
 							con
 									.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT, SHORT_TITLE_TEXT, CTOM_INSERT_DATE, SPONSOR_CODE)  values(?,?,?,?,?,?,?)");
 					ps.setLong(1, id);
-					ps
-							.setString(2, String.valueOf(protocol
-									.getNciIdentifier()));
-					ps.setString(3, String.valueOf(protocol
-							.getIdAssigningAuth()));
+					ps.setString(2, String.valueOf(protocol.getNciIdentifier()));
+					ps.setString(3, String.valueOf(protocol.getIdAssigningAuth()));
 					ps.setString(4, String.valueOf(protocol.getLongTxtTitle()));
-					ps
-							.setString(5, String.valueOf(protocol
-									.getShortTxtTitle()));
+					ps.setString(5, String.valueOf(protocol.getShortTxtTitle()));
 					if (protocol.getCtomInsertDt() == null)
 					{
-						ps.setTimestamp(6, new java.sql.Timestamp(new Date()
-								.getTime()));
+						ps.setTimestamp(6, new java.sql.Timestamp(new Date().getTime()));
 					}
 					else
 					{
-						ps.setTimestamp(6, new java.sql.Timestamp(protocol
-								.getCtomInsertDt().getTime()));
+						ps.setTimestamp(6, new java.sql.Timestamp(protocol.getCtomInsertDt()
+								.getTime()));
 					}
 					ps.setString(7, String.valueOf(protocol.getSponsorCode()));
 					ps.execute();
@@ -183,24 +179,27 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 						updateIdentifier(con, protocol);
 					}
 				} // update into participant if there was a participant
-					// associated
+				// associated
 				// with identifier.
 				else
 				{
 					ps =
 							con
 									.prepareStatement("update PROTOCOL set NCI_IDENTIFIER = ?, IDENTIFIER_ASSIGNING_AUTHORITY = ?, LONG_TITLE_TEXT = ? where ID = ?");
-					ps
-							.setString(1, String.valueOf(protocol
-									.getNciIdentifier()));
-					ps.setString(2, String.valueOf(protocol
-							.getIdAssigningAuth()));
+					ps.setString(1, String.valueOf(protocol.getNciIdentifier()));
+					ps.setString(2, String.valueOf(protocol.getIdAssigningAuth()));
 					ps.setString(3, String.valueOf(protocol.getLongTxtTitle()));
 					ps.setLong(4, protocol.getId());
 					ps.executeUpdate();
 					con.commit();
 				}
 			}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error saving the Protocol",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
 		}
 		finally
 		{
@@ -215,22 +214,22 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandler
 		}
 		// save protocol status
 		if (protocol.getStatus() != null)
-		{	
-			HL7V3MessageHandlerFactory.getInstance().getHandler(
-					"PROTOCOLSTATUS").persist(con, protocol);
-		}	
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler("PROTOCOL_STATUS").persist(con,
+					protocol);
+		}
 		// save investigator
 		if (protocol.getInvestigator() != null)
-		{	
-			HL7V3MessageHandlerFactory.getInstance().getHandler("INVESTIGATOR")
-					.persist(con, protocol);
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler("INVESTIGATOR").persist(con,
+					protocol);
 		}
 		// save healthcaresite
 		if (protocol.getHealthCareSite() != null)
 		{
-			HL7V3MessageHandlerFactory.getInstance().getHandler(
-							"HEALTHCARESITE").persist(con, protocol);
-		}	
+			HL7V3MessageHandlerFactory.getInstance().getHandler("HEALTH_CARE_SITE").persist(con,
+					protocol);
+		}
 	}
 
 }
