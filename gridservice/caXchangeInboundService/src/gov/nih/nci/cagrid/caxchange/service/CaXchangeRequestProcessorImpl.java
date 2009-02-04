@@ -318,14 +318,11 @@ public class CaXchangeRequestProcessorImpl extends
 						.getInstance();
 				String caXchangeSynchronousServiceURL = properties
 						.getProperty("synchronous.caxchange.serviceURL");
-				logger.debug("CAXCHANGE SERVICE URL: "
-						+ caXchangeSynchronousServiceURL);
+
 				if (caXchangeSynchronousServiceURL == null) {
 					caXchangeSynchronousServiceURL = configuration
 							.getCaXchangeSynchronousServiceURL();
 				}
-				logger.debug("CAXCHANGE SERVICE URL: "
-						+ caXchangeSynchronousServiceURL);
 
 				CaXchangeRequestMessage caXchangeRequestMessageToESB = new CaXchangeRequestMessage();
 				Message requestMessageToESB = buildRequestMessageToESB(requestMessageFromClient);
@@ -385,60 +382,42 @@ public class CaXchangeRequestProcessorImpl extends
 			metadata.setTransactionControl(TransactionControls.PROCESS);
 
 			// build the credentials object. Only one of the credential choices
-			// can be set
-			// the last choice values will reset the other choices in the group
+			// can be set the last choice values will reset the other choices in
+			// the group
 			Credentials credentials = new SynchronousRequestServiceStub.Credentials();
 			CredentialsChoice_type0 credentialsChoice_type0 = new SynchronousRequestServiceStub.CredentialsChoice_type0();
 			if (reqMsgFromClient.getMetadata().getCredentials()
 					.getGridIdentifier() != null) {
-				logger.debug("GRID CREDENTIALS ARE NOT NULL");
-				logger.debug("Grid Identifier: "
-						+ reqMsgFromClient.getMetadata().getCredentials()
-								.getGridIdentifier());
 				if (credentialsChoice_type0 == null) {
-					logger.debug("CREDENTIALS CHOICE TYPE 0 IS NULL");
 				}
 				credentialsChoice_type0.setGridIdentifier(reqMsgFromClient
 						.getMetadata().getCredentials().getGridIdentifier());
 			} else if (reqMsgFromClient.getMetadata().getCredentials()
 					.getGroupName() != null) {
-				logger.debug("GROUP NAME IS NOT NULL");
 				credentialsChoice_type0.setGroupName(reqMsgFromClient
 						.getMetadata().getCredentials().getGroupName());
 			} else {
-				logger.debug("USER NAME IS NOT NULL");
-				logger.debug("User Name: "
-						+ reqMsgFromClient.getMetadata().getCredentials()
-								.getUserName());
 				credentialsChoice_type0.setUserName(reqMsgFromClient
 						.getMetadata().getCredentials().getUserName());
 			}
 			credentials.setCredentialsChoice_type0(credentialsChoice_type0);
-			logger.debug("CREDENTIALS CHOICE SET");
 			credentials.setDelegatedCredentialReference(reqMsgFromClient
 					.getMetadata().getCredentials()
 					.getDelegatedCredentialReference());
 
 			credentials.setPassword(reqMsgFromClient.getMetadata()
 					.getCredentials().getPassword());
-			logger.debug("PASSWORD SET");
 
 			metadata.setCredentials(credentials);
-
-			logger.debug("3");
 			metadata.setCaXchangeIdentifier(reqMsgFromClient.getMetadata()
 					.getCaXchangeIdentifier());
-			logger.debug("4");
 			metadata.setExternalIdentifier(reqMsgFromClient.getMetadata()
 					.getExternalIdentifier());
-			logger.debug("5");
 			metadata.setOperationName(reqMsgFromClient.getMetadata()
 					.getOperationName());
-			logger.debug("6");
 			metadata.setServiceType(reqMsgFromClient.getMetadata()
 					.getServiceType());
 			requestMessageToESB.setMetadata(metadata);
-			logger.debug("7");
 
 			// Create and set the request
 			Request request = new Request();
@@ -464,10 +443,6 @@ public class CaXchangeRequestProcessorImpl extends
 			}
 
 			request.setBusinessMessagePayload(messagePayload);
-			logger.debug("URI: "
-					+ request.getBusinessMessagePayload()
-							.getXmlSchemaDefinition().getPath());
-			logger.debug("8");
 
 			requestMessageToESB.setRequest(request);
 			logger.debug("Out - buildRequestMessageToESB method");
@@ -502,26 +477,22 @@ public class CaXchangeRequestProcessorImpl extends
 				respMsgFromESB.getResponseMetadata().getCaXchangeIdentifier(),
 				respMsgFromESB.getResponseMetadata().getExternalIdentifier()));
 
-		logger.debug("RESPONSE METADATA SET");
 		// create and set the response
 		Response responseToClientL2 = new Response();
 
 		Statuses statuses = Statuses.fromString(respMsgFromESB.getResponse()
 				.getResponseStatus().toString());
 		responseToClientL2.setResponseStatus(statuses);
-		logger.debug("RESPONSE STATUSES SET");
 
 		// create a response or error response based on the choice
 		if (respMsgFromESB.getResponse().getResponseChoice_type0()
 				.getTargetResponse() != null) {
-			logger.debug("IN TARGETRESPONSE NOT NULL IF BLOCK");
 			TargetResponseMessage targetRespMsgToClientL2L1 = new TargetResponseMessage();
 			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage[] targetRespMsgFromESBArray = respMsgFromESB
 					.getResponse().getResponseChoice_type0()
 					.getTargetResponse();
 			if (targetRespMsgFromESBArray != null
 					&& targetRespMsgFromESBArray.length == 1) {
-				logger.debug("IN TARGETRESPONSE ARRAY LENGTH ONE IF LOOP");
 				gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage targetRespMsgFromESB = (gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage) targetRespMsgFromESBArray[0];
 				targetRespMsgToClientL2L1
 						.setTargetServiceIdentifier(targetRespMsgFromESB
@@ -538,7 +509,6 @@ public class CaXchangeRequestProcessorImpl extends
 				if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0()
 						.getTargetBusinessMessage() != null) {
 					gov.nih.nci.caxchange.MessagePayload targetBusinessMsg = new gov.nih.nci.caxchange.MessagePayload();
-					logger.debug("IN TARGET BUSINESS MSG NOT NULL IF LOOP");
 
 					OMElement documentElement = targetRespMsgFromESB
 							.getTargetResponseMessageChoice_type0()
@@ -554,20 +524,19 @@ public class CaXchangeRequestProcessorImpl extends
 					targetBusinessMsg
 							.set_any(new MessageElement[] { messageElement });
 
-					/*//un- comment the block below if the schema is present in the URI 
-					 if (targetRespMsgFromESB
-							.getTargetResponseMessageChoice_type0()
-							.getTargetBusinessMessage()
-							.getXmlSchemaDefinition().getPath() != null) {
-						logger.debug("IN TARGET SCHEMA NOT NULL IF LOOP");
-						targetBusinessMsg
-								.setXmlSchemaDefinition(new org.apache.axis.types.URI(
-										targetRespMsgFromESB
-												.getTargetResponseMessageChoice_type0()
-												.getTargetBusinessMessage()
-												.getXmlSchemaDefinition()
-												.getPath()));
-					}*/
+					/*
+					 * //un- comment the block below if the schema is present in
+					 * the URI if (targetRespMsgFromESB
+					 * .getTargetResponseMessageChoice_type0()
+					 * .getTargetBusinessMessage()
+					 * .getXmlSchemaDefinition().getPath() != null) {
+					 * logger.debug("IN TARGET SCHEMA NOT NULL IF LOOP");
+					 * targetBusinessMsg .setXmlSchemaDefinition(new
+					 * org.apache.axis.types.URI( targetRespMsgFromESB
+					 * .getTargetResponseMessageChoice_type0()
+					 * .getTargetBusinessMessage() .getXmlSchemaDefinition()
+					 * .getPath())); }
+					 */
 
 					targetRespMsgToClientL2L1
 							.setTargetBusinessMessage(targetBusinessMsg);
@@ -583,7 +552,6 @@ public class CaXchangeRequestProcessorImpl extends
 			}
 			responseToClientL2
 					.setTargetResponse(new TargetResponseMessage[] { targetRespMsgToClientL2L1 });
-			logger.debug("RESPONSE TARGET_RESPONSE SET");
 
 		} else {
 			ErrorDetails errorDetails = new ErrorDetails(respMsgFromESB
@@ -592,7 +560,6 @@ public class CaXchangeRequestProcessorImpl extends
 					respMsgFromESB.getResponse().getResponseChoice_type0()
 							.getCaXchangeError().getErrorDescription());
 			responseToClientL2.setCaXchangeError(errorDetails);
-			logger.debug("RESPONSE ERRORDETAILS SET");
 		}
 		responseMessageToClientL1.setResponse(responseToClientL2);
 		logger.debug("Out - buildResponseMessageToClient method");
