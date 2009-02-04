@@ -208,6 +208,7 @@ public class GridSU implements MessageExchangeListener {
 	 */
 	public void executeStrategy(MessageExchange exchange) throws Exception {
 		NormalizedMessage in = exchange.getMessage("in");
+		log.debug("Message Received:"+in);
 		Document input = new SourceTransformer().toDOMDocument(in);
 		GridMessage gridMessage = new GridMessageImpl(input);
 		String operationName = gridMessage.getOperationName();
