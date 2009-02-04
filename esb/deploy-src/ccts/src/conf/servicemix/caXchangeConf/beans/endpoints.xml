@@ -23,6 +23,9 @@
   <!-- START CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
   
   <bean:endpoint service="caxchange:unhandledServiceType" endpoint="unhandledServiceTypeEndpoint" bean="#unhandledServiceType" />
+  
+  <!-- endpoint below is implemented for testing purposes -->
+  <bean:endpoint service="caxchange:synchronousRequestService" endpoint="synchronousRequestEndpoint" bean="#synchronousRequestServiceBean" />
   <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
   
   
