@@ -24,6 +24,9 @@
     
     <bean id="unhandledServiceType" class="gov.nih.nci.caxchange.servicemix.bean.routing.UnhandledMessageTypeBean" />
     
+    <!-- bean below is implemented for testing purposes -->
+    <bean id="synchronousRequestServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaXchangeSynchronousRequestBean" />
+    
     
     <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
        
