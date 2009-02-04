@@ -24,13 +24,27 @@
        xsi:schemaLocation="http://servicemix.apache.org/http/1.0 http://servicemix.apache.org/schema/servicemix-http-2008.01.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-  <http:endpoint service="caxchange:synchronousRequestService"
+   <http:endpoint service="caxchange:SynchronousRequestService"
                  endpoint="soap"
                  role="consumer" 
                  locationURI="http://localhost:8192/synchronousRequest"
                  defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
                  wsdlResource="classpath:caXchangeSynchronousRequest.wsdl"
                  targetService="caxchange:serviceTypeRouter"
-                 soap="true" />             
+                 soap="true" />
+                   
+        <!-- For quick testing purposes, comment the block above and 
+        un-comment this block to send the request to a bean.  
+       <http:endpoint service="caxchange:SynchronousRequestService"
+                 endpoint="soap"
+                 role="consumer"
+                 soapAction=""
+                 soapVersion="1.2"                   
+                 locationURI="http://localhost:8192/synchronousRequest"
+                 defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
+                 wsdlResource="classpath:caXchangeSynchronousRequest.wsdl"
+                 targetService="caxchange:synchronousRequestService"
+                 soap="true" />
+          -->      
 
 </beans>

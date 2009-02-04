@@ -13,66 +13,23 @@
 			elementFormDefault="qualified" attributeFormDefault="unqualified">
 			<import namespace="http://caXchange.nci.nih.gov/messaging"
 				schemaLocation="caXchange.xsd" />
-			<!--
-				<element name="GetCaXchangeRequestMessage"> <complexType> <sequence>
-				<element ref="ns0:caXchangeRequestMessage" minOccurs="1"
-				maxOccurs="1" /> </sequence> </complexType> </element> <element
-				name="GetCaXchangeResponseMessage"> <complexType> <sequence>
-				<element ref="ns0:caXchangeResponseMessage" minOccurs="1"
-				maxOccurs="1" /> </sequence> </complexType> </element>
-			-->
-
-
-			<element name="ProcessRequestSynchronouslyRequest">
-				<complexType>
-					<sequence>
-						<element ref="ns0:caXchangeRequestMessage" minOccurs="1"
-							maxOccurs="1" />
-					</sequence>
-				</complexType>
-			</element>
-			<element name="ProcessRequestSynchronouslyResponse">
-				<complexType>
-					<sequence>
-						<element ref="ns0:caXchangeResponseMessage" minOccurs="1"
-							maxOccurs="1" />
-					</sequence>
-				</complexType>
-			</element>
-
 		</xs:schema>
-	</types>
-	<!--
-		<message name="GetCaXchangeRequestMessage"> <part name="parameters"
-		element="tns:GetCaXchangeRequestMessage" /> </message> <message
-		name="GetCaXchangeResponseMessage"> <part name="parameters"
-		element="tns:GetCaXchangeResponseMessage" /> </message>
-	-->
+	</types>	
 
 	<message name="ProcessRequestSynchronouslyRequest">
-		<part name="parameters" element="tns:ProcessRequestSynchronouslyRequest" />
+		<part name="parameters" element="ns0:caXchangeRequestMessage"/>
 	</message>
 	<message name="ProcessRequestSynchronouslyResponse">
-		<part name="parameters" element="tns:ProcessRequestSynchronouslyResponse" />
+		<part name="parameters" element="ns0:caXchangeResponseMessage" />
 	</message>
 
 
-	<portType name="CaXchangeRequestProcessorPortType">
-		<!--
-			<operation name="processRequestSynchronously"> <input
-			message="tns:GetCaXchangeRequestMessage"
-			wsa:Action="http://caxchange.nci.nih.gov/synchronousRequest/GetCaXchangeRequestMessage"
-			/> <output message="tns:GetCaXchangeResponseMessage"
-			wsa:Action="http://caxchange.nci.nih.gov/synchronousRequest/GetCaXchangeResponseMessage"
-			/> </operation>
-		-->
-
-
+	<portType name="CaXchangeRequestProcessorPortType">		
 		<operation name="processRequestSynchronously">
 			<input message="tns:ProcessRequestSynchronouslyRequest"
 				wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestSynchronouslyRequest" />
-			<output message="tns:ProcessRequestSynchronouslyResponse"
-				wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestSynchronouslyResponse" />
+			<output message="tns:ProcessRequestSynchronouslyResponse" 
+				wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/ProcessRequestSynchronouslyResponse"/>
 		</operation>
 	</portType>
 
