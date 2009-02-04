@@ -8,20 +8,26 @@ import gov.nih.nci.cagrid.caxchange.listener.CaxchangeResponseListener;
 import gov.nih.nci.cagrid.caxchange.listener.ResponseHandler;
 import gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault;
 import gov.nih.nci.caxchange.ErrorDetails;
+import gov.nih.nci.caxchange.MessageStatuses;
+import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.ResponseMetadata;
 import gov.nih.nci.caxchange.Statuses;
 import gov.nih.nci.caxchange.TargetResponseMessage;
-import gov.nih.nci.caxchange.synchronous.Credentials;
-import gov.nih.nci.caxchange.synchronous.Message;
-import gov.nih.nci.caxchange.synchronous.MessagePayload;
-import gov.nih.nci.caxchange.synchronous.ProcessRequestSynchronouslyResponse;
-import gov.nih.nci.caxchange.synchronous.Request;
-import gov.nih.nci.caxchange.synchronous.Response;
-import gov.nih.nci.caxchange.synchronous.TransactionControls;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.CaXchangeRequestMessage;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.CaXchangeResponseMessage;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Credentials;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.CredentialsChoice_type0;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Message;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.MessagePayload;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Metadata;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Request;
+import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TransactionControls;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,20 +43,24 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis.message.MessageElement;
-import org.apache.axis.types.URI;
-import org.apache.commons.beanutils.BeanUtils;
+import org.apache.axis2.databinding.types.URI;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.globus.wsrf.ResourceKey;
 import org.globus.wsrf.security.SecurityManager;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
- * TODO:I am the service side implementation class. IMPLEMENT AND DOCUMENT ME
  * 
  * @created by Introduce Toolkit version 1.1
  * 
@@ -283,6 +293,7 @@ public class CaXchangeRequestProcessorImpl extends
 			gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
 		logger.debug("Request in processRequestSynchronously: "
 				+ requestMessageFromClient);
+
 		try {
 			CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
 			ResourceKey resKey = ctxResourceHome.createResource();
@@ -307,42 +318,38 @@ public class CaXchangeRequestProcessorImpl extends
 						.getInstance();
 				String caXchangeSynchronousServiceURL = properties
 						.getProperty("synchronous.caxchange.serviceURL");
-				logger.debug("CAXCHANGE SERVICE URL: "+caXchangeSynchronousServiceURL);
+				logger.debug("CAXCHANGE SERVICE URL: "
+						+ caXchangeSynchronousServiceURL);
 				if (caXchangeSynchronousServiceURL == null) {
 					caXchangeSynchronousServiceURL = configuration
 							.getCaXchangeSynchronousServiceURL();
 				}
-				logger.debug("CAXCHANGE SERVICE URL: "+caXchangeSynchronousServiceURL);
+				logger.debug("CAXCHANGE SERVICE URL: "
+						+ caXchangeSynchronousServiceURL);
 
-				gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceLocator locator = new gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceLocator();
+				CaXchangeRequestMessage caXchangeRequestMessageToESB = new CaXchangeRequestMessage();
+				Message requestMessageToESB = buildRequestMessageToESB(requestMessageFromClient);
 
-				gov.nih.nci.caxchange.synchronous.CaXchangeRequestProcessorPortType caXchangeRequestProcessorPortType = locator
-						.getsoap(new URL(caXchangeSynchronousServiceURL));
-				gov.nih.nci.caxchange.synchronous.ProcessRequestSynchronouslyRequest processRequestSynchronouslyRequest = new gov.nih.nci.caxchange.synchronous.ProcessRequestSynchronouslyRequest();
-				gov.nih.nci.caxchange.synchronous.Message requestMessageToESB = buildRequestMessageToESB(requestMessageFromClient);
-				//gov.nih.nci.caxchange.synchronous.Message requestMessageToESB = new Message();
-				//logger.debug("BEFORE BEAN UTILS COPY");
-				//BeanUtils.copyProperties(requestMessageToESB, requestMessageFromClient);
-				
-				logger.debug("URI: "
-						+ requestMessageToESB.getRequest().getBusinessMessagePayload()
-								.getXmlSchemaDefinition().getPath());
-
-				processRequestSynchronouslyRequest
+				caXchangeRequestMessageToESB
 						.setCaXchangeRequestMessage(requestMessageToESB);
 
 				logger.info("Before sending messge " + new Date().getTime());
-				ProcessRequestSynchronouslyResponse processRequestSynchronouslyResponse = caXchangeRequestProcessorPortType
-						.processRequestSynchronously(processRequestSynchronouslyRequest);
+				SynchronousRequestServiceStub synchronousRequestServiceStub = new SynchronousRequestServiceStub(
+						caXchangeSynchronousServiceURL);
+				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
+						.processRequestSynchronously(caXchangeRequestMessageToESB);
 				logger.info("After sending messge " + new Date().getTime());
-				gov.nih.nci.caxchange.synchronous.ResponseMessage responseMessageFromESB = processRequestSynchronouslyResponse
-						.getCaXchangeResponseMessage();
 
-				ResponseMessage responseMessageToClient = buildResponseMessageToClient(responseMessageFromESB);
+				ResponseMessage responseMessageToClient = buildResponseMessageToClient(caXchangeResponseMessageFromESB
+						.getCaXchangeResponseMessage());
 
 				return responseMessageToClient;
 
 			} catch (Exception e) {
+				logger
+						.error(
+								"An error occured sending message to the caXchange hub.",
+								e);
 				return buildErrorResponse(requestMessageFromClient,
 						CaxchangeErrors.UNKNOWN,
 						"An error occured sending message to the caXchange hub."
@@ -367,35 +374,57 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @param reqMsgFromClient
 	 * @return gov.nih.nci.caxchange.synchronous.Message
 	 */
-	private gov.nih.nci.caxchange.synchronous.Message buildRequestMessageToESB(
+	private Message buildRequestMessageToESB(
 			gov.nih.nci.caxchange.Message reqMsgFromClient) {
 		logger.debug("In - buildRequestMessageToESB method");
 
-		gov.nih.nci.caxchange.synchronous.Message requestMessageToESB = new gov.nih.nci.caxchange.synchronous.Message();
+		Message requestMessageToESB = new Message();
 		try {
 			// Create and set the metadata
-			gov.nih.nci.caxchange.synchronous.Metadata metadata = new gov.nih.nci.caxchange.synchronous.Metadata();
-			logger.debug("1");
-			if (reqMsgFromClient.getMetadata().getTransactionControl() != null) {
-				logger.debug("REQUEST TRANSACTION CONTROL FROM CLIENT IS NULL");
-				TransactionControls transactionControls = TransactionControls
-						.fromString(reqMsgFromClient.getMetadata()
-								.getTransactionControl().toString());
-				logger.debug("1.1");
-				metadata.setTransactionControl(transactionControls);
-			} else {
-				metadata.setTransactionControl(TransactionControls.PROCESS);
-			}
+			Metadata metadata = new Metadata();
+			metadata.setTransactionControl(TransactionControls.PROCESS);
 
-			logger.debug("2");
-			metadata.setCredentials(new Credentials(reqMsgFromClient
+			// build the credentials object. Only one of the credential choices
+			// can be set
+			// the last choice values will reset the other choices in the group
+			Credentials credentials = new SynchronousRequestServiceStub.Credentials();
+			CredentialsChoice_type0 credentialsChoice_type0 = new SynchronousRequestServiceStub.CredentialsChoice_type0();
+			if (reqMsgFromClient.getMetadata().getCredentials()
+					.getGridIdentifier() != null) {
+				logger.debug("GRID CREDENTIALS ARE NOT NULL");
+				logger.debug("Grid Identifier: "
+						+ reqMsgFromClient.getMetadata().getCredentials()
+								.getGridIdentifier());
+				if (credentialsChoice_type0 == null) {
+					logger.debug("CREDENTIALS CHOICE TYPE 0 IS NULL");
+				}
+				credentialsChoice_type0.setGridIdentifier(reqMsgFromClient
+						.getMetadata().getCredentials().getGridIdentifier());
+			} else if (reqMsgFromClient.getMetadata().getCredentials()
+					.getGroupName() != null) {
+				logger.debug("GROUP NAME IS NOT NULL");
+				credentialsChoice_type0.setGroupName(reqMsgFromClient
+						.getMetadata().getCredentials().getGroupName());
+			} else {
+				logger.debug("USER NAME IS NOT NULL");
+				logger.debug("User Name: "
+						+ reqMsgFromClient.getMetadata().getCredentials()
+								.getUserName());
+				credentialsChoice_type0.setUserName(reqMsgFromClient
+						.getMetadata().getCredentials().getUserName());
+			}
+			credentials.setCredentialsChoice_type0(credentialsChoice_type0);
+			logger.debug("CREDENTIALS CHOICE SET");
+			credentials.setDelegatedCredentialReference(reqMsgFromClient
 					.getMetadata().getCredentials()
-					.getDelegatedCredentialReference(), reqMsgFromClient
-					.getMetadata().getCredentials().getGridIdentifier(),
-					reqMsgFromClient.getMetadata().getCredentials()
-							.getGroupName(), reqMsgFromClient.getMetadata()
-							.getCredentials().getPassword(), reqMsgFromClient
-							.getMetadata().getCredentials().getUserName()));
+					.getDelegatedCredentialReference());
+
+			credentials.setPassword(reqMsgFromClient.getMetadata()
+					.getCredentials().getPassword());
+			logger.debug("PASSWORD SET");
+
+			metadata.setCredentials(credentials);
+
 			logger.debug("3");
 			metadata.setCaXchangeIdentifier(reqMsgFromClient.getMetadata()
 					.getCaXchangeIdentifier());
@@ -413,15 +442,28 @@ public class CaXchangeRequestProcessorImpl extends
 
 			// Create and set the request
 			Request request = new Request();
-			logger.debug("URI: "
-					+ reqMsgFromClient.getRequest().getBusinessMessagePayload()
-							.getXmlSchemaDefinition().getPath());
-			//URI uri = new URI();
-			//uri.setPath("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
-			request.setBusinessMessagePayload(new MessagePayload(
-					reqMsgFromClient.getRequest().getBusinessMessagePayload()
-							.get_any(), reqMsgFromClient.getRequest().getBusinessMessagePayload()
-							.getXmlSchemaDefinition()));
+			MessagePayload messagePayload = new MessagePayload();
+
+			URI uri = new URI(reqMsgFromClient.getRequest()
+					.getBusinessMessagePayload().getXmlSchemaDefinition()
+					.getPath());
+			messagePayload.setXmlSchemaDefinition(uri);
+
+			MessageElement[] messageElement = reqMsgFromClient.getRequest()
+					.getBusinessMessagePayload().get_any();
+			if (messageElement != null && messageElement.length == 1) {
+				String msgElementString = ((MessageElement) messageElement[0])
+						.getAsString();
+				XMLStreamReader parser = XMLInputFactory.newInstance()
+						.createXMLStreamReader(
+								new ByteArrayInputStream(msgElementString
+										.getBytes()));
+				StAXOMBuilder builder = new StAXOMBuilder(parser);
+				OMElement documentElement = builder.getDocumentElement();
+				messagePayload.setExtraElement(documentElement);
+			}
+
+			request.setBusinessMessagePayload(messagePayload);
 			logger.debug("URI: "
 					+ request.getBusinessMessagePayload()
 							.getXmlSchemaDefinition().getPath());
@@ -444,35 +486,117 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @return ResponseMessage
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
+	 * @throws ParserConfigurationException
+	 * @throws IOException
+	 * @throws SAXException
 	 */
 	private ResponseMessage buildResponseMessageToClient(
-			gov.nih.nci.caxchange.synchronous.ResponseMessage respMsgFromESB)
-			throws IllegalAccessException, InvocationTargetException {
+			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
+			throws IllegalAccessException, InvocationTargetException,
+			ParserConfigurationException, SAXException, IOException {
 		logger.debug("In - buildResponseMessageToClient method");
-		ResponseMessage responseMessageToClient = new ResponseMessage();
+		ResponseMessage responseMessageToClientL1 = new ResponseMessage();
 
 		// create and set the response metadata
-		responseMessageToClient.setResponseMetadata(new ResponseMetadata(
+		responseMessageToClientL1.setResponseMetadata(new ResponseMetadata(
 				respMsgFromESB.getResponseMetadata().getCaXchangeIdentifier(),
 				respMsgFromESB.getResponseMetadata().getExternalIdentifier()));
 
+		logger.debug("RESPONSE METADATA SET");
 		// create and set the response
-		ErrorDetails errorDetails = new ErrorDetails(respMsgFromESB
-				.getResponse().getCaXchangeError().getErrorCode(),
-				respMsgFromESB.getResponse().getCaXchangeError()
-						.getErrorDescription());
+		Response responseToClientL2 = new Response();
+
 		Statuses statuses = Statuses.fromString(respMsgFromESB.getResponse()
 				.getResponseStatus().toString());
-		TargetResponseMessage[] targetResponseMessage = new TargetResponseMessage[1];
-		BeanUtils.copyProperties(targetResponseMessage, respMsgFromESB
-				.getResponse().getTargetResponse());
-		logger
-				.debug("AFTER BEANUTILS CALL. TargetResponseMessage object copied successfully");
-		gov.nih.nci.caxchange.Response response = new gov.nih.nci.caxchange.Response(
-				errorDetails, statuses, targetResponseMessage);
-		responseMessageToClient.setResponse(response);
+		responseToClientL2.setResponseStatus(statuses);
+		logger.debug("RESPONSE STATUSES SET");
+
+		// create a response or error response based on the choice
+		if (respMsgFromESB.getResponse().getResponseChoice_type0()
+				.getTargetResponse() != null) {
+			logger.debug("IN TARGETRESPONSE NOT NULL IF BLOCK");
+			TargetResponseMessage targetRespMsgToClientL2L1 = new TargetResponseMessage();
+			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage[] targetRespMsgFromESBArray = respMsgFromESB
+					.getResponse().getResponseChoice_type0()
+					.getTargetResponse();
+			if (targetRespMsgFromESBArray != null
+					&& targetRespMsgFromESBArray.length == 1) {
+				logger.debug("IN TARGETRESPONSE ARRAY LENGTH ONE IF LOOP");
+				gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage targetRespMsgFromESB = (gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage) targetRespMsgFromESBArray[0];
+				targetRespMsgToClientL2L1
+						.setTargetServiceIdentifier(targetRespMsgFromESB
+								.getTargetServiceIdentifier());
+				targetRespMsgToClientL2L1
+						.setTargetServiceOperation(targetRespMsgFromESB
+								.getTargetServiceOperation());
+
+				targetRespMsgToClientL2L1
+						.setTargetMessageStatus(MessageStatuses
+								.fromValue(targetRespMsgFromESB
+										.getTargetMessageStatus().getValue()));
+
+				if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0()
+						.getTargetBusinessMessage() != null) {
+					gov.nih.nci.caxchange.MessagePayload targetBusinessMsg = new gov.nih.nci.caxchange.MessagePayload();
+					logger.debug("IN TARGET BUSINESS MSG NOT NULL IF LOOP");
+
+					OMElement documentElement = targetRespMsgFromESB
+							.getTargetResponseMessageChoice_type0()
+							.getTargetBusinessMessage().getExtraElement();
+
+					DocumentBuilderFactory dbf = DocumentBuilderFactory
+							.newInstance();
+					DocumentBuilder db = dbf.newDocumentBuilder();
+					Document payload = db.parse(new ByteArrayInputStream(
+							documentElement.toString().getBytes()));
+					MessageElement messageElement = new MessageElement(payload
+							.getDocumentElement());
+					targetBusinessMsg
+							.set_any(new MessageElement[] { messageElement });
+
+					/*//un- comment the block below if the schema is present in the URI 
+					 if (targetRespMsgFromESB
+							.getTargetResponseMessageChoice_type0()
+							.getTargetBusinessMessage()
+							.getXmlSchemaDefinition().getPath() != null) {
+						logger.debug("IN TARGET SCHEMA NOT NULL IF LOOP");
+						targetBusinessMsg
+								.setXmlSchemaDefinition(new org.apache.axis.types.URI(
+										targetRespMsgFromESB
+												.getTargetResponseMessageChoice_type0()
+												.getTargetBusinessMessage()
+												.getXmlSchemaDefinition()
+												.getPath()));
+					}*/
+
+					targetRespMsgToClientL2L1
+							.setTargetBusinessMessage(targetBusinessMsg);
+				} else {
+					targetRespMsgToClientL2L1.setTargetError(new ErrorDetails(
+							targetRespMsgFromESB
+									.getTargetResponseMessageChoice_type0()
+									.getTargetError().getErrorCode()
+									.getErrorCodes(), targetRespMsgFromESB
+									.getTargetResponseMessageChoice_type0()
+									.getTargetError().getErrorDescription()));
+				}
+			}
+			responseToClientL2
+					.setTargetResponse(new TargetResponseMessage[] { targetRespMsgToClientL2L1 });
+			logger.debug("RESPONSE TARGET_RESPONSE SET");
+
+		} else {
+			ErrorDetails errorDetails = new ErrorDetails(respMsgFromESB
+					.getResponse().getResponseChoice_type0()
+					.getCaXchangeError().getErrorCode().getErrorCodes(),
+					respMsgFromESB.getResponse().getResponseChoice_type0()
+							.getCaXchangeError().getErrorDescription());
+			responseToClientL2.setCaXchangeError(errorDetails);
+			logger.debug("RESPONSE ERRORDETAILS SET");
+		}
+		responseMessageToClientL1.setResponse(responseToClientL2);
 		logger.debug("Out - buildResponseMessageToClient method");
-		return responseMessageToClient;
+		return responseMessageToClientL1;
 	}
 
 	/**
