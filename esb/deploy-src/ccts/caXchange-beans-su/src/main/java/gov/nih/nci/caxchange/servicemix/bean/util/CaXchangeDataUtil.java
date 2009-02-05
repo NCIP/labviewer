@@ -25,6 +25,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.apache.xmlbeans.XmlObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -333,6 +334,67 @@ public class CaXchangeDataUtil {
         response.setResponseStatus(responseStatus);
         return response;
     }
+    
+    
+    public TargetResponseMessage buildTargetResponse(Node targetResponse, Response response) throws Exception{
+    	XPath xpath = XPathFactory.newInstance().newXPath();
+        XPathExpression tsiExp = xpath.compile("/targetResponse/targetServiceIdentifier");
+        XPathExpression tsoExp = xpath.compile("/targetResponse/targetServiceOperation");
+        XPathExpression msExp = xpath.compile("/targetResponse/targetMessageStatus");
+        XPathExpression mpExp = xpath.compile("/targetResponse/targetBusinessMessage");
+        XPathExpression teExp = xpath.compile("/targetResponse/targetError");
+        XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
+        Statuses.Enum responseStatus = Statuses.SUCCESS;
+           Node brNode = targetResponse;
+           TargetResponseMessage brm = response.addNewTargetResponse();
+           brm.setTargetServiceIdentifier((String)tsiExp.evaluate(brNode, XPathConstants.STRING));
+           brm.setTargetServiceOperation((String)tsoExp.evaluate(brNode, XPathConstants.STRING));
+           String targetMessageStatus = (String)msExp.evaluate(brNode, XPathConstants.STRING);
+           if (MessageStatuses.FAULT.toString().equals(targetMessageStatus)) {
+               brm.setTargetMessageStatus(MessageStatuses.FAULT);
+               responseStatus = Statuses.FAILURE;
+           }else if (MessageStatuses.ERROR.toString().equals(targetMessageStatus)) {
+               brm.setTargetMessageStatus(MessageStatuses.ERROR);
+               responseStatus = Statuses.FAILURE;
+           }
+           else if (MessageStatuses.RESPONSE.toString().equals(targetMessageStatus)) {
+               brm.setTargetMessageStatus(MessageStatuses.RESPONSE);
+           }
+           Node mpNode =  (Node)mpExp.evaluate(brNode, XPathConstants.NODE);
+           if (mpNode != null) {
+               MessagePayload payload= brm.addNewTargetBusinessMessage();
+               payload.setXmlSchemaDefinition((String)schemaDefExp.evaluate(mpNode, XPathConstants.STRING));
+               Node payloadNode = payload.getDomNode();
+               Document doc = payloadNode.getOwnerDocument();
+               NodeList mpNodes = mpNode.getChildNodes();
+               for(int k=0;k<mpNodes.getLength();k++) {
+                   Node mpcNode = mpNodes.item(k);
+                   if (!("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
+                      //Node importedNode= doc.importNode(mpcNode, true);
+                	   XmlObject xmlObject = XmlObject.Factory.parse(mpcNode);
+                      payload.set(xmlObject);
+                   }
+               }
+           }
+           Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
+           if (teNode!= null) {
+              ErrorDetails targetError = ErrorDetails.Factory.newInstance();
+              NodeList teNodes=teNode.getChildNodes();              
+              for (int k=0;k<teNodes.getLength();k++) {
+                  Node teChildNode = teNodes.item(k);
+                  if ("errorCode".equals(teChildNode.getNodeName())) {
+                      targetError.setErrorCode(teChildNode.getTextContent());
+                  }
+                  if ("errorDescription".equals(teChildNode.getNodeName())) {
+                      targetError.setErrorDescription(teChildNode.getTextContent());
+                  }                  
+              }
+              brm.setTargetError(targetError);
+           }
+          response.setResponseStatus(responseStatus); 	
+          return brm;
+    }
+   
     /**
      * This method checks if the rollback is required
 	 * @param aggregatedResponse
