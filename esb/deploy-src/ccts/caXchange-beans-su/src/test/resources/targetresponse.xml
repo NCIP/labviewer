@@ -1,1 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><targetResponse><targetServiceIdentifier>LabLoader</targetServiceIdentifier><targetServiceOperation>CT_LAB_DATA</targetServiceOperation><targetMessageStatus>RESPONSE</targetMessageStatus><targetBusinessMessage><ns1:xmlSchemaDefinition xmlns:ns1="http://caXchange.nci.nih.gov/messaging">gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</ns1:xmlSchemaDefinition><result>success</result></targetBusinessMessage></targetResponse>
+<?xml version="1.0" encoding="UTF-8"?>
+<targetResponse xmlns="http://caXchange.nci.nih.gov/messaging">
+	<targetServiceIdentifier>LabLoader</targetServiceIdentifier>
+	<targetServiceOperation>CT_LAB_DATA</targetServiceOperation>
+	<targetMessageStatus>RESPONSE</targetMessageStatus>
+	<targetBusinessMessage>
+		<ns1:xmlSchemaDefinition
+			xmlns:ns1="http://caXchange.nci.nih.gov/messaging">
+			gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain
+		</ns1:xmlSchemaDefinition>
+		<result>success</result>
+	</targetBusinessMessage>
+</targetResponse>

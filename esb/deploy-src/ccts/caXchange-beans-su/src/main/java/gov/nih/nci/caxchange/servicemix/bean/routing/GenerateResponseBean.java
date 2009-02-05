@@ -1,5 +1,6 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
@@ -9,6 +10,7 @@ import gov.nih.nci.caXchange.messaging.Response;
 import gov.nih.nci.caXchange.messaging.ResponseMessage;
 import gov.nih.nci.caXchange.messaging.ResponseMetadata;
 import gov.nih.nci.caXchange.messaging.Statuses;
+import gov.nih.nci.caXchange.messaging.TargetResponseMessage;
 import gov.nih.nci.caxchange.jdbc.CaxchangeMessage;
 import gov.nih.nci.caxchange.persistence.CaxchangeMessageDAO;
 import gov.nih.nci.caxchange.persistence.DAOFactory;
@@ -24,6 +26,7 @@ import javax.jbi.messaging.NormalizedMessage;
 import javax.jbi.messaging.RobustInOnly;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -33,9 +36,13 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.servicemix.MessageExchangeListener;
 import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.apache.servicemix.jbi.jaxp.StringSource;
 import org.apache.servicemix.jbi.util.MessageUtil;
+import org.apache.xmlbeans.XmlOptions;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 	/**
 	 * This class generates the caXchange response forwards it to the JMS queue. 
 	 * for the client to pick up the response
@@ -73,8 +80,9 @@ public class GenerateResponseBean extends CaXchangeMessagingBean {
         	   Node caXchangeResponse = generateResponseFromTargetResponse(metadata,document);
         	   Source response = new DOMSource(caXchangeResponse);
         	   NormalizedMessage out = exchange.createMessage();
+        	   out.setContent(response);
      	       MessageUtil.transfer(in,out);
-     	      copyPropertiesAndAttachments(in,out);
+     	       copyPropertiesAndAttachments(in,out);
         	   out.setContent(response);
         	   exchange.setMessage(out, "out");
         	}else {
@@ -109,26 +117,24 @@ public class GenerateResponseBean extends CaXchangeMessagingBean {
         
     
     public Node generateResponseFromTargetResponse(Map<String, String> metadata, Document document) throws Exception {
-        CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance();
+    	XmlOptions xmlOptions = new XmlOptions();
+    	HashMap<String,String> ns = new HashMap<String,String>();
+    	ns.put("", "http://caXchange.nci.nih.gov/messaging");
+        CaXchangeResponseMessageDocument responseDocument = CaXchangeResponseMessageDocument.Factory.newInstance(xmlOptions);
+        
         ResponseMessage responseMessage = responseDocument.addNewCaXchangeResponseMessage();
         ResponseMetadata responseMetaData= responseMessage.addNewResponseMetadata();
         responseMetaData.setCaXchangeIdentifier(metadata.get(CaxchangeConstants.CAXCHANGE_IDENTIFIER));
         responseMetaData.setExternalIdentifier(metadata.get(CaxchangeConstants.EXTERNAL_IDENTIFIER));
         Response response = responseMessage.addNewResponse();
         response.setResponseStatus(Statuses.SUCCESS);
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        XPathExpression msExp = xpath.compile("/targetResponse/targetMessageStatus");        
-        String targetMessageStatus = (String)msExp.evaluate(document, XPathConstants.STRING);
-        if ((MessageStatuses.FAULT.toString().equals(targetMessageStatus))||
-        	(MessageStatuses.ERROR.toString().equals(targetMessageStatus))) {
-        	response.setResponseStatus(Statuses.FAILURE);
-        }
-        Document responseOwnerDocument = response.getDomNode().getOwnerDocument();
-        Node importedDocument  = responseOwnerDocument.importNode(document.getFirstChild(), true);
-        response.getDomNode().appendChild(importedDocument);
-        
+        caXchangeDataUtil.buildTargetResponse(document.getFirstChild(), response);
+
+        logger.debug(responseDocument.xmlText());
         return responseDocument.getDomNode();
-    }    
+    }   
+    
+   
 
     
     
