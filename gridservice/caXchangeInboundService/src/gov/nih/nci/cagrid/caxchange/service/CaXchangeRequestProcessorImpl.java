@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.caxchange.listener.CaxchangeResponseExceptionListener;
 import gov.nih.nci.cagrid.caxchange.listener.CaxchangeResponseListener;
 import gov.nih.nci.cagrid.caxchange.listener.ResponseHandler;
 import gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.ErrorDetails;
 import gov.nih.nci.caxchange.MessageStatuses;
 import gov.nih.nci.caxchange.Response;
@@ -27,11 +28,16 @@ import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Transacti
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -41,17 +47,22 @@ import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.apache.axiom.om.impl.llom.OMNamespaceImpl;
 import org.apache.axis.message.MessageElement;
+import org.apache.axis2.client.Options;
 import org.apache.axis2.databinding.types.URI;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -67,6 +78,7 @@ import org.xml.sax.SAXException;
  */
 public class CaXchangeRequestProcessorImpl extends
 		CaXchangeRequestProcessorImplBase {
+	protected static Pattern emptyNamespacePattern = Pattern.compile("xmlns:.*=\"\"|xmlns=\"\"");
 	protected static String brokerURL = null; // "tcp://localhost:61618";
 	protected static String destinationName = "caxchangeInboundQueue";
 	protected static String replyDestinationName = "caxchangeOutboundQueue";
@@ -339,7 +351,13 @@ public class CaXchangeRequestProcessorImpl extends
 
 				ResponseMessage responseMessageToClient = buildResponseMessageToClient(caXchangeResponseMessageFromESB
 						.getCaXchangeResponseMessage());
-
+				StringWriter stringWriter = new StringWriter();
+				if (logger.isDebugEnabled()) {
+				   Utils.serializeObject(responseMessageToClient, new QName(
+					    	"http://caXchange.nci.nih.gov/messaging",
+						    "caXchangeResponseMessage"), stringWriter);
+				   logger.debug(stringWriter);
+				}
 				return responseMessageToClient;
 
 			} catch (Exception e) {
@@ -452,6 +470,11 @@ public class CaXchangeRequestProcessorImpl extends
 		}
 		return requestMessageToESB;
 	}
+	
+	protected String replaceEmptyNamespaces(String documentAsString) {
+		Matcher matcher = emptyNamespacePattern.matcher(documentAsString);
+		return matcher.replaceAll("");
+	}
 
 	/**
 	 * Builds the ResponseMessage object to be sent to the client, from the
@@ -513,12 +536,16 @@ public class CaXchangeRequestProcessorImpl extends
 					OMElement documentElement = targetRespMsgFromESB
 							.getTargetResponseMessageChoice_type0()
 							.getTargetBusinessMessage().getExtraElement();
-
+					logger.debug(documentElement.getNamespace().getNamespaceURI()+":"+documentElement.getNamespace().getPrefix());
+                    String documentElementAsString = replaceEmptyNamespaces(documentElement.toString());
+                       
 					DocumentBuilderFactory dbf = DocumentBuilderFactory
 							.newInstance();
+					dbf.setNamespaceAware(true);
 					DocumentBuilder db = dbf.newDocumentBuilder();
 					Document payload = db.parse(new ByteArrayInputStream(
-							documentElement.toString().getBytes()));
+							documentElementAsString.getBytes()));
+					logger.debug(documentElementAsString);
 					MessageElement messageElement = new MessageElement(payload
 							.getDocumentElement());
 					targetBusinessMsg
