@@ -1,41 +1,21 @@
 package gov.nih.nci.cagrid.caxchange.test;
 
 
-import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
-import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
-
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
-import gov.nih.nci.cagrid.caxchange.context.stubs.CaXchangeResponseServicePortType;
-import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseRequest;
-import gov.nih.nci.cagrid.caxchange.context.stubs.GetResponseResponse;
-import gov.nih.nci.cagrid.caxchange.context.stubs.service.CaXchangeResponseServiceAddressingLocator;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
-import gov.nih.nci.cagrid.caxchange.stubs.service.CaXchangeRequestProcessorServiceAddressingLocator;
 import gov.nih.nci.cagrid.common.Utils;
-
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
-
 import gov.nih.nci.caxchange.MessagePayload;
-import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
-import gov.nih.nci.caxchange.Response;
+import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
 
-import gov.nih.nci.caxchange.ResponseMessage;
-
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-
-import java.io.Reader;
-
 import java.io.StringWriter;
-import java.net.URL;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -44,23 +24,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
-
 import junit.framework.TestSuite;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.message.addressing.EndpointReferenceType;
-
 import org.apache.axis.types.URI;
-import org.cagrid.gaards.cds.client.CredentialDelegationServiceClient;
-import org.cagrid.gaards.cds.client.DelegatedCredentialUserClient;
-import org.cagrid.gaards.cds.delegated.stubs.types.DelegatedCredentialReference;
-import org.cagrid.gaards.cds.stubs.types.CDSInternalFault;
-import org.cagrid.gaards.websso.utils.WebSSOConstants;
 import org.globus.gsi.GlobusCredential;
-import org.globus.wsrf.encoding.DeserializationException;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
-
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
@@ -132,7 +103,6 @@ public class TestCaXchangeGridService extends TestCase {
 	   creds.setDelegatedCredentialReference(delegatedReference);
    	   client = new CaXchangeRequestProcessorClient(url, authManager.getCredentials());
    	   userCredentials = authManager.getCredentials();
-
       }
       catch(Exception e) {
           System.out.println("Error creating the client");
@@ -146,45 +116,45 @@ public class TestCaXchangeGridService extends TestCase {
      * @throws Exception
      */
     public ResponseMessage invokeService() throws Exception {
-    	String synchronousProcessing = System.getProperty("synchronous");
-    	if ("true".equals(synchronousProcessing)) {
-    		System.out.println("Invoking the service synchronously.");
-    		ResponseMessage gotResponse = client.processRequestSynchronously(message);
-    		return gotResponse;
-    	}else {
-           CaXchangeResponseServiceReference crsr = client.processRequestAsynchronously(message);
-           System.out.println("Message has been send.");
-           EndpointReferenceType endPointReference =crsr.getEndpointReference();
-           CaXchangeResponseServiceClient responsClient = new CaXchangeResponseServiceClient(endPointReference, userCredentials);
-           boolean gotResponse=false;
-           ResponseMessage getResponse=null;
-           while(!gotResponse) {
-            try {
-               getResponse = responsClient.getResponse();
-               gotResponse= true;
-             }
-            catch(org.apache.axis.AxisFault responseNotReady) {
-            	System.out.println(responseNotReady.getFaultString());
-            }
-            catch (Exception e) {
-                System.out.println("An error occurred getting caXchange response."+e.getClass().getName());
-                throw e;
-             }
-           }
-        StringWriter stringWriter = new StringWriter();
-        Utils.serializeObject(getResponse, new QName("http://caXchange.nci.nih.gov/messaging", "caXchangeResponseMessage"), stringWriter);
-        System.out.println(stringWriter.toString());
-        return getResponse;
-    	}
-    }
+		String synchronousProcessing = System.getProperty("synchronous");
+		ResponseMessage getResponse = null;
+		if ("true".equals(synchronousProcessing)) {
+			System.out.println("Invoking the service synchronously.");
+			getResponse = client.processRequestSynchronously(message);
+		} else {
+			CaXchangeResponseServiceReference crsr = client
+					.processRequestAsynchronously(message);
+			System.out.println("Message has been send.");
+			EndpointReferenceType endPointReference = crsr
+					.getEndpointReference();
+			CaXchangeResponseServiceClient responsClient = new CaXchangeResponseServiceClient(
+					endPointReference, userCredentials);
+			boolean gotResponse = false;
+			while (!gotResponse) {
+				try {
+					getResponse = responsClient.getResponse();
+					gotResponse = true;
+				} catch (Exception e) {
+					System.out.println("caXchange response not ready.");
+				}
+			}
+		}
+		StringWriter stringWriter = new StringWriter();
+		Utils.serializeObject(getResponse, new QName(
+				"http://caXchange.nci.nih.gov/messaging",
+				"caXchangeResponseMessage"), stringWriter);
+		System.out.println(stringWriter.toString());
+		return getResponse;
+
+	}
+
 
 
 
     /**
-     * Test messagess of type LAB_BASED_AE.
-     *
-     * .
-     */
+	 * Test messagess of type LAB_BASED_AE.
+	 *  .
+	 */
     public void testAENotification() {
       try {
         InputStream testMessage = TestCaXchangeGridService.class.getClassLoader().getResourceAsStream("labbasedae.xml");
