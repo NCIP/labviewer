@@ -36,7 +36,7 @@
 			<eip:exchange-target service="caxchange:generateResponseService" />
 		</eip:targets>		
 	</eip:static-routing-slip>
-
+	
 	<eip:static-routing-slip service="caxchange:labBasedAeRoute"
 		endpoint="caxchange:labBasedAeEndPoint">
 		<eip:targets>
@@ -48,6 +48,67 @@
 		</eip:targets>		
 	</eip:static-routing-slip>
 	
+	<eip:static-routing-slip service="caxchange:loadLabToCDMSRoute"
+		endpoint="caxchange:loadLabToCDMSEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:setSubjectService" />
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
+			<eip:exchange-target service="caxchange:loadLab" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>		
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:ctLabDataRoute"
+		endpoint="caxchange:ctLabDataEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:setSubjectService" />
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
+			<eip:exchange-target service="caxchange:labLoader" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>		
+	</eip:static-routing-slip>
+
+	<!-- 
+	<eip:static-routing-slip service="caxchange:studyCreationRoute"
+		endpoint="caxchange:studyCreationEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:pscStudyCreationRoute" />
+			<eip:exchange-target service="caxchange:caaersStudyCreationRoute" />
+			<eip:exchange-target service="caxchange:ctomStudyRoute" />			
+		</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:pscStudyCreationRoute"
+		endpoint="caxchange:studyCreationEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:pscStudy">
+				
+			</eip:exchange-target>
+						
+			<eip:exchange-target service="caxchange:aggregatorListener" />
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
+			<eip:exchange-target service="caxchange:pscAdverseEvent" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>		
+	</eip:static-routing-slip>
+	
+	<eip:recipients>
+	    <eip:exchange-target service="caxchange:pscStudyCreationRouter" />
+        <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
+        <eip:exchange-target service="caxchange:ctomStudyRouter" />
+      </eip:recipients>      
+      <eip:targetServiceIdentifiers>
+               <value>psc</value>
+               <value>caAERS</value>
+               <value>LabViewer</value>
+      </eip:targetServiceIdentifiers>    
+
+
+
+	
+	 -->
 	
   <!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
        
