@@ -26,7 +26,7 @@
 				<eip:predicate>
 					<eip:xpath-predicate
 						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='SCHEDULE_MODIFICATION']) = 1"
-						namespaceContext="#nsContext" />
+						namespaceContext="#nsContext"/>
 				</eip:predicate>
 				<eip:target>
 					<eip:exchange-target service="caxchange:scheduleModificationRoute" />
@@ -36,10 +36,10 @@
 				<eip:predicate>
 					<eip:xpath-predicate
 						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='LAB_BASED_AE']) = 1"
-						namespaceContext="#nsContext" />
+						namespaceContext="#nsContext"/>
 				</eip:predicate>
 				<eip:target>
-					<eip:exchange-target service="caxchange:labBasedAeRoute" />
+					<eip:exchange-target service="caxchange:labBasedAeRoute"/>
 				</eip:target>
 			</eip:routing-rule>
 			<eip:routing-rule>
@@ -49,7 +49,7 @@
 						namespaceContext="#nsContext" />
 				</eip:predicate>
 				<eip:target>
-					<eip:exchange-target service="caxchange:loadLabToCDMSRoute" />
+					<eip:exchange-target service="caxchange:loadLabToCDMSRoute"/>
 				</eip:target>
 			</eip:routing-rule>
 			<eip:routing-rule>
