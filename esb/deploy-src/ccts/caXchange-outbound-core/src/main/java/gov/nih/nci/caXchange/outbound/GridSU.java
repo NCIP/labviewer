@@ -286,6 +286,7 @@ public class GridSU implements MessageExchangeListener {
 		if (isCopyProperties()) {
 			for (Iterator it = in.getPropertyNames().iterator(); it.hasNext();) {
 				String name = (String) it.next();
+				log.debug("Property:"+name+":"+in.getProperty(name));
 				out.setProperty(name, in.getProperty(name));
 			}
 		}
@@ -462,8 +463,10 @@ public class GridSU implements MessageExchangeListener {
 		root.appendChild(targetStatus);
 
 		Element payloadElement = output.createElement(RESPONSE_PAYLOAD_ELEMENT);
-		payloadElement.appendChild(output.importNode(gridMessage
-				.getSchemaDefinition(), true));
+		Element schemaDefElement = output.createElement(SCHEMA_DEFINITION_ELEMENT);
+		schemaDefElement.setNodeValue(gridMessage.getSchemaDefinition().getNodeValue());
+		//payloadElement.appendChild(output.importNode(gridMessage
+		//		.getSchemaDefinition(), true));
 		payloadElement.appendChild(output.importNode(result.getResult(), true));
 		root.appendChild(payloadElement);
 		return output;

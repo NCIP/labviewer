@@ -313,6 +313,10 @@ public class CaXchangeDataUtil {
                       Node importedNode= doc.importNode(mpcNode, true);
                       payloadNode.appendChild(importedNode);
                    }
+                   if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
+                       payload.setXmlSchemaDefinition(mpcNode.getNodeValue());
+                    }                   
+                   
                }
            }
            Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
@@ -363,7 +367,7 @@ public class CaXchangeDataUtil {
            Node mpNode =  (Node)mpExp.evaluate(brNode, XPathConstants.NODE);
            if (mpNode != null) {
                MessagePayload payload= brm.addNewTargetBusinessMessage();
-               payload.setXmlSchemaDefinition((String)schemaDefExp.evaluate(mpNode, XPathConstants.STRING));
+               //payload.setXmlSchemaDefinition((String)schemaDefExp.evaluate(mpNode, XPathConstants.STRING));
                Node payloadNode = payload.getDomNode();
                Document doc = payloadNode.getOwnerDocument();
                NodeList mpNodes = mpNode.getChildNodes();
@@ -374,6 +378,9 @@ public class CaXchangeDataUtil {
                 	   XmlObject xmlObject = XmlObject.Factory.parse(mpcNode);
                       payload.set(xmlObject);
                    }
+                   if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
+                       payload.setXmlSchemaDefinition(mpcNode.getNodeValue());
+                    }                     
                }
            }
            Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);

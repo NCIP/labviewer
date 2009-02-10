@@ -62,37 +62,34 @@
 					<eip:exchange-target service="caxchange:ctLabDataRoute" />
 				</eip:target>
 			</eip:routing-rule>
-			<!--
-				<eip:routing-rule> <eip:predicate> <eip:xpath-predicate
-				xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='STUDY_CREATION'])
-				= 1 and
-				count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK'])
-				= 0" namespaceContext="#nsContext" /> </eip:predicate> <eip:target>
-				<eip:exchange-target service="caxchange:studyCreationRoute" />
-				</eip:target> </eip:routing-rule> <eip:routing-rule> <eip:predicate>
-				<eip:xpath-predicate
-				xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='STUDY_CREATION'])
-				= 1" namespaceContext="#nsContext" /> </eip:predicate>
-				<eip:predicate> <eip:xpath-predicate
-				xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK'])
-				= 1" namespaceContext="#nsContext" /> </eip:predicate> <eip:target>
-				<eip:exchange-target service="caxchange:studyRollbackRoute" />
-				</eip:target> </eip:routing-rule>
-			-->
-			<!--
-				<eip:routing-rule> <eip:predicate> <eip:xpath-predicate
-				xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='REGISTER_SUBJECT'])
-				= 1" namespaceContext="#nsContext" /> </eip:predicate> <eip:target>
-				<eip:exchange-target service="caxchange:registerSubjectRoute" />
-				</eip:target> </eip:routing-rule>
-			-->
+			<eip:routing-rule>
+				<eip:predicate>
+					<eip:xpath-predicate
+						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='STUDY_CREATION']) = 1"
+						namespaceContext="#nsContext" />
+				</eip:predicate>
+				<eip:target>
+					<eip:exchange-target service="caxchange:studyCreationRoute" />
+				</eip:target>
+			</eip:routing-rule>
+			<eip:routing-rule>
+				<eip:predicate>
+					<eip:xpath-predicate
+						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='REGISTER_SUBJECT']) = 1"
+						namespaceContext="#nsContext" />
+				</eip:predicate>
+				<eip:target>
+					<eip:exchange-target service="caxchange:registerSubjectRoute" />
+				</eip:target>
+			</eip:routing-rule>			
 			<eip:routing-rule>
 				<eip:target>
-					<eip:exchange-target service="caxchange:callUnhandledMessageType" />
+					<eip:exchange-target service="caxchange:unhandledTypeRoute" />
 				</eip:target>
 			</eip:routing-rule>
 		</eip:rules>
 	</eip:content-based-router>
+	
 
 	<eip:namespace-context id="nsContext">
 		<eip:namespaces>

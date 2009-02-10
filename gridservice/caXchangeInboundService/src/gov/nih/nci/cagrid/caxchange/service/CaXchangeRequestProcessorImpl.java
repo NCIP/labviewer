@@ -27,6 +27,7 @@ import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Request;
 import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TransactionControls;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -52,11 +53,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
@@ -64,6 +67,8 @@ import org.apache.axiom.om.impl.llom.OMNamespaceImpl;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.databinding.types.URI;
+import org.apache.axis2.databinding.utils.writer.MTOMAwareXMLSerializer;
+import org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.globus.wsrf.ResourceKey;
@@ -442,8 +447,8 @@ public class CaXchangeRequestProcessorImpl extends
 			MessagePayload messagePayload = new MessagePayload();
 
 			URI uri = new URI(reqMsgFromClient.getRequest()
-					.getBusinessMessagePayload().getXmlSchemaDefinition()
-					.getPath());
+					.getBusinessMessagePayload().getXmlSchemaDefinition().toString()
+					);
 			messagePayload.setXmlSchemaDefinition(uri);
 
 			MessageElement[] messageElement = reqMsgFromClient.getRequest()
@@ -488,6 +493,25 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @throws IOException
 	 * @throws SAXException
 	 */
+	/*
+	private ResponseMessage buildResponseMessageToClient(
+			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
+			throws Exception {
+		XMLStreamReader xmlReader = respMsgFromESB.getPullParser(null);
+		StAXOMBuilder builder = new StAXOMBuilder(xmlReader);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(baos);
+		MTOMAwareXMLStreamWriter mtomWriter = new MTOMAwareXMLSerializer(writer);
+		respMsgFromESB.serialize(gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.CaXchangeResponseMessage.MY_QNAME,
+				                     OMAbstractFactory.getOMFactory(), mtomWriter, false);
+		String responseAsString = replaceEmptyNamespaces(baos.toString());
+		logger.debug("The response from ESB is:"+responseAsString);
+		StringReader reader = new StringReader(responseAsString);
+		ResponseMessage response = (ResponseMessage)Utils.deserializeObject(reader, ResponseMessage.class);
+		return response;
+		
+	}
+	*/
 	private ResponseMessage buildResponseMessageToClient(
 			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
 			throws IllegalAccessException, InvocationTargetException,
@@ -510,13 +534,13 @@ public class CaXchangeRequestProcessorImpl extends
 		// create a response or error response based on the choice
 		if (respMsgFromESB.getResponse().getResponseChoice_type0()
 				.getTargetResponse() != null) {
-			TargetResponseMessage targetRespMsgToClientL2L1 = new TargetResponseMessage();
 			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage[] targetRespMsgFromESBArray = respMsgFromESB
 					.getResponse().getResponseChoice_type0()
 					.getTargetResponse();
-			if (targetRespMsgFromESBArray != null
-					&& targetRespMsgFromESBArray.length == 1) {
-				gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage targetRespMsgFromESB = (gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage) targetRespMsgFromESBArray[0];
+			  TargetResponseMessage[] targetResponses = new TargetResponseMessage[targetRespMsgFromESBArray.length];
+			  int i=0;
+			  for (gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage targetRespMsgFromESB:targetRespMsgFromESBArray) {
+				TargetResponseMessage targetRespMsgToClientL2L1 = new TargetResponseMessage();
 				targetRespMsgToClientL2L1
 						.setTargetServiceIdentifier(targetRespMsgFromESB
 								.getTargetServiceIdentifier());
@@ -532,25 +556,29 @@ public class CaXchangeRequestProcessorImpl extends
 				if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0()
 						.getTargetBusinessMessage() != null) {
 					gov.nih.nci.caxchange.MessagePayload targetBusinessMsg = new gov.nih.nci.caxchange.MessagePayload();
+					if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0().getTargetBusinessMessage().getXmlSchemaDefinition()!= null){
+					   targetBusinessMsg.setXmlSchemaDefinition(new org.apache.axis.types.URI(targetRespMsgFromESB.getTargetResponseMessageChoice_type0().getTargetBusinessMessage().getXmlSchemaDefinition().toString()));
+					}
 
 					OMElement documentElement = targetRespMsgFromESB
 							.getTargetResponseMessageChoice_type0()
 							.getTargetBusinessMessage().getExtraElement();
-					logger.debug(documentElement.getNamespace().getNamespaceURI()+":"+documentElement.getNamespace().getPrefix());
-                    String documentElementAsString = replaceEmptyNamespaces(documentElement.toString());
-                       
-					DocumentBuilderFactory dbf = DocumentBuilderFactory
-							.newInstance();
-					dbf.setNamespaceAware(true);
-					DocumentBuilder db = dbf.newDocumentBuilder();
-					Document payload = db.parse(new ByteArrayInputStream(
+					if (documentElement != null){
+					   DocumentBuilderFactory dbf = DocumentBuilderFactory
+								.newInstance();
+					   dbf.setNamespaceAware(true);
+					   DocumentBuilder db = dbf.newDocumentBuilder();
+					       logger.debug(documentElement.getNamespace().getNamespaceURI()+":"+documentElement.getNamespace().getPrefix());
+                           String documentElementAsString = replaceEmptyNamespaces(documentElement.toString());
+                           Document payload = db.parse(new ByteArrayInputStream(
 							documentElementAsString.getBytes()));
-					logger.debug(documentElementAsString);
-					MessageElement messageElement = new MessageElement(payload
+					       logger.debug("Document as string:"+documentElementAsString);
+					       MessageElement messageElement = new MessageElement(payload
 							.getDocumentElement());
-					targetBusinessMsg
-							.set_any(new MessageElement[] { messageElement });
 
+					   targetBusinessMsg
+							.set_any( new MessageElement[]{messageElement});
+					}
 					/*
 					 * //un- comment the block below if the schema is present in
 					 * the URI if (targetRespMsgFromESB
@@ -576,9 +604,11 @@ public class CaXchangeRequestProcessorImpl extends
 									.getTargetResponseMessageChoice_type0()
 									.getTargetError().getErrorDescription()));
 				}
+				targetResponses[i++] =   targetRespMsgToClientL2L1;
 			}
+
 			responseToClientL2
-					.setTargetResponse(new TargetResponseMessage[] { targetRespMsgToClientL2L1 });
+					.setTargetResponse(targetResponses);
 
 		} else {
 			ErrorDetails errorDetails = new ErrorDetails(respMsgFromESB

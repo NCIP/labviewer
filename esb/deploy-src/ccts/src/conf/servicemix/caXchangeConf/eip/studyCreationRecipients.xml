@@ -19,11 +19,17 @@
 -->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
+       
+    <eip:async-bridge  service="caxchange:studyCreationAsyncBridge"  endpoint="caxchange:studyCreationAsyncBridgeEndpoint" >
+      <eip:target>
+        <eip:exchange-target service="caxchange:studyCreationRecipients" />
+      </eip:target>
+    </eip:async-bridge>
    
   <!-- static recipient list for study creation -->
     <eip:caxchange-static-recipient-list service="caxchange:studyCreationRecipients" endpoint="studyCreationRecipientsEndpoint">
       <eip:recipients>
-	    <eip:exchange-target service="caxchange:pscStudyCreationRouter" />
+	<eip:exchange-target service="caxchange:pscStudyCreationRouter" />
         <eip:exchange-target service="caxchange:caaersStudyCreationRouter" />
         <eip:exchange-target service="caxchange:ctomStudyRouter" />
       </eip:recipients>
@@ -33,5 +39,108 @@
                <value>LabViewer</value>
       </eip:targetServiceIdentifiers>      
   </eip:caxchange-static-recipient-list>
+  
+
+
+  <eip:content-based-router service="caxchange:pscStudyCreationRouter" endpoint="pscStudyCreationRouterEndpoint">
+    <eip:rules>
+      <eip:routing-rule>
+        <eip:predicate>
+          <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+        </eip:predicate>
+        <eip:target>
+          <eip:exchange-target service="caxchange:pscStudyRollback" />
+        </eip:target>
+      </eip:routing-rule>
+      <eip:routing-rule>
+        <eip:target>
+          <eip:exchange-target service="caxchange:callPSCStudyPipeline" />
+        </eip:target>
+      </eip:routing-rule>
+    </eip:rules>
+  </eip:content-based-router>
+  
+      <eip:content-based-router service="caxchange:caaersStudyCreationRouter" endpoint="caaersStudyCreationRouterEndpoint">
+        <eip:rules>
+          <eip:routing-rule>
+            <eip:predicate>
+              <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+            </eip:predicate>
+            <eip:target>
+              <eip:exchange-target service="caxchange:caaersStudyRollback" />
+            </eip:target>
+          </eip:routing-rule>
+          <eip:routing-rule>
+            <eip:target>
+              <eip:exchange-target service="caxchange:callcaAERSStudyPipeline" />
+            </eip:target>
+          </eip:routing-rule>
+        </eip:rules>
+  </eip:content-based-router>  
+  
+      <eip:content-based-router service="caxchange:ctomStudyRouter" endpoint="ctomStudyRouterEndpoint">
+        <eip:rules>
+          <eip:routing-rule>
+            <eip:predicate>
+              <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+            </eip:predicate>
+            <eip:target>
+              <eip:exchange-target service="caxchange:ctomStudyRollback" />
+            </eip:target>
+          </eip:routing-rule>
+          <eip:routing-rule>
+            <eip:target>
+              <eip:exchange-target service="caxchange:callCtomStudyPipeline" />
+            </eip:target>
+          </eip:routing-rule>
+        </eip:rules>
+  </eip:content-based-router>  
+  
+  
+  
+    <eip:pipeline service="caxchange:callPSCStudyPipeline" endpoint="callPSCStudyPipelineEndpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:pscStudy" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:studyResponseAggregator" />
+      </eip:target>
+  </eip:pipeline>
+  
+   <eip:pipeline service="caxchange:callcaAERSStudyPipeline" endpoint="callcaAERSStudyPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:caaersStudy" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:studyResponseAggregator" />
+        </eip:target>
+  </eip:pipeline>   
+  
+  <eip:pipeline service="caxchange:callCtomStudyPipeline" endpoint="callCtomStudyPipelineEndpoint">
+          <eip:transformer>
+            <eip:exchange-target service="caxchange:ctomStudy" />
+          </eip:transformer>
+          <eip:target>
+            <eip:exchange-target service="caxchange:studyResponseAggregator" />
+          </eip:target>
+  </eip:pipeline>
+  
+    <eip:caxchangeAggregator service="caxchange:studyResponseAggregator" endpoint="studyResponseAggregatorEndpoint" timeOut="300000">
+           <eip:target>
+             <eip:exchange-target service="caxchange:studyAggregateResponsePipeline"  />
+          </eip:target>
+  </eip:caxchangeAggregator>
+  
+   <eip:pipeline service="caxchange:studyAggregateResponsePipeline" endpoint="studyAggregateResponsePipelineEndpoint">
+          <eip:transformer>
+            <eip:exchange-target service="caxchange:aggregatorListener" />
+          </eip:transformer>
+          <eip:target>
+            <eip:exchange-target service="caxchange:studyCreationAsyncBridge" endpoint="caxchange:studyCreationAsyncBridgeEndpoint"/>
+          </eip:target>
+        <eip:faultsTarget>
+           <eip:exchange-target service="caxchange:studyCreationAsyncBridge" endpoint="caxchange:studyCreationAsyncBridgeEndpoint"/>
+         </eip:faultsTarget>        
+  </eip:pipeline>
   
 </beans>
