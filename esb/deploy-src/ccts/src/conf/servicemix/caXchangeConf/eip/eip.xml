@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+	<!--
 
-    Licensed to the Apache Software Foundation (ASF) under one or more
-    contributor license agreements.  See the NOTICE file distributed with
-    this work for additional information regarding copyright ownership.
-    The ASF licenses this file to You under the Apache License, Version 2.0
-    (the "License"); you may not use this file except in compliance with
-    the License.  You may obtain a copy of the License at
+		Licensed to the Apache Software Foundation (ASF) under one or more
+		contributor license agreements. See the NOTICE file distributed with
+		this work for additional information regarding copyright ownership.
+		The ASF licenses this file to You under the Apache License, Version
+		2.0 (the "License"); you may not use this file except in compliance
+		with the License. You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
-       xmlns:caxchange="http://nci.nih.gov/caXchange">
-       
-  <!-- START - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
-  	
-	<!--  import the router configuration file, which has configurations
-			based on the service type of the caxchange message header -->			
+	xmlns:caxchange="http://nci.nih.gov/caXchange">
+
+	<!-- START - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+
+	<!--
+		import the router configuration file, which has configurations based
+		on the service type of the caxchange message header
+	-->
 	<import resource="classpath:/caXchangeConf/eip/serviceTypeRouter.xml" />
 
 	<eip:static-routing-slip service="caxchange:scheduleModificationRoute"
@@ -33,9 +33,9 @@
 			<eip:exchange-target service="caxchange:payloadValidationService" />
 			<eip:exchange-target service="caxchange:pscAdverseEvent" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
-		</eip:targets>		
+		</eip:targets>
 	</eip:static-routing-slip>
-	
+
 	<eip:static-routing-slip service="caxchange:labBasedAeRoute"
 		endpoint="caxchange:labBasedAeEndPoint">
 		<eip:targets>
@@ -43,9 +43,9 @@
 			<eip:exchange-target service="caxchange:payloadValidationService" />
 			<eip:exchange-target service="caxchange:caaersLoadLab" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
-		</eip:targets>		
+		</eip:targets>
 	</eip:static-routing-slip>
-	
+
 	<eip:static-routing-slip service="caxchange:loadLabToCDMSRoute"
 		endpoint="caxchange:loadLabToCDMSEndPoint">
 		<eip:targets>
@@ -53,9 +53,9 @@
 			<eip:exchange-target service="caxchange:payloadValidationService" />
 			<eip:exchange-target service="caxchange:loadLab" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
-		</eip:targets>		
+		</eip:targets>
 	</eip:static-routing-slip>
-	
+
 	<eip:static-routing-slip service="caxchange:ctLabDataRoute"
 		endpoint="caxchange:ctLabDataEndPoint">
 		<eip:targets>
@@ -63,131 +63,145 @@
 			<eip:exchange-target service="caxchange:payloadValidationService" />
 			<eip:exchange-target service="caxchange:labLoader" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
-		</eip:targets>		
+		</eip:targets>
 	</eip:static-routing-slip>
-	
-	<eip:static-routing-slip service="caxchange:studyCreationRoute"	endpoint="caxchange:studyCreationEndPoint">
+
+	<eip:static-routing-slip service="caxchange:studyCreationRoute"
+		endpoint="caxchange:studyCreationEndPoint">
 		<eip:targets>
 			<eip:exchange-target service="caxchange:setSubjectService" />
 			<eip:exchange-target service="caxchange:payloadValidationService" />
-			<eip:exchange-target service="caxchange:storeOriginalMessageService" />		
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
 			<eip:exchange-target service="caxchange:studyCreationAsyncBridge" />
-		</eip:targets>				
+		</eip:targets>
 	</eip:static-routing-slip>
-	
-	<eip:static-routing-slip service="caxchange:registerSubjectRoute"	endpoint="caxchange:registerSubjectEndPoint">
+
+	<eip:static-routing-slip service="caxchange:registerSubjectRoute"
+		endpoint="caxchange:registerSubjectEndPoint">
 		<eip:targets>
 			<eip:exchange-target service="caxchange:setSubjectService" />
 			<eip:exchange-target service="caxchange:payloadValidationService" />
-			<eip:exchange-target service="caxchange:storeOriginalMessageService" />		
+			<eip:exchange-target service="caxchange:storeOriginalMessageService" />
 			<eip:exchange-target service="caxchange:registerSubjectAsyncBridge" />
-		</eip:targets>				
-	</eip:static-routing-slip>	
-	
-	
-       <eip:static-routing-slip service="caxchange:unhandledTypeRoute"	endpoint="caxchange:unhandledTypeRouteEndPoint">
-			<eip:targets>
-				<eip:exchange-target service="caxchange:unhandledMessageType" />
-				<eip:exchange-target service="caxchange:handleErrorResponseService" />
-			</eip:targets>				
+		</eip:targets>
 	</eip:static-routing-slip>
-	
-	
-	<eip:async-bridge  service="caxchange:synchronousAsyncBridge"  endpoint="caxchange:synchronousAsyncBridgeEndpoint" >
-	      <eip:target>
-	        <eip:exchange-target service="caxchange:syncPipeline" />
-	      </eip:target>
-        </eip:async-bridge>
-	
-	<eip:pipeline service="caxchange:asyncPipeline" endpoint="caxchange:asyncPipelineEndPoint" >
-	      <eip:transformer>
-		<eip:exchange-target service="caxchange:serviceTypeRouter" />
-	      </eip:transformer>
-	      <eip:faultsTarget>
-		 <eip:exchange-target service="caxchange:asyncHandleErrorResponsePipeline" />
-	      </eip:faultsTarget>
-	      <eip:target>
-		 <eip:exchange-target service="caxchange:ResponseQueueService" />
-	      </eip:target>	       
+
+
+	<eip:static-routing-slip service="caxchange:unhandledTypeRoute"
+		endpoint="caxchange:unhandledTypeRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:unhandledMessageType" />
+			<eip:exchange-target service="caxchange:handleErrorResponseService" />
+		</eip:targets>
+	</eip:static-routing-slip>
+
+
+	<eip:async-bridge service="caxchange:synchronousAsyncBridge"
+		endpoint="caxchange:synchronousAsyncBridgeEndpoint">
+		<eip:target>
+			<eip:exchange-target service="caxchange:syncPipeline" />
+		</eip:target>
+	</eip:async-bridge>
+
+	<eip:pipeline service="caxchange:asyncPipeline" endpoint="caxchange:asyncPipelineEndPoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:serviceTypeRouter" />
+		</eip:transformer>
+		<eip:faultsTarget>
+			<eip:exchange-target service="caxchange:asyncHandleErrorResponsePipeline" />
+		</eip:faultsTarget>
+		<eip:target>
+			<eip:exchange-target service="caxchange:ResponseQueueService" />
+		</eip:target>
 	</eip:pipeline>
-	
-        <eip:pipeline service="caxchange:syncPipeline" endpoint="caxchange:syncPipelineEndPoint" >
-		      <eip:transformer>
-			 <eip:exchange-target service="caxchange:serviceTypeRouter" />
-		      </eip:transformer>
-		      <eip:faultsTarget>
-			 <eip:exchange-target service="caxchange:syncHandleErrorResponsePipeline" />
-		      </eip:faultsTarget>
-		      <eip:target>
-			 <eip:exchange-target service="caxchange:synchronousAsyncBridge" />
-		      </eip:target>	       
+
+	<eip:pipeline service="caxchange:syncPipeline" endpoint="caxchange:syncPipelineEndPoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:serviceTypeRouter" />
+		</eip:transformer>
+		<eip:faultsTarget>
+			<eip:exchange-target service="caxchange:syncHandleErrorResponsePipeline" />
+		</eip:faultsTarget>
+		<eip:target>
+			<eip:exchange-target service="caxchange:synchronousAsyncBridge" />
+		</eip:target>
 	</eip:pipeline>
-	
-	  <!-- Pipeline to create an error response and forward it to JMS outbound queue -->
-	  <eip:pipeline service="caxchange:asyncHandleErrorResponsePipeline" endpoint="asyncHandleErrorResponsePipelineEndpoint">
-	      <eip:transformer>
-	        <eip:exchange-target service="caxchange:handleErrorResponseService" />
-	      </eip:transformer>
-	      <eip:target>
-	        <eip:exchange-target service="caxchange:ResponseQueueService" />
-	      </eip:target>
-          </eip:pipeline>
-          
-          <eip:pipeline service="caxchange:syncHandleErrorResponsePipeline" endpoint="syncHandleErrorResponsePipelineEndpoint">
-	  	      <eip:transformer>
-	  	        <eip:exchange-target service="caxchange:handleErrorResponseService" />
-	  	      </eip:transformer>
-	  	      <eip:target>
-	  	        <eip:exchange-target service="caxchange:synchronousAsyncBridge" />
-	  	      </eip:target>
-          </eip:pipeline>
 
-	
-  <!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
-       
+	<!--
+		Pipeline to create an error response and forward it to JMS outbound
+		queue
+	-->
+	<eip:pipeline service="caxchange:asyncHandleErrorResponsePipeline"
+		endpoint="asyncHandleErrorResponsePipelineEndpoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:handleErrorResponseService" />
+		</eip:transformer>
+		<eip:target>
+			<eip:exchange-target service="caxchange:ResponseQueueService" />
+		</eip:target>
+	</eip:pipeline>
 
-  
-  <!-- Static recipient lists for each type of message -->
-  
-  <import resource="classpath:/caXchangeConf/eip/registerSubjectRecipients.xml" /> 
+	<eip:pipeline service="caxchange:syncHandleErrorResponsePipeline"
+		endpoint="syncHandleErrorResponsePipelineEndpoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:handleErrorResponseService" />
+		</eip:transformer>
+		<eip:target>
+			<eip:exchange-target service="caxchange:synchronousAsyncBridge" />
+		</eip:target>
+	</eip:pipeline>
 
-  <import resource="classpath:/caXchangeConf/eip/studyCreationRecipients.xml" /> 
-      
- 
-  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="caxchange:rollbackPipelineEndpoint">
-      <eip:transformer>
-        <eip:exchange-target service="caxchange:serviceTypeRouter" />
-      </eip:transformer>
-      <eip:target>
-       <eip:exchange-target service="caxchange:rollbackMessageFilter" />
-      </eip:target>      
-  </eip:pipeline> 
- 
- <eip:message-filter service="caxchange:rollbackMessageFilter" endpoint="caxchange:rollbackMessageFilterEndpoint">
-   <eip:target>
-     <eip:exchange-target service="caxchange:rollbackMessageFilter" />
-   </eip:target>
-   <eip:filter>
-     <eip:xpath-predicate xpath="count(/caxchange:world) = 1" namespaceContext="#nsContext"/>
-   </eip:filter>
-</eip:message-filter>
-  
-  <!--  EIP send response for unhandled message type -->
-  
-  <eip:pipeline service="caxchange:callUnhandledMessageType" endpoint="callUnhandledMessageTypeEndpoint">
-      <eip:transformer>
-        <eip:exchange-target service="caxchange:unhandledMessageType" />
-      </eip:transformer>
-      <eip:target>
-        <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
-      </eip:target>
-  </eip:pipeline>
-  
-    <eip:namespace-context id="nsContext">
-      <eip:namespaces>
-        <eip:namespace prefix="caxchange">http://caXchange.nci.nih.gov/messaging</eip:namespace>
-      </eip:namespaces>
-  </eip:namespace-context>
+
+	<!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
+
+
+
+	<!-- Static recipient lists for each type of message -->
+
+	<import resource="classpath:/caXchangeConf/eip/registerSubjectRecipients.xml" />
+
+	<import resource="classpath:/caXchangeConf/eip/studyCreationRecipients.xml" />
+
+
+	<eip:pipeline service="caxchange:rollbackPipeline"
+		endpoint="caxchange:rollbackPipelineEndpoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:serviceTypeRouter" />
+		</eip:transformer>
+		<eip:target>
+			<eip:exchange-target service="caxchange:rollbackMessageFilter" />
+		</eip:target>
+	</eip:pipeline>
+
+	<eip:message-filter service="caxchange:rollbackMessageFilter"
+		endpoint="caxchange:rollbackMessageFilterEndpoint">
+		<eip:target>
+			<eip:exchange-target service="caxchange:rollbackMessageFilter" />
+		</eip:target>
+		<eip:filter>
+			<eip:xpath-predicate xpath="count(/caxchange:world) = 1"
+				namespaceContext="#nsContext" />
+		</eip:filter>
+	</eip:message-filter>
+
+	<!--  EIP send response for unhandled message type -->
+
+	<eip:pipeline service="caxchange:callUnhandledMessageType"
+		endpoint="callUnhandledMessageTypeEndpoint">
+		<eip:transformer>
+			<eip:exchange-target service="caxchange:unhandledMessageType" />
+		</eip:transformer>
+		<eip:target>
+			<eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
+		</eip:target>
+	</eip:pipeline>
+
+	<eip:namespace-context id="nsContext">
+		<eip:namespaces>
+			<eip:namespace prefix="caxchange">
+				http://caXchange.nci.nih.gov/messaging</eip:namespace>
+		</eip:namespaces>
+	</eip:namespace-context>
 
 
 </beans>
