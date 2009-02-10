@@ -128,6 +128,7 @@ public abstract class CaXchangeMessagingBean implements MessageExchangeListener 
 		if (isCopyProperties()) {
 			for (Iterator it = in.getPropertyNames().iterator(); it.hasNext();) {
 				String name = (String) it.next();
+				logger.debug("Property:"+name+":"+in.getProperty(name));
 				out.setProperty(name, in.getProperty(name));
 			}
 		}

@@ -19,6 +19,13 @@
 -->
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
+       
+    <eip:async-bridge  service="caxchange:registerSubjectAsyncBridge"  endpoint="caxchange:registerSubjectAsyncBridgeEndpoint" >
+      <eip:target>
+        <eip:exchange-target service="caxchange:registerSubjectRecipients" />
+      </eip:target>
+    </eip:async-bridge>
+          
 
   <!-- static recipient list for register subject -->
     <eip:caxchange-static-recipient-list service="caxchange:registerSubjectRecipients" endpoint="registerSubjectRecipientsEndpoint">
@@ -35,5 +42,137 @@
                <value>C3D</value>
       </eip:targetServiceIdentifiers>
   </eip:caxchange-static-recipient-list>
+  
+    <eip:content-based-router service="caxchange:pscRegisterSubjectRouter" endpoint="pscRegisterSubjectRouterEndpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:pscRegistrationRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="caxchange:callPSCRegistrationPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+    </eip:content-based-router>
+    
+   <eip:content-based-router service="caxchange:c3DRegisterSubjectRouter" endpoint="c3DRegisterSubjectRouterEndpoint">
+      <eip:rules>
+        <eip:routing-rule>
+          <eip:predicate>
+            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+          </eip:predicate>
+          <eip:target>
+            <eip:exchange-target service="caxchange:c3dRegistrationRollback" />
+          </eip:target>
+        </eip:routing-rule>
+        <eip:routing-rule>
+          <eip:target>
+            <eip:exchange-target service="caxchange:callc3DRegistrationPipeline" />
+          </eip:target>
+        </eip:routing-rule>
+      </eip:rules>
+  </eip:content-based-router>
+  
+  
+      <eip:content-based-router service="caxchange:caaersRegisterSubjectRouter" endpoint="caaersRegisterSubjectRouterEndpoint">
+        <eip:rules>
+          <eip:routing-rule>
+            <eip:predicate>
+              <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+            </eip:predicate>
+            <eip:target>
+              <eip:exchange-target service="caxchange:caaersRegistrationRollback" />
+            </eip:target>
+          </eip:routing-rule>
+          <eip:routing-rule>
+            <eip:target>
+              <eip:exchange-target service="caxchange:callcaAERSRegistrationPipeline" />
+            </eip:target>
+          </eip:routing-rule>
+        </eip:rules>
+  </eip:content-based-router>
+  
+    
+      <eip:content-based-router service="caxchange:ctomRegisterSubjectRouter" endpoint="ctomRegisterSubjectRouterEndpoint">
+        <eip:rules>
+          <eip:routing-rule>
+            <eip:predicate>
+              <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
+            </eip:predicate>
+            <eip:target>
+              <eip:exchange-target service="caxchange:ctomRegistrationRollback" />
+            </eip:target>
+          </eip:routing-rule>
+          <eip:routing-rule>
+            <eip:target>
+              <eip:exchange-target service="caxchange:callCtomRegistrationPipeline" />
+            </eip:target>
+          </eip:routing-rule>
+        </eip:rules>
+    </eip:content-based-router>
+  
+
+      
+  
+    <eip:pipeline service="caxchange:callPSCRegistrationPipeline" endpoint="callPSCRegistrationPipelineEndpoint">
+      <eip:transformer>
+        <eip:exchange-target service="caxchange:pscRegistration" />
+      </eip:transformer>
+      <eip:target>
+        <eip:exchange-target service="caxchange:registerSubjectResponseAggregator" />
+      </eip:target>
+  </eip:pipeline>  
+  
+    
+      <eip:pipeline service="caxchange:callc3DRegistrationPipeline" endpoint="callc3DRegistrationPipelineEndpoint">
+          <eip:transformer>
+            <eip:exchange-target service="caxchange:c3dRegistration" />
+          </eip:transformer>
+          <eip:target>
+            <eip:exchange-target service="caxchange:registerSubjectResponseAggregator" />
+          </eip:target>
+  </eip:pipeline>  
+  
+    <eip:pipeline service="caxchange:callcaAERSRegistrationPipeline" endpoint="callcaAERSRegistrationPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:caaersRegistration" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:registerSubjectResponseAggregator" />
+        </eip:target>
+  </eip:pipeline> 
+  
+    <eip:pipeline service="caxchange:callCtomRegistrationPipeline" endpoint="callCtomRegistrationPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:ctomRegistration" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:registerSubjectResponseAggregator" />
+        </eip:target>
+  </eip:pipeline>  
+  
+      <eip:caxchangeAggregator service="caxchange:registerSubjectResponseAggregator" endpoint="registerSubjectResponseAggregatorEndpoint" timeOut="300000">
+             <eip:target>
+               <eip:exchange-target service="caxchange:registerSubjectAggregateResponsePipeline"  />
+            </eip:target>
+    </eip:caxchangeAggregator>
+    
+     <eip:pipeline service="caxchange:registerSubjectAggregateResponsePipeline" endpoint="registerSubjectAggregateResponsePipelineEndpoint">
+            <eip:transformer>
+              <eip:exchange-target service="caxchange:aggregatorListener" />
+            </eip:transformer>
+            <eip:target>
+              <eip:exchange-target service="caxchange:registerSubjectAsyncBridge" endpoint="caxchange:registerSubjectAsyncBridgeEndpoint"/>
+            </eip:target>
+          <eip:faultsTarget>
+             <eip:exchange-target service="caxchange:registerSubjectAsyncBridge" endpoint="caxchange:registerSubjectAsyncBridgeEndpoint"/>
+           </eip:faultsTarget>        
+  </eip:pipeline>
   
 </beans>

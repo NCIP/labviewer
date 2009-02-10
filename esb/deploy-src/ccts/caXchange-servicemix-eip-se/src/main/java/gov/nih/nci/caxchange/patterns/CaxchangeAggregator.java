@@ -19,7 +19,10 @@ package gov.nih.nci.caxchange.patterns;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -170,6 +173,13 @@ public class CaxchangeAggregator extends AbstractAggregator {
         LOGGER.debug("Adding message");
         caxchangeAggregate.addMessage(message);
         String count = (String)message.getProperty(CaxchangeEIPConstants.CAXCHANGE_RECIPIENT_COUNT);
+        if (message.getPropertyNames()!=null){
+           Iterator<String> iterator = message.getPropertyNames().iterator();
+           while(iterator.hasNext()){
+        	   String name = iterator.next();
+        	   caxchangeAggregate.addProperty(name, message.getProperty(name));	   
+           }
+        }
         String correlationId = (String)exchange.getProperty("org.apache.servicemix.correlationId");
         if (correlationId != null) {
             caxchangeAggregate.setCorrelationId(correlationId);
@@ -209,6 +219,12 @@ public class CaxchangeAggregator extends AbstractAggregator {
             .buildAggregatedDocument(messages, timeout, caxchangeAggregate.getExchangesToReceive());
         message.setContent(new DOMSource(document));
         message.setProperty(CaxchangeEIPConstants.ORIGINAL_EXCHANGE_CORRELATIONID, caxchangeAggregate.getCorrelationId());
+        Map<String,Object> properties = caxchangeAggregate.getProperties();
+        Iterator iterator = properties.keySet().iterator();
+        while(iterator.hasNext()){
+        	String key = (String)iterator.next();
+        	message.setProperty(key, properties.get(key));
+        }
     }
 
     /**

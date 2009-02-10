@@ -17,7 +17,10 @@
 package gov.nih.nci.caxchange.patterns;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jbi.messaging.NormalizedMessage;
@@ -32,7 +35,8 @@ public class CaxchangeAggregation {
     protected List messages;
     protected String correlationId;
     //This is the set of service identifiers from which exchanges are expected.
-    protected Set exchangesToReceive;    
+    protected Set exchangesToReceive; 
+    protected Map<String,Object> properties = new HashMap<String,Object>();
     
     /**
      * Constructor for the class 
@@ -126,4 +130,18 @@ public class CaxchangeAggregation {
     public int getCount() {
         return count;
     }
+    
+    public void addProperty(String name, Object value) {
+    	properties.put(name, value);
+    }
+
+	public Map<String,Object> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String,Object> properties) {
+		this.properties = properties;
+	}
+    
+    
 }
