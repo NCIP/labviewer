@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -142,7 +143,10 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 
 				// new HealthCare Site - Get Id from sequence
 				hsId = getNextVal(con, "ORGANIZATION_SEQ");
-
+				
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// insert into HealthCare_Site
 				ps =
 						con
@@ -163,6 +167,11 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 
 			// Check if the Study Site exits for that healthcaresite Id and
 			// Protocol Id
+			
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			ps =
 					con
 							.prepareStatement("select id from study_site where HEALTHCARE_SITE_ID = ? and PROTOCOL_ID = ?");
@@ -180,7 +189,10 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 
 				// get the next Id value
 				ssId = getNextVal(con, "STUDY_SITE_SEQ");
-
+				
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// insert into Study_Site
 				ps =
 						con
@@ -202,14 +214,9 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 		if (hcSite.getStudyParticipantAssignment() != null)

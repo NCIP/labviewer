@@ -81,6 +81,7 @@
 package gov.nih.nci.ctom.ctlab.cleanTests;
 
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -127,17 +128,7 @@ public class VerifyNextValueData extends TestCase
 		}
 		finally
 		{
-			try
-			{
-				if (con != null)
-				{
-					con.close();
-				}
-			}
-			catch (SQLException e)
-			{
-				logger.error("Error closing connection", e);
-			}
+			con = SQLHelper.closeConnection(con);
 		}
 
 	}
