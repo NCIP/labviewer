@@ -133,10 +133,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 		}
 
 	}
@@ -174,10 +172,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 
 	}
@@ -211,10 +206,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 
 	}
@@ -310,10 +302,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 
 	}
@@ -358,14 +347,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+
 		}
 
 	}
@@ -408,7 +392,9 @@ public class CTLabDAO extends BaseJDBCDAO
 			}
 			else
 			{
-
+				rs = SQLHelper.closeResultSet(rs);
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// get next id from sequence
 				id = getNextVal(con, "CONCEPT_DESCRIPTOR_SEQ");
 				ps =
@@ -440,14 +426,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+
 		}
 
 	}
@@ -486,9 +467,15 @@ public class CTLabDAO extends BaseJDBCDAO
 				return rs.getLong(1);
 			}
 			else
-			{
+			{	
+				
 				// get next id from sequence
 				id = getNextVal(con, "CONCEPT_DESCRIPTOR_SEQ");
+			
+				//Clean up
+				rs = SQLHelper.closeResultSet(rs);
+				ps = SQLHelper.closePreparedStatement(ps);
+							
 				ps =
 						con
 								.prepareStatement("insert into CONCEPT_DESCRIPTOR (ID,CODE, CODE_SYSTEM_VERSION, DISPLAY_TEXT)  values(?,?,?,?)");
@@ -516,14 +503,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 	}
 
@@ -564,8 +545,12 @@ public class CTLabDAO extends BaseJDBCDAO
 				id = rs.getLong("PARTICIPANT_ID");
 
 			}
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			if (id != null)
-			{
+			{	
 				logger.debug("Performing rollback of the participant " + id);
 				// delete from the identifier table
 				ps =
@@ -576,7 +561,10 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setString(1, participantGridId);
 				ps.setString(2, participantExtension);
 				ps.executeUpdate();
-
+				
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// delete from the participant
 				ps = con.prepareStatement("delete from PARTICIPANT where ID=?");
 				ps.setLong(1, id);
@@ -591,14 +579,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+
 		}
 	}
 
@@ -635,6 +618,10 @@ public class CTLabDAO extends BaseJDBCDAO
 				// already present;update the identifier table
 				id = rs.getLong("PROTOCOL_ID");
 			}
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			if (id != null)
 			{
 				logger.debug("Performing rollback of the study " + id);
@@ -643,6 +630,9 @@ public class CTLabDAO extends BaseJDBCDAO
 				ps.setLong(1, id);
 				ps.executeUpdate();
 
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// delete from the protocol table
 				ps = con.prepareStatement("delete from PROTOCOL where ID=?");
 				ps.setLong(1, id);
@@ -657,14 +647,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+
 		}
 	}
 
@@ -686,7 +671,6 @@ public class CTLabDAO extends BaseJDBCDAO
 		Date insertDate = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ResultSet rs1 = null;
 		Long id = null;
 		if (participantGridId == null || participantExtension == null)
 		{
@@ -707,15 +691,18 @@ public class CTLabDAO extends BaseJDBCDAO
 				// already present;update the identifier table
 				id = rs.getLong("PARTICIPANT_ID");
 			}
-			rs.close();
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			if (id != null)
 			{
 				ps = con.prepareStatement("select CTOM_INSERT_DATE from PARTICIPANT where ID=?");
 				ps.setLong(1, id);
-				rs1 = ps.executeQuery();
-				if (rs1.next() && !rs1.isBeforeFirst())
+				rs = ps.executeQuery();
+				if (rs.next() && !rs.isBeforeFirst())
 				{
-					insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
+					insertDate = new java.util.Date(rs.getTimestamp(1).getTime());
 					logger.debug("insert date " + insertDate);
 				}
 			}
@@ -727,18 +714,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (rs1 != null)
-			{
-				rs1.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 		return insertDate;
@@ -762,7 +739,6 @@ public class CTLabDAO extends BaseJDBCDAO
 		Date insertDate = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ResultSet rs1 = null;
 		Long id = null;
 		if (studyGridId == null)
 			return insertDate;
@@ -780,16 +756,20 @@ public class CTLabDAO extends BaseJDBCDAO
 				// already present;update the identifier table
 				id = rs.getLong("PROTOCOL_ID");
 			}
-			rs.close();
+			
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			// insert into Protocol the insert date
 			if (id != null)
 			{
 				ps = con.prepareStatement("select CTOM_INSERT_DATE from PROTOCOL where ID=?");
 				ps.setLong(1, id);
-				rs1 = ps.executeQuery();
-				if (rs1.next() && !rs1.isBeforeFirst())
+				rs = ps.executeQuery();
+				if (rs.next() && !rs.isBeforeFirst())
 				{
-					insertDate = new java.util.Date(rs1.getTimestamp(1).getTime());
+					insertDate = new java.util.Date(rs.getTimestamp(1).getTime());
 					logger.debug("insert date " + insertDate);
 				}
 			}
@@ -801,19 +781,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-
-			if (rs1 != null)
-			{
-				rs1.close();
-			}
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 		return insertDate;
@@ -835,7 +804,6 @@ public class CTLabDAO extends BaseJDBCDAO
 		logger.debug("Inside getStudy method");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ResultSet rs1 = null;
 		Protocol study = null;
 		Long protocolId = null;
 		Long healthCareSiteId = null;
@@ -853,21 +821,25 @@ public class CTLabDAO extends BaseJDBCDAO
 				healthCareSiteId = rs.getLong(2);
 
 			}
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			if (protocolId != null)
 			{
 				ps =
 						con
 								.prepareStatement("select p.long_title_text,i.root,i.extension,i.assigning_authority_name from identifier i, protocol p where i.protocol_id=p.id and p.id=?");
 				ps.setLong(1, protocolId);
-				rs1 = ps.executeQuery();
-				if (rs1.next())
+				rs = ps.executeQuery();
+				if (rs.next())
 				{
 					study = new Protocol();
-					study.setLongTxtTitle(rs1.getString("LONG_TITLE_TEXT"));
-					study.getIdentifier().setRoot(rs1.getString("ROOT"));
-					study.getIdentifier().setExtension(rs1.getString("EXTENSION"));
+					study.setLongTxtTitle(rs.getString("LONG_TITLE_TEXT"));
+					study.getIdentifier().setRoot(rs.getString("ROOT"));
+					study.getIdentifier().setExtension(rs.getString("EXTENSION"));
 					study.getIdentifier().setAssigningAuthorityName(
-							rs1.getString("ASSIGNING_AUTHORITY_NAME"));
+							rs.getString("ASSIGNING_AUTHORITY_NAME"));
 				}
 			}
 		}
@@ -878,18 +850,9 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (rs1 != null)
-			{
-				rs1.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+
 
 		}
 		return study;
@@ -913,7 +876,6 @@ public class CTLabDAO extends BaseJDBCDAO
 
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ResultSet rs1 = null;
 		Long spa_id = null;
 		String root = null;
 		int count = 0;
@@ -931,6 +893,10 @@ public class CTLabDAO extends BaseJDBCDAO
 				root = rs.getString(2);
 
 			}
+			//Clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			if (spa_id != null)
 			{
 				String identOrg = root + "." + mrn;
@@ -939,10 +905,10 @@ public class CTLabDAO extends BaseJDBCDAO
 								.prepareStatement("select count(*) from identifier where protocol_id in (select protocol_id from study_site where id in( select study_site_id from study_participant_assignment where id = ? and STUDY_PARTICIPANT_IDENTFR_ORIG=? ))");
 				ps.setLong(1, spa_id);
 				ps.setString(2, identOrg);// get the participant root+mrn
-				rs1 = ps.executeQuery();
-				if (rs1.next())
+				rs = ps.executeQuery();
+				if (rs.next())
 				{
-					count = rs1.getInt(1);
+					count = rs.getInt(1);
 				}
 			}
 			if (count == 1 && root != null)
@@ -958,18 +924,8 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (rs1 != null)
-			{
-				rs1.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 		return spa_id;
@@ -1012,10 +968,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 	}
 

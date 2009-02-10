@@ -81,6 +81,7 @@
 package gov.nih.nci.ctom.ctlab.cleanTests;
 
 import gov.nih.nci.ctom.ctlab.persistence.BaseJDBCDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -302,14 +303,9 @@ public class CTTestDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (stmt != null)
-			{
-				stmt.close();
-			}
-			if (rs != null)
-			{
-				rs.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			stmt = SQLHelper.closeStatement(stmt);
 		}
 
 	}
@@ -332,10 +328,7 @@ public class CTTestDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			if (stmt != null)
-			{
-				stmt.close();
-			}
+			stmt = SQLHelper.closeStatement(stmt);
 		}
 	}
 

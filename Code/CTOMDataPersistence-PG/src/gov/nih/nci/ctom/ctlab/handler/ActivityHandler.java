@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.Activity;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -182,14 +183,8 @@ public class ActivityHandler extends CTLabDAO implements
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 
 	}

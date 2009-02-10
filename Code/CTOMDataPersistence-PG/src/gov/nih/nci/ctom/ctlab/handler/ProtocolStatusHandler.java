@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.domain.ProtocolStatus;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -141,10 +142,8 @@ public class ProtocolStatusHandler extends CTLabDAO implements HL7V3MessageHandl
 		}
 		finally
 		{
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 
 	}

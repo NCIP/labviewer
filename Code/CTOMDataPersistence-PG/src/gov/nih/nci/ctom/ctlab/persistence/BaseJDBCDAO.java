@@ -206,14 +206,8 @@ public abstract class BaseJDBCDAO
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (stmt != null)
-			{
-				stmt.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			stmt = SQLHelper.closeStatement(stmt);
 		}
 		return nextValue;
 	}

@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -137,6 +138,9 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 			}
 			else
 			{
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// Check study participant identifier, if it exists, then don't
 				// insert new SPA or Participant
 
@@ -181,14 +185,9 @@ public class StudyParticipantAssignmentHandler extends CTLabDAO implements
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 

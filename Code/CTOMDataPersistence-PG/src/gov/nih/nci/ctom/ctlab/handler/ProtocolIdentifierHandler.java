@@ -82,6 +82,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -138,6 +139,9 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements HL7V3MessageH
 				}
 				else
 				{
+					//clean up
+					ps = SQLHelper.closePreparedStatement(ps);
+					
 					// get the identifier id
 					identifierId = getNextVal(con, "IDENTIFIER_SEQ");
 
@@ -169,14 +173,9 @@ public class ProtocolIdentifierHandler extends CTLabDAO implements HL7V3MessageH
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 
