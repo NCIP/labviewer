@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -132,7 +133,9 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 			}
 			else
 			{
-
+				// clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+	
 				// Get Id from sequence
 				investigatorId = getNextVal(con, "PERSON_SEQ");
 
@@ -149,6 +152,11 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 				ps.execute();
 
 			}
+			
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
+			
 			// insert into Study_Investigator
 			ps =
 					con
@@ -162,7 +170,9 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 			}
 			else
 			{
-
+				//clean up
+				 ps = SQLHelper.closePreparedStatement(ps);
+				
 				Long siId = getNextVal(con, "STUDY_INVESTIGATOR_SEQ");
 				logger.debug("The study_Invest id is " + siId);
 				ps =
@@ -183,14 +193,9 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 	}

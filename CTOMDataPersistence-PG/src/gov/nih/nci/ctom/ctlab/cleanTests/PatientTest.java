@@ -80,6 +80,8 @@
  */
 package gov.nih.nci.ctom.ctlab.cleanTests;
 
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -126,14 +128,7 @@ public class PatientTest extends TestCase
 		}
 		finally
 		{
-			try
-			{
-				con.close();
-			}
-			catch (SQLException e)
-			{
-				logger.error("Error closing connection", e);
-			}
+			con = SQLHelper.closeConnection(con);
 		}
 
 	}

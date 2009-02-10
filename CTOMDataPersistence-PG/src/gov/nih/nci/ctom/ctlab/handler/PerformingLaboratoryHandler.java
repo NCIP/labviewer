@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.PerformingLaboratory;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -131,6 +132,9 @@ public class PerformingLaboratoryHandler extends CTLabDAO implements HL7V3Messag
 			}
 			else
 			{
+				//clean up
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// get the id from sequence
 				Long id = getNextVal(con, "ORGANIZATION_SEQ");
 				performingLaboratory.setOrganizationId(id);
@@ -151,14 +155,9 @@ public class PerformingLaboratoryHandler extends CTLabDAO implements HL7V3Messag
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			//clean up
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 		}
 	}
 

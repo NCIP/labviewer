@@ -83,6 +83,7 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.CentralLaboratory;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
+import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -130,10 +131,14 @@ public class CentralLaboratoryHandler extends CTLabDAO implements HL7V3MessageHa
 			}
 			else
 			{
-
+				//clean up
+				rs = SQLHelper.closeResultSet(rs);
+				ps = SQLHelper.closePreparedStatement(ps);
+				
 				// Get Id from sequence
 				Long id = getNextVal(con, "ORGANIZATION_SEQ");
 				centralLaboratory.setId(id);
+				
 				ps =
 						con
 								.prepareStatement("insert into CENTRAL_LABORATORY(ID, IDENTIFIER, NAME)  values(?,?,?)");
@@ -151,14 +156,8 @@ public class CentralLaboratoryHandler extends CTLabDAO implements HL7V3MessageHa
 		}
 		finally
 		{
-			if (rs != null)
-			{
-				rs.close();
-			}
-			if (ps != null)
-			{
-				ps.close();
-			}
+			rs = SQLHelper.closeResultSet(rs);
+			ps = SQLHelper.closePreparedStatement(ps);
 
 		}
 
