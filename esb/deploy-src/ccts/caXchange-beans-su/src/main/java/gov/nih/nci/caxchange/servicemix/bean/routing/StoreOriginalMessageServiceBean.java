@@ -46,7 +46,9 @@ public class StoreOriginalMessageServiceBean  extends CaXchangeMessagingBean {
         MessageUtil.transfer(in, out);
         try {
             logger.debug("Storing original message");
-            storeOriginalMessage(exchange);
+            if (!(caXchangeDataUtil.isRollback())) {
+               storeOriginalMessage(exchange);
+            }
         }catch(Exception e) {
             logger.error("Error occurred storing original message. Sending fault.", e);
             Fault fault = getFault(CaxchangeErrors.ERROR_STORING_MESSAGE, "Error occurred storing original message.", exchange );

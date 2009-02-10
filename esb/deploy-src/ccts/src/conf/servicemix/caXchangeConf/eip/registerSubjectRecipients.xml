@@ -20,7 +20,8 @@
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
        
-    <eip:async-bridge  service="caxchange:registerSubjectAsyncBridge"  endpoint="caxchange:registerSubjectAsyncBridgeEndpoint" >
+    <eip:async-bridge  service="caxchange:registerSubjectAsyncBridge"  endpoint="caxchange:registerSubjectAsyncBridgeEndpoint"
+      responseCorrIdProperty="registerSubject.correlationId.Property" >
       <eip:target>
         <eip:exchange-target service="caxchange:registerSubjectRecipients" />
       </eip:target>
@@ -171,8 +172,17 @@
               <eip:exchange-target service="caxchange:registerSubjectAsyncBridge" endpoint="caxchange:registerSubjectAsyncBridgeEndpoint"/>
             </eip:target>
           <eip:faultsTarget>
-             <eip:exchange-target service="caxchange:registerSubjectAsyncBridge" endpoint="caxchange:registerSubjectAsyncBridgeEndpoint"/>
+             <eip:exchange-target service="caxchange:registerSubjectHandleErrorResponsePipeline" />
            </eip:faultsTarget>        
   </eip:pipeline>
+  
+   <eip:pipeline service="caxchange:registerSubjectHandleErrorResponsePipeline" endpoint="registerSubjectHandleErrorResponsePipelineEndpoint">
+  	      <eip:transformer>
+  	        <eip:exchange-target service="caxchange:handleErrorResponseService" />
+  	      </eip:transformer>
+  	      <eip:target>
+  	        <eip:exchange-target service="caxchange:registerSubjectAsyncBridge" endpoint="caxchange:registerSubjectAsyncBridgeEndpoint" />
+  	      </eip:target>
+   </eip:pipeline>
   
 </beans>
