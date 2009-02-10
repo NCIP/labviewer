@@ -27,15 +27,12 @@ import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Request;
 import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TransactionControls;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,22 +50,14 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
-import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.OMNamespace;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
-import org.apache.axiom.om.impl.llom.OMNamespaceImpl;
 import org.apache.axis.message.MessageElement;
-import org.apache.axis2.client.Options;
 import org.apache.axis2.databinding.types.URI;
-import org.apache.axis2.databinding.utils.writer.MTOMAwareXMLSerializer;
-import org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.globus.wsrf.ResourceKey;
@@ -493,25 +482,6 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	/*
-	private ResponseMessage buildResponseMessageToClient(
-			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
-			throws Exception {
-		XMLStreamReader xmlReader = respMsgFromESB.getPullParser(null);
-		StAXOMBuilder builder = new StAXOMBuilder(xmlReader);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		XMLStreamWriter writer = XMLOutputFactory.newInstance().createXMLStreamWriter(baos);
-		MTOMAwareXMLStreamWriter mtomWriter = new MTOMAwareXMLSerializer(writer);
-		respMsgFromESB.serialize(gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.CaXchangeResponseMessage.MY_QNAME,
-				                     OMAbstractFactory.getOMFactory(), mtomWriter, false);
-		String responseAsString = replaceEmptyNamespaces(baos.toString());
-		logger.debug("The response from ESB is:"+responseAsString);
-		StringReader reader = new StringReader(responseAsString);
-		ResponseMessage response = (ResponseMessage)Utils.deserializeObject(reader, ResponseMessage.class);
-		return response;
-		
-	}
-	*/
 	private ResponseMessage buildResponseMessageToClient(
 			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
 			throws IllegalAccessException, InvocationTargetException,
