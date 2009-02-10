@@ -20,7 +20,8 @@
 <beans xmlns:eip="http://servicemix.apache.org/eip/1.0"
        xmlns:caxchange="http://nci.nih.gov/caXchange">
        
-    <eip:async-bridge  service="caxchange:studyCreationAsyncBridge"  endpoint="caxchange:studyCreationAsyncBridgeEndpoint" >
+    <eip:async-bridge  service="caxchange:studyCreationAsyncBridge"  endpoint="caxchange:studyCreationAsyncBridgeEndpoint"
+       responseCorrIdProperty="studyCreation.correlationId.Property" >
       <eip:target>
         <eip:exchange-target service="caxchange:studyCreationRecipients" />
       </eip:target>
@@ -139,8 +140,17 @@
             <eip:exchange-target service="caxchange:studyCreationAsyncBridge" endpoint="caxchange:studyCreationAsyncBridgeEndpoint"/>
           </eip:target>
         <eip:faultsTarget>
-           <eip:exchange-target service="caxchange:studyCreationAsyncBridge" endpoint="caxchange:studyCreationAsyncBridgeEndpoint"/>
+           <eip:exchange-target service="caxchange:studyCreationHandleErrorResponsePipeline"/>
          </eip:faultsTarget>        
   </eip:pipeline>
+  
+     <eip:pipeline service="caxchange:studyCreationHandleErrorResponsePipeline" endpoint="studyCreationHandleErrorResponsePipelineEndpoint">
+    	      <eip:transformer>
+    	        <eip:exchange-target service="caxchange:handleErrorResponseService" />
+    	      </eip:transformer>
+    	      <eip:target>
+    	        <eip:exchange-target service="caxchange:studyCreationAsyncBridge"  endpoint="caxchange:studyCreationAsyncBridgeEndpoint"/>
+    	      </eip:target>
+   </eip:pipeline>
   
 </beans>

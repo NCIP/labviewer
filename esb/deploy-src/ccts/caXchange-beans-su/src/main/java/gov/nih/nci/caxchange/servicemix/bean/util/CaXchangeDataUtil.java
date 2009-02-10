@@ -170,6 +170,36 @@ public class CaXchangeDataUtil {
     
     
     /**
+     * Gets transactional control
+	 * @param 
+	 * @return Operation name associated with the service type
+	 * @throws Exception
+	 */  
+    public String getTransactionControl() throws Exception {
+    	NodeList elements = document.getElementsByTagNameNS(CAXCHANGE_URI, "transactionControl");
+    	String transactionControl=null;
+    	if (elements.getLength()==1) {
+    		transactionControl = elements.item(0).getTextContent();
+    	}
+        return transactionControl; 
+    }     
+    
+    
+    /**
+     * returns true if the message is a rollback
+	 * @param 
+	 * @return Operation name associated with the service type
+	 * @throws Exception
+	 */  
+    public boolean isRollback() throws Exception {
+        String tc = getTransactionControl();
+        if (tc.equals("ROLLBACK")) {
+        	return true;
+        }
+        
+        return false; 
+    }    
+    /**
      * Gets business payload included in the caXchange request.
 	 * @param 
 	 * @return Business payload 

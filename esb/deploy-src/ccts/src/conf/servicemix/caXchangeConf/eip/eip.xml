@@ -113,7 +113,7 @@
 	
         <eip:pipeline service="caxchange:syncPipeline" endpoint="caxchange:syncPipelineEndPoint" >
 		      <eip:transformer>
-			<eip:exchange-target service="caxchange:serviceTypeRouter" />
+			 <eip:exchange-target service="caxchange:serviceTypeRouter" />
 		      </eip:transformer>
 		      <eip:faultsTarget>
 			 <eip:exchange-target service="caxchange:syncHandleErrorResponsePipeline" />
@@ -146,74 +146,31 @@
   <!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
        
 
-  <!-- Pipeline to rollback -->
-  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="rollbackPipelineEndpoint">
-      <eip:transformer>
-        <eip:exchange-target service="caxchange:setSubjectService" />
-      </eip:transformer>
-      <eip:target>
-        <eip:exchange-target service="caxchange:MessageTypeRouter" />
-      </eip:target>
-  </eip:pipeline>
-  
-    <!-- Pipeline for Aggregating response -->
-    <eip:pipeline service="caxchange:aggregateResponsePipeline" endpoint="aggregateResponsePipelineEndpoint">
-        <eip:transformer>
-          <eip:exchange-target service="caxchange:aggregatorListener" />
-        </eip:transformer>
-        <eip:target>
-          <eip:exchange-target service="caxchange:aggregatedResponseRouter" />
-        </eip:target>
-      <eip:faultsTarget>
-         <eip:exchange-target service="caxchange:handleErrorResponsePipeline" />
-       </eip:faultsTarget>        
-  </eip:pipeline>
-  
   
   <!-- Static recipient lists for each type of message -->
   
   <import resource="classpath:/caXchangeConf/eip/registerSubjectRecipients.xml" /> 
 
   <import resource="classpath:/caXchangeConf/eip/studyCreationRecipients.xml" /> 
-    
-  <!--- EIP components for invoking the PSC  -->
-  
-  <eip:content-based-router service="caxchange:pscRouter" endpoint="pscRouterEndpoint">
-      <eip:rules>
-        <eip:routing-rule>
-          <eip:predicate>
-            <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:operation='ROLLBACK']) = 1" namespaceContext="#nsContext"/>
-          </eip:predicate>
-          <eip:target>
-            <eip:exchange-target service="caxchange:pscRollback" />
-          </eip:target>
-        </eip:routing-rule>
-        <eip:routing-rule>
-          <eip:target>
-            <eip:exchange-target service="caxchange:callPscPipeline" />
-          </eip:target>
-        </eip:routing-rule>
-      </eip:rules>
-  </eip:content-based-router>
-  
-  <eip:pipeline service="caxchange:callPscPipeline" endpoint="callPscPipelineEndpoint">
+      
+ 
+  <eip:pipeline service="caxchange:rollbackPipeline" endpoint="caxchange:rollbackPipelineEndpoint">
       <eip:transformer>
-        <eip:exchange-target service="caxchange:pscProcess" />
+        <eip:exchange-target service="caxchange:serviceTypeRouter" />
       </eip:transformer>
       <eip:target>
-        <eip:exchange-target service="caxchange:caxchangeResponseAggregator" />
-      </eip:target>
-  </eip:pipeline>
-  
-  <!-- EIP Aggregator -->
-  <eip:caxchangeAggregator service="caxchange:caxchangeResponseAggregator" endpoint="caxchangeResponseAggregatorEndpoint" timeOut="300000">
-         <eip:target>
-           <eip:exchange-target service="caxchange:aggregateResponsePipeline"  />
-        </eip:target>
-  </eip:caxchangeAggregator>
-  
-  
+       <eip:exchange-target service="caxchange:rollbackMessageFilter" />
+      </eip:target>      
+  </eip:pipeline> 
  
+ <eip:message-filter service="caxchange:rollbackMessageFilter" endpoint="caxchange:rollbackMessageFilterEndpoint">
+   <eip:target>
+     <eip:exchange-target service="caxchange:rollbackMessageFilter" />
+   </eip:target>
+   <eip:filter>
+     <eip:xpath-predicate xpath="count(/caxchange:world) = 1" namespaceContext="#nsContext"/>
+   </eip:filter>
+</eip:message-filter>
   
   <!--  EIP send response for unhandled message type -->
   
