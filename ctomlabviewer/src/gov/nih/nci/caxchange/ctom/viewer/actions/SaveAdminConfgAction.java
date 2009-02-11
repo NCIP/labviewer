@@ -158,7 +158,8 @@ public class SaveAdminConfgAction extends Action
 		UserInfoHelper.setUserInfo(username, session.getId());
 
 		try
-		{
+		{	
+			//save the user set properties for the urls to a properties file
 			saveToPropertiesFile(aForm,session);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
 					DisplayConstants.MESSAGE_ID,
