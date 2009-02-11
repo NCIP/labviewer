@@ -31,10 +31,14 @@ public class CaxchangeConstants {
 
     public static final Set<String> ROLLBACK_STATUSES = new HashSet<String>();
 	public static final QName ROLLBACK_PIPELINE = new QName("http://nci.nih.gov/caXchange","rollbackPipeline");
+	public static final QName SERVICE_TYPE_ROUTER = new QName("http://nci.nih.gov/caXchange","serviceTypeRouter");
+	public static final QName SYNCHRONOUS_REQUEST_SERVICE = new QName("http://nci.nih.gov/caXchange","synchronousRequestService");
 
 	public static final String REQUEST_METADATA = "requestmetadata";
 	public static final String EXTERNAL_IDENTIFIER = "externalidentifier";
 	public static final String CAXCHANGE_IDENTIFIER = "caxchangeidentifier";
+	public static final String IN_MESSAGE = "in";
+	public static final String OUT_MESSAGE = "out";
 
     static {
         ROLLBACK_STATUSES.add("ERROR");
