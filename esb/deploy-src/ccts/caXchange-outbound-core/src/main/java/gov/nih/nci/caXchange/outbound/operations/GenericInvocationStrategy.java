@@ -8,7 +8,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.ConnectException;
 import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -46,6 +49,7 @@ import gov.nih.nci.cagrid.common.Utils;
  */
 public class GenericInvocationStrategy extends GridInvocationStrategy {
 
+	static protected Map<String,Class> clientClasses = new HashMap<String,Class>(); 
 	protected Properties caxchangeProps;
 	protected String gridClientClassName;
 	protected String requestPayloadClassName;
@@ -77,8 +81,9 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 			logger.debug("The service url is:"+url);
 			Object  client = getNewGridClient(url, cred);
 			Object requestPayload = getRequestPayload(client, message);
+			logger.info("Invoking grid operation:"+new Date());
             Object returnObject = invokeGridOperation(client, requestPayload);
-		   
+            logger.info("After Invoking grid operation:"+new Date());
 			//commented to remove commit
 			//client.commit(request);
             GridInvocationResult result = null;
@@ -115,9 +120,12 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 			logger.error("Grid class name is not configured for GenericInvocationStrategy.");
 			throw new GridInvocationException("Grid class name is not configured for GenericInvocationStrategy.");
 		}
-		Class gridClientClass = null;
+		Class gridClientClass = clientClasses.get(gridClientClassName);
 		try{
-		  gridClientClass = this.getClass().getClassLoader().loadClass(gridClientClassName);
+		  if (gridClientClass == null) {
+		     gridClientClass = this.getClass().getClassLoader().loadClass(gridClientClassName);
+		     clientClasses.put(gridClientClassName, gridClientClass);
+		  }
 		}catch(ClassNotFoundException cnfe) {
 			logger.error("Grid client class not found:"+gridClientClassName);
 			throw new GridInvocationException("Grid client class not found:"+gridClientClassName);

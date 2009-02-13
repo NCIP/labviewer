@@ -19,5 +19,6 @@ VALUES ('STUDY_CREATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
        ('REGISTER_SUBJECT','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
        ('LAB_BASED_AE','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs'),
        ('LOAD_LAB_TO_CDMS','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs'),
+       ('COPPA','http://po.coppa.nci.nih.gov'),
        ('SCHEDULE_MODIFICATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain');
 

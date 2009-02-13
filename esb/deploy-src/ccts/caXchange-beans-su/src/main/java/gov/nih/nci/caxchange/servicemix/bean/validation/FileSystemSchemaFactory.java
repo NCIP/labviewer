@@ -27,6 +27,7 @@ public class FileSystemSchemaFactory implements CaxchangeSchemaFactory {
 		   File schemaFile = null;
 		   if (schema == null) {
 		      String filename = getFileName(namespaceName);
+		      logger.debug("ns:"+namespaceName+" filename:"+filename);
 		      schemaFile = new File(schemaDirectoryLocation+ File.separator +filename);
 		      if (!schemaFile.canRead()){
 		    	 throw new SchemaFactoryException("Cannot read the schema file for namespace:"+namespaceName+" file name:"+filename);	

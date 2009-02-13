@@ -57,7 +57,21 @@
        <includes>
          <include>**/*</include>
        </includes>
-    </fileSet>     
+    </fileSet>  
+    <fileSet>
+       <directory>src/payloadSchemas</directory>
+       <outputDirectory>/payloadSchemas/</outputDirectory>
+       <includes>
+         <include>**/*</include>
+       </includes>       
+    </fileSet>
+    <fileSet>
+       <directory>src/servicemix-components</directory>
+       <outputDirectory>/servicemix-components/</outputDirectory>
+       <includes>
+         <include>**/*</include>
+       </includes>       
+    </fileSet>    
     <fileSet>
        <directory>src/llt-war/</directory>
        <outputDirectory>/war/</outputDirectory>
