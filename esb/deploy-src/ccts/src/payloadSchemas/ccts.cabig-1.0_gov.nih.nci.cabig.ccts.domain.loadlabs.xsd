@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:apis="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" targetNamespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="StudySite" nillable="true" type="apis:StudySite" />
+  <xs:complexType name="StudySite">
+    <xs:annotation>
+      <xs:documentation>A health care site in which clinical trial activities are conducted. 
+
+For example, the site where the subject encounter occurs, or the site of the Investigator.
+
+NOTE: Account for hierarchy in sites and relation to Study ID.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="accrualStatus" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Defines the status of the trial at the site.
+
+For example, open to accrual; closed to accrual; temporarily closed to accrual; pending accrual.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="endDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date specifying the end of the site's participation in a clinical trial.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="irbApprovalDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date the Institutional Review Board (IRB) approved this protocol for execution at this site.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="role" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The role the site is playing in that study. This is a coded list of kinds of participation. For an organization, this could include: Lead organization, participating organization, Primary sponsor, Secondary Sponsor etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="startDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date specifying the start of the site's participation in a clinical trial or study.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="status" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A value specifying whether the state of participation of a site in the given Study is pending, active, complete, or cancelled.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statusEndDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date after which a status is no longer considered active, enforceable, relevant, etc.
+
+For example, effectiveEndDate may refer to the closing of a study to enrollment. Patients enrolled on the study at the time of closure will continue their treatment plan.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statusStartDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date when this particular status becomes active.
+
+For example, in protocol, the effective date may be the date of IRB approval of the initial protocol version; the date the IRB Chair signs off on a protocol and patient enrollment can begin.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="targetAccrualNumber" nillable="true" type="xs:int">
+        <xs:annotation>
+          <xs:documentation>Total number of patients/subjects/participants needed for protocol enrollment at this site</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="StudyProtocol" nillable="true" type="apis:StudyProtocol" />
+      <xs:element name="StudySubject" nillable="true" type="apis:StudySubject" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="HealthCareSite" nillable="true" type="apis:HealthCareSite" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ScheduledActivity" nillable="true" type="apis:ScheduledActivity" />
+  <xs:complexType name="ScheduledActivity">
+    <xs:annotation>
+      <xs:documentation>A business process state of an activity (represented here as a subtype) which describes activities which have been associated with a particular subject and assigned a time or date when that activity is to be performed.
+
+For example, an X-Ray scheduled for February 15 is in state "Scheduled."  If John is unable to have the X-Ray on that date, the X-Ray would either be rescheduled (remain in "Scheduled" state, but "date" attribute would change) or moved to state "Canceled."</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:Activity">
+        <xs:sequence>
+          <xs:element name="scheduledDateTime" nillable="true" type="xs:dateTime">
+            <xs:annotation>
+              <xs:documentation>The date and time that the Activity is scheduled to occur.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="scheduledReason" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Text specifying the motivation, cause, or rationale of a ScheduledActivity. 
+
+For example, for scheduled visits, the protocol will define the name.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Participant" nillable="true" type="apis:Participant" />
+  <xs:complexType name="Participant">
+    <xs:annotation>
+      <xs:documentation>An individual who participates in a clinical trial, either as recipient of the investigational product(s) or as a control.
+
+A human being who may be assigned to a study. The study specifies how the subjects illness will be treated and/or monitored overtime.
+
+For example, a participant can include a patient in an interventional CT, however in QOL trials the people in the trial are not receiving health care, but are participating in the observational study.  Participant is a role not participation, and is similar to the notion of a patient. Potential patients to a clinical trial.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="confidentialityIndicator" nillable="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>A yes/no indicator that determines whether the patient, or the patient's legally acceptable representative, provided written authorization to allow the use and disclosure of their protected health information.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="paymentMethod" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Primary Payer/insurance carrier information at the time of treatment on a protocol. 
+
+For example,  1-Private Insurance, 2-Medicare, 3- Medicare And Private Insurance, 4-Medicaid, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="II" nillable="true" type="apis:II" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HealthCareSite" nillable="true" type="apis:HealthCareSite" />
+  <xs:complexType name="HealthCareSite">
+    <xs:annotation>
+      <xs:documentation>A physical location, typically a clinical research facility or a sponsor's office that provides healthcare services.  
+
+For example, Northwestern Memorial Hospital.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="healthcareSiteIdentifier" nillable="true" type="apis:II">
+        <xs:annotation>
+          <xs:documentation>The unique identifier for the HealthcareSite.
+
+For example, in CTEP, every site that interacts with NCI gets an NCI unique identifier. 
+For example, hospitals get an American Hospital Association (AHA) ID.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="postalAddress" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The location for where the healthcare site can be found or the information used to identify where to send physical items..</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="StudySite" nillable="true" type="apis:StudySite" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="StudySubject" nillable="true" type="apis:StudySubject" />
+  <xs:complexType name="StudySubject">
+    <xs:annotation>
+      <xs:documentation>An actual or potential individual who participates in a clinical trial either as a recipient of the investigational product or as a control.  May also include individuals who are being screened for clinical trials, or individuals participating in observational or other studies.
+
+For example, when designing a clinical trial we would use the StudySubject as a placeholder (indicated by the placeholder code) to describe the act committees in which the potential subject would participate.  Once a subject was identified, that StudySubject would be linked to the actual person in the study.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="informedConsentSignatureText" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The text provided by the patient when acknowledging participation on the protocol usually by signing the informed consent document.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="status" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A value drawn from an enumerated value set which describes the lifecycle of a class in the BRIDG model(e.g., new, active, inactive, nullified, normal, completed, suspended, draft, retired, terminated, pending approval, held, cancelled, aborted)
+
+For example, the status change of a protocol to 'suspended', requiring that patient accrual be halted until the protocol is restored to fully active status. This refers to codes to represent the status of a protocol in relation to the ability to enroll participants/patients. 
+
+For example, in a StudyProtocol, some of the values may be include things like: C-Closed, O-Open, S-Suspended, T-Terminated.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statusEndDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date after which a status is no longer considered active, enforceable, relevant, etc.
+
+For example, effectiveEndDate may refer to the closing of a study to enrollment. Patients enrolled on the study at the time of closure will continue their treatment plan.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statusStartDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The date when this particular status becomes active.
+
+For example, in protocol, the effective date may be the date of IRB approval of the initial protocol version; the date the IRB Chair signs off on a protocol and patient enrollment can begin.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="studySubjectState" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A value specifying whether the state of participation of a person in the given Study is screening, enrolled, terminated, completed, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="studySubjectStateDate" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>A value specifying whether the state of participation of a person in the given Study is screening, enrolled, terminated, completed, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="subgroup" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A unique code for identification of uniform groups of patients for separate analysis or treatment.
+
+For example, in NCI this is the CDUS Reporting.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="PerformedActivity" nillable="true" type="apis:PerformedActivity" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="PerformedStudy" nillable="true" type="apis:PerformedStudy" />
+      <xs:element name="StudySite" nillable="true" type="apis:StudySite" />
+      <xs:element name="ScheduledActivity" nillable="true" type="apis:ScheduledActivity" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="Participant" nillable="true" type="apis:Participant" />
+      <xs:element name="II" nillable="true" type="apis:II" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DocumentationRelationship" nillable="true" type="apis:DocumentationRelationship" />
+  <xs:complexType name="DocumentationRelationship">
+    <xs:annotation>
+      <xs:documentation>Specifies the meaning (or semantics) of the relationship of one piece of documentation to another.
+
+For example, in RPS, relationships of interest include "replaces" or "amends" (among others).  For example, support of versioning could be accomplished by having two different revisions of a document related through a "replaces" relationship.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="documentationRelationshipType" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The kind of association that exists between two pieces of documentation.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PerformedStudy" nillable="true" type="apis:PerformedStudy" />
+  <xs:complexType name="PerformedStudy">
+    <xs:annotation>
+      <xs:documentation>A business process state of a study (represented here as a subtype) that is a collector of performed activities in a study including a description of the actual number of study subjects and the start and end dates of enrollment.
+
+A performed study theoretically occurs after a planned study has been approved for execution.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:StudyProtocol">
+        <xs:sequence>
+          <xs:element name="actualAccrualNumber" nillable="true" type="xs:int">
+            <xs:annotation>
+              <xs:documentation>The actual number of subject who were accrued into the study.  This includes all of the subjects that have been enrolled into the study.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="PerformedActivity" nillable="true" type="apis:PerformedActivity" maxOccurs="unbounded" minOccurs="0" />
+          <xs:element name="PlannedStudy" nillable="true" type="apis:PlannedStudy" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="HealthCareProvider" nillable="true" type="apis:HealthCareProvider" />
+  <xs:complexType name="HealthCareProvider">
+    <xs:annotation>
+      <xs:documentation>One who directly or indirectly administers interventions that are designed to
+improve the physical or emotional status of patients.  A person licensed,
+certified or otherwise authorized or permitted by law to administer health
+care in the ordinary course of business or practice of a profession, including a health care facility.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="certificateLicenseText" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A free text description of the investigator's credentials. 
+
+For example, board certified, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="providerIdentifier" nillable="true" type="apis:II">
+        <xs:annotation>
+          <xs:documentation>The unique identifier for the healthcare provider.
+
+For example, the identifier assigned in the NCI investigator registry (National Cancer Institute Principal Investigator Identifier Number) to a physician approved for conducting a clinical trial.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="StudySite" nillable="true" type="apis:StudySite" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Activity" nillable="true" type="apis:Activity" />
+  <xs:complexType name="Activity" abstract="true">
+    <xs:annotation>
+      <xs:documentation>An abstract class that defines actions that can, in the context of a study, be planned, scheduled or performed.  An activity may be related to other activities in arbitrarily complex ways using instances of ActivityRelationship.
+
+For example, a surgical procedure, a laboratory test, or the administration of the drug would all be considered activities.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="category" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Identifies the kind of activity drawn from a controlled list of possible values. The category groups like activities.
+
+For example, "abdominal surgeries".</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="name" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Names assigned to health care procedures done for diagnostic, surveillance, treatment, palliation, or study-directed purposes.
+Values include: Bone Scan, Colonoscopy, CAT Scan, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="status" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A code specifying the state of the Activity.  A state is a named phase (or potential phase) of an instance of a concept in its lifecycle.  We are assuming that the state machine for the Act class in the HL7 v3 RIM is sufficient to describe the lifecycle of all model activities.
+
+For example, for a lab test, this would be the condition or stage in the lifecycle of the test. For example: ordered, performed, etc.
+
+For example, for the patient study calendar, the status attribute captures the states of a scheduled activity. These states can be scheduled, cancelled, and performed.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="statusEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element name="statusStartDate" nillable="true" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LabResult" nillable="true" type="apis:LabResult" />
+  <xs:complexType name="LabResult">
+    <xs:annotation>
+      <xs:documentation>An observation with a result that can be measured and expressed numerically or textually.  
+
+For example, the lab test "WBC count" would be associated to a LabResult called "WBC result" in which the results of the test (13,00 WBCs) would be stored.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:ObservationResult">
+        <xs:sequence>
+          <xs:element name="asCollectedIndicator" nillable="true" type="xs:boolean">
+            <xs:annotation>
+              <xs:documentation>This is a boolean flag that indicates whether the observation is in the units or values as collected, or if it has been converted into standardized units or values.There is an association between the observation that has the original data (and the original units) and the observation in which the data elements have been converted into a standardized units. 
+
+For example, a performing lab may have completed the observation or lab test using conventional units, but the sponsor may wish to have the test reported in SI units. This flag will be set to TRUE on the lab test that has the original units, and FALSE on the lab test in which the units that are different than the lab test's original units.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="numericPrecision" nillable="true" type="xs:int">
+            <xs:annotation>
+              <xs:documentation>An integer indicating the position of the rightmost significant digit with positive numbers extending to the right of the decimal point and with negative numbers extending to the left of the decimal point.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="numericResult" nillable="true" type="xs:float">
+            <xs:annotation>
+              <xs:documentation>Numeric result of the laboratory analysis expressed as a number.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="numericUnit" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The unit of measure in which the numeric result and reference limits are expressed.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="referenceRangeComment" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>An optional textual description of the characteristics of the reference range.
+
+NOTE: May describe a special reference range for demographics. For example:  "An age-related range has been applied."  May include the specific instrument used to measure the value.
+NOTE: Will map to appropriate field in HL7 V3</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="referenceRangeHigh" nillable="true" type="xs:float">
+            <xs:annotation>
+              <xs:documentation>Reported upper limit of reference range.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="referenceRangeLow" nillable="true" type="xs:float">
+            <xs:annotation>
+              <xs:documentation>Reported lower limit of reference range.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="referenceTextList" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>One or more text values that represent a normal text result. For example, Positive or Negative, or Sensitive, Resistant in a bacterial culture susceptibility test.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="reportedResultStatus" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The status of the reported result. 
+
+For example,  P - Preliminary F - Final C - Corrected</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="textResult" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Character result of a laboratory analysis expressed as text.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="StudySubject" nillable="true" type="apis:StudySubject" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="LabTest" nillable="true" type="apis:LabTest" />
+  <xs:complexType name="LabTest">
+    <xs:annotation>
+      <xs:documentation>One or more analytical procedures that are performed on a biological specimen outside the body that yields medically valuable information.   
+
+NOTE:  The ActivityRelationship allows the model to handle batteries and panels that are composed of component LabTests.  Flow cytometry and gene expression analyses are examples that would make use of this association.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:PerformedActivity">
+        <xs:sequence>
+          <xs:element name="additionalTestDescription" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Additional information about the test that could be useful.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="name" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Name of the Lab Test</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PlannedStudy" nillable="true" type="apis:PlannedStudy" />
+  <xs:complexType name="PlannedStudy">
+    <xs:annotation>
+      <xs:documentation>A business process state of a study (represented here as a subtype) that is a collector of planned activities in a study including a description of the planned number of study subjects and the duration of their participation in the study.
+
+A planned study theoretically occurs before a study starts.
+
+A planned study is usually submitted to an IRB or sponsoring organization for review and approval before the study is executed.
+
+NOTE: For the purpose of Release 1, this is a collector of planned activities. Study and StudyProtocol include additional concepts including ( design, methodology, statistical considerations and organization).</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:StudyProtocol">
+        <xs:sequence>
+          <xs:element name="plannedSubjectInterventionDuration" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Defines the total length of time that a subject is expected to participate in the study during the intervention duration.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="plannedSubjectParticipationDuration" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Defines the total length of time that a subject is expected to participate in the study including the intervention and follow-up duration.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="targetAccrualNumber" nillable="true" type="xs:int">
+            <xs:annotation>
+              <xs:documentation>Total number of patients/subjects/participants needed for protocol enrollment (accrual). 
+
+The number of subjects in a class or group including, the total for the entire trial intended to be enrolled in a trial to reach the planned sample size.  Target accruals are set so that statistical and scientific objectives of a trial will have a likelihood of being met as determined by agreement, algorithm or other specified process. [CDISC glossary]</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Person" nillable="true" type="apis:Person" />
+  <xs:complexType name="Person">
+    <xs:annotation>
+      <xs:documentation>A human being.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="initials" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The first letters of the person's first name, middle name, and last name. If the person does not have a middle initial, the initials will only be two characters.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="name" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A non-unique textual identifier or moniker for the Entity. 
+
+For example, proper names, nicknames, legal names of persons, etc.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Participant" nillable="true" type="apis:Participant" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="HealthCareProvider" nillable="true" type="apis:HealthCareProvider" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="StudyProtocol" nillable="true" type="apis:StudyProtocol" />
+  <xs:complexType name="StudyProtocol">
+    <xs:annotation>
+      <xs:documentation>This class is defined as &lt;&lt;both&gt;&gt; a subtype of Documentation - meaning that the term is used to define, specify, and/or contain any number of the specific documents that describe the objective(s), background, and/or plan (including the design, methodology, statistical considerations, organization, or other supplemental materials that describe the required information of a PlannedStudy &lt;&lt;and&gt;&gt; a collector for the specifications of specific activities, observations, interventions or assessments that are planned in a PlannedStudy  or executed in a PerformedStudy.  This includes all activities planned to test a particular hypothesis that is the basis of the StudyProtocol regarding the therapeutic effectiveness of a particular treatment, drug, device, procedure, or system.  A StudyProtocol can be either Primary or Correlative.  A StudyProtocol is considered to be Primary if it has one or more Correlative studies associated with it.  A Correlative study extends the objectives or observations/conclusions of a Primary study, enrolling the same (or a subset of the same) subjects as were enrolled in the Primary study.
+
+A document that describes the objective(s), background and plan (including design, methodology, statistical considerations and organization) of a Planned Study. The protocol also may refer to supplemental materials that describe required information. [modified ICH]  
+
+NOTE: We are assuming that a document is a container, which may be physical or logical, with the six characteristics listed in the definition of the Document class.  This class is the container for the Plan. 
+
+NOTE: StudyProtocol describes the pre-study, study, and post-study portions of the plan.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:Documentation">
+        <xs:sequence>
+          <xs:element name="Documentation" nillable="true" type="apis:Documentation" maxOccurs="unbounded" />
+          <xs:element name="II" nillable="true" type="apis:II" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ObservationResult" nillable="true" type="apis:ObservationResult" />
+  <xs:complexType name="ObservationResult" abstract="true">
+    <xs:annotation>
+      <xs:documentation>The result of observing, monitoring, measuring or otherwise qualitatively or quantitatively recording one or more aspects of physiologic or psychologic processes. 
+
+For example, in a clinical trial, observations can result from planned activities to address specific questions such as those observations made during a physical examination, laboratory tests, ECG testing, and sets of individual questions listed on questionnaires. 
+
+Not all observations are necessarily planned  for example, some observations may be laboratory tests that are done in response to patient occurrences that are not planned but used to assess patient symptoms. 
+
+An observation may be a symptom that a patient experiences that, in the context of a particular clinical trial, will be assessed as adverse.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="comment" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The additional description of an ObservationResult.
+
+For example, comments from the investigator regarding the condition of the specimen or any other observation.
+
+For example, comments in addition to the specimen condition from the central or performing laboratory describing the specimen.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="confidentiality" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A code for the degree of confidentiality applicable to an ObservationResult.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="reportedDateTime" nillable="true" type="xs:dateTime">
+        <xs:annotation>
+          <xs:documentation>The DateTime that the ObservationResult was reported.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="uncertainty" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A code indicating whether the ObservationResult, with its subordinate components has been asserted to be uncertain in any way. 
+
+For example, a patient might have had a cholecystectomy procedure in the past (but isn't sure).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Documentation" nillable="true" type="apis:Documentation" />
+  <xs:complexType name="Documentation">
+    <xs:annotation>
+      <xs:documentation>A collection of data. A documentation can be either physical or logical. In either case, it has the following characteristics: 1) Stewardship, 2) Potential for authentication, 3) Wholeness, 4) Human readability, 5) Persistence, 6) Global vs local context (the person that signs it is the author of all sections unless otherwise noted).  This class is an abstract concept that contains attributes common to all types of study documents. [HL7 CDA]
+
+For example, in RPS, regulatory processes require the submission of documents from the Applicant to the Regulatory Authority. These documents are varied in focus and are often defined by the field of study (i.e., GLP or GCP guidelines) or by the regulatory application requirements of the region or Regulatory Authority (e.g., Integrated Summary of Safety, Pharmacokinetics Written Summary). 
+
+NOTE: We use the term "documentation" to help people think of the contents of the documents, rather than the physical entity of a "document".</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="documentationType" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A string or code that identifies a general class or category of documents, for example, amendment, background material, guide, etc.
+
+For example, in RPS, this is the code that specifies how the file is to be used within the submission process (e.g. Protocol, Summary Introduction). Note: The codes may vary between different product types (application types). 
+
+For example, a RegulatoryRecord - A document that meets a record requirement of a regulatory authority and must be retained in accordance with that agencies records retention requirements.  Example: Data Clarification Form (DCF)</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="revision" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A string or code which identifies a given collection of content of a documentation at a point in time. 
+
+For example, over time, there may be multiple changes to a documentation, and the revision allows an individual to capture relationships between changes in the instances of a documentation over time. There can be a new revision every time the content changes. 
+
+For example, in RPS this could be operationalized as follows: The version number would be an integer starting at '1' and incrementing by 1. The first instance or original report should always be valued as '1'. The version number value must be incremented by one when a report is replaced, but can also be incremented more often to meet local requirements. 
+
+Different versions of the same document belong to the same documentation group.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="title" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The briefest description of the content of the documentation. 
+
+For example, Descriptive text used to represent the long title or name of a protocol.
+
+For example, the title of a protocol limited to 30 characters in length.
+
+For example, "protocol", "benchmark test" would be examples of titles for documentation.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="DocumentationRelationship" nillable="true" type="apis:DocumentationRelationship" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="II" nillable="true" type="apis:II" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PerformedActivity" nillable="true" type="apis:PerformedActivity" />
+  <xs:complexType name="PerformedActivity">
+    <xs:annotation>
+      <xs:documentation>A business process state of an activity (represented here as a subtype) which describes activities which have been successfully or unsuccessfully completed.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="apis:Activity">
+        <xs:sequence>
+          <xs:element name="performedEndDateTime" nillable="true" type="xs:dateTime">
+            <xs:annotation>
+              <xs:documentation>The point in time when this activity ended.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="performedReason" nillable="true" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>Text specifying the motivation, cause, or rationale of an Activity. 
+
+The datatype for this is string because the notion of  HL7's reasonCode may be moved to ActRelationship.
+
+For example, re-test, unscheduled or termination. For unscheduled, the event that occurred was initiated by a study participant and did not occur for protocol-specified reasons.
+
+For example, reasons that might qualify for being coded in this field might be: "routine requirement", "infectious disease reporting requirement", "on patient request", "required by law".</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="performedStartDateTime" nillable="true" type="xs:dateTime">
+            <xs:annotation>
+              <xs:documentation>The point in time when this activity began.
+
+For example, the datetime when sample was taken from the subject. 
+
+For example, a dose of chemotherapy was given on June 12th starting at 9am and finishing at 12pm.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="ScheduledActivity" nillable="true" type="apis:ScheduledActivity" />
+          <xs:element name="ObservationResult" nillable="true" type="apis:ObservationResult" minOccurs="0" maxOccurs="unbounded" />
+          <xs:element name="scheduledActivity2" nillable="true" type="apis:ScheduledActivity" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="II" nillable="true" type="apis:II" />
+  <xs:complexType name="II">
+    <xs:annotation>
+      <xs:documentation>An identifier that uniquely identifies a thing or object. Examples are object identifier for HL7 RIM objects, medical record number, order id, service catalog item id, Vehicle Identification Number (VIN), etc. 
+
+
+For example: sponsor protocol number, site id, investigator id, subject id, accession id, etc. 
+
+The assigningAuthority attribute is necessary to provide a context on who set that id for the study id, investigator id, etc.
+
+Similar to InstanceIdentifier data type of HL7 v3.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="assigningAuthorityName" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A human readable name or mnemonic for the assigning authority. The Assigning Authority Name has no computational value. The purpose of a Assigning Authority Name is to assist an unaided human interpreter of an II value to interpret the authority. Note: no automated processing must depend on the assigning authority name to be present in any form. [HL7]
+
+For example, the name of the organization who issued the extension.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="displayble" nillable="true" type="xs:boolean">
+        <xs:annotation>
+          <xs:documentation>Specifies if the identifier is intended for human display and data entry (displayable = true) as opposed to pure machine interoperation (displayable = false).</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="extension" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>A character string as a unique identifier within the scope of the identifier root.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="root" nillable="true" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>An unique identifier that guarantees the global uniqueness of the instance identifier. The root alone may be the entire instance identifier.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ErrorMessage" nillable="true" type="apis:WsErrors" />
+  <xs:complexType name="WsErrors">
+    <xs:sequence>
+      <xs:element name="WsError" nillable="true" type="apis:WsError" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="WsError">
+    <xs:sequence>
+      <xs:element name="ErrorCode" nillable="true" type="apis:ErrorCodes" />
+      <xs:element name="ErrorDesc" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="ErrorCodes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ApplicationError" />
+      <xs:enumeration value="StudyPositionNotAvailable" />
+      <xs:enumeration value="InvalidStudyOrPatient" />
+      <xs:enumeration value="UnauthorizedOperation" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="AcknowledgementMessage" nillable="true" type="apis:Acknowledgement" />
+  <xs:complexType name="Acknowledgement">
+    <xs:all>
+      <xs:element name="Status" nillable="true" type="apis:AckStatus" />
+      <xs:element name="Errors" nillable="true" type="apis:WsErrors" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+  <xs:simpleType name="AckStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Processed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LoadLabsRequest" nillable="true" type="apis:LoadLabsRequest" />
+  <xs:complexType name="LoadLabsRequest">
+    <xs:sequence>
+      <xs:element name="LabResult" nillable="true" type="apis:LabResult" maxOccurs="unbounded" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EnrollPatientRequest" nillable="true" type="apis:EnrollPatientRequest" />
+  <xs:complexType name="EnrollPatientRequest">
+    <xs:sequence>
+      <xs:element name="studySubject" nillable="true" type="apis:StudySubject" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EnrollPatientResponse" nillable="true" type="apis:EnrollPatientResponse" />
+  <xs:complexType name="EnrollPatientResponse">
+    <xs:sequence>
+      <xs:element name="studySubject" nillable="true" type="apis:StudySubject" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

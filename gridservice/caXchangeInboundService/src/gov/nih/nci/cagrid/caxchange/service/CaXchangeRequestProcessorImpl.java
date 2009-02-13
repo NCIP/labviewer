@@ -337,6 +337,13 @@ public class CaXchangeRequestProcessorImpl extends
 						.setCaXchangeRequestMessage(requestMessageToESB);
 
 				logger.info("Before sending messge " + new Date().getTime());
+				if (logger.isDebugEnabled()) {
+					   StringWriter sWriter = new StringWriter();
+					   Utils.serializeObject(requestMessageFromClient, new QName(
+						    	"http://caXchange.nci.nih.gov/messaging",
+							    "caXchangeRequestMessage"), sWriter);
+					   logger.debug(sWriter);
+					}				
 				SynchronousRequestServiceStub synchronousRequestServiceStub = new SynchronousRequestServiceStub(
 						caXchangeSynchronousServiceURL);
 				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
@@ -386,7 +393,9 @@ public class CaXchangeRequestProcessorImpl extends
 	private Message buildRequestMessageToESB(
 			gov.nih.nci.caxchange.Message reqMsgFromClient) {
 		logger.debug("In - buildRequestMessageToESB method");
-
+        if (logger.isDebugEnabled()) {
+        	
+        }
 		Message requestMessageToESB = new Message();
 		try {
 			// Create and set the metadata

@@ -514,4 +514,16 @@
       <property   name="targetOperation"   value="loadLabs" />
     </bean>
 
+
+  <bean id="coppaPOStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="http://localhost:8090/wsrf/services/cagrid/CoppaPO" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
+  </bean>
+
+  <bean    id="coppaPOSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaPOStrategy" />
+       </property>
+      <property  name="targetId"      value="COPPA" />
+  </bean>
 </beans>

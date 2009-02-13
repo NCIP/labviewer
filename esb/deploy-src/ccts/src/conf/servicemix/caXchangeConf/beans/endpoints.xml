@@ -80,5 +80,7 @@
   <bean:endpoint service="caxchange:labLoader" endpoint="labLoaderEndpoint" bean="#labLoader" />
   
   <bean:endpoint service="caxchange:caaersLoadLab" endpoint="endpoint" bean="#caAERSLoadLabStrategySU" />
+  
+  <bean:endpoint service="caxchange:coppaPO" endpoint="endpoint" bean="#coppaPOSU" />
 
 </beans>

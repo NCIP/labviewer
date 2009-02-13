@@ -41,7 +41,7 @@ public class CaXchangeDataUtil {
  
     public static final String CAXCHANGE_URI="http://caXchange.nci.nih.gov/messaging";
     static Logger logger=LogManager.getLogger(CaXchangeDataUtil.class);
-      
+
     private NormalizedMessage in;
     private Document document;
     
@@ -308,10 +308,10 @@ public class CaXchangeDataUtil {
         XPathExpression expression = xpath.compile("/aggregateResponse/targetResponse");
         XPathExpression tsiExp = xpath.compile("targetServiceIdentifier");
         XPathExpression tsoExp = xpath.compile("targetServiceOperation");
-        XPathExpression msExp = xpath.compile("targetMessageStatus");
+        XPathExpression msExp =  xpath.compile("targetMessageStatus");
         XPathExpression mpExp = xpath.compile("targetBusinessMessage");
-        XPathExpression teExp = xpath.compile("targetError");
-        XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
+        XPathExpression teExp =  xpath.compile("targetError");
+        XPathExpression schemaDefExp = xpath.compile("/aggregateResponse/targetResponse/targetBusinessMessage/xmlSchemaDefinition");
         NodeList nodes = (NodeList)expression.evaluate(node,XPathConstants.NODESET);
         Statuses.Enum responseStatus = Statuses.SUCCESS;
         for(int i=0;i<nodes.getLength();i++) {
@@ -333,7 +333,7 @@ public class CaXchangeDataUtil {
            Node mpNode =  (Node)mpExp.evaluate(brNode, XPathConstants.NODE);
            if (mpNode != null) {
                MessagePayload payload= brm.addNewTargetBusinessMessage();
-               payload.setXmlSchemaDefinition((String)schemaDefExp.evaluate(mpNode, XPathConstants.STRING));
+               //payload.setXmlSchemaDefinition((String)schemaDefExp.evaluate(mpNode, XPathConstants.STRING));
                Node payloadNode = payload.getDomNode();
                Document doc = payloadNode.getOwnerDocument();
                NodeList mpNodes = mpNode.getChildNodes();
@@ -344,9 +344,8 @@ public class CaXchangeDataUtil {
                       payloadNode.appendChild(importedNode);
                    }
                    if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
-                       payload.setXmlSchemaDefinition(mpcNode.getNodeValue());
+                       payload.setXmlSchemaDefinition(mpcNode.getTextContent());
                     }                   
-                   
                }
            }
            Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
@@ -371,13 +370,13 @@ public class CaXchangeDataUtil {
     
     
     public TargetResponseMessage buildTargetResponse(Node targetResponse, Response response) throws Exception{
-    	XPath xpath = XPathFactory.newInstance().newXPath();
+        XPath xpath = XPathFactory.newInstance().newXPath();
         XPathExpression tsiExp = xpath.compile("/targetResponse/targetServiceIdentifier");
         XPathExpression tsoExp = xpath.compile("/targetResponse/targetServiceOperation");
-        XPathExpression msExp = xpath.compile("/targetResponse/targetMessageStatus");
+        XPathExpression msExp =  xpath.compile("/targetResponse/targetMessageStatus");
         XPathExpression mpExp = xpath.compile("/targetResponse/targetBusinessMessage");
-        XPathExpression teExp = xpath.compile("/targetResponse/targetError");
-        XPathExpression schemaDefExp = xpath.compile("xmlSchemaDefinition");
+        XPathExpression teExp =  xpath.compile("/targetResponse/targetError");
+        XPathExpression schemaDefExp = xpath.compile("/targetResponse/targetBusinessMessage/xmlSchemaDefinition");
         Statuses.Enum responseStatus = Statuses.SUCCESS;
            Node brNode = targetResponse;
            TargetResponseMessage brm = response.addNewTargetResponse();
@@ -409,7 +408,7 @@ public class CaXchangeDataUtil {
                       payload.set(xmlObject);
                    }
                    if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
-                       payload.setXmlSchemaDefinition(mpcNode.getNodeValue());
+                       payload.setXmlSchemaDefinition(mpcNode.getTextContent());
                     }                     
                }
            }

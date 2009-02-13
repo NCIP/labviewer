@@ -145,7 +145,7 @@
 		  <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"
 		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"/>
 		 <copy file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-http-2008.01-installer.zip"
-		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-http-2008.01-installer.zip"/>
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-http-2008.01-installer.zip"/>		 
 	</target>
 	-->
 
@@ -289,6 +289,11 @@
 		 propertyFile="install.properties">
 			<replacefilter token="@GME_CACHE_DIRECTORY@" property="gme_cache_directory"/>
 		</replace>
+		
+		<replace  file="${cax.home}/temp/caxchange.properties" 
+				 propertyFile="install.properties">
+					<replacefilter token="@coppa.po.grid.service.url@" property="coppa.po.grid.service.url"/>
+		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 		 propertyFile="install.properties">
@@ -365,6 +370,13 @@
 		</replace>
 
 		<copy file="${cax.home}/temp/cax-websso-properties.xml" tofile="${cax.home}/gridservice/caXchangeInboundService/test/resources/websso-properties.xml" overwrite="true"/>
+		
+		<copy todir="${gme_cache_directory}">
+		     <fileset dir="${cax.home}/payloadSchemas" />
+		</copy>
+		
+		 <copy file="${cax.home}/servicemix-components/servicemix-shared-2008.01-installer-for-caxchange.zip"
+		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"/>
 
 
 	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/lib/optional">

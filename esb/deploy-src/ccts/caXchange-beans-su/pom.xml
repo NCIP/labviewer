@@ -54,13 +54,13 @@
 							**/StoreOriginalMessageServiceBeanTest.*
 						</exclude>
 						<exclude>**/HandleErrorResponseBeanTest.*</exclude> 
-						<!-- <exclude>**/GenerateResponseBeanTest.*</exclude> -->
+						<exclude>**/GenerateResponseBeanTest.*</exclude> 
 					    <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
 						<exclude>
 							**/InvokeDelegationServiceBeanTest.*
 						</exclude> 
 						 <exclude>**/InvokeDelegationServiceBeanInvalidCredentialsTest.*</exclude>
-						 <exclude>**/CaXchangeDataUtilTest.*</exclude>
+						 <!-- <exclude>**/CaXchangeDataUtilTest.*</exclude> -->
 						<exclude>
 							**/CaxchangeConsumerInvocationTest.*
 						</exclude>
@@ -143,6 +143,42 @@
 			<artifactId>gme-stubs</artifactId>
 			<version>1.2</version>
 		</dependency>
+    <!-- COPPA dependencies -->
+        <dependency>
+              <groupId>gov.nih.nci.coppa.po.grid</groupId> 
+              <artifactId>CoppaPO-client</artifactId> 
+              <version>1.0</version> 
+        </dependency> 
+        <dependency>
+              <groupId>gov.nih.nci.coppa.po.grid</groupId> 
+              <artifactId>CoppaPO-common</artifactId> 
+              <version>1.0</version> 
+        </dependency>  
+        <dependency>
+              <groupId>gov.nih.nci.coppa.po.grid</groupId> 
+              <artifactId>CoppaPO-stubs</artifactId> 
+              <version>1.0</version> 
+        </dependency> 
+        <dependency>
+              <groupId>gov.nih.nci.coppa.po.grid</groupId> 
+              <artifactId>CoppaPO-service</artifactId> 
+              <version>1.0</version> 
+        </dependency> 
+        <dependency>
+              <groupId>gov.nih.nci.coppa.po.grid</groupId> 
+              <artifactId>CoppaPO-tests</artifactId> 
+              <version>1.0</version> 
+        </dependency>		
+		<dependency>
+		  <groupId>javax.xml.bind</groupId>
+		  <artifactId>jaxb-api</artifactId>
+                  <version>2.1</version>
+                </dependency>
+                <dependency>                
+		  <groupId>com.sun.xml.bind</groupId>
+		  <artifactId>jaxb-impl</artifactId>
+		  <version>2.1.7</version>   
+                </dependency>		 
 	</dependencies>
 	<properties>
 		<servicemix-version>3.3</servicemix-version>
