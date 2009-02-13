@@ -4,7 +4,7 @@
         <targetServiceOperation>STUDY_CREATION</targetServiceOperation>
         <targetMessageStatus>RESPONSE</targetMessageStatus>
         <targetBusinessMessage>
-         <xmlSchemaDefinition xmlns="http://caXchange.nci.nih.gov/messaging">gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
+         <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
          <result>success</result>
          </targetBusinessMessage>
         </targetResponse>
@@ -13,8 +13,9 @@
      <targetServiceOperation>STUDY_CREATION</targetServiceOperation> 
      <targetMessageStatus>RESPONSE</targetMessageStatus> 
         <targetBusinessMessage>
-         <xmlSchemaDefinition xmlns="http://caXchange.nci.nih.gov/messaging">gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
+         <xmlSchemaDefinition>gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain</xmlSchemaDefinition>
          <result>success</result>
          </targetBusinessMessage>
               </targetResponse>
+              <targetResponse><targetServiceIdentifier>LabViewer</targetServiceIdentifier><targetServiceOperation/><targetMessageStatus>ERROR</targetMessageStatus><targetError><errorCode>101</errorCode><errorDescription>User /C=US/O=NCI/OU=CBIIT/OU=CCTS/OU=DEV/OU=Dorian IdP/CN=ccts@nih.gov not authorized for this operation</errorDescription></targetError></targetResponse>              
    </aggregateResponse>

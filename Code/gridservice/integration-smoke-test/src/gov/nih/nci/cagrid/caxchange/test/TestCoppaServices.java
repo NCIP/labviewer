@@ -12,6 +12,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.axis.message.MessageElement;
+import org.apache.axis.types.URI;
 import org.w3c.dom.Document;
 
 public class TestCoppaServices extends TestCaXchangeGridService {
@@ -42,6 +43,7 @@ public class TestCoppaServices extends TestCaXchangeGridService {
               message.getMetadata().setOperationName(operationName);
           }
           MessagePayload messagePayload = new MessagePayload();
+          messagePayload.setXmlSchemaDefinition(new URI("http://po.coppa.nci.nih.gov"));
           DocumentBuilder db =dbf.newDocumentBuilder();
           Document payload = db.parse(testMessage);
           MessageElement messageElement = new MessageElement(payload.getDocumentElement());

@@ -85,8 +85,7 @@ public class GridMessageImpl implements GridMessage {
 		if (nodes.getLength() == 1) {
 			return (Element) nodes.item(0);
 		} else {
-			log
-					.warn("Grid message does not contain schema definition element.");
+			log.warn("Grid message does not contain schema definition element.");
 			return null;
 		}
 	}

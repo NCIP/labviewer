@@ -464,9 +464,10 @@ public class GridSU implements MessageExchangeListener {
 
 		Element payloadElement = output.createElement(RESPONSE_PAYLOAD_ELEMENT);
 		Element schemaDefElement = output.createElement(SCHEMA_DEFINITION_ELEMENT);
-		schemaDefElement.setNodeValue(gridMessage.getSchemaDefinition().getNodeValue());
+		schemaDefElement.setTextContent(gridMessage.getSchemaDefinition().getTextContent());
 		//payloadElement.appendChild(output.importNode(gridMessage
 		//		.getSchemaDefinition(), true));
+		payloadElement.appendChild(schemaDefElement);
 		payloadElement.appendChild(output.importNode(result.getResult(), true));
 		root.appendChild(payloadElement);
 		return output;
@@ -489,7 +490,11 @@ public class GridSU implements MessageExchangeListener {
 		Element payloadElement = output.createElement(ERROR_RESPONSE_ELEMENT);
 		Element errorCode = output.createElement(ERROR_CODE_ELEMENT);
 		Element errorDescription = output.createElement(ERROR_DESCRIPTION_ELEMENT);
-		errorCode.setTextContent(findErrorCodeForException(e));
+		String errorCodeText = findErrorCodeForException(e);
+		if ("".equals(errorCodeText)){
+			errorCodeText=CaxchangeErrors.UNKNOWN;
+		}		
+		errorCode.setTextContent(errorCodeText);
 		
 		String errorDesc=e.getMessage();
 		if(e instanceof AxisFault){
@@ -536,6 +541,10 @@ public class GridSU implements MessageExchangeListener {
 			} else if (e instanceof ConnectException) {
 				errorCode=CaxchangeErrors.CONNECT_EXCEPTION;
 			}
+		}
+		
+		if ("".equals(errorCode)){
+			errorCode=CaxchangeErrors.UNKNOWN;
 		}
 			
 		return errorCode;
