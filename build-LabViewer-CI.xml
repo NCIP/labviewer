@@ -19,7 +19,7 @@
 		<target name="compile" description="Compiles all the modules">
 			
 			<echo>Compiling  CTOMDataPersistence </echo>
-			 <ant antfile="${basedir}/CTOMDataPersistence-PG/build.xml" dir="${basedir}/CTOMDataPersistence-PG" target="compile" inheritall="true" />
+			 <ant antfile="${basedir}/CTOMDataPersistence-PG/build.xml" dir="${basedir}/CTOMDataPersistence-PG" target="dist" inheritall="true" />
 		
 			<echo>Compiling  Registration Service </echo>
 			<ant antfile="${basedir}/RegistrationConsumerService-1.2/build.xml" dir="${basedir}/RegistrationConsumerService-1.2" target="compile" inheritall="true"/>
