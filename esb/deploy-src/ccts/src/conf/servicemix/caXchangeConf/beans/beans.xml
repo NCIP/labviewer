@@ -62,7 +62,7 @@
              <ref bean="payloadValidator"/>
          </property>
          <property name="caxchangeSchemaFactory">
-            <ref bean="gmeSchemaFactory" />
+            <ref bean="fileSystemSchemaFactory" />
          </property>
          <property name="eligibleServiceTypes" value="${messageTypes.for.validation}" />                 
  </bean>
