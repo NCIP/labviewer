@@ -15,14 +15,6 @@
             <xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
-
-    <xs:element name="Id" type="ISO:II">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="ISO:II"/>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
     
     <xs:element name="Person">
         <xs:complexType>
