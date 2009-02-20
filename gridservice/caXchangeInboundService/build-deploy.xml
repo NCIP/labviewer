@@ -120,14 +120,28 @@
 		<runtarget target="preDeployTomcat" />
 		<runtarget target="deployWebApp" />
 	</target>
+	
+	
+        <target name="createWarJBoss" depends="setDeploymentProperties" description="Creates a wsrf-caxchange.war file for deployment to tomcat">
+		       <ant antfile="${env.CAGRID_LOCATION}/antfiles/jboss/jboss.xml" inheritAll="false" target="deploySecureJBoss">
+		          <property name="jboss.dir" value="${jboss.dir}"/>
+		          <property name="webapp.name" value="${globus.webapp}"/>
+		       </ant>
+		       <antcall target="deployJBoss" />
+		       <mkdir dir="dist" />
+		       <copy file="deploy-jboss-log4j.properties" tofile="${jboss.dir}/server/default/deploy/${globus.webapp}.war/WEB-INF/classes/log4j.properties" overwrite="true"/>
+		       <war destfile="dist/${globus.webapp}.war" 
+		            webxml="${jboss.dir}/server/default/deploy/${globus.webapp}.war/WEB-INF/web.xml"
+		            basedir="${jboss.dir}/server/default/deploy/${globus.webapp}.war" /> 
+	</target>	
 
 	<!-- deploy service to jboss -->
 	<target name="deployJBoss" depends="all,setDeploymentProperties" description="Deploys to JBOSS_HOME (to set the services properties file set the ant command line variable -Dservice.properties.file)">
 
-		<property name="webapp.deploy.dir" value="${jboss.dir}/server/default/deploy/wsrf.war" />
+		<property name="webapp.deploy.dir" value="${jboss.dir}/server/default/deploy/${globus.webapp}.war" />
 		<property name="webapp.deploy.lib.dir" value="${webapp.deploy.dir}/WEB-INF/lib" />
 		<property name="webapp.deploy.schema.dir" value="${webapp.deploy.dir}/share/schema" />
-        <property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
+               <property name="webapp.deploy.etc.dir" value="${webapp.deploy.dir}/WEB-INF/etc" />
 		
 		<echo message="Deploying service ${service.deployment.path} under JBoss at ${webapp.deploy.dir}" />
 
