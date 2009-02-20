@@ -110,11 +110,13 @@ public class CaXchangeRequestProcessorImpl extends
 			caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(
 					resKey.getValue().toString());
 			String caller = SecurityManager.getManager().getCaller();
-			if ((caller == null) || (caller.equals("<anonymous>"))) {
+			logger.debug("The caller is:'" + caller +"'");
+			if ((caller == null)||("".equals(caller)) || ("<anonymous>".equals(caller.trim()))) {
 				updateErrorResponse(caXchangeRequestMessage, resKey,
 						CaxchangeErrors.PERMISSION_DENIED_FAULT,
 						"Unable to get the identity of the caller.Caller identity:"
 								+ caller);
+				return ctxResourceHome.getResourceReference(resKey);
 			}
 			logger.debug("Sending message for the caller:" + caller);
 			caXchangeRequestMessage.getMetadata().getCredentials()
@@ -308,13 +310,14 @@ public class CaXchangeRequestProcessorImpl extends
 					resKey.getValue().toString());
 
 			String caller = SecurityManager.getManager().getCaller();
-			if ((caller == null) || (caller.equals("<anonymous>"))) {
+			logger.debug("The caller is:'" + caller +"'");
+			if ((caller == null)||("".equals(caller)) || ("<anonymous>".equals(caller.trim()))) {
 				return buildErrorResponse(requestMessageFromClient,
 						CaxchangeErrors.PERMISSION_DENIED_FAULT,
 						"Unable to get the identity of the caller.Caller identity:"
 								+ caller);
 			}
-			logger.debug("Sending message for the caller:" + caller);
+			logger.debug("Sending message for the caller:'" + caller +"'");
 			requestMessageFromClient.getMetadata().getCredentials()
 					.setGridIdentifier(caller);
 
