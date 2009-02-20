@@ -591,7 +591,12 @@
 		<copy file="${cax.home}/temp/caxchange.properties" todir="${tom.home}/conf/caXchange" overwrite="true"/>
 	</target>
 
-	
+	<target name="grid-setup-jboss"   depends="assert,system-init,configure-caxchange-properties,createServiceWarJBoss"  description="sets grid service for the caxchange on JBoss">
+	        <property name="jboss.home" value="${env.JBOSS_HOME}" />
+		<copy file="${cax.home}/war/wsrf-caxchange.war" todir="${jboss.home}/server/default/deploy" overwrite="true" />
+		<mkdir dir="${tom.home}/conf/caXchange" />
+		<copy file="${cax.home}/temp/caxchange.properties" todir="${jboss.home}/caXchange" overwrite="true"/>
+	</target>
 
 	
 
@@ -931,4 +936,24 @@
               </fileset>
           </copy>
     </target>
+
+    <target name="createServiceWarJBoss" description="Creates the inbound service war file for JBoss." >
+         <property name="jboss.home" value="${env.JBOSS_HOME}" />
+         <copy tofile="${cax.home}/gridservice/caXchangeInboundService/deploy.properties" overwrite="true"
+                file="service-deploy.properties" />
+         
+         <delete dir="${temp.dir}/inbound" />
+         <mkdir dir="${temp.dir}/inbound" />
+         <dirname file="${temp.dir}/inbound/" property="jboss.dir" />
+	  <ant antfile="${cax.home}/gridservice/caXchangeInboundService/build.xml" inheritAll="false" target="createWarJBoss">
+	       <property name="jboss.dir" value="${jboss.dir}"/>
+	       <property name="globus.webapp" value="wsrf-caxchange"/>
+	       <property name="build.compiler" value="extJavac"/>
+          </ant>
+          <copy todir="${cax.home}/war">
+              <fileset dir="${cax.home}/gridservice/caXchangeInboundService/dist">
+                   <include name="wsrf-caxchange.war" />
+              </fileset>
+          </copy>
+    </target>    
 </project>
