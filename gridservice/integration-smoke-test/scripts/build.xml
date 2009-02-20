@@ -197,7 +197,7 @@
 				        </target>  
 	
 	
-	       <target name="testNewMessageType" depends="init,replace" description="Sends a new message type message to caXchange">
+	       <target name="testNewServiceType" depends="init,replace" description="Sends a new message type message to caXchange">
 				                <mkdir dir="${integration_smoke_test_home}/${junit.results.dir}" />
 					        <junit dir="${basedir}" printsummary="yes" showoutput="true">
 					        	<sysproperty key="payload.file.name" value="${payload.file.name}" />
