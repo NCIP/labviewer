@@ -23,13 +23,15 @@ public class CaXchangeExternalProperties {
     
     protected List<File> searchDirectories() {
         String catalinaHome = System.getProperty("catalina.home");
-
+        String jbossHome = System.getProperty("jboss.home.dir");
         List<File> dirs = new ArrayList<File>();
         if (catalinaHome != null) {
             dirs.add(new File(catalinaHome, "conf/"+APPLICATION_DIRECTORY_NAME));
-        } else {
-            logger.debug("catalina.home not set -- will not search");
         }
+        if (jbossHome != null) {
+        	dirs.add(new File(jbossHome,"/"+APPLICATION_DIRECTORY_NAME));
+        }
+        logger.info("JBOSS HOME"+jbossHome);
         return dirs;
     }
     
@@ -42,7 +44,8 @@ public class CaXchangeExternalProperties {
             if (possiblePath.exists()) {
                 readProperties(possiblePath);
                 return;
-            }         }
+            } 
+         }
     }
     
     private void readProperties(File path) {
