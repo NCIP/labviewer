@@ -31,7 +31,24 @@
                  defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
                  wsdlResource="classpath:caXchangeSynchronousRequest.wsdl"
                  targetService="caxchange:synchronousAsyncBridge"
-                 soap="true" />
+                 soap="true">                 
+   </http:endpoint>
+   
+   <!-- To make the synchronous service secured (HTTPS), comment the block above and 
+        un-comment this block .  
+   <http:endpoint service="caxchange:SynchronousRequestService"
+                 endpoint="soap"
+                 role="consumer" 
+                 locationURI="https://localhost:8193/synchronousRequest"
+                 defaultMep="http://www.w3.org/2004/08/wsdl/in-out"
+                 wsdlResource="classpath:caXchangeSynchronousRequest.wsdl"
+                 targetService="caxchange:synchronousAsyncBridge"
+                 soap="true">
+	   <http:ssl>
+	   	<http:sslParameters keyStore="classpath:caxchange.keystore" keyStorePassword="changeme"/>
+	   </http:ssl>                 
+   </http:endpoint>
+   -->
                    
         <!-- For quick testing purposes, comment the block above and 
         un-comment this block to send the request to a bean.  
