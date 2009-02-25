@@ -2,8 +2,8 @@
   xmlns:bean="http://servicemix.apache.org/bean/1.0"
   xmlns:eip="http://servicemix.apache.org/eip/1.0"
   xmlns:caxchange="http://nci.nih.gov/caXchange">
-
-  <sm:container id="jbi" embedded="true" createMBeanServer="false">
+  <import resource="classpath:jndi.xml"/>
+  <sm:container id="jbi" embedded="true" createMBeanServer="false" >
     <sm:activationSpecs>
       <sm:activationSpec>
         <sm:component>

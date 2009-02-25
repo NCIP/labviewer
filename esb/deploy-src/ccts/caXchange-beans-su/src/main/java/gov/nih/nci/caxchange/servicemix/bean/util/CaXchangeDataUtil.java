@@ -371,11 +371,11 @@ public class CaXchangeDataUtil {
     
     public TargetResponseMessage buildTargetResponse(Node targetResponse, Response response) throws Exception{
         XPath xpath = XPathFactory.newInstance().newXPath();
-        XPathExpression tsiExp = xpath.compile("/targetResponse/targetServiceIdentifier");
-        XPathExpression tsoExp = xpath.compile("/targetResponse/targetServiceOperation");
-        XPathExpression msExp =  xpath.compile("/targetResponse/targetMessageStatus");
-        XPathExpression mpExp = xpath.compile("/targetResponse/targetBusinessMessage");
-        XPathExpression teExp =  xpath.compile("/targetResponse/targetError");
+        XPathExpression tsiExp = xpath.compile("targetServiceIdentifier");
+        XPathExpression tsoExp = xpath.compile("targetServiceOperation");
+        XPathExpression msExp =  xpath.compile("targetMessageStatus");
+        XPathExpression mpExp = xpath.compile("targetBusinessMessage");
+        XPathExpression teExp =  xpath.compile("targetError");
         XPathExpression schemaDefExp = xpath.compile("/targetResponse/targetBusinessMessage/xmlSchemaDefinition");
         Statuses.Enum responseStatus = Statuses.SUCCESS;
            Node brNode = targetResponse;
@@ -402,14 +402,18 @@ public class CaXchangeDataUtil {
                NodeList mpNodes = mpNode.getChildNodes();
                for(int k=0;k<mpNodes.getLength();k++) {
                    Node mpcNode = mpNodes.item(k);
-                   if (!("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
-                      //Node importedNode= doc.importNode(mpcNode, true);
-                	   XmlObject xmlObject = XmlObject.Factory.parse(mpcNode);
-                      payload.set(xmlObject);
+                   if (mpcNode instanceof Element) {
+                     if (!("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
+                       Node importedNode= doc.importNode(mpcNode, true);
+                	   /* XmlObject xmlObject = XmlObject.Factory.parse(mpcNode);
+                       payload.set(xmlObject);*/
+                       payloadNode.appendChild(importedNode);
+                     }
+                     if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
+                    	 logger.debug("MPC node name:"+mpcNode.getNodeName()+" "+mpcNode.getTextContent());
+                         payload.setXmlSchemaDefinition(mpcNode.getTextContent().trim());
+                      }
                    }
-                   if (("xmlSchemaDefinition".equals(mpcNode.getNodeName()))) {
-                       payload.setXmlSchemaDefinition(mpcNode.getTextContent());
-                    }                     
                }
            }
            Node teNode = (Node)teExp.evaluate(brNode, XPathConstants.NODE);
