@@ -39,7 +39,7 @@ public class TestCoppaServices extends TestCaXchangeGridService {
           operationName = System.getProperty("operation.name");
       	  InputStream testMessage = getResourceInputStream("/payloads/"+payloadFileName);
           message.getMetadata().setServiceType(messageType);
-          if (operationName != null) {
+          if ((operationName != null)&&(!(operationName.equals("${operation.name}")))) {
               message.getMetadata().setOperationName(operationName);
           }
           MessagePayload messagePayload = new MessagePayload();
