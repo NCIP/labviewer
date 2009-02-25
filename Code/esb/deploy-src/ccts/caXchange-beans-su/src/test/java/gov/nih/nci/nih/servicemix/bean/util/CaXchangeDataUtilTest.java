@@ -50,6 +50,29 @@ public class CaXchangeDataUtilTest extends CaxchangeBeanServiceUnitTest {
 	  }
 	}
 	
+	public void testBuildResponseFromTargetResponse() {
+		  try {
+	    	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);
+	    	InputStream fis = getClass().getClassLoader().getResourceAsStream("testmessage.xml");
+	    	InOnly me = client.createInOnlyExchange();
+	    	me.getInMessage().setContent(new StreamSource(fis));
+	    	CaXchangeDataUtil util = (CaXchangeDataUtil)context.getBean("xpathUtil");
+	    	util.setIn(me.getMessage("in"));
+	    	util.initialize();
+	    	InputStream aggregatedResponse = getClass().getClassLoader().getResourceAsStream("targetresponse.xml");
+	    	DocumentBuilderFactory dbf= DocumentBuilderFactory.newInstance();
+	    	DocumentBuilder db = dbf.newDocumentBuilder();
+	    	Document document = db.parse(aggregatedResponse);
+	    	DOMSource ds = new DOMSource(document);
+	    	CaXchangeResponseMessageDocument response = util.generateResponseFromAggregatedResponse(ds);
+	    	assertNotNull(response);
+	    	System.out.println(response.validate());
+	    	System.out.println(response);
+		  }catch(Exception e) {
+			  throw new RuntimeException(e);
+		  }
+		}	
+	
 	public void testGetDelegationEPR() {
 		  try {
 	    	DefaultServiceMixClient client = new DefaultServiceMixClient(jbi);

@@ -54,13 +54,13 @@
 							**/StoreOriginalMessageServiceBeanTest.*
 						</exclude>
 						<exclude>**/HandleErrorResponseBeanTest.*</exclude> 
-						<exclude>**/GenerateResponseBeanTest.*</exclude> 
+						<!-- <exclude>**/GenerateResponseBeanTest.*</exclude> --> 
 					    <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
 						<exclude>
 							**/InvokeDelegationServiceBeanTest.*
 						</exclude> 
 						 <exclude>**/InvokeDelegationServiceBeanInvalidCredentialsTest.*</exclude>
-						 <!-- <exclude>**/CaXchangeDataUtilTest.*</exclude> -->
+						  <exclude>**/CaXchangeDataUtilTest.*</exclude> 
 						<exclude>
 							**/CaxchangeConsumerInvocationTest.*
 						</exclude>

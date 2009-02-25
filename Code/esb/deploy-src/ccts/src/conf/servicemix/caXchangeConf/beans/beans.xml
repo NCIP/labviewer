@@ -527,6 +527,6 @@
       <property name="strategy">
         <ref bean="coppaPOStrategy" />
        </property>
-      <property  name="targetId"      value="COPPA" />
+      <property  name="targetId"      value="COPPA_PO" />
   </bean>
 </beans>
