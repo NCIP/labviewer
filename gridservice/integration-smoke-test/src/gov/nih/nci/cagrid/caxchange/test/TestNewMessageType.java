@@ -38,7 +38,7 @@ public class TestNewMessageType extends TestCaXchangeGridService {
           operationName = System.getProperty("operation.name");
       	  InputStream testMessage = getResourceInputStream("/payloads/"+payloadFileName);
           message.getMetadata().setServiceType(messageType);
-          if (operationName != null) {
+          if ((operationName != null)&&(!(operationName.equals("${operation.name}")))) {
               message.getMetadata().setOperationName(operationName);
           }
           MessagePayload messagePayload = new MessagePayload();
@@ -46,6 +46,7 @@ public class TestNewMessageType extends TestCaXchangeGridService {
           Document payload = db.parse(testMessage);
           MessageElement messageElement = new MessageElement(payload.getDocumentElement());
           messagePayload.set_any(new MessageElement[]{messageElement});
+          messagePayload.setXmlSchemaDefinition(new org.apache.axis.types.URI("http://new.schema.definition"));          
           message.getRequest().setBusinessMessagePayload(messagePayload);
           ResponseMessage responseMessage = invokeService();
           assertNotNull(responseMessage);
