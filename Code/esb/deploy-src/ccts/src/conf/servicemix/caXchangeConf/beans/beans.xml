@@ -92,6 +92,9 @@
   <bean id="handleErrorResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.HandleErrorResponseBean"/>
   
    <bean id="generateResponseBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.GenerateResponseBean" />
+   
+     <bean id="extractPayloadBean" class="gov.nih.nci.caxchange.servicemix.bean.ExtractPayloadMessagingBean" />
+
 
   <bean id="unhandledMessageType" class="gov.nih.nci.caxchange.servicemix.bean.routing.UnhandledMessageTypeBean" />
   
@@ -516,7 +519,7 @@
 
 
   <bean id="coppaPOStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
-         <property  name="serviceUrl"     value="http://localhost:8090/wsrf/services/cagrid/CoppaPO" />
+         <property  name="serviceUrl"     value="${coppa.po.grid.service.url}" />
          <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
   </bean>
 

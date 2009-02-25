@@ -72,7 +72,7 @@ import org.xml.sax.SAXException;
  */
 public class CaXchangeRequestProcessorImpl extends
 		CaXchangeRequestProcessorImplBase {
-	protected static Pattern emptyNamespacePattern = Pattern.compile("xmlns:.*=\"\"|xmlns=\"\"");
+	protected static Pattern emptyNamespacePattern = Pattern.compile("xmlns:[a-zA-Z0-9].[a-zA-Z0-9]*=\"\"|xmlns=\"\"");
 	protected static String brokerURL = null; // "tcp://localhost:61618";
 	protected static String destinationName = "caxchangeInboundQueue";
 	protected static String replyDestinationName = "caxchangeOutboundQueue";
@@ -352,7 +352,6 @@ public class CaXchangeRequestProcessorImpl extends
 				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
 						.processRequestSynchronously(caXchangeRequestMessageToESB);
 				logger.info("After sending messge " + new Date().getTime());
-
 				ResponseMessage responseMessageToClient = buildResponseMessageToClient(caXchangeResponseMessageFromESB
 						.getCaXchangeResponseMessage());
 				StringWriter stringWriter = new StringWriter();
@@ -549,12 +548,14 @@ public class CaXchangeRequestProcessorImpl extends
 					   DocumentBuilderFactory dbf = DocumentBuilderFactory
 								.newInstance();
 					   dbf.setNamespaceAware(true);
+					   dbf.setValidating(false);
 					   DocumentBuilder db = dbf.newDocumentBuilder();
 					       logger.debug(documentElement.getNamespace().getNamespaceURI()+":"+documentElement.getNamespace().getPrefix());
+					       logger.debug("Document as string:"+documentElement.toString());
                            String documentElementAsString = replaceEmptyNamespaces(documentElement.toString());
+					       logger.debug("Document as string:"+documentElementAsString);
                            Document payload = db.parse(new ByteArrayInputStream(
 							documentElementAsString.getBytes()));
-					       logger.debug("Document as string:"+documentElementAsString);
 					       MessageElement messageElement = new MessageElement(payload
 							.getDocumentElement());
 

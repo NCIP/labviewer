@@ -43,6 +43,8 @@
   
   <bean:endpoint service="caxchange:unhandledMessageType" endpoint="unhandledMessageTypeEndpoint" bean="#unhandledMessageType" />
   
+  <bean:endpoint service="caxchange:extractPayloadService" endpoint="extractPayloadEndPoint" bean="#extractPayloadBean" />
+  
   <bean:endpoint service="caxchange:aggregatorListener" endpoint="aggregatorListenerEndpoint" bean="#aggregatorListener" />
   
   <bean:endpoint service="caxchange:ctomRegistration" endpoint="ctomRegistrationEndpoint" bean="#ctomRegistration" />
