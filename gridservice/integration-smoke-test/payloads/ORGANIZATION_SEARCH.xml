@@ -1,0 +1,11 @@
+<ns1:Organization xmlns:ns1="http://po.coppa.nci.nih.gov">
+  <ns1:identifier nullFlavor="NI"  xmlns:ns1="http://po.coppa.nci.nih.gov"/>
+  <ns1:name xmlns:ns1="http://po.coppa.nci.nih.gov">
+    <ns2:part qualifier="" value="YY" xmlns:ns2="uri:iso.org:21090"/>
+  </ns1:name>
+  <ns1:postalAddress xmlns:ns1="http://po.coppa.nci.nih.gov">
+    <ns12:part code="USA" type="CNT" value="adxp.value is required" xmlns:ns12="uri:iso.org:21090"/>
+  </ns1:postalAddress>
+  <ns1:statusCode xmlns:ns1="http://po.coppa.nci.nih.gov" />
+  <ns1:telecomAddress xmlns:ns1="http://po.coppa.nci.nih.gov" />
+</ns1:Organization>
