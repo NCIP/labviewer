@@ -37,6 +37,7 @@
     <module>caXchange-auditor-jar</module>
     <module>caxchange-metadata-service</module>
     <module>caXchange-sync-receiver-bc</module>
+    <module>caXchange-security-jar</module>
   </modules>
   <!-- Add ServiceMix repository -->
 <pluginRepositories>

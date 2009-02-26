@@ -37,7 +37,7 @@
     <dependency>
       <groupId>gov.nih.nci.caxchange</groupId>
       <artifactId>caXchange-servicemix-eip-se</artifactId>
-      <version>1.5</version>
+      <version>${project.version}</version>
     </dependency>	
   </dependencies>
   
