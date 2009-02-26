@@ -34,7 +34,7 @@
                  soap="true">                 
    </http:endpoint>
    
-   <!-- To make the synchronous service secured (HTTPS), comment the block above and 
+   <!-- To make the synchronous service secured, comment the block above and 
         un-comment this block .  
    <http:endpoint service="caxchange:SynchronousRequestService"
                  endpoint="soap"
@@ -44,9 +44,9 @@
                  wsdlResource="classpath:caXchangeSynchronousRequest.wsdl"
                  targetService="caxchange:synchronousAsyncBridge"
                  soap="true">
-	   <http:ssl>
-	   	<http:sslParameters keyStore="classpath:caxchange.keystore" keyStorePassword="changeme"/>
-	   </http:ssl>                 
+    <http:ssl>
+    	<http:sslParameters keyStore="classpath:caxchange.keystore" keyStorePassword="changeme"/>
+    </http:ssl>                 
    </http:endpoint>
    -->
                    
