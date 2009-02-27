@@ -23,7 +23,7 @@
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
-        <version>3.2.3</version>
+        <version>${servicemix-version}</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
@@ -72,10 +72,10 @@
 	<dependency>
 	  <groupId>org.apache.servicemix</groupId>
 	  <artifactId>servicemix-http</artifactId>
-	  <version>2008.01</version>
+	  <version>${servicemix-version}</version>
 	</dependency>	
   </dependencies>
   <properties>
-    <servicemix-version>3.3</servicemix-version>
+    <servicemix-version>3.2.2</servicemix-version>
   </properties>
 </project>
