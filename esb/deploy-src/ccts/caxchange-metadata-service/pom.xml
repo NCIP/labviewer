@@ -31,14 +31,13 @@
   <name>A Service HTTP Service Engine Service Unit</name>
   <url>http://www.myorganization.org</url>
   <properties>
-    <servicemix-version>3.3</servicemix-version>
+    <servicemix-version>3.2.2</servicemix-version>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-http</artifactId>
-      <!--<version>${servicemix-version}</version>  -->
-	  <version>2008.01</version>     
+      <version>${servicemix-version}</version> 
     </dependency>
   </dependencies>
   <build>
@@ -54,8 +53,7 @@
       <plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
-		<!--<version>${servicemix-version}</version>-->
-		<version>3.2.3</version>
+		<version>${servicemix-version}</version>
         <extensions>true</extensions>
       </plugin>     
     </plugins>
