@@ -84,13 +84,21 @@
 		</eip:targets>				
 	</eip:static-routing-slip>	
 	
-	<eip:static-routing-slip service="caxchange:coppaServiceRoute"	endpoint="caxchange:coppaServiceRouteEndPoint">
+	<eip:static-routing-slip service="caxchange:personServiceRoute"	endpoint="caxchange:personServiceRouteEndPoint">
 		<eip:targets>
 			<eip:exchange-target service="caxchange:payloadValidationService" />
-			<eip:exchange-target service="caxchange:coppaPO" />
+			<eip:exchange-target service="caxchange:coppaPerson" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
 		</eip:targets>				
 	</eip:static-routing-slip>	
+	
+	<eip:static-routing-slip service="caxchange:organizationServiceRoute"	endpoint="caxchange:organizationServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaOrganization" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
+	</eip:static-routing-slip>
 	
        <eip:static-routing-slip service="caxchange:unhandledTypeRoute"	endpoint="caxchange:unhandledTypeRouteEndPoint">
 			<eip:targets>

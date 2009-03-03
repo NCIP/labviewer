@@ -74,12 +74,20 @@
 			</eip:routing-rule>
                         <eip:routing-rule>
                                <eip:predicate>
-                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='COPPA_PO']) = 1" namespaceContext="#nsContext"/>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='PERSON']) = 1" namespaceContext="#nsContext"/>
                                </eip:predicate>
                                <eip:target>
-                                  <eip:exchange-target service="caxchange:coppaServiceRoute" />
+                                  <eip:exchange-target service="caxchange:personServiceRoute" />
                                </eip:target>
-                        </eip:routing-rule> 			
+                        </eip:routing-rule> 
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='ORGANIZATION']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:organizationServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>                        
 			<eip:routing-rule>
 				<eip:predicate>
 					<eip:xpath-predicate
