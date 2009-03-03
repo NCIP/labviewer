@@ -83,6 +83,9 @@
   
   <bean:endpoint service="caxchange:caaersLoadLab" endpoint="endpoint" bean="#caAERSLoadLabStrategySU" />
   
-  <bean:endpoint service="caxchange:coppaPO" endpoint="endpoint" bean="#coppaPOSU" />
+  <bean:endpoint service="caxchange:coppaPerson" endpoint="endpoint" bean="#coppaPersonSU" />
+  
+  <bean:endpoint service="caxchange:coppaOrganization" endpoint="endpoint" bean="#coppaOrganizationSU" />
+
 
 </beans>
