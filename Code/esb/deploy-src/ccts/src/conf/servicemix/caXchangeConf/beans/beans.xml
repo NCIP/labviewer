@@ -518,15 +518,27 @@
     </bean>
 
 
-  <bean id="coppaPOStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+  <bean id="coppaPersonStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
          <property  name="serviceUrl"     value="${coppa.po.grid.service.url}" />
          <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
   </bean>
 
-  <bean    id="coppaPOSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+  <bean    id="coppaPersonSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
       <property name="strategy">
-        <ref bean="coppaPOStrategy" />
+        <ref bean="coppaPersonStrategy" />
        </property>
-      <property  name="targetId"      value="COPPA_PO" />
+      <property  name="targetId"      value="PERSON" />
   </bean>
+  
+  <bean id="coppaOrganizationStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="${coppa.po.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
+  </bean>
+
+  <bean    id="coppaOrganizationSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaOrganizationStrategy" />
+       </property>
+      <property  name="targetId"      value="ORGANIZATION" />
+  </bean>  
 </beans>
