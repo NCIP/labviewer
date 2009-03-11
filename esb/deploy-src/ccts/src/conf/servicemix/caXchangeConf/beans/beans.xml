@@ -519,8 +519,8 @@
 
 
   <bean id="coppaPersonStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
-         <property  name="serviceUrl"     value="${coppa.po.grid.service.url}" />
-         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
+         <property  name="serviceUrl"     value="${coppa.person.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.entities.person.client.PersonClient" />
   </bean>
 
   <bean    id="coppaPersonSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
@@ -531,8 +531,8 @@
   </bean>
   
   <bean id="coppaOrganizationStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
-         <property  name="serviceUrl"     value="${coppa.po.grid.service.url}" />
-         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.po.grid.client.CoppaPOClient" />
+         <property  name="serviceUrl"     value="${coppa.organization.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.entities.organization.client.OrganizationClient" />
   </bean>
 
   <bean    id="coppaOrganizationSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
@@ -541,4 +541,53 @@
        </property>
       <property  name="targetId"      value="ORGANIZATION" />
   </bean>  
+  
+  <bean id="coppaClinicalResearchStaffStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="${coppa.clinilcalResearchStaff.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.clinicalresearchstaff.client.ClinicalResearchStaffClient" />
+  </bean>
+
+  <bean    id="coppaClinicalResearchStaffSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaClinicalResearchStaffStrategy" />
+       </property>
+      <property  name="targetId"      value="CLINICAL_RESEARCH_STAFF" />
+  </bean>    
+  
+  <bean id="coppaHealthCareFacilityStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="${coppa.healthCareFacility.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.healthcarefacility.client.HealthCareFacilityClient" />
+  </bean>
+
+  <bean    id="coppaHealthCareFacilitySU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaHealthCareFacilityStrategy" />
+       </property>
+      <property  name="targetId"      value="HEALTH_CARE_FACILITY" />
+  </bean>   
+  
+  <bean id="coppaHealthCareProviderStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="${coppa.healthCareProvider.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.healthcareprovider.client.HealthCareProviderClient" />
+  </bean>
+
+  <bean    id="coppaHealthCareProviderSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaHealthCareProviderStrategy" />
+       </property>
+      <property  name="targetId"      value="HEALTH_CARE_PROVIDER" />
+  </bean>   
+  
+  <bean id="coppaIdentifiedOrganizationStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+         <property  name="serviceUrl"     value="${coppa.identifiedOrganization.grid.service.url}" />
+         <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.identifiedorganization.client.IdentifiedOrganizationClient" />
+  </bean>
+
+  <bean    id="coppaIdentifiedOrganizationSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+      <property name="strategy">
+        <ref bean="coppaIdentifiedOrganizationStrategy" />
+       </property>
+      <property  name="targetId"      value="IDENTIFIED_ORGANIZATION" />
+  </bean>   
+  
 </beans>

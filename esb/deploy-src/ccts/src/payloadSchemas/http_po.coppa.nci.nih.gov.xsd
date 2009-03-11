@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ISO="uri:iso.org:21090" xmlns:COPPA-PO="http://po.coppa.nci.nih.gov" 
     targetNamespace="http://po.coppa.nci.nih.gov" elementFormDefault="qualified">
-    <xs:import schemaLocation="uri.iso.org.21090.xsd" namespace="uri:iso.org:21090"/>
+    <xs:import schemaLocation="ISO_datatypes_Narrative.xsd" namespace="uri:iso.org:21090"/>
 	
     <xs:element name="StringMap" type="COPPA-PO:StringMap"/>
     <xs:complexType name="StringMap">
@@ -20,6 +20,14 @@
         <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="ISO:II"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="Cd">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="ISO:CD"/>
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
@@ -68,6 +76,112 @@
                 <xs:element name="postalAddress" type="ISO:DSET_AD"/>
                 <xs:element name="telecomAddress" type="ISO:DSET_TEL"/>
                 <xs:element name="status" type="ISO:CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="HealthCareFacility">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A HealthCareFacilityDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="status" type="ISO:CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="HealthCareProvider">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A HealthCareProviderDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="scoperIdentifier" type="ISO:II"/>
+                <xs:element name="postalAddress" type="ISO:DSET_AD"/>                
+                <xs:element name="telecomAddress" type="ISO:DSET_TEL"/>
+                <xs:element name="status" type="ISO:CD"/>
+                <xs:element name="certificateLicenseText" type="ISO:ST"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="IdentifiedOrganization">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A IdentifiedOrganizationDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="scoperIdentifier" type="ISO:II"/>
+                <xs:element name="assignedId" type="ISO:II"/>
+                <xs:element name="status" type="ISO:CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="IdentifiedPerson">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A IdentifiedOrganizationDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="scoperIdentifier" type="ISO:II"/>
+                <xs:element name="assignedId" type="ISO:II"/>
+                <xs:element name="status" type="ISO:CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="OrganizationalContact">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A OrganizationalContactDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="scoperIdentifier" type="ISO:II"/>
+                <xs:element name="postalAddress" type="ISO:DSET_AD"/>                
+                <xs:element name="telecomAddress" type="ISO:DSET_TEL"/>
+                <xs:element name="status" type="ISO:CD"/>
+                <xs:element name="typeCode" type="ISO:DSET_CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="OversightCommittee">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A OversightCommitteeDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="status" type="ISO:CD"/>
+                <xs:element name="typeCode" type="ISO:CD"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ResearchOrganization">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>A ResearchOrganizationDTO ... </xs:documentation>
+            </xs:annotation>
+            <xs:sequence>
+                <xs:element name="identifier" type="ISO:II"/>
+                <xs:element name="playerIdentifier" type="ISO:II"/>
+                <xs:element name="status" type="ISO:CD"/>
+                <xs:element name="typeCode" type="ISO:CD"/>
+                <xs:element name="fundingMechanism" type="ISO:CD"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

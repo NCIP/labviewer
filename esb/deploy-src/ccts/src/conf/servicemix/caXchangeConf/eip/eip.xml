@@ -100,6 +100,38 @@
 		</eip:targets>				
 	</eip:static-routing-slip>
 	
+	<eip:static-routing-slip service="caxchange:clinicalResearchStaffServiceRoute"	endpoint="caxchange:oclinicalResearchStaffServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaClinicalResearchStaff" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:healthCareFacilityServiceRoute"	endpoint="caxchange:healthCareFacilityServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaHealthCareFacility" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:healthCareProviderServiceRoute"	endpoint="caxchange:healthCareProviderServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaHealthCareProvider" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
+	</eip:static-routing-slip>	
+	
+	<eip:static-routing-slip service="caxchange:identifiedOrganizationServiceRoute"	endpoint="caxchange:identifiedOrganizationServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaIdentifiedOrganization" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
+	</eip:static-routing-slip>	
+	
        <eip:static-routing-slip service="caxchange:unhandledTypeRoute"	endpoint="caxchange:unhandledTypeRouteEndPoint">
 			<eip:targets>
 				<eip:exchange-target service="caxchange:unhandledMessageType" />
