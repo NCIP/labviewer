@@ -22,5 +22,8 @@ VALUES ('STUDY_CREATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
        ('PERSON','http://po.coppa.nci.nih.gov'),
        ('ORGANIZATION','http://po.coppa.nci.nih.gov'),
        ('IDENTIFIED_ORGANIZATION','http://po.coppa.nci.nih.gov'),
+       ('CLINICAL_RESEARCH_STAFF','http://po.coppa.nci.nih.gov'),
+       ('HEALTH_CARE_FACILITY','http://po.coppa.nci.nih.gov'),
+       ('HEALTH_CARE_PROVIDER','http://po.coppa.nci.nih.gov'),
        ('SCHEDULE_MODIFICATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain');
 
