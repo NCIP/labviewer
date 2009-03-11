@@ -292,7 +292,12 @@
 		
 		<replace  file="${cax.home}/temp/caxchange.properties" 
 				 propertyFile="install.properties">
-					<replacefilter token="@coppa.po.grid.service.url@" property="coppa.po.grid.service.url"/>
+			<replacefilter token="@coppa.person.grid.service.url@" property="coppa.person.grid.service.url"/>
+			<replacefilter token="@coppa.organization.grid.service.url@" property="coppa.organization.grid.service.url"/>
+			<replacefilter token="@coppa.clinilcalResearchStaff.grid.service.url@" property="coppa.clinilcalResearchStaff.grid.service.url"/>
+			<replacefilter token="@coppa.identifiedOrganization.grid.service.url@" property="coppa.identifiedOrganization.grid.service.url"/>
+			<replacefilter token="@coppa.healthCareProvider.grid.service.url@" property="coppa.healthCareProvider.grid.service.url"/>
+			<replacefilter token="@coppa.healthCareFacility.grid.service.url@" property="coppa.healthCareFacility.grid.service.url"/>
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 

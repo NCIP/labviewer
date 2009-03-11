@@ -1,0 +1,8 @@
+<ClinicalResearchStaff xmlns="http://po.coppa.nci.nih.gov" xmlns:ISO="uri:iso.org:21090"> 
+<identifier  nullFlavor="NI"/>
+<playerIdentifier  nullFlavor="NI"/>
+<scoperIdentifier  nullFlavor="NI"/>
+<postalAddress/>
+<telecomAddress/>
+<status  code="pending"/>
+</ClinicalResearchStaff>
