@@ -87,7 +87,39 @@
                                <eip:target>
                                   <eip:exchange-target service="caxchange:organizationServiceRoute" />
                                </eip:target>
-                        </eip:routing-rule>                        
+                        </eip:routing-rule>    
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='CLINICAL_RESEARCH_STAFF']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:clinicalResearchStaffServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule> 
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='HEALTH_CARE_FACILITY']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:healthCareFacilityServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>     
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='HEALTH_CARE_PROVIDER']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:healthCareProviderServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>    
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='IDENTIFIED_ORGANIZATION']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:identifiedOrganizationServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>                          
 			<eip:routing-rule>
 				<eip:predicate>
 					<eip:xpath-predicate
