@@ -80,6 +80,8 @@
  */
 package gov.nih.nci.ctom.ctlab.persistence;
 
+import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
+import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.domain.StudyParticipantAssignment;
@@ -88,7 +90,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -971,5 +975,181 @@ public class CTLabDAO extends BaseJDBCDAO
 			ps = SQLHelper.closePreparedStatement(ps);
 		}
 	}
-
+	
+	
+	/**
+	 * Retrieving Investigator information using the CTEPID
+	 * @param con
+	 * @param ctepId
+	 * @return
+	 * @throws SQLException
+	 */
+	public Investigator retrieveInvestigator(Connection con, String ctepId) throws SQLException
+	{
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		Investigator pi = new Investigator();
+		logger.debug("CTEP Identifier or nci_identifier"+ctepId);
+		try
+		{
+			ps =
+					con
+							.prepareStatement("select last_name,first_name,middle_name,telecom_address,street_address,city,state,zip_code,country_code,phone,source,source_extract_date,ctom_insert_date,ctom_update_date from investigator where nci_identifier=?");
+			ps.setString(1, ctepId);
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				pi.setLastName(rs.getString("last_name"));
+				pi.setFirstName(rs.getString("first_name"));
+				pi.setMiddleNAle(rs.getString("middle_name"));
+				pi.setTelecomAddr(rs.getString("telecom_address"));
+				pi.setStreetAddr(rs.getString("street_address"));
+				pi.setCity(rs.getString("city"));
+				pi.setState(rs.getString("state"));
+				pi.setZipCode(rs.getString("zip_code"));
+				pi.setCountryCode(rs.getString("country_code"));
+				pi.setPhone(rs.getString("phone"));
+				pi.setSource(rs.getString("source"));
+				pi.setSrcExtractDt(rs.getDate("source_extract_date"));
+				pi.setCtomInsertDt(rs.getDate("ctom_insert_date"));
+				pi.setCtomUpdateDt(rs.getDate("ctom_update_date"));
+			}
+		
+			return pi;
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving Investigator information uisng the ctepid",se);
+			throw se;
+		}
+		finally
+		{
+			ps = SQLHelper.closePreparedStatement(ps);
+		}
+	}
+	/**
+	 * Retrieving HealthCareSite information using the CTEPID
+	 * @param con
+	 * @param ctepId
+	 * @return
+	 * @throws SQLException
+	 */
+	public HealthCareSite retrieveHealCareSite(Connection con, String ctepId) throws SQLException
+	{
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		HealthCareSite hcs = new HealthCareSite();
+		logger.debug("CTEP Identifier/nci_institute_code"+ctepId);
+		try
+		{
+			ps =
+					con
+							.prepareStatement("select name,telecom_address,street_address,city,state_code,postal_code,country_code,source,source_extract_date,ctom_insert_date,ctom_update_date from healthcare_site where nci_institute_code=?");
+			ps.setString(1, ctepId);
+			rs = ps.executeQuery();
+			if (rs.next())
+			{
+				hcs.setName(rs.getString("name"));
+				hcs.setTelecomAddr(rs.getString("telecom_address"));
+				hcs.setStreetAddr(rs.getString("street_address"));
+				hcs.setCity(rs.getString("city"));
+				hcs.setStateCode(rs.getString("state_code"));
+				hcs.setPostalCode(rs.getString("postal_code"));
+				hcs.setCountryCode(rs.getString("country_code"));
+				hcs.setSource(rs.getString("source"));
+				hcs.setSrcExtractDt(rs.getDate("source_extract_date"));
+				hcs.setCtomInsertDt(rs.getDate("ctom_insert_date"));
+				hcs.setCtomUpdateDt(rs.getDate("ctom_update_date"));
+			}
+		
+			return hcs;
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving HealthCareSite information uisng the ctepid",se);
+			throw se;
+		}
+		finally
+		{
+			ps = SQLHelper.closePreparedStatement(ps);
+		}
+	}
+	
+	/**
+	 * @param con
+	 * @param protocolId
+	 * @return List of CTEP Ids
+	 * @throws SQLException
+	 */
+	public List<String> retrieveCTEPIDForHCS(Connection con, Long protocolId) throws SQLException
+	{
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		List<String> ctepList = null;
+		logger.debug("Protocol ID to retrieve HealthCareSite "+protocolId);
+		try
+		{
+			ps =
+				con
+						.prepareStatement("select nci_institute_code from healthcare_site where id in (select healthcare_site_id from study_site where protocol_id=?)");
+		ps.setLong(1, protocolId);
+		rs = ps.executeQuery();
+		int i=0;
+		ctepList = new ArrayList<String>();
+		while (rs.next())
+		{
+			ctepList.add(i,rs.getString(1));
+			i++;
+		}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving ctepid/nci_institute_code for HCS for the given protocol id",se);
+			throw se;
+		}
+		finally
+		{
+			ps = SQLHelper.closePreparedStatement(ps);
+		}
+		return ctepList;
+	}
+	
+	/**
+	 * @param con
+	 * @param protocolId
+	 * @return List of CTEP Ids
+	 * @throws SQLException
+	 */
+	public List<String> retrieveCTEPIDForPI(Connection con, Long protocolId) throws SQLException
+	{
+		PreparedStatement ps = null;
+		ResultSet rs =null;
+		List<String> ctepList = null;
+		logger.debug("Protocol ID to retrieve PI "+protocolId);
+		try
+		{
+			ps =
+				con
+						.prepareStatement("select nci_identifier from investigator where id in (select investigator_id from study_investigator where protocol_id=?)");
+		ps.setLong(1, protocolId);
+		rs = ps.executeQuery();
+		int i=0;
+		ctepList = new ArrayList<String>();
+		while (rs.next())
+		{
+			ctepList.add(i,rs.getString(1));
+			i++;
+		}
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error retrieving ctepid/nci_identifier for PI for the given protocol id",se);
+			throw se;
+		}
+		finally
+		{
+			ps = SQLHelper.closePreparedStatement(ps);
+		}
+		return ctepList;
+	}
 }
