@@ -13,6 +13,10 @@
 			type="gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm" />
 		<form-bean name="StudySearchForm"
 			type="gov.nih.nci.caxchange.ctom.viewer.forms.StudySearchForm" />
+		<form-bean name="HealthCareSiteForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.HealthCareSiteForm" />
+		<form-bean name="PIForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.PIForm" />		
 		<form-bean name="ParticipantSearchForm"
 			type="gov.nih.nci.caxchange.ctom.viewer.forms.ParticipantSearchForm" />
 		<form-bean name="AdministartionForm"
@@ -272,7 +276,7 @@
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
 		</action>
-
+		
 		<action path="/loadParticipantSearch"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadParticipantSearchAction"
 			name="ParticipantSearchForm" scope="session" validate="false"
@@ -285,6 +289,7 @@
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
 		</action>
+		
 		<action path="/studySearch"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.StudySearchAction"
 			name="StudySearchForm" scope="session" validate="false"
@@ -296,7 +301,41 @@
 				path="Tiles.ParticipantSearch.Detail.Screen" />
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadHealthCareSiteSuccess"
+				path="/loadHealthCareSite.do" />
+			<forward name="LoadPISuccess"
+				path="/loadPI.do" />	
 		</action>
+		
+		<action path="/loadHealthCareSite"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadHealthCareSiteAction"
+			name="HealthCareSiteForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadHealthCareSiteSuccess"
+				path="Tiles.HealthCareSite.Page" />
+		</action>
+		
+		<action path="/loadPI"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadPIAction"
+			name="PIForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadPISuccess" path="Tiles.PI.Page" />	
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+		
 		<action path="/participantSearch"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.ParticipantSearchAction"
 			name="ParticipantSearchForm" scope="session"
@@ -310,6 +349,7 @@
 			<forward name="LoadSearchSuccess"
 				path="/LabActivitiesDBOperation.do" />
 		</action>
+		
 		<action path="/LoadAdmin"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadAdminAction"
 			name="AdministartionForm" scope="session" validate="false"
@@ -325,6 +365,7 @@
 			<forward name="LoadUsersSuccess"
 				path="/UserConfig.do?operation=loadUsers" />
 		</action>
+		
 		<action path="/SaveAdminConfg"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.SaveAdminConfgAction"
 			name="AdministartionForm" scope="session" validate="false"
@@ -341,6 +382,7 @@
 			<forward name="LoadUsersSuccess"
 				path="/UserConfig.do?operation=loadUsers" />
 		</action>
+		
 		<action path="/UserConfig"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.UserConfigAction"
 			name="UserConfigForm" scope="session" validate="false"
@@ -359,6 +401,7 @@
 			<forward name="LoadAddUser" path="Tiles.AddUser.Page" />
 			<forward name="LoadModifyUser" path="Tiles.ModifyUser.Page" />
 		</action>
+		
 		<!-- <action path="/addUsersAction" 
 			type="org.apache.struts.actions.ForwardAction"
 			name="UserConfigForm" scope="request" input="/pages/content/main/AddUserScreen.jsp"
