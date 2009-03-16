@@ -86,16 +86,13 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.StudySearchForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.StudySearchResult;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 import gov.nih.nci.security.exceptions.CSException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -246,6 +243,10 @@ public class StudySearchAction extends DispatchAction
 
 		// gets the session object from HttpRequest
 		HttpSession session = request.getSession();
+		
+		//clear the session attributes with previous participant data
+		CommonUtil util = new CommonUtil();
+		util.clearParticipantSessionData(session);
 
 		// search form
 		StudySearchForm sForm = (StudySearchForm) form;
@@ -259,12 +260,99 @@ public class StudySearchAction extends DispatchAction
 						"Study: " + ssr.getStudyId() + " [" + ssr.getStudyId()
 								+ "]";
 				session.setAttribute("studyId", ssr.getStudyId());
+				session.setAttribute("studyTitle", titleString);
 				session.setAttribute("pageTitle", titleString);
 				ssr.setIndex("");
 				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 						DisplayConstants.PARTICIPANTSEARCH_ID);
 				return (mapping
 						.findForward(ForwardConstants.LOAD_PART_SEARCH_SUCCESS));
+			}
+		}
+
+		return (mapping.findForward(ForwardConstants.LOAD_STUDY_SEARCH_SUCCESS));
+	}
+	/**
+	 * Forwards the control to the Healthcare site details page
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public ActionForward showHealthCareSite(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		ActionErrors errors = new ActionErrors();
+		ActionMessages messages = new ActionMessages();
+
+		// gets the session object from HttpRequest
+		HttpSession session = request.getSession();
+
+		// search form
+		StudySearchForm sForm = (StudySearchForm) form;
+		List<StudySearchResult> studiesList = sForm.getStudiesList();
+		for (StudySearchResult ssr : studiesList)
+		{
+			if (ssr.getIndex().equals("T"))
+			{
+				// change the title to include study information
+				String titleString =
+						"Study: " + ssr.getStudyId() + " [" + ssr.getStudyId()
+								+ "]";
+				session.setAttribute("studyId", ssr.getStudyId());
+				session.setAttribute("ID", ssr.getId());
+				session.setAttribute("pageTitle", titleString);
+				ssr.setIndex("");
+				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
+						DisplayConstants.STUDYSEARCH_ID);
+				return (mapping
+						.findForward(ForwardConstants.LOAD_HEALTHCARESITE_SUCCESS));
+			}
+		}
+
+		return (mapping.findForward(ForwardConstants.LOAD_STUDY_SEARCH_SUCCESS));
+	}
+	/**
+	 * Forwards the control to the PI details page
+	 * 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public ActionForward showPI(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		ActionErrors errors = new ActionErrors();
+		ActionMessages messages = new ActionMessages();
+
+		// gets the session object from HttpRequest
+		HttpSession session = request.getSession();
+
+		// search form
+		StudySearchForm sForm = (StudySearchForm) form;
+		List<StudySearchResult> studiesList = sForm.getStudiesList();
+		for (StudySearchResult ssr : studiesList)
+		{
+			if (ssr.getIndex().equals("T"))
+			{
+				// change the title to include study information
+				String titleString =
+						"Study: " + ssr.getStudyId() + " [" + ssr.getStudyId()
+								+ "]";
+				session.setAttribute("studyId", ssr.getStudyId());
+				session.setAttribute("ID", ssr.getId());
+				session.setAttribute("pageTitle", titleString);
+				ssr.setIndex("");
+				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
+						DisplayConstants.STUDYSEARCH_ID);
+				return (mapping
+						.findForward(ForwardConstants.LOAD_PI_SUCCESS));
 			}
 		}
 
