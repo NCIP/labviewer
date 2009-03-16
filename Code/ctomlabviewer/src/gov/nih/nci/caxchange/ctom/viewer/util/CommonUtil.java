@@ -83,6 +83,8 @@ package gov.nih.nci.caxchange.ctom.viewer.util;
 import gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.coppa.iso.Ii;
+import gov.nih.nci.coppa.iso.NullFlavor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -211,8 +213,69 @@ public class CommonUtil
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
+		session.removeAttribute("pageTitle");
+		session.removeAttribute("studyId");
+		session.removeAttribute("ID");
+		session.removeAttribute("participantId");
+		session.removeAttribute("patientId");
+	}
+	/**
+	 * @param session
+	 */
+	public void clearStudySessionData(HttpSession session)
+	{
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
+		session.removeAttribute("pageTitle");
+		session.removeAttribute("StudyTitle");
+		session.removeAttribute("studyId");
+		session.removeAttribute("ID");
+		session.removeAttribute("participantId");
+		session.removeAttribute("patientId");
 	}
+	/**
+	 * @param session
+	 */
+	public void clearParticipantSessionData(HttpSession session)
+	{
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
+		session.removeAttribute("participantId");
+		session.removeAttribute("participantTitle");
+		session.removeAttribute("patientId");
+	}
+	
+	/**
+	 * @param session
+	 */
+	public void clearLabSessionData(HttpSession session)
+	{
+		
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
+		session.removeAttribute("ALL_SEARCH_RESULT");
+		
+	}
+	/**
+	 * @param id
+	 * @return
+	 */
+	public Ii convertToIdentifiedOrgEntityIi(Long id) {
 
+        Ii ii = new Ii();
+        if (id == null) 
+        {
+            ii.setNullFlavor(NullFlavor.NI);
+        } 
+        else
+        {
+           ii.setExtension(id.toString());
+           //@todo : set others attributes of II;
+        }
+        return ii;
+    }
 }
