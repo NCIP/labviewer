@@ -115,4 +115,14 @@
 		<put name="Content" value="/pages/content/main/ModifyUserScreen.jsp" />
 	</definition>
 	
+	<!--PI Page -->
+	<definition name="Tiles.PI.Page" extends="Base">
+		<put name="Content" value="/pages/content/detailScreen/PIDetails.jsp" />
+	</definition>
+	
+	<!-- HealthCaresite Page -->
+	<definition name="Tiles.HealthCareSite.Page" extends="Base">
+		<put name="Content" value="/pages/content/detailScreen/HealthCareSiteDetails.jsp" />
+	</definition>
+	
 </tiles-definitions>
