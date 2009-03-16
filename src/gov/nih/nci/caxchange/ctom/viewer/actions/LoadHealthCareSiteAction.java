@@ -78,48 +78,35 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG™ SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.caxchange.ctom.viewer.DAO.ParticipantSearchDAO;
+import gov.nih.nci.caxchange.ctom.viewer.DAO.HealthCareSiteDAO;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
+import gov.nih.nci.caxchange.ctom.viewer.forms.HealthCareSiteForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
-import gov.nih.nci.caxchange.ctom.viewer.forms.ParticipantSearchForm;
-import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
-import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
-import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
-import gov.nih.nci.logging.api.user.UserInfoHelper;
-import gov.nih.nci.security.exceptions.CSException;
-
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.actions.DispatchAction;
 
 /**
- * This class performs the participant search action. The search action calls
- * the searchObjects method with the user entered search criteria and queries
- * the database. If the search returns a non null result set; it forwards the
- * user to participant search page and displays the results.
+ * This class loads the HealthCare Site details page after login information is
+ * authenticated. If authentication fails it redirects the user to login page to
+ * enter valid login information.
  * 
  * @author asharma
  */
-public class ParticipantSearchAction extends DispatchAction
+public class LoadHealthCareSiteAction extends Action
 {
-	private static final Logger logDB =
-			Logger.getLogger(ParticipantSearchAction.class);
+
+	private static final Logger logDB = Logger.getLogger(LoadHealthCareSiteAction.class);
 
 	/*
 	 * (non-Javadoc)
@@ -129,151 +116,104 @@ public class ParticipantSearchAction extends DispatchAction
 	 *      javax.servlet.http.HttpServletRequest,
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
-	public ActionForward doParticipantSearch(ActionMapping mapping,
-			ActionForm form, HttpServletRequest request,
-			HttpServletResponse response)
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
 
-		// gets the session object from HttpRequest
 		HttpSession session = request.getSession();
+		HealthCareSiteForm baseDBForm = (HealthCareSiteForm) form;
 
-		// search form
-		ParticipantSearchForm pForm = (ParticipantSearchForm) form;
+		String gridId = null;
+		String gridProxy = null;
 
-		UserInfoHelper.setUserInfo(((LoginForm) session
-				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
-				session.getId());
-		try
+		// gets the login object from the session
+		LoginForm fm = (LoginForm) request.getSession().getAttribute(DisplayConstants.LOGIN_OBJECT);
+		if (fm == null)
 		{
-			SearchResult searchResult = new SearchResult();
-			ParticipantSearchDAO participantDAO = new ParticipantSearchDAO();
+			gridId = (String) request.getParameter("gridId");
+			gridProxy = (String) request.getParameter("gridProxy");
+		}
+		else
+		{
+			gridId = fm.getLoginId();
+			gridProxy = fm.getGridProxy();
+		}
 
-			// search based on the given search criteria
-			searchResult =
-					participantDAO.searchObjects(mapping, pForm, request,
-							errors, messages);
-			pForm.setParticipantsList(searchResult.getSearchResultObjects());
-			// if the search returned nothing/null; display message
-			if (searchResult.getSearchResultObjects() == null
-					|| searchResult.getSearchResultObjects().isEmpty())
+		if (gridId != null && gridId.trim().length() > 0)
+		{
+			// validate the gridId
+			LoginForm loginForm = new LoginForm();
+			if (fm != null)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						DisplayConstants.ERROR_ID,
-						"The search criteria returned zero results"));
-				saveErrors(request, errors);
+				loginForm.setGridProxy(fm.getGridProxy());
+				loginForm.setLoginId(fm.getLoginId());
+
+			}
+			else
+			{
+				loginForm = new LoginForm();
+				loginForm.setLoginId(gridId);
+
+				if (gridProxy != null && gridProxy.length() > 0)
+					loginForm.setGridProxy(gridProxy);
+			}
+			session = request.getSession(true);
+			session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
+			session
+					.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
+							DisplayConstants.STUDYSEARCH_ID);
+		}
+		else
+		{ // if the session is new or the login object is null; redirects the
+			// user to login page
+			if (session.isNew() || (session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null))
+			{
 				if (logDB.isDebugEnabled())
 					logDB
-							.debug(session.getId()
-									+ "|"
-									+ ((LoginForm) session
-											.getAttribute(DisplayConstants.LOGIN_OBJECT))
-											.getLoginId() + "|"
-									+ pForm.getFormName()
-									+ "|search|Failure|No Records found for "
-									+ pForm.getFormName() + " object|"
-									+ form.toString() + "|");
-				return (mapping
-						.findForward(ForwardConstants.LOAD_PART_SEARCH_SUCCESS));
+							.debug("||"
+									+ baseDBForm.getFormName()
+									+ "|loadSearch|Failure|No Session or User Object Forwarding to the Login Page||");
+				return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 			}
-
-			// if search result is not null; forward to searchresults page
-			if (searchResult.getSearchResultMessage() != null
-					&& !(searchResult.getSearchResultMessage().trim()
-							.equalsIgnoreCase("")))
-			{
-				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-						DisplayConstants.MESSAGE_ID, searchResult
-								.getSearchResultMessage()));
-				saveMessages(request, messages);
-			}
-
-			session.setAttribute(DisplayConstants.SEARCH_RESULT_PART,
-					searchResult);
 		}
-		catch (CSException cse)
-		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					DisplayConstants.ERROR_ID, cse.getMessage()));
-			saveErrors(request, errors);
-			if (logDB.isDebugEnabled())
-				logDB.debug(session.getId()
-						+ "|"
-						+ ((LoginForm) session
-								.getAttribute(DisplayConstants.LOGIN_OBJECT))
-								.getLoginId() + "|" + pForm.getFormName()
-						+ "|search|Failure|Error Searching the "
-						+ pForm.getFormName() + " object|" + form.toString()
-						+ "|" + cse.getMessage());
-		}
-		catch (Exception e)
-		{
-			logDB.error(e.getMessage());
-		}
+		// retrieve the Healthcaresite details
+		retrieveHealthCareSiteDetails(request, baseDBForm);
 
-		// if search result is not null; forward to searchresults page
-		session.setAttribute(DisplayConstants.CURRENT_FORM, pForm);
+		// Set the details in the session
+		session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.STUDYSEARCH_ID);
+		session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
+
+		// if the login is valid; loads the search page
 		if (logDB.isDebugEnabled())
 			logDB.debug(session.getId()
 					+ "|"
-					+ ((LoginForm) session
-							.getAttribute(DisplayConstants.LOGIN_OBJECT))
-							.getLoginId() + "|" + pForm.getFormName()
-					+ "|search|Success|Success in searching "
-					+ pForm.getFormName() + " object|" + form.toString() + "|");
+					+ ((LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT))
+							.getLoginId() + "|" + baseDBForm.getFormName()
+					+ "|loadHealthCareSite|Success|Loading the HealthCare Site Page||");
 
-		return (mapping.findForward(ForwardConstants.LOAD_PART_SEARCH_SUCCESS));
+		return (mapping.findForward(ForwardConstants.LOAD_HEALTHCARESITE_SUCCESS));
 	}
 
 	/**
-	 * Forwards the control to the Lab Search page.
-	 * 
-	 * @param mapping
-	 * @param form
-	 * @param request
-	 * @param response
-	 * @return
+	 * @param session
+	 * @param baseDBForm
 	 */
-	public ActionForward loadLabs(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
+	private void retrieveHealthCareSiteDetails(HttpServletRequest request,
+			HealthCareSiteForm baseDBForm) throws Exception
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
 
-		// gets the session object from HttpRequest
-		HttpSession session = request.getSession();
-		
-		//clear the session attributes with previous lab data
-		CommonUtil util = new CommonUtil();
-		util.clearLabSessionData(session);
-
-		// search form
-		ParticipantSearchForm pForm = (ParticipantSearchForm) form;
-		List<ParticipantSearchResult> participantsList =
-				pForm.getParticipantsList();
-		for (ParticipantSearchResult psr : participantsList)
-		{
-			if (psr.getIndex().equals("T"))
-			{
-				
-				String participantTitle = psr.getFirstName()+" " +psr.getLastName() + " [" + psr.getPatientId()+ "]";
-				session.setAttribute("participantTitle",participantTitle);
-				// change the title to include patient information
-				String titleString =
-						session.getAttribute("studyTitle") + " :: "+ participantTitle;
-				session.setAttribute("participantId", psr.getGridId());
-				session.setAttribute("patientId", psr.getPatientId());
-				session.setAttribute("pageTitle", titleString);
-				psr.setIndex("");
-				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
-						DisplayConstants.LABACTIVITES_ID);
-				return (mapping
-						.findForward(ForwardConstants.LOAD_SEARCH_SUCCESS));
-			}
-		}
-
-		return (mapping.findForward(ForwardConstants.LOAD_STUDY_SEARCH_SUCCESS));
-	}
+		// perform a call to the COPPA Service to retrieve the latest
+		// organization information
+		// if the call is successful and returns results - persist them in the
+		// database and display the details to the user
+		// if the call fails - retrieve the details currently stored in the
+		// database and display the details to the user
+		HealthCareSiteDAO hcsDAO = new HealthCareSiteDAO();
+		hcsDAO.retrieveHealthCareSite(request, baseDBForm);
+		/*
+		 * baseDBForm.setName("NCI"); baseDBForm.setEmail("email@nci.nih.gov");
+		 * baseDBForm.setPhone("111-222-3333"); baseDBForm.setAddress("101,
+		 * Renner rd, Richardson");
+		 */}
 
 }
