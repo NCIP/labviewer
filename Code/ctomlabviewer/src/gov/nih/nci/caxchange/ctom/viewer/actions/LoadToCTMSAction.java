@@ -411,7 +411,7 @@ public class LoadToCTMSAction extends Action
 		if (gridCreds != null)
 			logDB.info("The credential : " + gridCreds.getIdentity());
 		metadata.setCredentials(creds);
-		metadata.setMessageType(MessageTypes._LOAD_LAB_TO_CDMS);
+		metadata.setServiceType("LOAD_LAB_TO_CDMS");
 		requestMessage.setMetadata(metadata);
 		Request caxchangeRequest = new Request();
 		requestMessage.setRequest(caxchangeRequest);

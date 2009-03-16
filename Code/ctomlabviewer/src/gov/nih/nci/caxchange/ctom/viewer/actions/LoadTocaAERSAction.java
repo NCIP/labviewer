@@ -414,7 +414,7 @@ public class LoadTocaAERSAction extends Action
 		if (gridCreds != null)
 			logDB.info("The credential : " + gridCreds.getIdentity());
 		metadata.setCredentials(creds);
-		metadata.setMessageType(MessageTypes._LAB_BASED_AE);
+		metadata.setServiceType("LAB_BASED_AE");
 		requestMessage.setMetadata(metadata);
 		Request caxchangeRequest = new Request();
 		requestMessage.setRequest(caxchangeRequest);
