@@ -103,6 +103,8 @@ public interface ForwardConstants
 	public static final String LOAD_SEARCH_SUCCESS = "LoadSearchSuccess";
 	public static final String LOAD_STUDY_SEARCH_SUCCESS =
 			"LoadStudySearchSuccess";
+	public static final String LOAD_HEALTHCARESITE_SUCCESS="LoadHealthCareSiteSuccess";
+	public static final String LOAD_PI_SUCCESS="LoadPISuccess";
 	public static final String LOAD_PART_SEARCH_SUCCESS =
 			"LoadPartSearchSuccess";
 	public static final String LOAD_SEARCH_RESULT_SUCCESS =
