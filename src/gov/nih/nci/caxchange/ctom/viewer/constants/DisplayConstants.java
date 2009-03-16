@@ -133,6 +133,8 @@ public class DisplayConstants
 	public static final String NOT_REQUIRED = "NOT_REQUIRED";
 
 	public static final String HOME_ID = "Home";
+	public static final String PI_ID = "PI";
+	public static final String HEALTH_CARE_SITE_ID = "HealthCareSite";
 	public static final String ADMIN_ID = "Admin";
 	public static final String ADMIN_HOME_ID = "AdminHome";
 	public static final String LABACTIVITES_ID = "LabActivities";
