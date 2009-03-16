@@ -12,6 +12,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
 	prefix="nested"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
+<%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 
 <html:form action="participantSearch.do?operation=doParticipantSearch" method="post">									
 <!-- laf box 1st half -->
@@ -100,7 +101,7 @@
  </div>
 <div style="height: 1em; white-space: nowrap;"></div>
 <div>
-  <logic:present name="ParticipantSearchForm" property="participantsList">
+ <logic:present name="<%=DisplayConstants.SEARCH_RESULT_PART%>">
   
    <!-- laf box 1st half -->
   <div class="box">
