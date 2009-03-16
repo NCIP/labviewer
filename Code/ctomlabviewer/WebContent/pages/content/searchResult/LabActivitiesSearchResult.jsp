@@ -166,11 +166,6 @@ function SelectAll()
 		<html:hidden property="nciIdentifier" value="" />
 		<html:hidden property="recordId" value="" />
 		<tr>
-			<td colspan="3">
-				<html:errors />
-			</td>
-		</tr>
-		<tr>
 			<td class="infoMessage" colspan="3">
 				<html:messages id="message" message="true">
 				<bean:write name="message"/>
