@@ -119,6 +119,11 @@
                         <version>${project.version}</version>
             </dependency>
             <dependency>
+                        <groupId>gov.nih.nci.caxchange</groupId>
+                        <artifactId>caXchange-saxon-xslt-su</artifactId>
+                        <version>${project.version}</version>
+            </dependency>            
+            <dependency>
 			    <groupId>gov.nih.nci.caxchange</groupId>
 			    <artifactId>caXchange-sync-receiver-bc</artifactId>
 			    <version>${project.version}</version>

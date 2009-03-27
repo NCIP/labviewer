@@ -147,27 +147,27 @@
         <dependency>
               <groupId>gov.nih.nci.coppa.po.grid</groupId> 
               <artifactId>CoppaPO-client</artifactId> 
-              <version>1.0</version> 
+              <version>1.2RC1</version> 
         </dependency> 
         <dependency>
               <groupId>gov.nih.nci.coppa.po.grid</groupId> 
               <artifactId>CoppaPO-common</artifactId> 
-              <version>1.0</version> 
+              <version>1.2RC1</version> 
         </dependency>  
         <dependency>
               <groupId>gov.nih.nci.coppa.po.grid</groupId> 
               <artifactId>CoppaPO-stubs</artifactId> 
-              <version>1.0</version> 
+              <version>1.2RC1</version> 
         </dependency> 
         <dependency>
               <groupId>gov.nih.nci.coppa.po.grid</groupId> 
               <artifactId>CoppaPO-service</artifactId> 
-              <version>1.0</version> 
+              <version>1.2RC1</version> 
         </dependency> 
         <dependency>
               <groupId>gov.nih.nci.coppa.po.grid</groupId> 
               <artifactId>CoppaPO-tests</artifactId> 
-              <version>1.0</version> 
+              <version>1.2RC1</version> 
         </dependency>		
 		<dependency>
 		  <groupId>javax.xml.bind</groupId>
