@@ -95,7 +95,7 @@ public class StudyTimePoint
 	private String courseStartDtOrg;
 	private Date courseStopDt;
 	private String courseStopDtOrg;
-	private int securityKey;
+	private Long securityKey;
 	private String source;
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
@@ -223,7 +223,7 @@ public class StudyTimePoint
 	/**
 	 * @return the securityKey
 	 */
-	public int getSecurityKey()
+	public Long getSecurityKey()
 	{
 		return securityKey;
 	}
@@ -232,7 +232,7 @@ public class StudyTimePoint
 	 * @param securityKey
 	 *            the securityKey to set
 	 */
-	public void setSecurityKey(int securityKey)
+	public void setSecurityKey(Long securityKey)
 	{
 		this.securityKey = securityKey;
 	}

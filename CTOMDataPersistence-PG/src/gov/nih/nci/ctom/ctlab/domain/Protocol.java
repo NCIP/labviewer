@@ -108,7 +108,7 @@ public class Protocol
 	private String idAssigningAuth;
 	private String docURI;
 	private String sponsorMontior;
-	private int securityKey;
+	private Long securityKey;
 	private String source;
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
@@ -570,7 +570,7 @@ public class Protocol
 	/**
 	 * @return the securityKey
 	 */
-	public int getSecurityKey()
+	public Long getSecurityKey()
 	{
 		return securityKey;
 	}
@@ -579,7 +579,7 @@ public class Protocol
 	 * @param securityKey
 	 *            the securityKey to set
 	 */
-	public void setSecurityKey(int securityKey)
+	public void setSecurityKey(Long securityKey)
 	{
 		this.securityKey = securityKey;
 	}
