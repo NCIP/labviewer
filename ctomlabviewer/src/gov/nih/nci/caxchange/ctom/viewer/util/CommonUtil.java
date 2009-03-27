@@ -202,7 +202,18 @@ public class CommonUtil
 		}
 		return userEmail;
 	}
-
+	/**
+	 * @param session
+	 */
+	public void clearMenuSessionData(HttpSession session)
+	{
+		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
+		session.removeAttribute(DisplayConstants.CURRENT_FORM);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
+		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
+		//session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+	}
+	
 	/**
 	 * @param session
 	 */

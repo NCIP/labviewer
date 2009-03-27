@@ -85,6 +85,7 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.MenuForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -123,11 +124,9 @@ public class MenuSelectionAction extends Action
 			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 
-		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
-		session.removeAttribute(DisplayConstants.CURRENT_FORM);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+		//clear the session attributes 
+		CommonUtil util = new CommonUtil();
+		util.clearMenuSessionData(session);
 
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 				menuSelectionForm.getTableId());
