@@ -95,7 +95,7 @@ public class Observation
 	private ClinicalResult clinicalResult = null;
 	private String uncertainityCode = null;
 	private String subtypeCode = null;
-	private int securityKey;
+	private Long securityKey;
 	private String source;
 	private Date srcExtractDt = null;
 	private Date ctomInsertDt = null;
@@ -138,7 +138,7 @@ public class Observation
 	/**
 	 * @return the securityKey
 	 */
-	public int getSecurityKey()
+	public Long getSecurityKey()
 	{
 		return securityKey;
 	}
@@ -147,7 +147,7 @@ public class Observation
 	 * @param securityKey
 	 *            the securityKey to set
 	 */
-	public void setSecurityKey(int securityKey)
+	public void setSecurityKey(Long securityKey)
 	{
 		this.securityKey = securityKey;
 	}

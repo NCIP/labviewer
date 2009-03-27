@@ -93,7 +93,7 @@ public class ProtocolStatus
 	private Date status_date;
 	private String status_date_orig;
 	private Long protocol_id;
-	private int security_key;
+	private Long security_key;
 	private String source;
 	private Date source_extract_date;
 	private Date ctom_insert_date;
@@ -187,7 +187,7 @@ public class ProtocolStatus
 	/**
 	 * @return the security_key
 	 */
-	public int getSecurity_key()
+	public Long getSecurity_key()
 	{
 		return security_key;
 	}
@@ -196,7 +196,7 @@ public class ProtocolStatus
 	 * @param security_key
 	 *            the security_key to set
 	 */
-	public void setSecurity_key(int security_key)
+	public void setSecurity_key(Long security_key)
 	{
 		this.security_key = security_key;
 	}

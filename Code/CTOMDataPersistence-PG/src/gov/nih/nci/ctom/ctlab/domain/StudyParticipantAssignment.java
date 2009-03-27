@@ -104,7 +104,7 @@ public class StudyParticipantAssignment
 	private String type;
 	private Long participantId;
 	private Long studySiteId;
-	private int securityKey;
+	private Long securityKey;
 	private String source;
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
@@ -411,7 +411,7 @@ public class StudyParticipantAssignment
 	/**
 	 * @return the securityKey
 	 */
-	public int getSecurityKey()
+	public Long getSecurityKey()
 	{
 		return securityKey;
 	}
@@ -420,7 +420,7 @@ public class StudyParticipantAssignment
 	 * @param securityKey
 	 *            the securityKey to set
 	 */
-	public void setSecurityKey(int securityKey)
+	public void setSecurityKey(Long securityKey)
 	{
 		this.securityKey = securityKey;
 	}

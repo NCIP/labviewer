@@ -110,7 +110,7 @@ public class Investigator
 	private String initials;
 	private Long admGndrConceptDescId;
 	private Long raceConceptDescpId;
-	private int securityKey;
+	private Long securityKey;
 	private String source;
 	private Date srcExtractDt;
 	private Date ctomInsertDt;
@@ -544,7 +544,7 @@ public class Investigator
 	/**
 	 * @return the securityKey
 	 */
-	public int getSecurityKey()
+	public Long getSecurityKey()
 	{
 		return securityKey;
 	}
@@ -553,7 +553,7 @@ public class Investigator
 	 * @param securityKey
 	 *            the securityKey to set
 	 */
-	public void setSecurityKey(int securityKey)
+	public void setSecurityKey(Long securityKey)
 	{
 		this.securityKey = securityKey;
 	}
