@@ -83,6 +83,7 @@ public class CaXchangeRequestProcessorImpl extends
 	protected static ConnectionFactory connectionFactory = null;
 	protected static Connection connection = null;
 	public static Map<CaxchangeResponseExceptionListener, Connection> responseListeners = null;
+	protected static Long synchronousServiceClientTimeout = null;
 
 	public CaXchangeRequestProcessorImpl() throws RemoteException {
 		super();
@@ -332,6 +333,15 @@ public class CaXchangeRequestProcessorImpl extends
 					caXchangeSynchronousServiceURL = configuration
 							.getCaXchangeSynchronousServiceURL();
 				}
+				
+				if (synchronousServiceClientTimeout == null){
+					String syncTimeout = properties.getProperty("synchronous.caxchange.service.client.timeout");
+					if (syncTimeout != null) {
+						synchronousServiceClientTimeout = new Long(syncTimeout);
+					}else {
+						synchronousServiceClientTimeout = new Long(300000);
+					}
+				}
 
 				CaXchangeRequestMessage caXchangeRequestMessageToESB = new CaXchangeRequestMessage();
 				Message requestMessageToESB = buildRequestMessageToESB(requestMessageFromClient);
@@ -349,6 +359,7 @@ public class CaXchangeRequestProcessorImpl extends
 					}				
 				SynchronousRequestServiceStub synchronousRequestServiceStub = new SynchronousRequestServiceStub(
 						caXchangeSynchronousServiceURL);
+				synchronousRequestServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(synchronousServiceClientTimeout.longValue());
 				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
 						.processRequestSynchronously(caXchangeRequestMessageToESB);
 				logger.info("After sending messge " + new Date().getTime());
