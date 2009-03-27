@@ -93,7 +93,7 @@ public class LabViewerStatus
 	Date adverseEventSentDate = null;
 	String cdmsIndicator = "false";
 	Date cdmsSentDate = null;
-	int clinicalResultId;
+	Integer clinicalResultId;
 	Date ctomInsertDate = null;
 	Date ctomUpdateDate = null;
 
@@ -185,7 +185,7 @@ public class LabViewerStatus
 	/**
 	 * @return the clinicalResultId
 	 */
-	public int getClinicalResultId()
+	public Integer getClinicalResultId()
 	{
 		return clinicalResultId;
 	}
@@ -194,7 +194,7 @@ public class LabViewerStatus
 	 * @param clinicalResultId
 	 *            the clinicalResultId to set
 	 */
-	public void setClinicalResultId(int clinicalResultId)
+	public void setClinicalResultId(Integer clinicalResultId)
 	{
 		this.clinicalResultId = clinicalResultId;
 	}
