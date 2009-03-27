@@ -119,7 +119,47 @@
                                <eip:target>
                                   <eip:exchange-target service="caxchange:identifiedOrganizationServiceRoute" />
                                </eip:target>
-                        </eip:routing-rule>                          
+                        </eip:routing-rule>        
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='IDENTIFIED_PERSON']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:identifiedPersonServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>            
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='ORGANIZATION_CONTACT']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:organizationContactServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>         
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='RESEARCH_ORGANIZATION']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:researchOrganizationServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>            
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='OVERSIGHT_COMMITTEE']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:oversightCommitteeServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>       
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='ORGANIZATION_BUSINESS_SERVICE']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:organizationBusinessServiceRoute" />
+                               </eip:target>
+                        </eip:routing-rule>                         
 			<eip:routing-rule>
 				<eip:predicate>
 					<eip:xpath-predicate

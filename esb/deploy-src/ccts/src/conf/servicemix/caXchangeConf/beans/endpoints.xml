@@ -94,6 +94,14 @@
   <bean:endpoint service="caxchange:coppaIdentifiedOrganization" endpoint="endpoint" bean="#coppaIdentifiedOrganizationSU" />
 
   <bean:endpoint service="caxchange:coppaHealthCareFacility" endpoint="endpoint" bean="#coppaHealthCareFacilitySU" />
+  
+  <bean:endpoint service="caxchange:coppaIdentifiedPerson" endpoint="endpoint" bean="#coppaIdentifiedPersonSU" />
+
+  <bean:endpoint service="caxchange:coppaOrganizationContact" endpoint="endpoint" bean="#coppaOrganizationContactSU" />
+  
+  <bean:endpoint service="caxchange:coppaResearchOrganization" endpoint="endpoint" bean="#coppaResearchOrganizationSU" />
+  
+  <bean:endpoint service="caxchange:coppaOversightCommittee" endpoint="endpoint" bean="#coppaOversightCommitteeSU" />
 
 
 </beans>
