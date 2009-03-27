@@ -7,8 +7,24 @@
 		<echo>
 	        PROP.FILE = ${PROP.FILE}</echo>
 	<property name="test.dir" value="test" />
-	<property name="report.dir"  value="${test.dir}/junitreport"/>
-	<property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties"/>
+	<property name="report.dir" value="${test.dir}/junitreport" />
+	<property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties" />
+
+	<!-- Cobertura -->
+	<path id="cobertura.classpath">
+		<fileset dir="${otherlib.home}" includes="*" />
+		<fileset dir="${libext.home}" includes="*" />
+		<fileset dir="lib-ext" includes="*" />
+		<pathelement path="otherlib/servlet.jar" />
+		<fileset dir="WebContent/WEB-INF/lib" includes="*" />
+	</path>
+
+	<!-- Cobertura -->
+	<property name="cobertura.dir" value="cobertura" />
+	<property name="cobertura.classes.dir" value="${cobertura.dir}/classes" />
+	<property name="cobertura.instrumented.dir" value="${cobertura.dir}/instrumented" />
+	<taskdef resource="tasks.properties" classpathref="cobertura.classpath" />
+
 	<target name="init">
 		<property name="webinf.home" value="${web.home}/WEB-INF" />
 		<property name="lib.home" value="${webinf.home}/lib" />
@@ -209,7 +225,7 @@
 	    </target>
 
 
-	<target name="all" depends="init,clean,prepare,configure,compile,dist,cleanup" description="Builds and deploys the entire application by cleaning the build and dist directories" />
+	<target name="all" depends="init,clean,prepare,configure,compile,dist" description="Builds and deploys the entire application by cleaning the build and dist directories" />
 
 	<target name="deployTomcat" depends="all">
 		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
@@ -234,4 +250,109 @@
 			<fileset file="${war.file}" />
 		</copy>
 	</target>
+
+
+	<!-- ******************************************************************* -->
+	<!-- ** TEST TARGETS                                                  ** -->
+	<!-- ******************************************************************* -->
+
+	<!-- Compiles the test classes before running them -->
+	<target name="test:compile" depends="all">
+		<delete dir="${test.home}/classes" />
+		<mkdir dir="${test.home}/classes" />
+		<javac srcdir="${test.home}/src" destdir="${test.home}/classes" debug="true" debuglevel="lines,source">
+			<classpath>
+				<pathelement path="build/WEB-INF/classes" />
+				<fileset dir="WebContent/WEB-INF/lib" includes="*" />
+				<fileset dir="${lib.home}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${libext.home}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${otherlib.home}">
+									<include name="*.jar" />
+								</fileset>
+				<pathelement path="dist/ctodslabviewer.war" />
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- Runs the unit tests and generates the coverage report -->
+	<target name="test:run" depends="test:compile, test:instrument">
+
+		<junit printsummary="yes" fork="yes" maxmemory="1024m" haltonfailure="no" haltonerror="no">
+			<formatter type="plain" />
+
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/cobertura.ser" />
+
+			<classpath>
+				<pathelement path="${cobertura.instrumented.dir}" />
+				<pathelement path="${test.home}/classes" />
+				<pathelement path="build/WEB-INF/classes" />
+				<fileset dir="WebContent/WEB-INF/lib" includes="*" />
+				<fileset dir="${lib.home}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${libext.home}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${otherlib.home}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+
+			<test name="gov.nih.nci.caxchange.ctom.viewer.junits.actions.AllTests" />
+
+
+		</junit>
+
+		<cobertura-report format="html" datafile="${cobertura.dir}/cobertura.ser" destdir="${cobertura.dir}" srcdir="${source.dir}" />
+	</target>
+
+	<!-- Start the selenium server in its own thread -->
+	<target name="test:start-server">
+		<!-- this is a 'known location' for this -->
+		<java jar="./selenium/selenium-server.jar" fork="true" spawn="true">
+
+			<arg line="-proxyInjectionMode -port 4671" />
+		</java>
+
+		<waitfor maxwait="30" maxwaitunit="second">
+			<and>
+				<socket server="localhost" port="4671" />
+				<!-- this url will 403, so we say that it should start counting errors at 404 to skip -->
+				<http url="http://localhost:4671/selenium-server/core/index.html" errorsBeginAt="404" />
+			</and>
+		</waitfor>
+	</target>
+
+	<!-- Stop the selenium server -->
+	<target name="test:stop-server">
+		<get taskname="selenium-shutdown" src="http://localhost:4671/selenium-server/driver/?cmd=shutDown" dest="result.txt" ignoreerrors="true" />
+		<echo taskname="selenium-shutdown" message="DGF Errors during shutdown are expected" />
+	</target>
+
+
+	<!-- Instruments the application classes that are tested for coverage checking -->
+	<target name="test:instrument">
+		<delete file="${cobertura.dir}/cobertura.ser" />
+		<delete dir="${cobertura.instrumented.dir}" />
+		<mkdir dir="${cobertura.instrumented.dir}" />
+
+		<!--  Instrument the application classes -->
+		<cobertura-instrument todir="${cobertura.instrumented.dir}" datafile="${cobertura.dir}/cobertura.ser">
+			<!--
+	            The following line causes instrumentation to ignore any
+	            source line containing a reference to log4j, for the
+	            purposes of coverage reporting.
+	            
+	            -->
+			<ignore regex="org.apache.log4j.*" />
+			<fileset dir="build/WEB-INF/classes">
+				<include name="**/*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
 </project>
