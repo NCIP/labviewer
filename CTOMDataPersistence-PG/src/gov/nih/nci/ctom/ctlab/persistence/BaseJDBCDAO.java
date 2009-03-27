@@ -119,6 +119,7 @@ public abstract class BaseJDBCDAO
 		{
 			InputStream stream = getClass().getResourceAsStream(CONFIG_FILE);
 			props.load(stream);
+			stream.close();
 		}
 		catch (FileNotFoundException e1)
 		{
@@ -163,6 +164,7 @@ public abstract class BaseJDBCDAO
 			log.error("Driver loaded, but cannot connect to db: " + fDbName);
 			log.error("Driver loaded, but cannot connect to db: " + e.getLocalizedMessage());
 		}
+		
 		return result;
 	}
 

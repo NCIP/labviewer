@@ -142,9 +142,8 @@ public class SPAIdentifierHandler extends CTLabDAO implements HL7V3MessageHandle
 				{
 					// already present;update the identifier table
 					id = rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID");
-					spa.setId(id);
-					spa.getIdentifier().setId(rs.getLong("ID"));
 					identifierId = rs.getLong("ID");
+										
 				}
 				else
 				{
@@ -167,11 +166,10 @@ public class SPAIdentifierHandler extends CTLabDAO implements HL7V3MessageHandle
 					ps.setString(4, spa.getIdentifier().getRoot());
 					ps.executeUpdate();
 					con.commit();
-
-					spa.setId(id);
-					spa.getIdentifier().setId(identifierId);
-
 				}
+				
+				spa.setId(id);
+				spa.getIdentifier().setId(identifierId);
 
 			}
 		}

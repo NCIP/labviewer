@@ -810,7 +810,7 @@ public class CTLabDAO extends BaseJDBCDAO
 		ResultSet rs = null;
 		Protocol study = null;
 		Long protocolId = null;
-		Long healthCareSiteId = null;
+		//Long healthCareSiteId = null;
 
 		try
 		{
@@ -822,7 +822,7 @@ public class CTLabDAO extends BaseJDBCDAO
 			if (rs.next())
 			{
 				protocolId = rs.getLong(1);
-				healthCareSiteId = rs.getLong(2);
+				//healthCareSiteId = rs.getLong(2);
 
 			}
 			//Clean up
