@@ -38,6 +38,7 @@
     <module>caxchange-metadata-service</module>
     <module>caXchange-sync-receiver-bc</module>
     <module>caXchange-security-jar</module>
+    <module>caXchange-saxon-xslt-su</module>
   </modules>
   <!-- Add ServiceMix repository -->
 <pluginRepositories>

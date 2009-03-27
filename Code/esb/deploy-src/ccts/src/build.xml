@@ -298,6 +298,10 @@
 			<replacefilter token="@coppa.identifiedOrganization.grid.service.url@" property="coppa.identifiedOrganization.grid.service.url"/>
 			<replacefilter token="@coppa.healthCareProvider.grid.service.url@" property="coppa.healthCareProvider.grid.service.url"/>
 			<replacefilter token="@coppa.healthCareFacility.grid.service.url@" property="coppa.healthCareFacility.grid.service.url"/>
+			<replacefilter token="@coppa.identifiedPerson.grid.service.url@" property="coppa.identifiedPerson.grid.service.url" />
+			<replacefilter token="@coppa.oversightcommittee.grid.service.url@" property="coppa.oversightcommittee.grid.service.url" />
+			<replacefilter token="@coppa.organizationContact.grid.service.url@" property="coppa.organizationContact.grid.service.url" />
+			<replacefilter token="@coppa.researchOrganization.grid.service.url@" property="coppa.researchOrganization.grid.service.url" />
 		</replace>
 
 		<replace  file="${cax.home}/temp/caxchange.properties" 

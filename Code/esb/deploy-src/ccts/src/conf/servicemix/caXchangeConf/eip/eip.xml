@@ -130,7 +130,78 @@
 			<eip:exchange-target service="caxchange:coppaIdentifiedOrganization" />
 			<eip:exchange-target service="caxchange:generateResponseService" />
 		</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:identifiedPersonServiceRoute"	endpoint="caxchange:identifiedPersonServiceRouteEndPoint">
+		<eip:targets>
+			<eip:exchange-target service="caxchange:payloadValidationService" />
+			<eip:exchange-target service="caxchange:coppaIdentifiedPerson" />
+			<eip:exchange-target service="caxchange:generateResponseService" />
+		</eip:targets>				
 	</eip:static-routing-slip>	
+		
+	<eip:static-routing-slip service="caxchange:organizationContactServiceRoute"	endpoint="caxchange:organizationContactServiceRouteEndPoint">
+			<eip:targets>
+				<eip:exchange-target service="caxchange:payloadValidationService" />
+				<eip:exchange-target service="caxchange:coppaOrganizationContact" />
+				<eip:exchange-target service="caxchange:generateResponseService" />
+			</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:researchOrganizationServiceRoute"	endpoint="caxchange:researchOrganizationServiceRouteEndPoint">
+				<eip:targets>
+					<eip:exchange-target service="caxchange:payloadValidationService" />
+					<eip:exchange-target service="caxchange:coppaResearchOrganization" />
+					<eip:exchange-target service="caxchange:generateResponseService" />
+				</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:static-routing-slip service="caxchange:oversightCommitteeServiceRoute"	endpoint="caxchange:oversightCommitteeServiceRouteEndPoint">
+				<eip:targets>
+					<eip:exchange-target service="caxchange:payloadValidationService" />
+					<eip:exchange-target service="caxchange:coppaOversightCommittee" />
+					<eip:exchange-target service="caxchange:generateResponseService" />
+				</eip:targets>				
+	</eip:static-routing-slip>	
+	
+	<eip:static-routing-slip service="caxchange:organizationBusinessServiceRoute"	endpoint="caxchange:organizationBusinessServiceRouteEndPoint">
+					<eip:targets>
+						<eip:exchange-target service="caxchange:payloadValidationService" />
+						<eip:exchange-target service="caxchange:IdentifiedOrganizationSearchCriteriaXslt" />
+						<eip:exchange-target service="caxchange:coppaIdentifiedOrganization" />
+						<eip:exchange-target service="caxchange:OrganizationIdCriteriaXslt" />
+						<eip:exchange-target service="caxchange:identifiedOrganizationRouter" />
+					</eip:targets>				
+	</eip:static-routing-slip>
+	
+	<eip:content-based-router service="caxchange:identifiedOrganizationRouter"
+			endpoint="caxchange:identifiedOrganizationRouterEndpoint">
+			<eip:rules>
+				<eip:routing-rule>
+					<eip:predicate>
+						<eip:xpath-predicate
+							xpath="count(/targetResponse[targetMessageStatus='ERROR']) = 1"
+							namespaceContext="#nsContext" />
+					</eip:predicate>
+					<eip:target>
+						<eip:exchange-target service="caxchange:generateResponseService" />
+					</eip:target>
+				</eip:routing-rule>		
+				<eip:routing-rule>
+					<eip:target>
+						<eip:exchange-target service="caxchange:organizationBusinessServiceGetOrgRoute" />
+					</eip:target>
+				</eip:routing-rule>
+			</eip:rules>
+	</eip:content-based-router>
+	
+	
+	<eip:static-routing-slip service="caxchange:organizationBusinessServiceGetOrgRoute"	endpoint="caxchange:organizationBusinessServiceGetOrgRouteEndPoint">
+						<eip:targets>
+							<eip:exchange-target service="caxchange:coppaOrganization" />
+							<eip:exchange-target service="caxchange:generateResponseService" />
+						</eip:targets>				
+	</eip:static-routing-slip>
 	
        <eip:static-routing-slip service="caxchange:unhandledTypeRoute"	endpoint="caxchange:unhandledTypeRouteEndPoint">
 			<eip:targets>

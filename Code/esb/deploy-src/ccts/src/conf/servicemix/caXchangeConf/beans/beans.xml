@@ -590,4 +590,54 @@
       <property  name="targetId"      value="IDENTIFIED_ORGANIZATION" />
   </bean>   
   
+  
+    <bean id="coppaIdentifiedPersonStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+           <property  name="serviceUrl"     value="${coppa.identifiedPerson.grid.service.url}" />
+           <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.identifiedperson.client.IdentifiedPersonClient" />
+    </bean>
+  
+    <bean    id="coppaIdentifiedPersonSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+        <property name="strategy">
+          <ref bean="coppaIdentifiedPersonStrategy" />
+         </property>
+        <property  name="targetId"      value="IDENTIFIED_PERSON" />
+  </bean>
+  
+      <bean id="coppaOrganizationContactStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+             <property  name="serviceUrl"     value="${coppa.organizationContact.grid.service.url}" />
+             <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.organizationalcontact.client.OrganizationalContactClient" />
+      </bean>
+    
+     <bean    id="coppaOrganizationContactSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+          <property name="strategy">
+            <ref bean="coppaOrganizationContactStrategy" />
+           </property>
+          <property  name="targetId"      value="ORGANIZATION_CONTACT" />
+  </bean>
+  
+  
+	<bean id="coppaResearchOrganizationStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+	       <property  name="serviceUrl"     value="${coppa.researchOrganization.grid.service.url}" />
+	       <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.researchorganization.client.ResearchOrganizationClient" />
+	</bean>
+
+	<bean    id="coppaResearchOrganizationSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+	    <property name="strategy">
+	      <ref bean="coppaResearchOrganizationStrategy" />
+	     </property>
+	    <property  name="targetId"      value="RESEARCH_ORGANIZATION" />
+	</bean>
+	
+	<bean id="coppaOversightCommitteeStrategy" class="gov.nih.nci.caXchange.outbound.operations.CoppaInvocationStrategy" init-method="init">
+	       <property  name="serviceUrl"     value="${coppa.oversightcommittee.grid.service.url}" />
+	       <property  name="gridClientClassName"  value="gov.nih.nci.coppa.services.structuralroles.oversightcommittee.client.OversightCommitteeClient" />
+	</bean>
+
+	<bean    id="coppaOversightCommitteeSU"    class="gov.nih.nci.caXchange.outbound.GridSU">
+	    <property name="strategy">
+	      <ref bean="coppaOversightCommitteeStrategy" />
+	     </property>
+	    <property  name="targetId"      value="OVERSIGHT_COMMITTEE" />
+	</bean>
+	
 </beans>
