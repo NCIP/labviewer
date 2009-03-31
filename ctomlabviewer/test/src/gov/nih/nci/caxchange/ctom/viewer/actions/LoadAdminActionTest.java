@@ -88,6 +88,9 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 
 import java.io.File;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import servletunit.struts.MockStrutsTestCase;
 
 public class LoadAdminActionTest extends MockStrutsTestCase 
@@ -98,7 +101,7 @@ public class LoadAdminActionTest extends MockStrutsTestCase
 	public LoadAdminActionTest(String testName) {
         super(testName);
     }
-	
+	@Before
 	public void setUp() throws Exception
 	{
 		super.setUp();
@@ -110,7 +113,7 @@ public class LoadAdminActionTest extends MockStrutsTestCase
        
 
 	}
-
+	@Test
 	public void testExecute()
 	{
 		getSession().setAttribute("CAGRID_SSO_GRID_IDENTITY","ccts@nih.gov");

@@ -86,7 +86,7 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 
 import java.io.File;
 
-import org.apache.struts.util.RequestUtils;
+import org.junit.Test;
 
 import servletunit.struts.MockStrutsTestCase;
 
@@ -108,13 +108,13 @@ public class LoginActionTest extends MockStrutsTestCase
        
 
 	}
-	
+	@Test
 	public void testLoginFail()
 	{
 		actionPerform();
         verifyForward(ForwardConstants.LOGIN_PAGE);
 	}
-	
+	@Test
 	public void testExecute()
 	{
 		getSession().setAttribute("CAGRID_SSO_GRID_IDENTITY","ccts@nih.gov");
