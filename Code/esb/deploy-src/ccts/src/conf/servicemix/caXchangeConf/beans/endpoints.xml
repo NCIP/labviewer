@@ -26,6 +26,8 @@
   
   <!-- endpoint below is implemented for testing purposes -->
   <bean:endpoint service="caxchange:synchronousRequestService" endpoint="synchronousRequestEndpoint" bean="#synchronousRequestServiceBean" />
+  
+  <bean:endpoint service="caxchange:notificationCapableService" endpoint="notificationCapableEndpoint" bean="#notificationCapableBean" />
   <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
   
   
