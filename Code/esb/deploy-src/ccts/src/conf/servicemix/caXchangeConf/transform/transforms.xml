@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:saxon="http://servicemix.apache.org/saxon/1.0"
+       xmlns:caxchange="http://nci.nih.gov/caXchange"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://servicemix.apache.org/saxon/1.0 http://servicemix.apache.org/schema/servicemix-saxon-3.2.2.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  
+
+  <!-- START SNIPPET: xslt --> 
+  <saxon:xslt service="caxchange:IdentifiedOrganizationSearchCriteriaXslt" endpoint="IdentifiedOrganizationSearchCriteriaEndpoint"
+              resource="classpath:/caXchangeConf/transform/IdentifiedOrganizationSearchCriteria.xsl" />
+              
+  <saxon:xslt service="caxchange:OrganizationIdCriteriaXslt" endpoint="OrganizationIdCriteriaEndpoint"
+              resource="classpath:/caXchangeConf/transform/OrganizationIdCriteria.xsl" />              
+  <!-- END SNIPPET: xslt --> 
+  
+
+</beans>
