@@ -34,6 +34,13 @@
 		jmsProviderDestinationName="caxchangeInboundQueue"
 		defaultMep="http://www.w3.org/2004/08/wsdl/in-only"
 		defaultOperation="test:Echo" connectionFactory="#connectionFactory" />
+		
+	<jms:endpoint service="caxchange:CaXchangeNCRequestConsumer"
+		endpoint="caxchangeInboundNCJmsConsumerEndpoint" targetService="caxchange:notificationCapableService"
+		targetEndpoint="notificationCapableEndpoint" role="consumer" destinationStyle="queue"
+		jmsProviderDestinationName="caxchangeNCInboundQueue"
+		defaultMep="http://www.w3.org/2004/08/wsdl/in-only"
+		defaultOperation="test:Echo" connectionFactory="#connectionFactory" />
 
 	<amq:connectionFactory id="connectionFactory"
 		brokerURL="${inbound.jms.brokerURL}" />
