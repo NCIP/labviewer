@@ -27,6 +27,8 @@
     <!-- bean below is implemented for testing purposes -->
     <bean id="synchronousRequestServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaXchangeSynchronousRequestBean" />
     
+    <bean id="notificationCapableBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.NotificationCapableBean" />
+    
     
     <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
        
