@@ -72,8 +72,30 @@ public class PrincipalInvestigator
 	private String email;
 	private String phone;
 	private String updatedDate;
+	private String coppaUpdate;
+	
+	
+	/**
+	 * @return the coppaUpdate
+	 */
+	public String getCoppaUpdate()
+	{
+	
+		return coppaUpdate;
+	}
+
 
 	
+	/**
+	 * @param coppaUpdate the coppaUpdate to set
+	 */
+	public void setCoppaUpdate(String coppaUpdate)
+	{
+	
+		this.coppaUpdate = coppaUpdate;
+	}
+
+
 	/**
 	 * @return the name
 	 */

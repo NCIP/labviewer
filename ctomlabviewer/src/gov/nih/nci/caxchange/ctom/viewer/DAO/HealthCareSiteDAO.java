@@ -96,19 +96,19 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.HealthCareSiteForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
-import gov.nih.nci.coppa.iso.Ii;
+import gov.nih.nci.coppa.po.Id;
 import gov.nih.nci.coppa.po.Organization;
-import gov.nih.nci.coppa.po.grid.remote.JNDIUtil;
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.handler.HealthCareSiteHandler;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
-import gov.nih.nci.services.organization.OrganizationDTO;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -129,7 +129,9 @@ import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 import org.iso._21090.ADXP;
 import org.iso._21090.AddressPartType;
+import org.iso._21090.DSETTEL;
 import org.iso._21090.ENXP;
+import org.iso._21090.TEL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -161,46 +163,39 @@ public class HealthCareSiteDAO
 	private void invokeService(HttpServletRequest request, HealthCareSiteForm baseDBForm)
 			throws Exception
 	{
+
 		CommonUtil util = new CommonUtil();
-		List<HCSite>hcsList = new ArrayList<HCSite>();
-		
+		List<HCSite> hcsList = new ArrayList<HCSite>();
+
 		// initialize the protocol
 		Protocol protocol = new Protocol();
 
 		// set the protocol id
 		Integer protcolId = (Integer) request.getSession().getAttribute("ID");
 		protocol.setId(protcolId.longValue());
-		
-		// 3 step process:
-		// 1. using the protocol id obtain the CTEP id for the HCS from CTODS DB.
-		// 2. using the CTEP Id - retrieve the ii for the HCS.
-		// 3. using this ii for HCS - invoke the COPPA service.
 
-		/*Ii iiOrgs = identifiedOrgs.get(0).getIdentifier();*/
-			// 1. using the protocol id obtain the CTEP id for the HCS from CTODS DB.
+		// 2 step process:
+		// 1. using the protocolId obtain the CTEP id for the HCS from CTODS DB.
+		// 2. using the CTEPId - retrieve the HCS by invoking the COPPA service.
+
+		// 1. using the protocol id obtain the CTEP id for the HCS from CTODS
+		// DB.
 		List<String> ctepIdList = retrieveCTEPIdforHCS(protcolId.longValue());
-		
+
 		for (String ctepIdentifier : ctepIdList)
 		{
-			// 2. using the CTEP Id - retrieve the ii for the HCS from COPPA.
+			// 2.Create a CTEP ii for the HCS.
 
-			OrganizationDTO identifiedOrganizationDTO = new OrganizationDTO();
-			identifiedOrganizationDTO.setIdentifier(util.convertToIdentifiedOrgEntityIi(new Long(
-					ctepIdentifier)));
+			Id iiCTEPId = new Id();
+			iiCTEPId.setExtension(ctepIdentifier);
 
-			JNDIUtil jndiUtil = JNDIUtil.getInstance();
-			List<OrganizationDTO> identifiedOrgs =
-					jndiUtil.getOrganizationService().search(identifiedOrganizationDTO);
-			Ii iiOrgs = identifiedOrgs.get(0).getIdentifier();
-			QName Ii = new QName("http://isodatatypes.coppa.nci.nih.gov", "Ii");	
-			MessageElement messageElement = new MessageElement(Ii, iiOrgs);
-			// 3. using this ii for HCS - invoke the COPPA service.
+			Document payload = serializedId(iiCTEPId);
+			if (payload == null)
+			{
+				continue;
+			}
 
-			InputStream testMessage =
-					HealthCareSiteDAO.class.getClassLoader().getResourceAsStream(
-							"ORGANIZATION_ID.xml");
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document payload = db.parse(testMessage);
+			// using this ii for CTEP - invoke the COPPA service.
 
 			// create caXchange RequestMessage
 			Message requestMessage = createMessage(request, payload);
@@ -214,11 +209,10 @@ public class HealthCareSiteDAO
 
 			// create the request
 			String url = (String) request.getSession().getAttribute("caXchangeURL");
-			// "https://cbvapp-d1017.nci.nih.gov:28445/wsrf-caxchange/services/cagrid/CaXchangeRequestProcessor";
+
 			CaXchangeRequestProcessorClient client =
 					new CaXchangeRequestProcessorClient(url, gridCreds);
 
-			// Utils.serializeObject(requestMessage, lab, writer);
 			ResponseMessage responseMessage = null;
 			boolean gotResponse = false;
 			int responseCount = 0;
@@ -238,16 +232,19 @@ public class HealthCareSiteDAO
 
 						// get the organization
 						HealthCareSite hcs = convertToSite(organization);
+						hcs.setNciInstituteCd(ctepIdentifier);
 						hcSite.setName(hcs.getName());
 
 						// get the address
 						String postalAddress = "";
 						postalAddress =
-								hcs.getStreetAddr() + " " + hcs.getCity() + " "
-										+ hcs.getPostalCode() + " " + hcs.getStateCode() + " "
+								hcs.getStreetAddr() + ", " + hcs.getCity() + ", "
+										+ hcs.getPostalCode() + ", " + hcs.getStateCode() + ", "
 										+ hcs.getCountryCode();
 						hcSite.setAddress(postalAddress);
+						hcSite.setEmail(hcs.getTelecomAddr());
 						hcSite.setUpdatedDate(new Date().toString());
+						hcSite.setCoppaUpdate("Y");
 						log.info("name" + hcs.getName());
 						log.info("address" + postalAddress);
 
@@ -257,9 +254,8 @@ public class HealthCareSiteDAO
 					// COPPA service invocation failed
 					else
 					{
-						// retrieve the PI details based on the CTEP Identifier
-						retrieveHCSDetailsForUI(new Long(
-								ctepIdentifier), hcSite);
+						// retrieve the HCS details based on the CTEP Identifier
+						retrieveHCSDetailsForUI(ctepIdentifier, hcSite);
 					}
 					hcsList.add(hcSite);
 				}
@@ -276,7 +272,49 @@ public class HealthCareSiteDAO
 				}
 			}// end of while
 			baseDBForm.setHcsList(hcsList);
-	}// end of for
+		}// end of for
+	}
+
+	/**
+	 * Serialized id.
+	 * 
+	 * @param ctepIi
+	 *            the ctep ii
+	 * @param idQname
+	 *            the id qname
+	 * @param writer
+	 *            the writer
+	 */
+	private Document serializedId(Id ctepIi)
+	{
+
+		Document payload = null;
+		try
+		{
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			// QName for the Id
+			QName idQname = new QName("http://po.coppa.nci.nih.gov", "Id");
+			StringWriter writer = new StringWriter();
+			// Serialize using the wsdd
+			InputStream wsddIs =
+					getClass().getResourceAsStream(
+							"/gov/nih/nci/coppa/services/client/client-config.wsdd");
+
+			Utils.serializeObject(ctepIi, idQname, writer, wsddIs);
+
+			// convert to Input stream
+			byte[] barray = writer.toString().getBytes();
+			InputStream is = new ByteArrayInputStream(barray);
+
+			// create the payload
+			payload = db.parse(is);
+
+		}
+		catch (Exception e)
+		{
+			log.error("Exception occured while serializing ii", e);
+		}
+		return payload;
 	}
 
 	/**
@@ -301,8 +339,8 @@ public class HealthCareSiteDAO
 
 			Metadata metadata = new Metadata();
 			metadata.setExternalIdentifier("CTODS");
-			metadata.setServiceType("ORGANIZATION");
-			metadata.setOperationName("getOrganization");
+			metadata.setServiceType("ORGANIZATION_BUSINESS_SERVICE");
+			metadata.setOperationName("getOrganizationByCTEPId");
 
 			// set the credentials
 			Credentials creds = new Credentials();
@@ -321,7 +359,6 @@ public class HealthCareSiteDAO
 			URI uri = new URI();
 			uri.setPath("http://coppa.nci.nih.gov");
 			messagePayload.setXmlSchemaDefinition(uri);
-			// MessageElement messageElement = new MessageElement(person, ii);
 			MessageElement messageElement = new MessageElement(payload.getDocumentElement());
 			messagePayload.set_any(new MessageElement[]
 			{ messageElement });
@@ -361,7 +398,7 @@ public class HealthCareSiteDAO
 						stringTransformer.transform(new DOMSource(el), new StreamResult(sw));
 						InputStream wsddIs =
 								getClass().getResourceAsStream(
-										"/gov/nih/nci/coppa/po/grid/client/client-config.wsdd");
+										"/gov/nih/nci/coppa/services/client/client-config.wsdd");
 
 						organization =
 								(gov.nih.nci.coppa.po.Organization) Utils.deserializeObject(
@@ -430,6 +467,15 @@ public class HealthCareSiteDAO
 				hcs.setCountryCode(part.getCode());
 			}
 		}
+		// get the Telecom Address
+		DSETTEL telList = poOrg.getTelecomAddress();
+		List<TEL> set = telList.getItem();
+		Iterator iter = set.iterator();
+		while (iter.hasNext())
+		{
+			TEL obj = (TEL) iter.next();
+			hcs.setTelecomAddr(obj.getValue().toString());
+		}
 		return hcs;
 	}
 
@@ -443,7 +489,7 @@ public class HealthCareSiteDAO
 		{
 			protocol.setHealthCareSite(healthCareSite);
 			HealthCareSiteHandler dao = new HealthCareSiteHandler();
-			dao.persist(dao.getConnection(), protocol);
+			dao.update(dao.getConnection(), protocol);
 		}
 		catch (Exception se)
 		{
@@ -459,18 +505,22 @@ public class HealthCareSiteDAO
 	 * @param ctepId
 	 * @param baseDBForm
 	 */
-	private void retrieveHCSDetailsForUI(Long ctepId, HCSite hcsite)
+	private void retrieveHCSDetailsForUI(String ctepId, HCSite hcsite)
 	{
 
 		try
 		{
 
 			CTLabDAO dao = new CTLabDAO();
-			HealthCareSite hcs = dao.retrieveHealCareSite(dao.getConnection(), ctepId.toString());
-			hcsite.setAddress(hcs.getStreetAddr() + " " + hcs.getCity() + " "
-					+ hcs.getStateCode() + " " + hcs.getPostalCode() + " " + hcs.getCountryCode());
-			hcsite.setName(hcs.getName());
-			hcsite.setUpdatedDate(hcs.getCtomUpdateDt().toString());
+			HealthCareSite hcs = dao.retrieveHealCareSite(dao.getConnection(), ctepId);
+			hcsite.setAddress(hcs.getStreetAddr() != null ? hcs.getStreetAddr() : "" + " "
+					+ hcs.getCity() != null ? hcs.getCity()
+					: "" + " " + hcs.getStateCode() != null ? hcs.getStateCode() : "" + " "
+							+ hcs.getPostalCode() != null ? hcs.getPostalCode() : "" + " "
+							+ hcs.getCountryCode() != null ? hcs.getCountryCode() : "");
+			hcsite.setName(hcs.getName() != null ? hcs.getName() : "");
+			hcsite.setUpdatedDate(hcs.getCtomUpdateDt() != null ? hcs.getCtomUpdateDt().toString()
+					: "");
 		}
 		catch (Exception se)
 		{
