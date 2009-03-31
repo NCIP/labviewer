@@ -81,12 +81,13 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
-import gov.nih.nci.caxchange.ctom.viewer.forms.MenuForm;
 
 import java.io.File;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import servletunit.struts.MockStrutsTestCase;
 
@@ -97,7 +98,7 @@ public class HappyActionTest extends MockStrutsTestCase
 	{
 		super(name);
 	}
-    
+    @Before
 	public void setUp() throws Exception
 	{
 		super.setUp();
@@ -108,14 +109,14 @@ public class HappyActionTest extends MockStrutsTestCase
 		setRequestPathInfo("/Happy");
         
 	}
-	
+	@Test
 	public void testLoginFail()
 	{
 		actionPerform();
         verifyForward(ForwardConstants.LOGIN_PAGE);
 	}
 	
-	
+	@Test
 	public void testExecute()
 	{
 		getSession().setAttribute("CAGRID_SSO_GRID_IDENTITY","ccts@nih.gov");
