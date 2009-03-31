@@ -96,15 +96,15 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.PIForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
+import gov.nih.nci.coppa.po.Id;
 import gov.nih.nci.coppa.po.Person;
-import gov.nih.nci.coppa.po.grid.remote.JNDIUtil;
 import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.handler.InvestigatorHandler;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
-import gov.nih.nci.services.person.PersonDTO;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -115,6 +115,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
@@ -172,28 +173,30 @@ public class PIDAO
 		protocol.setId(protcolId.longValue());
 		
 
-		// 3 step process:
-		// 1. using the protocol id obtain the CTEP id for the PI.
+		// 2 step process:
+		// 1. using the protocolId obtain the CTEP id for the PI from CTODS DB.
+		// 2. using the CTEPId - retrieve the PI by invoking the COPPA service.
+
+		// 1. using the protocol id obtain the CTEP id for the HCS from CTODS
+		// DB.
 
 		List<String> ctepIdList = retrieveCTEPIdforPI(protcolId.longValue());
 
 		for (String ctepIdentifier : ctepIdList)
 		{
-			// 2. using the CTEP Id - retrieve the ii for the PI.
+			// 2.Create a CTEP ii for the PI.
 
-			PersonDTO identifiedPersonDTO = new PersonDTO();
-			identifiedPersonDTO.setIdentifier(util.convertToIdentifiedOrgEntityIi(new Long(
-					ctepIdentifier)));
+			Id iiCTEPId = new Id();
+			iiCTEPId.setExtension(ctepIdentifier);
+			
+			//get the serialized version of the CTEP ID
+			Document payload = serializedId(iiCTEPId);
+			if (payload == null)
+			{
+				continue;
+			}
 
-			JNDIUtil jndiUtil = JNDIUtil.getInstance();
-			List<PersonDTO> identifiedPIs =
-					jndiUtil.getPersonService().search(identifiedPersonDTO);
-
-			// 3. using this ii for PI - invoke the COPPA service.
-			InputStream testMessage =
-					PIDAO.class.getClassLoader().getResourceAsStream("PERSON_ID.xml");
-			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document payload = db.parse(testMessage);
+			// using this ii for CTEP - invoke the COPPA service.
 
 			// create caXchange RequestMessage
 			Message requestMessage = createMessage(request, payload);
@@ -207,7 +210,7 @@ public class PIDAO
 
 			// create the request
 			String url = (String) request.getSession().getAttribute("caXchangeURL");
-			// "https://cbvapp-d1017.nci.nih.gov:28445/wsrf-caxchange/services/cagrid/CaXchangeRequestProcessor";
+			
 			CaXchangeRequestProcessorClient client =
 					new CaXchangeRequestProcessorClient(url, gridCreds);
 
@@ -248,6 +251,7 @@ public class PIDAO
 						List<TEL> telephone = person.getTelecomAddress().getItem();
 						pi.setEmail(telephone.get(0).getValue());
 						pi.setPhone(telephone.get(1).getValue());
+						
 
 						log.info("name" + pi.getName());
 						log.info("address" + postalAddress);
@@ -261,8 +265,7 @@ public class PIDAO
 					else
 					{
 						// retrieve the PI details based on the CTEP Identifier
-						retrievePIDetailsForUI(new Long(
-								ctepIdentifier), pi);
+						retrievePIDetailsForUI(ctepIdentifier, pi);
 					}
 					piList.add(pi);
 				}
@@ -280,6 +283,49 @@ public class PIDAO
 			}// end of while
 			baseDBForm.setPiList(piList);
 		}// end of for
+	}
+
+	
+	/**
+	 * Serialized id.
+	 * 
+	 * @param ctepIi
+	 *            the ctep ii
+	 * @param idQname
+	 *            the id qname
+	 * @param writer
+	 *            the writer
+	 */
+	private Document serializedId(Id ctepIi)
+	{
+
+		Document payload = null;
+		try
+		{
+			DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			// QName for the Id
+			QName idQname = new QName("http://po.coppa.nci.nih.gov", "Id");
+			StringWriter writer = new StringWriter();
+			// Serialize using the wsdd
+			InputStream wsddIs =
+					getClass().getResourceAsStream(
+							"/gov/nih/nci/coppa/services/client/client-config.wsdd");
+
+			Utils.serializeObject(ctepIi, idQname, writer, wsddIs);
+
+			// convert to Input stream
+			byte[] barray = writer.toString().getBytes();
+			InputStream is = new ByteArrayInputStream(barray);
+
+			// create the payload
+			payload = db.parse(is);
+
+		}
+		catch (Exception e)
+		{
+			log.error("Exception occured while serializing ii", e);
+		}
+		return payload;
 	}
 
 	/**
@@ -463,7 +509,7 @@ public class PIDAO
 		{
 			protocol.setInvestigator(investigator);
 			InvestigatorHandler dao = new InvestigatorHandler();
-			dao.persist(dao.getConnection(), protocol);
+			dao.update(dao.getConnection(), protocol);
 
 		}
 		catch (Exception se)
@@ -480,21 +526,20 @@ public class PIDAO
 	 * @param ctepId
 	 * @param baseDBForm
 	 */
-	private void retrievePIDetailsForUI(Long ctepId, PrincipalInvestigator pi)
+	private void retrievePIDetailsForUI(String ctepId, PrincipalInvestigator pi)
 	{
-
 		try
 		{
 
 			CTLabDAO dao = new CTLabDAO();
 			Investigator investigator =
-					dao.retrieveInvestigator(dao.getConnection(), ctepId.toString());
-			pi.setAddress(investigator.getStreetAddr() + " " + investigator.getCity() + " "
-					+ investigator.getState() + " " + investigator.getZipCode() + " "
-					+ investigator.getCountryCode());
-			pi.setName(investigator.getFirstName() + " " + investigator.getMiddleNAle()
-					+ " " + investigator.getLastName());
-			pi.setUpdatedDate(investigator.getCtomUpdateDt().toString());
+					dao.retrieveInvestigator(dao.getConnection(), ctepId);
+			pi.setAddress(investigator.getStreetAddr()!=null?investigator.getStreetAddr():"" + " " + investigator.getCity()!=null?investigator.getCity():"" + " "
+					+ investigator.getState()!=null?investigator.getState():"" + " " + investigator.getZipCode()!=null?investigator.getZipCode():"" + " "
+					+ investigator.getCountryCode()!=null?investigator.getCountryCode():"");
+			pi.setName(investigator.getFirstName()!=null?investigator.getFirstName():""+ " " + investigator.getMiddleNAle()!=null?investigator.getMiddleNAle():""
+					+ " " + investigator.getLastName()!=null?investigator.getLastName():"");
+			pi.setUpdatedDate(investigator.getCtomUpdateDt()!=null?investigator.getCtomUpdateDt().toString():"");
 		}
 		catch (Exception se)
 		{
