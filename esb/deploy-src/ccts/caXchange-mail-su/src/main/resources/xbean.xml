@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<beans xmlns:mail="http://servicemix.apache.org/mail/1.0"
+       xmlns:caxchange="http://nci.nih.gov/caXchange"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://servicemix.apache.org/mail/1.0 http://servicemix.apache.org/schema/servicemix-mail-3.2.3.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+       
+       <mail:sender service="caxchange:mailService" 
+                     endpoint="senderEndpoint"
+                     sender="nalamalaar@mail.nih.gov"
+                     receiver="analamala@ekagrasoft.com"
+                     debugMode="true" 
+                 connection="smtp://nalamalaar@mailfwd.nih.gov?password=An0101!!" />
+       
+     <!-- 
+    <mail:poller service="caxchange:mailService" 
+                 endpoint="pollerEndpoint" 
+                 targetService="caxchange:CaXchangeNCRequestConsumer"
+                 period="10000"
+                 debugMode="false"
+                 connection="imap://nalamalaar@mailfwd.nih.gov/INBOX?password=An0101!!"
+                 deleteProcessedMessages="false"
+                 processOnlyUnseenMessages="true" /> 
+
+	 
+    <mail:sender service="replaceMe:mailService" 
+                 endpoint="senderEndpoint"
+                 sender="no-reply@mycompany.com"
+                 receiver="your-static-receiver-address@some-host.com"
+                 debugMode="false" 
+                 connection="smtp://username@host?password=mypass" />  
+                 
+                
+    <mail:poller service="caxchange:mailPollingService" 
+                     endpoint="pollerEndpoint" 
+                     targetService="replaceMe:mailProcessingService"
+                     period="10000"
+                     debugMode="false"
+                     connection="imap://nalamalaar@mailfwd.nih.gov/INBOX?password=An0101!!"
+                     deleteProcessedMessages="false"
+                 processOnlyUnseenMessages="true" />
+    -->
+                 
+    
+</beans>
