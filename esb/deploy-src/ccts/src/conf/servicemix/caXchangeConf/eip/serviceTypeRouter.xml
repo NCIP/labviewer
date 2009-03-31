@@ -169,7 +169,17 @@
 				<eip:target>
 					<eip:exchange-target service="caxchange:registerSubjectRoute" />
 				</eip:target>
-			</eip:routing-rule>			
+			</eip:routing-rule>	
+			<eip:routing-rule>
+				<eip:predicate>
+					<eip:xpath-predicate
+						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='NOF_CATISSUE']) = 1"
+						namespaceContext="#nsContext" />
+				</eip:predicate>
+				<eip:target>
+					<eip:exchange-target service="caxchange:mailService" />
+				</eip:target>
+			</eip:routing-rule>
 			<eip:routing-rule>
 				<eip:target>
 					<eip:exchange-target service="caxchange:unhandledTypeRoute" />
