@@ -80,11 +80,8 @@
  */
 package gov.nih.nci.caxchange.ctom.viewer.util;
 
-import gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
-import gov.nih.nci.coppa.iso.Ii;
-import gov.nih.nci.coppa.iso.NullFlavor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -275,7 +272,7 @@ public class CommonUtil
 	 * @param id
 	 * @return
 	 */
-	public Ii convertToIdentifiedOrgEntityIi(Long id) {
+	/*public Ii convertToIdentifiedOrgEntityIi(Long id) {
 
         Ii ii = new Ii();
         if (id == null) 
@@ -288,5 +285,5 @@ public class CommonUtil
            //@todo : set others attributes of II;
         }
         return ii;
-    }
+    }*/
 }
