@@ -13,11 +13,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
 
 
-public class DTOTest {
+public class DTOTest extends TestCase{
 	
 	private static Map DEFAULT_ARGUMENTS = new HashMap(); 
 	
