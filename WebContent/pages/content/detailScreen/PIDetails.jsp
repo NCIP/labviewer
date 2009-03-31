@@ -101,9 +101,12 @@
 																									<nested:write name="piList"
 																										property="email" />
 																								</td>
-																								<td class="dataCellText" width="15%">&nbsp;
+																								<td class="dataCellText" width="25%">&nbsp;
 																									<nested:write name="piList"
 																										property="updatedDate" />
+																									<logic:equal name="piList" property="coppaUpdate" value="Y">
+																									 <img src="images/COPPA.jpg" alt="Data obtained from COPPA" height="30" width="40">
+																									</logic:equal>	
 																								</td>
 																							</tr>
 																						</nested:iterate>
