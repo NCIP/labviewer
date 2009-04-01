@@ -1,6 +1,7 @@
 package gov.nih.nci.caxchange.servicemix.bean.validation;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
