@@ -1,18 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ISO="uri:iso.org:21090" xmlns:COPPA-PO="http://po.coppa.nci.nih.gov" 
-    targetNamespace="http://po.coppa.nci.nih.gov" elementFormDefault="qualified">
+    targetNamespace="http://po.coppa.nci.nih.gov" elementFormDefault="qualified"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="1.0">
     <xs:import schemaLocation="ISO_datatypes_Narrative.xsd" namespace="uri:iso.org:21090"/>
 	
-    <xs:element name="StringMap" type="COPPA-PO:StringMap"/>
-    <xs:complexType name="StringMap">
+    <xs:element name="StringMap">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="COPPA-PO:StringMapType"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+	<xs:complexType name="StringMapType">
+		<xs:annotation>
+			<xs:appinfo>
+	         <jxb:class name="StringMapType">
+	            <jxb:javadoc>
+	            The StringMap type.
+	            </jxb:javadoc>
+	         </jxb:class>
+            </xs:appinfo>
+        </xs:annotation>
         <xs:sequence>
-            <xs:element name="item" type="COPPA-PO:stringMapItem" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+			        <xs:sequence>
+			            <xs:element name="key" type="xs:string" nillable="false" minOccurs="0"/>
+			            <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			        </xs:sequence>
+			    </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="stringMapItem">
+    
+    <xs:element name="IIMap" >
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="COPPA-PO:IIMapType"/>
+            </xs:complexContent>
+        </xs:complexType>    
+    </xs:element>
+    <xs:complexType name="IIMapType">
+        <xs:annotation>
+            <xs:appinfo>
+             <jxb:class name="IIMapType">
+                <jxb:javadoc>
+                The IIMap type.
+                </jxb:javadoc>
+             </jxb:class>
+            </xs:appinfo>
+        </xs:annotation>    
         <xs:sequence>
-            <xs:element name="key" type="xs:string" nillable="false"/>
-            <xs:element name="value" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+			    <xs:complexType>
+			        <xs:sequence>
+			            <xs:element name="key" type="ISO:II" nillable="false" minOccurs="0" />
+			            <xs:element name="value" type="ISO:II" minOccurs="0" />
+			        </xs:sequence>
+			    </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
