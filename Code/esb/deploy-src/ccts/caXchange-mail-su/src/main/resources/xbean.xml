@@ -25,24 +25,21 @@
        xsi:schemaLocation="http://servicemix.apache.org/mail/1.0 http://servicemix.apache.org/schema/servicemix-mail-3.2.3.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
        
+      <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:/caXchangeConf/mail/mail.properties</value>
+		</property>
+	   </bean>
+       
        <mail:sender service="caxchange:mailService" 
                      endpoint="senderEndpoint"
-                     sender="nalamalaar@mail.nih.gov"
-                     receiver="analamala@ekagrasoft.com"
-                     debugMode="true" 
-                 connection="smtp://nalamalaar@mailfwd.nih.gov?password=An0101!!" />
+                     sender="${mail.sender}"
+                     receiver="${mail.receiver}"
+                     debugMode="${mail.debugMode}" 
+                 connection="${mail.protocol}://${mail.user}@${mail.host}?password=${mail.password}" />
        
-     <!-- 
-    <mail:poller service="caxchange:mailService" 
-                 endpoint="pollerEndpoint" 
-                 targetService="caxchange:CaXchangeNCRequestConsumer"
-                 period="10000"
-                 debugMode="false"
-                 connection="imap://nalamalaar@mailfwd.nih.gov/INBOX?password=An0101!!"
-                 deleteProcessedMessages="false"
-                 processOnlyUnseenMessages="true" /> 
-
-	 
+     <!--	 
     <mail:sender service="replaceMe:mailService" 
                  endpoint="senderEndpoint"
                  sender="no-reply@mycompany.com"
@@ -56,10 +53,9 @@
                      targetService="replaceMe:mailProcessingService"
                      period="10000"
                      debugMode="false"
-                     connection="imap://nalamalaar@mailfwd.nih.gov/INBOX?password=An0101!!"
+                     connection="imap://username@host/INBOX?password=mypass"
                      deleteProcessedMessages="false"
                  processOnlyUnseenMessages="true" />
-    -->
-                 
+    -->                
     
 </beans>
