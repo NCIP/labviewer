@@ -93,8 +93,9 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- * InvestigatorHandler persists Investigator data into CTODS database
+ * InvestigatorHandler persists Investigator data into CTODS database.
  * 
  * @author asharma
  */
@@ -102,6 +103,7 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 {
 
 	// Logging File
+	/** The logger. */
 	private static Logger logger = Logger.getLogger("client");
 
 	/*
@@ -218,6 +220,71 @@ public class InvestigatorHandler extends CTLabDAO implements HL7V3MessageHandler
 
 		}
 	}
+	
+	/**
+	 * Update.
+	 * 
+	 * @param con the con
+	 * @param protocol the protocol
+	 * 
+	 * @throws Exception the exception
+	 */
+	public void update(Connection con, Protocol protocol) throws Exception
+	{
+
+		logger.debug("Updating the Investigator");
+		PreparedStatement ps = null;
+		
+
+		// retrieve the investigator from Protocol
+		Investigator inv = protocol.getInvestigator();
+		
+		try
+		{
+			// insert into Investigator
+				ps =
+				con
+				 .prepareStatement("update investigator set LAST_NAME=?, FIRST_NAME=?, MIDDLE_NAME=?, TELECOM_ADDRESS=?, STREET_ADDRESS=?," +
+				 		"CITY=?, STATE=?, ZIP_CODE=?, COUNTRY_CODE=?, PHONE=?, SOURCE=?, SOURCE_EXTRACT_DATE=?, CTOM_UPDATE_DATE=? where NCI_IDENTIFIER=?");
+				
+				ps.setString(1, String.valueOf(inv.getLastName() != null ? inv.getLastName() : ""));
+				ps.setString(2, String.valueOf(inv.getFirstName() != null ? inv.getFirstName() : ""));
+				ps.setString(3, String.valueOf(inv.getMiddleNAle() != null ? inv.getMiddleNAle() : ""));
+				ps.setString(4, String.valueOf(inv.getTelecomAddr() != null ? inv.getTelecomAddr() : ""));
+				ps.setString(5, String.valueOf(inv.getStreetAddr() != null ? inv.getStreetAddr() : ""));
+				ps.setString(6, String.valueOf(inv.getCity() != null ? inv.getCity() : ""));
+				ps.setString(7, String.valueOf(inv.getState() != null ? inv.getState() : ""));
+				ps.setString(8, String.valueOf(inv.getZipCode() != null ? inv.getZipCode() : ""));
+				ps.setString(9, String.valueOf(inv.getCountryCode() != null ? inv.getCountryCode() : ""));
+				ps.setString(10, String.valueOf(inv.getPhone() != null ? inv.getPhone() : ""));
+				ps.setString(11, String.valueOf(inv.getSource() != null ? inv.getSource() : ""));
+				Date srcExtractDt =
+					inv.getSrcExtractDt() != null ? inv.getSrcExtractDt() : new Date();
+			    
+					ps.setDate(12, new java.sql.Date(srcExtractDt.getTime()));
+				
+			    Date ctomUpdateDt =
+					inv.getCtomUpdateDt() != null ? inv.getCtomUpdateDt() : new Date();
+			    
+					ps.setDate(13, new java.sql.Date(ctomUpdateDt.getTime()));
+					ps.setString(14,inv.getNciId());
+				ps.execute();
+				con.commit();
+
+			}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the investigator",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
+		}
+		finally
+		{
+			//clean up
+			ps = SQLHelper.closePreparedStatement(ps);
+
+		}
+		}		
 	
 	/*
 	 * (non-Javadoc)
