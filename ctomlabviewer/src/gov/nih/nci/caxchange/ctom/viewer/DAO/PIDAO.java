@@ -188,9 +188,10 @@ public class PIDAO
 
 			Id iiCTEPId = new Id();
 			iiCTEPId.setExtension(ctepIdentifier);
-			
+				
 			//get the serialized version of the CTEP ID
 			Document payload = serializedId(iiCTEPId);
+			
 			if (payload == null)
 			{
 				continue;
@@ -236,6 +237,7 @@ public class PIDAO
 						Person person = getTargetResponse(resp);
 						// get the investigator name
 						Investigator investigator = convertToInvestigator(person);
+						investigator.setNciId(ctepIdentifier);
 						pi.setName(investigator.getFirstName() + " "
 								+ investigator.getMiddleNAle() + " " + investigator.getLastName());
 
@@ -251,7 +253,7 @@ public class PIDAO
 						List<TEL> telephone = person.getTelecomAddress().getItem();
 						pi.setEmail(telephone.get(0).getValue());
 						pi.setPhone(telephone.get(1).getValue());
-						
+						pi.setCoppaUpdate("Y");
 
 						log.info("name" + pi.getName());
 						log.info("address" + postalAddress);
@@ -351,8 +353,8 @@ public class PIDAO
 			// Create the caxchange message
 			Metadata metadata = new Metadata();
 			metadata.setExternalIdentifier("CTODS");
-			metadata.setServiceType("PERSON");
-			metadata.setOperationName("getPerson");
+			metadata.setServiceType("PERSON_BUSINESS_SERVICE");
+			metadata.setOperationName("getPersonByCTEPId");
 
 			// set the credentials
 			Credentials creds = new Credentials();
@@ -411,7 +413,7 @@ public class PIDAO
 						stringTransformer.transform(new DOMSource(el), new StreamResult(sw));
 						InputStream wsddIs =
 								getClass().getResourceAsStream(
-										"/gov/nih/nci/coppa/po/grid/client/client-config.wsdd");
+										"/gov/nih/nci/coppa/services/client/client-config.wsdd");
 
 						person =
 								(gov.nih.nci.coppa.po.Person) Utils.deserializeObject(
@@ -569,4 +571,5 @@ public class PIDAO
 		}
 		return ctepIdList;
 	}
-}
+	
+	}
