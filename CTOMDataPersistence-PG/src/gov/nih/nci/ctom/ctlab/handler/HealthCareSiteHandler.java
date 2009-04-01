@@ -240,6 +240,52 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 					.persist(con, protocol);
 		}
 	}
+	
+	
+	/**
+	 * Update.
+	 * 
+	 * @param con the con
+	 * @param protocol the protocol
+	 */
+	public void update(Connection con, Protocol protocol)throws Exception
+	{
+		logger.debug("Updating the HealthCareSite");
+		PreparedStatement ps = null;
+		
+		// retrieve HealthCareSite from Protocol
+		HealthCareSite hcSite = protocol.getHealthCareSite();
+		
+		// update  HealthCare_Site
+		ps =
+				con
+						.prepareStatement("Update HEALTHCARE_SITE set NAME = ?, STREET_ADDRESS = ? , CITY = ?, STATE_CODE = ?, " +
+								"POSTAL_CODE = ?, COUNTRY_CODE = ? , TELECOM_ADDRESS = ?, SOURCE = ?, SOURCE_EXTRACT_DATE = ? , CTOM_UPDATE_DATE = ? where NCI_INSTITUTE_CODE=?");
+
+		ps.setString(1, String.valueOf(hcSite.getName() != null ? hcSite.getName() : ""));
+		ps.setString(2, String.valueOf(hcSite.getStreetAddr() != null ? hcSite.getStreetAddr() : ""));
+		ps.setString(3, String.valueOf(hcSite.getCity() != null ? hcSite.getCity() : ""));
+		ps.setString(4, String.valueOf(hcSite.getStateCode() != null ? hcSite.getStateCode() : ""));
+		ps.setString(5, String.valueOf(hcSite.getPostalCode() != null ? hcSite.getPostalCode() : ""));
+		ps.setString(6, String.valueOf(hcSite.getCountryCode() != null ? hcSite.getCountryCode() : ""));
+		ps.setString(7, String.valueOf(hcSite.getTelecomAddr() != null ? hcSite.getTelecomAddr() : ""));
+		ps.setString(8, String.valueOf(hcSite.getSource() != null ? hcSite.getSource() : ""));
+		Date srcExtractDt =
+			hcSite.getSrcExtractDt() != null ? hcSite.getSrcExtractDt() : new Date();
+	    
+			ps.setDate(9, new java.sql.Date(srcExtractDt.getTime()));
+		
+	    Date ctomUpdateDt =
+	    	hcSite.getCtomUpdateDt() != null ? hcSite.getCtomUpdateDt() : new Date();
+	    
+			ps.setDate(10, new java.sql.Date(ctomUpdateDt.getTime()));
+			ps.setString(11, hcSite.getNciInstituteCd());
+						
+		ps.execute();
+		con.commit();
+	}
+		
+
 
 	/*
 	 * (non-Javadoc)
