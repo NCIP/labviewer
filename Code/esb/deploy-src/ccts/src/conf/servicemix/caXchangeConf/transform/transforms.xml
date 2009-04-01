@@ -5,7 +5,14 @@
        xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://servicemix.apache.org/saxon/1.0 http://servicemix.apache.org/schema/servicemix-saxon-3.2.2.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-  
+
+  <bean id="caxchangeProps"
+    class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="location">
+      <value>classpath:caxchange.properties</value>
+    </property>
+  </bean>
+    
 
   <!-- START SNIPPET: xslt --> 
   <saxon:xslt service="caxchange:IdentifiedOrganizationSearchCriteriaXslt" endpoint="IdentifiedOrganizationSearchCriteriaEndpoint"
@@ -13,6 +20,13 @@
               
   <saxon:xslt service="caxchange:OrganizationIdCriteriaXslt" endpoint="OrganizationIdCriteriaEndpoint"
               resource="classpath:/caXchangeConf/transform/OrganizationIdCriteria.xsl" />              
+              
+  <saxon:xslt service="caxchange:IdentifiedPersonSearchCriteriaXslt" endpoint="IdentifiedPersonSearchCriteriaEndpoint"
+              resource="classpath:/caXchangeConf/transform/IdentifiedPersonSearchCriteria.xsl" />
+              
+  <saxon:xslt service="caxchange:PersonIdCriteriaXslt" endpoint="PersonIdCriteriaEndpoint"
+              resource="classpath:/caXchangeConf/transform/PersonIdCriteria.xsl" />              
+              
   <!-- END SNIPPET: xslt --> 
   
 
