@@ -8,10 +8,14 @@ import gov.nih.nci.caxchange.jdbc.CaxchangeMetadata;
  *
  */
 public interface CaxchangeMetadataDAO {
+	
+    static public java.util.Map<String, CaxchangeMetadata> metadataCache = new java.util.HashMap<String, CaxchangeMetadata>(10);
+
 
     public void storeMetadata(CaxchangeMetadata caxchangeMetadata) throws Exception;
 
     public CaxchangeMetadata getMetadata(String messageType) throws Exception;
-
+    
     public void deleteMetadata(CaxchangeMetadata caxchangeMetadata) throws Exception;
+
 }

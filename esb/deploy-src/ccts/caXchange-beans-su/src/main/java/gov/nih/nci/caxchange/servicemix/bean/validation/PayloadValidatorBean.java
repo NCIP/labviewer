@@ -32,7 +32,6 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
     private Logger logger = LogManager.getLogger(PayloadValidatorBean.class);
     private PayloadValidator payloadValidator = null;
     private CaxchangeSchemaFactory caxchangeSchemaFactory = null;
-    static private java.util.Map<String, CaxchangeMetadata> metadataCache = new java.util.HashMap<String, CaxchangeMetadata>(6);
     
 
 	public PayloadValidator getPayloadValidator() {
@@ -57,7 +56,7 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
             	  throw new PayloadValidationException("Schema factory not initialized for payload validation.");
               }
               if (namespace != null){
-        	     schema = caxchangeSchemaFactory.getSchema(namespace);
+        	     schema = caxchangeSchemaFactory.getSchema(messageType);
               } else {
             	  throw new PayloadValidationException("Namespace not configured for this message type:"+messageType+". Please configure the namespace to get the validating schema.");
               }
@@ -90,12 +89,8 @@ public class PayloadValidatorBean extends CaXchangeMessagingBean {
 	}
 	
 	public String getPayloadNamespace(String messageType) throws Exception {
-		CaxchangeMetadata metadata = metadataCache.get(messageType);
-		if (metadata == null){
-		    CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
-		    metadata =metadataDAO.getMetadata(messageType);
-		    metadataCache.put(messageType, metadata);
-		}
+	    CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
+		 CaxchangeMetadata metadata =metadataDAO.getMetadata(messageType);
 		if (metadata != null) {
 			return metadata.getPayloadNamespace();
 		}

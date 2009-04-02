@@ -1,5 +1,9 @@
 package gov.nih.nci.caxchange.servicemix.bean.validation;
 
+import gov.nih.nci.caxchange.jdbc.CaxchangeMetadata;
+import gov.nih.nci.caxchange.persistence.CaxchangeMetadataDAO;
+import gov.nih.nci.caxchange.persistence.DAOFactory;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +42,13 @@ public class GMESchemaFactory implements CaxchangeSchemaFactory{
 	 * @return
 	 * @throws SchemaFactoryException
 	 */
-	public Schema getSchema(String namespaceName) throws SchemaFactoryException {
-		
+	public Schema getSchema(String messageType) throws SchemaFactoryException {
+		String namespaceName = null;
 		Schema schema = null;
 		try {
+		   CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
+		   CaxchangeMetadata metadata = metadataDAO.getMetadata(messageType);
+		   namespaceName =  metadata.getPayloadNamespace();			
 		   schema = schemaCache.get(namespaceName);
 		   File schemaFile = null;
 		   if (GMEGridServiceLocation == null) {
@@ -73,6 +80,8 @@ public class GMESchemaFactory implements CaxchangeSchemaFactory{
 			throw new SchemaFactoryException("Error while getting schema "+namespaceName, e1);
 		} catch (SAXException e2) {
 			throw new SchemaFactoryException("Error parsing schema for namespace "+namespaceName, e2);
+		} catch (Exception e3) {
+			throw new SchemaFactoryException("Error while getting schema for message type "+messageType, e3);
 		}
 		
 		return schema;		

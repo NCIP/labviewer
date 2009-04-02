@@ -130,7 +130,7 @@
                         </eip:routing-rule>            
                         <eip:routing-rule>
                                <eip:predicate>
-                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='ORGANIZATION_CONTACT']) = 1" namespaceContext="#nsContext"/>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='ORGANIZATIONAL_CONTACT']) = 1" namespaceContext="#nsContext"/>
                                </eip:predicate>
                                <eip:target>
                                   <eip:exchange-target service="caxchange:organizationContactServiceRoute" />
@@ -159,6 +159,14 @@
                                <eip:target>
                                   <eip:exchange-target service="caxchange:organizationBusinessServiceRoute" />
                                </eip:target>
+                        </eip:routing-rule>   
+                        <eip:routing-rule>
+                               <eip:predicate>
+                                   <eip:xpath-predicate xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='PERSON_BUSINESS_SERVICE']) = 1" namespaceContext="#nsContext"/>
+                               </eip:predicate>
+                               <eip:target>
+                                  <eip:exchange-target service="caxchange:personBusinessServiceRoute" />
+                               </eip:target>
                         </eip:routing-rule>                         
 			<eip:routing-rule>
 				<eip:predicate>
@@ -169,17 +177,7 @@
 				<eip:target>
 					<eip:exchange-target service="caxchange:registerSubjectRoute" />
 				</eip:target>
-			</eip:routing-rule>	
-			<eip:routing-rule>
-				<eip:predicate>
-					<eip:xpath-predicate
-						xpath="count(/caxchange:caXchangeRequestMessage/caxchange:metadata[caxchange:serviceType='NOF_CATISSUE']) = 1"
-						namespaceContext="#nsContext" />
-				</eip:predicate>
-				<eip:target>
-					<eip:exchange-target service="caxchange:mailService" />
-				</eip:target>
-			</eip:routing-rule>
+			</eip:routing-rule>			
 			<eip:routing-rule>
 				<eip:target>
 					<eip:exchange-target service="caxchange:unhandledTypeRoute" />
