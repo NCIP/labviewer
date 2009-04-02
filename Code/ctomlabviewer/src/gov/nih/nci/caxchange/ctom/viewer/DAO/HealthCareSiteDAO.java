@@ -519,6 +519,7 @@ public class HealthCareSiteDAO
 							+ hcs.getPostalCode() != null ? hcs.getPostalCode() : "" + " "
 							+ hcs.getCountryCode() != null ? hcs.getCountryCode() : "");
 			hcsite.setName(hcs.getName() != null ? hcs.getName() : "");
+			hcsite.setEmail(hcs.getTelecomAddr());
 			hcsite.setUpdatedDate(hcs.getCtomUpdateDt() != null ? hcs.getCtomUpdateDt().toString()
 					: "");
 		}
