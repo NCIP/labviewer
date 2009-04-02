@@ -8,6 +8,7 @@ package gov.nih.nci.caxchange.jdbc;
 public class CaxchangeMetadata {
     String messageType;
     String payloadNamespace;
+    String schemaFileName;
     /**
      * Default constructor
      */
@@ -53,6 +54,15 @@ public class CaxchangeMetadata {
     public String getPayloadNamespace() {
         return payloadNamespace;
     }
+
+    public void setSchemaFileName(String schemaFileName) {
+		this.schemaFileName = schemaFileName;
+    }
+
+    public String getSchemaFileName() {
+		return schemaFileName;
+    }
+
     /**Returns a string representation of the object.
      *@param
      *@return  a string representation of the object.
@@ -61,4 +71,6 @@ public class CaxchangeMetadata {
     public String toString() {
         return " message type:"+messageType+" payload Namespace:"+payloadNamespace;
     }
+
+
 }

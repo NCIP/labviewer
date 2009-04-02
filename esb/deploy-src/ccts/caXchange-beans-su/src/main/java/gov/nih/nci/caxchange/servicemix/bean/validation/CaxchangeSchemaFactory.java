@@ -6,5 +6,5 @@ public interface CaxchangeSchemaFactory {
 
 	public void init();
 	
-	public Schema getSchema(String namespaceName) throws SchemaFactoryException ;
+	public Schema getSchema(String messageType) throws SchemaFactoryException ;
 }

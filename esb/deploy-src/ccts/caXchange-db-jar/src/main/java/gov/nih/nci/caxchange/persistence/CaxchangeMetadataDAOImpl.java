@@ -58,12 +58,19 @@ public class CaxchangeMetadataDAOImpl  implements CaxchangeMetadataDAO{
         Connection conn=null;
         PreparedStatement ps=null;
         String insert= "insert into CAXCHANGE_MESSAGE_TYPES (MESSAGE_TYPE, PAYLOAD_NAMESPACE) VALUES (?,?)";
+        String insertSchemaFileName = "insert into CAXCHANGE_NAMESPACES (PAYLOAD_NAMESPACE, SCHEMA_FILE_NAME) VALUES (?,?)";
         try{
             conn= dataSource.getConnection();
             ps = conn.prepareStatement(insert);
             ps.setString(1, caxchangeMetadata.getMessageType());
             ps.setString(2, caxchangeMetadata.getPayloadNamespace());
             ps.executeUpdate();
+            if (caxchangeMetadata.getSchemaFileName() != null) {
+            	ps = conn.prepareStatement(insertSchemaFileName);
+            	ps.setString(1, caxchangeMetadata.getPayloadNamespace());
+            	ps.setString(2, caxchangeMetadata.getSchemaFileName());
+            	ps.executeUpdate();
+            }
         }catch(Exception e) {
             logger.error("Error inserting into CAXCHANGE_MESSAGE_TYPES.",e);
             throw e;
@@ -78,11 +85,16 @@ public class CaxchangeMetadataDAOImpl  implements CaxchangeMetadataDAO{
         Connection conn=null;
         PreparedStatement ps=null;
         String update= "UPDATE CAXCHANGE_MESSAGE_TYPES set PAYLOAD_NAMESPACE=? WHERE MESSAGE_TYPE=?";
+        String updateSchemaFileName = "UPDATE CAXCHANGE_NAMESPACES set SCHEMA_FILE_NAME=? WHERE PAYLOAD_NAMESPACE=?";
         try{
             conn= dataSource.getConnection();
             ps = conn.prepareStatement(update);
             ps.setString(2, caxchangeMetadata.getMessageType());
             ps.setString(1, caxchangeMetadata.getPayloadNamespace());
+            ps.executeUpdate();
+            ps = conn.prepareStatement(updateSchemaFileName);
+            ps.setString(2, caxchangeMetadata.getPayloadNamespace());
+            ps.setString(1, caxchangeMetadata.getSchemaFileName());
             ps.executeUpdate();
         }catch(Exception e) {
             logger.error("Error updating  CAXCHANGE_MESSAGE_TYPES. "+caxchangeMetadata,e);
@@ -100,11 +112,14 @@ public class CaxchangeMetadataDAOImpl  implements CaxchangeMetadataDAO{
      * @throws Exception
      */
     public CaxchangeMetadata getMetadata(String messageType) throws Exception{
-
+    	CaxchangeMetadata metadata =  metadataCache.get(messageType);
+    	if (metadata != null) {
+    		return metadata;
+    	}
         Connection conn=null;
         PreparedStatement ps=null;
-        CaxchangeMetadata metadata = null;
         String select= "select MESSAGE_TYPE, PAYLOAD_NAMESPACE FROM  CAXCHANGE_MESSAGE_TYPES WHERE MESSAGE_TYPE=?";
+        String selectSchemaFileName = "select PAYLOAD_NAMESPACE, SCHEMA_FILE_NAME FROM  CAXCHANGE_NAMESPACES WHERE PAYLOAD_NAMESPACE=?";
         try{
             conn= dataSource.getConnection();
             ps = conn.prepareStatement(select);
@@ -115,6 +130,18 @@ public class CaxchangeMetadataDAOImpl  implements CaxchangeMetadataDAO{
             	metadata.setMessageType(rs.getString("MESSAGE_TYPE"));
             	metadata.setPayloadNamespace(rs.getString("PAYLOAD_NAMESPACE"));
             }
+            ps.close();
+            if ((metadata!=null)&&(metadata.getPayloadNamespace()!=null)){
+               ps = conn.prepareStatement(selectSchemaFileName);
+               ps.setString(1, metadata.getPayloadNamespace());
+               try {
+            	  rs = ps.executeQuery();
+               }catch(Exception e){}
+               if ((rs!=null)&&(rs.next())){
+            	   metadata.setSchemaFileName(rs.getString("SCHEMA_FILE_NAME"));
+               }
+            }
+            metadataCache.put(messageType, metadata);
             return metadata;
         }catch(Exception e) {
             logger.error("Error querying CAXCHANGE_MESSAGES.",e);
