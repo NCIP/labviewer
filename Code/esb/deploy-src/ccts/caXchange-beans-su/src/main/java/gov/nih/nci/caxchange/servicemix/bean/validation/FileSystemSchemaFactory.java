@@ -1,5 +1,9 @@
 package gov.nih.nci.caxchange.servicemix.bean.validation;
 
+import gov.nih.nci.caxchange.jdbc.CaxchangeMetadata;
+import gov.nih.nci.caxchange.persistence.CaxchangeMetadataDAO;
+import gov.nih.nci.caxchange.persistence.DAOFactory;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,14 +23,17 @@ public class FileSystemSchemaFactory implements CaxchangeSchemaFactory {
 	private static Map<String,Schema> schemaCache = null;
 	private Logger logger = LogManager.getLogger(FileSystemSchemaFactory.class);
 	
-	public Schema getSchema(String namespaceName) throws SchemaFactoryException {
-		
+	public Schema getSchema(String messageType) throws SchemaFactoryException {
+		String namespaceName = null;
 		Schema schema = null;
 		try {
+		   CaxchangeMetadataDAO metadataDAO = DAOFactory.getCaxchangeMetadataDAO();
+		   CaxchangeMetadata metadata = metadataDAO.getMetadata(messageType);
+		   namespaceName =  metadata.getPayloadNamespace();
 		   schema = schemaCache.get(namespaceName);
 		   File schemaFile = null;
 		   if (schema == null) {
-		      String filename = getFileName(namespaceName);
+		      String filename = getFileName(metadata);
 		      logger.debug("ns:"+namespaceName+" filename:"+filename);
 		      schemaFile = new File(schemaDirectoryLocation+ File.separator +filename);
 		      if (!schemaFile.canRead()){
@@ -40,12 +47,18 @@ public class FileSystemSchemaFactory implements CaxchangeSchemaFactory {
 		   }
 		} catch (SAXException e2) {
 			throw new SchemaFactoryException("Error parsing schema for namespace "+namespaceName, e2);
+		} catch (Exception e3) {
+			throw new SchemaFactoryException("Error while getting schema for message type "+messageType, e3);
 		}
 		
 		return schema;	
 	}
 	
-	public String getFileName(String namespace) throws SchemaFactoryException {
+	public String getFileName(CaxchangeMetadata metadata) throws SchemaFactoryException {
+		if (metadata.getSchemaFileName()!=null){
+			return metadata.getSchemaFileName();
+		}
+		String namespace = metadata.getPayloadNamespace();
 		StringBuffer buffer = new StringBuffer();
 		boolean pathSerparator = false;
 		for(char c:namespace.toCharArray()){
