@@ -39,3 +39,8 @@ VALUES ('STUDY_CREATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain'),
        ('HEALTH_CARE_PROVIDER','http://po.coppa.nci.nih.gov'),
        ('SCHEDULE_MODIFICATION','gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain');
 
+INSERT INTO `CAXCHANGE_NAMESPACES`(`PAYLOAD_NAMESPACE`,`SCHEMA_FILE_NAME`)
+VALUES ('gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain','ccts.cabig-1.0_gov.nih.nci.cabig.ccts.domain.xsd'),
+       ('gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs','ccts.cabig-1.0_gov.nih.nci.cabig.ccts.domain.loadlabs.xsd'),
+       ('http://po.coppa.nci.nih.gov','http_po.coppa.nci.nih.gov.xsd'),
+       ('gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.ae.domain','ccts.cabig-1.0_gov.nih.nci.cabig.ccts.ae.domain.xsd');
