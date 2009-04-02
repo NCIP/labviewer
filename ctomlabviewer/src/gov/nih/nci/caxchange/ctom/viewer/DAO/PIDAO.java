@@ -249,11 +249,9 @@ public class PIDAO
 
 						pi.setAddress(postalAddress);
 						pi.setUpdatedDate(new Date().toString());
-
-						List<TEL> telephone = person.getTelecomAddress().getItem();
-						pi.setEmail(telephone.get(0).getValue());
-						pi.setPhone(telephone.get(1).getValue());
 						pi.setCoppaUpdate("Y");
+						pi.setEmail(investigator.getTelecomAddr());
+						pi.setPhone(investigator.getPhone());
 
 						log.info("name" + pi.getName());
 						log.info("address" + postalAddress);
@@ -495,6 +493,9 @@ public class PIDAO
 				pi.setCountryCode(part.getCode());
 			}
 		}
+		List<TEL> telephone = poPerson.getTelecomAddress().getItem();
+		pi.setTelecomAddr(telephone.get(0).getValue());
+		pi.setPhone(telephone.get(1).getValue());
 		return pi;
 	}
 
