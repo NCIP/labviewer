@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:mail="http://servicemix.apache.org/mail/1.0"
+	xmlns:caxchange="http://nci.nih.gov/caXchange" xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://servicemix.apache.org/mail/1.0 http://servicemix.apache.org/schema/servicemix-mail-3.2.3.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:/caXchangeConf/mail/mail.properties
+			</value>
+		</property>
+	</bean>
+
+	<mail:sender service="caxchange:mailService" endpoint="senderEndpoint"
+		sender="${mail.sender}" receiver="${mail.receiver}" debugMode="${mail.debugMode}"
+		connection="${mail.protocol}://${mail.user}@${mail.host}?password=${mail.password}" />
+</beans>
