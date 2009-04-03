@@ -537,11 +537,19 @@ public class PIDAO
 			CTLabDAO dao = new CTLabDAO();
 			Investigator investigator =
 					dao.retrieveInvestigator(dao.getConnection(), ctepId);
-			pi.setAddress(investigator.getStreetAddr()!=null?investigator.getStreetAddr():"" + " " + investigator.getCity()!=null?investigator.getCity():"" + " "
-					+ investigator.getState()!=null?investigator.getState():"" + " " + investigator.getZipCode()!=null?investigator.getZipCode():"" + " "
-					+ investigator.getCountryCode()!=null?investigator.getCountryCode():"");
-			pi.setName(investigator.getFirstName()!=null?investigator.getFirstName():""+ " " + investigator.getMiddleNAle()!=null?investigator.getMiddleNAle():""
-					+ " " + investigator.getLastName()!=null?investigator.getLastName():"");
+			
+			String address = investigator.getStreetAddr()!=null?investigator.getStreetAddr():"";
+			String city =  investigator.getCity()!=null?investigator.getCity():"" ;
+			String state = investigator.getState()!=null?investigator.getState():"";
+			String zipCode =investigator.getZipCode()!=null?investigator.getZipCode():"";
+			String country = investigator.getCountryCode()!=null?investigator.getCountryCode():"";
+			pi.setAddress(address + "," + city + "," + state + "," + zipCode + "," + country);
+			String fname = investigator.getFirstName()!=null?investigator.getFirstName():"";
+			String mname = investigator.getMiddleNAle()!=null?investigator.getMiddleNAle():"";
+			String lname = investigator.getLastName()!=null?investigator.getLastName():"";
+			pi.setName(fname + "," + mname + ","+ lname);
+			pi.setEmail(investigator.getTelecomAddr());
+			pi.setPhone(investigator.getPhone());
 			pi.setUpdatedDate(investigator.getCtomUpdateDt()!=null?investigator.getCtomUpdateDt().toString():"");
 		}
 		catch (Exception se)
