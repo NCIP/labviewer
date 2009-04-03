@@ -36,7 +36,7 @@
 		defaultOperation="test:Echo" connectionFactory="#connectionFactory" />
 		
 	<jms:endpoint service="caxchange:CaXchangeNCRequestConsumer"
-		endpoint="caxchangeInboundNCJmsConsumerEndpoint" targetService="caxchange:asyncPipeline"
+		endpoint="caxchangeInboundNCJmsConsumerEndpoint" targetService="caxchange:notificationCapableService"
 		targetEndpoint="notificationCapableEndpoint" role="consumer" destinationStyle="queue"
 		jmsProviderDestinationName="caxchangeNCInboundQueue"
 		defaultMep="http://www.w3.org/2004/08/wsdl/in-only"
