@@ -1,6 +1,7 @@
 package gov.nih.nci.caxchange.servicemix.bean.routing;
 
 import gov.nih.nci.caXchange.CaxchangeConstants;
+import gov.nih.nci.caxchange.servicemix.bean.CaXchangeMessagingBean;
 
 import java.io.StringReader;
 import java.util.HashMap;
@@ -11,16 +12,23 @@ import javax.jbi.messaging.InOut;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.servicemix.jbi.jaxp.SourceTransformer;
+import org.apache.servicemix.mail.marshaler.AbstractMailMarshaler;
 
-public class NotificationCapableBean extends HandleErrorResponseBean {
+import org.w3c.dom.Document;
+
+public class NotificationCapableBean extends CaXchangeMessagingBean {
 
 	public static final String DEFAULT_ERROR_CODE = "CAXCHANGE_ERROR";
-	public static final String DEFAULT_ERROR_MESSAGE = "An error occurred processing request.";
+	public static final String MAIL_MSG_HEADER = "<ns1:mailBody xmlns:ns1=\"http://caXchange.nci.nih.gov/messaging\">An error occurred processing request.";
+	public static final String MAIL_MSG_FOOTER = "</ns1:mailBody>";
 	public static HashMap<String, String> caXchangeIDAndRetryCountMap = new HashMap<String, String>();
 
 	private Logger logger = LogManager.getLogger(NotificationCapableBean.class);
@@ -40,7 +48,8 @@ public class NotificationCapableBean extends HandleErrorResponseBean {
 		Source sourceToPipeline = in.getContent();
 		messageToAsyncPipeline.setContent(sourceToPipeline);
 		inOut.setInMessage(messageToAsyncPipeline);
-		inOut.setService(CaxchangeConstants.ASYNC_PIPELINE);
+		inOut.setService(new QName("http://nci.nih.gov/caXchange",
+				"synchronousAsyncBridge"));
 		inOut.setStatus(ExchangeStatus.ACTIVE);
 		channel.send(inOut);
 	}
@@ -48,19 +57,29 @@ public class NotificationCapableBean extends HandleErrorResponseBean {
 	/**
 	 * 
 	 * @param exchange
-	 * @throws MessagingException
+	 * @throws Exception
 	 */
 	private void sendFailureEmailNotification(MessageExchange exchange)
-			throws MessagingException {
+			throws Exception {
 		NormalizedMessage in = exchange
 				.getMessage(CaxchangeConstants.IN_MESSAGE);
 		InOnly inOnly = channel.createExchangeFactory().createInOnlyExchange();
 		NormalizedMessage emailNormalizedMessage = inOnly.createMessage();
 		in.setContent(caXchangeDataUtil.getDOMSource());
-		Source sourceToEmail = in.getContent();
+		
+		String emailMessageDetails = "    SERVICE_TYPE: "
+				+ caXchangeDataUtil.getServiceType()
+				+ ".    CAXCHANGE_IDENTIFIER: "
+				+ caXchangeDataUtil.getCaXchangeIdentifier();
 
-		String emailMessage = DEFAULT_ERROR_MESSAGE;
-		Source source = new StreamSource(new StringReader(emailMessage));
+		String emailMessage = MAIL_MSG_HEADER + emailMessageDetails + MAIL_MSG_FOOTER;
+		logger.debug("EMAIL_MESSAGE: "+emailMessage);
+		Source streamSource = new StreamSource(new StringReader(emailMessage));
+		Source sourceToEmail = new SourceTransformer().toDOMSource(streamSource);
+
+		emailNormalizedMessage.setProperty(AbstractMailMarshaler.MAIL_TAG_SUBJECT, "CAXCHANGE ERROR: " + caXchangeDataUtil.getServiceType() + ": "
+			+ caXchangeDataUtil.getCaXchangeIdentifier());
+//		emailNormalizedMessage.setProperty("org.apache.servicemix.email.text", emailMessage);
 
 		emailNormalizedMessage.setContent(sourceToEmail);
 		inOnly.setInMessage(emailNormalizedMessage);
@@ -84,30 +103,31 @@ public class NotificationCapableBean extends HandleErrorResponseBean {
 		try {
 			logger.debug("CAXCHANGE IDENTIFIER: "
 					+ caXchangeDataUtil.getCaXchangeIdentifier());
+			logger.debug("REQUEST COMING FROM: "
+					+ exchange.getService().toString());
 			if (exchange.getService().equals(
-					CaxchangeConstants.NC_REQUEST_SERVICE)) {
+					new QName("http://nci.nih.gov/caXchange",
+							"notificationCapableService"))) {
+				logger
+						.debug("REQUEST COMING FROM NOTIFICAITON CAPABLE SERVICE");
 				caXchangeIDAndRetryCountMap.put(caXchangeDataUtil
 						.getCaXchangeIdentifier(), "0");
 				sendMessageToAsyncPipeline(exchange);
 
 			} else {
-				NormalizedMessage in = exchange
-						.getMessage(CaxchangeConstants.IN_MESSAGE);
-				String errorMessage = (String) in
-						.getProperty(CaxchangeConstants.ERROR_MESSAGE);
-				String errorCode = (String) in
-						.getProperty(CaxchangeConstants.ERROR_CODE);
-				logger.debug("ErrorMessage: " + errorMessage + " ErrorCode: "
-						+ errorCode);
-				if ((errorMessage != null) || (errorCode != null)) {
+				if (!(exchange.toString().lastIndexOf(
+						"<responseStatus>SUCCESS</responseStatus>") > -1)) {
+
+					logger.debug("RESPONSE STATUS FAILURE");
 					try {
 						int retryCount = new Integer(
 								caXchangeIDAndRetryCountMap
 										.get(caXchangeDataUtil
 												.getCaXchangeIdentifier()))
 								.intValue();
-						if (retryCount < 5) {
+						if (retryCount < 2) {
 							retryCount += 1;
+							logger.debug("****RETRY ATTEMPT****** "+retryCount);
 							caXchangeIDAndRetryCountMap.put(caXchangeDataUtil
 									.getCaXchangeIdentifier(), new Integer(
 									retryCount).toString());
@@ -128,7 +148,7 @@ public class NotificationCapableBean extends HandleErrorResponseBean {
 											.getCaXchangeIdentifier());
 							sendFailureEmailNotification(exchange);
 						}
-						deleteMessage(exchange);
+						// deleteMessage(exchange);
 					} catch (Exception e) {
 						logger
 								.error(
