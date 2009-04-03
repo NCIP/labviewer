@@ -33,7 +33,7 @@ public class CaxchangeConstants {
 	public static final QName ROLLBACK_PIPELINE = new QName("http://nci.nih.gov/caXchange","rollbackPipeline");
 	public static final QName SERVICE_TYPE_ROUTER = new QName("http://nci.nih.gov/caXchange","serviceTypeRouter");
 	public static final QName SYNCHRONOUS_REQUEST_SERVICE = new QName("http://nci.nih.gov/caXchange","synchronousRequestService");
-	public static final QName NC_REQUEST_SERVICE = new QName("http://nci.nih.gov/caXchange","CaXchangeNCRequestConsumer");
+	public static final QName NOTIFICATION_CAPABLE_SERVICE = new QName("http://nci.nih.gov/caXchange","notificationCapableService");
 	public static final QName ASYNC_PIPELINE = new QName("http://nci.nih.gov/caXchange","asyncPipeline");
 	public static final QName EMAIL_SERVICE = new QName("http://nci.nih.gov/caXchange","mailService");
 
