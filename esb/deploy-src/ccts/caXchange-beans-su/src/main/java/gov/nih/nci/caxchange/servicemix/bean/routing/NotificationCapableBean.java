@@ -83,7 +83,7 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 
 		emailNormalizedMessage.setContent(sourceToEmail);
 		inOnly.setInMessage(emailNormalizedMessage);
-		inOnly.setService(CaxchangeConstants.EMAIL_SERVICE);
+		inOnly.setService(new QName("http://nci.nih.gov/caXchange","mail_"+caXchangeDataUtil.getServiceType()+"_Service"));
 		inOnly.setStatus(ExchangeStatus.ACTIVE);
 		channel.send(inOnly);
 	}
