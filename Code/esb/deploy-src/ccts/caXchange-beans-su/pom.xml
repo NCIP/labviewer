@@ -183,7 +183,7 @@
 	<dependency>
 	      <groupId>org.apache.servicemix</groupId> 
 	      <artifactId>servicemix-mail</artifactId> 
-	      <version>2009.01</version> 
+	      <version>2008.01</version> 
         </dependency> 
 	</dependencies>
 	
