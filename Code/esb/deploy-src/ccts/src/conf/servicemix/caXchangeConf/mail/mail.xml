@@ -6,15 +6,34 @@
 	xsi:schemaLocation="http://servicemix.apache.org/mail/1.0 http://servicemix.apache.org/schema/servicemix-mail-3.2.3.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>classpath:/caXchangeConf/mail/mail.properties
-			</value>
-		</property>
-	</bean>
+	
 
-	<mail:sender service="caxchange:mailService" endpoint="senderEndpoint"
-		sender="${mail.sender}" receiver="${mail.receiver}" debugMode="${mail.debugMode}"
-		connection="${mail.protocol}://${mail.user}@${mail.host}?password=${mail.password}" />
+	<mail:sender service="caxchange:mail_SCHEDULE_MODIFICATION_Service" 
+                     endpoint="senderEndpoint"
+                     sender="nalamalaar@mail.nih.gov"
+                     receiver="analamala@ekagrasoft.com"
+                     debugMode="true" 
+                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
+                 
+     <mail:sender service="caxchange:mail_LAB_BASED_AE_Service" 
+                     endpoint="senderEndpoint"
+                     sender="marwahah@mail.nih.gov"
+                     receiver="hmarwaha@ekagrasoft.com"
+                     debugMode="true" 
+                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
+                 
+     <mail:sender service="caxchange:mail_LOAD_LAB_TO_CDMS_Service" 
+                     endpoint="senderEndpoint"
+                     sender="marwahah@mail.nih.gov"
+                     receiver="hmarwaha@ekagrasoft.com"
+                     debugMode="true" 
+                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
+                 
+                 
+     <!-- <mail:sender service="caxchange:mailService" 
+                     endpoint="senderEndpoint"
+                     sender="${mail.sender}"
+                     receiver="${mail.receiver}"
+                     debugMode="${mail.debugMode}" 
+                 connection="${mail.protocol}://${mail.user}@${mail.host}?password=${mail.password}" /> -->
 </beans>
