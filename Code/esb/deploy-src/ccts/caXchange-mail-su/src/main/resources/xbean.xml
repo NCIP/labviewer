@@ -24,11 +24,17 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://servicemix.apache.org/mail/1.0 http://servicemix.apache.org/schema/servicemix-mail-3.2.3.xsd
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-                 
-       
+              
        <import resource="classpath:/caXchangeConf/mail/mail.xml" /> 
        
-     <!--	 
+     <!--	      
+     <bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:/caXchangeConf/mail/mail.properties</value>
+		</property>
+	   </bean>
+     
     <mail:sender service="replaceMe:mailService" 
                  endpoint="senderEndpoint"
                  sender="no-reply@mycompany.com"
