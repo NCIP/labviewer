@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Cgriff (DHHS/NIH/NCI) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:caXchange="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/messaging" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:caXchange="http://caXchange.nci.nih.gov/messaging" xmlns="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/messaging" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="caXchangeRequestMessage" type="caXchange:message"/>
 	<xs:element name="caXchangeResponseMessage" type="caXchange:responseMessage"/>
 	<xs:element name="caXchangeRoutingMetadata" type="caXchange:routingMetadata">
@@ -83,7 +83,7 @@
 	<xs:complexType name="messagePayload">
 		<xs:sequence>
 			<xs:element name="xmlSchemaDefinition" type="xs:anyURI"/>
-			<xs:any processContents="lax" minOccurs="0"/>
+			<xs:any namespace="##any" processContents="lax" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="errorDetails">

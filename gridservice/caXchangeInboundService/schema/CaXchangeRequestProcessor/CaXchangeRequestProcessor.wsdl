@@ -10,7 +10,7 @@
                       
   ============================================================-->
   <types>
-    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsrbf="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" targetNamespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor" elementFormDefault="unqualified" attributeFormDefault="unqualified">
       <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.xsd" schemaLocation="../wsrf/faults/WS-BaseFaults.xsd" />
       <import namespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/Context/types" schemaLocation="./CaXchangeResponseServiceTypes.xsd" />
       <import namespace="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/types" schemaLocation="./CaXchangeRequestProcessorTypes.xsd" />
