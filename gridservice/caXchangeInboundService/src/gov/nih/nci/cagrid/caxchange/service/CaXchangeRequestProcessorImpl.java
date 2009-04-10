@@ -54,6 +54,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis.message.MessageElement;
@@ -96,10 +97,7 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @return
 	 * @throws RemoteException
 	 */
-	public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(
-			gov.nih.nci.caxchange.Message caXchangeRequestMessage)
-			throws RemoteException,
-			gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
+  public gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference processRequestAsynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
 		logger.debug("request:" + caXchangeRequestMessage);
 		try {
 			gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
@@ -296,30 +294,27 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @throws RemoteException
 	 * @throws gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault
 	 */
-	public gov.nih.nci.caxchange.ResponseMessage processRequestSynchronously(
-			gov.nih.nci.caxchange.Message requestMessageFromClient)
-			throws RemoteException,
-			gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
+  public gov.nih.nci.caxchange.ResponseMessage processRequestSynchronously(gov.nih.nci.caxchange.Message caXchangeRequestMessage) throws RemoteException, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeFault {
 		logger.debug("Request in processRequestSynchronously: "
-				+ requestMessageFromClient);
+				+ caXchangeRequestMessage);
 
 		try {
 			CaXchangeResponseServiceResourceHome ctxResourceHome = getCaXchangeResponseServiceResourceHome();
 			ResourceKey resKey = ctxResourceHome.createResource();
 
-			requestMessageFromClient.getMetadata().setCaXchangeIdentifier(
+			caXchangeRequestMessage.getMetadata().setCaXchangeIdentifier(
 					resKey.getValue().toString());
 
 			String caller = SecurityManager.getManager().getCaller();
 			logger.debug("The caller is:'" + caller +"'");
 			if ((caller == null)||("".equals(caller)) || ("<anonymous>".equals(caller.trim()))) {
-				return buildErrorResponse(requestMessageFromClient,
+				return buildErrorResponse(caXchangeRequestMessage,
 						CaxchangeErrors.PERMISSION_DENIED_FAULT,
 						"Unable to get the identity of the caller.Caller identity:"
 								+ caller);
 			}
 			logger.debug("Sending message for the caller:'" + caller +"'");
-			requestMessageFromClient.getMetadata().getCredentials()
+			caXchangeRequestMessage.getMetadata().getCredentials()
 					.setGridIdentifier(caller);
 
 			try {
@@ -344,7 +339,7 @@ public class CaXchangeRequestProcessorImpl extends
 				}
 
 				CaXchangeRequestMessage caXchangeRequestMessageToESB = new CaXchangeRequestMessage();
-				Message requestMessageToESB = buildRequestMessageToESB(requestMessageFromClient);
+				Message requestMessageToESB = buildRequestMessageToESB(caXchangeRequestMessage);
 
 				caXchangeRequestMessageToESB
 						.setCaXchangeRequestMessage(requestMessageToESB);
@@ -352,7 +347,7 @@ public class CaXchangeRequestProcessorImpl extends
 				logger.info("Before sending messge " + new Date().getTime());
 				if (logger.isDebugEnabled()) {
 					   StringWriter sWriter = new StringWriter();
-					   Utils.serializeObject(requestMessageFromClient, new QName(
+					   Utils.serializeObject(caXchangeRequestMessage, new QName(
 						    	"http://caXchange.nci.nih.gov/messaging",
 							    "caXchangeRequestMessage"), sWriter);
 					   logger.debug(sWriter);
@@ -360,6 +355,7 @@ public class CaXchangeRequestProcessorImpl extends
 				SynchronousRequestServiceStub synchronousRequestServiceStub = new SynchronousRequestServiceStub(
 						caXchangeSynchronousServiceURL);
 				synchronousRequestServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(synchronousServiceClientTimeout.longValue());
+				
 				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
 						.processRequestSynchronously(caXchangeRequestMessageToESB);
 				logger.info("After sending messge " + new Date().getTime());
@@ -379,7 +375,7 @@ public class CaXchangeRequestProcessorImpl extends
 						.error(
 								"An error occured sending message to the caXchange hub.",
 								e);
-				return buildErrorResponse(requestMessageFromClient,
+				return buildErrorResponse(caXchangeRequestMessage,
 						CaxchangeErrors.UNKNOWN,
 						"An error occured sending message to the caXchange hub."
 								+ e.getMessage());
@@ -491,131 +487,25 @@ public class CaXchangeRequestProcessorImpl extends
 		Matcher matcher = emptyNamespacePattern.matcher(documentAsString);
 		return matcher.replaceAll("");
 	}
-
 	/**
 	 * Builds the ResponseMessage object to be sent to the client, from the
 	 * Message object returned by the ESB
 	 * 
 	 * @param respMsgFromESB
-	 * @return ResponseMessage
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws SAXException
+	 * @return
+	 * @throws Exception
 	 */
 	private ResponseMessage buildResponseMessageToClient(
 			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.ResponseMessage respMsgFromESB)
-			throws IllegalAccessException, InvocationTargetException,
-			ParserConfigurationException, SAXException, IOException {
+			throws Exception {
 		logger.debug("In - buildResponseMessageToClient method");
-		ResponseMessage responseMessageToClientL1 = new ResponseMessage();
+        OMElement element =  respMsgFromESB.getOMElement(new QName("http://caXchange.nci.nih.gov/messaging","caXchangeResponseMessage"), OMAbstractFactory.getOMFactory());
+	    logger.debug("Response from servicemix- "+element.toString());
+        ResponseHandler responseHandler = new ResponseHandler();
+        responseHandler.setResponseText(element.toString());
+        return responseHandler.getResponse();
+     }
 
-		// create and set the response metadata
-		responseMessageToClientL1.setResponseMetadata(new ResponseMetadata(
-				respMsgFromESB.getResponseMetadata().getCaXchangeIdentifier(),
-				respMsgFromESB.getResponseMetadata().getExternalIdentifier()));
-
-		// create and set the response
-		Response responseToClientL2 = new Response();
-
-		Statuses statuses = Statuses.fromString(respMsgFromESB.getResponse()
-				.getResponseStatus().toString());
-		responseToClientL2.setResponseStatus(statuses);
-
-		// create a response or error response based on the choice
-		if (respMsgFromESB.getResponse().getResponseChoice_type0()
-				.getTargetResponse() != null) {
-			gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage[] targetRespMsgFromESBArray = respMsgFromESB
-					.getResponse().getResponseChoice_type0()
-					.getTargetResponse();
-			  TargetResponseMessage[] targetResponses = new TargetResponseMessage[targetRespMsgFromESBArray.length];
-			  int i=0;
-			  for (gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.TargetResponseMessage targetRespMsgFromESB:targetRespMsgFromESBArray) {
-				TargetResponseMessage targetRespMsgToClientL2L1 = new TargetResponseMessage();
-				targetRespMsgToClientL2L1
-						.setTargetServiceIdentifier(targetRespMsgFromESB
-								.getTargetServiceIdentifier());
-				targetRespMsgToClientL2L1
-						.setTargetServiceOperation(targetRespMsgFromESB
-								.getTargetServiceOperation());
-
-				targetRespMsgToClientL2L1
-						.setTargetMessageStatus(MessageStatuses
-								.fromValue(targetRespMsgFromESB
-										.getTargetMessageStatus().getValue()));
-
-				if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0()
-						.getTargetBusinessMessage() != null) {
-					gov.nih.nci.caxchange.MessagePayload targetBusinessMsg = new gov.nih.nci.caxchange.MessagePayload();
-					if (targetRespMsgFromESB.getTargetResponseMessageChoice_type0().getTargetBusinessMessage().getXmlSchemaDefinition()!= null){
-					   targetBusinessMsg.setXmlSchemaDefinition(new org.apache.axis.types.URI(targetRespMsgFromESB.getTargetResponseMessageChoice_type0().getTargetBusinessMessage().getXmlSchemaDefinition().toString()));
-					}
-
-					OMElement documentElement = targetRespMsgFromESB
-							.getTargetResponseMessageChoice_type0()
-							.getTargetBusinessMessage().getExtraElement();
-					if (documentElement != null){
-					   DocumentBuilderFactory dbf = DocumentBuilderFactory
-								.newInstance();
-					   dbf.setNamespaceAware(true);
-					   dbf.setValidating(false);
-					   DocumentBuilder db = dbf.newDocumentBuilder();
-					       logger.debug(documentElement.getNamespace().getNamespaceURI()+":"+documentElement.getNamespace().getPrefix());
-					       logger.debug("Document as string:"+documentElement.toString());
-                           String documentElementAsString = replaceEmptyNamespaces(documentElement.toString());
-					       logger.debug("Document as string:"+documentElementAsString);
-                           Document payload = db.parse(new ByteArrayInputStream(
-							documentElementAsString.getBytes()));
-					       MessageElement messageElement = new MessageElement(payload
-							.getDocumentElement());
-
-					   targetBusinessMsg
-							.set_any( new MessageElement[]{messageElement});
-					}
-					/*
-					 * //un- comment the block below if the schema is present in
-					 * the URI if (targetRespMsgFromESB
-					 * .getTargetResponseMessageChoice_type0()
-					 * .getTargetBusinessMessage()
-					 * .getXmlSchemaDefinition().getPath() != null) {
-					 * logger.debug("IN TARGET SCHEMA NOT NULL IF LOOP");
-					 * targetBusinessMsg .setXmlSchemaDefinition(new
-					 * org.apache.axis.types.URI( targetRespMsgFromESB
-					 * .getTargetResponseMessageChoice_type0()
-					 * .getTargetBusinessMessage() .getXmlSchemaDefinition()
-					 * .getPath())); }
-					 */
-
-					targetRespMsgToClientL2L1
-							.setTargetBusinessMessage(targetBusinessMsg);
-				} else {
-					targetRespMsgToClientL2L1.setTargetError(new ErrorDetails(
-							targetRespMsgFromESB
-									.getTargetResponseMessageChoice_type0()
-									.getTargetError().getErrorCode()
-									.getErrorCodes(), targetRespMsgFromESB
-									.getTargetResponseMessageChoice_type0()
-									.getTargetError().getErrorDescription()));
-				}
-				targetResponses[i++] =   targetRespMsgToClientL2L1;
-			}
-
-			responseToClientL2
-					.setTargetResponse(targetResponses);
-
-		} else {
-			ErrorDetails errorDetails = new ErrorDetails(respMsgFromESB
-					.getResponse().getResponseChoice_type0()
-					.getCaXchangeError().getErrorCode().getErrorCodes(),
-					respMsgFromESB.getResponse().getResponseChoice_type0()
-							.getCaXchangeError().getErrorDescription());
-			responseToClientL2.setCaXchangeError(errorDetails);
-		}
-		responseMessageToClientL1.setResponse(responseToClientL2);
-		logger.debug("Out - buildResponseMessageToClient method");
-		return responseMessageToClientL1;
-	}
 
 	/**
 	 * If there is an error in the processing, this method gets called which
