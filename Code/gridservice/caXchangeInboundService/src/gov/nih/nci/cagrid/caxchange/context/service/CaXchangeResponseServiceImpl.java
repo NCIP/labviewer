@@ -23,7 +23,7 @@ public class CaXchangeResponseServiceImpl extends CaXchangeResponseServiceImplBa
 		super();
 	}
 
-  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseNotReadyFault {
+  public gov.nih.nci.caxchange.ResponseMessage getResponse() throws RemoteException, gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeFault, gov.nih.nci.cagrid.caxchange.stubs.types.CaXchangeResponseNotReadyFault {
       try {
           gov.nih.nci.cagrid.caxchange.context.service.globus.resource.CaXchangeResponseServiceResourceHome brh =getResourceHome();
           CaXchangeResponseServiceResource currentResource = brh.getAddressedResource();
