@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://caXchange.nci.nih.gov/caxchangerequest"
+	xmlns:ns0="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/caxchangerequest">
+
+	<types>
+		<xs:schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://caXchange.nci.nih.gov/caxchangerequest"
+			elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<import namespace="http://caXchange.nci.nih.gov/messaging"
+				schemaLocation="caXchange.xsd" />
+		</xs:schema>
+	</types>
+
+	<message name="caxRequestMessage">
+		<part name="parameters" element="ns0:caXchangeRequestMessage" />
+	</message>
+	<message name="caxResponseMessage">
+		<part name="parameters" element="ns0:caXchangeResponseMessage" />
+	</message>
+
+
+	<portType name="CaXchangeRequestPortType">
+		<operation name="ProcessRequest">
+			<input message="tns:caxRequestMessage"
+				wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/caxRequestMessage" />
+			<output message="tns:caxResponseMessage"
+				wsa:Action="http://caxchange.cagrid.nci.nih.gov/CaXchangeRequestProcessor/caxResponseMessage" />
+		</operation>
+	</portType>
+
+	<binding name="CaXchangeRequestBinding" type="tns:CaXchangeRequestPortType">		
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<http:binding verb="POST"/>
+		<operation name="ProcessRequest">
+			<soap:operation style="document" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal"  />
+			</output>
+		</operation>
+	</binding>
+
+	<service name="CaXchangeRequestService">
+		<port name="soap" binding="tns:CaXchangeRequestBinding">
+			<soap:address location="http://localhost:8193/CaXchangeRequestService" />
+		</port>
+	</service>
+
+</definitions>
+	
