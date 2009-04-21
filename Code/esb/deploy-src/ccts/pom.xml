@@ -37,7 +37,7 @@
     <module>caXchange-auditor-jar</module>
     <module>caxchange-metadata-service</module>
     <module>caXchange-sync-receiver-bc</module>
-    
+    <module>caXchange-cxf-bc-su</module>
     <module>caXchange-security-jar</module>
     <module>caXchange-saxon-xslt-su</module>
     <module>caXchange-mail-su</module>
