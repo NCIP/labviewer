@@ -25,7 +25,13 @@
               resource="classpath:/caXchangeConf/transform/IdentifiedPersonSearchCriteria.xsl" />
               
   <saxon:xslt service="caxchange:PersonIdCriteriaXslt" endpoint="PersonIdCriteriaEndpoint"
-              resource="classpath:/caXchangeConf/transform/PersonIdCriteria.xsl" />              
+              resource="classpath:/caXchangeConf/transform/PersonIdCriteria.xsl" />
+              
+  <saxon:xslt service="caxchange:CXFWrapperEditIncomingXslt" endpoint="CXFWrapperEditIncomingEndpoint"
+              resource="classpath:/caXchangeConf/transform/CXFWrapperEditIncoming.xsl" />
+              
+  <saxon:xslt service="caxchange:CXFWrapperEditOutgoingXslt" endpoint="CXFWrapperEditOutgoingEndpoint"
+              resource="classpath:/caXchangeConf/transform/CXFWrapperEditOutgoing.xsl" />
               
   <!-- END SNIPPET: xslt --> 
   
