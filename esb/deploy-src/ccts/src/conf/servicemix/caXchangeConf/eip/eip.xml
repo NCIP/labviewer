@@ -253,6 +253,24 @@
 	</eip:static-routing-slip>
 	
 	
+	
+	
+	
+	<!-- START CHANGES MADE FOR CXF WRAPPER ELEMENT EDITING -->
+	  <eip:static-routing-slip service="caxchange:processRequestRoute" endpoint="caxchange:processRequestRouteEndPoint">
+		<eip:targets>		
+			<eip:exchange-target service="caxchange:CXFWrapperEditIncomingXslt" />
+			<eip:exchange-target service="caxchange:synchronousAsyncBridge" />
+			<eip:exchange-target service="caxchange:CXFWrapperEditOutgoingXslt" />
+		</eip:targets>				
+	  </eip:static-routing-slip>
+		
+	 <!-- END CHANGES MADE FOR CXF WRAPPER ELEMENT EDITING -->
+	
+	
+	
+
+		
 	<eip:async-bridge  service="caxchange:synchronousAsyncBridge"  endpoint="caxchange:synchronousAsyncBridgeEndpoint" >
 	      <eip:target>
 	        <eip:exchange-target service="caxchange:syncPipeline" />
@@ -304,8 +322,9 @@
 
 	
   <!-- END - CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
-       
-
+  
+  
+  
   
   <!-- Static recipient lists for each type of message -->
   
