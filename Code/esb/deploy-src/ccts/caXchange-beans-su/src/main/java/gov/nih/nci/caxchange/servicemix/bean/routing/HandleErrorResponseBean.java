@@ -60,6 +60,7 @@ public class HandleErrorResponseBean extends CaXchangeMessagingBean{
             throw new MessagingException("An error occurred sending error response to the queue.", e);
         }
         exchange.setMessage(out, "out");
+        logger.debug("Outgoing exchange: " + exchange);
         channel.send(exchange);
         deleteMessage(exchange);
     }
