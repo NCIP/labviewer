@@ -257,7 +257,11 @@ public class HL7v3CtLabUnMarshaller implements UnMarshaller {
 			String tmp = id.getRoot() + "." + id.getExtension();
 			spa.setStudyPartIdOrig(tmp);
 			
-			participant.setIdentifier(id);
+			Identifier idPart = new Identifier();
+			idPart.setRoot(id.getRoot());
+			idPart.setExtension(id.getExtension());
+			
+			participant.setIdentifier(idPart);
 		}
 		catch (NullPointerException ex) {}
 
