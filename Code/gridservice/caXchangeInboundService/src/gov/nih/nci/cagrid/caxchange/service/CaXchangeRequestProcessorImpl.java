@@ -28,6 +28,7 @@ import gov.nih.nci.caxchange.synchronous.SynchronousRequestServiceStub.Transacti
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
@@ -59,6 +60,7 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis2.databinding.types.URI;
+import org.apache.axis2.util.XMLUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.globus.wsrf.ResourceKey;
@@ -391,6 +393,7 @@ public class CaXchangeRequestProcessorImpl extends
 			throw caXchangeFault;
 		}
 	}
+  
 
 	/**
 	 * Builds the Message object to be sent to the ESB, from the Message object
@@ -400,7 +403,7 @@ public class CaXchangeRequestProcessorImpl extends
 	 * @return gov.nih.nci.caxchange.synchronous.Message
 	 */
 	private Message buildRequestMessageToESB(
-			gov.nih.nci.caxchange.Message reqMsgFromClient) {
+			gov.nih.nci.caxchange.Message reqMsgFromClient) throws Exception {
 		logger.debug("In - buildRequestMessageToESB method");
         if (logger.isDebugEnabled()) {
         	
@@ -460,16 +463,24 @@ public class CaXchangeRequestProcessorImpl extends
 
 			MessageElement[] messageElement = reqMsgFromClient.getRequest()
 					.getBusinessMessagePayload().get_any();
-			if (messageElement != null && messageElement.length == 1) {
-				String msgElementString = ((MessageElement) messageElement[0])
-						.getAsString();
-				XMLStreamReader parser = XMLInputFactory.newInstance()
-						.createXMLStreamReader(
+		
+			if (messageElement != null && messageElement.length > 0) {
+			    OMElement[] payloads = new OMElement[messageElement.length];
+			    int i=0;
+				for (MessageElement messageEl:messageElement){
+			        payloads[i++] = XMLUtils.toOM(messageEl.getAsDOM());
+			        /*
+				    String msgElementString = ((MessageElement) messageElement[0])
+			  			      .getAsString();
+				    XMLStreamReader parser = XMLInputFactory.newInstance()
+					  	.createXMLStreamReader(
 								new ByteArrayInputStream(msgElementString
 										.getBytes()));
-				StAXOMBuilder builder = new StAXOMBuilder(parser);
-				OMElement documentElement = builder.getDocumentElement();
-				messagePayload.setExtraElement(documentElement);
+				     StAXOMBuilder builder = new StAXOMBuilder(parser);
+				    OMElement documentElement = builder.getDocumentElement();
+				    */
+				}
+				messagePayload.setExtraElement(payloads);
 			}
 
 			request.setBusinessMessagePayload(messagePayload);
@@ -478,8 +489,9 @@ public class CaXchangeRequestProcessorImpl extends
 			logger.debug("Out - buildRequestMessageToESB method");
 
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			logger.error("Error converting to the synchronous stub.",e);
+			throw e;
+ 		}
 		return requestMessageToESB;
 	}
 	
