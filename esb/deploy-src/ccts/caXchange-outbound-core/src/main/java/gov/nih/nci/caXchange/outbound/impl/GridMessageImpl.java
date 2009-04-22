@@ -3,6 +3,9 @@
  */
 package gov.nih.nci.caXchange.outbound.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Category;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -72,6 +75,23 @@ public class GridMessageImpl implements GridMessage {
 		return null;
 	}
 
+	
+	public List<Element> getPayloads() {
+		NodeList nodes = getBusinessPayload().getChildNodes();
+		List<Element> els = new ArrayList<Element>();
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node node = nodes.item(i);
+			if (node instanceof Element) {
+				if (GridSU.SCHEMA_DEFINITION_ELEMENT
+						.equals(node.getLocalName())) {
+					continue;
+				}else {
+				   els.add((Element)node);	
+				}
+			}
+		}
+		return els;
+	}	
 	/**
 	 * This method gets the schema definition from the caxchange message
 	 * @param
@@ -106,6 +126,7 @@ public class GridMessageImpl implements GridMessage {
 			return null;
 		}
 	}
+
 	/**
 	 * This method gets the caxchange request message
 	 * @param

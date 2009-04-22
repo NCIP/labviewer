@@ -78,6 +78,7 @@ public class CoppaInvocationStrategy extends GenericInvocationStrategy {
 			   throw new GridInvocationException("Cannot determine the request payload class name for service:"+message.getServiceType()+" operation:"+message.getOperationName()+" Parameters:"+parameterTypes);
 		   }
 		   requestPayloadClass = parameterTypes[0];
+		   logger.debug("Request payload class name:"+requestPayloadClass.getName());
 		   return requestPayloadClass;
 
 		
