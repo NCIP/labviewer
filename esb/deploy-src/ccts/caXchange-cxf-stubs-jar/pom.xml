@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><project>
-  <parent>
+  <!--<parent>
     <artifactId>caxchange</artifactId>
     <groupId>gov.nih.nci.caxchange</groupId>
     <version>2.0</version>
-  </parent>
+  </parent>-->
   <modelVersion>4.0.0</modelVersion>
   <groupId>gov.nih.nci.caxchange</groupId>
   <artifactId>caXchange-cxf-stubs-jar</artifactId>
-  <packaging>jbi-service-unit</packaging>
+  <!--<packaging>jbi-service-unit</packaging>-->
   <name>A servicemix-bean Service Unit</name>
   <version>2.0</version>
   <url>http://www.myorganization.org</url>
@@ -22,18 +22,19 @@
     </resources>
     <plugins>
       <plugin>
+      	<inherited>false</inherited>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
         </configuration>
       </plugin>
-      <plugin>
+      <!--<plugin>
         <groupId>org.apache.servicemix.tooling</groupId>
         <artifactId>jbi-maven-plugin</artifactId>
         <version>${servicemix-version}</version>
         <extensions>true</extensions>
-      </plugin>
+      </plugin>-->
     </plugins>
   </build>
   <repositories>
@@ -77,7 +78,7 @@
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
-    <dependency>
+    <!--<dependency>
       <groupId>org.apache.servicemix</groupId>
       <artifactId>servicemix-bean</artifactId>
       <version>${servicemix-version}</version>
@@ -87,7 +88,7 @@
       <artifactId>servicemix-core</artifactId>
       <version>${servicemix-version}</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
     
     <!-- CXF WSDL2JAVA STUBS, JAR DEPENDENCIES  START-->    
     <dependency>
@@ -104,7 +105,7 @@
     </dependency>
     <dependency>
 	  <groupId>org.apache.cxf</groupId>
-	  <artifactId>cxf-bundle</artifactId>
+	  <artifactId>cxf</artifactId>
 	  <version>2.2</version>
 	  <scope>provided</scope>
     </dependency>
