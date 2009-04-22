@@ -83,7 +83,7 @@
 	<xs:complexType name="messagePayload">
 		<xs:sequence>
 			<xs:element name="xmlSchemaDefinition" type="xs:anyURI"/>
-			<xs:any processContents="lax" minOccurs="0"/>
+			<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="errorDetails">
