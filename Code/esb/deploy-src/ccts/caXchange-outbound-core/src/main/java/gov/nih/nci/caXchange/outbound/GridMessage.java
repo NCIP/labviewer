@@ -3,6 +3,8 @@
  */
 package gov.nih.nci.caXchange.outbound;
 
+import java.util.List;
+
 import org.w3c.dom.Element;
 
 /**
@@ -16,6 +18,9 @@ public interface GridMessage {
     public Element getMetaData();
     
     public Element getPayload();
+    
+    public List<Element> getPayloads();
+
     
     public Element getSchemaDefinition();
     

@@ -1,8 +1,11 @@
 package gov.nih.nci.caXchange.outbound.operations;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +14,7 @@ import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -30,6 +34,7 @@ import org.apache.servicemix.jbi.jaxp.StringSource;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -184,10 +189,40 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 						"client-config.wsdd");
 		Object requestPayload = null;
 		try {
-		    StringReader reader = new StringReader(transformer.toString(message.getPayload()));
-		    requestPayload = Utils.deserializeObject(
-				reader, requestPayloadClass, deseralizeStream);
-		}catch(TransformerException te) {
+			if (requestPayloadClass.isArray()){
+				List<Element> payloads = message.getPayloads();
+				requestPayload =  Array.newInstance(requestPayloadClass.getComponentType(), payloads.size());
+				byte[] arr = new byte[1024];
+				StringBuffer clientConfig = new StringBuffer();
+				int bytesRead = deseralizeStream.read(arr);
+				while (bytesRead>0){
+					clientConfig.append(new String(arr,0,bytesRead));
+					bytesRead = deseralizeStream.read(arr);
+				}
+				byte[] clientConfigAsBytes = clientConfig.toString().getBytes();
+				ByteArrayInputStream bais = null;
+				int i=0;
+				for(Element element:payloads){
+					String payload = transformer.toString(element);
+					logger.debug("The message payload is:"+payload);
+					StringReader reader = new StringReader(payload);
+					bais = new ByteArrayInputStream(clientConfigAsBytes);
+					Object obj = Utils.deserializeObject(
+							reader, requestPayloadClass,bais);
+					Array.set(requestPayload, i++, obj);
+				}
+			}
+			else {
+			  String payload = transformer.toString(message.getPayload());
+		      logger.debug("The message payload is:"+payload);
+		      StringReader reader = new StringReader(payload);
+		      requestPayload = Utils.deserializeObject(
+				  reader, requestPayloadClass, deseralizeStream);
+			}
+		}catch(IOException ie) {
+			logger.error("Error reading client-config.wsdd.",ie);
+			throw new GridInvocationException("Error reading client-config.wsdd.",ie);
+	    }catch(TransformerException te) {
 			logger.error("Error transforming payload to string.",te);
 			throw new GridInvocationException("Error transforming payload to string.",te);
 		}catch(SAXException se) {
@@ -218,6 +253,7 @@ public class GenericInvocationStrategy extends GridInvocationStrategy {
 		}
 		try {
 		  Method gridOperation = gridClientClass.getMethod(operationName,requestPayloadClass);
+		  logger.debug("Operation Name:"+operationName+" payload class:"+requestPayloadClass.getName());
 		  Object returnObject = gridOperation.invoke(client, requestPayload);
 		  return returnObject;
 		}catch(NoSuchMethodException nsme) {
