@@ -1,7 +1,5 @@
 package gov.nih.nci.caxchange.caxchangerequest;
 
-import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestPortType;
-import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestService;
 import gov.nih.nci.caxchange.messaging.Credentials;
 import gov.nih.nci.caxchange.messaging.Message;
 import gov.nih.nci.caxchange.messaging.MessagePayload;
@@ -114,9 +112,8 @@ public class SampleCaXchangeReqClient {
 
 			messagePayload
 					.setXmlSchemaDefinition("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
-
-			InputStream testMessage = SampleCaXchangeReqClient.class.getClassLoader()
-					.getResourceAsStream("sample-payload.xml");
+			System.out.println(SampleCaXchangeReqClient.class.getClassLoader().getResourceAsStream("/gov/nih/nci/caxchange/caxchangerequest/sample-payload.xml"));
+			InputStream testMessage = SampleCaXchangeReqClient.class.getClassLoader().getResourceAsStream("/src/main/java/gov/nih/nci/caxchange/caxchangerequest/sample-payload.xml");
 			if (testMessage == null) {
 				throw new RuntimeException("Test message does not exist.");
 			}

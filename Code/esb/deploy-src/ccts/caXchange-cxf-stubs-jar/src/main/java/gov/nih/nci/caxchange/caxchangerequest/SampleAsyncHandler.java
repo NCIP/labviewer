@@ -8,7 +8,7 @@ import javax.xml.ws.Response;
 
 public class SampleAsyncHandler implements AsyncHandler<ResponseMessage> {
 	
-	private ResponseMessage reply;
+	private ResponseMessage reply; 
 
 	public void handleResponse(Response<ResponseMessage> response) {
 		try{
