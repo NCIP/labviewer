@@ -112,8 +112,7 @@ public class SampleCaXchangeReqClient {
 
 			messagePayload
 					.setXmlSchemaDefinition("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain");
-			System.out.println(SampleCaXchangeReqClient.class.getClassLoader().getResourceAsStream("/gov/nih/nci/caxchange/caxchangerequest/sample-payload.xml"));
-			InputStream testMessage = SampleCaXchangeReqClient.class.getClassLoader().getResourceAsStream("/src/main/java/gov/nih/nci/caxchange/caxchangerequest/sample-payload.xml");
+			InputStream testMessage = SampleCaXchangeReqClient.class.getClassLoader().getResourceAsStream("sample-payload.xml");
 			if (testMessage == null) {
 				throw new RuntimeException("Test message does not exist.");
 			}
