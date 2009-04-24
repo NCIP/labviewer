@@ -54,6 +54,7 @@
 		<mkdir dir="${build.dir}/classes" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.dir}/lib" />
+		<mkdir dir="${dist.dir}/lib/nongrid" />
 	</target>
 	
 	<!--Clens the templorary files and folder created by the different targets-->
@@ -107,6 +108,12 @@
 		</jar>
 		<copy todir="${dist.dir}/lib">
 			<fileset dir="${lib.dir}">
+				<include name="*.jar"/>
+				<include name="*.zip"/>
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/lib/nongrid">
+			<fileset dir="${lib.dir}/nongrid">
 				<include name="*.jar"/>
 				<include name="*.zip"/>
 			</fileset>
