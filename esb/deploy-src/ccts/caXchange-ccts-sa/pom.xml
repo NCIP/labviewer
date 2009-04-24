@@ -133,7 +133,7 @@
 			    <artifactId>caXchange-cxf-bc-su</artifactId>
 			    <version>${project.version}</version>
             </dependency> 
-		<dependency>
+	     <dependency>
 			    <groupId>gov.nih.nci.caxchange</groupId>
 			    <artifactId>caXchange-mail-su</artifactId>
 			    <version>${project.version}</version>
