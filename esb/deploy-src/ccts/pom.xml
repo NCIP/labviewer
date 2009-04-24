@@ -41,8 +41,6 @@
     <module>caXchange-security-jar</module>
     <module>caXchange-saxon-xslt-su</module>
     <module>caXchange-mail-su</module>
-    <module>caXchange-axis2stubs-jar</module>
-    <module>caXchange-cxf-stubs-jar</module>
   </modules>
   <!-- Add ServiceMix repository -->
 <pluginRepositories>
