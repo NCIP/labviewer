@@ -26,7 +26,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
 public class TestCoppaServicesNonGrid extends TestCase {
@@ -61,7 +60,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 					.getSoap();
 
 			if ("true".equals(synchronousProcessing)) {
-				System.out.println("Invoking the service synchronously.");
+				System.out.println("Invoking the service Synchronously.");
 				gov.nih.nci.caxchange.messaging.ResponseMessage _processRequest_return = caXchangeRequestPortType
 						.processRequest(messageToCXFBC);
 				System.out.println("RESPONSE STATUS: "
@@ -71,11 +70,10 @@ public class TestCoppaServicesNonGrid extends TestCase {
 				assertEquals(_processRequest_return.getResponse()
 						.getResponseStatus(), Statuses.SUCCESS);
 			} else {
-				System.out.println("Invoking the service asynchronously.");
+				System.out.println("Invoking the service Asynchronously.");
 				// Callback approach - asynchronous
 				SampleAsyncHandler testAsyncHandler = new SampleAsyncHandler();
-				System.out
-						.println("Invoking processRequestAsync using callback object...");
+				
 				Future<?> response = caXchangeRequestPortType
 						.processRequestAsync(messageToCXFBC, testAsyncHandler);
 				while (!response.isDone()) {
@@ -100,8 +98,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 				// System.out.println("RESPONSE STATUS: "
 				// +
 				// _processRequestAsync__return.get().getResponse().getResponseStatus());
-
-				System.exit(0);
+				
 			}
 		} catch (Exception e) {
 
@@ -191,7 +188,15 @@ public class TestCoppaServicesNonGrid extends TestCase {
 	 * @throws Exception
 	 */
 	public InputStream getResourceInputStream(String fileName) throws Exception {
-		ClassPathResource cpr = new ClassPathResource(fileName);
+		
+		InputStream testMessage = this.getClass()
+		.getResourceAsStream(fileName);
+		if (testMessage == null) {
+			throw new Exception("Test message does not exist.");
+		}
+		return testMessage;
+		
+		/*ClassPathResource cpr = new ClassPathResource(fileName);
 		if (!cpr.exists()) {
 			throw new Exception(fileName + " does not exist.");
 		}
@@ -200,7 +205,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 			return inputStream;
 		} catch (IOException e) {
 			throw new Exception("Error loading file " + fileName);
-		}
+		}*/
 	}
 
 }
