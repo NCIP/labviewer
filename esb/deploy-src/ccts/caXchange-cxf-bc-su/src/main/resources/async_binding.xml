@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bindings xmlns:xsd="http://www.w3.org/2001/XMLSchema"
           xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-          wsdlLocation="http://localhost:8193/CaXchangeRequestService?wsdl"
+          wsdlLocation="caXchangeRequest.wsdl"
           xmlns="http://java.sun.com/xml/ns/jaxws">
   <bindings node="wsdl:definitions">
     <enableAsyncMapping>true</enableAsyncMapping>
