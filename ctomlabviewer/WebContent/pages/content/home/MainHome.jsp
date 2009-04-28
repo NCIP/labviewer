@@ -36,7 +36,7 @@
 							<tr>
 								<td><font size="2" face="verdana">
 								<p>
-								Welcome to the CTOM Lab Viewer Tool. You may 
+								Welcome to the CTODS Lab Viewer Tool. You may 
 								<br>
 								begin by clicking on any menu option above.
 								</font>
