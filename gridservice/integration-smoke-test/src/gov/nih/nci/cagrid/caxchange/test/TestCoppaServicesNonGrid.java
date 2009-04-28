@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.caxchange.test;
 
 import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestPortType;
 import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestService;
-import gov.nih.nci.caxchange.caxchangerequest.SampleAsyncHandler;
+import gov.nih.nci.caxchange.caxchangerequest.samples.SampleAsyncHandler;
 import gov.nih.nci.caxchange.messaging.Credentials;
 import gov.nih.nci.caxchange.messaging.Message;
 import gov.nih.nci.caxchange.messaging.MessagePayload;
@@ -13,7 +13,6 @@ import gov.nih.nci.caxchange.messaging.Response;
 import gov.nih.nci.caxchange.messaging.Statuses;
 import gov.nih.nci.caxchange.messaging.TransactionControls;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.Future;
