@@ -104,6 +104,8 @@ public class UserConfigForm extends ActionForm implements BaseAssociationForm
 	private Users userBean;
 
 	private List<Users> usersList;
+	
+	private int selectedIndex;
 
 	/**
 	 * @return the userBean
@@ -168,6 +170,26 @@ public class UserConfigForm extends ActionForm implements BaseAssociationForm
 	public String getFormName()
 	{
 		return DisplayConstants.USER_CONFG_ID;
+	}
+
+	
+	/**
+	 * @return the selectedIndex
+	 */
+	public int getSelectedIndex()
+	{
+	
+		return selectedIndex;
+	}
+
+	
+	/**
+	 * @param selectedIndex the selectedIndex to set
+	 */
+	public void setSelectedIndex(int selectedIndex)
+	{
+	
+		this.selectedIndex = selectedIndex;
 	}
 
 	/*

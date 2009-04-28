@@ -435,7 +435,7 @@ public class PIDAO
 	 * @param poPerson
 	 * @return
 	 */
-	public static Investigator convertToInvestigator(Person poPerson)
+	private Investigator convertToInvestigator(Person poPerson)
 	{
 
 		Investigator pi = new Investigator();
@@ -543,11 +543,11 @@ public class PIDAO
 			String state = investigator.getState()!=null?investigator.getState():"";
 			String zipCode =investigator.getZipCode()!=null?investigator.getZipCode():"";
 			String country = investigator.getCountryCode()!=null?investigator.getCountryCode():"";
-			pi.setAddress(address + "," + city + "," + state + "," + zipCode + "," + country);
+			pi.setAddress(address + " " + city + " " + state + " " + zipCode + " " + country);
 			String fname = investigator.getFirstName()!=null?investigator.getFirstName():"";
 			String mname = investigator.getMiddleNAle()!=null?investigator.getMiddleNAle():"";
 			String lname = investigator.getLastName()!=null?investigator.getLastName():"";
-			pi.setName(fname + "," + mname + ","+ lname);
+			pi.setName(fname + " " + mname + " "+ lname);
 			pi.setEmail(investigator.getTelecomAddr());
 			pi.setPhone(investigator.getPhone());
 			pi.setUpdatedDate(investigator.getCtomUpdateDt()!=null?investigator.getCtomUpdateDt().toString():"");

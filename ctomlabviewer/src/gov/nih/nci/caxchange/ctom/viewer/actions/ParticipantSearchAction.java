@@ -189,8 +189,9 @@ public class ParticipantSearchAction extends DispatchAction
 				saveMessages(request, messages);
 			}
 
-			session.setAttribute(DisplayConstants.SEARCH_RESULT_PART,
-					searchResult);
+//			session.setAttribute(DisplayConstants.SEARCH_RESULT_PART,
+//					searchResult);
+			//session.setAttribute("participantsList", pForm.getParticipantsList());
 		}
 		catch (CSException cse)
 		{
@@ -238,9 +239,6 @@ public class ParticipantSearchAction extends DispatchAction
 	public ActionForward loadLabs(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		ActionErrors errors = new ActionErrors();
-		ActionMessages messages = new ActionMessages();
-
 		// gets the session object from HttpRequest
 		HttpSession session = request.getSession();
 		
@@ -252,11 +250,10 @@ public class ParticipantSearchAction extends DispatchAction
 		ParticipantSearchForm pForm = (ParticipantSearchForm) form;
 		List<ParticipantSearchResult> participantsList =
 				pForm.getParticipantsList();
-		for (ParticipantSearchResult psr : participantsList)
-		{
-			if (psr.getIndex().equals("T"))
+		int index = Integer.parseInt(pForm.getIndex()) - 1;
+		if (participantsList != null && !participantsList.isEmpty())
 			{
-				
+			    ParticipantSearchResult psr = participantsList.get(index);
 				String participantTitle = psr.getFirstName()+" " +psr.getLastName() + " [" + psr.getPatientId()+ "]";
 				session.setAttribute("participantTitle",participantTitle);
 				// change the title to include patient information
@@ -265,14 +262,13 @@ public class ParticipantSearchAction extends DispatchAction
 				session.setAttribute("participantId", psr.getGridId());
 				session.setAttribute("patientId", psr.getPatientId());
 				session.setAttribute("pageTitle", titleString);
-				psr.setIndex("");
+				pForm.setIndex("");
 				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 						DisplayConstants.LABACTIVITES_ID);
 				return (mapping
 						.findForward(ForwardConstants.LOAD_SEARCH_SUCCESS));
 			}
-		}
-
+		
 		return (mapping.findForward(ForwardConstants.LOAD_STUDY_SEARCH_SUCCESS));
 	}
 
