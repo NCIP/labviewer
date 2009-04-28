@@ -182,6 +182,7 @@ public class LoadHealthCareSiteAction extends Action
 		// Set the details in the session
 		session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.STUDYSEARCH_ID);
 		session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
+		//session.setAttribute("hcsList",baseDBForm.getHcsList());
 
 		// if the login is valid; loads the search page
 		if (logDB.isDebugEnabled())

@@ -81,7 +81,6 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
-import gov.nih.nci.caxchange.ctom.viewer.beans.LabViewerStatus;
 import gov.nih.nci.caxchange.ctom.viewer.beans.Users;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 

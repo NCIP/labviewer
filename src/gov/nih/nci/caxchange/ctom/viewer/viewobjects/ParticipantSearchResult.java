@@ -78,22 +78,9 @@ public class ParticipantSearchResult
     private String lastName="";
     private String gridId="";
     private String details="";
-    private String index;
-	/**
-	 * @return the index
-	 */
-	public String getIndex() {
-		return index;
-	}
-
-	/**
-	 * @param index the index to set
-	 */
-	public void setIndex(String index) {
-		this.index = index;
-	}
-
-	/**
+    
+    
+    /**
 	 * @return the details
 	 */
 	public String getDetails() {

@@ -106,9 +106,9 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -238,8 +238,8 @@ public class HealthCareSiteDAO
 						// get the address
 						String postalAddress = "";
 						postalAddress =
-								hcs.getStreetAddr() + ", " + hcs.getCity() + ", "
-										+ hcs.getPostalCode() + ", " + hcs.getStateCode() + ", "
+								hcs.getStreetAddr() + "  " + hcs.getCity() + " "
+										+ hcs.getPostalCode() + " " + hcs.getStateCode() + " "
 										+ hcs.getCountryCode();
 						hcSite.setAddress(postalAddress);
 						hcSite.setEmail(hcs.getTelecomAddr());
@@ -408,6 +408,8 @@ public class HealthCareSiteDAO
 				}
 
 			}
+			
+			serializeOrg(organization);
 		}
 		catch (Exception e)
 		{
@@ -422,7 +424,7 @@ public class HealthCareSiteDAO
 	 * @param poPerson
 	 * @return
 	 */
-	public static HealthCareSite convertToSite(Organization poOrg)
+	private HealthCareSite convertToSite(Organization poOrg)
 	{
 
 		HealthCareSite hcs = new HealthCareSite();
@@ -550,5 +552,28 @@ public class HealthCareSiteDAO
 
 		}
 		return ctepIdList;
+	}
+	
+	private void serializeOrg(Organization org)
+	{
+
+		try
+		{
+			// QName for the Id
+			QName idQname = new QName("http://po.coppa.nci.nih.gov", "Organization");
+			PrintWriter writer = new PrintWriter("Org.xml");
+			// Serialize using the wsdd
+			InputStream wsddIs =
+					getClass().getResourceAsStream(
+							"/gov/nih/nci/coppa/services/client/client-config.wsdd");
+
+			Utils.serializeObject(org, idQname, writer, wsddIs);
+
+		}
+		catch (Exception e)
+		{
+			log.error("Exception occured while serializing ii", e);
+		}
+		
 	}
 }
