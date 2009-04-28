@@ -403,6 +403,14 @@ DATA TABLE BEGINS
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
 }
+.sortable{ /* for the horizontal column headers */
+  font-family:arial,helvetica,verdana,sans-serif;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  font-weight:bold;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
 .dataTable{ /* for the main table below the labels */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
@@ -418,9 +426,23 @@ DATA TABLE BEGINS
   background-color:#F4F4F5; /* constant: light gray */
   color:#000000; /* constant: black */
 }
+.odd{ /* for the light color of alternating rows */
+  background-color:#FFFFFF; /* constant: white */
+  color:#000000; /* constant: black */
+}
+.even{ /* for the dark color of alternating rows */
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+}
 .dataCellText{ /* for text output cells */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+.dataCellTextRed{ /* for text output cells */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:red;
   text-align:left;
 }
 .dataCellNumerical{ /* for numerical output cells */
@@ -511,4 +533,11 @@ MISCELLANEOUS BEGINS
 }
 img.img{ /* for images that need a border */
   border:1px solid #5C5C5C; /* constant: dark gray */
+}
+.pagebanner,.pagelinks,.export,.exportlinks{
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:.8em;
+}
+.hidden{
+	display:none;
 }

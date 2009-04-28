@@ -204,7 +204,7 @@
 <div>
 	<logic:present name="<%=DisplayConstants.SEARCH_RESULT%>">
 		<jsp:include
-			page="/pages/content/searchResult/LabActivitiesSearchResult.jsp" />
+			page="/pages/content/searchResult/NewLabActivitiesSearchResult.jsp" />
 	</logic:present>
 </div>
 <!-- laf box 2nd half -->
