@@ -182,6 +182,7 @@ public class LoadPIAction extends Action
 		// set the details in the session
 		session.setAttribute(DisplayConstants.CURRENT_ACTION, DisplayConstants.STUDYSEARCH_ID);
 		session.setAttribute(DisplayConstants.CURRENT_FORM, baseDBForm);
+		//session.setAttribute("piList", baseDBForm.getPiList());
 
 		// if the login is valid; loads the search page
 		if (logDB.isDebugEnabled())

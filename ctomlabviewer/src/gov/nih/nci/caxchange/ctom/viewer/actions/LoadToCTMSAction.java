@@ -83,10 +83,10 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
-import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
@@ -107,6 +107,7 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -384,7 +385,7 @@ public class LoadToCTMSAction extends Action
 
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length;
-		// PrintWriter writer = new PrintWriter("c3dmessage.xml");
+		 PrintWriter writer = new PrintWriter("c3dmessage.xml");
 		QName lab =
 				new QName(
 						"gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs",
@@ -430,7 +431,7 @@ public class LoadToCTMSAction extends Action
 		CaXchangeRequestProcessorClient client =
 				new CaXchangeRequestProcessorClient(url, gridCreds);
 
-		// Utils.serializeObject(requestMessage, lab, writer);
+		 Utils.serializeObject(requestMessage, lab, writer);
 		CaXchangeResponseServiceReference crsr =
 				client.processRequestAsynchronously(requestMessage);
 		CaXchangeResponseServiceClient responseService =

@@ -83,10 +83,10 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.caxchange.context.client.CaXchangeResponseServiceClient;
 import gov.nih.nci.cagrid.caxchange.context.stubs.types.CaXchangeResponseServiceReference;
+import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
-import gov.nih.nci.caxchange.MessageTypes;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
@@ -107,6 +107,7 @@ import gov.nih.nci.logging.api.user.UserInfoHelper;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -132,11 +133,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.cagrid.gaards.websso.authentication.CaGridAuthenticationManager;
 import org.globus.gsi.GlobusCredential;
 import org.hibernate.Session;
-import org.jasig.cas.authentication.Authentication;
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 import webservices.Documentation;
 import webservices.LabResult;
@@ -385,7 +383,7 @@ public class LoadTocaAERSAction extends Action
 		}
 		labRequest.setLabResult(labResults);
 		numOfLabs = labResults.length;
-		// PrintWriter writer = new PrintWriter("caAERSmessage.xml");
+		 PrintWriter writer = new PrintWriter("caAERSmessage.xml");
 		// QName lab = new
 		// QName("http://integration/caaers.nci.nih.gov/services","LoadLabsRequest");
 		QName lab =
@@ -393,7 +391,7 @@ public class LoadTocaAERSAction extends Action
 						"gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs",
 						"LoadLabsRequest");
 		// QName lab = new QName("LoadLabsRequest");
-		// Utils.serializeObject(labRequest, lab, writer);
+		Utils.serializeObject(labRequest, lab, writer);
 
 		// Create the caxchange message
 		Message requestMessage = new Message();

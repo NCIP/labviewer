@@ -107,6 +107,7 @@ import gov.nih.nci.system.query.cql.CQLLogicalOperator;
 import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
+import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
