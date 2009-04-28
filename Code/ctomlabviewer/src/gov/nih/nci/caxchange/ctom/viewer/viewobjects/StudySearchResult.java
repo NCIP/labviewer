@@ -62,10 +62,6 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.viewobjects;
 
-import java.util.Date;
-
-import gov.nih.nci.labhub.domain.LaboratoryResult;
-import gov.nih.nci.labhub.domain.SubjectAssignment;
 
 
 public class StudySearchResult
@@ -78,7 +74,6 @@ public class StudySearchResult
 	private String status = "";
 	private String gridId = "";
 	private String details="";
-	private String index;
 	
 	/**
 	 * @return the details
@@ -172,20 +167,6 @@ public class StudySearchResult
 	 */
 	public void setGridId(String gridId) {
 		this.gridId = gridId;
-	}
-
-	/**
-	 * @return the index
-	 */
-	public String getIndex() {
-		return index;
-	}
-
-	/**
-	 * @param index the index to set
-	 */
-	public void setIndex(String index) {
-		this.index = index;
 	}
 
 	/**

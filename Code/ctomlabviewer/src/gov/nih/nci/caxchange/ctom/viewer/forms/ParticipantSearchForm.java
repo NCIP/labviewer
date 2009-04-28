@@ -117,6 +117,8 @@ public class ParticipantSearchForm extends ActionForm implements
 		return participantPhrase;
 	}
 
+	private String index;
+	
 	// size of the studiesList
 	private int listSize;
 
@@ -222,6 +224,26 @@ public class ParticipantSearchForm extends ActionForm implements
 	public void setListSize(int listSize)
 	{
 		this.listSize = listSize;
+	}
+
+	
+	/**
+	 * @return the index
+	 */
+	public String getIndex()
+	{
+	
+		return index;
+	}
+
+	
+	/**
+	 * @param index the index to set
+	 */
+	public void setIndex(String index)
+	{
+	
+		this.index = index;
 	}
 
 }

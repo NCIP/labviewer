@@ -325,16 +325,19 @@ public class StudySubjectAction extends Action
 				SubjectAssignment ii =
 						(SubjectAssignment) resultsIterator.next();
 				String pageTitle = "";
-				String participantName =
+				String fName =
 						ii.getParticipant().getFirstName() != null ? ii
 								.getParticipant().getFirstName()
-								: " " + " " + ii.getParticipant().getLastName() != null ? ii
+								: " " ;
+				String lName = ii.getParticipant().getLastName() != null ? ii
 										.getParticipant().getLastName()
 										: "";
+				String participantName= fName + " "	+ lName;					
+										
 				String studyName =
-						ii.getStudySite().getStudy().getShortTitle() != null ? ii
+						(ii.getStudySite().getStudy().getShortTitle() != null || !ii.getStudySite().getStudy().getShortTitle().equals("null"))? ii
 								.getStudySite().getStudy().getShortTitle()
-								: "";
+								: " ";
 				pageTitle =
 						"Study:" + studyName + ":: Participant: "
 								+ participantName;

@@ -92,35 +92,44 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CommonUtil.
+ * 
  * @author asharma
  */
 public class CommonUtil
 {
+
+	/** The Constant CONFIG_FILE_1. */
 	private static final String CONFIG_FILE_1 = "/baseURL.properties";
+
+	/** The Constant CONFIG_FILE_2. */
 	private static final String CONFIG_FILE_2 = "/labviewer.properties";
+
+	/** The Constant log. */
 	private static final Logger log = Logger.getLogger(CommonUtil.class);
 
 	/**
-	 * Get the properties from properties file
+	 * Get the properties from properties file.
 	 * 
-	 * @param session
+	 * @param session the session
 	 */
 	public void getProperties(HttpSession session)
 	{
-		
+
 		try
 		{
 			Properties props1 = new Properties();
 			InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_1);
 			props1.load(stream);
-					
+
 			String caAERSurl = (String) props1.getProperty("BaseURLcaAERS");
 			String c3prurl = (String) props1.getProperty("BaseURLC3PR");
-			String C3Durl = (String)props1.getProperty("BaseURLC3D");
+			String C3Durl = (String) props1.getProperty("BaseURLC3D");
 			String url = (String) props1.getProperty("url");
 			String tissueurl = (String) props1.getProperty("tissueURL");
-			
+
 			session.setAttribute("BaseURLcaAERS", caAERSurl);
 			session.setAttribute("BaseURLC3PR", c3prurl);
 			session.setAttribute("caXchangeURL", url);
@@ -135,7 +144,7 @@ public class CommonUtil
 		{
 			log.error("Error reading the config file: " + CONFIG_FILE_1);
 		}
-		
+
 		try
 		{
 			Properties props = new Properties();
@@ -145,8 +154,7 @@ public class CommonUtil
 			session.setAttribute("testEnabled", testEnabled);
 			String webssoEnabled = (String) props.getProperty("websso.enabled");
 			session.setAttribute("webssoEnabled", webssoEnabled);
-			String webssoCasServer =
-					(String) props.getProperty("websso.cas.server");
+			String webssoCasServer = (String) props.getProperty("websso.cas.server");
 			session.setAttribute("webssoCasServer", webssoCasServer);
 			String version = (String) props.getProperty("version");
 			session.setAttribute("version", version);
@@ -156,7 +164,6 @@ public class CommonUtil
 			session.setAttribute("hotLinkType", hotLinkType);
 			String propertyFilePath = (String) props.getProperty("propertyFilePath");
 			session.setAttribute("propertyFilePath", propertyFilePath);
-
 
 		}
 		catch (FileNotFoundException e1)
@@ -170,15 +177,18 @@ public class CommonUtil
 	}
 
 	/**
-	 * @param session
-	 * @return
+	 * Check user login.
+	 * 
+	 * @param session the session
+	 * 
+	 * @return the string
 	 */
 	public String checkUserLogin(HttpSession session)
 	{
+
 		String userEmail = null;
 		// If logged in via WEBSSO
-		String gridIDentity =
-				(String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
+		String gridIDentity = (String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
 		if (gridIDentity != null)
 		{
 			int beginIndex = gridIDentity.lastIndexOf("=");
@@ -188,9 +198,7 @@ public class CommonUtil
 		// if logged in via CSM
 		if (userEmail == null)
 		{
-			LoginForm loginForm =
-					(LoginForm) session
-							.getAttribute(DisplayConstants.LOGIN_OBJECT);
+			LoginForm loginForm = (LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT);
 			if (loginForm != null)
 			{
 				userEmail = loginForm.getLoginId();
@@ -199,42 +207,20 @@ public class CommonUtil
 		}
 		return userEmail;
 	}
+
 	/**
-	 * @param session
+	 * Clear menu session data.
+	 * 
+	 * @param session the session
 	 */
 	public void clearMenuSessionData(HttpSession session)
 	{
+
 		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
 		session.removeAttribute(DisplayConstants.CURRENT_FORM);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
-		//session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
-	}
-	
-	/**
-	 * @param session
-	 */
-	public void clearSessionData(HttpSession session)
-	{
-		session.removeAttribute(DisplayConstants.CURRENT_ACTION);
-		session.removeAttribute(DisplayConstants.CURRENT_FORM);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
-		session.removeAttribute("pageTitle");
-		session.removeAttribute("studyId");
-		session.removeAttribute("ID");
-		session.removeAttribute("participantId");
-		session.removeAttribute("patientId");
-	}
-	/**
-	 * @param session
-	 */
-	public void clearStudySessionData(HttpSession session)
-	{
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
+		session.removeAttribute("StudySearchForm");
+		session.removeAttribute("ParticipantSearchForm");
+		session.removeAttribute("LabActivitiesSearchForm");
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
 		session.removeAttribute("pageTitle");
@@ -244,46 +230,53 @@ public class CommonUtil
 		session.removeAttribute("participantId");
 		session.removeAttribute("patientId");
 	}
+
 	/**
-	 * @param session
+	 * Clear session data.
+	 * 
+	 * @param session the session
+	 */
+	public void clearSessionData(HttpSession session)
+	{
+
+		clearMenuSessionData(session);
+	}
+
+	/**
+	 * Clear study session data.
+	 * 
+	 * @param session the session
+	 */
+	public void clearStudySessionData(HttpSession session)
+	{
+
+		clearMenuSessionData(session);
+	}
+
+	/**
+	 * Clear participant session data.
+	 * 
+	 * @param session the session
 	 */
 	public void clearParticipantSessionData(HttpSession session)
 	{
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
-		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
-		session.removeAttribute("participantId");
-		session.removeAttribute("participantTitle");
-		session.removeAttribute("patientId");
+
+		clearMenuSessionData(session);
 	}
-	
+
 	/**
-	 * @param session
+	 * Clear lab session data.
+	 * 
+	 * @param session the session
 	 */
 	public void clearLabSessionData(HttpSession session)
 	{
-		
+
+		session.removeAttribute(DisplayConstants.CURRENT_FORM);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
 		session.removeAttribute("ALL_SEARCH_RESULT");
-		
-	}
-	/**
-	 * @param id
-	 * @return
-	 */
-	/*public Ii convertToIdentifiedOrgEntityIi(Long id) {
 
-        Ii ii = new Ii();
-        if (id == null) 
-        {
-            ii.setNullFlavor(NullFlavor.NI);
-        } 
-        else
-        {
-           ii.setExtension(id.toString());
-           //@todo : set others attributes of II;
-        }
-        return ii;
-    }*/
+	}
+
 }

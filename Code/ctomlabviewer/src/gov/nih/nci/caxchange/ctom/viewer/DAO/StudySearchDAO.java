@@ -232,13 +232,13 @@ public class StudySearchDAO extends HibernateDaoSupport
 				StudySearchResult studySearchResult = new StudySearchResult();
 				studySearchResult.setId(study.getId());
 				// retrieve the short title
-				studySearchResult.setShortTitle(study.getShortTitle());
+				studySearchResult.setShortTitle(study.getShortTitle()!=null?study.getShortTitle():"");
 				// retrieve the extension and root for the study
 				Collection<II> identifiers = study.getStudyIdentifier();
 				II identifier = retrieveIdentifier(identifiers);
-				studySearchResult.setStudyId(identifier.getExtension());
+				studySearchResult.setStudyId(identifier.getExtension()!=null?identifier.getExtension():"");
 				studyGridId = identifier.getRoot();
-				studySearchResult.setGridId(studyGridId);
+				studySearchResult.setGridId(studyGridId != null?studyGridId:"");
 				request.getSession().setAttribute("studySubjectGridId",
 						studyGridId);
 				// retrieve the phase code

@@ -218,19 +218,21 @@ public class UserConfigAction extends DispatchAction
 		
 		// retrieve the users from the form
 		List<Users> users = baseDBForm.getUsersList();
+		int selectedIndex = baseDBForm.getSelectedIndex()>0?baseDBForm.getSelectedIndex()-1:0;
+				
 		boolean deleted = false;
 		
 		//encrypt passwords for all users before submitting for delete
 		 encryptAllUserPasswords(users);
 		
 		//check if user marked for delete
-		for (Users user : users)
-		{
-			if (user.getDeleteFlag().equals("T"))
-			{
-				// call the DAO method to perform delete
-				deleted = userDAO.deleteUser(user);
-			}
+		 if(users != null && !users.isEmpty() && selectedIndex >= 0)
+		 {
+		   Users user = users.get(selectedIndex);
+		   user.setDeleteFlag("T");
+		   // call the DAO method to perform delete
+	      deleted = userDAO.deleteUser(user);
+			
 		}	
 				
 		if (deleted)
@@ -400,20 +402,17 @@ public class UserConfigAction extends DispatchAction
 		ActionErrors errors = new ActionErrors();
 		ActionMessages messages = new ActionMessages();
 
-		// Http Session
-		HttpSession session = request.getSession();
-
 		// User Configuration Form
 		UserConfigForm baseDBForm = (UserConfigForm) form;
+		int selectedIndex = baseDBForm.getSelectedIndex()>0?baseDBForm.getSelectedIndex()-1:0;
 		List<Users> users = baseDBForm.getUsersList();
-		for (Users user : users)
+		if(users != null && !users.isEmpty() && selectedIndex >= 0)
 		{
-			if (user.getModifyFlag().equals("T"))
-			{
+			    Users user = users.get(selectedIndex);
+			    user.setModifyFlag("T");
 				user.setUpdateDate(new Date());
 				baseDBForm.setUserBean(user);
-				break;
-			}
+						
 		}
 
 		return (mapping.findForward(ForwardConstants.LOAD_MODIFY_USER));
@@ -459,18 +458,19 @@ public class UserConfigAction extends DispatchAction
 		}
 		// retrieve the user from the form
 		List<Users> users = baseDBForm.getUsersList();
+		int selectedIndex = baseDBForm.getSelectedIndex()>0?baseDBForm.getSelectedIndex()-1:0;
 		boolean userToModify = false;
 		
 		//encrypt passwords for all users before submitting for modify
 		 encryptAllUserPasswords(users);
 		
 		//check if user marked for modify
-		for (Users user : users)
-		{
-			if (user.getModifyFlag().equals("T"))
-			{
+		 if(users != null && !users.isEmpty() && selectedIndex >= 0)
+		 {
+			 	Users user = users.get(selectedIndex);
+			 	user.setModifyFlag("T");
 				userToModify = userDAO.modifyUser(user);
-			}
+			
 		}
 		if (userToModify)
 		{

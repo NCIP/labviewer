@@ -107,9 +107,8 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 	// list of studies
 	private List<StudySearchResult> studiesList;
 
-	// size of the studiesList
-	private int listSize;
-
+	private String index;
+	
 	/**
 	 * @return the studyPhrase
 	 */
@@ -198,21 +197,25 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 		this.studiesList = studiesList;
 	}
 
+	
 	/**
-	 * @return the listSize
+	 * @return the index
 	 */
-	public int getListSize()
+	public String getIndex()
 	{
-		return this.getStudiesList().size();
+	
+		return index;
 	}
 
+	
 	/**
-	 * @param listSize
-	 *            the listSize to set
+	 * @param index the index to set
 	 */
-	public void setListSize(int listSize)
+	public void setIndex(String index)
 	{
-		this.listSize = listSize;
+	
+		this.index = index;
 	}
 
+	
 }
