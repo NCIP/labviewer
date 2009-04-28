@@ -127,6 +127,11 @@
 		<!-- CXF WSDL2JAVA STUBS, JAR DEPENDENCIES  START-->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
 			<version>${cxf.version}</version>
 		</dependency>
@@ -143,8 +148,8 @@
 			<version>2.8.1</version>
 		</dependency>
 
-	
-	 
+
+
 		<dependency>
 			<groupId>org.apache.ws.commons.axiom
 			</groupId>
