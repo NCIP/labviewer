@@ -11,6 +11,8 @@
 	prefix="template"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
 	prefix="nested"%>
+<%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
+	
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.HealthCareSiteForm"%>
 
 <html:form action="loadHealthCareSite.do">
@@ -139,4 +141,5 @@
 		</div>
 		<!-- laf box 2nd half -->
 	</logic:present>
+	
 </html:form>

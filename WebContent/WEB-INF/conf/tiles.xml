@@ -83,15 +83,15 @@
 		<put name="Content" value="/pages/content/detailScreen/LabActivitiesSearchScreen.jsp" />
 	</definition>	
 	<definition name="Tiles.StudySearch.Detail.Screen" extends="Base">
-		<put name="Content" value="/pages/content/detailScreen/StudySearchScreen.jsp" />
+		<put name="Content" value="/pages/content/detailScreen/NewStudySearchScreen.jsp" />
 	</definition>	
 	<definition name="Tiles.ParticipantSearch.Detail.Screen" extends="Base">
-		<put name="Content" value="/pages/content/detailScreen/ParticipantSearchScreen.jsp" />
+		<put name="Content" value="/pages/content/detailScreen/NewParticipantSearchScreen.jsp" />
 	</definition>	
 	
 	<!-- Search Result Pages -->
 	<definition name="Tiles.LabActivities.Search.Result" extends="BaseSearchResults">
-		<put name="Content" value="/pages/content/searchResult/LabActivitiesSearchResult.jsp" />
+		<put name="Content" value="/pages/content/searchResult/NewLabActivitiesSearchResult.jsp" />
 	</definition>
 	
 	<!-- Happy Page -->
@@ -104,7 +104,7 @@
 	</definition>
 		<!-- Users Page -->
 	<definition name="Tiles.Users.Page" extends="Base">
-		<put name="Content" value="/pages/content/main/UserConfigScreen.jsp" />
+		<put name="Content" value="/pages/content/main/NewUserConfigScreen.jsp" />
 	</definition>
 		<!-- Add User Page -->
 	<definition name="Tiles.AddUser.Page" extends="Base">
@@ -117,12 +117,12 @@
 	
 	<!--PI Page -->
 	<definition name="Tiles.PI.Page" extends="Base">
-		<put name="Content" value="/pages/content/detailScreen/PIDetails.jsp" />
+		<put name="Content" value="/pages/content/detailScreen/NewPIDetails.jsp" />
 	</definition>
 	
 	<!-- HealthCaresite Page -->
 	<definition name="Tiles.HealthCareSite.Page" extends="Base">
-		<put name="Content" value="/pages/content/detailScreen/HealthCareSiteDetails.jsp" />
+		<put name="Content" value="/pages/content/detailScreen/NewHealthCareSiteDetails.jsp" />
 	</definition>
 	
 </tiles-definitions>
