@@ -16,6 +16,7 @@ import gov.nih.nci.caxchange.Statuses;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
@@ -118,6 +119,9 @@ public class TestCaXchangeGridService extends TestCase {
     public ResponseMessage invokeService() throws Exception {
 		String synchronousProcessing = System.getProperty("synchronous");
 		ResponseMessage getResponse = null;
+		StringWriter sw = new StringWriter();
+		Utils.serializeObject(message, new QName("http://caXchange.nci.nih.gov/messaging","caXchangeRequestMessage"), sw);
+		System.out.print(sw);
 		if ("true".equals(synchronousProcessing)) {
 			System.out.println("Invoking the service synchronously.");
 			getResponse = client.processRequestSynchronously(message);
