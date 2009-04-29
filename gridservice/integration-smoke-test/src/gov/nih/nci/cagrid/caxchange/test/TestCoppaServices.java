@@ -5,6 +5,7 @@ import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
 
 import java.io.InputStream;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -31,23 +32,53 @@ public class TestCoppaServices extends TestCaXchangeGridService {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public MessagePayload getMessagePayloadForGetByIds(String payloadFiles) throws Exception{
+	   try {
+		MessagePayload messagePayload = new MessagePayload();
+        messagePayload.setXmlSchemaDefinition(new URI("http://po.coppa.nci.nih.gov"));
+        StringTokenizer st = new StringTokenizer(payloadFiles,",");
+        MessageElement[] payloads = new MessageElement[st.countTokens()];
+        int i=0;
+        System.out.println("Payloads:"+payloadFiles);
+        while (st.hasMoreTokens()){
+        	String nextFile = st.nextToken();
+        	System.out.println("Adding file:"+nextFile);
+        	InputStream testMessage = getResourceInputStream("/payloads/"+nextFile);
+            DocumentBuilder db =dbf.newDocumentBuilder();
+            Document payload = db.parse(testMessage);
+            MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+            payloads[i++] = messageElement;
+        }
+        messagePayload.set_any(payloads);
+        return messagePayload;
+	   } catch(Exception e) {
+       	 throw e;       
+       }
+	}
+	
 	
     public void testCoppaService() {
         try {
           messageType = System.getProperty("message.type");
           payloadFileName =  System.getProperty("payload.file.name");
           operationName = System.getProperty("operation.name");
-      	  InputStream testMessage = getResourceInputStream("/payloads/"+payloadFileName);
           message.getMetadata().setServiceType(messageType);
           if ((operationName != null)&&(!(operationName.equals("${operation.name}")))) {
               message.getMetadata().setOperationName(operationName);
           }
-          MessagePayload messagePayload = new MessagePayload();
-          messagePayload.setXmlSchemaDefinition(new URI("http://po.coppa.nci.nih.gov"));
-          DocumentBuilder db =dbf.newDocumentBuilder();
-          Document payload = db.parse(testMessage);
-          MessageElement messageElement = new MessageElement(payload.getDocumentElement());
-          messagePayload.set_any(new MessageElement[]{messageElement});
+          MessagePayload messagePayload = null;
+          if (operationName.equals("getByIds")) {
+        	  messagePayload = getMessagePayloadForGetByIds(payloadFileName);
+          }else {
+        	  messagePayload = new MessagePayload();
+              messagePayload.setXmlSchemaDefinition(new URI("http://po.coppa.nci.nih.gov"));
+          	  InputStream testMessage = getResourceInputStream("/payloads/"+payloadFileName);
+              DocumentBuilder db =dbf.newDocumentBuilder();
+              Document payload = db.parse(testMessage);
+              MessageElement messageElement = new MessageElement(payload.getDocumentElement());
+              messagePayload.set_any(new MessageElement[]{messageElement});
+          }
+          
           message.getRequest().setBusinessMessagePayload(messagePayload);
           ResponseMessage responseMessage = invokeService();
           assertNotNull(responseMessage);
