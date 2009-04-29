@@ -2,7 +2,7 @@ package gov.nih.nci.cagrid.caxchange.test;
 
 import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestPortType;
 import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestService;
-import gov.nih.nci.caxchange.caxchangerequest.samples.SampleAsyncHandler;
+import gov.nih.nci.caxchange.cxfsamples.SampleAsyncHandler;
 import gov.nih.nci.caxchange.messaging.Credentials;
 import gov.nih.nci.caxchange.messaging.Message;
 import gov.nih.nci.caxchange.messaging.MessagePayload;
