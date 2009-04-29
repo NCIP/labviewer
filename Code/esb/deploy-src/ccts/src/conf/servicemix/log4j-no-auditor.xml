@@ -25,8 +25,10 @@
 			<param name="ConversionPattern" value="%-5p - %-30c{1} - %m%n"/>
 		</layout>
 	</appender>
-	<appender name="FILE" class="org.apache.log4j.FileAppender">
+	<appender name="FILE" class="org.apache.log4j.RollingFileAppender">
 		<param name="threshold" value="WARN"/>
+		<param name="maxFileSize" value="1024MB" />
+		<param name="maxBackupIndex" value="2" />
 		<param name="File" value="log/servicemix.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{ABSOLUTE} | %-5p | %-10t | %-24.24c{1} | %-30.30C %4L | %m%n"/>
@@ -57,6 +59,9 @@
 	<logger name="org.apache.servicemix.jbi.deployment">
 		<level value="WARN"/>
 	</logger>
+        <logger name="gov.nih.nci.caxchange">
+             <level value="WARN"/>
+        </logger>	
 	<root>
 		<level value="INFO"/>
 		<appender-ref ref="CONSOLE"/>
