@@ -79,6 +79,10 @@
 		       <include name="*.jar"/>
 		       <include name="*.zip"/>
 		   </fileset>
+		   <fileset dir="${lib.dir}/nongrid" >
+		  	<include name="*.jar"/>
+		        <include name="*.zip"/>
+		   </fileset>
 		   <path refid="globusClassPath" />
 		</path>
 		
