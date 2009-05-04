@@ -210,6 +210,7 @@
 var t = new ScrollableTable(document.getElementById('myScrollTable'), 82);
 //handles load action
 function loadParticipant(indexValue){
+    document.StudySearchForm.target = '_self';
     document.StudySearchForm.index.value=indexValue;
     document.StudySearchForm.action="studySearch.do?operation=loadParticipant";
     document.StudySearchForm.submit();
