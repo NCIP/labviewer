@@ -221,6 +221,8 @@ public class CommonUtil
 		session.removeAttribute("StudySearchForm");
 		session.removeAttribute("ParticipantSearchForm");
 		session.removeAttribute("LabActivitiesSearchForm");
+		session.removeAttribute("HealthCareSiteForm");
+		session.removeAttribute("PIForm");
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_COUNT);
 		session.removeAttribute("pageTitle");
