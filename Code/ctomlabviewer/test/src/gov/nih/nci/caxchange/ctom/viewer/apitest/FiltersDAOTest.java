@@ -70,6 +70,8 @@ import javax.servlet.http.HttpSession;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
+
 /**
  * 
  */
@@ -80,14 +82,17 @@ import junit.framework.TestCase;
  */
 public class FiltersDAOTest extends TestCase {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+	public FiltersDAOTest(String name)
+	{
+		super(name);
+	}
+   
+	@Before
+	public void setUp() throws Exception
+	{
+		super.setUp();
+		
+     }
 
     /*
      * (non-Javadoc)
@@ -107,11 +112,10 @@ public class FiltersDAOTest extends TestCase {
             List siteList = new ArrayList();
             siteList.add("All");
             String patientId = "00-00-00-0";
-            String gridId = "91dd4580-801b-4874-adeb-a174361bacea";
+            String gridId = "2.16.840.1.113883.19";
             fDao.executeSiteFilterQuery(patientId, gridId, siteList);
             assertNotNull("The filter list cannot be null", siteList);
-            // assert for expected number of records...
-
+            assertEquals(1,siteList.size());
         } finally {
 
         }
@@ -128,7 +132,8 @@ public class FiltersDAOTest extends TestCase {
             String studyId = "SMOKE_TEST";
             String patientId = "00-00-00-0";
             fDao.executeLabTestFilter(studyId, patientId, labTestList);
-
+            assertNotNull("The filter list cannot be null", labTestList);
+            assertEquals(2,labTestList.size());
         } finally {
         }
     }
