@@ -92,10 +92,10 @@ import org.junit.Test;
 
 import servletunit.struts.MockStrutsTestCase;
 
-public class HappyActionTest extends MockStrutsTestCase
+public class HomeActionTest extends MockStrutsTestCase
 {
 	
-	public HappyActionTest(String name)
+	public HomeActionTest(String name)
 	{
 		super(name);
 	}
@@ -104,10 +104,9 @@ public class HappyActionTest extends MockStrutsTestCase
 	{
 		super.setUp();
 		
-		
 		setContextDirectory(new File("WebContent"));
         setConfigFile("/cTODSLabViewer/WebContent/WEB-INF/conf/struts-config.xml");
-		setRequestPathInfo("/Happy");
+		setRequestPathInfo("/Home");
         
 	}
 	@Test
@@ -127,7 +126,7 @@ public class HappyActionTest extends MockStrutsTestCase
         getSession().setAttribute(DisplayConstants.LOGIN_OBJECT,loginForm);
         
 		actionPerform();
-        verifyForward(ForwardConstants.LOAD_TEST);
+        verifyForward(ForwardConstants.LOGIN_SUCCESS);
 	}
 
 	protected void tearDown() throws Exception

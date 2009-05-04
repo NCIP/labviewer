@@ -1,7 +1,11 @@
 package gov.nih.nci.caxchange.ctom.viewer.beans;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
+import gov.nih.nci.caxchange.ctom.viewer.forms.AdministrationForm;
+import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.forms.MenuForm;
+import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
+import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
+import gov.nih.nci.caxchange.ctom.viewer.viewobjects.StudySearchResult;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -32,8 +36,11 @@ public class DTOTest extends TestCase{
 	  assertGetterSetterBehavior(new PrincipalInvestigator());
 	  // assertGetterSetterBehavior(new ProtocolStatus());
 	   assertGetterSetterBehavior(new Users());
-	  	  
-	  
+	   
+	   //For Forms
+	   assertGetterSetterBehavior(new ParticipantSearchResult());
+	   assertGetterSetterBehavior(new StudySearchResult());
+	  // assertGetterSetterBehavior(new LabActivityResult());
 	}
 
 	/**

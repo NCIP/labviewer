@@ -61,23 +61,23 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.apitest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import gov.nih.nci.caxchange.ctom.viewer.DAO.StudySearchDAO;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.web.context.ContextLoader;
 
 /**
  * @author sharms9
  * 
  */
-public class StudySearchDAOTest {
+public class StudySearchDAOTest extends TestCase{
 
     /**
      * @throws java.lang.Exception
@@ -106,6 +106,7 @@ public class StudySearchDAOTest {
         String studyPhrase = "test";
         List results = ssDAO.executeQuery(studyPhrase);
         assertNotNull("The filter list cannot be null", results);
+        assertEquals(1,results.size());
     }
 
 }
