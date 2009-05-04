@@ -18,7 +18,7 @@
 					<!-- Fully qualified class name-->
 				</authorization-provider-class>
 				<hibernate-config-file>
-					@tomcat_dir@/conf/labviewer.hibernate.cfg.xml
+					@tomcat_dir@/conf/cabig/cTODSlabviewer.hibernate.cfg.xml
 				</hibernate-config-file>
 			</authorization>
 		</application>
