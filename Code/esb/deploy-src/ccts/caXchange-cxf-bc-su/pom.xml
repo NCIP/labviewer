@@ -28,7 +28,7 @@
 				<artifactId>jbi-maven-plugin</artifactId>
 				<version>${servicemix-version}</version>
 				<extensions>true</extensions>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 	<repositories>
@@ -80,6 +80,11 @@
 			<groupId>org.apache.servicemix</groupId>
 			<artifactId>servicemix-cxf-bc</artifactId>
 			<version>${servicemix-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.nih.nci.caxchange</groupId>
+			<artifactId>caXchange-beans-su</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<properties>
