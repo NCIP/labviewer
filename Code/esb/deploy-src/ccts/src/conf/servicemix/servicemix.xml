@@ -33,6 +33,9 @@
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:servicemix.properties"/>
 	</bean>
+         <bean id="caxchangePropertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:caxchange.properties"/>
+	</bean>	
 	<!-- Include other resources -->
 	<import resource="classpath:security.xml"/>
 	<import resource="classpath:jmx.xml"/>
@@ -52,8 +55,10 @@
 			<sm:securedBroker authorizationMap="#authorizationMap">
 				<sm:flows>
 					<sm:sedaFlow/>
-					<sm:jmsFlow jmsURL="${activemq.url}"/>
-					<sm:jcaFlow connectionManager="#connectionManager" jmsURL="${activemq.url}"/>
+					<sm:jmsFlow jmsURL="${activemq.url}" userName="system" password="manager"/>
+					<!-- commented out as this does not work with a secure jms.
+					  <sm:jcaFlow connectionManager="#connectionManager" jmsURL="${activemq.url}"/>
+					-->
 				</sm:flows>
 			</sm:securedBroker>
 		</sm:broker>
@@ -86,7 +91,6 @@
 	<sm:dotViewService container="#jbi" autoStart="true"/>
 	<sm:logService container="#jbi" autoStart="true" refreshPeriod="60"/>
 	<bean id="caXchangeLogger" class="gov.nih.nci.caxchange.servicemix.jbi.audit.CommonLoggingListener" init-method="doStart">
-		
 		<property name="container" ref="jbi"/>
 		<property name="logExchangesSent" value="false"/>
 		<property name="logExchangesAccepted" value="false"/>
