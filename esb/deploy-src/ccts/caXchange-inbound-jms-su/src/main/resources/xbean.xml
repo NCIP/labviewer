@@ -43,7 +43,7 @@
 		defaultOperation="test:Echo" connectionFactory="#connectionFactory" />
 
 	<amq:connectionFactory id="connectionFactory"
-		brokerURL="${inbound.jms.brokerURL}" />
+		brokerURL="${inbound.jms.brokerURL}" userName="${amq.caxchange.user}" password="${amq.caxchange.password}" />
 
 	<!-- JMS ConnectionFactory from JNDI -
 		<bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
