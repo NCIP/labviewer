@@ -37,7 +37,7 @@
                    />
 
 
-    <amq:connectionFactory id="connectionFactory" brokerURL="${outbound.jms.brokerURL}" />
+    <amq:connectionFactory id="connectionFactory" brokerURL="${outbound.jms.brokerURL}"  userName="${amq.caxchange.user}" password="${amq.caxchange.password}"/>
 
     <!-- JMS ConnectionFactory from JNDI -
     <bean id="connectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">

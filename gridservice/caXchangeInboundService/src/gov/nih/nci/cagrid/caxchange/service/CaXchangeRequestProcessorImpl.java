@@ -166,12 +166,16 @@ public class CaXchangeRequestProcessorImpl extends
 					.getInstance();
 			String inboundJmsBrokerUrl = properties
 					.getProperty("inbound.jms.brokerURL");
+			String jmsUserName = properties
+			.getProperty("amq.caxchange.user");
+			String jmsUserPassword = properties
+			.getProperty("amq.caxchange.password");
 			if (inboundJmsBrokerUrl == null) {
 				inboundJmsBrokerUrl = configuration
 						.getCaXchangeInboundBrokerURL();
 			}
 			if (connectionFactory == null) {
-				connectionFactory = new ActiveMQConnectionFactory(
+				connectionFactory = new ActiveMQConnectionFactory(jmsUserName,jmsUserPassword,
 						inboundJmsBrokerUrl);
 			}
 			if (destination == null) {
@@ -253,12 +257,16 @@ public class CaXchangeRequestProcessorImpl extends
 					.getInstance();
 			String outboundJmsBrokerUrl = properties
 					.getProperty("outbound.jms.brokerURL");
+			String jmsUserName = properties
+			.getProperty("amq.caxchange.user");
+			String jmsUserPassword = properties
+			.getProperty("amq.caxchange.password");
 			if (outboundJmsBrokerUrl == null) {
 				outboundJmsBrokerUrl = configuration
 						.getCaXchangeInboundBrokerURL();
 			}
 			if (connectionFactory == null) {
-				connectionFactory = new ActiveMQConnectionFactory(
+				connectionFactory = new ActiveMQConnectionFactory(jmsUserName, jmsUserPassword,
 						outboundJmsBrokerUrl);
 			}
 			if (replyDestination == null) {

@@ -35,6 +35,31 @@
       <amq:journaledJDBC journalLogFiles="5" dataDirectory="../data" dataSource="#mysql-ds"/>
        
 		</amq:persistenceAdapter>
+		<!-- Configuration for securing active MQ -->
+	        <amq:plugins>
+                <amq:simpleAuthenticationPlugin>
+	        <amq:users>
+	        	<amq:authenticationUser username="system" password="manager"
+	      	        	groups="guests,users,caxchange_users,admins"/>
+		        <amq:authenticationUser username="@amq.caxchange.user@" password="@amq.caxchange.password@"
+		            	groups="caxchange_users"/>
+	        </amq:users>
+                </amq:simpleAuthenticationPlugin>		
+      <amq:authorizationPlugin>
+        <amq:map>
+          <amq:authorizationMap>
+            <amq:authorizationEntries>
+              <amq:authorizationEntry queue=">" read="admins" write="admins" admin="admins" />             
+              <amq:authorizationEntry topic=">" read="admins" write="admins" admin="admins" />  
+              <amq:authorizationEntry queue="caxchangeInboundQueue" read="caxchange_users" write="caxchange_users" admin="caxchange_users" />
+              <amq:authorizationEntry queue="caxchangeOutboundQueue" read="caxchange_users" write="caxchange_users" admin="caxchange_users" />
+              <amq:authorizationEntry topic="ActiveMQ.Advisory.>" read="guests,caxchange_users,users,admins" write="guests,caxchange_users,users,admins" admin="guests,caxchange_users,users,admins"/>
+            </amq:authorizationEntries>              
+          </amq:authorizationMap>
+        </amq:map>
+      </amq:authorizationPlugin>                
+                </amq:plugins>		
+		
 		<amq:transportConnectors>
 			<!-- Activate a TCP connector with multicast discovery.
             Note that multicast may be disabled if your computer
