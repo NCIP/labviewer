@@ -1,6 +1,7 @@
 package gov.nih.nci.caxchange.ctom.viewer.util;
 
 import gov.nih.nci.caxchange.ctom.viewer.beans.HCSite;
+import gov.nih.nci.caxchange.ctom.viewer.beans.PrincipalInvestigator;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
 
@@ -9,7 +10,7 @@ import org.displaytag.decorator.TableDecorator;
 // TODO: Auto-generated Javadoc
 /**
  * The Class HCSDecorator.
- * 
+ *
  * @author Anupama Sharma
  */
 public class HCSDecorator extends TableDecorator
@@ -29,7 +30,7 @@ public class HCSDecorator extends TableDecorator
 
 	/**
 	 * Gets the name.
-	 * 
+	 *
 	 * @return the name
 	 */
 	public final String getName()
@@ -47,7 +48,7 @@ public class HCSDecorator extends TableDecorator
 
 	/**
 	 * Gets the address.
-	 * 
+	 *
 	 * @return the address
 	 */
 	public final String getAddress()
@@ -55,17 +56,17 @@ public class HCSDecorator extends TableDecorator
 
 		HCSite hcSite = (HCSite) getCurrentRowObject();
 		String addr = NBSP;
-		if (hcSite.getAddress() != null && !hcSite.getAddress().equals("")
+		if (hcSite.getAddress() != null && !hcSite.getAddress().equals("")&& hcSite.getAddress().trim().length() > 1
 				&& !hcSite.getAddress().equals("null"))
 		{
 			addr = hcSite.getAddress();
 		}
 		return addr;
 	}
-	
+
 	/**
 	 * Gets the email.
-	 * 
+	 *
 	 * @return the email
 	 */
 	public final String getEmail()
@@ -80,10 +81,10 @@ public class HCSDecorator extends TableDecorator
 		}
 		return email;
 	}
-	
+
 	/**
 	 * Gets the phone.
-	 * 
+	 *
 	 * @return the phone
 	 */
 	public final String getPhone()
@@ -97,6 +98,28 @@ public class HCSDecorator extends TableDecorator
 			phone = hcSite.getPhone();
 		}
 		return phone;
+	}
+	/**
+	 * Gets the updated Date.
+	 *
+	 * @return the upDate
+	 */
+	public final String getUpdatedDate()
+	{
+
+		HCSite hcSite = (HCSite) getCurrentRowObject();
+		String upDate = NBSP;
+		String coppaImg = "<img src='images/COPPA.jpg' alt='Data obtained from COPPA'>";
+		if (hcSite.getUpdatedDate() != null && !hcSite.getUpdatedDate().equals("")
+				&& !hcSite.getUpdatedDate().equals("null"))
+		{
+			if (hcSite.getCoppaUpdate() != null && hcSite.getCoppaUpdate().equalsIgnoreCase("Y")){
+				upDate = hcSite.getUpdatedDate() + " " + coppaImg;
+			} else {
+				upDate = hcSite.getUpdatedDate();
+			}
+		}
+		return upDate;
 	}
 
 }
