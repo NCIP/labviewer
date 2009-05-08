@@ -109,6 +109,47 @@ public class LabActivityResult
 	private boolean labLoadedToCDMS = false;
 	private String labLoadedToCDMSDate = "";
 	private String siteId = "";
+    private String labsToCDMS="";
+    private String labsToAE="";
+	
+	/**
+	 * @return the labsToCDMS
+	 */
+	public String getLabsToCDMS()
+	{
+	
+		return labsToCDMS;
+	}
+
+	
+	/**
+	 * @param labsToCDMS the labsToCDMS to set
+	 */
+	public void setLabsToCDMS(String labsToCDMS)
+	{
+	
+		this.labsToCDMS = labsToCDMS;
+	}
+
+	
+	/**
+	 * @return the labsToAE
+	 */
+	public String getLabsToAE()
+	{
+	
+		return labsToAE;
+	}
+
+	
+	/**
+	 * @param labsToAE the labsToAE to set
+	 */
+	public void setLabsToAE(String labsToAE)
+	{
+	
+		this.labsToAE = labsToAE;
+	}
 
 	/**
 	 * @return the siteId
