@@ -446,27 +446,27 @@ public class HealthCareSiteDAO
 			ADXP part = (ADXP) iteAddr.next();
 			if (AddressPartType.AL == part.getType())
 			{
-				hcs.setStreetAddr(part.getValue());
+				hcs.setStreetAddr(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.ADL == part.getType())
 			{
-				hcs.setStreetAddr(hcs.getStreetAddr() + part.getValue());
+				hcs.setStreetAddr(hcs.getStreetAddr() + part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.CTY == part.getType())
 			{
-				hcs.setCity(part.getValue());
+				hcs.setCity(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.STA == part.getType())
 			{
-				hcs.setStateCode(part.getValue());
+				hcs.setStateCode(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.ZIP == part.getType())
 			{
-				hcs.setPostalCode(part.getValue());
+				hcs.setPostalCode(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.CNT == part.getType())
 			{
-				hcs.setCountryCode(part.getCode());
+				hcs.setCountryCode(part.getCode()!=null?part.getCode():"");
 			}
 		}
 		// get the Telecom Address

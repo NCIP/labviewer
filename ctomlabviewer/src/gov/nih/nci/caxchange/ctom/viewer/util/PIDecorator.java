@@ -7,7 +7,7 @@ import org.displaytag.decorator.TableDecorator;
 // TODO: Auto-generated Javadoc
 /**
  * The Class PIDecorator.
- * 
+ *
  * @author Anupama Sharma
  */
 public class PIDecorator extends TableDecorator
@@ -27,7 +27,7 @@ public class PIDecorator extends TableDecorator
 
 	/**
 	 * Gets the name.
-	 * 
+	 *
 	 * @return the name
 	 */
 	public final String getName()
@@ -45,7 +45,7 @@ public class PIDecorator extends TableDecorator
 
 	/**
 	 * Gets the address.
-	 * 
+	 *
 	 * @return the address
 	 */
 	public final String getAddress()
@@ -53,17 +53,17 @@ public class PIDecorator extends TableDecorator
 
 		PrincipalInvestigator pi = (PrincipalInvestigator) getCurrentRowObject();
 		String addr = NBSP;
-		if (pi.getAddress() != null && !pi.getAddress().equals("")
+		if (pi.getAddress() != null && !pi.getAddress().equals("") && pi.getAddress().trim().length() > 1
 				&& !pi.getAddress().equals("null"))
 		{
 			addr = pi.getAddress();
 		}
 		return addr;
 	}
-	
+
 	/**
 	 * Gets the email.
-	 * 
+	 *
 	 * @return the email
 	 */
 	public final String getEmail()
@@ -78,10 +78,11 @@ public class PIDecorator extends TableDecorator
 		}
 		return email;
 	}
-	
+
+
 	/**
 	 * Gets the phone.
-	 * 
+	 *
 	 * @return the phone
 	 */
 	public final String getPhone()
@@ -95,6 +96,28 @@ public class PIDecorator extends TableDecorator
 			phone = pi.getPhone();
 		}
 		return phone;
+	}
+	/**
+	 * Gets the updated Date.
+	 *
+	 * @return the upDate
+	 */
+	public final String getUpdatedDate()
+	{
+
+		PrincipalInvestigator pi = (PrincipalInvestigator) getCurrentRowObject();
+		String upDate = NBSP;
+		String coppaImg = "<img src='images/COPPA.jpg' alt='Data obtained from COPPA'>";
+		if (pi.getUpdatedDate() != null && !pi.getUpdatedDate().equals("")
+				&& !pi.getUpdatedDate().equals("null"))
+		{
+			if (pi.getCoppaUpdate() != null && pi.getCoppaUpdate().equalsIgnoreCase("Y")){
+				upDate = pi.getUpdatedDate() + " " + coppaImg;
+			} else {
+				upDate = pi.getUpdatedDate();
+			}
+		}
+		return upDate;
 	}
 
 }

@@ -470,27 +470,27 @@ public class PIDAO
 			ADXP part = (ADXP) iteAddr.next();
 			if (AddressPartType.AL == part.getType())
 			{
-				pi.setStreetAddr(part.getValue());
+				pi.setStreetAddr(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.ADL == part.getType())
 			{
-				pi.setStreetAddr(pi.getStreetAddr() + " " + part.getValue());
+				pi.setStreetAddr(pi.getStreetAddr() + " " + part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.CTY == part.getType())
 			{
-				pi.setCity(part.getValue());
+				pi.setCity(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.STA == part.getType())
 			{
-				pi.setState(part.getValue());
+				pi.setState(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.ZIP == part.getType())
 			{
-				pi.setZipCode(part.getValue());
+				pi.setZipCode(part.getValue()!=null?part.getValue():"");
 			}
 			else if (AddressPartType.CNT == part.getType())
 			{
-				pi.setCountryCode(part.getCode());
+				pi.setCountryCode(part.getCode()!=null?part.getCode():"");
 			}
 		}
 		List<TEL> telephone = poPerson.getTelecomAddress().getItem();
