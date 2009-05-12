@@ -33,7 +33,8 @@
   
   
   
-  
+  <bean:endpoint service="caxchange:payloadValidationService" endpoint="payloadValidationEndpoint" bean="#payloadValidatorBean" />
+
 
   <bean:endpoint service="caxchange:setSubjectService" endpoint="setSubjectEndpoint" bean="#invokeDelegationServiceBean"/>
   
