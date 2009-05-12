@@ -60,7 +60,6 @@
          <property name="eligibleServiceTypes" value="${messageTypes.for.validation}" />                 
  </bean>
  
-  <bean:endpoint service="caxchange:payloadValidationService" endpoint="payloadValidationEndpoint" bean="#payloadValidatorBean" />
   
   <bean:endpoint service="caxchange:getCaXchangeMetadataService" endpoint="getCaXchangeMetadataEndpoint" bean="#caXchangeMetadataBean"/>
 

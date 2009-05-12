@@ -125,6 +125,10 @@ public abstract class ServiceUnitConfig {
     		throw new ConfigurationException("Error processing imports.",e);
     	}
     }
+    
+    public boolean serviceNameExists(String serviceName) throws ConfigurationException {
+    	return false;
+    }
 
 
     /**
