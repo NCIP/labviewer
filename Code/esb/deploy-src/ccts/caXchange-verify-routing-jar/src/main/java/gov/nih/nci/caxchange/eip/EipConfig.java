@@ -1,10 +1,13 @@
 package gov.nih.nci.caxchange.eip;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
@@ -13,11 +16,13 @@ import javax.xml.xpath.XPathExpression;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import gov.nih.nci.caxchange.beans.BeansConfig;
 import gov.nih.nci.caxchange.servicemix.ServiceUnitConfig;
+import gov.nih.nci.caxchange.transform.TransformConfig;
 
 
 /**
@@ -29,8 +34,9 @@ import gov.nih.nci.caxchange.servicemix.ServiceUnitConfig;
 public class EipConfig extends ServiceUnitConfig {
 
 	private static Logger logger = LogManager.getLogger(EipConfig.class);
-	private BeansConfig beansConfig;
+	private List<ServiceUnitConfig> configs = new ArrayList<ServiceUnitConfig>();
 	private int routingErrors=0;
+	protected Stack<String> serviceNamesStack = new Stack<String>();
 
 
     /**
@@ -91,6 +97,10 @@ public class EipConfig extends ServiceUnitConfig {
      */
     public void verifyRouting(Node node) throws EipConfigurationException {
     	try {
+    		if (serviceNamesStack.contains(getServiceNameForNode(node))) {
+    			return;
+    		}
+    		serviceNamesStack.push(getServiceNameForNode(node));
     		//printANode(node,System.out);
     		Set<String> serviceNames  = getExchangeTargetsForANode(node);
     		for(String serviceName:serviceNames){
@@ -98,9 +108,11 @@ public class EipConfig extends ServiceUnitConfig {
     			Node targetNode= getComponentByServiceName(serviceName);
     			boolean beanEndPoint = false;
     			if (targetNode == null){
-    				//try to verify if it is a beans endpoint:
-    				if (beansConfig!=null) {
-    					beanEndPoint = beansConfig.beanServiceNameExists(serviceName);
+    				//try to verify if it is a  endpoint in other service units
+    				Iterator<ServiceUnitConfig> configI = configs.iterator();
+    				while(configI.hasNext() && !beanEndPoint) {
+    					ServiceUnitConfig config = configI.next();
+    					beanEndPoint = config.serviceNameExists(serviceName);
     				}
     			}
     			if ((targetNode == null)&&(!beanEndPoint)){
@@ -112,10 +124,20 @@ public class EipConfig extends ServiceUnitConfig {
     			}
     		  }
     		}
+    		serviceNamesStack.pop();
     	}catch(Exception e) {
     		logger.error("Error verifying routing for:"+node,e);
     		throw new EipConfigurationException("Error verifying routing for:"+node,e);
     	}
+    }
+    
+    public String getServiceNameForNode(Node node) throws EipConfigurationException {
+        if (node == null) return null;
+        NamedNodeMap attrs = node.getAttributes();
+        if (attrs == null) return null;
+        Node attr = attrs.getNamedItem("service");
+        if (attr == null) return null;
+        return attr.getNodeValue();
     }
     /**
      * This method returns a String[] of message types configured within caXchange.
@@ -159,13 +181,17 @@ public class EipConfig extends ServiceUnitConfig {
 			EipConfig eipConfig = new EipConfig();
 			eipConfig.setFileName("caXchangeConf/eip/eip.xml");
 			eipConfig.initialize();
-		    Node router = eipConfig.getComponentByServiceName("caxchange:MessageTypeRouter");
+		    Node router = eipConfig.getComponentByServiceName("caxchange:serviceTypeRouter");
 			//eipConfig.printANode(router, System.out);
 			Set<String> serviceNames = eipConfig.getExchangeTargetsForANode(router);
 			BeansConfig beansConfig = new BeansConfig();
 			beansConfig.setFileName("caXchangeConf/beans/beans.xml");
 			beansConfig.initialize();
-			eipConfig.setBeansConfig(beansConfig);
+			TransformConfig transformConfig = new TransformConfig();
+			transformConfig.setFileName("caXchangeConf/transform/transforms.xml");
+			transformConfig.initialize();
+			eipConfig.addConfig(beansConfig);
+			eipConfig.addConfig(transformConfig);
 			eipConfig.verifyRouting(router);
 			System.out.println("\n\nThere were "+eipConfig.getRoutingErrors()+" routing errors detected.");
 		}catch(Exception e){
@@ -183,13 +209,18 @@ public class EipConfig extends ServiceUnitConfig {
 	}
 	
 
-	public BeansConfig getBeansConfig() {
-		return beansConfig;
+	public List<ServiceUnitConfig> getConfigs() {
+		return configs;
 	}
 
-	public void setBeansConfig(BeansConfig beansConfig) {
-		this.beansConfig = beansConfig;
+	public void setConfigs(List<ServiceUnitConfig> configs) {
+		this.configs = configs;
 	}
+	
+	public void addConfig(ServiceUnitConfig config) {
+		this.configs.add(config);
+	}
+
 
 	public int getRoutingErrors() {
 		return routingErrors;

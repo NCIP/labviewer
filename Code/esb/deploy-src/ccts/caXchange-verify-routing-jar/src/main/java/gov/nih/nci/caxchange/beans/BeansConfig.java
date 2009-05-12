@@ -1,6 +1,7 @@
 package gov.nih.nci.caxchange.beans;
 
 
+import gov.nih.nci.caxchange.servicemix.ConfigurationException;
 import gov.nih.nci.caxchange.servicemix.ServiceUnitConfig;
 
 import java.io.InputStream;
@@ -84,7 +85,7 @@ public class BeansConfig extends ServiceUnitConfig{
      * @return
      * @throws BeansConfigurationException
      */
-    public boolean beanServiceNameExists(String serviceName) throws BeansConfigurationException {
+    public boolean serviceNameExists(String serviceName) throws ConfigurationException {
     	if (serviceName==null){
     		return true;
     	}
