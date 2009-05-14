@@ -46,7 +46,7 @@
 					<map>
 						<entry key="action" value="UsernameToken
 			Timestamp Signature" />
-						<entry key="passwordType" value="PasswordDigest" />
+						<entry key="passwordType" value="PasswordText" />
 						<entry key="signaturePropFile" value="caXchangeConf/security/cxfCrypto.properties" />
 						<entry key="passwordCallbackRef">
 							<ref bean="myPasswordCallback" />
