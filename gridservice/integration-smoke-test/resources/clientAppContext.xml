@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<bean id="clientFactory" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
+		<property name="serviceClass"
+			value="gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestPortType" />
+		<property name="address"
+			value="https://localhost:8193/CaXchangeRequestService" />
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.binding.soap.saaj.SAAJOutInterceptor" />
+				<ref bean="wss4jOutConfiguration" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="wss4jOutConfiguration" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+		<property name="properties">
+			<map>
+				<entry key="action" value="UsernameToken Timestamp Signature" />
+				<entry key="user" value="wsClient" />
+				<entry key="passwordType" value="PasswordText" />
+				<entry key="signaturePropFile" value="resources/cxfClientCrypto.properties" />
+				<entry>
+					<key>	
+						<value>passwordCallbackRef</value>
+					</key>
+					<ref bean="passwordCallback" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="passwordCallback"
+		class="gov.nih.nci.cagrid.caxchange.test.ClientPasswordCallback" />
+
+</beans>
