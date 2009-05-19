@@ -251,7 +251,7 @@
 			<sysproperty key="service.type" value="${service.type}" />
 			<sysproperty key="operation.name" value="${operation.name}" />
 			<sysproperty key="synchronous" value="${synchronous}" />
-			<sysproperty key="caxchange.cxfbc.url" value="${caxchange.cxfbc.url}"/>
+			<sysproperty key="cxfappcontext.file.name" value="${cxfappcontext.file.name}"/>
 			<classpath refid="testClassPathNonGrid" />
 			<formatter type="xml" />
 			<test fork="yes" todir="${integration_smoke_test_home}/${junit.results.dir}" name="gov.nih.nci.cagrid.caxchange.test.TestCoppaServicesNonGrid" />
