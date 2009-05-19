@@ -5,7 +5,8 @@
 	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
 	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://caXchange.nci.nih.gov/caxchangerequest"
-	xmlns:ns0="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/caxchangerequest">
+	xmlns:ns0="http://caXchange.nci.nih.gov/messaging" targetNamespace="http://caXchange.nci.nih.gov/caxchangerequest"
+	xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
 
 	<types>
 		<xs:schema xmlns="http://www.w3.org/2001/XMLSchema"
@@ -22,6 +23,9 @@
 	<message name="caxResponseMessage">
 		<part name="parameters" element="ns0:caXchangeResponseMessage" />
 	</message>
+	<message name="Header">
+		<part name="Security" element="wsse:Security" />
+	</message>
 
 
 	<portType name="CaXchangeRequestPortType">
@@ -33,24 +37,25 @@
 		</operation>
 	</portType>
 
-	<binding name="CaXchangeRequestBinding" type="tns:CaXchangeRequestPortType">		
+	<binding name="CaXchangeRequestBinding" type="tns:CaXchangeRequestPortType">
 		<soap:binding style="document"
 			transport="http://schemas.xmlsoap.org/soap/http" />
-		<http:binding verb="POST"/>
+		<http:binding verb="POST" />
 		<operation name="ProcessRequest">
 			<soap:operation style="document" />
 			<input>
 				<soap:body use="literal" />
+				<!-- <soap:header use="literal" part="security" message="tns:Header"></soap:header>  -->
 			</input>
 			<output>
-				<soap:body use="literal"  />
+				<soap:body use="literal" />
 			</output>
 		</operation>
 	</binding>
 
 	<service name="CaXchangeRequestService">
 		<port name="soap" binding="tns:CaXchangeRequestBinding">
-			<soap:address location="http://localhost:8193/CaXchangeRequestService" />
+			<soap:address location="https://localhost:8193/CaXchangeRequestService" />
 		</port>
 	</service>
 
