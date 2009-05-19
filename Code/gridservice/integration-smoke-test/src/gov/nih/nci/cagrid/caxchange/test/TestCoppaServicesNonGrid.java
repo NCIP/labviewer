@@ -1,7 +1,6 @@
 package gov.nih.nci.cagrid.caxchange.test;
 
 import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestPortType;
-import gov.nih.nci.caxchange.caxchangerequest.CaXchangeRequestService;
 import gov.nih.nci.caxchange.cxfsamples.SampleAsyncHandler;
 import gov.nih.nci.caxchange.messaging.Credentials;
 import gov.nih.nci.caxchange.messaging.Message;
@@ -14,10 +13,8 @@ import gov.nih.nci.caxchange.messaging.Statuses;
 import gov.nih.nci.caxchange.messaging.TransactionControls;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.concurrent.Future;
 
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -25,6 +22,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
 
 public class TestCoppaServicesNonGrid extends TestCase {
@@ -32,7 +31,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 	private String serviceType = null;
 	private String payloadFileName = null;
 	private String operationName = null;
-	private String url = null;
+	private String cxfAppContext = null;
 	private String synchronousProcessing = null;
 
 	public TestCoppaServicesNonGrid(String name) {
@@ -44,19 +43,18 @@ public class TestCoppaServicesNonGrid extends TestCase {
 			serviceType = System.getProperty("service.type");
 			payloadFileName = System.getProperty("payload.file.name");
 			operationName = System.getProperty("operation.name");
-			url = System.getProperty("caxchange.cxfbc.url");
+			cxfAppContext = System.getProperty("cxfappcontext.file.name");
 			synchronousProcessing = System.getProperty("synchronous");
 
 			Message messageToCXFBC = buildMessageToCXFBC(serviceType,
 					payloadFileName, operationName);
 
-			CaXchangeRequestService caXchangeRequestService = new CaXchangeRequestService(
-					new URL(url),
-					new QName("http://caXchange.nci.nih.gov/caxchangerequest",
-							"CaXchangeRequestService"));
-
-			CaXchangeRequestPortType caXchangeRequestPortType = caXchangeRequestService
-					.getSoap();
+			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+					"/resources/"+cxfAppContext);
+			JaxWsProxyFactoryBean jaxWsProxyFactoryBean = (JaxWsProxyFactoryBean) context
+					.getBean("clientFactory");
+			CaXchangeRequestPortType caXchangeRequestPortType = (CaXchangeRequestPortType) jaxWsProxyFactoryBean
+					.create();
 
 			if ("true".equals(synchronousProcessing)) {
 				System.out.println("Invoking the service Synchronously.");
@@ -72,7 +70,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 				System.out.println("Invoking the service Asynchronously.");
 				// Callback approach - asynchronous
 				SampleAsyncHandler testAsyncHandler = new SampleAsyncHandler();
-				
+
 				Future<?> response = caXchangeRequestPortType
 						.processRequestAsync(messageToCXFBC, testAsyncHandler);
 				while (!response.isDone()) {
@@ -97,7 +95,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 				// System.out.println("RESPONSE STATUS: "
 				// +
 				// _processRequestAsync__return.get().getResponse().getResponseStatus());
-				
+
 			}
 		} catch (Exception e) {
 
@@ -123,6 +121,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 
 	/**
 	 * Builds the request message to CXF binding component
+	 * 
 	 * @param serviceType
 	 * @param payloadFileName
 	 * @param operationName
@@ -158,8 +157,7 @@ public class TestCoppaServicesNonGrid extends TestCase {
 			Request request = new Request();
 			MessagePayload messagePayload = new MessagePayload();
 
-			messagePayload
-					.setXmlSchemaDefinition("");
+			messagePayload.setXmlSchemaDefinition("");
 
 			InputStream testMessage = getResourceInputStream("/payloads/"
 					+ payloadFileName);
@@ -187,24 +185,20 @@ public class TestCoppaServicesNonGrid extends TestCase {
 	 * @throws Exception
 	 */
 	public InputStream getResourceInputStream(String fileName) throws Exception {
-		
-		InputStream testMessage = this.getClass()
-		.getResourceAsStream(fileName);
+
+		InputStream testMessage = this.getClass().getResourceAsStream(fileName);
 		if (testMessage == null) {
 			throw new Exception("Test message does not exist.");
 		}
 		return testMessage;
-		
-		/*ClassPathResource cpr = new ClassPathResource(fileName);
-		if (!cpr.exists()) {
-			throw new Exception(fileName + " does not exist.");
-		}
-		try {
-			InputStream inputStream = cpr.getInputStream();
-			return inputStream;
-		} catch (IOException e) {
-			throw new Exception("Error loading file " + fileName);
-		}*/
+
+		/*
+		 * ClassPathResource cpr = new ClassPathResource(fileName); if
+		 * (!cpr.exists()) { throw new Exception(fileName + " does not exist.");
+		 * } try { InputStream inputStream = cpr.getInputStream(); return
+		 * inputStream; } catch (IOException e) { throw new
+		 * Exception("Error loading file " + fileName); }
+		 */
 	}
 
 }
