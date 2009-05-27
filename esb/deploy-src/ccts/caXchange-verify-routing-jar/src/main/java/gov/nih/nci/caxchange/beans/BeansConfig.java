@@ -200,7 +200,7 @@ public class BeansConfig extends ServiceUnitConfig{
 			BeansConfig beansConfig = new BeansConfig();
 			beansConfig.setFileName("caXchangeConf/beans/beans.xml");
 			beansConfig.initialize();
-			System.out.println(beansConfig.beanServiceNameExists("caxchange:ctomRegistration"));
+			System.out.println(beansConfig.serviceNameExists("caxchange:ctomRegistration"));
 			System.out.println(beansConfig.getRollbackMessageTypes());
 			NodeList imports = beansConfig.getImports();
 			int i=0;
