@@ -60,6 +60,8 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis.message.MessageElement;
 import org.apache.axis2.databinding.types.URI;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.apache.axis2.util.XMLUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -365,6 +367,11 @@ public class CaXchangeRequestProcessorImpl extends
 				SynchronousRequestServiceStub synchronousRequestServiceStub = new SynchronousRequestServiceStub(
 						caXchangeSynchronousServiceURL);
 				synchronousRequestServiceStub._getServiceClient().getOptions().setTimeOutInMilliSeconds(synchronousServiceClientTimeout.longValue());
+				
+				HttpTransportProperties.Authenticator authenticator = new HttpTransportProperties.Authenticator();
+				authenticator.setUsername(properties.getProperty("httpbc.caxchange.user"));
+				authenticator.setPassword(properties.getProperty("httpbc.caxchange.password"));
+				synchronousRequestServiceStub._getServiceClient().getOptions().setProperty(HTTPConstants.AUTHENTICATE, authenticator);
 				
 				CaXchangeResponseMessage caXchangeResponseMessageFromESB = synchronousRequestServiceStub
 						.processRequestSynchronously(caXchangeRequestMessageToESB);
