@@ -86,6 +86,11 @@
 			<artifactId>caXchange-beans-su</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+		      <groupId>org.apache.ws.security</groupId> 
+		      <artifactId>wss4j</artifactId> 
+		      <version>1.5.4</version> 
+    		</dependency>
 	</dependencies>
 	<properties>
 		<servicemix-version>3.2.2</servicemix-version>
