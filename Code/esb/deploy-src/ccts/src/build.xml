@@ -395,7 +395,7 @@
 		 tofile="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-shared-2008.01-installer.zip"/>
 		 
 		 <mkdir dir="${SERVICEMIX_HOME}/apache-servicemix-3.3/undeployed-components"/>
-		 <move file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-wsn2005-2008.01-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/undeployed-components" />
+		 <move file="${SERVICEMIX_HOME}/apache-servicemix-3.3/hotdeploy/servicemix-wsn2005-2008.01-installer.zip" todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/undeployed-components" failonerror="false"/>
 
 
 	    <copy todir="${SERVICEMIX_HOME}/apache-servicemix-3.3/lib/optional">
