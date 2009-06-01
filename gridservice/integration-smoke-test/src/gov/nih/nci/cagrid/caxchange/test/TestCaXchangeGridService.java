@@ -80,6 +80,7 @@ public class TestCaXchangeGridService extends TestCase {
 
     public void setUp() {
       try {
+      	dbf.setNamespaceAware(true);
        loginProperties = new Properties();
        InputStream is = getResourceInputStream("/resources/login.properties");
        loginProperties.load(is);

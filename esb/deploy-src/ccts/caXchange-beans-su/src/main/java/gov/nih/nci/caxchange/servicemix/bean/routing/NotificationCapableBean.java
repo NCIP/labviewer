@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 
 import javax.jbi.messaging.ExchangeStatus;
+import javax.jbi.messaging.Fault;
 import javax.jbi.messaging.InOnly;
 import javax.jbi.messaging.InOut;
 import javax.jbi.messaging.MessageExchange;
@@ -27,38 +28,73 @@ import org.w3c.dom.Document;
 public class NotificationCapableBean extends CaXchangeMessagingBean {
 
 	public static final String DEFAULT_ERROR_CODE = "CAXCHANGE_ERROR";
+	public static final String NOTIFICATION_BEAN_CORRELATION_ID = "NOTIFICATION_BEAN_CORRELATION_ID";
 	public static final String MAIL_MSG_HEADER = "<ns1:mailBody xmlns:ns1=\"http://caXchange.nci.nih.gov/messaging\">An error occurred processing request.";
 	public static final String MAIL_MSG_FOOTER = "</ns1:mailBody>";
-	public static HashMap<String, String> caXchangeIDAndRetryCountMap = new HashMap<String, String>();
+	public static HashMap<String, ExchangeInProcess> caXchangeIDAndRetryCountMap = new HashMap<String, ExchangeInProcess>();
 
 	private Logger logger = LogManager.getLogger(NotificationCapableBean.class);
+	private int retryCount = 3;
+	private QName targetService = null;
+	private QName notificationService = null;
+
+	public QName getNotificationService() {
+		return notificationService;
+	}
+
+	public void setNotificationService(QName notificationService) {
+		this.notificationService = notificationService;
+	}
+
+	public QName getTargetService() {
+		return targetService;
+	}
+
+	public void setTargetService(QName targetService) {
+		this.targetService = targetService;
+	}
+
+	public int getRetryCount() {
+		return retryCount;
+	}
+
+	public void setRetryCount(int retryCount) {
+		this.retryCount = retryCount;
+	}
 
 	/**
 	 * 
 	 * @param exchange
 	 * @throws MessagingException
 	 */
-	private void sendMessageToAsyncPipeline(MessageExchange exchange)
-			throws MessagingException {
-		NormalizedMessage in = exchange
-				.getMessage(CaxchangeConstants.IN_MESSAGE);
+	protected void sendMessageToTargetService(MessageExchange exchange)
+			throws Exception {
+		NormalizedMessage in = exchange.getMessage("in");
 		InOut inOut = channel.createExchangeFactory().createInOutExchange();
-		NormalizedMessage messageToAsyncPipeline = inOut.createMessage();
-		in.setContent(caXchangeDataUtil.getDOMSource());
+		NormalizedMessage messageToTargetService = inOut.createMessage();
 		Source sourceToPipeline = in.getContent();
-		messageToAsyncPipeline.setContent(sourceToPipeline);
-		inOut.setInMessage(messageToAsyncPipeline);
-		inOut.setService(new QName("http://nci.nih.gov/caXchange",
-				"synchronousAsyncBridge"));
+		messageToTargetService.setContent(in.getContent());
+		inOut.setInMessage(messageToTargetService);
+		inOut.setService(targetService);
 		inOut.setStatus(ExchangeStatus.ACTIVE);
 		channel.send(inOut);
 	}
-
+	protected void sendNotification(MessageExchange exchange) throws Exception{
+		NormalizedMessage in = exchange
+		.getMessage("in");
+		InOnly inOnly = channel.createExchangeFactory().createInOnlyExchange();
+		NormalizedMessage notificationMessage = inOnly.createMessage();
+		notificationMessage.setContent(caXchangeDataUtil.getDOMSource());
+		inOnly.setInMessage(notificationMessage);
+		inOnly.setService(notificationService);
+		inOnly.setStatus(ExchangeStatus.ACTIVE);
+		channel.send(inOnly);
+	}
 	/**
 	 * 
 	 * @param exchange
 	 * @throws Exception
-	 */
+	 
 	private void sendFailureEmailNotification(MessageExchange exchange)
 			throws Exception {
 		NormalizedMessage in = exchange
@@ -83,10 +119,10 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 
 		emailNormalizedMessage.setContent(sourceToEmail);
 		inOnly.setInMessage(emailNormalizedMessage);
-		inOnly.setService(new QName("http://nci.nih.gov/caXchange","mail_"+caXchangeDataUtil.getServiceType()+"_Service"));
+		inOnly.setService(notificationService);
 		inOnly.setStatus(ExchangeStatus.ACTIVE);
 		channel.send(inOnly);
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
@@ -105,62 +141,69 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 					+ caXchangeDataUtil.getCaXchangeIdentifier());
 			logger.debug("REQUEST COMING FROM: "
 					+ exchange.getService().toString());
-			if (exchange.getService().equals(
-					new QName("http://nci.nih.gov/caXchange",
-							"notificationCapableService"))) {
-				logger
-						.debug("REQUEST COMING FROM NOTIFICAITON CAPABLE SERVICE");
+			ExchangeInProcess exchangeInProcess = caXchangeIDAndRetryCountMap.get(caXchangeDataUtil
+						.getCaXchangeIdentifier());
+			if ((exchangeInProcess == null)){
+				logger.debug(" A new exchange is received.");
+				exchangeInProcess = new ExchangeInProcess();
+				exchangeInProcess.setExchange(exchange);
 				caXchangeIDAndRetryCountMap.put(caXchangeDataUtil
-						.getCaXchangeIdentifier(), "0");
-				sendMessageToAsyncPipeline(exchange);
-
-			} else {
-				if (!(exchange.toString().lastIndexOf(
-						"<responseStatus>SUCCESS</responseStatus>") > -1)) {
-
+						.getCaXchangeIdentifier(), exchangeInProcess);
+				sendMessageToTargetService(exchange);
+			} 
+			else  {
+				//This is  a response from the target service
+				logger.debug("This is  a response from the target service");
+				exchangeInProcess = caXchangeIDAndRetryCountMap.get(caXchangeDataUtil
+						.getCaXchangeIdentifier());
+				caXchangeDataUtil.setOut(exchange.getMessage("out"));
+				caXchangeDataUtil.initialize();
+				if ((exchange.getFault()!=null)||(!caXchangeDataUtil.isResponseSuccess())) {
 					logger.debug("RESPONSE STATUS FAILURE");
-					try {
-						int retryCount = new Integer(
-								caXchangeIDAndRetryCountMap
-										.get(caXchangeDataUtil
-												.getCaXchangeIdentifier()))
-								.intValue();
-						if (retryCount < 2) {
-							retryCount += 1;
-							logger.debug("****RETRY ATTEMPT****** "+retryCount);
-							caXchangeIDAndRetryCountMap.put(caXchangeDataUtil
-									.getCaXchangeIdentifier(), new Integer(
-									retryCount).toString());
-							try {
-								Thread.sleep(5000);
-							} catch (InterruptedException ie) {
-								logger.error(
-										"An error occurred sending message.",
-										ie);
-								throw new MessagingException(
-										"An error occurred sending message.",
-										ie);
-							}
-							sendMessageToAsyncPipeline(exchange);
+						int currentRetryCount = exchangeInProcess.getRetryCount();
+						if (currentRetryCount < retryCount) {
+							currentRetryCount += 1;
+							logger.debug("****RETRY ATTEMPT****** "+currentRetryCount);
+							exchangeInProcess.setRetryCount(currentRetryCount);
+							sendMessageToTargetService(exchangeInProcess.getExchange());
+							exchange.setStatus(ExchangeStatus.DONE);
+							channel.send(exchange);
 						} else {
+							logger.debug("Retry count achieved..");
 							caXchangeIDAndRetryCountMap
 									.remove(caXchangeDataUtil
 											.getCaXchangeIdentifier());
-							sendFailureEmailNotification(exchange);
+							try {
+							   sendNotification(exchange);
+							}catch(Exception e){
+								logger.error("Error sending email notification.+ for identifier:"+caXchangeDataUtil
+										.getCaXchangeIdentifier());
+							}
+							MessageExchange originalExchange = exchangeInProcess.getExchange();
+							Fault fault = originalExchange.createFault();
+							if (exchange.getMessage("out")!=null){
+							   fault.setContent(exchange.getMessage("out").getContent());
+							}else {
+								fault.setContent(caXchangeDataUtil.getDOMSource());
+							}
+							originalExchange.setFault(fault);
+							channel.send(originalExchange);
+							exchange.setStatus(ExchangeStatus.DONE);
+							channel.send(exchange);
 						}
-						// deleteMessage(exchange);
-					} catch (Exception e) {
-						logger
-								.error(
-										"An error occurred sending email notification.",
-										e);
-						throw new MessagingException(
-								"An error occurred sending email notification.",
-								e);
-					}
 				} else {
-					logger.debug("Message Delivered Successfully");
-					// DO NOTHING. EVERYTHING IS SUCCESSFUL
+					logger.debug("Success from target service..");
+					// Return response
+					MessageExchange originalExchange = exchangeInProcess.getExchange();
+					NormalizedMessage out = originalExchange.createMessage();
+					if (exchange.getMessage("out")!=null) {
+						out.setContent(exchange.getMessage("out").getContent());
+					}else {
+						out.setContent(caXchangeDataUtil.getDOMSource());
+					}
+					channel.send(originalExchange);	
+					exchange.setStatus(ExchangeStatus.DONE);
+					channel.send(exchange);
 				}
 			}
 		} catch (Exception e) {
@@ -169,6 +212,24 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 					e);
 		}
 
+	}
+	
+	protected class ExchangeInProcess {
+		private int retryCount = 0;
+		private MessageExchange exchange = null;
+		public int getRetryCount() {
+			return retryCount;
+		}
+		public void setRetryCount(int retryCount) {
+			this.retryCount = retryCount;
+		}
+		public MessageExchange getExchange() {
+			return exchange;
+		}
+		public void setExchange(MessageExchange exchange) {
+			this.exchange = exchange;
+		}
+		
 	}
 
 }
