@@ -54,7 +54,8 @@
 							**/StoreOriginalMessageServiceBeanTest.*
 						</exclude>
 						<exclude>**/HandleErrorResponseBeanTest.*</exclude> 
-						<!-- <exclude>**/GenerateResponseBeanTest.*</exclude> --> 
+						 <exclude>**/TestEmailNotificationBean.*</exclude> 
+						<exclude>**/GenerateResponseBeanTest.*</exclude> 
 					    <exclude>**/CaxchangeAggregatorListenerTest.*</exclude>
 						<exclude>
 							**/InvokeDelegationServiceBeanTest.*

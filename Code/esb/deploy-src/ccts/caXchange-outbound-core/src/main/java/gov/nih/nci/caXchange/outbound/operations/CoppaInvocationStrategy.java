@@ -61,8 +61,10 @@ public class CoppaInvocationStrategy extends GenericInvocationStrategy {
 		Class requestPayloadClass = getRequestPayloadClass(client,message);
 		requestPayloadClassName = requestPayloadClass.getName();
 		QName typeDesc = getReturnTypeDescription(client, message);
-		returnTypeNameSpace = typeDesc.getNamespaceURI();
-		returnTypeElement = typeDesc.getLocalPart();
+		if (typeDesc != null) {
+		   returnTypeNameSpace = typeDesc.getNamespaceURI();
+		   returnTypeElement = typeDesc.getLocalPart();
+		}
 		return super.invokeGridService(channel, exchange, message);
 	}
 	

@@ -43,7 +43,9 @@ public class CaXchangeDataUtil {
     static Logger logger=LogManager.getLogger(CaXchangeDataUtil.class);
 
     private NormalizedMessage in;
+    private NormalizedMessage out;
     private Document document;
+    private Document outDocument;
     
     /**
      * Default constructor
@@ -60,6 +62,10 @@ public class CaXchangeDataUtil {
       try {
     	document =
     		new SourceTransformer().toDOMDocument(in);
+    	if (out!=null) {
+    		outDocument =
+        		new SourceTransformer().toDOMDocument(out);
+    	}
       }catch(Exception e){
     	  logger.error("Error parsing input document.",e);
       }
@@ -434,6 +440,24 @@ public class CaXchangeDataUtil {
           response.setResponseStatus(responseStatus); 	
           return brm;
     }
+    
+    public boolean isResponseSuccess() throws Exception{
+    	if (outDocument==null){
+    		initialize();
+    	}
+    	if (outDocument == null) {
+    		throw new Exception("No response is set.");
+    	}
+    	boolean success = false;
+    	NodeList elements = outDocument.getElementsByTagNameNS(CAXCHANGE_URI, "responseStatus");
+    	if (elements.getLength() == 1) {
+    		String responseStatus = elements.item(0).getTextContent();
+    		if (Statuses.SUCCESS.toString().equals(responseStatus)) {
+    			success = true;
+    		}
+    	}
+    	return success;
+    }
    
     /**
      * This method checks if the rollback is required
@@ -495,6 +519,12 @@ public class CaXchangeDataUtil {
     public NormalizedMessage getIn() {
         return in;
     }
+	public NormalizedMessage getOut() {
+		return out;
+	}
+	public void setOut(NormalizedMessage out) {
+		this.out = out;
+	}
         
  
 }
