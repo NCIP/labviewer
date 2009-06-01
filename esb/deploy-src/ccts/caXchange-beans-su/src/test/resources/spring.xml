@@ -19,6 +19,7 @@
   			<bean:endpoint service="caxchange:caXchangeConsumer" endpoint="caXchangeConsumerEndpoint" bean="#caXchangeConsumer" />
   			<bean:endpoint service="caxchange:ResponseQueueService" endpoint="caxchangeOutboundJmsProviderEndpoint" bean="#caxchangeMessagingTestBean" />
   			<bean:endpoint service="caxchange:generateResponseService" endpoint="cgenerateResponseEndpoint" bean="#generateResponseBean" />
+  			<bean:endpoint service="caxchange:emailNotificationService" endpoint="emailNotificationEndpoint" bean="#testEmailNotificationBean" />
             </bean:endpoints>
           </bean:component>
         </sm:component>
@@ -82,6 +83,12 @@
     <property
       name="targetOperation"
       value="PROCESS" />
+  </bean>
+  
+  <bean id="testEmailNotificationBean" 
+       class="gov.nih.nci.caxchange.servicemix.bean.routing.NotificationCapableBean">
+       <property name="retryCount" value="2" />
+       <property name="targetService" value="caxchange:payloadValidator" />
   </bean>
 
   <bean
