@@ -368,5 +368,13 @@
       </eip:namespaces>
   </eip:namespace-context>
 
+  <eip:pipeline service="caxchange:mailNotificationPipeline" endpoint="mailNotificationPipelineEndpoint">
+        <eip:transformer>
+          <eip:exchange-target service="caxchange:MailNotificationXslt" />
+        </eip:transformer>
+        <eip:target>
+          <eip:exchange-target service="caxchange:mailNotificationService" />
+        </eip:target>
+  </eip:pipeline>
 
 </beans>
