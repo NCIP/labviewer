@@ -27,8 +27,11 @@
     <!-- bean below is implemented for testing purposes -->
     <bean id="synchronousRequestServiceBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.CaXchangeSynchronousRequestBean" />
     
-    <bean id="notificationCapableBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.NotificationCapableBean" />
-    
+    <bean id="sampleNotificationCapableBean" class="gov.nih.nci.caxchange.servicemix.bean.routing.NotificationCapableBean">
+         <property name="retryCount" value="2" />
+         <property name="targetService" value="caxchange:caaersLoadLab" />
+         <property name="notificationService" value="caxchange:mailNotificationPipeline" />
+    </bean>    
     
     <!-- END CHANGES MADE FOR SYNCHRONOUS PROCESSING -->
        

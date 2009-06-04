@@ -259,6 +259,7 @@ public class GridSU implements MessageExchangeListener {
 	}
 	
 	protected void copyRequestMetadata(GridMessage gridMessage, NormalizedMessage out) throws Exception {
+		log.debug("Copying request metadata...");
 		Map<String, String> metadata = new HashMap<String, String>();
 		metadata.put(CaxchangeConstants.EXTERNAL_IDENTIFIER, gridMessage.getExternalIdentifier());
 		metadata.put(CaxchangeConstants.CAXCHANGE_IDENTIFIER, gridMessage.getCaxchangeIdentifier());

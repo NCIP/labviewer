@@ -33,6 +33,9 @@
   <saxon:xslt service="caxchange:CXFWrapperEditOutgoingXslt" endpoint="CXFWrapperEditOutgoingEndpoint"
               resource="classpath:/caXchangeConf/transform/CXFWrapperEditOutgoing.xsl" />
               
+  <saxon:xslt service="caxchange:MailNotificationXslt" endpoint="MailNotificationXsltEndpoint"
+              resource="classpath:/caXchangeConf/transform/EmailNotification.xsl" />              
+              
   <!-- END SNIPPET: xslt --> 
   
 
