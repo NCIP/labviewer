@@ -8,26 +8,12 @@
 
 	
 
-	<mail:sender service="caxchange:mail_SCHEDULE_MODIFICATION_Service" 
-                     endpoint="senderEndpoint"
-                     sender="nalamalaar@mail.nih.gov"
-                     receiver="analamala@ekagrasoft.com"
-                     debugMode="true" 
-                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
-                 
-     <mail:sender service="caxchange:mail_LAB_BASED_AE_Service" 
+     <mail:sender service="caxchange:mailNotificationService" 
                      endpoint="senderEndpoint"
                      sender="marwahah@mail.nih.gov"
                      receiver="hmarwaha@ekagrasoft.com"
                      debugMode="true" 
-                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
-                 
-     <mail:sender service="caxchange:mail_LOAD_LAB_TO_CDMS_Service" 
-                     endpoint="senderEndpoint"
-                     sender="marwahah@mail.nih.gov"
-                     receiver="hmarwaha@ekagrasoft.com"
-                     debugMode="true" 
-                 connection="smtp://username@mailfwd.nih.gov?password=mypass" />
+                     connection="smtp://username@mailfwd.nih.gov?password=mypass" />
                  
                  
      <!-- <mail:sender service="caxchange:mailService" 

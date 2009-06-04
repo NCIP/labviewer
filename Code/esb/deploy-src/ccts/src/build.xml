@@ -87,7 +87,9 @@
     </condition>
     <antcall target="servicemix-install-win"/>
 </target>
-
+        <target name="copy-secured-activemq" if="jms.secured" >
+           <copy file="${cax.home}/conf/servicemix/activemq.xml" tofile="${cax.home}/temp/activemq.xml"  overwrite="true"/>
+        </target>
 
 	<!--Installs the servicemix from apache site and unzip to location given in install.properties file-->
 	<target name="servicemix-install-unix" depends="assert,system-init,clean" description="download servicemix" if="isUnix">
@@ -489,6 +491,9 @@
 
 		<copy file="${cax.home}/conf/servicemix/activemq.xml" tofile="${cax.home}/temp/activemq.xml"
 		overwrite="true"/>
+		
+		<antcall target="copy-secured-activemq" />
+
 		<copy file="${cax.home}/conf/servicemix/servicemix.properties" tofile="${cax.home}/temp/servicemix.properties"
 		overwrite="true"/>
 		<replace  file="${cax.home}/temp/servicemix.properties" 

@@ -13,6 +13,7 @@ import javax.jbi.messaging.InOut;
 import javax.jbi.messaging.MessageExchange;
 import javax.jbi.messaging.MessagingException;
 import javax.jbi.messaging.NormalizedMessage;
+import javax.jbi.messaging.RobustInOnly;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
@@ -73,12 +74,14 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 		InOut inOut = channel.createExchangeFactory().createInOutExchange();
 		NormalizedMessage messageToTargetService = inOut.createMessage();
 		Source sourceToPipeline = in.getContent();
-		messageToTargetService.setContent(in.getContent());
+		messageToTargetService.setContent(caXchangeDataUtil.getDOMSource());
 		inOut.setInMessage(messageToTargetService);
 		inOut.setService(targetService);
 		inOut.setStatus(ExchangeStatus.ACTIVE);
+		copyPropertiesAndAttachments(in, messageToTargetService);
 		channel.send(inOut);
 	}
+	
 	protected void sendNotification(MessageExchange exchange) throws Exception{
 		NormalizedMessage in = exchange
 		.getMessage("in");
@@ -88,6 +91,7 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 		inOnly.setInMessage(notificationMessage);
 		inOnly.setService(notificationService);
 		inOnly.setStatus(ExchangeStatus.ACTIVE);
+		copyPropertiesAndAttachments(in, notificationMessage);
 		channel.send(inOnly);
 	}
 	/**
@@ -180,28 +184,55 @@ public class NotificationCapableBean extends CaXchangeMessagingBean {
 										.getCaXchangeIdentifier());
 							}
 							MessageExchange originalExchange = exchangeInProcess.getExchange();
-							Fault fault = originalExchange.createFault();
-							if (exchange.getMessage("out")!=null){
-							   fault.setContent(exchange.getMessage("out").getContent());
-							}else {
-								fault.setContent(caXchangeDataUtil.getDOMSource());
+							if (originalExchange instanceof InOut) {
+							   if (exchange.getFault()!=null){
+							      Fault fault = originalExchange.createFault();
+							      fault.setContent(exchange.getFault().getContent());
+								  originalExchange.setFault(fault);
+								  copyPropertiesAndAttachments(exchange.getFault(), fault);
+							    }
+							    if (exchange.getMessage("out")!=null){
+							    	NormalizedMessage resp = originalExchange.createMessage();
+							    	resp.setContent(exchange.getMessage("out").getContent());
+							    	originalExchange.setMessage(resp, "out");
+							    	copyPropertiesAndAttachments(exchange.getMessage("out"), resp);
+							    }
+							    else {
+							    	NormalizedMessage resp = originalExchange.createMessage();
+							    	resp.setContent(caXchangeDataUtil.getDOMSource());
+							    	originalExchange.setMessage(resp, "out");
+							    	copyPropertiesAndAttachments(originalExchange.getMessage("in"), resp);
+							    }
+							    channel.send(originalExchange);
 							}
-							originalExchange.setFault(fault);
-							channel.send(originalExchange);
+							if ((originalExchange instanceof InOnly)||(originalExchange instanceof RobustInOnly)) {
+								originalExchange.setStatus(ExchangeStatus.DONE);
+								channel.send(originalExchange);
+							}							
 							exchange.setStatus(ExchangeStatus.DONE);
 							channel.send(exchange);
 						}
 				} else {
 					logger.debug("Success from target service..");
+					caXchangeIDAndRetryCountMap.remove(caXchangeDataUtil
+						.getCaXchangeIdentifier());
 					// Return response
 					MessageExchange originalExchange = exchangeInProcess.getExchange();
-					NormalizedMessage out = originalExchange.createMessage();
-					if (exchange.getMessage("out")!=null) {
-						out.setContent(exchange.getMessage("out").getContent());
-					}else {
-						out.setContent(caXchangeDataUtil.getDOMSource());
+					if (originalExchange instanceof InOut) {
+					   NormalizedMessage out = originalExchange.createMessage();
+					   if (exchange.getMessage("out")!=null) {
+						  out.setContent(exchange.getMessage("out").getContent());
+						  copyPropertiesAndAttachments(exchange.getMessage("out"), out);
+					   }else {
+						  out.setContent(caXchangeDataUtil.getDOMSource());
+					   }
+					   copyPropertiesAndAttachments(originalExchange.getMessage("in"), out);
+					   channel.send(originalExchange);
+					} 
+					if ((originalExchange instanceof InOnly)||(originalExchange instanceof RobustInOnly)) {
+						originalExchange.setStatus(ExchangeStatus.DONE);
+						channel.send(originalExchange);
 					}
-					channel.send(originalExchange);	
 					exchange.setStatus(ExchangeStatus.DONE);
 					channel.send(exchange);
 				}
