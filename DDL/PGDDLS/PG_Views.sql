@@ -98,20 +98,18 @@ SELECT activity.id  AS                            id,
 FROM   activity, study_time_point            
 WHERE  activity.id = study_time_point.activity_id;
 
-CREATE OR REPLACE VIEW LAB_HUB_INVESTIGATOR
-(ID, DATE_OF_BIRTH, INITIALS, IDENTIFIER, NAME, 
- STUDY_SITE_ID, SEX_CONCEPT_DESCRIPTOR_ID, RACE_CONCEPT_DESCRIPTOR_ID)
-AS 
-SELECT investigator.id  AS                            id,
-       investigator.birth_date AS                      date_of_birth,
-       investigator.initials  AS                      initials,
-       investigator.nci_identifier  AS                identifier,
-       investigator.last_name   AS                    name,
-       study_investigator.id   AS                           study_site_id,
-       investigator.adm_gndr_concept_descriptor_id AS sex_concept_descriptor_id,
-       investigator.race_concept_descriptor_id     AS race_concept_descriptor_id
-FROM   investigator , study_investigator
-WHERE  investigator.id = study_investigator.investigator_id;
+CREATE OR REPLACE VIEW lab_hub_investigator AS 
+  SELECT investigator.id, investigator.birth_date AS date_of_birth, 
+  investigator.initials, investigator.nci_identifier AS identifier, 
+  investigator.last_name AS name,
+  investigator.last_name, investigator.first_name, investigator.middle_name, investigator.telecom_address, 
+ investigator.street_address, investigator.city, investigator.state, investigator.zip_code, 
+ investigator.country_code, investigator.phone, investigator.source, investigator.source_extract_date, 
+ study_investigator.id AS study_site_id, 
+ investigator.adm_gndr_concept_descriptor_id AS sex_concept_descriptor_id, 
+ investigator.race_concept_descriptor_id
+ FROM investigator, study_investigator
+ WHERE investigator.id = study_investigator.investigator_id;
 
 CREATE OR REPLACE VIEW LAB_HUB_LAB_RESULT
 (ID, NUMERIC_RESULT, NUMERIC_PRECISION, TEXT_RESULT, REFERENCE_RANGE_LOW, 
