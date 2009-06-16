@@ -18,6 +18,7 @@ import gov.nih.nci.ccts.grid.Study;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.xml.sax.SAXException;
@@ -30,9 +31,9 @@ public class CaXchangeStudyConsumerTest {
 
 	
 		 //String serviceUrl="https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/StudyLookupService";
-		 String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyLookupService";
-		 String sampleFile = "/SampleRegistrationMessage.xml";
-		
+		 private String serviceUrl = "https://localhost:8443/ctom-wsrf/services/cagrid/StudyLookupService";
+		 private String sampleFile = "/SampleRegistrationMessage.xml";
+		 private Logger log =Logger.getLogger(getClass());
 		/**
 		 * main method just creates this class and calls the test method which performs all
 		 * the work
@@ -53,7 +54,8 @@ public class CaXchangeStudyConsumerTest {
 		{
 			try
 			{
-				System.out.println("Calling Study Look up service at " + serviceUrl);
+				System.out.println("Calling Study Look up service at " + serviceUrl);	
+				log.debug("Calling Study Look up service at " + serviceUrl);
 				// Setup the credentials
 				 GlobusCredential gb =this.obtainCredentials();
 				
@@ -65,8 +67,8 @@ public class CaXchangeStudyConsumerTest {
 				
 				// Call the service
 				  Study study = client.getStudy(reg);
-				 System.out.println("Study title"+ study.getLongTitleText());  
-				System.out.println("Returned from calling service");
+				  log.debug("Study title"+ study.getLongTitleText());  
+				  log.debug("Returned from calling service");
 			}
 			catch (Exception e)
 			{
@@ -100,7 +102,7 @@ public class CaXchangeStudyConsumerTest {
 			
 			GlobusCredential proxy =null;
 			try{
-				   
+				  log.debug("Obtaining globus Proxy");
 				   //Create credential		
 
 				   Credential cred = new Credential();
