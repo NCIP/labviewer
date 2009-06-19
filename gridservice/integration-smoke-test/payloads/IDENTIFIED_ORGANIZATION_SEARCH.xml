@@ -1,7 +1,0 @@
-<IdentifiedOrganization xmlns="http://po.coppa.nci.nih.gov" xmlns:ISO="uri:iso.org:21090"> 
-<identifier nullFlavor="NI"/>
-<playerIdentifier nullFlavor="NI"/>
-<scoperIdentifier nullFlavor="NI"/>
-<assignedId/>
-<status code="active"/>
-</IdentifiedOrganization>
