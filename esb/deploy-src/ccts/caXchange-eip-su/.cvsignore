@@ -1,8 +1,0 @@
-target
-build
-*.jar
-.classpath
-.project
-*.jpr
-*.jws
-
