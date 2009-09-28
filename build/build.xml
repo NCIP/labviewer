@@ -41,8 +41,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 	<!-- added for remote deployments since file is copied to root of install dir -->
 	<basename property="properties.file.name" file="${properties.file}" />
-	<property name="ssh.dir.temp" location="${target.dir}/download" />
-	<property name="ssh.key.file" location="D:/DevLabViewer/trunk/common/ssh-keys" />
 	<!-- BDA standard structure -->
 	<property name="build.dir" location="." />
 	<property name="software.dir" location=".." />
