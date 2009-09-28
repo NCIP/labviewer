@@ -13,23 +13,23 @@
 	<target name="build_zip">
 		<mkdir dir="${dest.dir}" />
 		<zip destfile="${dest.dir}/${module.name}.zip">
-			<zipfileset dir="${artifacts.dir}" prefix="artifacts" />
-			<zipfileset dir="${cTODDeployment.dir}" prefix="cTODSDeploymentController" />
-			<zipfileset dir="${cTomData.dir}" prefix="CTOMDataPersistence">
+			<zipfileset dir="${artifacts.dir}" prefix="${artifacts.dir.prefix}" />
+			<zipfileset dir="${cTODDeployment.dir}" prefix="${ctodsdeploymentcontroller.dir.prefix}" />
+			<zipfileset dir="${cTomData.dir}" prefix="${ctomdatapersistence.dir.prefix}">
 					<exclude name="**/bin/**" />
 			</zipfileset>
-			<zipfileset dir="${cTomLab.dir}" prefix="cTODSLabViewer">
+			<zipfileset dir="${cTomLab.dir}" prefix="${ctodslabviewer.dir.prefix}">
 				<exclude name="**/build/**" />
 			</zipfileset>
-			<zipfileset dir="${labLoader.dir}" prefix="LabLoader">
-				<exclude name="**/build/**" />
-				<exclude name="**/bin/**" />
-			</zipfileset>
-			<zipfileset dir="${regConsumerService.dir}" prefix="RegistrationConsumerService">
+			<zipfileset dir="${labLoader.dir}" prefix="${labloader.dir.prefix}">
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
-			<zipfileset dir="${studyConsumerService.dir}" prefix="StudyConsumerService">
+			<zipfileset dir="${regConsumerService.dir}" prefix="${registrationconsumerservice.dir.prefix}">
+				<exclude name="**/build/**" />
+				<exclude name="**/bin/**" />
+			</zipfileset>
+			<zipfileset dir="${studyConsumerService.dir}" prefix="${studyconsumerservice.dir.prefix}">
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
@@ -37,7 +37,7 @@
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>-->
-			<zipfileset dir="${ddl.dir}" prefix="DDL" />
+			<zipfileset dir="${ddl.dir}" prefix="${ddl.dir.prefix}" />
 		</zip>
 	</target>
 
@@ -56,11 +56,11 @@
 	<target name="pre-stage" description="Builds the cTOM-wsrf war file">
 
 		<echo>Pre stage  Registration Service </echo>
-		<ant antfile="${unZip.dir}/RegistrationConsumerService/build-ctms.xml" dir="${unZip.dir}/RegistrationConsumerService" target="deploySkeletonService" inheritall="true">
+		<ant antfile="${unZip.dir}/${registrationconsumerservice.dir.prefix}/build-ctms.xml" dir="${unZip.dir}/${registrationconsumerservice.dir.prefix}" target="deploySkeletonService" inheritall="true">
 
 		</ant>
 		<echo>Pre stage  StudyConsumer Service </echo>
-		<ant antfile="${unZip.dir}/StudyConsumerService/build-ctms.xml" dir="${unZip.dir}/StudyConsumerService" target="deploySkeletonService" inheritall="true">
+		<ant antfile="${unZip.dir}/${studyconsumerservice.dir.prefix}/build-ctms.xml" dir="${unZip.dir}/${studyconsumerservice.dir.prefix}" target="deploySkeletonService" inheritall="true">
 
 		</ant>
 	<!--	<echo>Pre stage  StudyLookup Service </echo>
@@ -68,7 +68,7 @@
 
 		</ant> -->
 		<echo>Pre stage  Lab Loader Service </echo>
-		<ant antfile="${unZip.dir}/LabLoader/build-ctms.xml" dir="${unZip.dir}/LabLoader" target="deploySkeletonService" inheritall="true">
+		<ant antfile="${unZip.dir}/${labloader.dir.prefix}/build-ctms.xml" dir="${unZip.dir}/${labloader.dir.prefix}" target="deploySkeletonService" inheritall="true">
 
 		</ant>
 	</target>
@@ -79,16 +79,16 @@
 		<echo>Building  stage temp directory</echo>
 		<mkdir dir="${stage.dir}" />
 		<unzip dest="${stage.dir}" overwrite="true">
-			<fileset dir="${unZip.dir}/RegistrationConsumerService/build/">
+			<fileset dir="${unZip.dir}/${registrationconsumerservice.dir.prefix}/build/">
 				<include name="*.zip" />
 			</fileset>
-			<fileset dir="${unZip.dir}/StudyConsumerService/build/">
+			<fileset dir="${unZip.dir}/${studyconsumerservice.dir.prefix}/build/">
 				<include name="*.zip" />
 			</fileset>
 		<!--	<fileset dir="${unZip.dir}/StudyLookupService/build/">
 				<include name="*.zip" />
 			</fileset> -->
-			<fileset dir="${unZip.dir}/LabLoader/build/">
+			<fileset dir="${unZip.dir}/${labloader.dir.prefix}/build/">
 				<include name="*.zip" />
 			</fileset>
 		</unzip>
@@ -187,7 +187,7 @@
 		  <filter token="database_dialect" value="${database.dialect}" />
 		  <filter token="database_driver" value="${database.driver}" />
 		  <filter token="database_url" value="${database.url}" />
-		  <filter token="database_user" value="${database.username}" />
+		  <filter token="database_user" value="${database.user}" />
 		  <filter token="database_passwd" value="${database.password}" />
 		</filterset>
 		</copy>
@@ -198,21 +198,20 @@
 	<target name="build-ctom-wsrf" depends="build-stage" description="Builds the ctom wsrf">
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
-		<war destfile="${war-dist.dir}/${war.name}.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
+		<war destfile="${software.dir}/target/dist/exploded/ctom-wsrf/${war.name}.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
 	</target>
-
 
 	<!-- Builds the cTOMDataPersistence jar file -->
 	
 	<target name="build-db-jars" description="Builds the database jars">
 		<echo>Creating cTOMPersistence jar</echo>
-		<ant antfile="${unZip.dir}/CTOMDataPersistence/build.xml" dir="${unZip.dir}/CTOMDataPersistence" target="dist" inheritall="true" />
+		<ant antfile="${unZip.dir}/${ctomdatapersistence.dir.prefix}/build.xml" dir="${unZip.dir}/${ctomdatapersistence.dir.prefix}" target="dist" inheritall="true" />
 	</target>
 	
 	<!-- Deploys the cTOM-wsrf and cTODSLabViewer war files -->
 	<target name="deploy_cTODS" depends="build-db-jars,build-ctom-wsrf" description="Deploys the cTOM-wsrf and cTODSLabViewer war files">
 		<echo>Deploying cTODSLabViewer to Tomcat webapps</echo>
-		<ant antfile="${unZip.dir}/cTODSLabViewer/build.xml" dir="${unZip.dir}/cTODSLabViewer" target="deployTomcat" inheritall="true" />
+		<ant antfile="${unZip.dir}/${ctodslabviewer.dir.prefix}/build.xml" dir="${unZip.dir}/${ctodslabviewer.dir.prefix}" target="deployTomcat" inheritall="true" />
 		<echo>Deploying ctom-wsrf to Tomcat webapps</echo>
 		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
 			<fileset file="${war-dist.dir}/${war.name}.war" />
