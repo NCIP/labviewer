@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="StudyConsumer" targetNamespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/bindings" location="StudyConsumer_bindings.wsdl"/>
+  <wsdl:service name="StudyConsumerService">
+    <wsdl:port name="StudyConsumerPortTypePort" binding="binding:StudyConsumerPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
