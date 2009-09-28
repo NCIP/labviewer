@@ -1,153 +1,440 @@
-<project name="wsrf" default="dist" basedir=".">
+<?xml version="1.0" encoding="UTF-8"?>
 
-	<property name="PROP.FILE" location="build.properties"/>
-		<property file="${PROP.FILE}" />
-			<echo>
-		        PROP.FILE = ${PROP.FILE}</echo>
-	     <property name="lib.home" value="lib"/>
-	<echo>SRC.file=${build.source.dir}</echo>
-	<target name="createConnectionProperties" description="Creates the connection properties file">
-		<delete>
-			<fileset file="${build.source.dir}/dataConnection.properties" />
-		</delete>
-		<copy file="conf/dataConnection.properties.template" toFile="${build.source.dir}/dataConnection.properties" filtering="true">
-			<filterset begintoken="@" endtoken="@">
-				<filtersfile file="${PROP.FILE}" />
-			</filterset>
-		</copy>
-	</target>
+<!-- ====================================================================== -->
+<!--     CTOMDataPersistence ant script                                     -->
+<!-- ====================================================================== -->
+
+<project name="ctomdatapersistence" default="package" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 	
-	<target name="changectomlabapiormjar" >
-		<mkdir dir="ctomlabapi-orm-temp"/>
-		<echo message="Extracting the files from ctomlabapi-orm.jar..."/>
-		<unjar src="conf/ctomlabapi-orm.jar" dest="ctomlabapi-orm-temp" >
-		</unjar>
-		<delete file="ctomlabapi-orm-temp/hibernate.cfg.xml" />
-		<copy file="ctomlabapi-orm-temp/hibernate.cfg.xml.template" toFile="ctomlabapi-orm-temp/hibernate.cfg.xml" filtering="true" overwrite="true">
-			<filterset begintoken="@" endtoken="@">
-				<filter token="database.dialect" value="${database.dialect}" />
+	<property name="software.dir" value=".."/>
+	<property name="bda-utils" value="${software.dir}/target/bda-utils" />
+	    
+	    <!-- PATHS -->
+	    <path id="macrodef">
+	        <fileset dir="${bda-utils}">
+	            <include name="**/*.jar" />
+	        </fileset>
+	    </path>
+	<path id="ivy.classpath">
+		<fileset dir="${software.dir}/target/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>	
+    <!-- Task definitions -->
+      <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="macrodef"/>
+	 
+
+
+	<property name="ctomdatapersistence.dir" value="${software.dir}/CTOMDataPersistence-PG"/>
+	<property name="ctomdatapersistence.report.dir" value="${ctomdatapersistence.dir}/target/ctomdatapersistence/reports"/>
+    <property file="${ctomdatapersistence.dir}/build.properties"/>
+    <property name="ctomdatapersistence.resourceDir" value="${ctomdatapersistence.dir}/resources"/>
+
+    <property name="ctomdatapersistence.pmd" value="${ctomdatapersistence.resourceDir}/ctomdatapersistencePmd.xml"/>
+    <property name="ctomdatapersistence.checkstyle" value="${ctomdatapersistence.resourceDir}/ctomdatapersistenceCheckstyle.xml"/>
+
+    <property name="ctomdatapersistence.build.finalName" value="ctomdatapersistence"/>
+    <property name="ctomdatapersistence.build.dir" value="${ctomdatapersistence.dir}/target"/>
+    <property name="ctomdatapersistence.build.outputDir" value="${ctomdatapersistence.build.dir}/classes"/>
+    <property name="ctomdatapersistence.build.srcDir.0" value="${ctomdatapersistence.dir}/src/java"/>
+    <property name="ctomdatapersistence.build.resourceDir.0" value="${ctomdatapersistence.dir}/src/resources"/>
+    <property name="ctomdatapersistence.build.testOutputDir" value="${ctomdatapersistence.build.dir}/test-classes"/>
+    <property name="ctomdatapersistence.build.testDir.0" value="${ctomdatapersistence.dir}/test/java"/>
+    <property name="ctomdatapersistence.build.testResourceDir.0" value="${ctomdatapersistence.dir}/test/resources"/>
+    <property name="ctomdatapersistence.test.reports" value="${ctomdatapersistence.report.dir}/test-reports"/>
+    <property name="ctomdatapersistence.coverage.reports" value="${ctomdatapersistence.report.dir}/coverage-reports"/>
+    <property name="ctomdatapersistence.reporting.outputDirectory" value="${ctomdatapersistence.report.dir}/site"/>
+    <property name="ctomdatapersistence.jar" value="${ctomdatapersistence.build.finalName}.jar"/>
+    <property name="ctomdatapersistence.build.coberturaOutputDir" value="${ctomdatapersistence.build.dir}/generated-classes"/>
+
+    <property name="lib.dir" value="${ctomdatapersistence.dir}/target/ctomdatapersistence/lib"/>
+    <property name="common.dir" value="${software.dir}/common"/>
+    <property name="ivy.file" value="ivy-2.0.0.jar" />
+    <!-- <property name="ivy-cacore.file" value="ivy-cacore-2.0.0-beta2.jar" /> -->
+	<property name="ivy.settings.file" location="${common.dir}/ivysettings.xml" />
+    <property name="ivy.def.file" location="ivy-ctomdatapersistence.xml" />
+    <property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+
+    <!-- ====================================================================== -->
+    <!-- Defining classpaths                                                    -->
+    <!-- ====================================================================== -->
+
+    <property name="compile.jar.dir" location="${lib.dir}/ctomdatapersistence/compile" />
+    <path id="compile.classpath">
+        <fileset dir="${compile.jar.dir}"/>
+    </path>
+
+    <property name="test.jar.dir" location="${lib.dir}/ctomdatapersistence/test" />
+    <path id="test.classpath">
+        <fileset dir="${test.jar.dir}"/>
+    </path>
+    
+    <property name="test-simian.jar.dir" location="${lib.dir}/ctomdatapersistence/test-simian" />
+    <path id="test-simian.classpath">
+        <fileset dir="${test-simian.jar.dir}"/>
+    </path>
+    
+    <property name="test-junit.jar.dir" location="${lib.dir}/ctomdatapersistence/test-junit" />
+    <path id="test-junit.classpath">
+        <fileset dir="${test-junit.jar.dir}"/>
+    </path>
+    
+    <property name="test-cobertura.jar.dir" location="${lib.dir}/ctomdatapersistence/test-cobertura" />
+    <path id="test-cobertura.classpath">
+        <fileset dir="${test-cobertura.jar.dir}"/>
+    </path>
+    
+    <property name="test-checkstyle.jar.dir" location="${lib.dir}/ctomdatapersistence/test-checkstyle" />
+    <path id="test-checkstyle.classpath">
+        <fileset dir="${test-checkstyle.jar.dir}"/>
+    </path>
+
+    <property name="test-pmd.jar.dir" location="${lib.dir}/ctomdatapersistence/test-pmd" />
+    <path id="test-pmd.classpath">
+        <fileset dir="${test-pmd.jar.dir}"/>
+    </path>
+    
+    <property name="test-selenium.jar.dir" location="${lib.dir}/ctomdatapersistence/test-selenium" />
+    <path id="test-selenium.classpath">
+        <fileset dir="${test-selenium.jar.dir}"/>
+    </path>
+
+
+    <!-- ====================================================================== -->
+    <!-- Task definitions                                                       -->
+    <!-- ====================================================================== -->
+    <mkdir dir="${lib.dir}"/>
+    <mkdir dir="${ctomdatapersistence.report.dir}/ctomdatapersistence"/>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath"/>
+
+    <!-- ====================================================================== -->
+    <!-- Cleaning up target                                                     -->
+    <!-- ====================================================================== -->
+
+    <target name="clean" description="Clean the output directory">
+        <delete dir="${ctomdatapersistence.build.dir}"/>
+        <delete dir="${ctomdatapersistence.report.dir}/ctomdatapersistence"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Configure main compilation target                                      -->
+    <!-- ====================================================================== -->
+
+	<target name="createConnectionProperties" description="Creates the connection properties file">
+		<copy file="${ctomdatapersistence.resourceDir}/dataConnection.properties.template" 
+			toFile="${ctomdatapersistence.build.resourceDir.0}/dataConnection.properties" 
+			filtering="true">
+		   <filterset begintoken="@" endtoken="@">
 				<filter token="database.driver" value="${database.driver}" />
 				<filter token="database.url" value="${database.url}" />
-				<filter token="database.username" value="${database.username}" />
+				<filter token="database.user" value="${database.user}" />
 				<filter token="database.password" value="${database.password}" />
 			</filterset>
-		</copy>
-		<jar jarfile="${artifacts.dir}/ctomlabapi-orm.jar" basedir="ctomlabapi-orm-temp" update="yes"/>
-		<copy file="conf/ctomlabapi-beans.jar" todir="${artifacts.dir}" overwrite="true"/>
-		<delete dir="ctomlabapi-orm-temp" />
+	 </copy>
 	</target>
-	
-	<target name="compile" depends="createConnectionProperties,changectomlabapiormjar">
-		<delete dir="${build.classes.dir}" failonerror="false"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<javac srcdir="${build.source.dir}" destdir="${build.classes.dir}" source="1.5" debug="true" debuglevel="lines,vars,source">
-			<classpath>
-				<fileset dir="${lib.home}" includes="*.jar" />
-			</classpath>
-		</javac>
-		<copy file="${build.source.dir}/dataConnection.properties" toFile="${build.classes.dir}/dataConnection.properties"/>
-		<copy file="${build.source.dir}/log4j.properties" toFile="${build.classes.dir}/log4j.properties"/>
-	</target>
+		
+		<target name="changectomlabapiormjar" >
+			<mkdir dir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp"/>
+			<echo message="Extracting the files from ctomlabapi-orm.jar..."/>
+			<unjar src="${ctomdatapersistence.resourceDir}/ctomlabapi-orm.jar" 
+				  dest="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" >
+			</unjar>
+			<delete file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml" />
+			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml.template" toFile="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml" filtering="true" overwrite="true">
+				<filterset begintoken="@" endtoken="@">
+					<filter token="database.dialect" value="${database.dialect}" />
+					<filter token="database.driver" value="${database.driver}" />
+					<filter token="database.url" value="${database.url}" />
+					<filter token="database.user" value="${database.user}" />
+					<filter token="database.password" value="${database.password}" />
+				</filterset>
+			</copy>
+			<jar jarfile="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" basedir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" update="yes"/>
+			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${ctomdatapersistence.build.dir}" overwrite="true"/>
+			<copy file="${ctomdatapersistence.resourceDir}/ctomlabapi-beans.jar" todir="${ctomdatapersistence.build.dir}" overwrite="true"/>
+			<copy file="${ctomdatapersistence.resourceDir}/ctomlabapi-beans.jar" todir="${software.dir}/target/dist/exploded/artifacts" overwrite="true"/>
+			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${software.dir}/target/dist/exploded/artifacts" overwrite="true"/>
+			<delete dir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" />
+		</target>
+    
+    <!-- ====================================================================== -->
+    <!-- Compilation target                                                     -->
+    <!-- ====================================================================== -->
 
-	<target name="dist" depends="compile">
-		<mkdir dir="${artifacts.dir}"/>
-		<jar destfile="${artifacts.dir}/ctomdatapersistence.jar">
-			<fileset dir="${build.classes.dir}">
-				<include name="**/*.class"/>
-			</fileset>
-			<fileset dir="${build.source.dir}">
-				<include name="**/*.xml"/>
-				<include name="**/*.properties"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<!-- Smoke test Clean up targets -->
-	
-	<!-- Smoke test Study Clean up target -->
-	<target name="cleanStudy" description="Cleans the smoke study from the CTODS database">
-			<echo>Cleaning the smoke study from the CTODS database</echo>
-		<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">	
-					<classpath location="${build.classes.dir}">
-							<fileset dir="${lib.home}">
-								<include name="*.jar"/>
-							</fileset>
-				</classpath>
-				<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.StudyTest" haltonfailure="yes" outfile="result"/>
-			</junit>
-		</target>
+    <target name="compile" depends="createConnectionProperties,changectomlabapiormjar" description="Compile the code">
+        <mkdir dir="${ctomdatapersistence.build.outputDir}"/>
+        <javac destdir="${ctomdatapersistence.build.outputDir}" 
+               nowarn="false" 
+               debug="true" 
+               optimize="false" 
+               deprecation="true" 
+               target="1.5" 
+               verbose="false" 
+               fork="false" 
+               source="1.5">
+            <src>
+                <pathelement location="${ctomdatapersistence.build.srcDir.0}"/>
+            </src>
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${ctomdatapersistence.build.outputDir}" filtering="true">
+            <fileset dir="${ctomdatapersistence.build.resourceDir.0}"/>
+        </copy>
+    </target>
 
-	<!-- Smoke test Patient Clean up target -->		
-		<target name="cleanPatient" description="Cleans the smoke study patient from the CTODS database">
-			<echo>Cleaning the smoke study patient from the CTODS database</echo>
-			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
-				<classpath location="${build.classes.dir}">
-											<fileset dir="${lib.home}">
-												<include name="*.jar"/>
-											</fileset>
-								</classpath>
-								<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.PatientTest"/>
-			</junit>
-		</target>
-	
-	<!-- Smoke test Lab(s) Clean up target -->		
-		<target name="cleanLab" description="Cleans the smoke study lab from the CTODS database">
-			<echo>Cleaning the smoke study lab from the CTODS database</echo>
-			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
-						<classpath location="${build.classes.dir}">
-								<fileset dir="${lib.home}">
-									<include name="*.jar"/>
-								</fileset>
-						</classpath>
-			<jvmarg value="-Dapplication.configuration.file=/dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.LabTest"/>
-			</junit>
-		</target>
-	<!-- Verifies the smoke study Lab data target -->		
-		<target name="verifyLabData" description="Verifies the smoke study Lab data from the CTODS database">
-			<echo>Verifying the smoke study Lab data from the CTODS database</echo>
-			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
-						<classpath location="${build.classes.dir}">
-								<fileset dir="${lib.home}">
-									<include name="*.jar"/>
-								</fileset>
-						</classpath>
-			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyLabData"/>
-			</junit>
-		</target>
-	<!-- Verifies the smoke study patient data target -->		
-		<target name="verifyPatientData" description="Verifies the smoke study patient data from the CTODS database">
-			<echo>Verifying the smoke study patient data from the CTODS database</echo>
-			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
-						<classpath location="${build.classes.dir}">
-								<fileset dir="${lib.home}">
-									<include name="*.jar"/>
-								</fileset>
-						</classpath>
-			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyPatientData"/>
-			</junit>
-		</target>
-	<!-- Verifies the smoke study data target -->		
-		<target name="verifyStudyData" description="Verifies the smoke study data from the CTODS database">
-			<echo>Verifying the smoke study data from the CTODS database</echo>
-			<junit printsummary="yes" haltonfailure="yes" filtertrace="on" fork="yes">
-						<classpath location="${build.classes.dir}">
-								<fileset dir="${lib.home}">
-									<include name="*.jar"/>
-								</fileset>
-						</classpath>
-			<jvmarg value="-Dapplication.configuration.file=./dataConnection.properties"/>
-			       <formatter type="plain"/>
-			       <test name="gov.nih.nci.ctom.ctlab.cleanTests.VerifyStudyData"/>
-			</junit>
-		</target>
+    <!-- ====================================================================== -->
+    <!-- Configure test compilation target                                      -->
+    <!-- ====================================================================== -->
+
+    <target name="configure-tests">
+        <copy file="${ctomdatapersistence.resourceDir}/test.properties.ctomdatapersistence" 
+              tofile="${ctomdatapersistence.build.testResourceDir.0}/test.properties"
+              overwrite="true">
+            <filterset>
+                <filter token="test.schema.showsql" value="${test.schema.showsql}"/>
+            </filterset>
+        </copy>
+    </target>
+    
+    <!-- ====================================================================== -->
+    <!-- Test-compilation target                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="compile-tests" 
+      depends="compile, configure-tests" 
+      description="Compile the test code"> 
+        <mkdir dir="${ctomdatapersistence.build.testOutputDir}"/>
+        <javac destdir="${ctomdatapersistence.build.testOutputDir}" 
+               nowarn="false" 
+               debug="true" 
+               optimize="false" 
+               deprecation="true" 
+               target="1.5" 
+               verbose="false" 
+               fork="false" 
+               source="1.5">
+            <src>
+                <pathelement location="${ctomdatapersistence.build.testDir.0}"/>
+            </src>
+            <classpath>
+                <pathelement location="${ctomdatapersistence.build.outputDir}"/>
+                <path refid="test.classpath"/>
+                <path refid="test-junit.classpath"/>
+                <path refid="test-selenium.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${ctomdatapersistence.build.testOutputDir}">
+            <fileset dir="${ctomdatapersistence.build.testResourceDir.0}"/>
+        </copy>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run Cobertura and JUnit                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-cobertura" depends="compile-tests">
+        
+        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
+
+        <delete file="${ctomdatapersistence.build.dir}/cobertura.ser" />
+        
+        <cobertura-instrument datafile="${ctomdatapersistence.build.dir}/cobertura.ser"
+                              toDir="${ctomdatapersistence.build.coberturaOutputDir}">
+            <fileset dir="${ctomdatapersistence.build.outputDir}">
+                <include name="**/*.class" />
+            </fileset>
+        </cobertura-instrument>   
+        
+        <mkdir dir="${ctomdatapersistence.test.reports}"/>
+        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir="." showoutput="no">
+            <sysproperty key="basedir" value="."/>
+            <sysproperty key="net.sourceforge.cobertura.datafile"
+                    file="${ctomdatapersistence.build.dir}/cobertura.ser" />
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+            <classpath location="${ctomdatapersistence.build.coberturaOutputDir}"/>
+            <classpath location="${ctomdatapersistence.build.outputDir}"/>
+            <classpath location="${ctomdatapersistence.build.testOutputDir}"/>
+            <classpath refid="test.classpath"/>
+            <classpath refid="test-junit.classpath"/>
+            <classpath refid="test-cobertura.classpath"/>
+            <batchtest todir="${ctomdatapersistence.test.reports}">
+                <fileset dir="${ctomdatapersistence.build.testDir.0}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        
+        <cobertura-report datafile="${ctomdatapersistence.build.dir}/cobertura.ser"
+                          destdir="${ctomdatapersistence.coverage.reports}" 
+                          srcdir="${ctomdatapersistence.build.srcDir.0}" />
+
+        <cobertura-report datafile="${ctomdatapersistence.build.dir}/cobertura.ser"
+                          format="xml"
+                          destdir="${ctomdatapersistence.coverage.reports}" 
+                          srcdir="${ctomdatapersistence.build.srcDir.0}" />
+        
+        <cobertura-check datafile="${ctomdatapersistence.build.dir}/cobertura.ser"
+                         totalbranchrate="70" 
+                         totallinerate="70"
+                         haltonfailure="false"/>
+     </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run checkstyle                                                         -->
+    <!-- ====================================================================== -->
+
+    <target name="test-checkstyle">
+        <taskdef resource="checkstyletask.properties" 
+             classpath="${test-checkstyle.jar.dir}/checkstyle-all-4.4.jar"/>
+        <checkstyle config="${ctomdatapersistence.checkstyle}" failOnViolation="true">
+            <classpath>
+                <pathelement location="${ctomdatapersistence.build.outputDir}"/>
+            	<path refid="compile.classpath"/>
+            </classpath>
+            <fileset dir="src" includes="**/*.java" />
+            <formatter type="plain"/>
+            <formatter type="plain" toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/checkstyle.txt"/>
+            <formatter type="xml"   toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/checkstyle.xml"/>
+        </checkstyle>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run PMD                                                                -->
+    <!-- ====================================================================== -->
+
+    <target name="test-pmd">
+        <taskdef name="pmd" classpath="${test-pmd.jar.dir}/pmd-4.2.2.jar" classname="net.sourceforge.pmd.ant.PMDTask"/>
+             
+        <pmd shortFilenames="true" failOnRuleViolation="true" 
+                                   rulesetfiles="${ctomdatapersistence.pmd}">
+            <formatter type="text" toConsole="true"/>
+            <formatter type="text" toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/pmd.txt"/>
+            <formatter type="xml"  toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/pmd.xml"/>
+            <fileset dir="src">
+                <include name="**/*.java"/>
+            </fileset>
+         </pmd>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run Simian                                                             -->
+    <!-- ====================================================================== -->
+
+    <target name="test-simian">
+        <taskdef resource="simiantask.properties" 
+             classpath="${test-simian.jar.dir}/simian-2.2.24.jar"/>
+
+        <simian>
+            <fileset dir="src" includes="**/*.java"/>
+            <formatter type="plain" toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/simian.txt"/>
+            <formatter type="xml"   toFile="${ctomdatapersistence.report.dir}/ctomdatapersistence/simian.xml"/>
+            <formatter type="plain"/>
+        </simian>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Run all tests                                                          -->
+    <!-- ====================================================================== -->
+
+    <target name="test-dynamic-analysis" 
+            depends="ivy-get,compile,compile-tests,test-cobertura" 
+            description="Run dynamic analysis."/>
+    
+    <target name="test-static-analysis" 
+            depends="ivy-get,compile,test-checkstyle,test-pmd,test-simian" 
+            description="Run static analysis."/>
+
+    <target name="test-all" 
+            depends="test-static-analysis,test-dynamic-analysis" 
+            description="Run all tests"/>
+
+    <!-- ====================================================================== -->
+    <!-- Package target                                                         -->
+    <!-- ====================================================================== -->
+ 
+    <target name="jar">
+        <jar jarfile="${ctomdatapersistence.build.dir}/${ctomdatapersistence.jar}" 
+             compress="true" 
+             index="false" 
+             basedir="${ctomdatapersistence.build.outputDir}"/>
+    	<jar jarfile="${software.dir}/target/dist/exploded/artifacts/${ctomdatapersistence.jar}" 
+    	             compress="true" 
+    	             index="false" 
+    	             basedir="${ctomdatapersistence.build.outputDir}"/>
+    </target>
+
+    
+    
+    <target name="package-notest-noivy" depends="compile,jar"/>
+
+    <target name="package-notest" depends="ivy-get,compile,jar"
+            description="Package the application.  Do not run tests."/>
+
+    <target name="package" depends="ivy-get,compile,test-all,jar" 
+            description="Package the application"/>
+
+    <target name="package-client" depends="package-notest-noivy" 
+            description="Package the client jar."/>
+    
+    <!-- ====================================================================== -->
+    <!-- Help target                                                            -->
+    <!-- ====================================================================== -->
+
+    <target name="help">
+        <echo message="Please run: $ant -projecthelp"/>
+    </target>
+
+    <!-- ====================================================================== -->
+    <!-- Ivy Targets                                                            -->
+    <!-- ====================================================================== -->
+    <target name="init:ivy">
+        <mkdir dir="${local.repo.dir}"/>
+        <mkdir dir="${lib.dir}"/>
+        <property name="ivy.dep.file" value="${ivy.def.file}"/>
+        <ivy:settings file="${ivy.settings.file}" />
+    </target>
+    <target name="ivy-test-cobertura" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-cobertura" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-cobertura" />
+    </target>
+    <target name="ivy-test-junit" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-junit" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-junit" />
+    </target>
+    <target name="ivy-test-pmd" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-pmd" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-pmd" />
+    </target>
+    <target name="ivy-test-checkstyle" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-checkstyle" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-checkstyle" />
+    </target>
+    <target name="ivy-test-simian" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-simian" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-simian" />
+    </target>
+    <target name="ivy-test-selenium" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="test-selenium" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test-selenium" />
+    </target>
+    <target name="ivy-compile" depends="init:ivy">
+        <ivy:resolve refresh="true" conf="compile" />
+        <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="compile" />
+    </target>
+    <target name="ivy-test" 
+            depends="init:ivy,ivy-test-cobertura,ivy-test-junit,ivy-test-pmd,ivy-test-checkstyle,ivy-test-simian,ivy-test-selenium">
+            <ivy:resolve refresh="true" conf="test" />
+            <ivy:retrieve pattern="${lib.dir}/ctomdatapersistence/[conf]/[artifact]-[revision].[ext]" conf="test" />
+    </target>
+    <target name="ivy-get" 
+            depends="init:ivy,ivy-compile,ivy-test" 
+            description="Updates the local ivy repository">
+    </target>
+    <target name="ivy-clean" description="Delete jars.">
+        <delete dir="${lib.dir}/ctomdatapersistence"/>
+    </target>
+    
 </project>
