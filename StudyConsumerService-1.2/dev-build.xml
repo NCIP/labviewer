@@ -11,7 +11,8 @@
 	<!-- Place any other properties you will need here                  -->
 	<!-- ============================================================== -->
 		
-		<property name="artifacts.dir" value="../artifacts" />
+	<property name="software.dir" location=".." />
+	<property name="artifacts.dir" value="${software.dir}/target/dist/exploded/artifacts" />
 
 
 
