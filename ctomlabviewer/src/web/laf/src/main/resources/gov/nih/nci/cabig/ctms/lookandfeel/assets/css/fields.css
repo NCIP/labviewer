@@ -1,0 +1,71 @@
+input, label, select, textarea {
+  vertical-align: middle;
+  margin: 0; padding: 0;
+}
+input[type=text], input[type=password], select, textarea {
+  background-color: #f4f4f5;
+  border: 1px inset #ccc;
+  padding: 2px;
+}
+input[disabled], select[disabled], textarea[disabled] {
+  border-color: #ddc;
+  background-color: #ddc;
+}
+input[type=button], input[type=submit], input[type=reset] {
+  color: white;
+  background-color: #3876C1;
+  border: 1px outset #3876C1;
+}
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active {
+  border-style: inset;
+}
+
+.error input {
+  border-color: #c03;
+}
+
+/*
+    Styles for scriptaculous-generated autocompleters
+ */
+div.autocomplete {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #888;
+    border-top-width: 0;
+    margin: 0;
+    padding: 0;
+}
+div.autocomplete ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+div.autocomplete ul li.selected { background-color: #ffb;}
+div.autocomplete ul li {
+    list-style-type: none;
+    display: block;
+    margin: 0;
+    padding: 2px;
+    border-style: solid;
+    border-color: #888;
+    border-width: 1px 0 0 0;
+    cursor: pointer;
+}
+
+/*
+    SELECT-equivalent groups of radio buttons
+ */
+.longselect {
+    border: 1px inset #ccc; 
+}
+.longselect label {
+    display: block;
+    padding: 0.2em 0.5em;
+    /* next two properties combine to give a hanging indent */
+    text-indent: -1.3em;
+    padding-left: 1.8em;
+    background-color: #f4f4f5;
+}
+.longselect label:hover {
+    background-color: #D7E7ED;
+}
