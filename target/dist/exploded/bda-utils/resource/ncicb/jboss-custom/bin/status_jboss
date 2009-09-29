@@ -1,0 +1,58 @@
+#!/bin/bash
+#===  FUNCTION  ================================================================
+#          NAME:  getPID ()
+#   DESCRIPTION:  
+#    PARAMETERS:  
+#       RETURNS:  
+#===============================================================================
+getPID ()
+{
+  local procid
+  if [ -f $PIDFILE ]; then
+       procid=`cat ${JBOSS_HOME}/server/${JBOSS_CONF_BASE}/bin/${JBOSS_CONF_BASE}.pid`       
+   else
+       #echo "$PIDFILE not found or readable"	
+       case $(uname) in
+       SunOS)
+         PS=/usr/ucb/ps
+         procid=$($PS -auwwx | grep $JBOSS_CONF_BASE | grep -v grep | grep $JBOSS_USER | awk '{print $2}')
+       ;;
+       Linux)
+         PS=pgrep
+         procid=$($PS -fu $JBOSS_USER "org.jboss.Main \-c $JBOSS_CONF_BASE")
+       ;;
+       esac 
+  fi
+  eval "$1=$procid"
+}
+
+#-------------------------------------------------------------------------------
+#   Main
+#-------------------------------------------------------------------------------
+DIRNAME=`dirname $0`
+PROGNAME=`basename $0`
+INIT_CONF="$DIRNAME/init.conf"
+if [ -r "$INIT_CONF" ]; then
+    . "$INIT_CONF"
+else
+   echo "${PROGNAME}: Missing init.conf! exiting..."
+   exit 1
+fi
+
+PIDFILE="$DIRNAME/$JBOSS_CONF_BASE.pid"
+getPID PID
+if [ "$PID" ]; then
+        if [ "x$1" = "xquiet" ]; then
+          echo $PID
+        else 
+	  echo "$JBOSS_CONF_BASE running as $JBOSS_USER with PID $PID"
+          ps -www $PID
+        fi
+else
+        if [ "x$1" = "xquiet" ]; then
+	  echo -n ""
+        else
+	  #echo "${PROGNAME}: could not find pid for user $JBOSS_USER instance $JBOSS_CONF_BASE"	
+          echo "Jboss not started"
+        fi
+fi
