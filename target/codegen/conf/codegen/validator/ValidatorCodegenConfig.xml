@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-lazy-init="false" default-dependency-check="none" default-autowire="no">
+
+	<import resource="classpath:CodegenConfig.xml"/>
+
+	<!-- 									 -->
+	<!--  Entry point for the Hibernate Validator Annotation Code Generator -->
+	<!-- 									 -->	
+	<bean name="Generator" class="gov.nih.nci.codegen.Generator" singleton="false">
+		<constructor-arg ref="UMLModel"></constructor-arg>
+		<constructor-arg index="1">
+			<list>
+				<ref bean="LogicalModelValidator" />
+			</list>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<list>
+				<ref bean="ValidatorTransformer"/>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 									 -->
+	<!--  Transformers						 -->
+	<!-- 									 -->
+	<bean name="ValidatorTransformer" class="gov.nih.nci.codegen.validator.transformer.jet.ValidatorTransformer">
+		<property name="artifactHandler">
+			<bean class="gov.nih.nci.codegen.handler.FileHandler">
+				<property name="useArtifactSource" value="false"/>
+				<property name="outputDir" value="@VALIDATOR_OUTPUTDIR@"/>
+				<property name="fileName" value="validator-Config.xml"/>				
+			</bean>
+		</property>
+		<property name="serviceURL" value="@CADSR_CONNECTION_URL@"/>
+		<property name="namespacePrefix" value="@NAMESPACE_PREFIX@"/>
+		<property name="enabled" value="@ENABLE_VALIDATOR_CFG_TRANSFORMER@"/>
+		<property name="name" value="Validator Config File Transformer"/>
+		<property name="transformerUtils" ref="TransformerUtils"></property>			
+	</bean>
+
+</beans>

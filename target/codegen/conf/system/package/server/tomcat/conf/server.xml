@@ -1,0 +1,15 @@
+<Server port="8005" shutdown="SHUTDOWN" debug="0">
+
+  <GlobalNamingResources>
+
+	<Resource name="GlobalSDKGridSecurityMap" auth="Container" type="java.util.Map"/>
+	<ResourceParams name="GlobalSDKGridSecurityMap">
+		<parameter>
+			<name>factory</name>
+			<value>gov.nih.nci.system.security.authentication.cagrid.executor.tomcat.TomcatJNDIBinderFactory</value>
+		</parameter>
+	</ResourceParams>
+
+  </GlobalNamingResources>
+
+</Server>

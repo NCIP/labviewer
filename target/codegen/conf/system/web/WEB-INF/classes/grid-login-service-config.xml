@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="AuthenticationService" class="gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationLocalServiceImpl">
+		<constructor-arg index="0">
+			<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+			    <property name="serviceUrl" value="@SDK_GRID_LOGIN_SERVICE_URL@/http/authenticationService"/>
+			    <property name="serviceInterface" value="gov.nih.nci.system.security.authentication.cagrid.executor.GridAuthenticationRemoteService"/>
+			</bean>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<bean class="org.springframework.jndi.JndiObjectFactoryBean">
+				<property name="jndiName" value="@GRID_JNDI_NAME@"/>
+				<!--@TOMCAT_START@-->
+				<property name="resourceRef" value="true"/>
+				<!--@TOMCAT_END@-->
+			</bean>
+		</constructor-arg>
+	</bean>
+
+</beans>
