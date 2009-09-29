@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build Utilities" >
+
+	<description>Build script utilities</description>
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+	
+</project>
