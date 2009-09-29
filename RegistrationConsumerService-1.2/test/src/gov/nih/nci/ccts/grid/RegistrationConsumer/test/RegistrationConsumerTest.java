@@ -23,7 +23,7 @@ public class RegistrationConsumerTest extends TestCase{
         String xml=readFileAsString(xmlPath);
         System.out.println(xml);
         Registration registration=(Registration)Utils.deserializeObject(new FileReader(xmlPath), Registration.class, new FileInputStream(new File(clientConfigPath)));
-        registrationConsumerClient.register(registration);
+        //registrationConsumerClient.register(registration);
     }
 
     private static String readFileAsString(String filePath) throws java.io.IOException {
