@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CodegenValidator" basedir="." default="dist">
+
+	<description>Build script for generating a Hibernate Validator config</description> 
+	<description>file artifact, which is used to generate annotations on </description>
+	<description>generated domain POJO beans</description>
+	
+	<property name="sdk.home" value="../.." />
+	<property file="${sdk.home}/build.properties" prefix="master"/>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="build.properties"/>
+	<property file="${codegen.dir}/build.properties" prefix="codegen" />
+	
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="..\..\build-scripts\build-utils.xml"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${codegen.dir}\${codegen.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<path location="${codegen.dir}\${codegen.build.classes.dir}"/>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing codegen directories"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Condition determining if clean is possible or not
+	*********************************************************************** -->
+	<target name="prepare-clean-condition">
+		<SDKecho message="${ant.project.name}: Checking the condition for cleaning"/>
+		<condition property="clean-condition-met">
+			<available file="${build.dir}" type="dir"/>
+		</condition>
+	</target>	
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files" depends="prepare-clean-condition" if="clean-condition-met">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files in addition to child projects
+	*********************************************************************** -->
+	<target name="clean-all" depends="clean" description="Cleans the child projects and generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning child projects"/>
+		<ant antfile="${codegen.validator.templates.dir}\build.xml" target="clean" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<!--***********************************************************************
+	*** Prepare source code
+	*********************************************************************** -->
+	<target name="prepare-source">
+		<SDKecho message="${ant.project.name}: Executing child projects"/>
+		<ant antfile="${codegen.validator.templates.dir}\build.xml" target="compile-templates" inheritall="false" inheritrefs="false" />
+	</target>
+
+	
+	<!--***********************************************************************
+	*** Compiles source code
+	*********************************************************************** -->
+	<target name="compile" depends="init,prepare-source" description="Compiles source code">
+		<SDKecho message="${ant.project.name}: Compiling Jet source code"/>
+		<javac srcdir="${codegen.validator.src.dir}:${codegen.validator.templates.src.dir}" destdir="${build.classes.dir}" debug="true">
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+
+	<!--***********************************************************************
+	*** Create distributable package
+	*********************************************************************** -->
+	<target name="dist" depends="compile" description="Prepates distribution files">
+		<SDKecho message="${ant.project.name}: Creating distributable package"/>
+		<jar destfile="${dist.dir}\${file.output.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Main-Class" value="gov.nih.nci.codegen.Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<fileset dir="${codegen.validator.src.dir}" includes="**/*.java" />
+			<fileset dir="${codegen.validator.templates.src.dir}" includes="**/*.java" />
+		</jar>
+		<copy todir="${dist.dir}">
+			<fileset dir="${lib.dir}" includes="*.jar"/>
+		</copy>
+	</target>
+	
+	<!--***********************************************************************
+	*** Dumps the current Code Generator properties  
+	*********************************************************************** -->
+	<target name="show-properties" description="Dumps a list of all currently set Code Generator properties">
+		<echoproperties destfile="antproperties-codegen.txt"/>
+		<echo>Properties were dumped to 'antproperties-codegen.txt'</echo>
+	</target>
+</project>

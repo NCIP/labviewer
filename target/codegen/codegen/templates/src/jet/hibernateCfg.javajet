@@ -1,0 +1,27 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="HibernateCfgTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+	
+<%
+	Map hibernatePropertiesMap = (Map)configurationParams.get("HIBERNATE_PROPERTIES");
+	if(hibernatePropertiesMap != null){%>
+		<!-- Properties for the session factory -->
+<%	
+		for(java.util.Iterator iter = hibernatePropertiesMap.keySet().iterator();iter.hasNext();){
+		String param = (String) iter.next();%>
+		<property name="<%=param%>"><%=(String)hibernatePropertiesMap.get(param)%></property>
+<%		}
+	}%>
+
+		<!-- Mapped Resources -->
+<%for(UMLClass klass:transformerUtils.getAllHibernateClasses(model)){%>
+		<mapping resource="<%=transformerUtils.getFQCN(klass).replace('.','/')%>.hbm.xml" />
+<%}%>
+	</session-factory>
+</hibernate-configuration>
+
+        

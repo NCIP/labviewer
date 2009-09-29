@@ -1,0 +1,67 @@
+<%@ jet package="gov.nih.nci.codegen.validator.transformer.jet" 
+        class="ValidatorTransformer"
+        skeleton="ValidatorTransformerBase.skeleton" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-lazy-init="false" default-dependency-check="none"
+	default-autowire="no">
+
+	<bean name="ValidatorModel" class="gov.nih.nci.codegen.validator.ValidatorModel">
+		<constructor-arg>
+			<map>
+<%String enumValues;
+boolean addClassConfigBegin = false;
+boolean addClassConfigEnd = false;
+for(UMLClass klass:transformerUtils.getAllHibernateClasses(model)){
+
+	addClassConfigBegin = true;
+	for(UMLAttribute attr: klass.getAttributes()){
+		enumValues = getCaDSREnumPattern(transformerUtils.getFQCN(klass)+"."+attr.getName());
+		if (enumValues != null && enumValues.length() > 0 ){
+			addClassConfigEnd = true;
+			if (addClassConfigBegin) { %>			
+				<entry key="<%=transformerUtils.getFQCN(klass)%>">
+					<bean class="gov.nih.nci.codegen.validator.ValidatorClass">
+						<constructor-arg value="<%=transformerUtils.getFQCN(klass)%>" />
+						<constructor-arg index="1"> <!-- attribute-level constraints -->
+							<map>
+<%			} %>
+								<entry key="<%=attr.getName()%>">
+									<bean class="gov.nih.nci.codegen.validator.ValidatorAttribute">
+										<constructor-arg value="<%=attr.getName()%>" />
+										<constructor-arg index="1">
+											<list>
+												<bean class="gov.nih.nci.codegen.validator.ValidatorConstraint">
+													<constructor-arg value="org.hibernate.validator.Pattern" />
+													<constructor-arg index="1">
+														<map>
+															<entry key="regex" value='"(<%=enumValues%>)"' />
+														</map>
+													</constructor-arg>
+												</bean>
+											</list>
+										</constructor-arg>
+									</bean>
+								</entry>	
+<%			if (addClassConfigBegin) 
+				addClassConfigBegin = false;
+		} //if (enumValues != null && enumValues.length() > 0 )
+	} // for(UMLAttribute attr: klass.getAttributes()) 
+	if (addClassConfigEnd){%>																													
+							</map>
+						</constructor-arg>
+						<constructor-arg index="2"><!-- class-level constraints -->
+							<list/>
+						</constructor-arg>						
+					</bean>
+				</entry>
+<%		addClassConfigEnd = false;
+	}	
+}%>				
+			</map>
+		</constructor-arg>
+	</bean>
+
+</beans>
+
+        

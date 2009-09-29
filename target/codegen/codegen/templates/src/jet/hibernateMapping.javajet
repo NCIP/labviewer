@@ -1,0 +1,302 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="HibernateMappingTransformer"
+        skeleton="ParentClassTransformerBase.skeleton" %>
+<%UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
+String abstractModifier = transformerUtils.isAbstract(klass) ? "true" : "false";
+String polymorphismAttr = transformerUtils.hasImplicitParent(klass) ? "implicit" : "explicit";
+String fqcn = transformerUtils.getFQCN(klass);
+UMLClass table = transformerUtils.getTable(klass);
+String emptySpace = transformerUtils.getEmptySpace(level);
+String discriminatorColumnName = transformerUtils.findDiscriminatingColumnName(klass);
+if(level == 0){
+String discriminatorValue = transformerUtils.getRootDiscriminatorValue(klass);
+String discriminatorValueStr = (discriminatorValue==null) ? "" : "discriminator-value=\""+discriminatorValue+"\"";
+%>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="<%=transformerUtils.getFullPackageName(klass)%>" auto-import="false" default-cascade="none">
+	<class name="<%=klass.getName()%>" table="<%=table.getName()%>" lazy="true" polymorphism="<%=polymorphismAttr%>" abstract="<%=abstractModifier%>" <%=discriminatorValueStr%>>
+		<cache usage="read-write" />
+		<id name="<%=idAttr.getName()%>" type="<%=transformerUtils.getHibernateDataType(klass,idAttr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+idAttr.getName())%>"><%
+		java.util.HashMap<String,String> pkGeneratorTags=transformerUtils.getPKGeneratorTags(table,fqcn,idAttr);
+		  String pkSystemwideGeneratorTag=pkGeneratorTags.get(transformerUtils.PK_GENERATOR_SYSTEMWIDE+transformerUtils.getDatabaseType());
+		  if(pkSystemwideGeneratorTag!=null){%>
+			<%=pkSystemwideGeneratorTag%><%
+		  }else{%>
+			<generator class="<%=pkGeneratorTags.get(transformerUtils.TV_PK_GENERATOR+transformerUtils.getDatabaseType())%>"><%
+					java.util.Iterator itr=pkGeneratorTags.keySet().iterator();
+					 while(itr.hasNext()){
+						String key=(String)itr.next();
+						if(!key.equals(transformerUtils.TV_PK_GENERATOR+transformerUtils.getDatabaseType())){
+		    			String value=(String)pkGeneratorTags.get(key);%>	
+				<param name="<%=key%>"><%=value%></param><%}
+					}%>
+			</generator><%
+			}%>			
+		</id><%
+		if(discriminatorColumnName!=null && !discriminatorColumnName.equals("")){%>
+		<%=emptySpace%><discriminator column="<%=discriminatorColumnName%>" type="string"/><%
+		}
+}
+		UMLClass currentKlass = klass;
+		do{
+			if(currentKlass.getAttributes().size()>0){%>
+		<%=emptySpace%><!-- Attributes mapping for the <%=currentKlass.getName()%> class --><%
+				for(UMLAttribute attr:currentKlass.getAttributes()){
+					if(attr != idAttr){
+						if(transformerUtils.isCollection(currentKlass, attr)){
+							UMLClass collectionTable = transformerUtils.findCollectionTable(attr, model);
+							String keyColumnName = transformerUtils.getCollectionKeyColumnName(collectionTable, currentKlass, attr);
+							String elementColumnName = transformerUtils.getCollectionElementColumnName(collectionTable, currentKlass, attr);
+							String elementType = transformerUtils.getCollectionElementHibernateType(currentKlass, attr);%>
+		<%=emptySpace%><set name="<%=attr.getName()%>" lazy="false" table="<%=collectionTable.getName()%>">
+			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><element type="<%=elementType%>" column="<%=elementColumnName%>" />
+		<%=emptySpace%></set>
+						<%}
+						else{
+						    UMLClass temp;
+							if (transformerUtils.isImplicitParent(currentKlass)){
+								temp = klass;
+							} else {
+								temp = currentKlass;
+							}
+						%>
+		<%=emptySpace%><property name="<%=attr.getName()%>" type="<%=transformerUtils.getHibernateDataType(temp,attr)%>" column="<%=transformerUtils.getMappedColumnName(table,fqcn+"."+attr.getName())%>"/><%
+						}
+					}
+				}
+			}
+			if(currentKlass.getAssociations().size()>0){%>
+		<%=emptySpace%><!-- Associations mapping for the <%=currentKlass.getName()%> class --><%
+				
+				//First Pass - process 'set' elements >
+
+				for(UMLAssociation association:currentKlass.getAssociations()){
+					List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+					UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(currentKlass,assocEnds);
+					UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(currentKlass,assocEnds);
+					
+					if(otherEnd.isNavigable())
+					{
+						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+						String assocKlassName = transformerUtils.getFQCN(assocKlass);
+						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
+						
+						if(transformerUtils.isAny(thisEnd,otherEnd)) //Association to an implicit parent class
+						{
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							UMLClass anyTable = transformerUtils.getTable(currentKlass);
+							%>
+		<%=emptySpace%><any name="<%=otherEnd.getRoleName()%>" meta-type="string" id-type="integer" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"><%
+							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
+			<%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
+							}//for	%>
+			<%=emptySpace%><column name="<%=transformerUtils.getImplicitDiscriminatorColumn(anyTable,currentKlass,otherEnd.getRoleName())%>"/>
+			<%=emptySpace%><column name="<%=transformerUtils.getImplicitIdColumn(anyTable,currentKlass,otherEnd.getRoleName())%>"/>
+		<%=emptySpace%></any><%
+						} else if(transformerUtils.isMany2Any(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+								throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' tags of the same association");
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String joinTableName = correlationTable.getName();
+							UMLClass implicitClass = (UMLClass)otherEnd.getUMLElement();
+							
+							%>
+		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
+			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><many-to-any meta-type="string" id-type="integer"><%
+							for (UMLClass nonImplicitSubclass:transformerUtils.getNonImplicitSubclasses(implicitClass)){%>
+			<%=emptySpace%><%=emptySpace%><meta-value value="<%=transformerUtils.getDiscriminatorValue(nonImplicitSubclass)%>" class="<%=transformerUtils.getFQCN(nonImplicitSubclass)%>"/><%
+							}//for	%>
+			<%=emptySpace%><%=emptySpace%><column name="<%=transformerUtils.getImplicitDiscriminatorColumn(correlationTable,currentKlass,otherEnd.getRoleName())%>"/>
+			<%=emptySpace%><%=emptySpace%><column name="<%=transformerUtils.getImplicitIdColumn(correlationTable,currentKlass,otherEnd.getRoleName())%>"/>
+			<%=emptySpace%></many-to-any>
+		<%=emptySpace%></set><%
+						} else if(transformerUtils.isMany2Many(thisEnd,otherEnd)){
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass);
+							String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass,otherEnd, true);
+							String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd, assocKlass, thisEnd, true);
+							String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+							if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+								throw new GenerationException("Different columns used for implements-association and inverse-of of the same association");
+							String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+							String joinTableName = correlationTable.getName();%>
+		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" inverse="<%=inverseValue%>">
+			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" />
+		<%=emptySpace%></set><%
+						}else if(transformerUtils.isOne2Many(thisEnd,otherEnd)){	//One to Many
+							String lazyValue = lazy == true ? "true" : "false";
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //One to Many - No Join Table
+							{
+								UMLClass assocTable = transformerUtils.getTable(assocKlass);
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								String keyColumnName = transformerUtils.findAssociatedColumn(assocTable,assocKlass,thisEnd,currentKlass,otherEnd, false);
+								String assocColumnName = transformerUtils.findAssociatedColumn(assocTable,currentKlass,otherEnd,assocKlass,thisEnd, false);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(assocTable,assocKlass,thisEnd);
+								if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+									throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' tags of the same association");
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false"; %>
+		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
+			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><key column="<%=keyColumnName%>" not-null="<%=notNullFkAttr%>" />
+			<%=emptySpace%><one-to-many class="<%=assocKlassName%>"/>
+		<%=emptySpace%></set><%
+							}else{ //One to Many - Join Table
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+									throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' of the same association");
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();%>
+		<%=emptySpace%><set name="<%=otherEnd.getRoleName()%>" table="<%=joinTableName%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>" inverse="<%=inverseValue%>">
+			<%=emptySpace%><cache usage="read-write" />
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><many-to-many class="<%=assocKlassName%>" column="<%=assocColumnName%>" unique="true"/>
+		<%=emptySpace%></set><%
+							}
+						}else if(transformerUtils.isMany2One(thisEnd,otherEnd)){
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+								if (correlationTable == null) //Many to One - No Join Table
+								{	
+									String lazyValue = lazy == true ? "proxy" : "false";							
+									String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false);%>
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+								}else{ // Many to One - Join Table
+						
+										// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
+								}
+						}else{	//One to One
+							String lazyValue = lazy == true ? "proxy" : "false";
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable == null) //Many to One - No Join Table
+							{
+
+								String keyColumnName = transformerUtils.findAssociatedColumn(table,currentKlass,otherEnd,assocKlass,thisEnd, false, false);
+								Boolean keyColumnPresent = (keyColumnName!=null && !"".equals(keyColumnName));
+								if(thisEnd.isNavigable())
+								{
+									if(keyColumnPresent){%>
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+									}else{%>
+		<%=emptySpace%><one-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" property-ref="<%=thisEnd.getRoleName()%>" lazy="<%=lazyValue%>" cascade="<%=cascadeStyle%>"/><%
+									}
+								}else{
+									if(keyColumnPresent){%>
+		<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" class="<%=assocKlassName%>" column="<%=keyColumnName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/><%
+									}else {
+									    throw new GenerationException("One to one unidirectional mapping requires key column to be present in the source class"+transformerUtils.getFQCN(currentKlass));
+									}
+								}
+							}else{ // generate <join> statement
+								// do nothing; do not generate any <join> elements in this first pass!  Hibernate DTD requires any <set> elements to appear first
+							}
+						}
+					}
+				}//end - for(UMLAssociation association:currentKlass.getAssociations()) - First Pass to process 'set' elements
+				
+				//Second Pass - process any <join> elements
+				for(UMLAssociation association:currentKlass.getAssociations()){
+					List<UMLAssociationEnd> assocEnds = association.getAssociationEnds();
+					UMLAssociationEnd thisEnd = transformerUtils.getThisEnd(currentKlass,assocEnds);
+					UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(currentKlass,assocEnds);
+					
+					if(otherEnd.isNavigable())
+					{
+						UMLClass assocKlass = (UMLClass)otherEnd.getUMLElement();
+						String assocKlassName = transformerUtils.getFQCN(assocKlass);
+						String cascadeStyle = transformerUtils.findCascadeStyle(currentKlass, otherEnd.getRoleName(), association);
+						boolean lazy = transformerUtils.isLazyLoad(currentKlass, otherEnd.getRoleName(), association);
+						
+				        if(transformerUtils.isMany2One(thisEnd,otherEnd)){
+								String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+								UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+								if (correlationTable != null) //Many to One -  Join Table
+								{
+									String lazyValue = lazy == true ? "proxy" : "false";
+									String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+									String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+									String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+									if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+										throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' of the same association");
+									String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+									String joinTableName = correlationTable.getName();%>
+		<%=emptySpace%><join table="<%=joinTableName%>" inverse="<%=inverseValue%>" optional="true">
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/>
+		<%=emptySpace%></join><%
+								}
+						}else if(transformerUtils.isOne2One(thisEnd,otherEnd)){	//One to One
+							String lazyValue = lazy == true ? "proxy" : "false";
+							String notNullFkAttr=transformerUtils.isFKAttributeNull(otherEnd);
+							UMLClass correlationTable = transformerUtils.findCorrelationTable(association, model, assocKlass, false);
+							if (correlationTable != null) //Many to One -  Join Table
+							{
+								String keyColumnName = transformerUtils.findAssociatedColumn(correlationTable,assocKlass,thisEnd, currentKlass, otherEnd, true);
+								String assocColumnName = transformerUtils.findAssociatedColumn(correlationTable,currentKlass,otherEnd,assocKlass,thisEnd, true);
+								String inverseColumnName =  transformerUtils.findInverseColumnValue(correlationTable,assocKlass,thisEnd);
+								if(!"".equals(inverseColumnName) && !assocColumnName.equals(inverseColumnName))
+									throw new GenerationException("Different columns used for 'implements-association' and 'inverse-of' of the same association");
+								String inverseValue = assocColumnName.equals(inverseColumnName) ?"true":"false";
+								String joinTableName = correlationTable.getName();%>
+		<%=emptySpace%><join table="<%=joinTableName%>" inverse="<%=inverseValue%>" optional="true">
+			<%=emptySpace%><key column="<%=keyColumnName%>" />
+			<%=emptySpace%><many-to-one name="<%=otherEnd.getRoleName()%>" column="<%=assocColumnName%>" class="<%=assocKlassName%>" unique="true" lazy="<%=lazyValue%>" not-null="<%=notNullFkAttr%>" cascade="<%=cascadeStyle%>"/>
+		<%=emptySpace%></join><%
+							}
+						}
+					}
+				}//end - for(UMLAssociation association:currentKlass.getAssociations()) - Second Pass to process 'join' elements
+				
+			}//end -  if(currentKlass.getAssociations().size()>0
+			
+			currentKlass = transformerUtils.getSuperClass(currentKlass);
+		}while(currentKlass!=null && transformerUtils.isImplicitParent(currentKlass));
+		for(UMLGeneralization gen:klass.getGeneralizations()){
+			UMLClass subKlass = (UMLClass)gen.getSubtype();
+			String subFqcn = transformerUtils.getFQCN(subKlass);
+			if(subKlass!=klass){
+				if(discriminatorColumnName == null || "".equals(discriminatorColumnName)){
+				UMLClass superKlass = (UMLClass)gen.getSupertype();
+				UMLClass subTable = transformerUtils.getTable(subKlass);
+				String keyColumnName = transformerUtils.getMappedColumnName(subTable,subFqcn+"."+idAttr.getName());%>
+		<%=emptySpace%><joined-subclass name="<%=subFqcn%>" table="<%=subTable.getName()%>" lazy="true">
+			<%=emptySpace%><key column="<%=keyColumnName%>" /><%=generate(model, subKlass, level+1)%>
+		<%=emptySpace%></joined-subclass><%
+				}else{
+					String discriminatorValue = transformerUtils.getDiscriminatorValue(subKlass);
+					UMLClass subTable = transformerUtils.getTable(subKlass);
+					if(subTable == table){%>
+		<%=emptySpace%><subclass name="<%=subFqcn%>" discriminator-value="<%=discriminatorValue%>"><%=generate(model, subKlass, level+1)%>
+		<%=emptySpace%></subclass><%
+					}else{
+						String keyColumnName = transformerUtils.getMappedColumnName(subTable,subFqcn+"."+idAttr.getName());%>
+		<%=emptySpace%><subclass name="<%=subFqcn%>" discriminator-value="<%=discriminatorValue%>">
+			<%=emptySpace%><join table="<%=subTable.getName()%>">
+				<%=emptySpace%><key column="<%=keyColumnName%>" /><%=generate(model, subKlass, level+1)%>
+			<%=emptySpace%></join>
+		<%=emptySpace%></subclass><%
+					}
+				}
+			}
+		}%>
+<%if(level == 0){%>
+	</class>
+</hibernate-mapping>
+<%}%>
