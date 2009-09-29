@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="System" basedir="." default="dist">
+
+	<description>Build script for building the runtime system</description>
+		
+	<property name="sdk.home" value=".." />
+	<property file="${sdk.home}/build.properties" prefix="master" />
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="build.properties"  />
+	<property file="${security.dir}\build.properties"  prefix="security"/>
+	
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="..\build-scripts\build-utils.xml"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<path location="${security.dir}\${security.build.classes.dir}"/>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+	
+
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing directories"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Condition determining if clean is possible or not
+	*********************************************************************** -->
+	<target name="prepare-clean-condition">
+		<SDKecho message="${ant.project.name}: Checking the condition for cleaning"/>
+		<condition property="clean-condition-met">
+			<available file="${src.dir}" type="dir"/>
+		</condition>
+	</target>	
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files"  depends="prepare-clean-condition" if="clean-condition-met">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean-all" description="Cleans the generated directories and files"  depends="clean">
+		<SDKecho message="${ant.project.name}: Cleaning child projects"/>
+		<ant antfile="${security.dir}/build.xml" target="clean" inheritall="no" inheritrefs="false"/>
+	</target>
+	
+	<!--***********************************************************************
+	*** Compiles source code
+	*********************************************************************** -->
+	<target name="compile" depends="init" description="Compiles source code">
+		<SDKecho message="${ant.project.name}: Compiling source code"/>
+		<ant antfile="${security.dir}/build.xml" target="compile" inheritall="no" inheritrefs="false"/>
+		<javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="true">
+			<classpath refid="classpath"/>
+		</javac>
+		<copy todir="${build.classes.dir}">
+			<fileset dir="${src.dir}" includes="gov/nih/nci/system/web/struts/action/package.properties"/>
+		</copy>
+	</target>
+
+	<!--***********************************************************************
+	*** Create distributable package
+	*********************************************************************** -->
+	<target name="dist" depends="compile" description="Prepates distribution files">
+		<SDKecho message="${ant.project.name}: Creating distributable package"/>
+		<ant antfile="${security.dir}/build.xml" target="dist" inheritall="no" inheritrefs="false"/>
+		<copy todir="${dist.dir}">
+			<fileset dir="${security.dir}\${security.dist.dir}" includes="*.jar"/>
+		</copy>
+		<jar destfile="${dist.dir}\${file.output.client.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<include name="gov/nih/nci/system/client/**/*"/>
+			<include name="gov/nih/nci/system/applicationservice/*"/>
+			<include name="gov/nih/nci/system/query/**/*"/>
+			<include name="gov/nih/nci/system/dao/*Exception*.*"/>
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/system/client/**/*"/>
+				<include name="gov/nih/nci/system/applicationservice/*"/>
+				<include name="gov/nih/nci/system/query/**/*"/>
+				<include name="gov/nih/nci/system/dao/*Exception*.*"/>
+			</fileset>
+		</jar>
+
+		<jar destfile="${dist.dir}\${file.output.core.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<include name="gov/nih/nci/system/dao/**/*"/>
+			<include name="gov/nih/nci/system/applicationservice/impl/**/*"/>
+			<include name="gov/nih/nci/system/util/**/*"/>
+			<exclude name="gov/nih/nci/system/dao/*Exception*.*"/>
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/system/dao/**/*"/>
+				<include name="gov/nih/nci/system/applicationservice/impl/**/*"/>
+				<include name="gov/nih/nci/system/util/**/*"/>
+				<exclude name="gov/nih/nci/system/dao/*Exception*.*"/>
+			</fileset>
+		</jar>
+
+		<jar destfile="${dist.dir}\${file.output.web.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<include name="gov/nih/nci/system/web/**/*"/>
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/system/web/**/*"/>
+			</fileset>
+		</jar>
+	
+		<jar destfile="${dist.dir}\${file.output.ws.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<include name="gov/nih/nci/system/webservice/**/*"/>
+			<fileset dir="${src.dir}">
+				<include name="gov/nih/nci/system/webservice/**/*"/>
+			</fileset>		
+		</jar>
+	</target>
+	
+</project>
