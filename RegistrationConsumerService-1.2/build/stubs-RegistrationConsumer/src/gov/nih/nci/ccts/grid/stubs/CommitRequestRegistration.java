@@ -8,13 +8,13 @@
 package gov.nih.nci.ccts.grid.stubs;
 
 public class CommitRequestRegistration  implements java.io.Serializable {
-    private gov.nih.nci.ccts.grid.Registration registration;
+    private gov.nih.nci.cabig.ccts.domain.Registration registration;
 
     public CommitRequestRegistration() {
     }
 
     public CommitRequestRegistration(
-           gov.nih.nci.ccts.grid.Registration registration) {
+           gov.nih.nci.cabig.ccts.domain.Registration registration) {
            this.registration = registration;
     }
 
@@ -24,7 +24,7 @@ public class CommitRequestRegistration  implements java.io.Serializable {
      * 
      * @return registration
      */
-    public gov.nih.nci.ccts.grid.Registration getRegistration() {
+    public gov.nih.nci.cabig.ccts.domain.Registration getRegistration() {
         return registration;
     }
 
@@ -34,7 +34,7 @@ public class CommitRequestRegistration  implements java.io.Serializable {
      * 
      * @param registration
      */
-    public void setRegistration(gov.nih.nci.ccts.grid.Registration registration) {
+    public void setRegistration(gov.nih.nci.cabig.ccts.domain.Registration registration) {
         this.registration = registration;
     }
 

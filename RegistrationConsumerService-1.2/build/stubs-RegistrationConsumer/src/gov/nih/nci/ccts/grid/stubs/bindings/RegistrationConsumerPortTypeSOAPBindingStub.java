@@ -232,7 +232,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "AddressType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.AddressType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.AddressType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -246,7 +246,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "TreatmentEpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.TreatmentEpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.TreatmentEpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -260,21 +260,21 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyFundingSponsorType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyFundingSponsorType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyFundingSponsorType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudySiteType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudySiteType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudySiteType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ExclusionEligibilityCriteriaType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ExclusionEligibilityCriteriaType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ExclusionEligibilityCriteriaType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -288,21 +288,21 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "CoordinatingCenterStudyStatusType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.CoordinatingCenterStudyStatusType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.CoordinatingCenterStudyStatusType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ScheduledArmType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ScheduledArmType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ScheduledArmType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StratumGroupType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StratumGroupType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StratumGroupType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -330,28 +330,28 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyOrganizationType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyOrganizationType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyOrganizationType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "Study");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.Study.class;
+            cls = gov.nih.nci.cabig.ccts.domain.Study.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "NonTreatmentEpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.NonTreatmentEpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.NonTreatmentEpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyCoordinatingCenterType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyCoordinatingCenterType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyCoordinatingCenterType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -386,7 +386,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ParticipantType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ParticipantType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ParticipantType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -414,7 +414,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "SystemAssignedIdentifierType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.SystemAssignedIdentifierType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.SystemAssignedIdentifierType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -470,7 +470,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyDataEntryStatusType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyDataEntryStatusType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyDataEntryStatusType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
@@ -484,7 +484,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "InclusionEligibilityCriteriaType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.InclusionEligibilityCriteriaType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.InclusionEligibilityCriteriaType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -519,7 +519,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "HealthcareSiteType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.HealthcareSiteType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.HealthcareSiteType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -568,7 +568,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyDiseaseType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyDiseaseType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyDiseaseType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -582,14 +582,14 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ArmType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ArmType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ArmType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StratificationCriterionType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StratificationCriterionType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StratificationCriterionType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -645,7 +645,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "IdentifierType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.IdentifierType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.IdentifierType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -687,7 +687,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "Registration");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.Registration.class;
+            cls = gov.nih.nci.cabig.ccts.domain.Registration.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -743,14 +743,14 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "OrganizationAssignedIdentifierType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.OrganizationAssignedIdentifierType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ScheduledNonTreatmentEpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ScheduledNonTreatmentEpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ScheduledNonTreatmentEpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -778,7 +778,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyInvestigatorType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyInvestigatorType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -799,14 +799,14 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "EligibilityCriteriaType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.EligibilityCriteriaType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.EligibilityCriteriaType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "HealthcareSiteInvestigatorType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.HealthcareSiteInvestigatorType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.HealthcareSiteInvestigatorType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -827,7 +827,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StudyRefType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StudyRefType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StudyRefType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -848,14 +848,14 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "RegDataEntryStatusType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.RegDataEntryStatusType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.RegDataEntryStatusType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ScheduledTreatmentEpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ScheduledTreatmentEpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ScheduledTreatmentEpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -890,7 +890,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "ScheduledEpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.ScheduledEpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.ScheduledEpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -974,14 +974,14 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "RegWorkflowStatusType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.RegWorkflowStatusType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.RegWorkflowStatusType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "InvestigatorType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.InvestigatorType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.InvestigatorType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -1002,7 +1002,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "StratificationCriterionPermissibleAnswerType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.StratificationCriterionPermissibleAnswerType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.StratificationCriterionPermissibleAnswerType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -1023,7 +1023,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "EpochType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.EpochType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.EpochType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -1072,7 +1072,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "SiteStudyStatusType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.SiteStudyStatusType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.SiteStudyStatusType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
@@ -1100,7 +1100,7 @@ public class RegistrationConsumerPortTypeSOAPBindingStub extends org.apache.axis
 
             qName = new javax.xml.namespace.QName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain", "DiseaseTermType");
             cachedSerQNames.add(qName);
-            cls = gov.nih.nci.ccts.grid.DiseaseTermType.class;
+            cls = gov.nih.nci.cabig.ccts.domain.DiseaseTermType.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
