@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="db-integrate">
+	<!--
+	$Id: template-db-integrate.xml 79 2008-04-22 18:08:25Z saksass $
+	$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/utils/resource/template-db-integrate.xml $
+	-->
+
+	<target name="database-integrate" description="Apply DB changes">	
+	</target>
+</project>
