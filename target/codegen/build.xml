@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDK" basedir="." default="build-system">
+
+	<description>Build script for caCORE SDK</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="installer.properties"  />
+	<property file="local.properties"  />
+	<property file="conf/deploy.properties"  />
+	<property file="build.properties"  />
+	<property file="${codegen.dir}/build.properties" prefix="codegen"  />
+	<property file="${codegen.validator.dir}/build.properties" prefix="validator"  />
+	<property file="${system.dir}/build.properties" prefix="system"  />
+	<property file="${writable-api.dir}/build.properties" prefix="writable-api"  />
+	<property file="${security.dir}/build.properties" prefix="security"  />
+	<property file="${grid-remoting.dir}/build.properties" prefix="grid-remoting"  />
+	<property file="${grid-jaas.dir}/build.properties" prefix="grid-jaas"  />
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="build-scripts\build-utils.xml"/>
+	<import file="${codegen.dir}\build.xml"/>
+	<import file="${system.dir}\build.xml"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+
+	<path id="codegen.runtime">
+		<fileset dir="${codegen.dir}\dist">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${output.codegen.config.dir}"/>
+	</path>
+	
+    <path id="system.lib.class.path">
+        <fileset dir="${system.dir}\${system.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+	
+	<path id="codegen.validator.runtime">
+		<fileset dir="${codegen.validator.dir}\dist">
+			<include name="**/*.jar"/>
+		</fileset>
+		<path refid="codegen.runtime"/>
+		<path refid="system.lib.class.path"/>
+		<pathelement path="${output.codegen.config.dir}"/><!-- Needed due to CodegenConfig.xml ref -->
+		<pathelement path="${output.codegen.validator.config.dir}"/>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+
+	<!--***********************************************************************
+	*** HIDE/SHOW DB CONNECTION PROPERTIES TO BE USED IN HIBERNATE CONFIGURATION
+	*********************************************************************** -->
+	<condition property="JNDI_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="JNDI_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="DB_CONNECTION_START" value="${xml.comment.start}" else="">
+		<or>
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="DB_CONNECTION_END" value="${xml.comment.end}" else="">
+		<or>
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	
+	<condition property="CSM_JNDI_START" value="" else="${xml.comment.start}">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="CSM_JNDI_END" value="" else="${xml.comment.end}">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="CSM_DB_CONNECTION_START" value="${xml.comment.start}" else="">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="CSM_DB_CONNECTION_END" value="${xml.comment.end}" else="">
+		<or>
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CSM_USE_JNDI_BASED_CONNECTION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	
+	<condition property="SECURITY_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="SECURITY_START" value="" else="${xml.comment.start}">
+		<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="SECURITY_END" value="" else="${xml.comment.end}">
+		<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="INSTANCE_LEVEL_SECURITY_ENABLED" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_INSTANCE_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_INSTANCE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	<condition property="ATTRIBUTE_LEVEL_SECURITY_ENABLED" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_ATTRIBUTE_LEVEL_SECURITY}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ATTRIBUTE_LEVEL_SECURITY_START" value="" else="${xml.comment.start}">
+		<equals arg1="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="ATTRIBUTE_LEVEL_SECURITY_END" value="" else="${xml.comment.end}">
+		<equals arg1="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="CACHE_PROTECTION_ELEMENTS_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${CACHE_PROTECTION_ELEMENTS}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${CACHE_PROTECTION_ELEMENTS}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>	
+	
+	<condition property="server-exclude-commons-logging" value="commons-logging*.*" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="server-exclude-log4j" value="log4j*.*" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="server-exclude-classes-list" value="**/log4j*.*" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="WRITABLE_API_EXTENSION_ENABLED" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_WRITABLE_API_EXTENSION}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+
+	<condition property="read-api-exclude-list" value="" else="*.jar">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+
+	<condition property="read-api-exclude-list-remote-client" value="${writable-api.file.output.core.writable.name}" else="*.jar">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="SERVICE_INTERFACE" value="${extension.api.interface}" else="${sdk.api.interface}">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>	
+
+	<condition property="SERVICE_IMPL" value="${extension.api.impl}" else="${sdk.api.impl}">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>	
+
+	<condition property="DAO_IMPL" value="${extension.dao.impl}" else="${sdk.dao.impl}">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>	
+	
+	<condition property="SERVICE_METHOD_HELPER" value="${extension.sdk.security.writable.applicationservice.method.impl}" else="${sdk.security.readable.applicationservice.method.impl}">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="ENABLE_WRITABLE_API_EXTENSION_VALIDATOR" value="true" else="false">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="HBM2DDL_START" value="" else="${xml.comment.start}">
+		<equals arg1="${HBM2DDL_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="HBM2DDL_END" value="" else="${xml.comment.end}">
+		<equals arg1="${HBM2DDL_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="HBM2DDL_TYPE_REVISED" value="${HBM2DDL_TYPE}" else="validate">
+		<equals arg1="${DB_DIALECT}" arg2="org.hibernate.dialect.HSQLDialect" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="WRITABLE_APPLICATION_SERVICE_INTERFACE" value="${extension.api.security}" else="">
+		<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="ENABLE_HIBERNATE_VALIDATOR" value="true" else="false">
+		<and>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_HIBERNATE_VALIDATOR}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ENABLE_HIBERNATE_VALIDATOR_START" value="" else="${xml.comment.start}">
+		<equals arg1="${ENABLE_HIBERNATE_VALIDATOR}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="ENABLE_HIBERNATE_VALIDATOR_END" value="" else="${xml.comment.end}">
+		<equals arg1="${ENABLE_HIBERNATE_VALIDATOR}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="ENABLE_LOGICAL_MODEL_VALIDATOR" value="true" else="false">
+		<or>
+			<equals arg1="${VALIDATE_LOGICAL_MODEL}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${VALIDATE_LOGICAL_MODEL}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_MODEL_MAPPING_VALIDATOR" value="true" else="false">
+		<or>
+			<equals arg1="${VALIDATE_MODEL_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${VALIDATE_MODEL_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_HIBERNATE_MAPPING_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_HIBERNATE_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_HIBERNATE_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_BEANS_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_BEANS}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_BEANS}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_CASTOR_MAPPING_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_CASTOR_MAPPING}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_XSD_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_XSD}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_XSD}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_GENERATE_XSD_WITH_GME_TAGS" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${GENERATE_XSD_WITH_GME_TAGS}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_XSD_WITH_GME_TAGS}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${ENABLE_XSD_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ENABLE_GENERATE_XSD_WITH_PERMISSIBLE_VALUES" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${GENERATE_XSD_WITH_PERMISSIBLE_VALUES}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${GENERATE_XSD_WITH_PERMISSIBLE_VALUES}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${ENABLE_XSD_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ENABLE_GME_TAGS_VALIDATOR" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${VALIDATE_GME_TAGS}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${VALIDATE_GME_TAGS}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${ENABLE_XSD_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_GENERATE_XSD_WITH_GME_TAGS}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ENABLE_VALIDATOR_CFG_TRANSFORMER" value="true" else="false">
+		<or>
+			<equals arg1="${ENABLE_HIBERNATE_VALIDATOR}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_GENERATE_XSD_WITH_PERMISSIBLE_VALUES}" arg2="true" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_WSDD_GENERATION" value="true" else="false">
+		<or>
+			<equals arg1="${GENERATE_WSDD}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${GENERATE_WSDD}" arg2="yes" casesensitive="false" trim="true" />
+		</or>
+	</condition>
+	<condition property="ENABLE_CLM_LOGGER_CFG_GENERATION" value="true" else="false">
+		<and>
+			<or>
+				<equals arg1="${ENABLE_COMMON_LOGGING_MODULE}" arg2="true" casesensitive="false" trim="true" />
+				<equals arg1="${ENABLE_COMMON_LOGGING_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+			</or>
+			<equals arg1="${WRITABLE_API_EXTENSION_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+
+	</condition>
+	<condition property="ENABLE_CLM_LOGGER_CFG_GENERATION_START" value="" else="${xml.comment.start}">
+		<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="ENABLE_CLM_LOGGER_CFG_GENERATION_END" value="" else="${xml.comment.end}">
+		<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="true" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="ENABLE_EMPTY_INTERCEPTOR_START" value="" else="${xml.comment.start}">
+		<and>
+			<equals arg1="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" arg2="false" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="false" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="ENABLE_EMPTY_INTERCEPTOR_END" value="" else="${xml.comment.end}">
+		<and>
+			<equals arg1="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" arg2="false" casesensitive="false" trim="true" />
+			<equals arg1="${ENABLE_CLM_LOGGER_CFG_GENERATION}" arg2="false" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	
+	<condition property="GRID_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
+		<and>
+			<not>
+				<or>
+					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+			</not>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="GRID_LOGIN_MODULE_END" value="${xml.comment.end}" else="">
+		<and>
+			<not>
+				<or>
+					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${ENABLE_GRID_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+			</not>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+
+	<condition property="CSM_LOGIN_MODULE_START" value="${xml.comment.start}" else="">
+		<and>
+			<not>
+				<or>
+					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+			</not>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	<condition property="CSM_LOGIN_MODULE_END" value="${xml.comment.end}" else="">
+		<and>
+			<not>
+				<or>
+					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="true" casesensitive="false" trim="true" />
+					<equals arg1="${ENABLE_CSM_LOGIN_MODULE}" arg2="yes" casesensitive="false" trim="true" />
+				</or>
+			</not>
+			<equals arg1="${SECURITY_ENABLED}" arg2="true" casesensitive="false" trim="true" />
+		</and>
+	</condition>
+	
+	<condition property="TOMCAT_START" value="${xml.comment.start}" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	<condition property="TOMCAT_END" value="${xml.comment.end}" else="">
+		<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+	</condition>
+	
+	<condition property="JBOSS_START" value="${xml.comment.start}" else="">
+		<not>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+	<condition property="JBOSS_END" value="${xml.comment.end}" else="">
+		<not>
+			<equals arg1="${SERVER_TYPE}" arg2="jboss" casesensitive="false" trim="true" />
+		</not>
+	</condition>
+
+	<condition property="MODEL_FILE_IN_DIRECTORY" value="${MODEL_FILE_PATH}" else="models/${MODEL_FILE}">
+		<isset property="${MODEL_FILE_PATH}"/>
+	</condition>
+
+	<!--***********************************************************************
+	*** Prepares the output directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing directories"/>
+		<mkdir dir="${output.dir}"/>
+		<mkdir dir="${output.project.dir}"/>
+		<mkdir dir="${output.src.dir}"/>
+		<mkdir dir="${output.conf.dir}"/>
+		<mkdir dir="${output.conf.db.scripts.dir}"/>
+		<mkdir dir="${output.codegen.config.dir}"/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${build.jar.dir}"/>
+		<mkdir dir="${build.doc.dir}"/>
+		<mkdir dir="${package.dir}"/>
+		<mkdir dir="${package.client.server.dir}"/>
+		<mkdir dir="${package.client.jboss.dir}"/>
+		<mkdir dir="${package.client.tomcat.dir}"/>
+		<mkdir dir="${package.client.remote.dir}"/>
+		<mkdir dir="${package.client.remote.lib.dir}"/>
+		<mkdir dir="${package.client.remote.conf.dir}"/>
+		<mkdir dir="${package.client.local.dir}"/>
+		<mkdir dir="${package.client.local.lib.dir}"/>
+		<mkdir dir="${package.system.dir}"/>
+		<mkdir dir="${package.client.ws.dir}"/>
+		<mkdir dir="${package.client.ws.lib.dir}"/>
+		<mkdir dir="${package.client.ws.conf.dir}"/>
+		<mkdir dir="${package.client.grid-jaas.dir}"/>
+		<mkdir dir="${package.client.grid-jaas.lib.dir}"/>
+		<mkdir dir="${package.client.grid-jaas.conf.dir}"/>
+	
+		<copy todir="${output.conf.dir}" overwrite="true">
+			<fileset dir="${conf.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${output.conf.db.scripts.dir}" overwrite="true">
+			<fileset dir="${models.db.scripts.dir}">
+				<include name="**/*.sql" />
+			</fileset>
+		</copy>
+
+		<replace dir="${output.conf.dir}">
+			<replacefilter token="@PROJECT_NAME@" value="${PROJECT_NAME}" />
+			<replacefilter token="@SDK_GRID_LOGIN_SERVICE_NAME@" value="${SDK_GRID_LOGIN_SERVICE_NAME}" />
+			<replacefilter token="@OUTPUTDIR@" value="${output.src.dir}" />
+			<replacefilter token="@VALIDATOR_OUTPUTDIR@" value="${output.codegen.config.dir}" />
+			<replacefilter token="@MODEL_FILE_IN_DIRECTORY@" value="${MODEL_FILE_IN_DIRECTORY}" />
+			<replacefilter token="@MODEL_FILE_TYPE@" value="${MODEL_FILE_TYPE}" />
+			<replacefilter token="@LOGICAL_MODEL@" value="${LOGICAL_MODEL}" />
+			<replacefilter token="@DATA_MODEL@" value="${DATA_MODEL}" />
+			<replacefilter token="@INCLUDE_PACKAGE@" value="${INCLUDE_PACKAGE}" />
+			<replacefilter token="@EXCLUDE_PACKAGE@" value="${EXCLUDE_PACKAGE}" />
+			<replacefilter token="@EXCLUDE_NAME@" value="${EXCLUDE_NAME}" />
+			<replacefilter token="@EXCLUDE_NAMESPACE@" value="${EXCLUDE_NAMESPACE}" />
+			<replacefilter token="@NAMESPACE_PREFIX@" value="${NAMESPACE_PREFIX}" />	
+			<replacefilter token="@CACHE_PATH@" value="${CACHE_PATH}" />	
+			<replacefilter token="${xml.comment.start}@DB_JNDI_URL_START@${xml.comment.end}" value="${JNDI_START}" />	
+			<replacefilter token="${xml.comment.start}@DB_JNDI_URL_END@${xml.comment.end}" value="${JNDI_END}" />	
+			<replacefilter token="${xml.comment.start}@DB_CONNECTION_POOL_START@${xml.comment.end}" value="${DB_CONNECTION_START}" />	
+			<replacefilter token="${xml.comment.start}@DB_CONNECTION_POOL_END@${xml.comment.end}" value="${DB_CONNECTION_END}" />	
+			<replacefilter token="@DB_JNDI_URL@" value="${DB_JNDI_URL}" />	
+			<replacefilter token="@DB_DRIVER@" value="${DB_DRIVER}" />	
+			<replacefilter token="@DB_CONNECTION_URL@" value="${DB_CONNECTION_URL}" />	
+			<replacefilter token="@DB_USERNAME@" value="${DB_USERNAME}" />	
+			<replacefilter token="@DB_PASSWORD@" value="${DB_PASSWORD}" />	
+			<replacefilter token="@DB_DIALECT@" value="${DB_DIALECT}" />
+			<replacefilter token="@WEBSERVICE_NAME@" value="${WEBSERVICE_NAME}"/>
+			<replacefilter token="@VALIDATE_LOGICAL_MODEL@" value="${ENABLE_LOGICAL_MODEL_VALIDATOR}"/>
+			<replacefilter token="@VALIDATE_MODEL_MAPPING@" value="${ENABLE_MODEL_MAPPING_VALIDATOR}"/>
+			<replacefilter token="@VALIDATE_GME_TAGS@" value="${ENABLE_GME_TAGS_VALIDATOR}"/>
+			<replacefilter token="@VALIDATE_WRITABLE_API_EXTENSION@" value="${ENABLE_WRITABLE_API_EXTENSION_VALIDATOR}" />						
+			<replacefilter token="@GENERATE_HIBERNATE_MAPPING@" value="${ENABLE_HIBERNATE_MAPPING_GENERATION}"/>
+			<replacefilter token="@GENERATE_BEANS@" value="${ENABLE_BEANS_GENERATION}"/>
+			<replacefilter token="@GENERATE_CASTOR_MAPPING@" value="${ENABLE_CASTOR_MAPPING_GENERATION}"/>
+			<replacefilter token="@GENERATE_XSD@" value="${ENABLE_XSD_GENERATION}"/>
+			<replacefilter token="@GENERATE_XSD_WITH_GME_TAGS@" value="${ENABLE_GENERATE_XSD_WITH_GME_TAGS}"/>
+			<replacefilter token="@GENERATE_XSD_WITH_PERMISSIBLE_VALUES@" value="${ENABLE_GENERATE_XSD_WITH_PERMISSIBLE_VALUES}"/>
+			<replacefilter token="@ENABLE_VALIDATOR_CFG_TRANSFORMER@" value="${ENABLE_VALIDATOR_CFG_TRANSFORMER}"/>
+			<replacefilter token="@GENERATE_WSDD@" value="${ENABLE_WSDD_GENERATION}"/>
+			<replacefilter token="@ENABLE_HIBERNATE_VALIDATOR@" value="${ENABLE_HIBERNATE_VALIDATOR}"/>
+			<replacefilter token="@ENABLE_HIBERNATE_VALIDATOR_START@" value="${ENABLE_HIBERNATE_VALIDATOR_START}"/>
+			<replacefilter token="@ENABLE_HIBERNATE_VALIDATOR_END@" value="${ENABLE_HIBERNATE_VALIDATOR_END}"/>
+			<replacefilter token="@CADSR_CONNECTION_URL@" value="${CADSR_CONNECTION_URL}"/>
+			<replacefilter token="@SERVER_URL@" value="${SERVER_URL}"/>
+			<replacefilter token="${xml.comment.start}@CSM_DB_JNDI_URL_START@${xml.comment.end}" value="${CSM_JNDI_START}" />	
+			<replacefilter token="${xml.comment.start}@CSM_DB_JNDI_URL_END@${xml.comment.end}" value="${CSM_JNDI_END}" />	
+			<replacefilter token="${xml.comment.start}@CSM_DB_CONNECTION_POOL_START@${xml.comment.end}" value="${CSM_DB_CONNECTION_START}" />	
+			<replacefilter token="${xml.comment.start}@CSM_DB_CONNECTION_POOL_END@${xml.comment.end}" value="${CSM_DB_CONNECTION_END}" />	
+			<replacefilter token="@CSM_DB_JNDI_URL@" value="${CSM_DB_JNDI_URL}" />	
+			<replacefilter token="@CSM_DB_DRIVER@" value="${CSM_DB_DRIVER}" />	
+			<replacefilter token="@CSM_DB_CONNECTION_URL@" value="${CSM_DB_CONNECTION_URL}" />	
+			<replacefilter token="@CSM_DB_USERNAME@" value="${CSM_DB_USERNAME}" />	
+			<replacefilter token="@CSM_DB_PASSWORD@" value="${CSM_DB_PASSWORD}" />	
+			<replacefilter token="@CSM_DB_DIALECT@" value="${CSM_DB_DIALECT}" />
+			<replacefilter token="@CSM_PROJECT_NAME@" value="${CSM_PROJECT_NAME}" />
+			<replacefilter token="${xml.comment.start}@SECURITY_START@${xml.comment.end}" value="${SECURITY_START}" />	
+			<replacefilter token="${xml.comment.start}@SECURITY_END@${xml.comment.end}" value="${SECURITY_END}" />	
+			<replacefilter token="@INSTANCE_LEVEL_SECURITY_ENABLED@" value="${INSTANCE_LEVEL_SECURITY_ENABLED}" />
+			<replacefilter token="@ATTRIBUTE_LEVEL_SECURITY_ENABLED@" value="${ATTRIBUTE_LEVEL_SECURITY_ENABLED}" />
+			<replacefilter token="@SECURITY_ENABLED@" value="${SECURITY_ENABLED}" />			
+			<replacefilter token="@IDENTITY_GENERATOR_TAG@" value="${IDENTITY_GENERATOR_TAG}" />
+			<replacefilter token="@DATABASE_TYPE@" value="${DATABASE_TYPE}" />
+			<replacefilter token="@SERVICE_INTERFACE@" value="${SERVICE_INTERFACE}" />
+			<replacefilter token="@SERVICE_IMPL@" value="${SERVICE_IMPL}" />
+			<replacefilter token="@DAO_IMPL@" value="${DAO_IMPL}" />
+			<replacefilter token="@HBM2DDL_TYPE@" value="${HBM2DDL_TYPE_REVISED}" />
+			<replacefilter token="${xml.comment.start}@HBM2DDL_START@${xml.comment.end}" value="${HBM2DDL_START}" />	
+			<replacefilter token="${xml.comment.start}@HBM2DDL_END@${xml.comment.end}" value="${HBM2DDL_END}" />	
+			<replacefilter token="@SERVICE_METHOD_HELPER@" value="${SERVICE_METHOD_HELPER}" />
+			<replacefilter token="@CACHE_PROTECTION_ELEMENTS_ENABLED@" value="${CACHE_PROTECTION_ELEMENTS_ENABLED}" />
+			<replacefilter token="@GENERATE_CLM_LOGGER_CFG@" value="${ENABLE_CLM_LOGGER_CFG_GENERATION}" />
+			<replacefilter token="@READABLE_APPLICATION_SERVICE_INTERFACE@" value="${sdk.api.interface}" />
+			<replacefilter token="@WRITABLE_APPLICATION_SERVICE_INTERFACE@" value="${WRITABLE_APPLICATION_SERVICE_INTERFACE}" />
+			
+			<replacefilter token="@ENABLE_EMPTY_INTERCEPTOR_START@" value="${ENABLE_EMPTY_INTERCEPTOR_START}" />
+			<replacefilter token="@ENABLE_EMPTY_INTERCEPTOR_END@" value="${ENABLE_EMPTY_INTERCEPTOR_END}" />
+			<replacefilter token="@ATTRIBUTE_LEVEL_SECURITY_START@" value="${ATTRIBUTE_LEVEL_SECURITY_START}" />
+			<replacefilter token="@ATTRIBUTE_LEVEL_SECURITY_END@" value="${ATTRIBUTE_LEVEL_SECURITY_END}" />
+			<replacefilter token="@ENABLE_CLM_LOGGER_CFG_GENERATION_START@" value="${ENABLE_CLM_LOGGER_CFG_GENERATION_START}" />
+			<replacefilter token="@ENABLE_CLM_LOGGER_CFG_GENERATION_END@" value="${ENABLE_CLM_LOGGER_CFG_GENERATION_END}" />
+			<replacefilter token="@CLM_DB_DRIVER@" value="${CLM_DB_DRIVER}" />	
+			<replacefilter token="@CLM_DB_CONNECTION_URL@" value="${CLM_DB_CONNECTION_URL}" />	
+			<replacefilter token="@CLM_DB_USERNAME@" value="${CLM_DB_USERNAME}" />	
+			<replacefilter token="@CLM_DB_PASSWORD@" value="${CLM_DB_PASSWORD}" />	
+			<replacefilter token="@CLM_PROJECT_NAME@" value="${CLM_PROJECT_NAME}" />
+			<replacefilter token="@HIBERNATE_SHOW_SQL@" value="${HIBERNATE_SHOW_SQL}" />
+			
+			<replacefilter token="@CAGRID_AUTHENTICATION_SERVICE_URL@" value="${CAGRID_AUTHENTICATION_SERVICE_URL}" />
+			<replacefilter token="@CAGRID_DORIAN_SERVICE_URL@" value="${CAGRID_DORIAN_SERVICE_URL}" />
+			<replacefilter token="@SDK_GRID_LOGIN_SERVICE_URL@" value="${SDK_GRID_LOGIN_SERVICE_URL}" />
+			<replacefilter token="@CAGRID_LOGIN_MODULE_NAME@" value="${CAGRID_LOGIN_MODULE_NAME}" />
+			<replacefilter token="${xml.comment.start}@GRID_LOGIN_MODULE_START@${xml.comment.end}" value="${GRID_LOGIN_MODULE_START}"/>
+			<replacefilter token="${xml.comment.start}@GRID_LOGIN_MODULE_END@${xml.comment.end}" value="${GRID_LOGIN_MODULE_END}"/>
+			<replacefilter token="${xml.comment.start}@CSM_LOGIN_MODULE_START@${xml.comment.end}" value="${CSM_LOGIN_MODULE_START}"/>
+			<replacefilter token="${xml.comment.start}@CSM_LOGIN_MODULE_END@${xml.comment.end}" value="${CSM_LOGIN_MODULE_END}"/>
+			<replacefilter token="@GRID_JNDI_NAME@" value="${GRID_JNDI_NAME}" />
+			
+			<replacefilter token="${xml.comment.start}@JBOSS_START@${xml.comment.end}" value="${JBOSS_START}"/>
+			<replacefilter token="${xml.comment.start}@JBOSS_END@${xml.comment.end}" value="${JBOSS_END}"/>
+			<replacefilter token="${xml.comment.start}@TOMCAT_START@${xml.comment.end}" value="${TOMCAT_START}"/>
+			<replacefilter token="${xml.comment.start}@TOMCAT_END@${xml.comment.end}" value="${TOMCAT_END}"/>
+			
+		</replace>
+		<copy todir="${output.src.dir}" file="${system.config.security.dir}/${csm.ehcache.file}"/>
+		<copy tofile="${output.src.dir}/${csm.security.config.file}" file="${system.config.security.dir}/${csm.security.config.original.file}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files created following the 
+	*** execution of the build-system target.
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${output.project.dir}"/>
+		<delete dir="${release.dir}"/>
+		<property name="clean-all-performed" value="true"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files of both the main and child projects
+	*********************************************************************** -->
+	<target name="clean-all" depends="clean,clean-junit" description="Cleans the child projects and generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning child projects"/>
+		<delete dir="${output.dir}"/>
+		<ant antfile="${codegen.dir}\build.xml" target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${codegen.validator.dir}\build.xml" target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${system.dir}\build.xml"  target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${security.dir}\build.xml"  target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${writable-api.dir}\build.xml"  target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${grid-remoting.dir}\build.xml"  target="clean-all" inheritall="false" inheritrefs="false" />
+		<ant antfile="${grid-jaas.dir}\build.xml"  target="clean-all" inheritall="false" inheritrefs="false" />
+	</target>
+	
+	<target name="clean-junit" depends="prepare-condition-clean-junit" if="prepare-required-clean-junit">	
+		<SDKecho message="${ant.project.name}: Cleaning junit child project, if it exists"/>
+		<ant antfile="${junit.dir}\build.xml"  target="clean" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<!--***********************************************************************
+	*** Prepare 
+	*********************************************************************** -->
+	<target name="prepare-condition-clean-junit">
+		<SDKecho message="${ant.project.name}: Checking the condition for junit project clean"/>
+		<condition property="prepare-required-clean-junit">
+			<available file="${junit.dir}\build.xml"/>
+		</condition>
+	</target>
+	
+	<target name="prepare-condition-validator-codegen">
+		<SDKecho message="${ant.project.name}: Checking the condition for codegen validator project build"/>
+		<condition property="prepare-required-validator-codegen">
+			<not>
+				<available file="${codegen.validator.dir}/${validator.dist.dir}/${validator.file.output.name}"/>
+			</not>
+		</condition>
+	</target>
+	
+	<target name="prepare-validator-codegen" depends="prepare-condition-validator-codegen" if="prepare-required-validator-codegen">	
+		<SDKecho message="${ant.project.name}: Preparing the codegen validator project"/>
+		<ant antfile="${codegen.validator.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+	
+	<target name="prepare-condition-codegen">
+		<fail unless="IDENTITY_GENERATOR_TAG">IDENTITY_GENERATOR property must be set in deploy.properties</fail>
+		<SDKecho message="${ant.project.name}: Checking the condition for codegen project build"/>
+		<condition property="prepare-required-codegen">
+			<not>
+				<available file="${codegen.dir}/${codegen.dist.dir}/${codegen.file.output.name}"/>
+			</not>
+		</condition>
+	</target>
+
+	<target name="prepare-codegen" depends="prepare-condition-codegen" if="prepare-required-codegen">
+		<SDKecho message="${ant.project.name}: Preparing the codegen project"/>
+		<ant antfile="${codegen.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<target name="prepare-condition-system" >
+		<SDKecho message="${ant.project.name}: Checking the condition for system project build"/>
+		<condition property="prepare-required-system">
+			<and>
+				<not><available file="${system.dir}/${system.dist.dir}/${system.file.output.client.name}"/></not>
+				<not><available file="${system.dir}/${system.dist.dir}/${system.file.output.core.name}"/></not>
+				<not><available file="${system.dir}/${system.dist.dir}/${system.file.output.web.name}"/></not>
+				<not><available file="${system.dir}/${system.dist.dir}/${system.file.output.ws.name}"/></not>
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepare-system" depends="prepare-condition-system" if="prepare-required-system">
+		<SDKecho message="${ant.project.name}: Preparing the system project"/>
+		<ant antfile="${system.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<target name="prepare-condition-writable-api" >
+		<SDKecho message="${ant.project.name}: Checking the condition for writable api project build"/>
+		<condition property="prepare-required-writable-api">
+			<and>
+				<not><available file="${writable-api.dir}/${writable-api.dist.dir}/${writable-api.file.output.core.writable.name}"/></not>
+				<not><available file="${writable-api.dir}/${writable-api.dist.dir}/${writable-api.file.output.client.writable.name}"/></not>
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepare-writable-api" depends="prepare-condition-writable-api" if="prepare-required-writable-api">
+		<SDKecho message="${ant.project.name}: Preparing the writable api project"/>
+		<ant antfile="${writable-api.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+	
+	<target name="prepare-condition-grid-remoting" >
+		<SDKecho message="${ant.project.name}: Checking the condition for grid-remoting project build"/>
+		<condition property="prepare-required-grid-remoting">
+			<and>
+				<not><available file="${grid-remoting.dir}/${grid-remoting.dist.dir}/${grid-remoting.file.output.remoting.name}"/></not>
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepare-grid-remoting" depends="prepare-condition-grid-remoting" if="prepare-required-grid-remoting">
+		<SDKecho message="${ant.project.name}: Preparing the grid-remoting project"/>
+		<ant antfile="${grid-remoting.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<target name="prepare-condition-grid-jaas" >
+		<SDKecho message="${ant.project.name}: Checking the condition for grid-jaas project build"/>
+		<condition property="prepare-required-grid-jaas">
+			<and>
+				<not><available file="${grid-jaas.dir}/${grid-jaas.dist.dir}/${grid-jaas.file.output.jaas.name}"/></not>
+				<not><available file="${grid-jaas.dir}/${grid-jaas.dist.dir}/${grid-jaas.file.output.jaas.executor.name}"/></not>
+				<not><available file="${grid-jaas.dir}/${grid-jaas.dist.dir}/${grid-jaas.file.output.jaas.jndibinder.name}"/></not>
+			</and>
+		</condition>
+	</target>
+
+	<target name="prepare-grid-jaas" depends="prepare-condition-grid-jaas" if="prepare-required-grid-jaas">
+		<SDKecho message="${ant.project.name}: Preparing the grid-jaas project"/>
+		<ant antfile="${grid-jaas.dir}\build.xml" target="dist" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<target name="prepare" depends="prepare-codegen,prepare-system,prepare-writable-api,prepare-grid-remoting,prepare-grid-jaas"/>
+
+	<!--***********************************************************************
+	*** Runs the Hibernate Validator Code Generator 
+	*********************************************************************** -->
+	<target name="codegen-validator" depends="prepare-validator-codegen,init" description="Runs the Validator Code Generator">
+		<SDKecho message="${ant.project.name}: Running the Hibernate Validator code generator"/>
+		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
+			<arg value="${codegen.config.validator.file}" />
+			<jvmarg value="-Xms256M" />
+			<jvmarg value="-Xmx512M" />
+			<classpath refid="codegen.validator.runtime" />
+		</java>
+	</target>	
+	
+	<!--***********************************************************************
+	*** Runs the Code Generator 
+	*********************************************************************** -->
+	<target name="codegen" depends="prepare-codegen,init,codegen-validator" description="Runs the Code Generator">
+		<SDKecho message="${ant.project.name}: Running the code generator"/>
+		<java classname="gov.nih.nci.codegen.Generator" failonerror="true" fork="true" >
+			<arg value="${codegen.config.file}" />
+			<jvmarg value="-Xms256M" />
+			<jvmarg value="-Xmx512M" />
+			<classpath refid="codegen.runtime" />
+		</java>
+	</target>
+
+	<!--***********************************************************************
+	*** Compiles the generated beans 
+	*********************************************************************** -->
+	<target name="compile-beans" depends="codegen" description="Compiles the generated beans">
+		<SDKecho message="${ant.project.name}: Compiling the generated beans"/>
+		<javac srcdir="${output.src.dir}" destdir="${build.classes.dir}" classpathref="system.lib.class.path" debug="true">
+			<classpath refid="system.lib.class.path" />
+			<include name="**/*.java"/>
+		</javac>
+	</target>
+
+	<!--***********************************************************************
+	*** Packages the generated artifacts 
+	*********************************************************************** -->
+	<target name="package-codegen-artifacts" depends="codegen,compile-beans" description="Packages the generated ORM and bean artifacts">
+		<SDKecho message="${ant.project.name}: Packaging the generated artifacts"/>
+		<jar destfile="${build.jar.dir}\${bean.file}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${VERSION}"/>
+			</manifest>
+			<fileset dir="${output.src.dir}" includes="**/*.java" />
+		</jar>
+		<jar destfile="${build.jar.dir}\${orm.file}" basedir="${output.src.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${VERSION}"/>
+			</manifest>
+			<include name="**/*.hbm.xml"/>
+			<include name="*.cfg.xml"/>
+			<include name="ehcache.xml"/>
+			<exclude name="${csm.security.config.file}"/>
+		</jar>
+	</target>
+
+	<target name="package-system" depends="prepare,package-remote-client,package-local-client,package-webapp,package-ws-client,package-grid-jaas-client,package-grid-login-service,package-server" description="Packages the system">
+		<SDKecho message="${ant.project.name}: Packaging the system artifacts"/>
+	</target>	
+
+	<target name="package-remote-client" depends="prepare,package-codegen-artifacts">
+		<SDKecho message="${ant.project.name}: Packaging the remote client"/>
+
+		<copy todir="${package.client.remote.conf.dir}">
+			<fileset dir="${output.src.dir}">
+				<include name="*.xsd"/>
+				<include name="*xml-mapping*.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${package.client.remote.lib.dir}">
+			<fileset dir="${system.dir}\${system.dist.dir}">
+				<include name="${system.file.output.client.name}"/>
+				<include name="${security.file.output.security.name}"/>
+			</fileset>
+			<fileset dir="${writable-api.dir}\${writable-api.dist.dir}" includes="*.jar">
+				<exclude name="${read-api-exclude-list-remote-client}"/>
+			</fileset>
+			<fileset dir="${grid-remoting.dir}\${grid-remoting.dist.dir}" includes="*.jar"/>
+			
+			<fileset dir="${system.dir}\${system.lib.dir}">
+				<include name="${system.file.output.client.name}"/>
+				<include name="acegi*.*"/>
+				<include name="asm*.*"/>
+				<include name="antlr*.*"/>
+				<include name="cglib*.*"/>
+				<include name="commons-codec*.*"/>
+				<include name="commons-collection*.*"/>
+				<include name="commons-logging*.*"/>
+				<include name="hibernate3*.*"/>
+				<include name="log4j*.*"/>
+				<include name="spring*.*"/>
+				<include name="castor*.*"/>
+				<include name="xercesImpl*.*"/>
+				<include name="caGrid-CQL*.*"/>
+				<include name="cog-jglobus*.*"/>
+				<include name="axis*.*"/>
+				<include name="jaxrpc*.*"/>
+				<include name="commons-discovery*.*"/>
+			</fileset>
+			<fileset dir="${build.jar.dir}" includes="${bean.file}" />
+		</copy>
+		<copy todir="${package.client.remote.dir}">
+			<fileset dir="${system.config.client.remote.dir}"/>
+		</copy>
+	</target>
+
+	<target name="package-local-client" depends="prepare,package-codegen-artifacts">
+		<SDKecho message="${ant.project.name}: Packaging the local client"/>
+		<copy todir="${package.client.local.lib.dir}">
+			<fileset dir="${system.dir}\${system.dist.dir}">
+				<include name="${system.file.output.client.name}"/>
+				<include name="${system.file.output.core.name}"/>
+				<include name="${security.file.output.security.name}"/>
+			</fileset>
+			<fileset dir="${writable-api.dir}\${writable-api.dist.dir}" includes="*.jar">
+				<exclude name="${read-api-exclude-list}"/>
+			</fileset>
+			<fileset dir="${system.dir}\${system.lib.dir}">
+				<include name="${system.file.output.client.name}"/>
+				<include name="acegi*.*"/>
+				<include name="asm*.*"/>
+				<include name="antlr*.*"/>
+				<include name="c3p0*.*"/>
+				<include name="cglib*.*"/>
+				<include name="commons-codec*.*"/>
+				<include name="commons-collection*.*"/>
+				<include name="commons-logging*.*"/>
+				<include name="csmapi*.*"/>
+				<include name="clm*.*"/>
+				<include name="dom4j*.*"/>
+				<include name="ehcache*.*"/>
+				<include name="hibernate*.*"/>
+				<include name="jta*.*"/>	
+				<include name="jdom*.*"/>	
+				<include name="log4j*.*"/>
+				<include name="mysql*.*"/>
+				<include name="ojdbc*.*"/>
+				<include name="spring*.*"/>
+				<include name="cog-jglobus*.*"/>
+				<include name="cog-axis*.*"/>
+				<include name="caGrid*.*"/>
+				<include name="axis*.*"/>
+				<include name="jaxrpc*.*"/>
+				<include name="commons-discovery*.*"/>
+			</fileset>
+			<fileset dir="${build.jar.dir}" includes="${bean.file}" />
+			<fileset dir="${build.jar.dir}" includes="${orm.file}" />
+		</copy>
+		<copy todir="${package.client.local.dir}">
+			<fileset dir="${system.config.client.local.dir}"/>
+		</copy>
+		<copy todir="${package.client.local.conf.dir}">
+			<fileset dir="${system.config.web.classes.dir}">
+				<include name="${application.config.file}"/>
+				<include name="${application.config.security.file}"/>
+			</fileset>
+			<fileset dir="${output.src.dir}">
+				<include name="${csm.security.config.file}"/>
+				<include name="${csm.ehcache.file}"/>
+				<include name="${clm.object.state.logger.config}"/>
+			</fileset>
+		</copy>
+	</target>	
+
+	<target name="package-webapp" depends="prepare,package-codegen-artifacts">
+		<SDKecho message="${ant.project.name}: Packaging the webapp"/>
+		<war destfile="${package.system.dir}\${PROJECT_NAME}.war" webxml="${build.conf.web-inf.dir}\web.xml">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${VERSION}"/>
+			</manifest>
+			<lib dir="${system.dir}\${system.dist.dir}" includes="*.jar"/>
+			<lib dir="${writable-api.dir}\${writable-api.dist.dir}" includes="*.jar">
+				<exclude name="${read-api-exclude-list}"/>
+			</lib>
+			<lib dir="${build.jar.dir}" includes="${bean.file}" />
+			<lib dir="${build.jar.dir}" includes="${orm.file}" />
+			<lib dir="${system.dir}\${system.lib.dir}" includes="*.jar">
+				<exclude name="${server-exclude-commons-logging}"/>
+				<exclude name="${server-exclude-log4j}"/>
+				<exclude name="servlet.jar"/>
+				<exclude name="xercesImpl*.*"/>
+				<exclude name="cog*.*"/>
+			</lib>
+			<lib dir="${grid-jaas.dir}\${grid-jaas.dist.dir}" includes="*.*" excludes="${grid-jaas.file.output.jaas.jndibinder.name}"/>
+			<fileset dir="${build.conf.system.web.dir}">
+				<include name="**/*"/>
+				<exclude name="**/web.xml"/>
+				<exclude name="${server-exclude-classes-list}"/>
+			</fileset>
+			<fileset dir="${system.dir}\${system.web.dir}">
+				<include name="**/*"/>
+			</fileset>
+			<fileset dir="${build.dir}">
+				<include name="docs/**/*"/>
+			</fileset>
+			<classes dir="${output.src.dir}">
+				<include name="${csm.security.config.file}"/>
+				<include name="${csm.ehcache.file}"/>
+				<include name="${clm.object.state.logger.config}"/>
+			</classes>
+			<webinf dir="${output.src.dir}">
+				<include name="server-config.wsdd"/>
+			</webinf>
+		</war>
+	</target>	
+
+	<target name="package-grid-login-service" depends="prepare">
+		<SDKecho message="${ant.project.name}: Packaging the Grid Login Service application"/>
+		<war destfile="${package.system.dir}\${SDK_GRID_LOGIN_SERVICE_NAME}.war" webxml="${system.config.grid.loginService.webinf.dir}\web.xml">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Version" value="${VERSION}"/>
+			</manifest>
+			<lib dir="${grid-jaas.dir}\${grid-jaas.lib.dir}" includes="*.jar">
+				<exclude name="${server-exclude-commons-logging}"/>		
+				<exclude name="${server-exclude-log4j}"/>
+				<exclude name="cog-jglobus*.*"/>				
+				<exclude name="cog-tomcat*.*"/>				
+				<exclude name="cryptix*.*"/>				
+				<exclude name="jce-jdk*.*"/>				
+				<exclude name="puretls*.*"/>
+				<exclude name="xml-api*.*"/>
+				<exclude name="xercesImpl*.*"/>
+				<exclude name="jgss*.*"/>
+			</lib>
+			<lib dir="${grid-jaas.dir}\${grid-jaas.dist.dir}" includes="*.jar" excludes="${grid-jaas.file.output.jaas.jndibinder.name}"/>
+			<fileset dir="${system.config.grid.loginService.dir}">
+				<include name="**/*"/>
+				<exclude name="**/web.xml"/>
+			</fileset>
+		</war>
+	</target>	
+	
+	<target name="package-ws-client" depends="prepare,package-codegen-artifacts">
+		<SDKecho message="${ant.project.name}: Packaging the Web Service client"/>
+		<copy todir="${package.client.ws.lib.dir}">
+			<fileset dir="${system.dir}\${system.lib.dir}">
+				<include name="axis*.*"/>
+				<include name="commons-discovery*.*"/>
+				<include name="commons-logging*.*"/>
+				<include name="jaxrpc*.*"/>
+				<include name="saaj*.*"/>
+				<include name="wsdl4j*.*"/>
+			</fileset>
+			<fileset dir="${build.jar.dir}" includes="${bean.file}" />
+		</copy>
+		<copy todir="${package.client.ws.dir}">
+			<fileset dir="${system.config.client.ws.dir}"/>
+		</copy>
+	</target>	
+
+	<target name="package-grid-jaas-client" depends="prepare">
+		<SDKecho message="${ant.project.name}: Packaging the Grid JAAS Module"/>
+		<copy todir="${package.client.grid-jaas.lib.dir}">
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.lib.dir}"/>
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.dist.dir}" >
+				<include name="**/*.jar" />
+				<exclude name="${grid-jaas.file.output.jaas.jndibinder.name}"/>
+				<exclude name="xercesImpl*.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${package.client.grid-jaas.dir}">
+			<fileset dir="${system.config.client.grid-jaas.dir}"/>
+		</copy>
+		<copy todir="${package.client.grid-jaas.conf.dir}">
+			<fileset dir="${system.config.grid.loginService.web.classes.dir}" includes="*.*" excludes="grid-remote*.*"/>
+		</copy>
+	</target>	
+		
+	<target name="package-server" depends="init">
+		<SDKecho message="${ant.project.name}: Packaging the server libraries"/>
+		<mkdir dir="${package.client.jboss.dir}/server/default/lib"/>
+		
+		<copy todir="${package.client.jboss.dir}/server/default/lib">
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.lib.dir}">
+				<include name="cog-jglobus*.*"/>
+				<include name="cog-tomcat*.*"/>
+				<include name="cog-axis*.*"/>
+				<include name="cryptix*.*"/>
+				<include name="jce-jdk*.*"/>
+				<include name="puretls*.*"/>
+				<include name="xml-apis*.*"/>
+			</fileset>
+			<fileset dir="${system.dir}\${system.lib.dir}">
+				<include name="ojdbc*.*"/>
+				<include name="mysql*.*"/>
+			</fileset>
+		</copy>
+		
+		<mkdir dir="${package.client.tomcat.dir}/common/endorsed"/>
+		<mkdir dir="${package.client.tomcat.dir}/common/lib"/>
+		<mkdir dir="${package.client.tomcat.dir}/server/lib"/>
+		<mkdir dir="${package.client.tomcat.dir}/conf"/>
+		<mkdir dir="${package.client.tomcat.dir}/conf/Catalina"/>
+		<mkdir dir="${package.client.tomcat.dir}/conf/Catalina/localhost"/>
+		
+		<copy todir="${package.client.tomcat.dir}/common/endorsed">
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.lib.dir}">
+				<include name="xalan*.*"/>
+				<include name="xml-apis*.*"/>
+				<include name="xercesImpl*.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${package.client.tomcat.dir}/common/lib">
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.lib.dir}">
+				<include name="cog-jglobus*.*"/>
+				<include name="cog-axis*.*"/>
+				<include name="cryptix*.*"/>
+				<include name="jce-jdk*.*"/>
+				<include name="puretls*.*"/>
+				<include name="xml-apis*.*"/>
+				<include name="jgss*.*"/>
+				<include name="log4j*.*"/>
+			</fileset>
+			<fileset dir="${system.dir}\${system.lib.dir}">
+				<include name="ojdbc*.*"/>
+				<include name="mysql*.*"/>
+			</fileset>
+			<fileset dir="${grid-jaas.dir}\${grid-jaas.dist.dir}">
+				<include name="${grid-jaas.file.output.jaas.jndibinder.name}"/>
+			</fileset>
+		</copy>
+	<copy todir="${package.client.tomcat.dir}/server/lib">
+		<fileset dir="${grid-jaas.dir}\${grid-jaas.lib.dir}">
+			<include name="cog-tomcat*.*"/>
+		</fileset>
+	</copy>
+	
+	<copy tofile="${package.client.tomcat.context.dir}/${PROJECT_NAME}.xml" file="${system.config.server.context.dir}/${file.project.Context}"/>
+	<copy tofile="${package.client.tomcat.context.dir}/${SDK_GRID_LOGIN_SERVICE_NAME}.xml" file="${system.config.server.context.dir}/${file.grid.loginService.Context}"/>
+	<copy todir="${package.client.tomcat.serverxml.dir}" >
+		<fileset dir="${system.config.server.serverxml.dir}">
+			<include name="**/server.xml"/>
+			<include name="**/login.config"/>
+		</fileset>
+	</copy>
+		
+	</target>	
+	
+	<!--***********************************************************************
+	*** Generates Javadocs for the Java Beans
+	*********************************************************************** -->
+	<target name="doc" depends="codegen" description="Generates javadocs for the domain Java beans">
+		<SDKecho message="${ant.project.name}: Generating javadocs for the beans"/>
+		<javadoc packagenames="*" destdir="${build.doc.dir}" author="true"
+			private="true" version="true" use="true" windowtitle="${PROJECT_NAME} API Documentation"
+			doctitle="${PROJECT_NAME} API Documentation" useexternalfile="yes" verbose="false">
+			<classpath refid="system.lib.class.path" />
+		    <bottom><![CDATA[<i>This API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
+			<fileset dir="${output.src.dir}" includes="**/*.java"/>
+		</javadoc>
+	</target>
+	
+	<!--***********************************************************************
+	*** Generates Javadocs for the entire System (except codegen)
+	*********************************************************************** -->
+	<target name="systemdoc" depends="codegen" description="Generates javadocs for the entire system">
+		<SDKecho message="${ant.project.name}: Generating javadocs for the entire system"/>
+		<mkdir dir="${release.dir}"/>
+		<javadoc packagenames="*" destdir="${build.systemdoc.dir}" author="true"
+			private="true" version="true" use="true" windowtitle="${VERSION} API Documentation"
+			doctitle="${VERSION} API Documentation" useexternalfile="yes" verbose="false">
+			<classpath refid="system.lib.class.path" />
+		    <bottom><![CDATA[<i>This System API was generated by the <a href='http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk'>caCORE Software Development Kit</a>.</i>]]></bottom>
+			<fileset dir="${system.dir}/${system.src.dir}" includes="**/*.java"/>
+			<fileset dir="${writable-api.dir}/${writable-api.src.dir}" includes="**/*.java"/>
+			<fileset dir="${grid-jaas.dir}/${grid-jaas.src.dir}" includes="**/*.java"/>
+			<fileset dir="${grid-remoting.dir}/${grid-remoting.src.dir}" includes="**/*.java"/>
+			<fileset dir="${security.dir}/${security.src.dir}" includes="**/*.java"/>
+		</javadoc>
+		<zip destfile="${release.systemdoc.file}" whenempty="skip">
+			<zipfileset dir="${build.systemdoc.dir}"/>
+		</zip>
+	</target>
+
+
+	<!--***********************************************************************
+	*** Generates the system using properties set within /conf/deploy.properties
+	*********************************************************************** -->
+	<target name="build-system" depends="clean,package-codegen-artifacts,doc,package-system" description="Generates complete system">
+		<SDKecho message="${ant.project.name}: Completed the system build"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Refreshes Validator constraints in POJO beans and XSD Restrictions in Schema (XSD) files
+	*********************************************************************** -->
+	<target name="refresh-validator-permissible-values" depends="package-codegen-artifacts" description="Refreshes Validator constraints in POJO beans and XSD Restrictions in Schema (XSD) files">
+		<SDKecho message="${ant.project.name}: Completed Refreshing permissible values in validator"/>
+	</target>
+	
+	<!--***********************************************************************
+	*** Dumps the current Code Generator properties  
+	*********************************************************************** -->
+	<target name="show-properties" description="Dumps a list of all currently set Code Generator properties">
+		<echoproperties destfile="antproperties.txt"/>
+		<echo>Properties were dumped to 'antproperties.txt'</echo>
+	</target>
+	
+	<!--***********************************************************************
+	*** Creates release packages for the SDK  
+	*********************************************************************** -->
+	<target name="package-release-contents" depends="clean-all,prepare,systemdoc" description="Creates release packages">
+		<ant antfile="${junit.dir}\build.xml"  target="clean" inheritall="false" inheritrefs="false" />
+		<SDKecho message="${ant.project.name}: Creates release packages"/>
+		<mkdir dir="${release.dir}"/>
+
+		<zip destfile="${release.binary.file}" whenempty="skip">
+			<zipfileset dir="${basedir}">
+				<include name="/${writable-api.dir}/**/*"/>
+				<include name="/${system.dir}/**/*"/>
+				<include name="/${grid-remoting.dir}/**/*"/>
+				<include name="/${grid-jaas.dir}/**/*"/>
+				<include name="/${conf.dir}/**/*"/>
+				<include name="/${models.dir}/**/*"/>
+				<include name="/build-scripts/**/*"/>
+				<include name="/docs/**/*"/>
+				<include name="**/${codegen.dir}/**/*"/>
+				<include name="build.xml"/>
+				<include name="build.properties"/>
+				<include name="README.txt"/>
+				<include name="LICENSE.txt"/>
+				<exclude name="**/CVS"/>
+				<exclude name="**/CVS/*"/>
+				<exclude name="**/build"/>
+				<exclude name="**/build/**/*"/>
+				<exclude name="**/bin"/>
+				<exclude name="**/bin/**/*"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/src"/>
+				<exclude name="**/src/**/*"/>
+			</zipfileset>
+		</zip>
+			
+		<zip destfile="${release.src.file}" whenempty="skip">
+			<zipfileset dir="${basedir}">
+				<include name="/${writable-api.dir}/**/*"/>
+				<include name="/${system.dir}/**/*"/>
+				<include name="/${grid-remoting.dir}/**/*"/>
+				<include name="/${grid-jaas.dir}/**/*"/>
+				<include name="/${conf.dir}/**/*"/>
+				<include name="/${models.dir}/**/*"/>
+				<include name="/build-scripts/**/*"/>
+				<include name="/docs/**/*"/>
+				<include name="**/${codegen.dir}/**/*"/>
+				<include name="build.xml"/>
+				<include name="build.properties"/>
+				<include name="README.txt"/>
+				<include name="LICENSE.txt"/>
+				<exclude name="**/CVS"/>
+				<exclude name="**/CVS/*"/>
+				<exclude name="**/build"/>
+				<exclude name="**/build/**/*"/>
+				<exclude name="**/dist"/>
+				<exclude name="**/dist**/*"/>
+				<exclude name="**/bin"/>
+				<exclude name="**/bin/**/*"/>
+			</zipfileset>
+		</zip>
+
+		<tar destfile="${release.binary.tar.file}">
+			<tarfileset dir="${basedir}">
+				<include name="/${writable-api.dir}/**/*"/>
+				<include name="/${system.dir}/**/*"/>
+				<include name="/${grid-remoting.dir}/**/*"/>
+				<include name="/${grid-jaas.dir}/**/*"/>
+				<include name="/${conf.dir}/**/*"/>
+				<include name="/${models.dir}/**/*"/>
+				<include name="/build-scripts/**/*"/>
+				<include name="/docs/**/*"/>
+				<include name="**/${codegen.dir}/**/*"/>
+				<include name="build.xml"/>
+				<include name="build.properties"/>
+				<include name="README.txt"/>
+				<include name="LICENSE.txt"/>
+				<exclude name="**/CVS"/>
+				<exclude name="**/CVS/*"/>
+				<exclude name="**/build"/>
+				<exclude name="**/build/**/*"/>
+				<exclude name="**/bin"/>
+				<exclude name="**/bin/**/*"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/src"/>
+				<exclude name="**/src/**/*"/>
+			</tarfileset>
+		</tar>
+		<tar destfile="${release.src.tar.file}">
+			<tarfileset dir="${basedir}">
+				<include name="/${writable-api.dir}/**/*"/>
+				<include name="/${system.dir}/**/*"/>
+				<include name="/${grid-remoting.dir}/**/*"/>
+				<include name="/${grid-jaas.dir}/**/*"/>
+				<include name="/${conf.dir}/**/*"/>
+				<include name="/${models.dir}/**/*"/>
+				<include name="/build-scripts/**/*"/>
+				<include name="/docs/**/*"/>
+				<include name="**/${codegen.dir}/**/*"/>
+				<include name="build.xml"/>
+				<include name="build.properties"/>
+				<include name="README.txt"/>
+				<include name="LICENSE.txt"/>
+				<exclude name="**/CVS"/>
+				<exclude name="**/CVS/*"/>
+				<exclude name="**/build"/>
+				<exclude name="**/build/**/*"/>
+				<exclude name="**/dist"/>
+				<exclude name="**/dist**/*"/>
+				<exclude name="**/bin"/>
+				<exclude name="**/bin/**/*"/>
+			</tarfileset>
+		</tar>
+		
+	</target>
+	
+	<target name="copy-sdk" if="anthill.artifacts.dir" description="Copy SDK target required for ANTHILL">
+		<copy todir="${anthill.artifacts.dir}">
+			<fileset dir="../../">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+	</target>
+	
+</project>
