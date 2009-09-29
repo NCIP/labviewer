@@ -1,0 +1,40 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="EHCacheTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>  
+<ehcache>
+
+	<diskStore path="<%=(String)configurationParams.get("CACHE_PATH")%>"/>
+
+	<defaultCache
+		maxElementsInMemory="500"
+		eternal="false"
+		timeToIdleSeconds="1800"
+		timeToLiveSeconds="100000"
+		overflowToDisk="true"/>
+	
+<%for(UMLClass klass:transformerUtils.getAllClasses(model)){%>	
+	<cache name="<%=transformerUtils.getFQCN(klass)%>"
+		maxElementsInMemory="500"
+		eternal="false"
+		timeToIdleSeconds="1800"
+		timeToLiveSeconds="100000"
+		overflowToDisk="true"/>
+	<%for(UMLAssociation assoc:klass.getAssociations()){
+		List<UMLAssociationEnd> assocEnds = assoc.getAssociationEnds();
+		UMLAssociationEnd otherEnd = transformerUtils.getOtherEnd(klass,assocEnds);
+
+		if(otherEnd.isNavigable())
+		{
+			if(transformerUtils.isAssociationEndMany(otherEnd))
+			{%>
+	<cache name="<%=transformerUtils.getFQCN(klass)%>.<%=otherEnd.getRoleName()%>"
+		maxElementsInMemory="500"
+		eternal="false"
+		timeToIdleSeconds="1800"
+		timeToLiveSeconds="100000"
+		overflowToDisk="true"/>
+			<%}
+		}	
+	}%>
+<%}%>
+</ehcache>

@@ -1,0 +1,78 @@
+<%@ jet package="gov.nih.nci.codegen.transformer.jet" 
+        class="CLMLoggerCfgTransformer"
+        skeleton="ModelTransformerBase.skeleton" %>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ObjectStateLoggerConfig [
+<!-- 
+	ObjectStateLoggerConfig DTD. This DTD is specified for the ObjectStateLoggerConfig.xml
+-->
+<!ELEMENT ObjectStateLoggerConfig (ObjectStateLoggerName, LoggerConfigurationFile, LogLevel, LoggingEnabled, ObjectStateLoggerMessageFormat, DomainObjectList)>
+<!--
+	Name of the Logger used in the LoggerConfigurationFile.
+	The name of the logger should match with the log4j-config.xml logger value. That is, log4j-config.xml 
+	should have a logger with ObjectStateLoggerName.
+-->
+<!ELEMENT ObjectStateLoggerName (#PCDATA)>
+<!--
+Name of the Log4j Config file. Example: sample-log4j-config.xml
+-->
+<!ELEMENT LoggerConfigurationFile (#PCDATA)>
+<!--
+	LogLevel indicates the log level to be logged. Possible values are the Log4j Log Levels specified in org.apache.log4j.Level.
+	Check the class for all possible values. Example values are OFF, FATAL, ERROR, WARN, INFODEBUG and ALL.
+-->
+<!ELEMENT LogLevel (#PCDATA)>
+<!--
+	LoggingEnabled. Enable or Disable logging.
+	True - indicates logging is enabled.
+-->
+<!ELEMENT LoggingEnabled (#PCDATA)>
+<!ATTLIST  LoggingEnabled value (true | false) "true">
+<!--
+	ObjectStateLoggerMessageFormat indicates the type of message. ie. string, etc.
+	Default value is string.
+-->
+<!ELEMENT ObjectStateLoggerMessageFormat EMPTY>
+<!ATTLIST  ObjectStateLoggerMessageFormat type (string|xml) "string">
+<!--
+	DomainObjectList is the list of DomainObjects whose state changes are to be logged.
+-->
+<!ELEMENT DomainObjectList (DomainObject)*>
+<!--
+	DomainObject whose state changes are to be logged.
+-->
+<!ELEMENT DomainObject (ObjectName, IdentifierAttribute?)>
+<!-- 
+	ObjectName of the domain object. Example: sample.package.ClassName
+-->
+<!ELEMENT ObjectName (#PCDATA)>
+<!-- 
+	IdentifierAttribute is the name of the object property that is to be used save in logs object ID column. This value will be matched with 
+	query Object ID for retrieval. 
+	Example: For object with attributes: personname, street, zip. < IdentifierAttribute>personname</ IdentifierAttribute>.
+	 In this example, the attribute 'personname' will be used to store logs with ObjectId = Name
+
+	Example: For object with attributes: first, last, street, zip. <IdentifierAttribute>first,last</ IdentifierAttribute>. 
+	In this example, the composite attributes value of 'first+last' will used to store logs with ObjectID = 'first+last'.
+-->
+<!ELEMENT IdentifierAttribute (#PCDATA)>
+
+
+]>
+<ObjectStateLoggerConfig>
+	<ObjectStateLoggerName>CSM.Audit.Logging.ObjectState.Authorization</ObjectStateLoggerName>
+	<LoggerConfigurationFile>log4j.xml</LoggerConfigurationFile>
+	<LogLevel>info</LogLevel>
+	<LoggingEnabled value="true" />
+	<ObjectStateLoggerMessageFormat type="string" />
+	<DomainObjectList><%for(UMLClass klass:transformerUtils.getAllClasses(model)){
+		UMLAttribute idAttr = transformerUtils.getClassIdAttr(klass);
+		if (idAttr!=null){%>
+		<DomainObject>
+			<ObjectName><%=transformerUtils.getFQCN(klass)%></ObjectName>
+			<IdentifierAttribute><%=idAttr.getName()%></IdentifierAttribute>
+		</DomainObject>	
+<%		}
+	}%>
+	</DomainObjectList>
+</ObjectStateLoggerConfig>

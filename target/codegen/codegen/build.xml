@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Codegen" basedir="." default="dist">
+
+	<description>Build script for compiling JET Templates</description>
+		
+	<property name="sdk.home" value=".." />
+	<property file="${sdk.home}/build.properties" prefix="master" />
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="build.properties"  />
+	
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="..\build-scripts\build-utils.xml"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+	
+
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing codegen directories"/>
+		<mkdir dir="${build.classes.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Condition determining if clean is possible or not
+	*********************************************************************** -->
+	<target name="prepare-clean-condition">
+		<SDKecho message="${ant.project.name}: Checking the condition for cleaning"/>
+		<condition property="clean-condition-met">
+			<available file="${codegen.core.src.dir}/src" type="dir"/>
+		</condition>
+	</target>	
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files" depends="prepare-clean-condition" if="clean-condition-met">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files in addition to child projects
+	*********************************************************************** -->
+	<target name="clean-all" depends="clean" description="Cleans the child projects and generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning child projects"/>
+		<ant antfile="${codegen.templates.dir}\build.xml" target="clean" inheritall="false" inheritrefs="false" />
+	</target>
+
+	<!--***********************************************************************
+	*** Prepare source code
+	*********************************************************************** -->
+	<target name="prepare-source">
+		<SDKecho message="${ant.project.name}: Executing child projects"/>
+		<ant antfile="${codegen.templates.dir}\build.xml" target="compile-templates" inheritall="false" inheritrefs="false" />
+	</target>
+
+	
+	<!--***********************************************************************
+	*** Compiles source code
+	*********************************************************************** -->
+	<target name="compile" depends="init,prepare-source" description="Compiles source code">
+		<SDKecho message="${ant.project.name}: Compiling source code"/>
+		<javac srcdir="${codegen.core.src.dir}:${codegen.templates.src.dir}" destdir="${build.classes.dir}" debug="true">
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+
+	<!--***********************************************************************
+	*** Create distributable package
+	*********************************************************************** -->
+	<target name="dist" depends="compile" description="Prepates distribution files">
+		<SDKecho message="${ant.project.name}: Creating distributable package"/>
+		<jar destfile="${dist.dir}\${file.output.name}" basedir="${build.classes.dir}">
+			<manifest>
+				<attribute name="Generated-By" value="caCORE SDK Code Generator"/>
+				<attribute name="Main-Class" value="gov.nih.nci.codegen.Generator"/>
+				<attribute name="Version" value="${master.VERSION}"/>
+			</manifest>
+			<fileset dir="${codegen.core.src.dir}" includes="**/*.java" />
+			<fileset dir="${codegen.templates.src.dir}" includes="**/*.java" />
+		</jar>
+		<copy todir="${dist.dir}">
+			<fileset dir="${lib.dir}" includes="*.jar"/>
+		</copy>
+	</target>
+	
+	<!--***********************************************************************
+	*** Dumps the current Code Generator properties  
+	*********************************************************************** -->
+	<target name="show-properties" description="Dumps a list of all currently set Code Generator properties">
+		<echoproperties destfile="antproperties-codegen.txt"/>
+		<echo>Properties were dumped to 'antproperties-codegen.txt'</echo>
+	</target>
+</project>

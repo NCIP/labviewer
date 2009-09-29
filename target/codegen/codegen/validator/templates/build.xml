@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SDK Templates" basedir="." default="compile-templates">
+
+	<description>Build script for compiling JET Templates</description>
+
+	<!--***********************************************************************
+	*** Load the build properties from the file
+	*********************************************************************** -->
+	<property file="build.properties"/>
+	<property file="${codegen.core.templates.dir}/build.properties" prefix="templates" />
+	
+	<!--***********************************************************************
+	*** Import utility script
+	*********************************************************************** -->
+	<import file="..\..\..\build-scripts\build-utils.xml"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="classpath">
+		<fileset dir="${codegen.core.templates.dir}\${templates.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+	
+	<!--***********************************************************************
+	*** Define JET Compilation task.
+	*********************************************************************** -->
+	<taskdef name="jetc" classname="ch.paranor.epla.structure.JETCTask">
+		<classpath refid="classpath" />
+	</taskdef>
+	
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing directories"/>
+		<mkdir dir="${build.src.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Condition determining if clean is possible or not
+	*********************************************************************** -->
+	<target name="prepare-clean-condition">
+		<SDKecho message="${ant.project.name}: Checking the condition for cleaning"/>
+		<condition property="clean-condition-met">
+			<available file="${jet.template.dir}" type="dir"/>
+		</condition>
+	</target>	
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files" depends="prepare-clean-condition" if="clean-condition-met">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${build.dir}"/>
+	</target>
+
+	
+	<!--***********************************************************************
+	*** Compiles templates
+	*********************************************************************** -->
+	<target name="compile-templates" depends="clean,init" description="Compiles Jet Templates">
+		<SDKecho message="${ant.project.name}: Compiling JET templates"/>
+		<jetc destDir="${build.src.dir}">
+			<fileset dir="${jet.template.dir}" includes="**/*.javajet"/>
+		</jetc>
+	</target>
+	
+</project>
