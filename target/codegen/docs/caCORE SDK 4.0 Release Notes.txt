@@ -1,0 +1,438 @@
+                        Release Notes
+    
+            caCORE Software Development Toolkit (SDK)
+                         Version 4.0
+                       	October, 2007
+
+		  National Cancer Institute 
+Center for Biomedical Informatics and Information Technology
+
+
+================================================================
+                            Contents
+================================================================
+
+
+    1.0 caCORE SDK Introduction
+    2.0 New Features and Updates
+    3.0 Bug Fixes
+    4.0 Known Issues
+    5.0 Bug Reports and Support
+    6.0 caCORE Open Development
+    7.0 Documentation
+    8.0 NCI CBIIT Web Pages
+
+
+================================================================
+	1.0 caCORE SDK Introduction and History
+================================================================
+
+    caCORE SDK 4.0
+
+    --  02 November 2007
+
+    caCORE SDK 3.2.1
+
+    --  22 March 2007
+
+    caCORE SDK 3.2
+
+    --  22 December 2006
+
+    caCORE SDK 1.1
+
+    --  27 March 2006
+
+    caCORE SDK 1.0.3
+
+    --  28 July 2005
+
+    caCORE SDK 1.0.2
+
+    --  12 April 2005
+
+    caCORE SDK 1.0.1
+
+    --  16 February 2005
+
+    caCORE SDK 1.0
+
+    --  31 January 2005
+
+    The caCORE Software Development Kit (SDK) is a set of tools
+    that can be used by an intermediate Java developer to create
+    a 'caCORE-like' system. Such systems are constructed using
+    certain design principles:
+
+    --  UML Modeling
+
+    --  n-tier architecture with open APIs
+
+    --  controlled vocabularies
+
+    --  registered metadata
+
+    A system built along these lines is said to be 'semantically
+    integrated', that is, there exists runtime metadata that
+    describes every class and class attribute in the API.
+
+    https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+
+================================================================
+	2.0 New Features and Updates
+================================================================
+
+    +---------------------------------------+
+    | caCORE SDK Components		    |
+    +---------------------------------------+
+
+    The caCORE SDK includes the following components:
+
+    --  Sample UML object/data models to use with the development
+	    kit:
+
+	--  SDKTestModel.EAP (Enterprise Architect)
+	--  sdk.uml (ArgoUML)
+
+    --  XML Metadata Interchange (XMI) or XML Version of the sample
+	    models:
+
+        --  sdk.xmi (Enterprise Architect)
+        --  sdk.uml (ArgoUML)
+
+    --  Configuration file to enable you to customize your 
+        installation to meet your specific database, server,
+        and other configuration needs.
+
+        --  deploy.properties
+
+    --  Ant buildfile
+
+	--  build.xml
+
+    --  Code generator package
+
+    --  Runtime system
+
+    Please read the caCORE SDK Programmer's Guide before
+    downloading the SDK.  
+
+    https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+
+    +---------------------------------------+
+    | Updates / New Features                |
+    +---------------------------------------+
+
+    caCORE SDK 4.0 is a major release with many new features available. 
+    Some of the newly developed features are to improve the infrastructure 
+    and others are to support new requirements. A list highlighting the
+    major functionality and performance enhancements and improvements introduced 
+    in the caCORE SDK 4.0 release is provided below.
+
+    Code Generation:  
+    The architecture and the core of the code generation module of the caCORE 
+    SDK 4.0 has been completely rewritten. The Entire code generation 
+    framework now runs from a single configuration file based on the Spring Framework 
+    as opposed to individual configuration files used by previous releases. Some of 
+    the more visible improvements in the code generation module are highlighted below.
+
+    -- Support for Enterprise Architect and ArgoUML: Previous releases of the
+       caCORE SDK used to support only Enterprise Architect as a tool for UML 
+       modeling. With SDK 4.0, users can choose between ArgoUML and Enterprise 
+       Architect. The added support for ArgoUML provides users an open source 
+       alternative to commercial software like Enterprise Architect.  
+
+    -- Code Generation performance improvement:  The caCORE SDK 4.0 has 
+       significantly improved the performance of the code generation module. 
+       Average users should notice the system generation process to be completed 
+       in approximately 15% of time of what it used to take with the previous 
+       releases of SDK. 
+     	
+    -- Support for Validators:  The caCORE SDK code generator now supports 
+       validators, which serve the purpose of validating the object model and 
+       object-relational mapping information before the code generator starts. 
+       These validators provide descriptive messages to users which allow users 
+       to quickly identify the root cause of the code generation failure.   
+	 	
+    -- Reduced and Improved Generated Artifacts:  The artifacts generated by 
+       caCORE SDK are completely redesigned to suit the needs of the newly 
+       redesigned runtime system. Artifacts generated by previous releases of 
+       the SDK were not reusable outside of SDK due to certain dependencies on 
+       the SDK.  Artifacts generated by the SDK 4.0, however, can be reused elsewhere. 
+       For example, Java Beans generated by the SDK had getter methods that would 
+       connect to the server; they were not simple POJOs.  In SDK 4.0, the generated
+       beans are indeed simple POJO beans. 
+
+    -- Support for Additional UML Features:  The SDK now supports many new UML 
+       features in the object model and in the object-relational mapping process.
+
+       Object Model:
+
+       -- ID attribute:  Users of the caCORE SDK no longer have to name the attribute 
+          that maps to the primary key column of the corresponding table for the 
+          class as "ID". Users can now specify the attribute mapping to primary key 
+          column using a tag value on the class in the domain model.
+
+       -- Support for primitives:  SDK 4.0 allows users to use Java Primitive types to
+            specify an attribute's data type.
+
+       -- Support for primitive collections:  Users of the SDK can now use primitive 
+	    collections or data types when specifying the attribute type.
+
+       Object Relational Mapping:
+
+       -- Inheritance:  caCORE SDK 4.0 now supports an alternate way of mapping 
+          inheritance hierarchy in the database. SDK users can choose between 
+          existing "Table per class" mechanism to map inheritance in the database,
+          or they can use "Table per inheritance hierarchy" for the mapping.
+
+       -- Join tables: Previous releases of the SDK used to only support join tables 
+          for the many-to-many type of associations. With SDK 4.0, users can choose 
+          to use join tables for any type of association.
+
+    Generated System: In addition to the new code generator module, caCORE SDK 4.0 has 
+    introduced significant changes in the runtime system. Since many of the changes are
+    in the infrastructure, mostly users utilizing advance options will notice or be 
+    affected by the restructuring of the SDK’s runtime system.
+
+    -- Client-Server infrastructure improvements: 
+
+       -- The client-server infrastructure of SDK used to rely on the Java beans 
+          developed specifically for SDK. These specialized java beans had the capability
+          to connect to the server when required to fetch the associated objects. With 
+          SDK 4.0, regular POJOs are used in conjunction with concepts from Aspect 
+          Oriented Programming (AOP) to facilitate similar mechanism. With this design 
+          approach, domain object beans generated by SDK are true POJOs and can be used 
+          outside of SDK more easily. 
+
+       -- In addition to the restructuring of the Java beans with AOP, SDK 4.0 now also 
+          can connect to various SDK generated systems from within the same client JVM. 
+          In previous versions, users of the SDK could connect to only one remote 
+          service at a time; with this feature, developers will now be able to retrieve 
+          data from multiple data services.
+
+    -- Simplified Application Service:  Many of the existing methods of the Application 
+       Service interface have been deprecated. Newly added methods have a syntax similar 
+       to the existing methods, but they now require less information. The simplified 
+       Application Service interface will be easier to work with.
+
+    -- Web Services.  
+
+       -- SDK 4.0 generated web services work with the simple POJO beans. The 
+          Web Service from previous version of SDK required specialized POJO beans in the .ws
+          package, whereas SDK 4.0 generated web services utilizes the same Java beans that 
+          are used by the other tiers of the application.
+ 
+       -- SDK 4.0 web services also have additional methods to allow users to fetch the 
+          associations of the domain object. Users can now specify which specific 
+          association they would like to fetch from the server.
+
+       -- Starting with version 4.0, users of the SDK will not have to deploy the Web 
+          Service independently. The SDK 4.0 generated web services are embedded in the 
+          .war file, and will be deployed automatically when the application server starts.
+
+    -- Graphical User Interface
+
+       -- The caCORE SDK 4.0 generated system has a newly developed graphical user 
+          interface. This new interface allows users a richer experience. 
+
+       -- Security of the new user interface has been enhanced. Users now have access to 
+          built in security capabilities such that when the security is enabled in the 
+          system, users will get experience of completely secured system and not just one 
+          of the secured interface.
+
+       -- The caCORE SDK 4.0 generated GUI now has embedded Javadocs for the domain 
+          objects for which the system was originally generated. Users of the web 
+          interface can browse the Javadocs by visiting a link on the generated system’s 
+          home page.
+
+       -- Previous releases of the SDK did not allow fetching of an associated object that
+          had more than one association with another object.  The newly generated web 
+          interface allows user to retrieve associations regardless of the number of 
+          associations between two objects.
+ 
+    -- Security
+
+       -- The caCORE SDK 4.0 has a completely new security implementation that is based on
+          the ACEGI security framework. The previous implementation of security in the 
+          caCORE SDK was weaved into the application logic. For caCORE SDK 4.0, security 
+          implementation is kept outside of the application and is managed through Aspect 
+          Oriented Programming principles. SDK users can now more easily change the 
+          implementation of security without going into the details of SDK’s core code 
+          base. 
+
+       -- Instance level security:  The caCORE SDK 4.0 supports instance level security 
+          utilizing CSM, which provides flexibility to provide more granular access to the
+          data. For example, users can be given access to only a subset of records from a 
+          particular table vs. all the records of a particular table. 
+
+       -- Attribute level security:  In addition to the instance level security, the caCORE
+          SDK 4.0 also provides a very granular attribute level security to the users.  For
+          example, only certain users are allowed to see Social Security Numbers of a 
+          Person object. 
+
+       -- Concurrent user access in secured API:  Users of the SDK generated java client in 
+          the previous releases were constrained to use the same user account throughout 
+          the lifecycle of the ApplicationService. In SDK 4.0, users can create many 
+          different instances of the ApplicationService and login with different user 
+          accounts at the same time from different threads of the client application. 
+
+
+
+================================================================
+	3.0 Bug Fixes Since Last Release
+================================================================
+
+    -- When two objects have multiple associations between
+       them, the generated system of previous SDK versions would 
+       only return one of the associated object via the HTTP and 
+       Web Service interfaces. SDK 4.0 corrects this issue by 
+       providing API's that allow the user to specify the particular
+       association.
+
+
+
+================================================================
+	4.0 Known Issues
+================================================================
+
+    -- The SDK will not generate both ends of bi-directional 
+	 self associations within the Java Beans.
+
+    -- The caCORE Castor-based Marshaller does not currently handle 
+	 recursive bi-directional associations.	
+
+    -- The SDK purposely ignores the lower-bound multiplicity
+	 value from the UML model when generating the Schemas.  A
+	 deployment option/property will be provided in a future 
+	 release that will force the SDK to honor the value placed
+	 within the model.
+
+    -- When building a system, an error will be generated if
+	 Java keywords are used as class and/or attribute names in
+	 the UML logical model.  Similarly, SQL keywords in the
+	 data model will generate errors.
+   
+    -- If you use multiple datasources from different databases
+	 servers, the toolkit will not be able to generate
+	 multiple orm*.cfg.xml files automatically. You will need
+	 to generate a single ORM, then manually split that file
+	 into however many ORM's you are using.
+
+    -- The HTTP interface has reserved characters like % and #.
+	 If the reserved characters are part of the query, the
+	 HTTP parser will not work correctly.
+	
+	 Example:  "test%122".  
+
+	 A workaround is to use the wild card character '*':
+
+	 Example:  "test*122"
+
+       More detailed information is available in the caCORE
+       4.0 SDK Developer's Guide, available at:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+   -- Users can learn more about status of new and known issues by
+	visiting the GForge website at 
+	https://gforge.nci.nih.gov/tracker/?atid=730&group_id=148&func=browse
+
+================================================================
+	5.0 Bug Reports and Support
+================================================================
+
+    -- The NCI CBIIT Application Support group can be contacted at:
+
+	 http://ncicb.nci.nih.gov/NCICB/support
+	 Telephone: 301-451-4384 	
+	 Toll free: 888-478-4423
+
+    -- A GForge Support tracker group, which is actively monitored by caCORE SDK 
+       developers, has been created to track any support requests. If you believe 
+       there is a bug/issue in the caCORE SDK software itself, or have a technical 
+       issue that cannot be resolved by contacting the NCI CBIIT Application Support group, 
+       please submit a new support tracker using the following link: 
+
+       https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731. 
+
+    -- Prior to submitting a new tracker, review any existing support request trackers 
+       in order to help avoid duplicate submissions.
+
+    -- A list summarizing the online SDK resources is provided below:
+
+	 Mailing List:			CACORESDK_USERS-L@mail.nih.gov
+	 Mailing List Archive:		https://list.nih.gov/archives/cacore_sdk_users-l.html
+	 Project Home (GForge):		https://gforge.nci.nih.gov/projects/cacoresdk/
+	 Support Tracker (GForge): 	https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731
+     caCORE SDK users:		    http://list.nih.gov/archives/cacore_sdk_users-l.html       
+
+
+================================================================
+	6.0 caCORE Open Development
+================================================================
+
+    -- cacoresdk : The NCICB caCORE Software Development Kit is
+		a set of tools designed to aid in the design
+		and creation of a 'caCORE-like' software
+		system.
+     
+       http://gforge.nci.nih.gov/projects/cacoresdk/
+     
+
+================================================================
+	7.0 Documentation
+================================================================
+    
+    -- The caCORE SDK 4.0 provides two guides.  The first, the "caCORE
+       4.0 SDK Developer's Guide", combines information formerly 
+       contained within the caCORE SDK Programmer's, Technical, and 
+       Basic Installation and Test guides.  The second, the "caCORE 
+       4.0 SDK Migration Guide", contains information on migrating from
+       previous versions of the SDK.
+
+    -- The caCORE SDK Developer's Guide can be downloaded via
+       FTP from:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+    -- The caCORE SDK Migration Guide can be downloaded via
+       FTP from:
+
+       https://gforge.nci.nih.gov/docman/index.php?group_id=148&selected_doc_group_id=1389&language_id=1
+
+    -- JavaDocs are also available for the generated domain classes.  
+       To view them, first build the system for your model using the 
+       instructions contained in "Chapter 9 Configuring and Running 
+       the SDK" of the caCORE 4.0 Developer's Guide.  The JavaDocs 
+       are generated within the /output/<project_name>/build/docs
+       folder, and also included in the project WAR file located in 
+       /output/<project_name>/package/webapp/ directory.  Once the 
+       WAR file is deployed, the JavaDocs are also viewable online 
+       via the "JavaDocs" link on the SDK Home page.
+
+
+================================================================
+	8.0 NCI CBIIT Web Pages
+================================================================
+
+    The NCI Center for Biomedical Informatics and Information Technology
+    --  http://ncicb.nci.nih.gov/
+    
+    NCI CBIIT Application Support
+     
+    --  http://ncicbsupport.nci.nih.gov/sw/
+	  http://ncicb.nci.nih.gov/NCICB/support
+
+    caCORE SDK
+
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk
+    -- http://gforge.nci.nih.gov/projects/cacoresdk/
+
+    Common Security Module (CSM)
+    
+    --  http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/csm
+
+//end

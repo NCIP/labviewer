@@ -1,0 +1,407 @@
+                        Release Notes
+    
+            caCORE Software Development Toolkit (SDK)
+                         Version 4.0.1
+                       	  April, 2008
+
+       National Cancer Institute Center for Bioinformatics
+
+
+================================================================
+                            Contents
+================================================================
+
+
+    1.0 caCORE SDK Introduction
+    2.0 Features and Updates
+    3.0 Bug Fixes
+    4.0 Known Issues
+    5.0 Bug Reports and Support
+    6.0 caCORE Open Development
+    7.0 Documentation
+    8.0 NCICB Web Pages
+
+
+================================================================
+	1.0 caCORE SDK Introduction and History
+================================================================
+
+    caCORE SDK 4.0.1
+
+    --  15 April 2008
+
+    caCORE SDK 4.0
+
+    --  11 October 2007
+
+    caCORE SDK 3.2.1
+
+    --  22 March 2007
+
+    caCORE SDK 3.2
+
+    --  22 December 2006
+
+    caCORE SDK 1.1
+
+    --  27 March 2006
+
+    caCORE SDK 1.0.3
+
+    --  28 July 2005
+
+    caCORE SDK 1.0.2
+
+    --  12 April 2005
+
+    caCORE SDK 1.0.1
+
+    --  16 February 2005
+
+    caCORE SDK 1.0
+
+    --  31 January 2005
+
+    The caCORE Software Development Kit (SDK) is a set of tools
+    that can be used by an intermediate Java developer to create
+    a 'caCORE-like' system. Such systems are constructed using
+    certain design principles:
+
+    --  UML Modeling
+
+    --  n-tier architecture with open APIs
+
+    --  controlled vocabularies
+
+    --  registered metadata
+
+    A system built along these lines is said to be 'semantically
+    integrated', that is, there exists runtime metadata that
+    describes every class and class attribute in the API.
+
+    http://nci.nih.gov/pub/cacore/SDK/caCORE_SDK4.0_Developers_Guide.pdf
+
+
+================================================================
+	2.0 Features and Updates
+================================================================
+
+    +---------------------------------------+
+    | Features:  caCORE SDK Components      |
+    +---------------------------------------+
+
+    The caCORE SDK includes the following components:
+
+    --  Sample UML object/data models to use with the development
+	    kit:
+
+	--  SDKTestModel.EAP (Enterprise Architect)
+	--  sdk.uml (ArgoUML)
+
+    --  XML Metadata Interchange (XMI) or XML Version of the sample
+	    models:
+
+        --  sdk.xmi (Enterprise Architect)
+        --  sdk.uml (ArgoUML)
+
+    --  Framework packages
+
+        --  gov.nih.nci.system
+        --  gov.nih.nci.common
+        --  org.hibernate
+        --  org.springframework
+        --  org.acegisecurity
+
+    --  Configuration file to enable you to customize your 
+        installation to meet your specific database, server,
+        and other network needs.
+
+        --  deploy.properties
+
+    --  Ant buildfile
+
+	--  build.xml
+
+    --  Code generator package
+
+        --  gov.nih.nci.codegen.core
+        --  gov.nih.nci.codegen.framework
+        --  Java JET templates for generating caCORE like APIs
+
+    Please read the caCORE SDK Programmer's Guide before
+    downloading the SDK.  
+
+    https://gforge.nci.nih.gov/docman/view.php/148/8650/caCORE%20SDK%204.0%20Developer's%20Guide_101007.pdf
+
+
+    +---------------------------------------+
+    | Updates / New Features                |
+    +---------------------------------------+
+
+    caCORE SDK 4.0.1 is a minor release with several new features available. 
+    Some of the newly developed features are to improve the infrastructure 
+    and others are to support new requirements. A list highlighting the
+    functionality and performance enhancements and improvements introduced 
+    in the caCORE SDK 4.0.1 release is provided below.
+
+
+    -- Abstract classes. See GForge [#2958] caIntegrator suggestions for more info.
+  
+       In general, full abstract base classes are classes either         
+       explicitly declared to be abstract, or which contain abstract (unimplemented)
+       methods. Except the instantiation capability, they have the same
+       capabilities as a concrete class or type.
+
+       Starting with SDK 4.0.1, users are now able to designate a class
+       as abstract in their EA or ArgoUML models by checking the
+       "abstract" checkbox modifier in the class properties
+       dialog or pane.  Concrete class(es) will need to "extend"
+       the abstract class by using a "Generalization" link
+       between the abstract and concrete class(es).  The source of a
+       given "Generalization" link should be the concrete
+       subclass; the target should be the abstract class.
+
+       The SDK code generator will generate both the abstract and concrete
+       subclass(es) as pojo beans, or classes.  The abstract class
+       will contain the "abstract" modifier in the class
+       declaration.  The code generator will also generate an XSD containing
+       the abstract="true" attribute in the element declaration
+       corresponding to the abstract class. Finally, the generated Hibernate
+       mapping file for the abstract class will contain the
+       abstract="true" attribute in the class declaration.
+
+       Note:  No changes will be made to the Castor mapping file(s),
+       as the purpose of the mapping file is simply to "map",
+       or link, and XSD element to it's corresponding Java class.
+
+       On the SDK GUI, abstract classes will have an "(abstract)"
+       suffix appended to them.  As abstract classes are not searchable,
+       the Criteria dialog will not be displayed if the abstract class
+       is selected.
+
+       Note: Like interfaces, abstract class cannot be instantiated
+       (i.e. you cannot create an object from an abstract class), and
+       so will not be searchable via the UI or any of the SDK API's.
+
+
+    -- Marker Interfaces. See GForge [#2958] caIntegrator suggestions for more info.
+
+       In general, an interface is a specification of behavior that
+       implementers agree to meet. It is a contract. By implementing
+       an interface, classes are guaranteed to support a required behavior,
+       which allows the system to treat non-related elements in the
+       same way - ie. through the common interface.
+
+       A Marker interface in Java is simply an interface that has no
+       behavior. It is just used to "mark" Java classes which
+       support a certain capability -- the class marks itself as implementing
+       the interface.
+
+       Examples include:
+
+       - java,lang.Cloneable
+       - java,io.Serializable
+       - java.util.EventListener
+
+       Starting with SDK 4.0.1, users will be able to create marker interfaces
+       (with no behavior, or methods) in their models.  To indicate
+       that a given class implements a marker interface, create a dependency
+       link between the class and interface.  The source should be the
+       class, the target should be the interface.  The dependency link
+       should have a "realize" stereotype.
+
+       The SDK code generator will generate a corresponding Java interface
+       and class for the ones in the model.  The class "pojo"
+       will implement the marker interface.
+
+       Note: An interface cannot be instantiated (i.e. you cannot create
+       an object from an Interface), and so will not be searchable via
+       the UI or any of the SDK API's.
+
+
+    -- Implicit Polymorphism.  See GForge [#11539] Support for Hibernate Impilicit 
+                               Inheritance for more info.
+
+       Support for Hibernate Implicit Inheritance has now been added to SDK 4.0.1.
+       For more details on this form of Inheritance Mapping, see:
+
+       -- http://www.hibernate.org/hib_docs/v3/reference/en/html_single/#inheritance
+       -- http://www-128.ibm.com/developerworks/java/library/j-hibernate/
+
+
+================================================================
+	3.0 Bug Fixes Since Last Release
+================================================================
+
+    -- [#4150] WS does not handle inheritance properly
+    -- [#4153] WS does not support comma separated nested search paths
+    -- [#8951] GetHTML query syntax does not support slashes in the criteria
+    -- [#9282] Association to a class in a different package does not work in XSD
+    -- [#9392] Uppercase association names generate error in WS
+    -- [#9602] Validation error in testing association to a class in a different package 
+    -- [#9618] The SDK Test Model KEY table causes an SQLException in MySQL
+    -- [#10639] Associations in related packages are not checked
+    -- [#11189] Search Object drop down is not populated with the correct classnames
+    -- [#11191] Generation of inefficient subqueries results in slow performance and timeouts
+    -- [#11866] ApplicationService methods do not allow casting of results
+    -- [#12454] camel case error
+    -- [#12539] inheritance across package results in incorrect hibernate mapping
+    -- [#12636] Eager loaded objects are not proxied correctly
+    -- [#13110] associations to the child class in the table per hierarchy with leaf in separate table not being validated
+    -- [#13111] Super class in separate package generates incorrect HBM files
+    -- [#13133] Missing id attribute error in Castor mapping file generation
+    -- [#13144] WS getTotalNumberOfRecords returns incorrect number
+    -- [#13295] isJoinedSubclass() test in NestedCriteria2HQL is causing query criteria to be ignored
+    -- [#13365] Implicit polymorphism: Associations from root class are attributed to subclasses
+    -- [#13481] Unmarshalling test for remote client throws exception
+    -- [#13577] Interfaces (in a different package) displaced with realization classes in the same package on the web interface
+    -- [#13578] 21 JUnit tests fail 
+
+
+================================================================
+	4.0 Known Issues
+================================================================
+
+    -- [#13168] Polymorphic Implicit Inheritance queries fail if 
+	firstResult/maxResult is set prior to executing query
+
+
+    -- The SDK will not generate both ends of bi-directional 
+	 associations within the Java Beans.
+
+    -- The caCORE Castor-based Marshaller does not currently handle 
+	 recursive bi-directional associations.	
+
+    -- The SDK purposely ignores the lower-bound multiplicity
+	 value from the UML model when generating the Schemas.  A
+	 deployment option/property will be provided in a future 
+	 release that will force the SDK to honor the value placed
+	 within the model.
+
+    -- When building a system, an error will be generated if
+	 Java keywords are used as class and/or attribute names in
+	 the UML logical model.  Similarly, SQL keywords in the
+	 data model will generate errors.
+   
+    -- If you use multiple datasources from different databases
+	 servers, the toolkit will not be able to generate
+	 multiple orm*.cfg.xml files automatically. You will need
+	 to generate a single ORM, then manually split that file
+	 into however many ORM's you are using.
+
+    -- The HTTP interface has reserved characters like % and #.
+	 If the reserved characters are part of the query, the
+	 HTTP parser will not work correctly.
+	
+	 Example:  "test%122".  
+
+	 A workaround is to use the wild card character '*':
+
+	 Example:  "test*122"
+
+       More detailed information is available in the caCORE
+       4.0 SDK Developer's Guide, available at:
+
+       http://nci.nih.gov/pub/cacore/SDK/caCORE_SDK3.2_Programmers_Guide.pdf
+
+================================================================
+	5.0 Bug Reports and Support
+================================================================
+
+    -- The NCICB Application Support group can be contacted at:
+
+	 http://ncicb.nci.nih.gov/NCICB/support
+	 Telephone: 301-451-4384 	
+	 Toll free: 888-478-4423
+
+    -- A GForge Support tracker group, which is actively monitored by caCORE SDK 
+       developers, has been created to track any support requests. If you believe 
+       there is a bug/issue in the caCORE SDK software itself, or have a technical 
+       issue that cannot be resolved by contacting the NCICB Application Support group, 
+       please submit a new support tracker using the following link: 
+
+       https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731. 
+
+    -- Prior to submitting a new tracker, review any existing support request trackers 
+       in order to help avoid duplicate submissions.
+
+    -- A list summarizing the online SDK resources is provided below:
+
+	 Mailing List:			CACORESDK_USERS-L@mail.nih.gov
+	 Mailing List Archive:		https://list.nih.gov/archives/ cacore_sdk_users-l.html
+	 Project Home (GForge):		https://gforge.nci.nih.gov/projects/cacoresdk/
+	 Support Tracker (GForge): 	https://gforge.nci.nih.gov/tracker/?group_id=148&atid=731
+         caCORE SDK users:		http://list.nih.gov/archives/cacore_sdk_users-l.html       
+
+
+================================================================
+	6.0 caCORE Open Development
+================================================================
+
+    -- cacoresdk : The NCICB caCORE Software Development Kit is
+		a set of tools designed to aid in the design
+		and creation of a 'caCORE-like' software
+		system.
+     
+       http://gforge.nci.nih.gov/projects/cacoresdk/
+     
+
+================================================================
+	7.0 Documentation
+================================================================
+    
+    -- The caCORE SDK 4.0.1 provides two guides.  The first, the "caCORE
+       4.0 SDK Developer's Guide", combines information formerly 
+       contained within the caCORE SDK Programmer's, Technical, and 
+       Basic Installation and Test guides.  The second, the "caCORE 
+       4.0 SDK Migration Guide", contains information on migrating from
+       previous versions of the SDK.
+
+    -- The caCORE SDK Developer's Guide can be downloaded via
+       FTP from:
+
+       http://nci.nih.gov/pub/cacore/SDK/caCORE_SDK4.0_Developers_Guide.pdf
+
+    -- The caCORE SDK Migration Guide can be downloaded via
+       FTP from:
+
+       http://nci.nih.gov/pub/cacore/SDK/caCORE_SDK4.0_Migration_Guide.pdf
+
+    -- JavaDocs are also available for the generated domain classes.  
+       To view them, first build the system for your model using the 
+       instructions contained in "Chapter 9 Configuring and Running 
+       the SDK" of the caCORE 4.0 Developer's Guide.  The JavaDocs 
+       are generated within the /output/<project_name>/build/docs
+       folder, and also included in the project WAR file located in 
+       /output/<project_name>/package/webapp/ directory.  Once the 
+       WAR file is deployed, the JavaDocs are also viewable online 
+       via the "JavaDocs" link on the SDK Home page.
+
+
+================================================================
+	8.0 NCICB Web Pages
+================================================================
+
+    The NCI Center for Bioinformatics
+
+    --  http://ncicb.nci.nih.gov/
+    
+    NCICB Application Support
+     
+    --  http://ncicbsupport.nci.nih.gov/sw/
+	  http://ncicb.nci.nih.gov/NCICB/support
+
+    NCICB Download Center
+
+    --  http://ncicb.nci.nih.gov/download/
+
+    caCORE SDK
+
+    -- http://ncicb.nci.nih.gov/NCICB/infrastructure/cacoresdk
+    -- http://gforge.nci.nih.gov/projects/cacoresdk/
+
+    Common Security Module (CSM)
+    
+    --  http://ncicb.nci.nih.gov/NCICB/infrastructure/cacore_overview/csm
+
+//end
