@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-lazy-init="false" default-dependency-check="none" default-autowire="no">
+
+	<bean id="PKGeneratorValidator" class="gov.nih.nci.codegen.validator.PKGeneratorValidator">
+		<property name="enabled">
+			<value>@VALIDATE_MODEL_MAPPING@</value>
+		</property>
+		<property name="pkGeneratorPropertyMap">
+			<map>
+				<entry key="increment" value-ref="IncrementPKProperty" />
+				<entry key="identity" value-ref="IdentityPKProperty" />
+				<entry key="sequence" value-ref="SequencePKProperty" />
+				<entry key="hilo" value-ref="HiloPKProperty" />
+				<entry key="seqhilo" value-ref="SeqhiloPKProperty" />
+				<entry key="uuid" value-ref="UuidPKProperty" />
+				<entry key="guid" value-ref="GuidPKProperty" />
+				<entry key="native" value-ref="NativePKProperty" />
+				<entry key="select" value-ref="SystemwidePKProperty" />
+				<entry key="" value-ref="SystemwidePKProperty" />
+			</map>
+		</property>
+		<property name="transformerUtils" ref="TransformerUtils"></property>
+	</bean>
+
+	<bean id="SystemwidePKDataTypes" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>int</value>
+				<value>integer</value>
+				<value>string</value>
+				<value>long</value>
+				<value>double</value>
+				<value>character</value>
+				<value>float</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="IntPKDataTypes" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>int</value>
+				<value>integer</value>
+				<value>short</value>
+				<value>long</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StringPKDataTypes" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>string</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="IdentityPKDatabases" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>db2</value>
+				<value>mysql</value>
+				<value>ms_sql_server</value>
+				<value>sybase</value>
+				<value>hypersonicsql</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SequencePKDatabases" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>db2</value>
+				<value>postgressql</value>
+				<value>oracle</value>
+				<value>sapdb</value>
+				<value>mckoi</value>
+				<value>interbase</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="GuidPKDatabases" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>ms_sql_server</value>
+				<value>mysql</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SystemwidePKDatabases" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>db2</value>
+				<value>postgressql</value>
+				<value>oracle</value>
+				<value>sapdb</value>
+				<value>mckoi</value>
+				<value>interbase</value>
+				<value>mysql</value>
+				<value>ms_sql_server</value>
+				<value>sybase</value>
+				<value>hypersonicsql</value>
+				<value>hsql</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SequenceGeneratorParams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>sequence</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="HiloGeneratorParams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>table</value>
+				<value>column</value>
+				<value>max_lo</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SeqhiloGeneratorParams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>sequence</value>
+				<value>max_lo</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SelectGeneratorParams" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>key</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="EmptyGeneratorParams" class="java.util.ArrayList"></bean>
+
+	<bean id="IncrementPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="increment" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="GuidPKDatabases" />
+		<constructor-arg ref="EmptyGeneratorParams" />
+	</bean>
+
+	<bean id="IdentityPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="identity" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="IdentityPKDatabases" />
+		<constructor-arg value="EmptyGeneratorParams" />
+	</bean>
+
+	<bean id="SequencePKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="sequence" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="SequencePKDatabases" />
+		<constructor-arg ref="SequenceGeneratorParams" />
+	</bean>
+
+	<bean id="HiloPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="hilo" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="SystemwidePKDatabases" />
+		<constructor-arg ref="HiloGeneratorParams" />
+	</bean>
+
+	<bean id="SeqhiloPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="seqhilo" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="SystemwidePKDatabases" />
+		<constructor-arg ref="SeqhiloGeneratorParams" />
+	</bean>
+
+	<bean id="UuidPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="uuid" />
+		<constructor-arg ref="StringPKDataTypes" />
+		<constructor-arg ref="SystemwidePKDatabases" />
+		<constructor-arg ref="EmptyGeneratorParams" />
+	</bean>
+
+	<bean id="GuidPKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="guid" />
+		<constructor-arg ref="StringPKDataTypes" />
+		<constructor-arg ref="GuidPKDatabases" />
+		<constructor-arg ref="EmptyGeneratorParams" />
+	</bean>
+
+	<bean id="NativePKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="native" />
+		<constructor-arg ref="IntPKDataTypes" />
+		<constructor-arg ref="SystemwidePKDatabases" />
+		<constructor-arg ref="EmptyGeneratorParams" />
+	</bean>
+
+	<bean id="SystemwidePKProperty" class="gov.nih.nci.codegen.validator.PKGeneratorProperty">
+		<constructor-arg value="" />
+		<constructor-arg ref="SystemwidePKDataTypes" />
+		<constructor-arg ref="SystemwidePKDatabases" />
+		<constructor-arg ref="EmptyGeneratorParams" />
+	</bean>
+
+</beans>

@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<beans>
+
+  <!-- These are the bean(s) that need to be protected. -->
+  <bean id='applicationService' class='gov.nih.nci.system.applicationservice.impl.ApplicationServiceImpl'/>
+  
+  <!-- SDK implementation of the SecurityHelper. -->
+  <bean id='securityHelper' class='gov.nih.nci.system.security.acegi.external.SecurityHelperImpl'/>
+  
+  <!-- This bean defines a proxy for the protected bean. Notice that -->
+  <!-- the id defined above is specified. When an application asks Spring -->
+  <!-- for a applicationService it will get this proxy instead. -->
+  <bean id='autoProxyCreator' class='org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator'>
+    <property name='interceptorNames'>
+      <list><value>securityInterceptor</value></list>
+    </property>
+    <property name='beanNames'>
+      <list><value>applicationService</value></list>
+    </property>
+  </bean>
+
+  <!-- This bean specifies which roles are assigned to each user. -->
+  <bean id="userDetailsService" class="gov.nih.nci.system.security.acegi.authentication.CSMUserDetailsService">
+  	<!-- Specify the Application Context required by CSM -->
+	<property name="csmApplicationContext"><value>acegitest</value></property>
+  </bean>
+ 
+
+<!--    																				-->    
+<!-- 																					-->    
+<!--  NOTHING BELOW THIS WILL NEED TO BE MODIFIED for CSM-ACEGI Adapter usage by SDK. 	-->  
+<!-- 																					-->    
+<!-- 																					-->    
+
+  <!-- This bean specifies which roles are authorized to execute which methods. -->
+  <bean id='securityInterceptor' class='gov.nih.nci.system.security.acegi.CSMMethodSecurityInterceptor'>
+    <property name='securityHelper' ref='securityHelper'/>
+    <property name='authenticationManager' ref='authenticationManager'/>
+    <property name='accessDecisionManager' ref='accessDecisionManager'/>
+    <property name='afterInvocationManager' ref='afterInvocationManager'/>
+    <property name='objectDefinitionSource' ref='csmMethodDefinitionSource'/>
+   </bean>
+  
+  <bean id='csmMethodDefinitionSource' class='gov.nih.nci.system.security.acegi.authorization.CSMMethodDefinitionSource'>
+  	<property name='methodMapCache' ref='ehCacheBasedMethodMapCache'/>
+  </bean>
+  <bean id='ehCacheBasedMethodMapCache' class='gov.nih.nci.system.security.acegi.authorization.EhCacheBasedMethodMapCache'>
+	<property name="cache">
+        <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+          <property name="cacheManager">
+            <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+          </property>
+          <property name="cacheName" value="userCache"/>
+        </bean>
+      </property>
+  </bean>
+
+
+  <!-- This bean specifies that a user can access the protected methods -->
+  <!-- if they have any one of the roles specified in the objectDefinitionSource above. -->
+  <bean id='accessDecisionManager' class='org.acegisecurity.vote.AffirmativeBased'>
+    <property name='decisionVoters'>
+      <list><ref bean='roleVoter'/></list>
+    </property>
+  </bean>
+
+  <!-- The next three beans are boilerplate. They should be the same for nearly all applications. -->
+  <bean id='authenticationManager' class='org.acegisecurity.providers.ProviderManager'>
+    <property name='providers'>
+      <list><ref bean='authenticationProvider'/></list>
+    </property>
+  </bean>
+
+  <bean id='authenticationProvider' class='gov.nih.nci.system.security.acegi.authentication.CSMAuthenticationProvider'>
+    <property name='userDetailsService' ref='userDetailsService'/>
+  </bean>
+
+  <bean id='roleVoter' class='gov.nih.nci.system.security.acegi.authorization.CSMRoleVoter'/>
+  
+  <bean id='afterInvocationManager' class='gov.nih.nci.system.security.acegi.CSMAfterInvocationProviderManager'>
+	 <property name='providers'>
+      <list><ref bean='afterInvocationProvider'/></list>
+    </property>
+ </bean>
+
+  <bean id='afterInvocationProvider' class='gov.nih.nci.system.security.acegi.CSMAfterInvocationProvider'/>
+	 
+</beans>

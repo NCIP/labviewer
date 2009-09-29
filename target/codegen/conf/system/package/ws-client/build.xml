@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="caCORESDK" basedir="." default="run">
+
+	<description>Build script for WS Client</description>
+
+	<property file="build.properties"  />
+
+	<property name="lib.dir" value="lib"/>
+	<property name="build.dir" value="build"/>
+	<property name="src.dir" value="src"/>
+	<property name="conf.dir" value="conf"/>
+	
+	<!--***********************************************************************
+	*** CLASSPATH AND UNIX-STYLE BASEDIR PROPERTIES
+	*********************************************************************** -->
+	<path id="runtime">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+		<pathelement path="${build.dir}"/>
+	</path>
+	
+	<path id="compiletime">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- set basedir.url = basedir as unix style pathname, regardless of platform -->
+	<path id="basedir.path">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<pathconvert targetos="unix" property="basedir.unix" refid="basedir.path" />
+
+	<macrodef name="SDKecho">
+		<attribute name="message" default="..." />
+		<sequential>
+			<echo>*****************************************************************</echo>
+			<echo>***  @{message}</echo>
+			<echo>*****************************************************************</echo>
+		</sequential>
+	</macrodef>
+	
+	<!--***********************************************************************
+	*** Prepares the directory structure
+	*********************************************************************** -->
+	<target name="init" >
+		<SDKecho message="${ant.project.name}: Preparing directories"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Cleans the generated directories and files
+	*********************************************************************** -->
+	<target name="clean" description="Cleans the generated directories and files">
+		<SDKecho message="${ant.project.name}: Cleaning directories and files"/>
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<!--***********************************************************************
+	*** Compiles the classes
+	*********************************************************************** -->
+	<target name="compile" depends="init" description="Compiles the generated beans">
+		<SDKecho message="${ant.project.name}: Compiling the generated beans"/>
+		<javac srcdir="${src.dir}" destdir="${build.dir}" debug="true">
+			<include name="**/*.java"/>
+			<classpath refid="compiletime"/>
+		</javac>
+	</target>
+
+	<!--***********************************************************************
+	*** Runs the Test 
+	*********************************************************************** -->
+	<target name="run" depends="compile" description="Runs the test">
+		<SDKecho message="${ant.project.name}: Running the test"/>
+		<java classname="TestClient" fork="true">
+			<classpath refid="runtime" />
+		</java>
+	</target>
+	
+	<!--***********************************************************************
+	*** Undeploying the web service from the server
+	*********************************************************************** -->
+	<target name="undeploy"  description="Undeploys the webservice">
+		<SDKecho message="Undeploying web services from ${SERVER_URL}/services/${WEBSERVICE_NAME}"/>
+		<java classname="org.apache.axis.client.AdminClient" fork="true">
+			<classpath refid="classpath"/>
+			<arg value="-l${SERVER_URL}/services/AxisServlet"/>
+			<arg value="${conf.dir}/undeploy.wsdd"/>
+		</java>
+	</target>
+	
+	<!--***********************************************************************
+	*** Dumps the properties of the build script
+	*********************************************************************** -->
+	<target name="show-properties" description="Dumps a list of all properties currently set">
+		<echoproperties destfile="antproperties.txt"/>
+		<echo>Properties were dumped to 'antproperties.txt'</echo>
+	</target>
+	
+</project>
