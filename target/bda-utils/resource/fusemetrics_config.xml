@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config project="Project" search="reports" output="C:\dev\fusematrix/target/output" persist="C:\dev\fusematrix/target/persist" template="C:\dev\fusematrix/bda-utils/resource/dashboard.tmpl" html="C:\dev\fusematrix/target/output/dashboard.html">
+
+   <metric name="loc" analysis="javancss" />
+   <metric name="classes" analysis="javancss" />
+   <metric name="max_complexity" analysis="javancss" />
+   <metric name="loc_population" histogram="javancss" />
+   <metric name="duplication" analysis="cpd" regexp="cpd_report.xml" />
+   <metric name="duplication_population" histogram="cpd" />
+   <metric name="bugs" analysis="findbugs" />
+   <metric name="bug_population" histogram="findbugs" />
+   <metric name="coverage" analysis="cobertura" />
+   <metric name="coverage_branch" analysis="cobertura" />
+   <metric name="coverage_line" analysis="cobertura" />
+
+   <metric name="coverage_population" histogram="cobertura" />
+   <metric name="coupling_afferent_max" analysis="jdepend" />
+   <metric name="coupling_efferent_max" analysis="jdepend" />
+   <metric name="test_count" analysis="junit" />
+   <metric name="test_failures" analysis="junit" />
+   <metric name="pmd_violations" analysis="pmd" />
+   <metric name="pmd_violation_population" histogram="pmd" />
+
+
+</config>
