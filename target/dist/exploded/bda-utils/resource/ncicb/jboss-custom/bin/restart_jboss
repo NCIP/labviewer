@@ -1,0 +1,116 @@
+#!/bin/bash
+#===  FUNCTION  ================================================================
+#          NAME:  getPID ()
+#   DESCRIPTION:  
+#    PARAMETERS:  
+#       RETURNS:  
+#===============================================================================
+getPID ()
+{
+  local procid
+  if [ -f $PIDFILE ]; then
+       procid=`cat ${JBOSS_HOME}/server/${JBOSS_CONF_BASE}/bin/${JBOSS_CONF_BASE}.pid`
+   else
+       #echo "$PIDFILE not found or readable"
+       case $(uname) in
+       SunOS)
+         PS=/usr/ucb/ps
+         procid=$($PS -auwwx | grep $JBOSS_CONF_BASE | grep -v grep | grep $JBOSS_USER | awk '{print $2}')
+       ;;
+       Linux)
+         PS=pgrep
+         procid=$($PS -fu $JBOSS_USER "\-c $JBOSS_CONF_BASE")
+       ;;
+       esac
+  fi
+  eval "$1=$procid"
+}
+#===  FUNCTION  ================================================================
+#          NAME:  restartJboss
+#   DESCRIPTION:  
+#    PARAMETERS:  
+#       RETURNS:  
+#===============================================================================
+restartJboss ()
+{
+  local status="START"
+  local pathtobin="$JBOSS_HOME/server/$JBOSS_CONF_BASE/bin"
+  if [ ! -x "$pathtobin/start_jboss" ] ; then
+		echo "permission not granted to execute the startup file $DIRNAME/start_jboss"
+		exit 1
+  fi
+  if [ ! -x "$pathtobin/stop_jboss" ] ; then
+		echo "permission not granted to execute the startup file $DIRNAME/stop_jboss"
+		exit 1
+  fi
+  echo "stopping $JBOSS_USER:$JBOSS_CONF_BASE at $(date) on $(hostname)"
+  $pathtobin/stop_jboss
+  waitForJboss "stop"
+  echo "starting $JBOSS_USER:$JBOSS_CONF_BASE at $(date) on $(hostname)"
+  $pathtobin/start_jboss
+  waitForJboss "start"
+}
+
+#===  FUNCTION  ================================================================
+#          NAME:  waitForJboss
+#   DESCRIPTION:  
+#    PARAMETERS:  
+#       RETURNS:  
+#===============================================================================
+waitForJboss ()
+{
+  local maxsnooze=24
+  local snooze=5
+  local snoozecnt=0
+	local indicator=$1
+  local status=0
+	
+	while [ $status != $indicator ] ; do
+		echo "sleeping $snooze secs..."
+		sleep $snooze
+    let "snoozecnt = $snoozecnt + 1"
+		getPID proc_id
+		if [ "$proc_id" ]; then
+		  echo "Jboss running with PID $proc_id..."
+			status="start"
+		else 
+		  echo "Jboss not running"
+			status="stop"
+		fi
+ 		if [ $snoozecnt -eq $maxsnooze ]; then
+			echo "Could not $indicator Jboss"
+			exit 1
+		fi
+    
+	done
+}
+
+#-------------------------------------------------------------------------------
+#   Main
+#-------------------------------------------------------------------------------
+DIRNAME=`dirname $0`
+PROGNAME=`basename $0`
+INIT_CONF="$DIRNAME/init.conf"
+if [ -r "$INIT_CONF" ]; then
+    . "$INIT_CONF"
+else
+   echo "${PROGNAME}: Missing init.conf! exiting..."
+   exit 1
+fi
+
+JBOSS_UID=`/usr/bin/id -u ${JBOSS_USER}`
+
+if [ "$EUID" -ne "${JBOSS_UID}" ] ; then
+  echo "Please become the \"${JBOSS_USER}\" user before restarting this instance"
+  exit 1
+fi
+
+PIDFILE="$DIRNAME/$JBOSS_CONF_BASE.pid"
+getPID PID
+if [ "$PID" ]; then
+	echo "$JBOSS_CONF_BASE running as $JBOSS_USER with PID $PID"
+ 	restartJboss 
+else
+	echo "could not find pid for user $JBOSS_USER instance $JBOSS_CONF_BASE"	
+	exit 1;
+fi
