@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:att="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Attribute" 
+	xmlns:pred="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Predicates" 
+	targetNamespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Attribute" 
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://CQL.caBIG/2/gov.nih.nci.cagrid.cql.Predicates" schemaLocation="Predicates.xsd"/>
+	
+	<xsd:complexType name="CQLAttribute" abstract="true">
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	
+	<xsd:element name="BinaryCQLAttribute" type="att:BinaryCQLAttribute"/>
+	<xsd:complexType name="BinaryCQLAttribute">
+		<xsd:complexContent>
+			<xsd:extension base="att:CQLAttribute">
+				<xsd:sequence>
+					<xsd:element name="Predicate" type="pred:BinaryPredicate" minOccurs="1" maxOccurs="1"/>
+					<xsd:element ref="att:AttributeValue" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:element name="UnaryCQLAttribute" type="att:UnaryCQLAttribute"/>
+	<xsd:complexType name="UnaryCQLAttribute">
+		<xsd:complexContent>
+			<xsd:extension base="att:CQLAttribute">
+				<xsd:sequence>
+					<xsd:element name="Predicate" type="pred:UnaryPredicate" minOccurs="1" maxOccurs="1"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:element name="AttributeValue" type="att:AttributeValue"/>
+	<xsd:complexType name="AttributeValue">
+		<xsd:choice>
+			<xsd:element name="StringValue" type="xsd:string"/>
+			<xsd:element name="DateValue" type="xsd:date"/>
+			<xsd:element name="TimeValue" type="xsd:time"/>
+			<xsd:element name="LongValue" type="xsd:long"/>
+			<xsd:element name="IntegerValue" type="xsd:int"/>
+			<xsd:element name="BooleanValue" type="xsd:boolean"/>
+		</xsd:choice>
+	</xsd:complexType>
+</xsd:schema>
