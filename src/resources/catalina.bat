@@ -102,7 +102,7 @@ set _EXECJAVA=%_RUNJAVA%
 set MAINCLASS=org.apache.catalina.startup.Bootstrap
 set ACTION=start
 set SECURITY_POLICY_FILE=
-set DEBUG_OPTS=
+set DEBUG_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
 set JPDA=
 set JAVA_OPTS=-Djava.security.auth.login.config=%CATALINA_HOME%\conf\login.config
 
