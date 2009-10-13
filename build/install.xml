@@ -45,11 +45,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
 	<property file="${properties.file}" />
 	
+	
 	<!-- Generic properties -->
 	<property name="project.name" value="LabViewer"/>
 	<property name="env.name" value="local"/>
 	<property name="log.dir" location="${basedir}/logs" />
-	<property name="working.dir" location="${basedir}/working" />
+	<property name="working.dir" location="../../working" />
 	<property name="temp.dir" location="${working.dir}/temp" />
 	<property name="database.type" value="postgresql" />
 	<property name="database.system.url" value="jdbc:${database.type}://${database.server}:${database.port}/postgres" />
@@ -258,6 +259,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<echo  message="Checking if database properties exist: ${db.prop.list}"/>
 		<properties-exist properties.list="${db.prop.list}"/>
 		<echoproperties prefix="database"/>
+		<echo  message="db.dir.dest: ${db.dir.dest}"/>
+		<echo  message="db.dir.src: ${db.dir.src}"/>
 		<copy todir="${db.dir.dest}" filtering="true">
 			<fileset dir="${db.dir.src}">
 				<include name="**/*"/>
@@ -300,16 +303,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 					sql.delimitertype="row"
 					/>
 			</case>
-			<case value="mysql">
-				<database-install
-					db.install.create.file.list="${db.install.create.mysql.file.list}"
-					/>
-			</case>
-		</switch>
-		<database-upgrade
-			database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"
-			/>
-		<database-tag/>
+			</switch>
+		<database-upgrade database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"/>
+    	<database-tag/>
 	</target>
 
 	<target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="init:install,init:common">
@@ -673,10 +669,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<delete dir="${tomcat.home}/temp"/>
 		<delete dir="${tomcat.home}/work"/>
 		<!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
-		<copy file="${software.dir}\target\dist\exploded\ctodslabviewer\ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
-		<copy file="${software.dir}\target\dist\exploded\ctom-wsrf\ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
-		<copy file="${software.dir}\ctomlabviewer\src\resources\login.config" todir="${tomcat.home}/conf" overwrite="true" />
-		<copy file="${software.dir}\ctomlabviewer\src\resources\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" />
+		<copy file="${software.dir}\exploded\ctodslabviewer\ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${software.dir}\exploded\ctom-wsrf\ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${software.dir}\exploded\ctodslabviewer\login.config" todir="${tomcat.home}/conf" overwrite="true" />
+		<copy file="${software.dir}\exploded\ctodslabviewer\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" />
 		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
 		<copy file="${bda-utils.dir}/clm-3.2.jar" todir="${tomcat.home}/server/${tomcat.server.name}/lib" overwrite="true" />
 		-->
