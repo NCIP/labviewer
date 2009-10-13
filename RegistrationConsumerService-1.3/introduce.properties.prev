@@ -1,0 +1,11 @@
+#Introduce Properties
+#Thu Sep 24 16:01:42 EDT 2009
+introduce.skeleton.services.list=RegistrationConsumer
+introduce.skeleton.extensions=
+introduce.skeleton.timestamp=1216415673959
+introduce.skeleton.service.name=RegistrationConsumer
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=/Users/kruttikagarwal/Documents/workspace-c3pr/ctms-commons/trunk/grid/ccts-grid-services/RegistrationConsumerGridService-1.3
+introduce.skeleton.namespace.domain=http\://grid.ccts.nci.nih.gov/RegistrationConsumer
+introduce.soap.binding.excludes=\ 
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security
