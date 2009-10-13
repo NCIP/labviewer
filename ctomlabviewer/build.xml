@@ -133,7 +133,7 @@
 		</copy>
 	</target>
 	
-	<target name="configure" depends="prepareBuild, configureCSMAuthentication">
+	<target name="configure" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
 		<copy file="${ctomlabviewer.resourceDir}/labviewer.hibernate.cfg.xml.template" 
 			  toFile="${ctomlabviewer.build.resourceDir.0}/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
@@ -191,7 +191,8 @@
 		</copy>
 	</target>
 
-	<target name="configureCSMAuthentication">
+	<target name="configureCSMAuthentication" unless="websso.enabled">
+		<echo message="configureCSMAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.csm.template" 
 			  toFile="${ctomlabviewer.build.resourceDir.0}/web.xml" overwrite="true" />
 		<copy file="${ctomlabviewer.resourceDir}/login.config.template" 
@@ -208,6 +209,7 @@
 	</target>
 
 	<target name="configureWebSSOAuthentication" if="websso.enabled">
+		<echo message="configureWebSSOAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
 			  toFile="${ctomlabviewer.build.resourceDir.0}/web.xml" overwrite="true" filtering="true">
 		<filterset begintoken="@" endtoken="@">
@@ -250,7 +252,12 @@
 	            </classpath>
 	        </javac>
 	        <copy todir="${ctomlabviewer.build.outputDir}">
-	             <fileset dir="${ctomlabviewer.build.resourceDir.0}"/>
+	             <fileset dir="${ctomlabviewer.build.resourceDir.0}">
+	             <patternset> 	
+	        	   <exclude name="login.config"/>
+	               <exclude name="*.bat"/>
+	             </patternset>		
+	        	</fileset>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/HealthCareSitePart.hbm.xml"/>
@@ -455,6 +462,13 @@
 		           <!-- <webinf dir="${pa.dir}/ctomlabviewer/src/webapp/WEB-INF" excludes="web.xml"/>-->
 		            <fileset dir="${software.dir}/ctomlabviewer/src/web"/>
 		        </war>
+	    	
+	    	<copy todir="${software.dir}/target/dist/exploded/ctodslabviewer">
+	    	   <fileset file="${ctomlabviewer.build.resourceDir.0}/login.config"/>
+	    	</copy>
+	    	<copy todir="${software.dir}/target/dist/exploded/ctodslabviewer">
+	    	  <fileset file="${ctomlabviewer.build.resourceDir.0}/catalina.bat"/>
+	    	</copy>
 		    </target>
 
 	    <target name="package-notest-noivy" depends="compile,war"/>

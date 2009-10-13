@@ -1,4 +1,4 @@
-<ns1:Deployment deployDateTime="1254160680165" deploymentPrefix="cagrid" serviceDeploymentDirName="cagrid_StudyConsumer" serviceName="StudyConsumer" xsi:type="ns1:Deployment" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Deployment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ns1:Deployment deployDateTime="1255278530234" deploymentPrefix="cagrid" serviceDeploymentDirName="cagrid_StudyConsumer" serviceName="StudyConsumer" xsi:type="ns1:Deployment" xmlns:ns1="gme://gov.nih.nci.cagrid.introduce/1/Deployment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <Jars xsi:type="ns1:Jars">
   <Jar location="." name=".svn" xsi:type="ns1:Jar"/>
   <Jar location="." name="antlr-2.7.6.jar" xsi:type="ns1:Jar"/>
@@ -28,6 +28,7 @@
   <Jar location="." name="castor-0.9.9.jar" xsi:type="ns1:Jar"/>
   <Jar location="." name="cglib-2.1.3.jar" xsi:type="ns1:Jar"/>
   <Jar location="." name="clm.jar" xsi:type="ns1:Jar"/>
+  <Jar location="." name="Copy of ctomdatapersistence.jar" xsi:type="ns1:Jar"/>
   <Jar location="." name="csmapi.jar" xsi:type="ns1:Jar"/>
   <Jar location="." name="ctomdatapersistence.jar" xsi:type="ns1:Jar"/>
   <Jar location="." name="ctomlabapi-beans.jar" xsi:type="ns1:Jar"/>

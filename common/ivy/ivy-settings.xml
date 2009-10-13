@@ -21,6 +21,11 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem>
+			<filesystem name="local-project-repo" local="true">
+				<!-- Local project level repo -->
+				<artifact pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<ivy pattern="${ivy.project.repo}/[organisation]/[module]/[revision]/ivy-[revision].xml" />
+			</filesystem>
 			<filesystem name="local-system-repo" local="true">
 				<!-- Local system level repo, to share chagnes ammong multiple projects-->
 				<artifact pattern="${ivy.system.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -41,6 +46,12 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
 			</url>  
+			<url name="ncicb-ivy-repo">
+				<!-- duplicate entry for Enterprise repository to not break existing caches -->
+				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<ivy pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
+			</url>  
+			
 			<!-- this is where you can publish to, either your own code or for testing new thirdparty files -->
 		</chain>
 	</resolvers>
