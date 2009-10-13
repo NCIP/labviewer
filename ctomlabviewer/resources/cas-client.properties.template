@@ -1,0 +1,6 @@
+cas.server.gateway=false
+cas.server.renew=false
+cas.server.url=https://@cas_server@/cas/
+cas.server.proxyCallbackUrl=https://@cas_server@/manager/proxy/Receptor
+cas.client.serverName=@client_server@
+cas.client.proxyCallbackUrl=https://@client_server@/myClientApp/casProxyReceptor
