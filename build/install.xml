@@ -627,9 +627,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			grid.external.secure.host="${grid.external.secure.host}"
 			grid.external.secure.port="${grid.external.secure.port}"
 			/>
-		-->
+-->
 		<tomcat-configure-grid
 			/>
+				
 	</target>
 
 	<target name="install:post" depends="
@@ -670,7 +671,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<delete dir="${tomcat.home}/work"/>
 		<!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
 		<copy file="${software.dir}\exploded\ctodslabviewer\ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
-		<copy file="${software.dir}\exploded\ctom-wsrf\ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<!--<copy file="${software.dir}\exploded\ctom-wsrf\ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />-->
 		<copy file="${software.dir}\exploded\ctodslabviewer\login.config" todir="${tomcat.home}/conf" overwrite="true" />
 		<copy file="${software.dir}\exploded\ctodslabviewer\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" />
 		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
