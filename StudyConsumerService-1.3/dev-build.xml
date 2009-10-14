@@ -96,7 +96,11 @@
 	<!-- Pre Compile Build Target                                       -->
 	<!-- ============================================================== -->
 	<target name="preCompile">
-
+		<copy todir="${lib.dir}">
+					<fileset dir="${artifacts.dir}">
+						<include name="*.jar"/>
+					</fileset>
+				</copy>
 	</target>
 
 	<!-- ============================================================== -->
