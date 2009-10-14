@@ -2,7 +2,7 @@
  <ns1:serviceDescription>
   <ns2:Service description="" name="LabLoader" version="1.1" xmlns:ns2="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service">
    <ns2:pointOfContactCollection>
-    <ns3:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role="" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
+    <ns3:PointOfContact affiliation="caBig" email="jbrush@scenpro.com" firstName="Jenny" lastName="Brush" phoneNumber="9724375001" role="Manager" xmlns:ns3="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common"/>
    </ns2:pointOfContactCollection>
    <ns2:serviceContextCollection>
     <ns2:ServiceContext description="" name="LabLoader">
@@ -42,10 +42,10 @@
   </ns2:Service>
  </ns1:serviceDescription>
  <ns1:hostingResearchCenter>
-  <ns8:ResearchCenter displayName="" shortName="" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
-   <ns8:Address country="" locality="" postalCode="" stateProvince="" street1="" street2=""/>
+  <ns8:ResearchCenter displayName="sdsad" shortName="wewe" xmlns:ns8="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common">
+   <ns8:Address country="xxx" locality="xxx" postalCode="532321" stateProvince="TX" street1="sdsdsdasd" street2=""/>
    <ns8:pointOfContactCollection>
-    <ns8:PointOfContact affiliation="" email="" firstName="" lastName="" phoneNumber="" role=""/>
+    <ns8:PointOfContact affiliation="sdsd" email="as@asd.com" firstName="sdsd" lastName="sdd" phoneNumber="232323231" role="xdsdsd"/>
    </ns8:pointOfContactCollection>
   </ns8:ResearchCenter>
  </ns1:hostingResearchCenter>
