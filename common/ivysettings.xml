@@ -14,18 +14,11 @@
 				<ivy pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/ivy.xml" />
 				<artifact pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
-			<url name="ncicb-ivy-repo" m2compatible="false">
-				<ivy pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/ivy.xml" />
-				<artifact pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-			</url>
 			<url name="cagrid.ivy.repo" m2compatible="false">
 				<ivy pattern="${cagrid.ivy.repo}/[organisation]/[module]/ivy-[revision].xml" />
 				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
-			<url name="cagrid.ivy.repo" m2compatible="false">
-				<ivy pattern="${cagrid.ivy.repo}/[organisation]/[module]/ivy-[revision].xml" />
-				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact].[ext]" />
-			</url>
+			
 		</chain>
 	</resolvers>
 </ivysettings>
