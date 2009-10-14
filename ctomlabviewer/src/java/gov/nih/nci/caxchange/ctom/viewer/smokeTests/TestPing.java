@@ -140,14 +140,16 @@ public class TestPing
 						+ serviceUrl);
 		try
 		{
-			SmokeTestServiceClient sclient =
-					new SmokeTestServiceClient(serviceUrl);
+			SmokeTestServiceClient sclient = null;
 			if (gc != null)
 			{
-				sclient.setProxy(gc);
+				sclient =
+					new SmokeTestServiceClient(serviceUrl,gc);//sclient.setProxy(gc);
 			}
-			sclient.ping();
-			status = "Ping returned with no exceptions";
+			if (sclient != null) {
+			 sclient.ping();
+			 status = "Ping returned with no exceptions";
+			}
 		}
 		catch (Exception e)
 		{
