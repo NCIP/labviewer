@@ -4,14 +4,16 @@ import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
-import gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime;
 import gov.nih.nci.cagrid.labviewer.client.LabLoaderClient;
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.io.FileInputStream;
 
 import org.apache.log4j.Logger;
+import org.cagrid.gaards.dorian.client.GridUserClient;
+import org.cagrid.gaards.dorian.federation.CertificateLifetime;
+import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.globus.gsi.GlobusCredential;
-import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 public class LabLoaderTest
 {
@@ -116,26 +118,20 @@ public class LabLoaderTest
 
 			// Authenticate to the IdP (DorianIdP) using credential
 			AuthenticationClient authClient =
-					new AuthenticationClient(
-							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
+					new AuthenticationClient("https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
 							cred);
 			SAMLAssertion saml = authClient.authenticate();
 
 			// Requested Grid Credential lifetime (12 hours)
 
-			ProxyLifetime lifetime = new ProxyLifetime();
-			lifetime.setHours(12);
+	        CertificateLifetime lifetime = new CertificateLifetime();
+	        lifetime.setHours(12);
 
-			// Delegation Path Length
+	        // Request PKI/Grid Credential
+	        String dorianURL="https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian";
+	        GridUserClient dorian = new GridUserClient(dorianURL);
+	        proxy = dorian.requestUserCertificate(saml, lifetime);
 
-			int delegationLifetime = 0;
-
-			// Request Grid Credential
-
-			IFSUserClient dorian =
-					new IFSUserClient(
-							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian");
-			proxy = dorian.createProxy(saml, lifetime, delegationLifetime);
 
 		}
 		catch (Exception e)
