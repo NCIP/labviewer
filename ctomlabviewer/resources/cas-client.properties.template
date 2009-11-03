@@ -1,6 +1,16 @@
+
+###########  THEESE WERE CHANGED for 1.3 BY RAM on 10/21/2009
+#cas.server.gateway=false
+#cas.server.renew=false
+#cas.server.url=https://@cas_server@/cas/
+#cas.server.proxyCallbackUrl=https://@cas_server@/manager/proxy/Receptor
+#cas.client.serverName=@client_server@
+#cas.client.proxyCallbackUrl=https://@client_server@/myClientApp/casProxyReceptor
+
+###########  THEESE WERE ADDED for 1.3 BY RAM on 10/21/2009
 cas.server.gateway=false
 cas.server.renew=false
-cas.server.url=https://@cas_server@/cas/
-cas.server.proxyCallbackUrl=https://@cas_server@/manager/proxy/Receptor
-cas.client.serverName=@client_server@
-cas.client.proxyCallbackUrl=https://@client_server@/myClientApp/casProxyReceptor
+logout.landing.url=www.google.com
+
+cas.server.url=https://@WEBSSO.SERVER@:@WEBSSO.SERVER.HTTPS.PORT@/webssoserver/
+cas.client.service=https://@WEBSSO.CLIENT.SERVER@:@WEBSSO.CLIENT.HTTP.PORT@/ctomlabviewer
