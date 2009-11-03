@@ -11,8 +11,9 @@
 	-->
 
 	<target name="build_zip">
-		<mkdir dir="${dest.dir}" />
-		<zip destfile="${dest.dir}/${module.name}.zip">
+		<mkdir dir="${zip.dest.dir}" />
+        <echo message="from build-zip: ${zip.dest.dir}"/>
+        <zip destfile="${zip.dest.dir}/${module.name}.zip">
 			<zipfileset dir="${artifacts.dir}" prefix="artifacts" />
 			<zipfileset dir="${cTODDeployment.dir}" prefix="cTODSDeploymentController" />
 			<zipfileset dir="${cTomData.dir}" prefix="CTOMDataPersistence">
@@ -48,29 +49,52 @@
 
 	<!-- Unzips the build download file -->
 	<target name="unZip" description="Unzips the build download">
-		<unzip src="${dest.dir}/${module.name}.zip" dest="${unZip.dir}" />
+		<unzip src="${zip.dest.dir}/${module.name}.zip" dest="${unZip.dir}" />
 	</target>
 
 
 	<!-- Builds the cTOM-wsrf war file -->
 	<target name="pre-stage" description="Builds the cTOM-wsrf war file">
 
-		<echo>Pre stage  Registration Service </echo>
-		<ant antfile="${unZip.dir}/RegistrationConsumerService/build-ctms.xml" dir="${unZip.dir}/RegistrationConsumerService" target="deploySkeletonService" inheritall="true">
+		<echo>Pre stage  Registration Service: ${unZip.dir} </echo>
+        <echo>Dest Dir is: ${dest.dir} </echo>
+
+<!-- ram ON 10/21/2009 CHANGED NOT TO USE ZIP/UNZIP TARGETS -->
+        <!--<ant antfile="${unZip.dir}/RegistrationConsumerService/build-ctms.xml" dir="${unZip.dir}/RegistrationConsumerService" target="deploySkeletonService" inheritall="true">
+
+		</ant>-->
+        <ant antfile="${regConsumerService.dir}/build-ctms.xml"  dir="${regConsumerService.dir}" target="deploySkeletonService" inheritall="true">
 
 		</ant>
-		<echo>Pre stage  StudyConsumer Service </echo>
+
+
+        <echo>Pre stage  StudyConsumer Service </echo>
+<!--
 		<ant antfile="${unZip.dir}/StudyConsumerService/build-ctms.xml" dir="${unZip.dir}/StudyConsumerService" target="deploySkeletonService" inheritall="true">
 
 		</ant>
-	<!--	<echo>Pre stage  StudyLookup Service </echo>
+-->
+        <ant antfile="${studyConsumerService.dir}/build-ctms.xml"  dir="${studyConsumerService.dir}" target="deploySkeletonService" inheritall="true">
+
+        </ant>
+
+
+        <!--	<echo>Pre stage  StudyLookup Service </echo>
 		<ant antfile="${unZip.dir}/StudyLookupService/build-ctms.xml" dir="${unZip.dir}/StudyLookupService" target="deploySkeletonService" inheritall="true">
 
 		</ant> -->
 		<echo>Pre stage  Lab Loader Service </echo>
+<!--
 		<ant antfile="${unZip.dir}/LabLoader/build-ctms.xml" dir="${unZip.dir}/LabLoader" target="deploySkeletonService" inheritall="true">
 
 		</ant>
+-->
+
+        <ant antfile="${labLoader.dir}/build-ctms.xml" dir="${labLoader.dir}" target="deploySkeletonService" inheritall="true">
+
+        </ant>
+
+
 	</target>
 
 	<!-- Builds the staging directory -->
@@ -79,20 +103,44 @@
 		<echo>Building  stage temp directory</echo>
 		<mkdir dir="${stage.dir}" />
 		<unzip dest="${stage.dir}" overwrite="true">
+
+
+            <!--- RAM changed unzip.dir to ${regConsumerService.dir} and other Study and LabLOader also -->
+            <!--
 			<fileset dir="${unZip.dir}/RegistrationConsumerService/build/">
 				<include name="*.zip" />
 			</fileset>
 			<fileset dir="${unZip.dir}/StudyConsumerService/build/">
 				<include name="*.zip" />
 			</fileset>
-		<!--	<fileset dir="${unZip.dir}/StudyLookupService/build/">
+			-->
+            <fileset dir="${regConsumerService.dir}/build/">
+                <include name="*.zip" />
+            </fileset>
+            <fileset dir="${studyConsumerService.dir}/build/">
+                <include name="*.zip" />
+            </fileset>
+
+
+
+        <!--	<fileset dir="${unZip.dir}/StudyLookupService/build/">
 				<include name="*.zip" />
 			</fileset> -->
-			<fileset dir="${unZip.dir}/LabLoader/build/">
+
+            <!--- RAM changed unzip.dir to  labLoader.dir -->
+<!--
+            <fileset dir="${unZip.dir}/LabLoader/build/">
 				<include name="*.zip" />
 			</fileset>
-		</unzip>
-		<move todir="${webapps.dir}">
+-->
+
+            <fileset dir="${labLoader.dir}/build/">
+				<include name="*.zip" />
+			</fileset>
+        </unzip>
+
+
+        <move todir="${webapps.dir}">
 			<fileset dir="${stage.dir}/webapps/wsrf"/>
 		</move>
 		<mkdir dir="${webapps.dir}/share/schema/core" />
@@ -140,7 +188,8 @@
 		<copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_common">
 			<fileset dir="wsrf-folder/globus_wsrf_common" />
 		</copy>
-		<copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core">
+        <!-- TODO:  RAM on 10/27/2009 : fix certificate paths in global_security_descriptor.xml file before you copy from globus_wsrf_core  -->
+        <copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core">
 			<fileset dir="wsrf-folder/globus_wsrf_core" />
 		</copy>
 		<copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core_registry">
