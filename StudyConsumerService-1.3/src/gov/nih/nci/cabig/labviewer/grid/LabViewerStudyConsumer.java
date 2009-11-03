@@ -185,7 +185,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			// and using this ii perform a COPPA service call to retrieve the Health care site details
 			Long ctepIdentifier=1L;
 			//retrieveOrgIi(ctepIdentifier);
-			
+
 			if (study.getStudyOrganization(0).getHealthcareSite() != null)
 			{
 				logger.info("payload has HealthcareSite information");
@@ -287,7 +287,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.ccts.grid.common.StudyConsumerI#rollback(gov.nih.nci.ccts.grid.Study)
 	 */
 	public void rollback(Study study) throws RemoteException,
