@@ -1,77 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans>
-
-
-<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-      <property name="brokerURL"  value="tcp://cbiovqa5010.nci.nih.gov:61618" />  
-		<!--     <property name="brokerURL"  value="tcp://cbiovdev5032.nci.nih.gov:61618" />   -->
-</bean>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 
-
-<bean id="sendQueueDestination"     class="org.apache.activemq.command.ActiveMQQueue">
-      <constructor-arg>
-            <value>lab-viewer-message.inputQueue</value>
-      </constructor-arg>                   
-</bean>
- 
-
-
-<bean id="MessageBroadcaster" class="edu.duke.cabig.c3pr.esb.impl.MessageBroadcastServiceImpl">
-	<property name="connectionFactory">
-        <ref bean="connectionFactory"/>
-    </property>
-	<property name="sendQueue">
-        <ref bean="sendQueueDestination"/>
-    </property>
-</bean>
-
-										   
-<bean id="AdverseEventJMSService"	class="gov.nih.nci.caxchange.ctom.viewer.util.AdverseEventJMSService">
-	<property name="esbBroadcastService">
-        <ref bean="MessageBroadcaster"/>
-    </property>
-</bean>
-
-
-
-   <bean id="gridAuthenticationClient" class="gov.nih.nci.cabig.ctms.web.sso.GridBasicAuthenticationClientImpl">
-    	<property name="idpUrl" value="https://cagrid-auth.nci.nih.gov:8443/wsrf/services/cagrid/AuthenticationService"/>
-		<property name="ifsUrl" value="https://cagrid-dorian.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-		<property name="proxyLifetimeHours" value="12"/>
-		<property name="proxyLifetimeMinutes" value="0"/>
-		<property name="proxyLifetimeSeconds" value="0"/>
-		<property name="delegationPathLength" value="0"/>
-    </bean>
-    
-    <bean id="gridProxyValidator" class="gov.nih.nci.cabig.ctms.web.sso.GridProxyValidatorImpl"/>
-    
-    <bean id="gridProxyRetrievalStrategy" class="gov.nih.nci.cabig.ctms.web.sso.DefaultGridProxyRetrievalStrategy">
-    	<property name="authenticationClient" ref="gridAuthenticationClient"/>
-    	<property name="validator" ref="gridProxyValidator"/>
-    	<property name="usernameParam" value="username"/>
-    	<property name="passwordParam" value="password"/>
-    	<property name="gridProxyParam" value="gridProxy"/>
-    </bean>
-
-
-    <bean id="gridProxyTransformerImpl" class="gov.nih.nci.ctms.interoperability.GridProxyTransformerImpl">
-    	<property name="idpUrl" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-    	<property name="ifsUrl" value="https://cagrid-dorian-qa.nci.nih.gov:8443/wsrf/services/cagrid/Dorian"/>
-    </bean>
-
-
-    <bean id="eventsManager" class="gov.nih.nci.caxchange.ctom.viewer.applicationservice.EventsManager">
-    	<property name="loadLabActiviteSystemURL" value="http://cbiovqa5010.nci.nih.gov:8192/ctmsirouting/"/>
-    	<!--  <property name="loadLabActiviteSystemURL" value="http://cbiovdev5032.nci.nih.gov:8192/ctmsirouting/"/>  -->
-    </bean>
 
     <bean id="labActivityResultComparator" class="gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResultComparator">
     	<property name="order" value="DESCENDING"/>
     </bean>
+    
+    <!-- BEGIN: ADDED by RAM on 10/21/2009 as per new caGRID 1.3 security document for WebSSO -->
+    <bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="/WEB-INF/classes/cas-client.properties" />
+	</bean>
 
+	<bean name="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter"
+		p:casServerLoginUrl="${cas.server.url}" p:renew="${cas.server.renew}" p:gateway="${cas.server.gateway}" p:service="${cas.client.service}" />
+
+	<bean name="casValidationFilter" class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
+		p:service="${cas.client.service}" p:redirectAfterValidation="true">
+		<property name="ticketValidator">
+			<bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator">
+				<constructor-arg index="0" value="${cas.server.url}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="sun.net.www.protocol.https.HttpsURLConnectionImpl" />
+		<property name="targetMethod" value="setDefaultHostnameVerifier" />
+		<property name="arguments">
+			<list>
+				<bean class="org.cagrid.websso.common.WebSSOHostNameVerifier" />
+			</list>
+		</property>
+	</bean>    
+
+
+
+    <!-- END RAM 10/21/2009 -->
 
 </beans>
 
