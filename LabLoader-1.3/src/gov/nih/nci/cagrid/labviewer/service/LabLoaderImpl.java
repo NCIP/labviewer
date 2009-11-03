@@ -35,7 +35,9 @@ public class LabLoaderImpl extends LabLoaderImplBase
 	{
 		logger.info("LabLoader loadLab method called.");
 		String username = LabLoaderAuthorization.getCallerIdentity();
-		if (!authorized(username))
+
+          /* Ram commented this below after talking to Anu on 10/30/2009
+        if (!authorized(username))
 		{
 			logger.error("User " + username
 					+ " not authorized for this operation");
@@ -47,7 +49,8 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		}
 		else
 		{
-			// Now unmarshall the HL7v3 message
+		*/
+           // Now unmarshall the HL7v3 message
 			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
 			Object obj = null;
 			Connection con = null;
@@ -98,7 +101,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 					logger.error("Error closing connection",ex);
 				}
 			}// end of finally
-		}// end of else
+		/*  Ram's comment on 10/30/2009 END }}// end of else */
 	}
 
 	/**
