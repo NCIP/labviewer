@@ -44,7 +44,7 @@ function MM_swapImage() { //v3.0
    // -->
 </script>
 
-<html:form styleId="menuForm" action="<%="/MenuSelection"%>">
+<html:form styleId="menuForm" action="<%=\"/MenuSelection\"%>">
 	<%
 	String tableId;
 	try
