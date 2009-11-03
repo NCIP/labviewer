@@ -5,7 +5,7 @@
 <!-- ====================================================================== -->
 
 <project name="ctomlabviewer" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-	
+
 	<property name="software.dir" value=".."/>
 	<property name="bda-utils" value="${software.dir}/target/bda-utils" />
 	    
@@ -204,8 +204,9 @@
 				<filter token="database_passwd" value="${database.password}" />
 			</filterset>
 		</copy>
-		<copy file="${ctomlabviewer.resourceDir}/catalina.bat.template" 
-					  toFile="${ctomlabviewer.build.resourceDir.0}/catalina.bat" overwrite="true" />
+        <!-- RAM commented on 10/31/2009 as we are not supposed to do anything with catalna.bat -->
+        <!--<copy file="${ctomlabviewer.resourceDir}/catalina.bat.template"
+					  toFile="${ctomlabviewer.build.resourceDir.0}/catalina.bat" overwrite="true" />-->
 	</target>
 
 	<target name="configureWebSSOAuthentication" if="websso.enabled">
@@ -221,9 +222,11 @@
 		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
 			  toFile="${ctomlabviewer.build.resourceDir.0}/cas-client.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
-				<filter token="cas_server" value="${websso.cas.server}" />
-				<filter token="client_server" value="${websso.client.server}" />
-			</filterset>
+				<filter token="WEBSSO.SERVER" value="${websso.cas.server}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${websso.client.server}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.cas.server.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
 		</copy>
 		<!-- <copy file="${ctomlabviewer.resourceDir}/client-config.wsdd" 
 			  toFile="${ctomlabviewer.build.resourceDir.0}/client-config.wsdd" overwrite="true" /> -->
@@ -256,7 +259,8 @@
 	             <patternset> 	
 	        	   <exclude name="login.config"/>
 	               <exclude name="*.bat"/>
-	             </patternset>		
+                   <exclude name="web.xml"/>  
+                 </patternset>
 	        	</fileset>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
@@ -434,7 +438,7 @@
 	            description="Run all tests"/>
 	
 	    <!-- ====================================================================== -->
-	    <!-- Package target                                                         -->
+	    <!-- Packagee target                                                         -->
 	    <!-- ====================================================================== -->
 
 	    <target name="war">
@@ -453,22 +457,51 @@
 	    		<copy todir="${software.dir}/ctomlabviewer/src/web/WEB-INF">
 	    		    <fileset file="${software.dir}/ctomlabviewer/target/classes/tiles.xml"/>
 	    		</copy>
-	    	
-		        <war destfile="${software.dir}/target/dist/exploded/ctodslabviewer/${ctomlabviewer.war}" 
+
+                <delete>
+                    <fileset dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
+                        <include name="axis-1.4.2_10.jar"/>
+                       <!-- <include name="cas-server-3.0.5.jar"/>-->
+                        <include name="cog-jglobus*.jar"/>
+                         <include name="cryptix*.jar"/>
+                         <include name="pull-parser-2.jar"/>
+                         <include name="servlet*.jar"/>
+                         <include name="spring-1.2.8.jar"/>
+                         <include name="spring-beans-1.2.8.jar"/>
+                         <include name="spring-core-1.2.8.jar"/>
+                         <include name="caGrid-CQL-cql.1.0-1.3.jar"/>
+                        <include name="cas-client-uportal-3.0.jar"/>
+                                 <include name="cas-server-core-3.2.2.jar"/>
+                                   <include name="commons-collections-3.1.jar"/>
+                                   <include name="commons-dbcp-1.2.1.jar"/>
+                                <include name="commons-discovery-0.2.jar"/>
+                                <include name="commons-logging-1.0.4.jar"/>
+                                <include name="commons-pool-1.2.jar"/>
+                        <include name="caCORE_SDK_321-3.2.1.zip"/>
+                        <include name="cog-jglobus-1.2.jar"/>
+                        <include name="cas-client-core-3.0.jar"/>
+                        <include name="cas-server-3.0.5.jar"/>
+                    </fileset>
+                </delete>
+                <war destfile="${software.dir}/target/dist/exploded/ctodslabviewer/${ctomlabviewer.war}"
 		             compress="false" 
 		             webxml="${software.dir}/ctomlabviewer/src/resources/web.xml">            
-		            <lib dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib"/>
-		            <classes dir="${ctomlabviewer.build.outputDir}"/>
+		            <lib dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
+                    </lib>
+                    <classes dir="${ctomlabviewer.build.outputDir}"/>
 		           <!-- <webinf dir="${pa.dir}/ctomlabviewer/src/webapp/WEB-INF" excludes="web.xml"/>-->
 		            <fileset dir="${software.dir}/ctomlabviewer/src/web"/>
 		        </war>
-	    	
+
+            <!-- RAM commented on 10/31/2009 as we are not supposed to do anything with catalna.bat -->
+<!--
 	    	<copy todir="${software.dir}/target/dist/exploded/ctodslabviewer">
 	    	   <fileset file="${ctomlabviewer.build.resourceDir.0}/login.config"/>
 	    	</copy>
 	    	<copy todir="${software.dir}/target/dist/exploded/ctodslabviewer">
 	    	  <fileset file="${ctomlabviewer.build.resourceDir.0}/catalina.bat"/>
 	    	</copy>
+-->
 		    </target>
 
 	    <target name="package-notest-noivy" depends="compile,war"/>
