@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
-        gridId="000ffb14-adcf-4c1a-a47b-9144bae0a45d7">
+        gridId="000ffb14-adcf-4c1a-a47b-9144bae0a45d7-anu">
 	<studySite gridId="2.16.840.1.113883.19.2">
 		<healthcareSite gridId="WF GRID ID1">
 			<nciInstituteCode>1</nciInstituteCode>
@@ -9,14 +9,15 @@
 		<roleCode>Affiliate Site</roleCode>
 		<startDate>2007-10-01T00:00:00.000-04:00</startDate>
 	</studySite>
-	<studyRef gridId="db762d64-e213-4bf9-9f9b-bccd36be56e737">
-		<shortTitleText>Combination Chemotherapy NHL</shortTitleText>
+	<!--<studyRef gridId="cb762d64-e213-4bf9-9f9b-bccd36be56e737-RB">-->
+		<studyRef gridId="555-Anu">
+        <shortTitleText>RB'Test: Combination Chemotherapy NHL</shortTitleText>
 		<longTitleText>RANDOMIZED PHASE I/II STUDY OF VACCINIA-CEA(6D)-TRICOM AND FOWLPOX-(6D)</longTitleText>
 		<identifier
 			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			type="04_C_0137" xsi:type="OrganizationAssignedIdentifierType">
+			type="04_C_NEW" xsi:type="OrganizationAssignedIdentifierType">
 			<type>Coordinating Center Identifier</type>
-			<value>04_C_0137</value>
+			<value>04_C_NEW</value>
 			<primaryIndicator>true</primaryIndicator>
 			<healthcareSite gridId="WF GRID ID1">
 				<nciInstituteCode>1</nciInstituteCode>
@@ -35,10 +36,10 @@
 	</studyRef>
 	<participant
 		xmlns:ns1="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
-		ns1:gridId="3337d998-747b-4bb7-b0df-d8d475e8479a9">
-		<ns1:gridId>3337d998-747b-4bb7-b0df-d8d475e8479a9</ns1:gridId>
-		<ns1:firstName>Peggy</ns1:firstName>
-		<ns1:lastName>Castillo</ns1:lastName>
+		ns1:gridId="3337d998-747b-4bb7-b0df-d8d475e8479a9-anutest">
+		<ns1:gridId>3337d998-NEW_anutest</ns1:gridId>
+		<ns1:firstName>IVY</ns1:firstName>
+		<ns1:lastName>Maven</ns1:lastName>
 		<ns1:address />
 		<ns1:administrativeGenderCode>Male</ns1:administrativeGenderCode>
 		<ns1:birthDate>1971-01-09</ns1:birthDate>
@@ -47,7 +48,7 @@
 			type="NCI-1009"
 			xsi:type="ns1:OrganizationAssignedIdentifierType">
 			<ns1:type>MRN</ns1:type>
-			<ns1:value>NCI-1009</ns1:value>
+			<ns1:value>NCI-anutest</ns1:value>
 			<ns1:primaryIndicator>true</ns1:primaryIndicator>
 			<ns1:healthcareSite gridId="WF GRID ID">
 				<ns1:nciInstituteCode>Wake</ns1:nciInstituteCode>
