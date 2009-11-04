@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<securityConfig xmlns="http://www.globus.org">
-    <credential>
-        <key-file value="C:\Documents and Settings\asharma\.cagrid\certificates\Pretonite-key.pem"/>
-        <cert-file value="C:\Documents and Settings\asharma\.cagrid\certificates\Pretonite-cert.pem"/>
-    </credential>
-    
-</securityConfig>
