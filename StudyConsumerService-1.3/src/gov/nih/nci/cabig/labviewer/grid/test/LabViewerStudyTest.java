@@ -8,8 +8,7 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.ccts.grid.studyconsumer.client.StudyConsumerClient;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
@@ -25,12 +24,16 @@ import org.xml.sax.SAXException;
  * <P>
  * 
  * @author Michael Holck
- */
-public class LabViewerStudyTest
+ */                                                       
+public class LabViewerStudyTest                  
 {
 	String serviceUrl =
-			"https://localhost:8443/ctom-wsrf/services/cagrid/StudyConsumer";
-	// String serviceUrl
+			"https://localhost:21443/ctom-wsrf/services/cagrid/StudyConsumer";
+            //"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/StudyConsumer";
+    
+                            
+
+                                                                  
 	// ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
 	// String serviceUrl=
 	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyConsumer";
@@ -38,9 +41,12 @@ public class LabViewerStudyTest
 	// "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer";
 	// String serviceUrl=
 	// "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/StudyConsumer";
-	String sampleFile = "/SampleStudyMessage.xml";
-	// String sampleFile = "/StudyMessage.xml";
-	String proxyFile = "D:/proxy";
+	//String sampleFile = "/SampleStudyMessage.xml";
+
+    String sampleFile = "C:/Development/sampleMessages/ccts_2.8_sample_study.xml";
+
+    //String sampleFile = "/StudyMessage.xml";
+	String proxyFile = "C:/Development/proxy";
 	private Logger log = Logger.getLogger(getClass());
 
 	/**
@@ -107,16 +113,22 @@ public class LabViewerStudyTest
 			Credential cred = new Credential();
 			BasicAuthenticationCredential bac =
 					new BasicAuthenticationCredential();
-			bac.setUserId("ccts@nih.gov");
-			bac.setPassword("!Ccts@nih.gov1");
+			bac.setUserId("dev1@nci");
+			bac.setPassword("D3v1@NC1.gov");
 			cred.setBasicAuthenticationCredential(bac);
 
 			// Authenticate to the IdP (DorianIdP) using credential
-			AuthenticationClient authClient =
+
+            /* RAM: on 10/26/2009 changed to go to current server */
+            AuthenticationClient authClient =
 					new AuthenticationClient(
-							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
-							cred);
-			SAMLAssertion saml = authClient.authenticate();
+							//"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
+							"https://ncias-c278-v.nci.nih.gov:28443/webssoserver",
+                            cred);
+
+
+
+            SAMLAssertion saml = authClient.authenticate();
 
 			// Requested Grid Credential lifetime (12 hours)
 
@@ -124,8 +136,11 @@ public class LabViewerStudyTest
 	        lifetime.setHours(12);
 
 	        // Request PKI/Grid Credential
-	        String dorianURL="https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian";
-	        GridUserClient dorian = new GridUserClient(dorianURL);
+            /* RAM: on 10/26/2009 changed to go to current server */
+            //String dorianURL="https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian";
+            String dorianURL="https://ncias-c278-v.nci.nih.gov:28443/webssoserver";
+
+            GridUserClient dorian = new GridUserClient(dorianURL);
 	        proxy = dorian.requestUserCertificate(saml, lifetime);
 
 
@@ -149,10 +164,10 @@ public class LabViewerStudyTest
 	 * @throws DeserializationException
 	 * @throws SAXException
 	 */
-	private Study getStudy() throws DeserializationException, SAXException
-	{
-		InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
-		InputStreamReader reader = new InputStreamReader(sampleIs);
+	private Study getStudy() throws DeserializationException, SAXException, IOException {
+		//InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
+        InputStream sampleIs = new FileInputStream(sampleFile);
+        InputStreamReader reader = new InputStreamReader(sampleIs);
 		InputStream wsddIs =
 				getClass()
 						.getResourceAsStream(
