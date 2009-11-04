@@ -80,10 +80,10 @@
 			
 
 			
-<parameter name="logicalHost" value="Pretonite"/>
+<parameter name="logicalHost" value="localhost"/>
 			<parameter name="publishHostName" value="true"/>
 			
-			<parameter name="containerSecDesc" value="global_security_descriptor.xml"/>
+			<parameter name="containerSecDesc" value="etc/globus_wsrf_core/global_security_descriptor.xml"/>
 </globalConfiguration>
 
     <handler name="RPCDispatcher" type="java:org.apache.axis.providers.java.RPCProvider"/>
