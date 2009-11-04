@@ -18,7 +18,7 @@ import org.globus.gsi.GlobusCredential;
 public class LabLoaderTest
 {
 	String serviceUrl =
-			"https://localhost:8443/ctom-wsrf/services/cagrid/LabLoader";
+			"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/LabLoader";
 	// String
 	// serviceUrl="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/LabLoader";
 	// String
@@ -37,8 +37,8 @@ public class LabLoaderTest
 	// Settings/asharma/Desktop/Temp/processedFolder/TER_2008_04_28_13_23_00_V2TOV3_v2-18-hl7v3.xml";
 	// String
 	 //sampleFile="D:/Development/LabLoader/src/TER_2008_07_03_09_27_20_V2TOV3_v2-1-hl7v3.xml";
-//	 String sampleFile="D:/Development/LabLoader-1.2-cvs/src/HL7V3-1.xml";
-	String proxyFile = "D:/proxy";
+     String sampleFile="C:/Development/NewLabViewer/LabLoader-1.3/src/HL7V3-1.xml";
+	String proxyFile = "C:/Development/proxy";
 	private Logger logger = Logger.getLogger(getClass());
 
 	/**
@@ -70,11 +70,11 @@ public class LabLoaderTest
 			// URL fileLoc = getClass().getResource(sampleFile);
 			
 			// Read the file from disk
-			for(int i=1;i<2;i++)
-			{
-				String sampleFile="D:/DEMOTEST/mrn-4/HL7V3-"+i+".xml";	
-				System.out.println(sampleFile);
-				FileInputStream fis = new FileInputStream(sampleFile);
+			//for(int i=1;i<2;i++)
+			//{
+				//String sampleFile="D:/DEMOTEST/mrn-4/HL7V3-"+i+".xml";	
+				//System.out.println(sampleFile);
+			    FileInputStream fis = new FileInputStream(sampleFile);
 				int x= fis.available();
 				byte b[]= new byte[x];
 				fis.read(b);
@@ -84,7 +84,7 @@ public class LabLoaderTest
 				client.loadLab(content);
 			
 				System.out.println("Returned from calling service");
-		   }
+		   //}
 		}
 		catch (Exception e)
 		{

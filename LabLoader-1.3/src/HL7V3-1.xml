@@ -2,8 +2,8 @@
 <!-- section='HM' subSection='PO' realm='UV' artifact='MT-deprecated' domain='RT' xmlns:mif='urn:hl7-org:v3/mif' version='01' root='DEFN'-->
 <ClinicalTrial xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="CLNTRL" moodCode="EVN">
   
- <id assigningAuthorityName="NCI" extension="04_C_0121" root="f3551f50-9812-4e12-bc48-47ad1a49ed71" xsi:type="II"/>
-   <title xsi:type="ST">RANDOMIZED PHASE I/II STUDY OF VACCINIA-CEA(6D)-TRICOM AND FOWLPOX-(6D)-TRICOM WITH GM-CSF</title>
+ <id assigningAuthorityName="NCI" extension="04_C_0121-testanu" root="f3551f50-9812-4e12-bc48-47ad1a49ed71-testanu" xsi:type="II"/>
+   <title xsi:type="ST">RANDOMIZED PHASE I/II STUDY OF VACCINIA-CEA(6D)-TRICOM AND FOWLPOX-(6D)-TRICOM WITH GM-CSF test anu</title>
       <component typeCode="COMP" contextConductionInd="true">
          <trialAtSite classCode="CLNTRL" moodCode="EVN">
             <location typeCode="LOC" contextControlCode="OP">
@@ -25,18 +25,18 @@
                   <subjectAssignment classCode="CLNTRL" moodCode="EVN">
                      <recordTarget typeCode="RCT" contextControlCode="OP">
                      <enrolledSubject classCode="RESBJ">
-		     			     <id extension="23-23-34-2" root="2.16.840.1.113883.19" xsi:type="II"/>
+		     			     <id extension="23-23-34-2-testanu" root="2.16.840.1.113883.19-testanu" xsi:type="II"/>
 		     			      <subjectPerson classCode="PSN" determinerCode="INSTANCE">
 		     			      <name xsi:type="PN">
 		     				 <suffix/>
-		     				 <family>Bauer</family>
-		     				 <given>Jack</given>
+		     				 <family>Anu</family>
+		     				 <given>anu</given>
 		     				 <prefix/>
 		     			      </name>
 		     			      <administrativeGenderCode codeSystem="2.16.840.1.113883.19" code="F" xsi:type="CV"/>
 		     			      <birthTime value="19621008" xsi:type="TS"/>
 		     			      <asSpareSubject classCode="RESBJ">
-		     				 <id extension="23-23-34-2" root="2.16.840.1.113883.19" xsi:type="II"/>
+		     				 <id extension="23-23-34-2-testanu" root="2.16.840.1.113883.19-testanu" xsi:type="II"/>
 		     			      </asSpareSubject>
 		     			   </subjectPerson>
 			</enrolledSubject>
