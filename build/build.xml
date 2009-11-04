@@ -255,7 +255,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		clean,
 		init,
 		build:ctomdatapersistence,
-
+        build:ctodslabviewer-webapp,
 		build:ctom-wsrf
 		" >
 	</target>
@@ -550,7 +550,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<deploy-local target.name="${install.target}"/>
 	</target>
 
-	<target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
+    
+    <target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
 		<!--
 		  * Requires a database installation.
 		  * Will use the target from install.xml specified in ${upgrade.target} (defaults to install unless passed in on command line).
