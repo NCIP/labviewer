@@ -11,6 +11,8 @@ import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
@@ -25,12 +27,15 @@ import org.xml.sax.SAXException;
  * <P>
  * 
  * @author Michael Holck
- */
-public class LabViewerRegistrationTest
-{
+ */                                                                
+public class LabViewerRegistrationTest                       
+{                                                                                         
 	String serviceUrl =
-			"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // "https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// private String serviceUrl=
+			//"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // "https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
+    "https://localhost:21443/ctom-wsrf/services/cagrid/RegistrationConsumer";
+    
+
+    // private String serviceUrl=
 	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
 	// https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian
 	// String serviceUrl=
@@ -40,9 +45,11 @@ public class LabViewerRegistrationTest
 	// String serviceUrl =
 	// "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/RegistrationConsumer";
 	// String serviceUrl
-	// ="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	private String sampleFile = "/SampleRegistrationMessage.xml";
-	private String proxyFile = "D:/proxy";
+
+	//private String sampleFile = "/SampleRegistrationMessage.xml";
+    String sampleFile = "C:/Development/sampleMessages/Registration_sample.xml";
+
+    String proxyFile = "C:/Development/proxy";
 	private Logger logger = Logger.getLogger(getClass());
 
 	/**
@@ -73,8 +80,8 @@ public class LabViewerRegistrationTest
 					+ serviceUrl);
 
 			// Setup the credentials
-			GlobusCredential gb = this.obtainCredentials();//new
-																	// GlobusCredential(proxyFile);
+			GlobusCredential gb = new GlobusCredential(proxyFile); //this.obtainCredentials();//new
+																	//
 
 			// Create the client
 			RegistrationConsumerClient client =
@@ -112,14 +119,14 @@ public class LabViewerRegistrationTest
 			Credential cred = new Credential();
 			BasicAuthenticationCredential bac =
 					new BasicAuthenticationCredential();
-			bac.setUserId("ccts@nih.gov");
-			bac.setPassword("!Ccts@nih.gov1");
+			bac.setUserId("dev1@nci");
+			bac.setPassword("D3v1@NC1.gov");
 			cred.setBasicAuthenticationCredential(bac);
 
 			// Authenticate to the IdP (DorianIdP) using credential
 			AuthenticationClient authClient =
 					new AuthenticationClient(
-							"https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian",
+							"https://ncias-c278-v.nci.nih.gov:28443/webssoserver",
 							cred);
 			SAMLAssertion saml = authClient.authenticate();
 
@@ -129,7 +136,7 @@ public class LabViewerRegistrationTest
 	        lifetime.setHours(12);
 
 	        // Request PKI/Grid Credential
-	        String dorianURL="https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian";
+	        String dorianURL="https://ncias-c278-v.nci.nih.gov:28443/webssoserver";
 	        GridUserClient dorian = new GridUserClient(dorianURL);
 	        proxy = dorian.requestUserCertificate(saml, lifetime);
 
@@ -153,10 +160,10 @@ public class LabViewerRegistrationTest
 	 * @throws SAXException
 	 */
 	private Registration getRegistration() throws DeserializationException,
-			SAXException
-	{
-		InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
-		InputStreamReader reader = new InputStreamReader(sampleIs);
+			SAXException, IOException {
+		//InputStream sampleIs = getClass().getResourceAsStream(sampleFile);
+         InputStream sampleIs = new FileInputStream(sampleFile);
+        InputStreamReader reader = new InputStreamReader(sampleIs);
 		InputStream wsddIs =
 				getClass().getResourceAsStream(
 						"/gov/nih/nci/ccts/grid/client/client-config.wsdd");
