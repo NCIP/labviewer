@@ -11,14 +11,24 @@
 	insert into csm_application(APPLICATION_ID, APPLICATION_NAME,APPLICATION_DESCRIPTION,DECLARATIVE_FLAG,ACTIVE_FLAG,UPDATE_DATE)
 	values (1, 'csmupt','UPT Super Admin Application',0,0,now());
 	select nextval(' CSM_APPLICATI_APPLICATION__SEQ');
+--	insert into csm_application(APPLICATION_ID, APPLICATION_NAME,APPLICATION_DESCRIPTION,DECLARATIVE_FLAG,ACTIVE_FLAG,UPDATE_DATE)
+	-- values (2, 'labviewer','Lab Viewer Application',0,0,now());
+	--  select nextval(' CSM_APPLICATI_APPLICATION__SEQ');
 	
 	insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
 	values (1, 'admin','UPT','Administrator','zJPWCwDeSgG8j2uyHEABIQ==',now());
 	select nextval('CSM_USER_USER_ID_SEQ');
+	-- insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
+	-- values (2, 'dev1@nci','dev','dev','raZjjVit/vwqjNaQ/oYeaA==',now());
+	-- select nextval('CSM_USER_USER_ID_SEQ');
 	 
 	insert into csm_protection_element(PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID,UPDATE_DATE)
 	values(1, 'csmupt','UPT Super Admin Application','csmupt',1,now());
 	select nextval('CSM_PROTECTIO_PROTECTION_E_SEQ');
+	-- insert into csm_protection_element(PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID,UPDATE_DATE)
+	-- values(2, 'labviewer','Lab Viewer Application','labviewer',2,now());
+	-- select nextval('CSM_PROTECTIO_PROTECTION_E_SEQ');
+	
 	
 	insert into csm_user_pe(USER_PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_ID,USER_ID,UPDATE_DATE)
 	values(1,1,1,now());
@@ -30,7 +40,7 @@
 	select nextval('CSM_APPLICATI_APPLICATION__SEQ');
 	
 	insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
-	values (2, 'cctsdemo1@nci.nih.gov','CCTS','Demo','L5DdDAvHmUGthtxFP2ZrIA==',now());
+	values (2, 'dev1@nci','CCTS','Demo','raZjjVit/vwqjNaQ/oYeaA==',now());
 	select nextval('CSM_USER_USER_ID_SEQ');
 	
 	insert into csm_protection_element(PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID,UPDATE_DATE)
