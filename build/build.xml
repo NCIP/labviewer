@@ -36,10 +36,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<condition property="application.base.path" value="${application.base.path.windows}">
 		<os family="windows" />
 	</condition>
-	<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+    <!-- RAM on 10/21/2009 changed tomcat.home to ${tomcat.relative.path}
+    <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+    -->
+    <property name="tomcat.home" value="${tomcat.relative.path}"/>
 
 
-	<!-- added for remote deployments since file is copied to root of install dir -->
+    <!-- added for remote deployments since file is copied to root of install dir -->
 	<basename property="properties.file.name" file="${properties.file}" />
 	<!-- BDA standard structure -->
 	<property name="build.dir" location="." />
@@ -66,12 +69,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 	<!-- Properties that relate to how to call build targets from sub-projects-->
 	<!-- Working directory passed to Ant tasks -->
-	<property name="ctodsdeploymentcontroller.base.dir" location="${software.dir}/cTODSDeploymentController-1.2"/>
+	<property name="ctodsdeploymentcontroller.base.dir" location="${software.dir}/cTODSDeploymentController-1.3"/>
 	<property name="ctomdatapersistence.base.dir" location="${software.dir}/CTOMDataPersistence-PG"/>
-	<property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
-	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.2"/>
-	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.2"/>
-	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.2"/>
+    <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}"/>
+    <property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
+	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
+	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
+	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.3"/>
 	<property name="cchc.base.dir" location="${software.dir}/CancerCenterClient"/>
 
 	<!-- Build file names relative working dir above, if the basedir of the sub-project ant script is ".." you should set the *.basdir to and the build file should include the dir and build file name from the *.base.dir -->
@@ -100,7 +104,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		Directory and files must be in svn to work.
 	-->
 	<property name="db.src.dir" value="${software.dir}/db" />
-	<property name="db-install.src.dir" value="${software.dir}/CTOMDataPersistence-PG/dbscripts/db-install" />
+	<property name="db-install.src.dir" value="${software.dir}/CTOMDataPersistence-PG/dbscripts/db-install" />  
 	<property name="db-upgrade.src.dir" value="${software.dir}/CTOMDataPersistence-PG/dbscripts/db-upgrade" />
 
 	<!-- Distribution Structure properties, used to copy files into the distribution area.
@@ -251,13 +255,16 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		clean,
 		init,
 		build:ctomdatapersistence,
-		build:ctodslabviewer-webapp,
+
 		build:ctom-wsrf
 		" >
 	</target>
 
-	<target name="build:ctomdatapersistence" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
-		<!--  setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+
+
+
+    <target name="build:ctomdatapersistence" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
+        <!--  setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
 		<ant inheritAll="false" inheritRefs="false" antfile="${ctomdatapersistence.build.file}" target="${ctomdatapersistence.build.target}" dir="${ctomdatapersistence.base.dir}">
 			<property name="dist.dir" value="${ctomdatapersistence.dist.dir}" />
 			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
@@ -278,7 +285,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<property name="database.user" value="${database.user}"/>
 		<property name="database.password" value="${database.password}"/>
 		<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
-	 	<property name="dest.dir" value="${software.dir}"/>
+	 	<property name="dest.dir" value="${target.dir}/wsrf-tmp"/>
 	 	<property name="temp.dir" value="${target.dir}"/>
 		<property name="labLoader.dir" value="${labloader.base.dir}"/>
 		<property name="regConsumerService.dir" value="${registrationconsumerservice.base.dir}"/>
@@ -288,7 +295,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	 	<property name="registrationconsumerservice.dir.prefix" value="RegistrationConsumerService-1.3"/>
 	 	<property name="studyconsumerservice.dir.prefix" value="StudyConsumerService-1.3"/>
 	 	<property name="artifacts.dir.prefix" value="artifacts"/>
-	</ant>
+        <property name="ctomdeploymentcontroller.dir" value="${ctodsdeploymentcontroller.base.dir}"/>
+         <property name="cert.path" value="${cert.path}"/>
+			<property name="key.path" value="${key.path}"/>
+    </ant>
 		<!-- or if you have a static file then you copy it from your source -->
 		<!--<copy todir="${ctom-wsrf-webapp.dist.dir}">
 			  <fileset file="${war-dist.dir}/${war.name}.war" />
@@ -352,6 +362,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<!-- Add tasks here to zip up src into a distribution, may require some additoinal properties for distribution name" -->
 	</target>
 
+<!--
 	<target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
 		init,
  		dist:tools:retrieve:tomcat,
@@ -359,7 +370,16 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		" >
 	</target>
 
-	<target name="dist:tools:retrieve:cagrid" unless="cagrid-libs.tools.exists" description="Downloads JBOSS from binary repository and verifies checksum">
+-->
+    <target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
+        init,
+         dist:tools:retrieve:tomcat,
+         dist:tools:retrieve:cagrid
+        " >
+    </target>
+
+
+	<target name="dist:tools:retrieve:cagrid" unless="cagrid-libs.tools.exists" description="Downloads caGRID from binary repository and verifies checksum">
 		<get src="${cagrid-libs.src.url}" dest="${cagrid-libs.dest.file}" />
 		<get src="${cagrid-base-war.src.url}" dest="${cagrid-base-war.dest.file}" />
 	</target>
@@ -520,6 +540,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<target name="deploy:local:install" depends="build:all,dist:installer:prep" description="Installs and configures the application and required binaries and re-creates the datbase  on the local machine. Used for developer desktops and ci environments.">
 		<!--
 		  * Requires a database installation.
+		  
 		  * Will use the target from install.xml specified in ${install.target} (defaults to install unless passed in on command line).
 		  * If you want properties to be used at install time they must be included in a proeprties file.
 		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install.
