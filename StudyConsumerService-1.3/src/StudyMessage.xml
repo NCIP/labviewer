@@ -91,7 +91,7 @@
       <healthcareSiteInvestigator>
        <investigator>
         <nciIdentifier>SMOKE_TEST</nciIdentifier>
-        <fullName>John Doe</fullName>
+        <fullName>Dr Anderson</fullName>
        </investigator>
       </healthcareSiteInvestigator>
      </studyInvestigator>
@@ -113,13 +113,13 @@
      <startDate>2008-08-25</startDate>
     </studyOrganization>
     <studyOrganization xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" gridId="e5291c32-15bd-4629-8482-4ac9dc95a53c" xsi:type="StudyFundingSponsorType">
-     <healthcareSite gridId="NCI GRID ID">
-      <name>National Cancer Institute</name>
+     <healthcareSite gridId="MD Anderson GRID ID">
+      <name>MD Anderson</name>
       <address>
-       <streetAddress>6130 Executive Blvd</streetAddress>
-       <city>Rockville</city>
-       <stateCode>MD</stateCode>
-       <postalCode>20852</postalCode>
+       <streetAddress>WestHeimer</streetAddress>
+       <city>Houston</city>
+       <stateCode>TX</stateCode>
+       <postalCode>75080</postalCode>
        <countryCode>USA</countryCode>
       </address>
       <nciInstituteCode>NCI</nciInstituteCode>
