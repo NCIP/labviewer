@@ -1,8 +1,9 @@
 <project name="cTomLabViewer" default="build_zip" basedir=".">
 	<property file="build-download.properties" />
 	<property environment="env" />
-	
-	 <!-- ******************************************************************* -->
+
+
+     <!-- ******************************************************************* -->
 	 <!-- **           DISTRIBUTION ZIP TARGET	                           ** -->
 	  <!-- ******************************************************************* -->
 	<!--
@@ -189,6 +190,14 @@
 			<fileset dir="wsrf-folder/globus_wsrf_common" />
 		</copy>
         <!-- TODO:  RAM on 10/27/2009 : fix certificate paths in global_security_descriptor.xml file before you copy from globus_wsrf_core  -->
+        <copy file="${ctomdeploymentcontroller.dir}/resources/global_security_descriptor_template.xml"
+			  toFile="${webapps.dir}/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" overwrite="true" filtering="true">
+                <filterset begintoken="@" endtoken="@">
+                    <filter token="cert.path" value="${cert.path}" />
+                    <filter token="key.path" value="${key.path}" />
+                </filterset>
+		</copy>
+
         <copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core">
 			<fileset dir="wsrf-folder/globus_wsrf_core" />
 		</copy>
