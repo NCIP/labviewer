@@ -321,7 +321,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="loadLabURLS" value="${loadLabURLS}"/>
 			<property name="BaseURLcaAERS" value="${BaseURLcaAERS}"/>
 			<property name="BaseURLC3D" value="${BaseURLC3D}"/>
-			<property name="tissueURL" value="${tissueURL}"/>
+            <property name="BaseURLC3PR" value="${BaseURLC3PR}"/>
+            <property name="tissueURL" value="${tissueURL}"/>
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
 			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
@@ -329,7 +330,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="websso.enabled" value="${websso.enabled}"/>
 			<property name="websso.cas.server" value="${websso.cas.server}"/>
 			<property name="websso.client.server" value="${websso.client.server}"/>
-			<property name="cert.path" value="${cert.path}"/>
+            <property name="websso.cas.server.port" value="${websso.cas.server.port}"/>
+			<property name="websso.client.port" value="${websso.client.port}"/>
+
+            <property name="cert.path" value="${cert.path}"/>
 			<property name="key.path" value="${key.path}"/>
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
