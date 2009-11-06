@@ -125,7 +125,7 @@
 	<target name="createConnectionProperties" description="Creates the connection properties file">
 		<copy file="${ctomdatapersistence.resourceDir}/dataConnection.properties.template"
 			toFile="${ctomdatapersistence.build.resourceDir.0}/dataConnection.properties"
-			filtering="true">
+			filtering="true" overwrite="true">
 		   <filterset begintoken="@" endtoken="@">
 				<filter token="database.driver" value="${database.driver}" />
 				<filter token="database.url" value="${database.url}" />
