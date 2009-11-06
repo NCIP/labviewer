@@ -245,7 +245,7 @@
 		  <filter token="database_dialect" value="${database.dialect}" />
 		  <filter token="database_driver" value="${database.driver}" />
 		  <filter token="database_url" value="${database.url}" />
-		  <filter token="database_user" value="${database.username}" />
+		  <filter token="database_user" value="${database.user}" />
 		  <filter token="database_passwd" value="${database.password}" />
 		</filterset>
 		</copy>
