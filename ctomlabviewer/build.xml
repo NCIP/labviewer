@@ -22,7 +22,8 @@
 	</path>	
     <!-- Task definitions -->
       <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="macrodef"/>
-	 
+
+    <property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties" />
 
 
 	<property name="ctomlabviewer.dir" value="${software.dir}/ctomlabviewer"/>
