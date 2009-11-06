@@ -1,9 +1,0 @@
-
-# CHANGED BY RAM and added below as per caGRID 1.3 WebSSON config doc
-
-cas.server.gateway=false
-cas.server.renew=false
-logout.landing.url=www.google.com
-
-cas.server.url=https://@WEBSSO.SERVER@:@WEBSSO.SERVER.HTTPS.PORT@/webssoserver/
-cas.client.service=http://@WEBSSO.CLIENT.SERVER@:@WEBSSO.CLIENT.HTTP.PORT@/webssoclientjasigexample-1.3-dev/protected/
