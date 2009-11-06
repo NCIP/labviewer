@@ -85,6 +85,7 @@ import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.AdministrationForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
 import gov.nih.nci.logging.api.user.UserInfoHelper;
 
 import java.io.BufferedOutputStream;
@@ -199,7 +200,7 @@ public class SaveAdminConfgAction extends Action
 		{
 			//get the path of the BaseURL properties file from the session
 			String path = (String) session.getAttribute("propertyFilePath");
-			
+			                    
 			File file = new File(session.getServletContext().getRealPath(path));
 			Properties propsToUpdate = new Properties();
 			propsToUpdate.put("BaseURLcaAERS", aForm.getCaaersUrl());
@@ -211,7 +212,15 @@ public class SaveAdminConfgAction extends Action
 					new BufferedOutputStream(new FileOutputStream(file));
 			propsToUpdate.store(oStream, "");
 			oStream.close();
-		}
+
+            /* also update cache */
+            CommonUtil.props1.put("BaseURLcaAERS", aForm.getCaaersUrl());
+			CommonUtil.props1.put("BaseURLC3D", aForm.getC3dUrl());
+			CommonUtil.props1.put("BaseURLC3PR", aForm.getC3prUrl());
+			CommonUtil.props1.put("tissueURL",aForm.getTissueUrl());
+			CommonUtil.props1.put("url", aForm.getCaxUrl());
+             
+        }
 		catch (FileNotFoundException e1)
 		{
 			logDB.error("The config file not found: " + CONFIG_FILE);
