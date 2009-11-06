@@ -83,9 +83,7 @@ package gov.nih.nci.caxchange.ctom.viewer.util;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Properties;
 
 import javax.servlet.http.HttpSession;
@@ -109,8 +107,16 @@ public class CommonUtil
 
 	/** The Constant log. */
 	private static final Logger log = Logger.getLogger(CommonUtil.class);
+    public static Properties props1 = new Properties();
+    static {
+        try {
+            props1.load(new FileInputStream(CONFIG_FILE_1));
+        } catch(IOException ioe) {
+            log.error("Error reading the config file: " + CONFIG_FILE_1);
+        }
+    }
 
-	/**
+    /**
 	 * Get the properties from properties file.
 	 * 
 	 * @param session the session
@@ -118,12 +124,13 @@ public class CommonUtil
 	public void getProperties(HttpSession session)
 	{
 
-		try
-		{
-			Properties props1 = new Properties();
-			InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_1);
-			props1.load(stream);
+		//try
+		//{
 
+            //File file = new File(session.getServletContext().getRealPath(CONFIG_FILE_1));
+            //InputStream stream = getClass().getResourceAsStream(CONFIG_FILE_1);
+			//props1.load(stream);
+            //props1.load(new FileInputStream(CONFIG_FILE_1));
 			String caAERSurl = (String) props1.getProperty("BaseURLcaAERS");
 			String c3prurl = (String) props1.getProperty("BaseURLC3PR");
 			String C3Durl = (String) props1.getProperty("BaseURLC3D");
@@ -135,7 +142,7 @@ public class CommonUtil
 			session.setAttribute("caXchangeURL", url);
 			session.setAttribute("BaseURLC3D", C3Durl);
 			session.setAttribute("tissueURL", tissueurl);
-		}
+		/*}
 		catch (FileNotFoundException e1)
 		{
 			log.error("The config file not found: " + CONFIG_FILE_1);
@@ -144,7 +151,7 @@ public class CommonUtil
 		{
 			log.error("Error reading the config file: " + CONFIG_FILE_1);
 		}
-
+        */
 		try
 		{
 			Properties props = new Properties();
