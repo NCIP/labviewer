@@ -2,7 +2,7 @@
 
 <project default="deploySkeletonService" name="CTMS Adverse Event grid service" basedir=".">
 
-    <property name="project.name" value="RegistrationConsumer_Grid_Service"/>
+    <property name="project.name" value="StudyConsumer_Grid_Service"/>
 
     <property name="build.dir" value="${basedir}/build"/>
 
@@ -12,6 +12,8 @@
     <target name="deploySkeletonService">
 
         <!--override tomcat env variable to write out to temp location-->
+         <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
         <property name="tomcat.dir" value="${build.dir}/tempTomcat"/>
         <ant antfile="build.xml" inheritall="true" target="deployTomcat"/>
 
