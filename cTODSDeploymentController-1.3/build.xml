@@ -1,7 +1,7 @@
 <project name="cTomLabViewer" default="build_zip" basedir=".">
 	<property file="build-download.properties" />
 	<property environment="env" />
-
+     <property name="software.dir" value=".."/>
 
      <!-- ******************************************************************* -->
 	 <!-- **           DISTRIBUTION ZIP TARGET	                           ** -->
@@ -12,15 +12,16 @@
 	-->
 
 	<target name="build_zip">
-		<mkdir dir="${zip.dest.dir}" />
-        <echo message="from build-zip: ${zip.dest.dir}"/>
-        <zip destfile="${zip.dest.dir}/${module.name}.zip">
+        <!-- RAM changed from ${zip.dest.dir} to ${temp.dir}  -->
+        <mkdir dir="${temp.dir}" />
+        <echo message="from build-zip: ${temp.dir}"/>
+        <zip destfile="${temp.dir}/${module.name}.zip">
 			<zipfileset dir="${artifacts.dir}" prefix="artifacts" />
-			<zipfileset dir="${cTODDeployment.dir}" prefix="cTODSDeploymentController" />
-			<zipfileset dir="${cTomData.dir}" prefix="CTOMDataPersistence">
+			<zipfileset dir="${ctomdeploymentcontroller.dir}" prefix="cTODSDeploymentController" />
+			<zipfileset dir="${ctomdatapersistence.dir}" prefix="CTOMDataPersistence">
 					<exclude name="**/bin/**" />
 			</zipfileset>
-			<zipfileset dir="${cTomLab.dir}" prefix="cTODSLabViewer">
+			<zipfileset dir="${ctomlabviewer.dir}" prefix="cTODSLabViewer">
 				<exclude name="**/build/**" />
 			</zipfileset>
 			<zipfileset dir="${labLoader.dir}" prefix="LabLoader">
@@ -31,7 +32,7 @@
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
-			<zipfileset dir="${studyConsumerService.dir}" prefix="StudyConsumerService">
+			<zipfileset dir="${studyconsumerservice.dir}" prefix="StudyConsumerService">
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
@@ -49,10 +50,12 @@
 	  <!-- ******************************************************************* -->
 
 	<!-- Unzips the build download file -->
+<!-- RAM commented this
 	<target name="unZip" description="Unzips the build download">
 		<unzip src="${zip.dest.dir}/${module.name}.zip" dest="${unZip.dir}" />
 	</target>
 
+-->
 
 	<!-- Builds the cTOM-wsrf war file -->
 	<target name="pre-stage" description="Builds the cTOM-wsrf war file">
@@ -75,7 +78,7 @@
 
 		</ant>
 -->
-        <ant antfile="${studyConsumerService.dir}/build-ctms.xml"  dir="${studyConsumerService.dir}" target="deploySkeletonService" inheritall="true">
+        <ant antfile="${studyconsumerservice.dir}/build-ctms.xml"  dir="${studyconsumerservice.dir}" target="deploySkeletonService" inheritall="true">
 
         </ant>
 
@@ -118,7 +121,7 @@
             <fileset dir="${regConsumerService.dir}/build/">
                 <include name="*.zip" />
             </fileset>
-            <fileset dir="${studyConsumerService.dir}/build/">
+            <fileset dir="${regConsumerService.dir}/build/">
                 <include name="*.zip" />
             </fileset>
 
@@ -256,8 +259,9 @@
 	<target name="build-ctom-wsrf" depends="build-stage" description="Builds the ctom wsrf">
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
-		<war destfile="${war-dist.dir}/${war.name}.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
-	</target>
+		<war destfile="${war-dist.dir}/ctom-wsrf.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
+	    <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${software.dir}/target/dist/exploded/ctom-wsrf" overwrite="true"/>
+    </target>
 
 
 	<!-- Builds the cTOMDataPersistence jar file -->
@@ -273,7 +277,7 @@
 		<ant antfile="${unZip.dir}/cTODSLabViewer/build.xml" dir="${unZip.dir}/cTODSLabViewer" target="deployTomcat" inheritall="true" />
 		<echo>Deploying ctom-wsrf to Tomcat webapps</echo>
 		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
-			<fileset file="${war-dist.dir}/${war.name}.war" />
+			<fileset file="${war-dist.dir}/ctom-wsrf.war" />
 		</copy>
 		
 	</target>
