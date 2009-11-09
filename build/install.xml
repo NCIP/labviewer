@@ -36,9 +36,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property environment="env" />
 	<property file="local.properties"/>
 	<property file="project.properties"/>
-	<!-- load the properties file -->
+
+
 	<property name="properties.file" value="${basedir}/install.properties"/>
-	<echo message="Using properties file of ${properties.file}."/>
+    <echo message="Using properties file of ${properties.file}."/>
+
+
+    <echo message="Using properties file of ${properties.file}."/>
 	<available file="${properties.file}" property="properties.file.exists" />
 	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
@@ -309,7 +313,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="init:install,init:common">
-		<validate-pre-install
+        <validate-pre-install
 			ant.check.version="${ant.minimum.version}"
 			java.check.version.major="${java.major.version}"
 			java.check.version.minor="${java.minor.version}"
@@ -353,7 +357,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		">
 	</target>
 
-	<target name="install" description="Installs and configures JBOSS, creates database, and deploys application" 
+	<target name="install" description="Installs and configures TOMCAT, creates database, and deploys application" 
 		depends="
 		init:install,
  		init:common,
@@ -369,10 +373,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		">
 	</target>
 
-	<target name="upgrade:tomcat" description="Wrapper target to call all targets required to upgrade tomcat container." unless="exclude.tomcat" depends="init:upgrade:tomcat,init:common,upgrade-ncm:tomcat">
+	<target name="upgrade:tomcat" description=
+            "Wrapper target to call all targets required to upgrade tomcat container."
+            unless="exclude.tomcat" depends="init:upgrade:tomcat,init:common,upgrade-ncm:tomcat">
 	</target>
 
-	<target name="upgrade" description="Upgrades JBoss and Database" depends="init:upgrade,init:common,upgrade-ncm">
+	<target name="upgrade" description="Upgrades Tomcat and Database" depends="init:upgrade,init:common,upgrade-ncm">
 	</target>
 
 	<target name="upgrade-with-dbinstall" description="Upgrades JBoss and Database" depends="init:upgrade,init:common,upgrade-ncm:with-dbinstall">
@@ -614,23 +620,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="install:tomcat:grid:configure" description="Configure tomcat-application" unless="exclude.tomcat" depends="init:install,init:common">
-		<!--
-		<grid-appserver-configure
-			appserver.conf.dir="${tomcat.home}/conf"
-			appserver.webapp.dir="${tomcat.home}/webapps"
-			appserver.server-xml.file="${tomcat.home}/conf/server.xml"
-			appserver.server-xml.service.name="Catalina"
-			appserver.port.http="${tomcat.port.http}"
-			appserver.port.ssl="${tomcat.port.ssl}"
-			appserver.hostname="${tomcat.hostname}"
-			appserver.external.http.host="${tomcat.external.http.host}"
-			grid.external.secure.host="${grid.external.secure.host}"
-			grid.external.secure.port="${grid.external.secure.port}"
-			/>
--->
-		<tomcat-configure-grid
-			/>
-				
+		<!--<tomcat-configure-grid grid.application.relative.dir="${grid.dir.dest}" />-->
 	</target>
 
 	<target name="install:post" depends="
@@ -666,21 +656,33 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		</if>
 	</target>
 
-	<target name="install:tomcat:LabViewer-webapp" description="Deploy LabViewer-webapp and common libraries to tomcat installation" unless="exclude.tomcat" depends="init:install,init:common">
+	<target name="deploy:LabViewer" description="Copies all final Labviewer aritifcats to Tomcat">
+        <copy file="${target.dir}/ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${target.dir}/ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
+    </target>
+
+    <target name="install:tomcat:LabViewer-webapp"
+            description="Deploy LabViewer-webapp and common libraries to tomcat installation"
+            unless="exclude.tomcat" depends="init:install,init:common">
 		<delete dir="${tomcat.home}/temp"/>
 		<delete dir="${tomcat.home}/work"/>
 		<!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
-		<copy file="${software.dir}\exploded\ctodslabviewer\ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
-		<!--<copy file="${software.dir}\exploded\ctom-wsrf\ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />-->
-		<copy file="${software.dir}\exploded\ctodslabviewer\login.config" todir="${tomcat.home}/conf" overwrite="true" />
-		<copy file="${software.dir}\exploded\ctodslabviewer\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" />
+		<copy file="${software.dir}/exploded/ctodslabviewer/ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
+		<copy file="${software.dir}/exploded/ctom-wsrf/ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
+
+        <!-- RAM commented this below 3 lines
+        <copy file="${software.dir}\exploded\ctodslabviewer\login.config" todir="${tomcat.home}/conf" overwrite="true" />
+		<copy file="${software.dir}\exploded\ctodslabviewer\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" /> -->
 		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
 		<copy file="${bda-utils.dir}/clm-3.2.jar" todir="${tomcat.home}/server/${tomcat.server.name}/lib" overwrite="true" />
-		-->
+
 		<copy file="${database.driver.file}" todir="${tomcat.home}/common/lib" overwrite="true" />
+		-->
 	</target>
 
-	<target name="install:tomcat:LabViewer-webapp:configure" description="Configure LabViewer-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="init:install,init:common">
+	<target name="install:tomcat:LabViewer-webapp:configure"
+            description="Configure LabViewer-webapp application, copies over externalized properties or configurations
+            that are not part of the tomcat configuration" unless="exclude.tomcat" depends="init:install,init:common">
 		<!-- configure datasource -->
 	</target>
 
@@ -701,8 +703,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<os family="windows" />
 		</condition>
 		<echo message="application.base.path=${application.base.path}"/>
-		<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
-	</target>
+
+        <!-- Ram changed this -->
+        <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
+        <property name="tomcat.home" value="${tomcat.relative.path}"/>
+
+    </target>
 
 	<target name="init:upgrade" depends="
 		init:upgrade:tomcat
