@@ -41,6 +41,8 @@
 		<dependency org="ncicb" name="CoreServices" rev="noversion" conf="compile->master" />
 		<dependency org="ncicb" name="SmokeTestService" rev="0.1" conf="compile->master" />
 		<dependency org="ncicb" name="CaXchangeRequestProcessor" rev="noversion" conf="compile->master" />
+		<dependency org="ncicb" name="iso-datatypes" rev="1.1" conf="compile->master" />
+		<dependency org="ncicb" name="coppa-commons" rev="1.1-SNAPSHOT" conf="compile->master" />
 				
 		
 		
