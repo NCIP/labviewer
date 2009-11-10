@@ -348,7 +348,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:tomcat:binaries,
 		install:tomcat:configure,
 		install:tomcat:LabViewer-webapp:re-configure,
-		install:tomcat:LabViewer-webapp,
+		install:tomcat:LabViewer,
 		install:tomcat:LabViewer-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
@@ -396,7 +396,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:tomcat:binaries,
 		install:tomcat:configure,
 		install:tomcat:LabViewer-webapp:re-configure,
-		install:tomcat:LabViewer-webapp,
+		install:tomcat:LabViewer,
 		install:tomcat:LabViewer-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
@@ -442,7 +442,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:init,
 		install:tomcat:configure,
 		install:tomcat:LabViewer-webapp:re-configure,
-		install:tomcat:LabViewer-webapp,
+		install:tomcat:LabViewer,
 		install:tomcat:LabViewer-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
@@ -487,7 +487,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:validation:pre-install:ports,
 		install:init,
 		install:tomcat:LabViewer-webapp:re-configure,
-		install:tomcat:LabViewer-webapp,
+		install:tomcat:LabViewer,
 		install:tomcat:LabViewer-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
@@ -656,12 +656,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		</if>
 	</target>
 
-	<target name="deploy:LabViewer" description="Copies all final Labviewer aritifcats to Tomcat">
-        <copy file="${target.dir}/ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
-		<copy file="${target.dir}/ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
-    </target>
 
-    <target name="install:tomcat:LabViewer-webapp"
+    <target name="install:tomcat:LabViewer"
             description="Deploy LabViewer-webapp and common libraries to tomcat installation"
             unless="exclude.tomcat" depends="init:install,init:common">
 		<delete dir="${tomcat.home}/temp"/>
@@ -669,16 +665,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
 		<copy file="${software.dir}/exploded/ctodslabviewer/ctomlabviewer.war" todir="${tomcat.home}/webapps" overwrite="true" />
 		<copy file="${software.dir}/exploded/ctom-wsrf/ctom-wsrf.war" todir="${tomcat.home}/webapps" overwrite="true" />
-
-        <!-- RAM commented this below 3 lines
-        <copy file="${software.dir}\exploded\ctodslabviewer\login.config" todir="${tomcat.home}/conf" overwrite="true" />
-		<copy file="${software.dir}\exploded\ctodslabviewer\catalina.bat" todir="${tomcat.home}/bin" overwrite="true" /> -->
-		<!--  Many NCI applications require clm for csm, so you can point this to where you have the version you want to use
-		<copy file="${bda-utils.dir}/clm-3.2.jar" todir="${tomcat.home}/server/${tomcat.server.name}/lib" overwrite="true" />
-
-		<copy file="${database.driver.file}" todir="${tomcat.home}/common/lib" overwrite="true" />
-		-->
-	</target>
+   </target>
 
 	<target name="install:tomcat:LabViewer-webapp:configure"
             description="Configure LabViewer-webapp application, copies over externalized properties or configurations
