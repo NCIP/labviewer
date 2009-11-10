@@ -214,8 +214,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="clean">
-		<delete dir="${dist.dir}" />
-		<delete dir="${temp.dir}" />
+		<delete dir="${dist.dir}" quiet="true"/>
+		<delete dir="${temp.dir}"  quiet="true"/>
 	</target>
 
 	<target name="init" description="Sets up build are and initalizes variables">
