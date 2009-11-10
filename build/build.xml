@@ -18,7 +18,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
     <!-- RAM:  chnaged install.property file for suite installer
     <property name="properties.file" value="install.properties"/> -->
-    <property name="properties.file" value="install.properties"/>
+    <!-- <property name="properties.file" value="install.properties"/> -->
 
     <!-- RAM commented this out cause it is not an upgrade
     <property name="upgrade.properties.file" value="upgrade.properties"/> -->
@@ -300,12 +300,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
          <property name="temp.dir" value="${target.dir}"/>
 		<property name="labLoader.dir" value="${labloader.base.dir}"/>
 		<property name="regConsumerService.dir" value="${registrationconsumerservice.base.dir}"/>
-		<property name="studyConsumerService.dir" value="${studyconsumerservice.base.dir}"/>
+		<property name="studyconsumerService.dir" value="${studyconsumerservice.base.dir}"/>
 	 	<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="labloader.dir.prefix" value="LabLoader-1.3"/>
 	 	<property name="registrationconsumerservice.dir.prefix" value="RegistrationConsumerService-1.3"/>
 	 	<property name="registrationconsumerservice.dir" value="${registrationconsumerservice.base.dir}"/>
-	 	<property name="studyconsumerservice.dir.prefix" value="StudyConsumerService-1.3"/>
+	 	<!--<property name="studyconsumerservice.dir.prefix" value="StudyConsumerService-1.3"/> -->
 	 	<property name="artifacts.dir.prefix" value="artifacts"/>
         <property name="ctomdeploymentcontroller.dir" value="${ctodsdeploymentcontroller.base.dir}"/>
          <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}" />
