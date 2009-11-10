@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="RegistrationConsumer" targetNamespace="http://grid.ccts.nci.nih.gov/RegistrationConsumer/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://grid.ccts.nci.nih.gov/RegistrationConsumer/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://grid.ccts.nci.nih.gov/RegistrationConsumer/bindings" location="RegistrationConsumer_bindings.wsdl"/>
-  <wsdl:service name="RegistrationConsumerService">
-    <wsdl:port name="RegistrationConsumerPortTypePort" binding="binding:RegistrationConsumerPortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
