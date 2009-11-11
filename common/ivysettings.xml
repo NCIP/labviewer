@@ -17,6 +17,7 @@
 			<url name="cagrid.ivy.repo" m2compatible="false">
 				<ivy pattern="${cagrid.ivy.repo}/[organisation]/[module]/ivy-[revision].xml" />
 				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact].[ext]" />
 			</url>
 			
 		</chain>
