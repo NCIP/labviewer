@@ -484,6 +484,8 @@
                         <include name="cas-server-3.0.5.jar"/>
                     </fileset>
                 </delete>
+                <echo message="creating directory: ${software.dir}/target/dist/exploded/ctodslabviewer"/>
+                <mkdir dir="${software.dir}/target/dist/exploded/ctodslabviewer"/>
                 <war destfile="${software.dir}/target/dist/exploded/ctodslabviewer/${ctomlabviewer.war}"
 		             compress="false" 
 		             webxml="${software.dir}/ctomlabviewer/src/resources/web.xml">            
