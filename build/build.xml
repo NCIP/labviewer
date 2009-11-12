@@ -16,8 +16,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property file="local.properties" />
 	<property file="project.properties" />
 
-    <!-- RAM:  chnaged install.property file for suite installer
-    <property name="properties.file" value="install.properties"/> -->
+
+    <property name="properties.file" value="install.properties"/>
     <!-- <property name="properties.file" value="install.properties"/> -->
 
     <!-- RAM commented this out cause it is not an upgrade
