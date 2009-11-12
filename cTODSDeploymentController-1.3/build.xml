@@ -260,7 +260,8 @@
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
 		<war destfile="${war-dist.dir}/ctom-wsrf.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
-	    <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${software.dir}/target/dist/exploded/ctom-wsrf" overwrite="true"/>
+	    <!--<copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${software.dir}/target/dist/exploded/ctom-wsrf" overwrite="true"/>-->
+        <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${artifacts.dir}/../ctom-wsrf" overwrite="true"/>
     </target>
 
 
