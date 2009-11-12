@@ -125,7 +125,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctom-wsrf-webapp.dist.dir" value="${dist.exploded.dir}/${ctom-wsrf-webapp.dist.relative.dir}"/>
 	<property name="cchc.dist.dir" value="${dist.exploded.dir}/${cchc.dist.relative.dir}"/>
 	<property name="ctomdatapersistence.dist.dir" value="${dist.exploded.dir}/${ctomdatapersistence.dist.relative.dir}"/>
-	<property name="labviewer.artifact.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}" />
+    <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/new-artifacts"/>
+    <!--<property name="labviewer.artifact.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}" />-->
 	<property name="tools.dist.dir" value="${dist.exploded.dir}/${tools.dist.relative.dir}" />
 	<property name="common.dist.dir" value="${dist.exploded.dir}/${common.dist.relative.dir}" />
    	<property name="db-install.dist.dir" value="${dist.exploded.dir}/${db-install.dist.relative.dir}" />
@@ -453,8 +454,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			optional.property.list="ldap.url,ldap.basedn"
 			delete.property.list="exclude.jboss.backup"
 			/>
-		<zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />
-		<copy file="${ctodslabviewer-webapp.dist.dir}/ctomlabviewer.war" toDir="${target.dir}" overwrite="true"/>
+		<!--<zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />-->
+        <zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}"/>
+        <copy file="${ctodslabviewer-webapp.dist.dir}/ctomlabviewer.war" toDir="${target.dir}" overwrite="true"/>
         <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${target.dir}" overwrite="true"/>
 	</target>
 
