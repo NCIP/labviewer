@@ -154,8 +154,8 @@
 			<jar jarfile="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" basedir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" update="yes"/>
 			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${ctomdatapersistence.build.dir}" overwrite="true"/>
 			<copy file="${ctomdatapersistence.resourceDir}/ctomlabapi-beans.jar" todir="${ctomdatapersistence.build.dir}" overwrite="true"/>
-			<copy file="${ctomdatapersistence.resourceDir}/ctomlabapi-beans.jar" todir="${software.dir}/target/dist/exploded/artifacts" overwrite="true"/>
-			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${software.dir}/target/dist/exploded/artifacts" overwrite="true"/>
+			<copy file="${ctomdatapersistence.resourceDir}/ctomlabapi-beans.jar" todir="${artifacts.dir}" overwrite="true"/>
+			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${artifacts.dir}" overwrite="true"/>
 			<delete dir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" />
 		</target>
     
@@ -359,11 +359,11 @@
     <!-- ====================================================================== -->
  
     <target name="jar">
-        <jar jarfile="${ctomdatapersistence.build.dir}/${ctomdatapersistence.jar}" 
-             compress="true" 
+        <jar jarfile="${ctomdatapersistence.build.dir}/${ctomdatapersistence.jar}"
+             compress="true"
              index="false" 
              basedir="${ctomdatapersistence.build.outputDir}"/>
-    	<jar jarfile="${software.dir}/target/dist/exploded/artifacts/${ctomdatapersistence.jar}" 
+    	<jar jarfile="${artifacts.dir}/${ctomdatapersistence.jar}"
     	             compress="true" 
     	             index="false" 
     	             basedir="${ctomdatapersistence.build.outputDir}"/>
