@@ -121,7 +121,7 @@
             <fileset dir="${regConsumerService.dir}/build/">
                 <include name="*.zip" />
             </fileset>
-            <fileset dir="${regConsumerService.dir}/build/">
+            <fileset dir="${studyconsumerservice.dir}/build/">
                 <include name="*.zip" />
             </fileset>
 
