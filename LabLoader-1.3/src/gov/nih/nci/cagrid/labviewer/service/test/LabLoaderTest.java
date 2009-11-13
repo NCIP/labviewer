@@ -37,8 +37,10 @@ public class LabLoaderTest
 	// Settings/asharma/Desktop/Temp/processedFolder/TER_2008_04_28_13_23_00_V2TOV3_v2-18-hl7v3.xml";
 	// String
 	 //sampleFile="D:/Development/LabLoader/src/TER_2008_07_03_09_27_20_V2TOV3_v2-1-hl7v3.xml";
-     String sampleFile="C:/Development/NewLabViewer/LabLoader-1.3/src/HL7V3-1.xml";
-	String proxyFile = "C:/Development/proxy";
+     //String sampleFile="C:/Development/NewLabViewer/LabLoader-1.3/src/HL7V3-1.xml";
+
+    String sampleFile="C:/Development/testdata/mrn-3/HL7V3-1.xml";
+    String proxyFile = "C:/Development/proxy";
 	private Logger logger = Logger.getLogger(getClass());
 
 	/**
