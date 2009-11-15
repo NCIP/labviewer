@@ -37,8 +37,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property file="local.properties"/>
 	<property file="project.properties"/>
 
-
-	<!--  <property name="properties.file" value="${basedir}/install.properties"/> -->
+<!-- load the properties file -->
+	<property name="properties.file" value="${basedir}/install.properties"/>
     <echo message="Using properties file of ${properties.file}."/>
 
 
