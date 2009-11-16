@@ -407,8 +407,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
              <echo message="Downloading Tomcat from: ${tomcat.src.url}"/> 
              <get src="${tomcat.src.url}" dest="${tomcat.dest.file}" />
              <get src="${tomcat.src.url.md5}" dest="${tomcat.dest.file}.md5" />
-             <checksum file="${tomcat.dest.file}" verifyProperty="tomcat.cksum.ok" format="MD5SUM" />
+             <checksum file="${tomcat.dest.file}" verifyProperty="tomcat.cksum.ok" />
                     <if>
+                            <equals arg1="${tomcat.cksum.ok}" arg2="true" />
                             <then>
                                    <echo message="Downloaded tomcat sucessfully" />
                             </then>
