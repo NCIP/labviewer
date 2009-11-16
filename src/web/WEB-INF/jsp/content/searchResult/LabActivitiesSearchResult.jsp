@@ -67,7 +67,7 @@ function SelectAll()
    	{
 	  		document.LabActivitiesSearchResultForm.operation.value="execute";
             document.LabActivitiesSearchResultForm.target="_self";
-            document.LabActivitiesSearchResultForm.action="<%="submitAdverseEvent.do"%>";
+            document.LabActivitiesSearchResultForm.action='<%="submitAdverseEvent.do"%>';
 	  		document.LabActivitiesSearchResultForm.recordId.value=recordIdvalue;
 	  		document.LabActivitiesSearchResultForm.submit();
  	}
@@ -158,7 +158,7 @@ function SelectAll()
 <!-- laf box 1st half -->
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="95%" height="100%" >
-	<html:form styleId="LabActivitiesSearchResultForm" action="<%="/LabActivitiesDB"%>" target="_self" >
+	<html:form styleId="LabActivitiesSearchResultForm" action='<%="/LabActivitiesDB"%>' target="_self" >
 		<html:hidden property="operation" value="read" />
 		<bean:define name="<%=DisplayConstants.LOGIN_OBJECT%>" id="loginObject" type="LoginForm" />
 		<html:hidden property="gridProxy" value="<%=loginObject.getGridProxy()%>" />
