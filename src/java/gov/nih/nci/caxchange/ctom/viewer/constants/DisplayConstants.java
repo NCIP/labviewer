@@ -81,6 +81,8 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.constants;
 
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
+
 /**
  * @author Kunal Modi (Ekagra Software Technologies Ltd.)
  */
@@ -88,8 +90,9 @@ public class DisplayConstants
 {
 	// QA
 	public static String CAAERS_URL =
-			"http://cbiovqa5010.nci.nih.gov:38080/caaers/pages/ae/list";
-	// Dev
+			//"http://cbiovqa5010.nci.nih.gov:38080/caaers/pages/ae/list";
+            (String) CommonUtil.props1.getProperty("BaseURLcaAERS");
+    // Dev
 	// public static String CAAERS_URL =
 	// "http://cbiovdev5041.nci.nih.gov:38080/caaers/pages/ae/list";
 	public static String APPLICATION_CONTEXT_NAME = "labviewer";
