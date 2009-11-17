@@ -126,7 +126,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctom-wsrf-webapp.dist.dir" value="${dist.exploded.dir}/${ctom-wsrf-webapp.dist.relative.dir}"/>
 	<property name="cchc.dist.dir" value="${dist.exploded.dir}/${cchc.dist.relative.dir}"/>
 	<property name="ctomdatapersistence.dist.dir" value="${dist.exploded.dir}/${ctomdatapersistence.dist.relative.dir}"/>
-    <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/new-artifacts"/>
+    <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/artifacts"/>
     <!--<property name="labviewer.artifact.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}" />-->
 	<property name="tools.dist.dir" value="${dist.exploded.dir}/${tools.dist.relative.dir}" />
 	<property name="common.dist.dir" value="${dist.exploded.dir}/${common.dist.relative.dir}" />
@@ -330,7 +330,46 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="build:ctodslabviewer-webapp" depends="init, build:ctomdatapersistence" description="Call webapp sub-projects build target to produce artifiacts">
-		<!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+		<echo message="Using properties file of ${properties.file}." />
+        <echo message=" *************** PROPERTIES PASSED IN ************:"/>
+            <echo message="dist.dir= ${ctodslabviewer-webapp.dist.dir}" />
+			<echo message="env.GLOBUS_LOCATION= ${env.GLOBUS_LOCATION}"/>
+			<echo message="database.dialect= ${database.dialect}"/>
+			<echo message="database.driver= ${database.driver}"/>
+			<echo message="database.url= ${database.url}"/>
+			<echo message="database.user= ${database.user}"/>
+			<echo message="database.password= ${database.password}"/>
+			<echo message="artifacts.dir= ${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+            <echo message="ctomlabviewer.dir= ${ctomlabviewer.base.dir}"/>
+
+            <echo message="software.dir= ${software.dir}"/>
+           <echo message="log.dir= ${log.dir}"/>
+			<echo message="loadLabURLS= ${loadLabURLS}"/>
+			<echo message="BaseURLcaAERS= ${BaseURLcaAERS}"/>
+			<echo message="BaseURLC3D= ${BaseURLC3D}"/>
+            <echo message="BaseURLC3PR= ${BaseURLC3PR}"/>
+			<echo message="hotLink_NAME= ${hotLink_NAME}"/>
+			<echo message="testEnabled= ${testEnabled}"/>
+			<echo message="SmokeTestGridURL= ${SmokeTestGridURL}"/>
+
+			<echo message="websso.enabled= ${websso.enabled}"/>
+			<echo message="websso.cas.server= ${websso.cas.server}"/>
+			<echo message="websso.client.server= ${websso.client.server}"/>
+            <echo message="websso.cas.server.port= ${websso.cas.server.port}"/>
+			<echo message="websso.client.port= ${websso.client.port}"/>
+
+            <echo message="cert.path= ${cert.path}"/>
+			<echo message="key.path= ${key.path}"/>
+			<echo message="hotLink_NAME= ${hotLink_NAME}"/>
+			<echo message="testEnabled= ${testEnabled}"/>
+
+
+
+
+
+
+        <!-- ################################################################################################### -->
+        <!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
 		<ant inheritAll="false" inheritRefs="false" antfile="${ctomlabviewer.build.file}" target="${ctomlabviewer.build.target}" dir="${ctomlabviewer.base.dir}">
 			<property name="dist.dir" value="${ctodslabviewer-webapp.dist.dir}" />
 			<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
