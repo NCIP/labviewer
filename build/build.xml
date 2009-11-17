@@ -312,7 +312,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	 	<property name="artifacts.dir.prefix" value="artifacts"/>
         <property name="ctomdeploymentcontroller.dir" value="${ctodsdeploymentcontroller.base.dir}"/>
          <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}" />
-         <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}" />
+         <!--<property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}" />-->
          <property name="unZip.dir" value="${unZip.dir}"/>
          <property name="stage.dir" value="${stage.dir}"/>
          <property name="war-dist.dir" value="${war-dist.dir}"/>
@@ -340,8 +340,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
 			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
-			
-		   <property name="log.dir" value="${log.dir}"/>
+            <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}"/>
+
+            <property name="software.dir" value="${software.dir}"/>
+           <property name="log.dir" value="${log.dir}"/>
 			<property name="loadLabURLS" value="${loadLabURLS}"/>
 			<property name="BaseURLcaAERS" value="${BaseURLcaAERS}"/>
 			<property name="BaseURLC3D" value="${BaseURLC3D}"/>
@@ -407,7 +409,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <target name="dist:tools:retrieve:tomcat" unless="tomcat.tools.exists" description="Downloads TOMCAT from binary repository and verifies checksum...">
                  <echo message="Downloading Tomcat from: ${tomcat.src.url}"/>
                  <get src="${tomcat.src.url}" dest="${tomcat.dest.file}" />
-                 <get src="${tomcat.src.url.md5}" dest="${tomcat.dest.file}.md5" />
+                <!-- <get src="${tomcat.src.url.md5}" dest="${tomcat.dest.file}.md5" />-->
                  <checksum file="${tomcat.dest.file}" verifyProperty="tomcat.cksum.ok" />
                         <!--<if>
                                 <equals arg1="${tomcat.cksum.ok}" arg2="true" />
