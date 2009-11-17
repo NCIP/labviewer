@@ -6,7 +6,7 @@
 
 <project name="ctomlabviewer" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
-	<property name="software.dir" value=".."/>
+  <property name="software.dir" value=".."/>
 	<property name="bda-utils" value="${software.dir}/target/bda-utils" />
 	    
 	<!-- PATHS -->
@@ -131,7 +131,7 @@
 		<copy todir="${compile.jar.dir}" overwrite="true">
 			<!--<fileset dir="${software.dir}/target/dist/exploded/artifacts" includes="ctom*.jar" />-->
 			<fileset dir="${artifacts.dir}" includes="ctom*.jar" />
-            <fileset dir="${software.dir}/ctomlabviewer/src/resources/jar"/>
+            <fileset dir="${ctomlabviewer.dir}/src/resources/jar"/>
 		</copy>
 	</target>
 	
@@ -445,20 +445,22 @@
 
 	    <target name="war">
 		        <copy todir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
-		            <fileset dir="${software.dir}/ctomlabviewer/target/ctomlabviewer/lib/ctomlabviewer/compile"/>
+		            <fileset dir="${ctomlabviewer.dir}/target/ctomlabviewer/lib/ctomlabviewer/compile"/>
 		        </copy>
-	    		<copy todir="${software.dir}/ctomlabviewer/src/web/WEB-INF">
-	    			<fileset file="${software.dir}/ctomlabviewer/target/classes/securityConfiguration.xml"/>
+<!--  RAM:  commented out on 11/16/09
+	    		<copy todir="${ctomlabviewer.webHome}/WEB-INF">
+	    			<fileset file="${ctomlabviewer.dir}/target/classes/securityConfiguration.xml"/>
 	    		</copy>
-	    		<copy todir="${software.dir}/ctomlabviewer/src/web/WEB-INF">
-	    			<fileset file="${software.dir}/ctomlabviewer/target/classes/cas-client.properties"/>
+	    		<copy todir="${ctomlabviewer.webHome}/WEB-INF">
+	    			<fileset file="${ctomlabviewer.dir}/target/classes/cas-client.properties"/>
 	    		</copy>
-	    		<copy todir="${software.dir}/ctomlabviewer/src/web/WEB-INF">
-	    		    <fileset file="${software.dir}/ctomlabviewer/target/classes/struts-config.xml"/>
+	    		<copy todir="${ctomlabviewer.webHome}/WEB-INF">
+	    		    <fileset file="${ctomlabviewer.dir}/target/classes/struts-config.xml"/>
 	    		</copy>
-	    		<copy todir="${software.dir}/ctomlabviewer/src/web/WEB-INF">
-	    		    <fileset file="${software.dir}/ctomlabviewer/target/classes/tiles.xml"/>
+	    		<copy todir="${ctomlabviewer.webHome}/WEB-INF">
+	    		    <fileset file="${ctomlabviewer.dir}/target/classes/tiles.xml"/>
 	    		</copy>
+-->
 
                 <delete>
                     <fileset dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
@@ -488,15 +490,18 @@
  <!--               <echo message="creating directory: ${software.dir}/target/dist/exploded/ctodslabviewer"/>
                 <mkdir dir="${software.dir}/target/dist/exploded/ctodslabviewer"/>
  -->               <!--<war destfile="${software.dir}/target/dist/exploded/ctodslabviewer/${ctomlabviewer.war}"-->
+            <!-- webxml="${software.dir}/ctomlabviewer/src/resources/web.xml"> -->
                   <war destfile="${artifacts.dir}/../ctodslabviewer/${ctomlabviewer.war}"        
                      compress="false"
-		             webxml="${software.dir}/ctomlabviewer/src/resources/web.xml">            
+		             webxml="${ctomlabviewer.build.resourceDir.0}/web.xml">
 		            <lib dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
                     </lib>
                     <classes dir="${ctomlabviewer.build.outputDir}"/>
 		           <!-- <webinf dir="${pa.dir}/ctomlabviewer/src/webapp/WEB-INF" excludes="web.xml"/>-->
-		            <fileset dir="${software.dir}/ctomlabviewer/src/web"/>
-		        </war>
+		            <!--<fileset dir="${software.dir}/ctomlabviewer/src/web"/>-->
+                      <fileset dir="${ctomlabviewer.webHome}"/>
+
+                  </war>
 
             <!-- RAM commented on 10/31/2009 as we are not supposed to do anything with catalna.bat -->
 <!--
