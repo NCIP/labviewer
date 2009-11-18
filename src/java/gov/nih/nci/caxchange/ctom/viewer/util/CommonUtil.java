@@ -110,7 +110,7 @@ public class CommonUtil
     public static Properties props1 = new Properties();
     static {
         try {
-            props1.load(new FileInputStream(CONFIG_FILE_1));
+            props1.load(CommonUtil.class.getResourceAsStream(CONFIG_FILE_1));
         } catch(IOException ioe) {
             log.error("Error reading the config file: " + CONFIG_FILE_1);
         }
