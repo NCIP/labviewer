@@ -269,11 +269,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		init,
 		build:ctomdatapersistence,
         build:ctodslabviewer-webapp,
-		build:ctom-wsrf
+        build:ctom-wsrf
 		" >
 	</target>
-
-
 
 
     <target name="build:ctomdatapersistence" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
