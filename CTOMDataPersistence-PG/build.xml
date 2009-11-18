@@ -126,12 +126,12 @@
 		<copy file="${ctomdatapersistence.resourceDir}/dataConnection.properties.template"
 			toFile="${ctomdatapersistence.build.resourceDir.0}/dataConnection.properties"
 			filtering="true" overwrite="true">
-		   <filterset begintoken="@" endtoken="@">
+		   <!--<filterset begintoken="@" endtoken="@">
 				<filter token="database.driver" value="${database.driver}" />
 				<filter token="database.url" value="${database.url}" />
 				<filter token="database.user" value="${database.user}" />
 				<filter token="database.password" value="${database.password}" />
-			</filterset>
+			</filterset>-->
 	 </copy>
 	</target>
 		
@@ -143,13 +143,13 @@
 			</unjar>
 			<delete file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml" />
 			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml.template" toFile="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp/hibernate.cfg.xml" filtering="true" overwrite="true">
-				<filterset begintoken="@" endtoken="@">
+				<!--<filterset begintoken="@" endtoken="@">
 					<filter token="database.dialect" value="${database.dialect}" />
 					<filter token="database.driver" value="${database.driver}" />
 					<filter token="database.url" value="${database.url}" />
 					<filter token="database.user" value="${database.user}" />
 					<filter token="database.password" value="${database.password}" />
-				</filterset>
+				</filterset>-->
 			</copy>
 			<jar jarfile="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" basedir="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm-temp" update="yes"/>
 			<copy file="${ctomdatapersistence.build.resourceDir.0}/ctomlabapi-orm.jar" todir="${ctomdatapersistence.build.dir}" overwrite="true"/>
