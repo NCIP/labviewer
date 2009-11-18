@@ -82,7 +82,7 @@
 		<dependency org="apache" name="commons-lang" rev="2.2"/>
 		<dependency org="apache" name="commons-logging" rev="1.1"/>
 		<dependency org="apache" name="log4j" rev="1.2.15" conf="default" />
-			
+			                
 		
 		<dependency org="apache" name="tomcat-servlet" rev="2.2"/>
 		
@@ -109,6 +109,9 @@
             <exclude module="pull-parser"/>
          </dependency>
 
+        <dependency org="stax" name="stax-api" rev="1.0" />
+         <dependency org="jaxb" name="jaxb-impl" rev="2.0.1"/>
+        
 
 
          <dependency org="cglib" name="cglib" rev="2.1_3"/>
