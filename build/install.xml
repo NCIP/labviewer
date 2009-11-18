@@ -5,7 +5,7 @@ $Id: install.xml 1715 2009-05-27 21:43:55Z saksass $
 $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-template/software/build/install.xml $
 -->
 
-<project name="LabViewer-installer" default="upgrade" basedir="." 
+<project name="LabViewer-installer" default="install" basedir="." 
 	xmlns:ivy="antlib:org.apache.ivy.ant"
 	>
 	<description>
@@ -151,7 +151,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		</path>
 	
 		<property name="properties.template.file" value="${basedir}/properties.template" />
-		<!-- figure out whether to use install-properties.template or upgrade-proprties.template based on the name of the properties file
+		<!-- figure out whether to use empty.properties.template or upgrade-proprties.template based on the name of the properties file
 		<propertyregex property="properties.file.type"
 			input="${properties.file}"
 			regexp=".*(install|upgrade).*"
@@ -160,7 +160,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<echo message="Properties file type = ${properties.file.type}"/>
 		<switch value="${properties.file.type}">
 			<case value="install">
-				<property name="properties.template.file" value="install-properties.template" />
+				<property name="properties.template.file" value="empty.properties.template" />
 			</case>         
 			<case value="upgrade">
 				<property name="properties.template.file" value="upgrade-properties.template" />
@@ -657,15 +657,282 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 
+
+    <target name="replace-tokens">
+        <delete dir="${target.dir}/token-replace" quiet="true"/>
+        <mkdir dir="${target.dir}/token-replace"/>
+
+        <unzip src="ctom-wsrf/ctom-wsrf.war" dest="${target.dir}/token-replace/ctom-wsrf" overwrite="true"/>
+        <unzip src="ctodslabviewer/ctomlabviewer.war" dest="${target.dir}/token-replace/ctomlabviewer" overwrite="true"/>
+	
+        <antcall target="replace-ctomdatapersistence"/>
+        <antcall target="replace-ctomlabviewer"/>
+        <antcall target="replace-ctom-wsrf"/>
+
+        <delete file="ctodslabviewer/ctomlabviewer.war" />
+		<war destfile="ctodslabviewer/ctomlabviewer.war"
+                webxml="${target.dir}/token-replace/ctomlabviewer/WEB-INF/web.xml">
+		        <fileset dir="${target.dir}/token-replace/ctomlabviewer" />
+		</war>
+
+        <delete file="ctom-wsrf/ctom-wsrf.war"/>
+		<war destfile="ctom-wsrf/ctom-wsrf.war"
+                webxml="${target.dir}/token-replace/ctom-wsrf/WEB-INF/web.xml">
+		        <fileset dir="${target.dir}/token-replace/ctom-wsrf" />
+		</war>
+
+        <echo message="Target replace-tokens completed"/>
+    </target>
+
+    <target name="replace-ctom-wsrf">
+
+			<echo message="Executing replace-ctom-wsrf"/>
+
+            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>			
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml"
+	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">		
+               <filterset begintoken="@" endtoken="@">
+                    <filter token="cert.path" value="${cert.path}" />
+                    <filter token="key.path" value="${key.path}" />
+                </filterset>			
+			</copy>		
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp/global_security_descriptor.xml"
+	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true"/>	     				   
+			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>
+
+	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+				<filterset begintoken="@" endtoken="@">
+					  <filter token="database_dialect" value="${database.dialect}" />
+					  <filter token="database_driver" value="${database.driver}" />
+					  <filter token="database_url" value="${database.url}" />
+					  <filter token="database_user" value="${database.user}" />
+					  <filter token="database_passwd" value="${database.password}" />
+				</filterset>
+			</copy>		
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes" overwrite="true"/>	     				   
+			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>
+
+		    <echo message="target replace-ctom-wsrf completed"/>
+			
+	</target>
+
+    <target name="replace-ctomlabviewer">
+		   <echo message="Executing replace-ctomlabviewer"/>
+
+
+			<mkdir dir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp"/>
+			
+			<antcall target="configure-csm"/>
+			<antcall target="configure-ctods-hibernate"/>
+			<antcall target="configure-csm-app-security"/>
+			<antcall target="configure-log4j"/>
+			<antcall target="configure-labviewer-properties"/> 
+			<antcall target="configure-baseURL-properties"/>
+			<antcall target="configure-WebSSO-Authentication"/>
+			<antcall target="configure-cas-client"/>
+			
+			<delete dir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" quiet="true"/>
+            <echo message="target replace-ctomlabviewer completed"/>
+    </target>
+
+	<target name="configure-cas-client" >
+		<echo message="Executing configure-cas-client"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/cas-client.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+			<filterset begintoken="@" endtoken="@">
+				<filter token="WEBSSO.SERVER" value="${websso.cas.server}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${websso.client.server}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.cas.server.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
+	    </copy>		
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cas-client.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+	
+	
+	<target name="configure-WebSSO-Authentication" >
+		<echo message="configure-WebSSO-Authentication"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/web.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+			<filterset begintoken="@" endtoken="@">
+				<filter token="cert.path" value="${cert.path}" />
+				<filter token="key.path" value="${key.path}" />
+				<filter token="cas_server" value="${websso.cas.server}" />			
+			</filterset>
+	    </copy>		
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/web.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF" overwrite="true"/>	        
+	</target> 
+	
+	
+	
+	<target name="configure-labviewer-properties">
+	<echo message="configure-labviewer-properties"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="hotLink_Type" value="${hotLink_Type}" />
+				<filter token="testEnabled" value="${testEnabled}" />
+				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
+				<filter token="websso.enabled" value="${websso.enabled}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />	
+			</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+
+	<target name="configure-baseURL-properties">
+		<echo message="configure-baseURL-properties"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/baseURL.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+			
+			<filterset begintoken="@" endtoken="@">
+				<filter token="BaseURLcaAERS" value="${BaseURLcaAERS}" />
+				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
+				<filter token="BaseURLC3PR" value="${BaseURLC3PR}" />
+				<filter token="loadLabURLS" value="${loadLabURLS}" />	
+				<filter token="tissueURL" value="${tissueURL}" />
+		    </filterset>
+			
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/baseURL.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+	
+	
+	<target name="configure-csm">
+		<echo message="configure-csm"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_url" value="${database.url}" />
+					<filter token="database_user" value="${database.user}" />
+					<filter token="database_passwd" value="${database.password}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>
+	        
+	</target>
+	
+	<target name="configure-ctods-hibernate">
+		<echo message="configure-ctods-hibernate"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_url" value="${database.url}" />
+					<filter token="database_user" value="${database.user}" />
+					<filter token="database_passwd" value="${database.password}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cTODSlabviewer.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+
+	<target name="configure-csm-app-security">
+		<echo message="configure-csm-app-security"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/ApplicationSecurityConfig.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+								<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/ApplicationSecurityConfig.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+
+	
+	<target name="configure-log4j">
+		<echo message="configure-log4j"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/log4j.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+      		<filterset begintoken="@" endtoken="@">
+				<filter token="log_dir" value="${log.dir}" />
+			</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/log4j.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+	
+    <target name="replace-ctomdatapersistence" >
+		<echo message="Executing replace-ctomdatapersistence"/>
+        <delete dir="${target.dir}/token-replace/ctomlabapi-orm" quiet="true"/>
+        <delete dir="${target.dir}/token-replace/ctomdatapersistence" quiet="true"/>
+        <mkdir dir="${target.dir}/token-replace/ctomdatapersistence"/>
+        <mkdir dir="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <unjar src="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+                 dest="${target.dir}/token-replace/ctomdatapersistence"/>
+        <delete file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"/>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/dataConnection.properties"
+              filtering="true" overwrite="true" tofile="${target.dir}/token-replace/ctomdatapersistence/tmp/dataConnection.properties">
+            <filterset begintoken="@" endtoken="@">
+                    <filter token="database.dialect" value="${database.dialect}" />
+                    <filter token="database.driver" value="${database.driver}" />
+                    <filter token="database.url" value="${database.url}" />
+                    <filter token="database.user" value="${database.user}" />
+                    <filter token="database.password" value="${database.password}" />
+            </filterset>
+        </copy>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/tmp/dataConnection.properties"
+              tofile="${target.dir}/token-replace/ctomdatapersistence/dataConnection.properties" overwrite="true"/>
+        <delete dir="${target.dir}/token-replace/ctomdatapersistence/tmp"/>
+
+        <!-- unzip ctomlabapi-orm.jar, delete and reassemble it back -->
+        <unjar src="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+                 dest="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <delete file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"/>
+
+        <copy file="${target.dir}/token-replace/ctomlabapi-orm/hibernate.cfg.xml"
+              filtering="true" overwrite="true" tofile="${target.dir}/token-replace/tmp/ctomlabapi-orm/hibernate.cfg.xml">
+            <filterset begintoken="@" endtoken="@">
+                <filter token="database.dialect" value="${database.dialect}" />
+                 <filter token="database.driver" value="${database.driver}" />
+                 <filter token="database.url" value="${database.url}" />
+                 <filter token="database.user" value="${database.user}" />
+                 <filter token="database.password" value="${database.password}" />
+             </filterset>
+        </copy>
+        <copy file="${target.dir}/token-replace/tmp/ctomlabapi-orm/hibernate.cfg.xml"
+              tofile="${target.dir}/token-replace/ctomlabapi-orm/hibernate.cfg.xml"/>
+         <delete dir="${target.dir}/token-replace/tmp"/>
+
+        <!-- reassemble back ctomlabapi-orm.jar.  Also copy thsi back into WEB-INF/lib   -->
+         <jar file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+             basedir="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+              todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib"/>
+
+        <!-- reassemble back ctomdatapersistence.jar   -->
+        <jar file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+             basedir="${target.dir}/token-replace/ctomdatapersistence"  />
+        
+        <echo message="target replace-ctomdatapersistence completed"/>
+    </target>
+
     <target name="install:tomcat:LabViewer"
             description="Deploy LabViewer-webapp and common libraries to tomcat installation"
             unless="exclude.tomcat" depends="init:install,init:common">
 		<delete dir="${tomcat.home}/temp"/>
 		<delete dir="${tomcat.home}/work"/>
-		<!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
-		<copy file="ctodslabviewer/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+
+        <antcall target="replace-tokens"/>
+        <!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
+        
+        <copy file="ctodslabviewer/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+
 		<copy file="ctom-wsrf/ctom-wsrf.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+
    </target>
+
 
 	<target name="install:tomcat:LabViewer-webapp:configure"
             description="Configure LabViewer-webapp application, copies over externalized properties or configurations
