@@ -195,10 +195,12 @@
         <!-- TODO:  RAM on 10/27/2009 : fix certificate paths in global_security_descriptor.xml file before you copy from globus_wsrf_core  -->
         <copy file="${ctomdeploymentcontroller.dir}/resources/global_security_descriptor_template.xml"
 			  toFile="${webapps.dir}/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" overwrite="true" filtering="true">
+<!--
                 <filterset begintoken="@" endtoken="@">
                     <filter token="cert.path" value="${cert.path}" />
                     <filter token="key.path" value="${key.path}" />
                 </filterset>
+-->
 		</copy>
 
         <copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core">
@@ -244,6 +246,7 @@
 			<fileset dir="wsrf-folder/classes" />
 		</copy>
 		<copy file="labviewer.hibernate.cfg.xml.template" toFile="${webapps.dir}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
+<!--
 		 <filterset begintoken="@" endtoken="@">
 		  <filter token="database_dialect" value="${database.dialect}" />
 		  <filter token="database_driver" value="${database.driver}" />
@@ -251,6 +254,7 @@
 		  <filter token="database_user" value="${database.user}" />
 		  <filter token="database_passwd" value="${database.password}" />
 		</filterset>
+-->
 		</copy>
 	</target>
 
