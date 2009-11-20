@@ -28,13 +28,14 @@ import org.xml.sax.SAXException;
 public class LabViewerStudyTest                  
 {
 	String serviceUrl =
-			//"https://localhost:21443/ctom-wsrf/services/cagrid/StudyConsumer";
-            "https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/StudyConsumer";
-    
-                            
+			"https://localhost:21443/ctom-wsrf/services/cagrid/StudyConsumer";
+            //"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/StudyConsumer";   // DEV1 URL
+           // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/StudyConsumer";  // new DEV2 URL
 
-                                                                  
-	// ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
+
+
+
+    // ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
 	// String serviceUrl=
 	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyConsumer";
 	// String serviceUrl =
