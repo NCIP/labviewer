@@ -675,6 +675,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		        <fileset dir="${target.dir}/token-replace/ctomlabviewer" />
 		</war>
 
+		<!--  copy all persistence related jars from ctomlabviewer exploded war to ctom-wsrf exploded area.. -->
+		<antcall target="copy-psJars-ctomlabviewer-to-ctomwsrf"/>		 
+		
         <delete file="ctom-wsrf/ctom-wsrf.war"/>
 		<war destfile="ctom-wsrf/ctom-wsrf.war"
                 webxml="${target.dir}/token-replace/ctom-wsrf/WEB-INF/web.xml">
@@ -684,6 +687,19 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
         <echo message="Target replace-tokens completed"/>
     </target>
 
+	<target name="copy-psJars-ctomlabviewer-to-ctomwsrf">
+			<echo message="Executing copy-psJars-ctomlabviewer-to-ctomwsrf (Copying 3 persistence jars) "/>
+			
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+                  tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomdatapersistence.jar" overwrite="true"/>
+			  
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomlabapi-beans.jar"
+				tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomlabapi-beans.jar" overwrite="true"/>
+			  
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomlabapi-orm.jar"
+				tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomlabapi-orm.jar" overwrite="true"/>
+     </target>	
+	 
     <target name="replace-ctom-wsrf">
 
 			<echo message="Executing replace-ctom-wsrf"/>
@@ -721,8 +737,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
     <target name="replace-ctomlabviewer">
 		   <echo message="Executing replace-ctomlabviewer"/>
-
-
 			<mkdir dir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp"/>
 			
 			<antcall target="configure-csm"/>
