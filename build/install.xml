@@ -936,14 +936,17 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <target name="install:tomcat:LabViewer"
             description="Deploy LabViewer-webapp and common libraries to tomcat installation"
             unless="exclude.tomcat" depends="init:install,init:common">
+			
 		<delete dir="${tomcat.home}/temp"  quiet="true"/>
 		<delete dir="${tomcat.home}/work"  quiet="true"/>
-
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer" quiet="true"/>
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf" quiet="true"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer.war" quiet="true"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf.war" quiet="true"/>
+		
         <antcall target="replace-tokens"/>
-        <!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
-        
+                
         <copy file="to-be-deployed/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
-
 		<copy file="to-be-deployed/ctom-wsrf.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
 
    </target>
