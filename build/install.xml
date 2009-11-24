@@ -669,8 +669,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
         <antcall target="replace-ctomlabviewer"/>
         <antcall target="replace-ctom-wsrf"/>
 
-        <delete file="ctodslabviewer/ctomlabviewer.war" />
-		<war destfile="ctodslabviewer/ctomlabviewer.war"
+        <!--<delete file="ctodslabviewer/ctomlabviewer.war" />-->
+		<mkdir dir="to-be-deployed"/>
+		<war destfile="to-be-deployed/ctomlabviewer.war"
                 webxml="${target.dir}/token-replace/ctomlabviewer/WEB-INF/web.xml">
 		        <fileset dir="${target.dir}/token-replace/ctomlabviewer" />
 		</war>
@@ -678,8 +679,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<!--  copy all persistence related jars from ctomlabviewer exploded war to ctom-wsrf exploded area.. -->
 		<antcall target="copy-psJars-ctomlabviewer-to-ctomwsrf"/>		 
 		
-        <delete file="ctom-wsrf/ctom-wsrf.war"/>
-		<war destfile="ctom-wsrf/ctom-wsrf.war"
+        <!--<delete file="ctom-wsrf/ctom-wsrf.war"/>-->
+		<war destfile="to-be-deployed/ctom-wsrf.war"
                 webxml="${target.dir}/token-replace/ctom-wsrf/WEB-INF/web.xml">
 		        <fileset dir="${target.dir}/token-replace/ctom-wsrf" />
 		</war>
@@ -935,15 +936,15 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <target name="install:tomcat:LabViewer"
             description="Deploy LabViewer-webapp and common libraries to tomcat installation"
             unless="exclude.tomcat" depends="init:install,init:common">
-		<delete dir="${tomcat.home}/temp"/>
-		<delete dir="${tomcat.home}/work"/>
+		<delete dir="${tomcat.home}/temp"  quiet="true"/>
+		<delete dir="${tomcat.home}/work"  quiet="true"/>
 
         <antcall target="replace-tokens"/>
         <!--<copy file="${LabViewer-webapp.dir.dist}/${LabViewer-webapp.war.file}" todir="${tomcat.home}/webapps" overwrite="true" />-->
         
-        <copy file="ctodslabviewer/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+        <copy file="to-be-deployed/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
 
-		<copy file="ctom-wsrf/ctom-wsrf.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+		<copy file="to-be-deployed/ctom-wsrf.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
 
    </target>
 
