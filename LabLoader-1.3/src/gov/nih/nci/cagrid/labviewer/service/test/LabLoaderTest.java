@@ -8,6 +8,9 @@ import gov.nih.nci.cagrid.labviewer.client.LabLoaderClient;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.File;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
@@ -17,29 +20,24 @@ import org.globus.gsi.GlobusCredential;
 
 public class LabLoaderTest
 {
-	String serviceUrl =
-			"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/LabLoader";
-	// String
-	// serviceUrl="https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/LabLoader";
-	// String
-	// serviceUrl="https://cbvapp-q1009.nci.nih.gov:8080/ctom-wsrf/services/cagrid/LabLoader";
-	// String serviceUrl =
-	// "http://localhost:8080/wsrf/services/cagrid/LabLoader";
-	// String serviceUrl =
-	// "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/LabLoader";
-	// String
-	// serviceUrl="http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/LabLoader";
-	// String serviceUrl=
-	// "https://cbvapp-d1017.nci.nih.gov:28443/ctom-wsrf/services/cagrid/LabLoader";
-	// String serviceUrl=
-	// "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/LabLoader";
-	// String sampleFile = "C:/Documents and
-	// Settings/asharma/Desktop/Temp/processedFolder/TER_2008_04_28_13_23_00_V2TOV3_v2-18-hl7v3.xml";
-	// String
-	 //sampleFile="D:/Development/LabLoader/src/TER_2008_07_03_09_27_20_V2TOV3_v2-1-hl7v3.xml";
-     String sampleFile="C:/Development/NewLabViewer/LabLoader-1.3/src/HL7V3-1.xml";
-	String proxyFile = "C:/Development/proxy";
-	private Logger logger = Logger.getLogger(getClass());
+    private static final String CONFIG_FILE_1 = "C:/LabViewer/TestClient/service-url.properties";
+    public static Properties props1 = new Properties();
+    private static final Logger log = Logger.getLogger(LabLoaderTest.class);
+    static {
+        try {
+            props1.load(new FileInputStream(CONFIG_FILE_1));
+        } catch(IOException ioe) {
+            System.out.println ("Error reading the config file: " + CONFIG_FILE_1);
+            ioe.printStackTrace();
+        }
+    }
+
+    String serviceUrl = (String) props1.get("serviceURL");
+			//"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/LabLoader";
+
+    String proxyFile = "C:/LabViewer/TestClient/proxy";
+
+    private Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * @param args
@@ -56,35 +54,40 @@ public class LabLoaderTest
 	 */
 	public void test()
 	{
-		System.out.println("Beginning test to call Lab Loader at " + serviceUrl);
-		logger.debug("Beginning test to call Lab Loader at " + serviceUrl);
+
 		try
 		{
-			// Setup the credentials
+            System.out.println("Calling SERVICE URL:" + serviceUrl);
+            // Setup the credentials
 			GlobusCredential gb = new GlobusCredential(proxyFile);//this.obtainCredentials();//
-						 
-			// Create the client
-			LabLoaderClient client = new LabLoaderClient(this.serviceUrl,gb);
-			
-			// Read the sample HL7v3 message to send
-			// URL fileLoc = getClass().getResource(sampleFile);
-			
-			// Read the file from disk
-			//for(int i=1;i<2;i++)
-			//{
-				//String sampleFile="D:/DEMOTEST/mrn-4/HL7V3-"+i+".xml";	
-				//System.out.println(sampleFile);
-			    FileInputStream fis = new FileInputStream(sampleFile);
+
+            // Create the client
+		    LabLoaderClient client = new LabLoaderClient(this.serviceUrl,gb);
+
+
+           File[] dataFiles = new File("C:/LabViewer/TestData").listFiles();
+            for (int i = 0; i < dataFiles.length; i++) {
+                File dataFile = dataFiles[i];
+
+                if (! dataFile.getName().endsWith(".xml")) continue;
+
+                FileInputStream fis = new FileInputStream(dataFile);
 				int x= fis.available();
 				byte b[]= new byte[x];
 				fis.read(b);
 				String content = new String(b);
-			
-				// Call the service
-				client.loadLab(content);
-			
-				System.out.println("Returned from calling service");
-		   //}
+
+                System.out.println("BEGIN loading data from file: " + dataFile.getName());
+                log.debug("BEGIN loading data from file: " + dataFile.getName());
+
+                // Call the service
+                client.loadLab(content);
+
+                System.out.println("FINISHED loading data from file: " + dataFile.getName());
+                log.debug("FINISHED loading data from file: " + dataFile.getName());
+                log.debug("\n\n");
+
+            }
 		}
 		catch (Exception e)
 		{
