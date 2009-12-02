@@ -36,7 +36,8 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		logger.info("LabLoader loadLab method called.");
 		String username = LabLoaderAuthorization.getCallerIdentity();
 
-          /* Ram commented this below after talking to Anu on 10/30/2009
+          /* Ram commented this below after talking to Anu on 10/30/2009.  Again uncommented this after fixing
+            some caGrid config files on 12/02/2009 */
         if (!authorized(username))
 		{
 			logger.error("User " + username
@@ -49,7 +50,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		}
 		else
 		{
-		*/
+
            // Now unmarshall the HL7v3 message
 			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
 			Object obj = null;
@@ -101,7 +102,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 					logger.error("Error closing connection",ex);
 				}
 			}// end of finally
-		/*  Ram's comment on 10/30/2009 END }}// end of else */
+		}// /*  Ram's comment on 10/30/2009 END end of else */
 	}
 
 	/**
