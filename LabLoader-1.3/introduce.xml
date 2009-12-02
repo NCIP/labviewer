@@ -70,7 +70,13 @@
    <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
     <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
      <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
-     <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+		<ns6:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+			<ns6:SecuritySetting xsi:type="ns6:SecuritySetting">None</ns6:SecuritySetting>
+			<ns6:MethodAuthorization xsi:type="ns6:MethodAuthorization">
+			<ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+			</ns6:MethodAuthorization>
+		</ns6:MethodSecurity>
+	 <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
      <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
     </ns4:Method>
     <ns4:Method description="loadLab method is called to persist an HL7v3 message to the database" isImported="false" isProvided="false" name="loadLab" xsi:type="ns4:MethodType">
