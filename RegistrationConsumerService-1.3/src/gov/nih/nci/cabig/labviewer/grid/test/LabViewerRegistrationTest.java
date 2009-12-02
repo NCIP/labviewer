@@ -31,8 +31,8 @@ import org.xml.sax.SAXException;
 public class LabViewerRegistrationTest                       
 {                                                                                         
 	String serviceUrl =
-		//	"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // "https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";//"https://localhost:8443/ctom-wsrf/services/cagrid/RegistrationConsumer";
-         "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/RegistrationConsumer";
+		"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // DEV1
+        // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/RegistrationConsumer";  // DEV2 
     
                              
     // private String serviceUrl=
