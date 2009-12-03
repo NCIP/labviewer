@@ -959,7 +959,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	</target>
 
 	<target name="install:tomcat:LabViewer-webapp:re-configure" description="Configure LabViewer-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="init:install,init:common">
-	</target>
+
+    </target>
 
 	<target name="init:install" unless="upgrade.running">
 		<property name="install.running" value="true"/>
@@ -978,7 +979,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
         <!-- Ram changed this -->
         <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
-        <property name="tomcat.home" value="${tomcat.relative.path}"/>
+        <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
 
     </target>
 
