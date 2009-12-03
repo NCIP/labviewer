@@ -236,7 +236,7 @@ function SelectAll()
 																										sort="list" cellspacing="0" cellpadding="3"
 																										pagesize="15" id="labtable" export="true"
 																										size="totalLabs" defaultsort="5"
-																										defaultorder="ascending" requestURI=""
+																										defaultorder="ascending" requestURI="/search.do"
 																										decorator="gov.nih.nci.caxchange.ctom.viewer.util.LabSearchDecorator"
 																										style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;"
 																										class="dataTable">
@@ -257,8 +257,7 @@ function SelectAll()
 																										<display:setProperty
 																											name="export.excel.filename"
 																											value="LabResults.xls" />
-																										<display:setProperty
-																											name="export.csv.filename"
+																										<display:setProperty name="export.csv.filename"
 																											value="LabResults.csv" />
 																										<display:setProperty
 																											name="export.xml.filename"
@@ -271,7 +270,7 @@ function SelectAll()
 																										<display:setProperty
 																											name="export.xml.include_header" value="true" />
 																										<display:column class="dataCellText"
-																											sortable="true"
+																											sortable="true"  media='html' 
 																											title="<img src='images/CheckBox.gif' alt='Select All' id='CheckGif' onclick='SelectAll();return false'/>'"
 																											maxLength="90">
 																											<html:multibox style="formFieldSized"
@@ -314,11 +313,12 @@ function SelectAll()
 																										<display:column property="highRange"
 																											class="dataCellText" sortable="true"
 																											title="Upper Limit" />
-																										<display:column
-																												property="labsToCDMS"
+
+                                                                                                        <display:column property="labsToCDMS"
 																												class="dataCellText" sortable="true"
 																												title="Sent to CDMS" />
-																										<display:column
+
+                                                                                                        <display:column
 																												property="labsToAE"
 																												class="dataCellText" sortable="true"
 																												title="Sent to caAERS" />
