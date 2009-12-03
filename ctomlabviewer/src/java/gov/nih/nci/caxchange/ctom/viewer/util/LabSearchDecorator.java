@@ -4,6 +4,11 @@ import gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResult;
 
 import org.displaytag.decorator.TableDecorator;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
 /**
  * The Class LabSearchDecorator.
  * 
@@ -13,9 +18,10 @@ public class LabSearchDecorator extends TableDecorator
 {
 
 	/** The Constant NBSP. */
-	private static final String NBSP = "&nbsp;";
+	//private static final String NBSP = "&nbsp;";
+    private static final String NBSP = "Not Available ";
 
-	/**
+    /**
 	 * Instantiates a new lab search decorator.
 	 */
 	public LabSearchDecorator()
@@ -137,14 +143,21 @@ public class LabSearchDecorator extends TableDecorator
 	 * 
 	 * @return the labs to cdms
 	 */
-	public final String getLabsToCDMS()
+	public final String getLabsToCDMS()        /* Ram changed on 12/04/2009 from String to Date */
 	{
 
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
-		String labsToCDMS = "false";
-		if (labSearchResult.isLabLoadedToCDMS())
+		String labsToCDMS = " NOT SENT ";
+        //Date labsToCDMS = null;
+        if (labSearchResult.isLabLoadedToCDMS())
 		{
-			labsToCDMS = labSearchResult.getLabLoadedToCDMSDate();
+          try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            if (labSearchResult.getLabLoadedToCDMSDate() != null) labsToCDMS = df.format(df.parse(labSearchResult.getLabLoadedToCDMSDate()));
+           } catch( Throwable e) {  //ignore it
+               labsToCDMS=null;
+           }
 		}
 		return labsToCDMS;
 	}
@@ -154,15 +167,21 @@ public class LabSearchDecorator extends TableDecorator
 	 * 
 	 * @return the labs to ae
 	 */
-	public final String getLabsToAE()
+	public final String getLabsToAE()  /* Ram changed on 12/04/2009 from String to Date */
 	{
 
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
-		String labsToAE = "false";
+		String labsToAE = " NOT SENT ";
 		if (labSearchResult.isAdverseEventReported())
 		{
-			labsToAE = labSearchResult.getAdverseEventReportedDate();
-		}
+			try {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                if (labSearchResult.getAdverseEventReportedDate() != null)
+                                labsToAE = df.format(df.parse(labSearchResult.getAdverseEventReportedDate()));
+            } catch( Throwable e) {  //ignore it
+               labsToAE =null;
+            }
+        }
 		return labsToAE;
 	}
 	
