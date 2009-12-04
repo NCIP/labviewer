@@ -40,7 +40,7 @@
 	select nextval('CSM_APPLICATI_APPLICATION__SEQ');
 	
 	insert into csm_user (USER_ID, LOGIN_NAME,FIRST_NAME,LAST_NAME,PASSWORD,UPDATE_DATE)
-	values (2, 'demo','CCTS','Demo','demo',now());
+	values (2, 'demo','CCTS','Demo','raZjjVit/vwqjNaQ/oYeaA==',now());
 	select nextval('CSM_USER_USER_ID_SEQ');
 	
 	insert into csm_protection_element(PROTECTION_ELEMENT_ID, PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID,UPDATE_DATE)
