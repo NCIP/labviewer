@@ -149,14 +149,20 @@ public class LabSearchDecorator extends TableDecorator
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
 		String labsToCDMS = " NOT SENT ";
         //Date labsToCDMS = null;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (labSearchResult.isLabLoadedToCDMS())
 		{
           try {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             if (labSearchResult.getLabLoadedToCDMSDate() != null) labsToCDMS = df.format(df.parse(labSearchResult.getLabLoadedToCDMSDate()));
-           } catch( Throwable e) {  //ignore it
-               labsToCDMS=null;
+           } catch( ParseException e) {
+			   DateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+			   try {
+                labsToCDMS = df.format(df1.parse(labSearchResult.getLabLoadedToCDMSDate()));
+			   } catch(Throwable t) {
+					labsToCDMS=null;
+			   }
+
            }
 		}
 		return labsToCDMS;
@@ -172,14 +178,20 @@ public class LabSearchDecorator extends TableDecorator
 
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
 		String labsToAE = " NOT SENT ";
-		if (labSearchResult.isAdverseEventReported())
+         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (labSearchResult.isAdverseEventReported())
 		{
 			try {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 if (labSearchResult.getAdverseEventReportedDate() != null)
                                 labsToAE = df.format(df.parse(labSearchResult.getAdverseEventReportedDate()));
-            } catch( Throwable e) {  //ignore it
-               labsToAE =null;
+            } catch( ParseException e) {
+                DateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+                try {
+                  labsToAE = df.format(df1.parse(labSearchResult.getAdverseEventReportedDate()));
+                } catch(Throwable t) {
+                     labsToAE=null;
+                }
+
             }
         }
 		return labsToAE;
