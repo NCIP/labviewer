@@ -352,10 +352,23 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:tomcat:LabViewer-webapp:configure,
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
-		install:post:tomcat,
+
+		install:configure:ssl,
 		install:tomcat:start
 		">
 	</target>
+        <!-- install:post:tomcat, -->
+    <target  name="install:configure:ssl" description="configures SSL connectors, keystore and password">
+        <copy  file="server-template.xml" tofile="${tomcat.home}/conf/server.xml" overwrite="true">
+            <filterset begintoken="@" endtoken="@">
+                  <filter token="keystoreLocation" value="${tomcat.ssl.keystore.location}" />
+                  <filter token="keystorePassword" value="${tomcat.ssl.keystore.pass}" />
+                  <filter token="cert.path" value="${cert.path}" />
+				  <filter token="key.path" value="${key.path}" />
+                  <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
+        </copy>
+    </target>
 
 	<target name="install" description="Installs and configures TOMCAT, creates database, and deploys application" 
 		depends="
@@ -401,7 +414,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:tomcat:grid,
 		install:tomcat:grid:configure,
 		upgrade:post:tomcat,
-		install:post:tomcat,
+		
 		install:tomcat:start
 		">
 	</target>
