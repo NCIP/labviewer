@@ -272,7 +272,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
         build:ctom-wsrf
 		" >
 	</target>
-
+       
 
     <target name="build:ctomdatapersistence" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
         <!--  setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
@@ -484,7 +484,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<include name="cagrid*"/>
 			</fileset>
 		</copy>
-	</target>
+        <copy todir="${dist.exploded.dir}" file="server-template.xml" overwrite="true"/>
+
+    </target>
 
 
     <target name="dist:installer" depends="dist:installer:prep"
