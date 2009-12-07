@@ -98,8 +98,11 @@ public class TestPing
 {
 
 	private static final Logger log = Logger.getLogger(TestPing.class);
-	private static final String CONFIG_FILE = "/baseURL.properties";
-	String serviceUrl = "";
+    
+    //private static final String CONFIG_FILE = "/baseURL.properties";
+    private static final String CONFIG_FILE = "/labviewer.properties";
+
+    String serviceUrl = "";
 
 	public static void main(String[] args)
 	{
