@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<securityConfig xmlns="http://www.globus.org">
+    <credential>
+        <key-file value="@key.path@"/>
+        <cert-file value="@cert.path@"/>
+    </credential>
+    
+</securityConfig>

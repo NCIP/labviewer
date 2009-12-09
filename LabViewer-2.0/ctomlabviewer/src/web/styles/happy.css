@@ -1,0 +1,161 @@
+/**** GENERAL TAG STYLE OVERRIDES */
+
+body {
+  margin: 0; padding: 0 0 35px 0;
+  background: url(../images/chrome/caBIG_footer.gif) no-repeat bottom right #eee;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  color: #000000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  color: #2E3257;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+h2 { font-size: 1.0em; }
+h3, h4 { font-size: 0.9em; }
+
+p { margin: 1em 0; }
+
+/**** COMMON TEMPLATE ELEMENTS */
+
+#header {
+  background: url(../images/chrome/header_BG.gif) repeat-x top;
+  min-width: 770px;
+}
+
+#header .background-R {
+  background: url(../images/chrome/header_BG_R.gif) no-repeat top right;
+}
+
+/**** PAGE CONTENT BOXES */
+
+#main {
+  margin: 0;
+  padding: 12px 18px 20px 18px;
+  clear: both;
+}
+
+
+/* A pane is a vertical subdivision of the page.
+   Individual panes will need to have their widths specified
+   if there's more than one in a page;
+   the total should be something less than 100%. */
+.pane {
+  float: left;
+  margin: 0 14px 12px 0;
+}
+
+/* Each pane will contain one or more "boxes" */
+.box {
+  background-color: #fff;
+  margin-bottom: 12px; 
+}
+.box .header {
+  background: url(../images/chrome/boxheader_BG.gif) repeat-x top #1972C7;
+}
+.box .header h2 {
+  color: #FFFFFF;
+  margin: 0;
+  padding: 6px 20px 4px 8px;
+}
+.box .header .background-L { background: url(../images/chrome/boxheader_BG_L.gif) no-repeat top left; }
+.box .header .background-R { background: url(../images/chrome/boxheader_BG_R.gif) no-repeat top right; }
+
+.box .content {
+  padding: 8px;
+}
+
+.box h3 {
+  position: relative;
+  border-top: solid 1px #000;
+  background: url(../images/chrome/boxsubhead_BG.png) repeat-x bottom #c9e3eb;
+  padding: 4px 8px;
+}
+
+
+.division {
+    clear: both;
+}
+
+
+
+/*
+    'row' is a class for label: value type rows.  The intent is
+    that each row would contain 2-3 subdivs:  a label (float: left), an optional extra
+    (float: right), and the value (positioned naturally).
+ */
+div.row {
+    padding: 2px;
+    margin: 1px 0;
+}
+/* Automatically clear after each row
+   Based on http://www.positioniseverything.net/easyclearing.html */
+div.row:after, .autoclear:after {
+    display: block ;
+    content: ' ';
+    clear: both ;
+    height: 0 ;
+    visibility: hidden ;
+}
+div.row div.label, div.row div.value {
+  line-height: 1.5em;
+}
+div.row div.pass {
+  line-height: 1.5em;
+  font-weight: bold;
+  color: green;
+}
+div.row div.fail {
+  line-height: 1.5em;
+  font-weight: bold;
+  color: red;
+}
+div.row div.error {
+  line-height: 1.5em;
+  color: red;
+}
+div.row div.label {
+  font-weight: bold;
+  float: left;
+  margin-left: 0.5em;
+  text-align: right;
+  /* default width; pages might override */
+  width: 45em;
+}
+div.row div.value {
+  font-weight: normal;
+  /* default; should be changed whenever .label width is changed */
+  margin-left: 11em;
+  /* In Mac the Help (?) button is wrapping */
+  white-space:nowrap;
+  width: 50em;
+}
+
+/*
+  Left and right panels
+*/
+.rightpanel {
+    float:right;
+    width:48%;
+    margin: 0 14px 14px 0;
+    padding: 5px;
+}
+
+.leftpanel {
+    float: left;
+    width:52%;
+    margin: 0 5px 5px -2em;
+    padding: 5px;
+}
+
+
+
+

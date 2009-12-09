@@ -1,0 +1,1121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- bda-build-template version 1.1.1  -->
+<!--
+$Id: install.xml 1715 2009-05-27 21:43:55Z saksass $
+$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-template/software/build/install.xml $
+-->
+
+<project name="LabViewer-installer" default="install" basedir="." 
+	xmlns:ivy="antlib:org.apache.ivy.ant"
+	>
+	<description>
+		This build file is part of the bda-build-templates project. This is the master install file for the project.  It should be placed in project/software.  This script is copied into the distribution and  executed from the extracted distribution.  It is run by typing "ant" from the master project build.xml or from command line. This script has two flows install and upgrade.
+		Install will do the following
+ 			* Install binaries
+			* Configure binaries
+			* Install application
+			* Configure application
+			* Re-create database
+			* Upgrade database
+		Upgrade will do the following
+			* Install application
+			* Configure application
+			* Upgrade database
+		The script includes target that may not be used by all projects, but are included in here becaue it is a template. This script has targets to deal with the following, you can delete targets you don't want to work with
+		Application servers (option for grid services also)
+			* JBoss
+			* Tomcat
+		Databases
+			* MySQL
+			* PostgreSQL
+			* Oracle
+		This script requires java and ant to run. Every thing else it needs is included in the distribution.
+	</description>
+
+	<!-- Properties file related properties and tasks -->
+	<property environment="env" />
+	<property file="local.properties"/>
+	<property file="project.properties"/>
+
+<!-- load the properties file -->
+	<property name="properties.file" value="${basedir}/install.properties"/>
+    <echo message="Using properties file of ${properties.file}."/>
+
+
+    <echo message="Using properties file of ${properties.file}."/>
+	<available file="${properties.file}" property="properties.file.exists" />
+	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+	<property file="${properties.file}" />
+	
+	
+	<!-- Generic properties -->
+	<property name="project.name" value="LabViewer"/>
+	<property name="env.name" value="local"/>
+	<property name="log.dir" location="${basedir}/logs" />
+	<property name="working.dir" location="../../working" />
+	<property name="temp.dir" location="${working.dir}/temp" />
+	<property name="database.type" value="postgresql" />
+	<property name="database.system.url" value="jdbc:${database.type}://${database.server}:${database.port}/postgres" />
+
+
+	<!-- Install Time properties -->
+	<!-- Source and target directories -->
+	<property name="bda-utils.dir" location="${basedir}/bda-utils" />
+	<property name="tools.dir" location="${basedir}/${tools.dist.relative.dir}" />
+	<property name="common.dir.src" location="${basedir}/${common.dist.relative.dir}" />
+	<property name="common.dir.dest" location="${working.dir}/${common.dist.relative.dir}" />
+	<property name="db.dir.src" location="${basedir}/${db.dist.relative.dir}" />
+	<property name="db.dir.dest" location="${working.dir}/${db.dist.relative.dir}" />
+	<property name="db-install.dir.dest" location="${working.dir}/${db-install.dist.relative.dir}" />
+	<property name="db-upgrade.dir.dest" location="${working.dir}/${db-upgrade.dist.relative.dir}" />
+
+	<!-- *-ds.xml and WAR -->
+	<property name="LabViewer-webapp.dir.dist" location="${basedir}/${LabViewer-webapp.dist.relative.dir}" />
+	<property name="LabViewer-webapp.ds.file" value="LabViewer-ds.xml" />
+	<property name="LabViewer-webapp.name" value="LabViewer-webapp" />
+	<property name="LabViewer-webapp.war.file" value="${LabViewer-webapp.name}.war" />
+
+	<!-- Grid related properties -->
+	<property name="grid.resource.dir" location="${basedir}/${tools.dist.relative.dir}" />
+	<property name="resource.file.tomcat-globus-lib" value="cagrid-wscore-4.0.3-appserver-libs.zip" />
+	<property name="grid.application.dir" location="${basedir}/ctom-wsrf" />
+	<property name="grid.artifact.file" value="ctom-wsrf.war" />
+	<property name="grid.dir.dest" value="ctom-wsrf" />
+	<property name="grid.application.name" value="LabLoader" />
+
+	<!-- Paths -->
+	<path id="bda-utils.classpath">
+		<fileset dir="${bda-utils.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<!-- Task definitions -->
+	<taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml" classpathref="bda-utils.classpath"/>
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="bda-utils.classpath"/>
+	<taskdef resource="liquibasetasks.properties" classpathref="bda-utils.classpath"/>
+	<taskdef name="groovy" classname="org.codehaus.groovy.ant.Groovy" classpathref="bda-utils.classpath"/>
+
+	<!-- Includes-->
+	<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
+
+	<!-- Clean/make working dir -->
+	<delete dir="${working.dir}" failonerror="false"/>
+	<mkdir dir="${working.dir}" />
+
+	<!-- Start logging moved out of target so all targets are logged --> 
+	<!--<property name="install-logs.dir" location="${application.base.path}/change-logs"/> -->
+	<property name="install-logs.dir" location="${log.dir}"/>
+	<mkdir dir="${install-logs.dir}"/>
+	<tstamp>
+		<format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+	<record name="${install-logs.dir}/install-${install.time}.log" action="start"/>
+
+	<!-- Targets begin -->
+
+
+
+	<target name="init:common">
+		<!-- Conditionals -->
+		<!-- LabViewer-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
+		<echoproperties prefix="database"/>
+		<switch value="${database.type}">
+			<case value="oracle">
+				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
+				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
+				<property name="database.schema" value="${database.name}"/>
+			</case>
+			<case value="mysql">
+				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
+				<property name="database.driver" value="com.mysql.jdbc.Driver"/>
+				<property name="database.schema" value="${database.name}"/>
+			</case>
+			<case value="postgresql">
+				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+				<property name="database.driver" value="org.postgresql.Driver"/>
+				<property name="database.schema" value="public"/>
+			</case>
+			<default>
+				<fail message="Invalid database type ${database.type}"/>
+			</default>
+		</switch>
+	
+		<path id="jdbc.driver.classpath">
+			<pathelement location="${database.driver.file}"/>
+		</path>
+	
+		<property name="properties.template.file" value="${basedir}/properties.template" />
+		<!-- figure out whether to use empty.properties.template or upgrade-proprties.template based on the name of the properties file
+		<propertyregex property="properties.file.type"
+			input="${properties.file}"
+			regexp=".*(install|upgrade).*"
+			select="\1"     
+			/>              
+		<echo message="Properties file type = ${properties.file.type}"/>
+		<switch value="${properties.file.type}">
+			<case value="install">
+				<property name="properties.template.file" value="empty.properties.template" />
+			</case>         
+			<case value="upgrade">
+				<property name="properties.template.file" value="upgrade-properties.template" />
+			</case>         
+			<default>       
+				<fail message="Property file name must include 'install' or 'upgrade' so it can be determined which properties template should be used. If you are not certain include 'upgrade' in the name of your proeprties file."/>
+			</default>      
+		</switch>
+		-->
+		<filterset id="embedded.filterset">
+			<filter token="application.base.path" value="${application.base.path}"/>
+			<filter token="application.url" value="${application.url}"/>
+			<filter token="database.url" value="${database.url}"/>
+			<filter token="database.user" value="${database.user}"/>
+			<filter token="database.password" value="${database.password}"/>
+			<filter token="database.system.url" value="${database.system.url}"/>
+			<!-- added internal properties that may be used in a filtered copy -->
+			<filter token="database.driver" value="${database.driver}"/>
+			<!-- added for liquibase -->
+			<filter token="db-upgrade.run.dir" value="${db-upgrade.dir.dest}/${database.type}"/>
+			<filter token="tomcat.home" value="${tomcat.home}"/>
+			<filter token="database.dialect" value="${database.dialect}"/>
+			<filter token="hibernate.cfg.file.path" value="${hibernate.cfg.file.path}"/>
+			<filter token="env.LOGNAME" value="${env.LOGNAME}"/>
+			<filter token="env.JAVA_HOME" value="${env.JAVA_HOME}"/>
+			<filter token="project.name" value="project.name"/>
+			<filter token="" value=""/>
+		</filterset>
+
+		<!-- Added to convert location to file and path -->
+		<basename file="${tomcat.ssl.keystore.location}" property="tomcat.ssl.keystore.file"/>
+		<dirname file="${tomcat.ssl.keystore.location}" property="tomcat.ssl.keystore.dir"/>
+		<basename file="${tomcat.grid.secure.cert.location}" property="tomcat.grid.secure.cert.file"/>
+		<dirname file="${tomcat.grid.secure.cert.location}" property="tomcat.grid.secure.dir"/>
+		<basename file="${tomcat.grid.secure.key.location}" property="tomcat.grid.secure.key.file"/>
+		<!--OS Temp dir -->
+		<condition property="os.temp.dir" value="/tmp">
+			<or>
+				<os family="unix" />
+				<os family="mac" />
+			</or>
+		</condition>
+	
+		<condition property="os.temp.dir" value="c:/temp">
+			<os family="windows" />
+		</condition>
+
+	</target>
+
+	<target name="diag">
+		<echoproperties/>
+	</target>
+
+	<target name="install:clean" description="Removes all files from the local filesystem" depends="
+		init:install,
+ 		init:common,
+ 		install:clean:tomcat
+		">
+	</target>
+
+	<target name="install:clean:tomcat" unless="exclude.tomcat" depends="init:install,init:common">
+		<sleep seconds="5" />
+		<property name="backup.count" value="5"/>
+		<if>
+			<not>
+				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+			</not>
+			<then>
+				<property name="backup.tomcat.base.dir" location="${application.base.path}/backup/tomcat"/>
+		
+				<backup-dir
+					src.dir="${tomcat.home}"
+					backup.base.dir="${backup.tomcat.base.dir}"
+					backup.count="${backup.count}"
+					/>
+			</then>
+		</if>
+		<delete dir="${tomcat.home}"/>
+	</target>
+
+	<target name="install:init" description="Does directory management to initialize install" depends="init:install,init:common">
+		<!-- Default to false, properties can override -->
+		<property name="grid.secure.enable" value="false"/>
+		<property name="tomcat.ssl.enable" value="false"/>
+		<!-- Copy files to ensure values containing variables are expanded, such properties are stored in embedded.filterset and then copy with filter files -->
+		<copy todir="${common.dir.dest}" filtering="true">
+			<fileset dir="${common.dir.src}">
+				<include name="**/*"/>
+			</fileset>
+			<filterset refid="embedded.filterset"/>
+			<filterset>
+				<filtersfile file="${properties.file}"/>
+				<filtersfile file="project.properties"/>
+			</filterset>
+		</copy> 
+	</target>
+
+	<target name="install:database:prep" description="Copies db files with filtering" unless="exclude.database" depends="init:install,init:common">
+		<property name="db.prop.list" value="database.url,database.user,database.password,database.name"/>
+		<echo  message="Checking if database properties exist: ${db.prop.list}"/>
+		<properties-exist properties.list="${db.prop.list}"/>
+		<echoproperties prefix="database"/>
+		<echo  message="db.dir.dest: ${db.dir.dest}"/>
+		<echo  message="db.dir.src: ${db.dir.src}"/>
+		<copy todir="${db.dir.dest}" filtering="true">
+			<fileset dir="${db.dir.src}">
+				<include name="**/*"/>
+			</fileset>
+			<filterset refid="embedded.filterset"/>
+			<filterset>
+				<filtersfile file="${properties.file}"/>
+				<filtersfile file="project.properties"/>
+			</filterset>
+		</copy>
+		<mkdir dir="${os.temp.dir}/${project.name}"/>
+		<copy todir="${os.temp.dir}/${project.name}" filtering="true" flatten="true" overwrite="true">
+			<fileset dir="${db.dir.dest}">
+				<include name="**/db-upgrade.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="install:database" description="Runs datbase creation scripts then calls uprade database." unless="exclude.database"
+		depends="
+		init:install,
+		init:common,
+		install:database:prep
+		">
+		<!-- Drop all schema objects or re-create the db -->
+		<database-clean/>
+		<!-- Run baseline scripts stored in db.install.create.${database.type}.file.list variable -->
+		<switch value="${database.type}">
+			<case value="oracle">
+				<database-install
+					db.install.create.file.list="${db.install.create.oracle.file.list}"
+					sql.delimiter="/"
+					sql.delimitertype="row"
+					/>
+			</case>
+			<case value="postgresql">
+				<database-install
+					db.install.create.file.list="${db.install.create.postgresql.file.list}"
+					sql.delimiter="/"
+					sql.delimitertype="row"
+					/>
+			</case>
+			</switch>
+		<database-upgrade database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"/>
+    	<database-tag/>
+	</target>
+
+	<target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="init:install,init:common">
+        <validate-pre-install
+			ant.check.version="${ant.minimum.version}"
+			java.check.version.major="${java.major.version}"
+			java.check.version.minor="${java.minor.version}"
+			database.version="${mysql.minimum.version}"
+			/>
+	</target>
+
+	<target name="install:validation:pre-install:ports" description="Checks to see if configured ports are listenting and fails buld, meant to be run after jboss:stop" depends="init:install,init:common">
+		<validate-ports-preinstall />
+	</target>
+
+	<target name="install:validation:post-install" description="Run post-install checks from bda-utils" depends="init:install,init:common">
+		<if>
+			<not>
+				<isset property="exclude.start.servers"/>
+			</not>
+			<then>
+				<validate-post-install />
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat" description="Wrapper scripts that calls all required targets to install the tomcat container" unless="exclude.tomcat"
+		depends="
+		init:install,
+		init:common,
+		install:validation:pre-install,
+		install:tomcat:stop,
+		install:validation:pre-install:ports,
+		install:clean:tomcat,
+		install:init,
+		install:tomcat:binaries,
+		install:tomcat:configure,
+		install:tomcat:LabViewer-webapp:re-configure,
+		install:tomcat:LabViewer,
+		install:tomcat:LabViewer-webapp:configure,
+		install:tomcat:grid,
+		install:tomcat:grid:configure,
+
+		install:configure:ssl,
+		install:tomcat:start
+		">
+	</target>
+        <!-- install:post:tomcat, -->
+    <target  name="install:configure:ssl" description="configures SSL connectors, keystore and password">
+        <copy  file="server-template.xml" tofile="${tomcat.home}/conf/server.xml" overwrite="true">
+            <filterset begintoken="@" endtoken="@">
+                  <filter token="keystoreLocation" value="${tomcat.ssl.keystore.location}" />
+                  <filter token="keystorePassword" value="${tomcat.ssl.keystore.pass}" />
+                  <filter token="cert.path" value="${cert.path}" />
+				  <filter token="key.path" value="${key.path}" />
+                  <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
+        </copy>
+    </target>
+
+	<target name="install" description="Installs and configures TOMCAT, creates database, and deploys application" 
+		depends="
+		init:install,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:validation:pre-install:ports,
+ 		install:clean,
+ 		install:init,
+ 		install:database,
+ 		install:tomcat,
+ 		install:post,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade:tomcat" description=
+            "Wrapper target to call all targets required to upgrade tomcat container."
+            unless="exclude.tomcat" depends="init:upgrade:tomcat,init:common,upgrade-ncm:tomcat">
+	</target>
+
+	<target name="upgrade" description="Upgrades Tomcat and Database" depends="init:upgrade,init:common,upgrade-ncm">
+	</target>
+
+	<target name="upgrade-with-dbinstall" description="Upgrades JBoss and Database" depends="init:upgrade,init:common,upgrade-ncm:with-dbinstall">
+	</target>
+
+	<target name="upgrade-dac:tomcat" description="Wrapper target to call all targets required to upgrade tomcat container." unless="exclude.tomcat"
+		depends="
+		init:upgrade:tomcat,
+		init:common,
+		install:validation:pre-install,
+		install:tomcat:stop,
+		install:validation:pre-install:ports,
+		install:clean:tomcat,
+		install:init,
+		install:tomcat:binaries,
+		install:tomcat:configure,
+		install:tomcat:LabViewer-webapp:re-configure,
+		install:tomcat:LabViewer,
+		install:tomcat:LabViewer-webapp:configure,
+		install:tomcat:grid,
+		install:tomcat:grid:configure,
+		upgrade:post:tomcat,
+		
+		install:tomcat:start
+		">
+	</target>
+
+	<target name="upgrade-dac" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		upgrade:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade-dac:with-dbinstall" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		install:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade-cm:tomcat" description="Wrapper target to call all targets required to upgrade tomcat container." unless="exclude.tomcat"
+		depends="
+		init:upgrade:tomcat,
+		init:common,
+		install:validation:pre-install,
+		install:tomcat:stop,
+		install:validation:pre-install:ports,
+		install:init,
+		install:tomcat:configure,
+		install:tomcat:LabViewer-webapp:re-configure,
+		install:tomcat:LabViewer,
+		install:tomcat:LabViewer-webapp:configure,
+		install:tomcat:grid,
+		install:tomcat:grid:configure,
+		upgrade:post:tomcat,
+		install:post:tomcat,
+		install:tomcat:start
+		">
+	</target>
+
+	<target name="upgrade-cm" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		upgrade:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade-cm:with-dbinstall" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		install:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade-ncm:tomcat" description="Wrapper target to call all targets required to upgrade tomcat container." unless="exclude.tomcat"
+		depends="
+		init:upgrade:tomcat,
+		init:common,
+		install:validation:pre-install,
+		install:tomcat:stop,
+		install:validation:pre-install:ports,
+		install:init,
+		install:tomcat:LabViewer-webapp:re-configure,
+		install:tomcat:LabViewer,
+		install:tomcat:LabViewer-webapp:configure,
+		install:tomcat:grid,
+		install:tomcat:grid:configure,
+		install:post:tomcat,
+		install:tomcat:start
+		">
+	</target>
+
+	<target name="upgrade-ncm" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		upgrade:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade-ncm:with-dbinstall" description="Upgrades JBoss and Database"
+		depends="
+		init:upgrade,
+ 		init:common,
+ 		install:validation:pre-install,
+ 		install:tomcat:stop,
+ 		install:init,
+ 		install:database,
+ 		upgrade:tomcat,
+ 		install:validation:post-install
+		">
+	</target>
+
+	<target name="upgrade:database" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+		depends="
+		init:upgrade,
+		init:common,
+		install:database:prep
+		">
+		<database-upgrade
+			database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"
+			/>
+		<database-tag/>
+	</target>
+
+	<target name="upgrade:database:tag" description="Tags current state of database with a tag to allow for rollback of database to previous versions." unless="exclude.database"
+		depends="
+		init:upgrade,
+		init:common,
+		install:init,
+		install:database:prep
+		">
+		<database-tag/>
+	</target>
+
+	<target name="upgrade:database:rollback" description="Rolls back database to previous tagged version using rollback scripts." unless="exclude.database"
+		depends="
+		init:upgrade,
+		init:common,
+		install:init,
+		install:database:prep
+		">
+		<database-rollback/>
+	</target>
+
+	<target name="install:tomcat:binaries" description="Install tomcat binaries" unless="exclude.tomcat" depends="init:install,init:common">
+		<delete dir="${tomcat.home}"/>
+		<dirname file="${tomcat.home}" property="tomcat.base.dir"/>
+		<unzip dest="${tomcat.base.dir}" src="${tools.dir}/${tomcat.binaries.file}" />
+		<if>    
+			<os family="unix"/>
+			<then>  
+				<chmod dir="${tomcat.home}/bin" perm="ugo+rx" 
+					includes="**/*.sh"/>
+			</then>
+		</if>
+	</target>
+
+	<target name="install:tomcat:configure" description="Configure tomcat (change ports)" unless="exclude.tomcat" depends="init:install,init:common">
+		<tomcat-configure
+			tomcat.grid.configure="true"
+			/>
+	</target>
+
+	<target name="install:tomcat:stop" description="Stop Tomcat" unless="exclude.tomcat" depends="init:install,init:common">
+		<if>
+			<available file="${tomcat.home}/bin/shutdown.sh"/>
+			<then>
+				<echo message="Shutting down tomcat"/>
+				<tomcat-stop tomcat.home="${tomcat.home}"/>
+			</then>
+			<else>
+				<echo message="Tomcat not found , not shutting down tomcat"/>
+			</else>
+		</if>
+	</target>
+
+	<target name="install:tomcat:start" description="Start Tomcat" unless="exclude.tomcat" depends="init:install,init:common">
+		<if>    
+			<not>   
+				<isset property="exclude.start.servers"/>
+			</not>  
+			<then>  
+				<tomcat-start tomcat.home="${tomcat.home}"/>
+			</then> 
+		</if>   
+	</target>
+
+	<target name="install:LabViewer-grid" description="Wrapper target for Grid application targets"
+		depends="
+		init:install,
+ 		init:common
+		">
+	</target>
+
+	<target name="install:tomcat:grid" description="Deploy grid to tomcat" unless="exclude.tomcat" depends="init:install,init:common">
+		<mkdir dir="${tomcat.home}/webapps/${grid.dir.dest}"/>
+		<unzip dest="${tomcat.home}/common/lib" src="${grid.resource.dir}/${resource.file.tomcat-globus-lib}">
+			<patternset>
+				<exclude name="**/cog-tomcat.jar"/>
+			</patternset>
+		</unzip>
+		<unzip dest="${tomcat.home}/server/lib" src="${grid.resource.dir}/${resource.file.tomcat-globus-lib}" >
+			<patternset>
+				<include name="**/cog-tomcat.jar"/>
+			</patternset>
+		</unzip>
+		<unzip dest="${tomcat.home}/webapps/${grid.dir.dest}" src="${grid.application.dir}/${grid.artifact.file}" />
+	</target>
+
+	<target name="install:tomcat:grid:configure" description="Configure tomcat-application" unless="exclude.tomcat" depends="init:install,init:common">
+		<!--<tomcat-configure-grid grid.application.relative.dir="${grid.dir.dest}" />-->
+	</target>
+
+	<target name="install:post" depends="
+		init:install,
+ 		init:common,
+ 		install:post:tomcat
+		">
+	</target>
+
+	<target name="install:post:tomcat" unless="exclude.tomcat" depends="init:install,init:common">
+		<if>
+			<not>
+				<equals arg1="${exclude.tomcat.backup}" arg2="true"/>
+			</not>
+			<then>
+				<property name="changelogFile" location="${install-logs.dir}/changeLog-${install.time}.txt"/>
+				<property name="compare1.dir" location="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}"/>
+				<property name="compare2.dir" location="${tomcat.home}"/>
+				<report-dir-diff
+					dir1="${compare1.dir}"
+					dir2="${compare2.dir}"
+					reportFile="${changelogFile}"
+					/>
+				
+				<mkdir dir="${tomcat.home}/server/${tomcat.server.name}/log"/>
+				<mkdir dir="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}/server/${tomcat.server.name}/log"/>
+				<copy todir="${tomcat.home}/server/${tomcat.server.name}/log">
+					<fileset dir="${backup.tomcat.base.dir}/backup/${tomcat.binaries.relative.dir}/server/${tomcat.server.name}/log">
+						<include name="*"/>
+					</fileset>
+				</copy>
+			</then>
+		</if>
+	</target>
+
+
+
+    <target name="replace-tokens">
+        <delete dir="${target.dir}/token-replace" quiet="true"/>
+        <mkdir dir="${target.dir}/token-replace"/>
+
+        <unzip src="ctom-wsrf/ctom-wsrf.war" dest="${target.dir}/token-replace/ctom-wsrf" overwrite="true"/>
+        <unzip src="ctodslabviewer/ctomlabviewer.war" dest="${target.dir}/token-replace/ctomlabviewer" overwrite="true"/>
+	
+        <antcall target="replace-ctomdatapersistence"/>
+        <antcall target="replace-ctomlabviewer"/>
+        <antcall target="replace-ctom-wsrf"/>
+
+        <!--<delete file="ctodslabviewer/ctomlabviewer.war" />-->
+		<mkdir dir="to-be-deployed"/>
+		<war destfile="to-be-deployed/ctomlabviewer.war"
+                webxml="${target.dir}/token-replace/ctomlabviewer/WEB-INF/web.xml">
+		        <fileset dir="${target.dir}/token-replace/ctomlabviewer" />
+		</war>
+
+		<!--  copy all persistence related jars from ctomlabviewer exploded war to ctom-wsrf exploded area.. -->
+		<antcall target="copy-psJars-ctomlabviewer-to-ctomwsrf"/>		 
+		
+        <!--<delete file="ctom-wsrf/ctom-wsrf.war"/>-->
+		<war destfile="to-be-deployed/ctom-wsrf.war"
+                webxml="${target.dir}/token-replace/ctom-wsrf/WEB-INF/web.xml">
+		        <fileset dir="${target.dir}/token-replace/ctom-wsrf" />
+		</war>
+
+        <echo message="Target replace-tokens completed"/>
+    </target>
+
+	<target name="copy-psJars-ctomlabviewer-to-ctomwsrf">
+			<echo message="Executing copy-psJars-ctomlabviewer-to-ctomwsrf (Copying 3 persistence jars) "/>
+			
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+                  tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomdatapersistence.jar" overwrite="true"/>
+			  
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomlabapi-beans.jar"
+				tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomlabapi-beans.jar" overwrite="true"/>
+			  
+			<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomlabapi-orm.jar"
+				tofile="${target.dir}/token-replace/ctom-wsrf/WEB-INF/lib/ctomlabapi-orm.jar" overwrite="true"/>
+     </target>	
+	 
+    <target name="replace-ctom-wsrf">
+
+			<echo message="Executing replace-ctom-wsrf"/>
+
+            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>			
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml"
+	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">		
+               <filterset begintoken="@" endtoken="@">
+                    <filter token="cert.path" value="${cert.path}" />
+                    <filter token="key.path" value="${key.path}" />
+                </filterset>			
+			</copy>		
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp/global_security_descriptor.xml"
+	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true"/>	     				   
+			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>
+
+	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+				<filterset begintoken="@" endtoken="@">
+					  <filter token="database_dialect" value="${database.dialect}" />
+					  <filter token="database_driver" value="${database.driver}" />
+					  <filter token="database_url" value="${database.url}" />
+					  <filter token="database_user" value="${database.user}" />
+					  <filter token="database_passwd" value="${database.password}" />
+				</filterset>
+			</copy>		
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes" overwrite="true"/>	     				   
+			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>
+
+		    <echo message="target replace-ctom-wsrf completed"/>
+			
+	</target>
+
+    <target name="replace-ctomlabviewer">
+		   <echo message="Executing replace-ctomlabviewer"/>
+			<mkdir dir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp"/>
+			
+			<antcall target="configure-csm"/>
+			<antcall target="configure-ctods-hibernate"/>
+			<antcall target="configure-csm-app-security"/>
+			<antcall target="configure-log4j"/>
+			<antcall target="configure-labviewer-properties"/> 
+			<antcall target="configure-baseURL-properties"/>
+			<antcall target="configure-WebSSO-Authentication"/>
+			<antcall target="configure-cas-client"/>
+			
+			<delete dir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" quiet="true"/>
+            <echo message="target replace-ctomlabviewer completed"/>
+    </target>
+
+	<target name="configure-cas-client" >
+		<echo message="Executing configure-cas-client"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/cas-client.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+			<filterset begintoken="@" endtoken="@">
+				<filter token="WEBSSO.SERVER" value="${websso.cas.server}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${websso.client.server}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.cas.server.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
+	    </copy>		
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cas-client.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+	
+	
+	<target name="configure-WebSSO-Authentication" >
+		<echo message="configure-WebSSO-Authentication"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/web.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
+			<filterset begintoken="@" endtoken="@">
+				<filter token="cert.path" value="${cert.path}" />
+				<filter token="key.path" value="${key.path}" />
+				<filter token="cas_server" value="${websso.cas.server}" />			
+			</filterset>
+	    </copy>		
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/web.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF" overwrite="true"/>	        
+	</target> 
+	
+	
+	
+	<target name="configure-labviewer-properties">
+	<echo message="configure-labviewer-properties"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="hotLink_Type" value="${hotLink_Type}" />
+				<filter token="testEnabled" value="${testEnabled}" />
+				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
+				<filter token="websso.enabled" value="${websso.enabled}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />	
+			</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+
+	<target name="configure-baseURL-properties">
+		<echo message="configure-baseURL-properties"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/baseURL.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+			
+			<filterset begintoken="@" endtoken="@">
+				<filter token="BaseURLcaAERS" value="${BaseURLcaAERS}" />
+				<filter token="BaseURLC3D" value="${BaseURLC3D}" />
+				<filter token="BaseURLC3PR" value="${BaseURLC3PR}" />
+				<filter token="loadLabURLS" value="${loadLabURLS}" />	
+				<filter token="tissueURL" value="${tissueURL}" />
+		    </filterset>
+			
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/baseURL.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target> 
+	
+	
+	<target name="configure-csm">
+		<echo message="configure-csm"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_url" value="${database.url}" />
+					<filter token="database_user" value="${database.user}" />
+					<filter token="database_passwd" value="${database.password}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>
+	        
+	</target>
+	
+	<target name="configure-ctods-hibernate">
+		<echo message="configure-ctods-hibernate"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/cTODSlabviewer.hibernate.cfg.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_url" value="${database.url}" />
+					<filter token="database_user" value="${database.user}" />
+					<filter token="database_passwd" value="${database.password}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cTODSlabviewer.hibernate.cfg.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+
+	<target name="configure-csm-app-security">
+		<echo message="configure-csm-app-security"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/ApplicationSecurityConfig.xml"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+								<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
+				</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/ApplicationSecurityConfig.xml"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+
+	
+	<target name="configure-log4j">
+		<echo message="configure-log4j"/>
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/log4j.properties"
+	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
+      		<filterset begintoken="@" endtoken="@">
+				<filter token="log_dir" value="${log.dir}" />
+			</filterset>
+	    </copy>
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/log4j.properties"
+	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
+	</target>
+	
+    <target name="replace-ctomdatapersistence" >
+		<echo message="Executing replace-ctomdatapersistence"/>
+        <delete dir="${target.dir}/token-replace/ctomlabapi-orm" quiet="true"/>
+        <delete dir="${target.dir}/token-replace/ctomdatapersistence" quiet="true"/>
+        <mkdir dir="${target.dir}/token-replace/ctomdatapersistence"/>
+        <mkdir dir="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <unjar src="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+                 dest="${target.dir}/token-replace/ctomdatapersistence"/>
+        <delete file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"/>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/dataConnection.properties"
+              filtering="true" overwrite="true" tofile="${target.dir}/token-replace/ctomdatapersistence/tmp/dataConnection.properties">
+            <filterset begintoken="@" endtoken="@">
+                    <filter token="database.dialect" value="${database.dialect}" />
+                    <filter token="database.driver" value="${database.driver}" />
+                    <filter token="database.url" value="${database.url}" />
+                    <filter token="database.user" value="${database.user}" />
+                    <filter token="database.password" value="${database.password}" />
+            </filterset>
+        </copy>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/tmp/dataConnection.properties"
+              tofile="${target.dir}/token-replace/ctomdatapersistence/dataConnection.properties" overwrite="true"/>
+        <delete dir="${target.dir}/token-replace/ctomdatapersistence/tmp"/>
+
+        <!-- unzip ctomlabapi-orm.jar, delete and reassemble it back -->
+        <unjar src="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+                 dest="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <delete file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"/>
+
+        <copy file="${target.dir}/token-replace/ctomlabapi-orm/hibernate.cfg.xml"
+              filtering="true" overwrite="true" tofile="${target.dir}/token-replace/tmp/ctomlabapi-orm/hibernate.cfg.xml">
+            <filterset begintoken="@" endtoken="@">
+                <filter token="database.dialect" value="${database.dialect}" />
+                 <filter token="database.driver" value="${database.driver}" />
+                 <filter token="database.url" value="${database.url}" />
+                 <filter token="database.user" value="${database.user}" />
+                 <filter token="database.password" value="${database.password}" />
+             </filterset>
+        </copy>
+        <copy file="${target.dir}/token-replace/tmp/ctomlabapi-orm/hibernate.cfg.xml"
+              tofile="${target.dir}/token-replace/ctomlabapi-orm/hibernate.cfg.xml"/>
+         <delete dir="${target.dir}/token-replace/tmp"/>
+
+        <!-- reassemble back ctomlabapi-orm.jar.  Also copy thsi back into WEB-INF/lib   -->
+         <jar file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+             basedir="${target.dir}/token-replace/ctomlabapi-orm"/>
+        <copy file="${target.dir}/token-replace/ctomdatapersistence/ctomlabapi-orm.jar"
+              todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib"/>
+
+        <!-- reassemble back ctomdatapersistence.jar   -->
+        <jar file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/lib/ctomdatapersistence.jar"
+             basedir="${target.dir}/token-replace/ctomdatapersistence"  />
+        
+        <echo message="target replace-ctomdatapersistence completed"/>
+    </target>
+
+    <target name="install:tomcat:LabViewer"
+            description="Deploy LabViewer-webapp and common libraries to tomcat installation"
+            unless="exclude.tomcat" depends="init:install,init:common">
+			
+		<delete dir="${tomcat.home}/temp"  quiet="true"/>
+		<delete dir="${tomcat.home}/work"  quiet="true"/>
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer" quiet="true"/>
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf" quiet="true"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer.war" quiet="true"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf.war" quiet="true"/>
+		
+        <antcall target="replace-tokens"/>
+                
+        <copy file="to-be-deployed/ctomlabviewer.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+		<copy file="to-be-deployed/ctom-wsrf.war" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
+
+   </target>
+
+
+	<target name="install:tomcat:LabViewer-webapp:configure"
+            description="Configure LabViewer-webapp application, copies over externalized properties or configurations
+            that are not part of the tomcat configuration" unless="exclude.tomcat" depends="init:install,init:common">
+		<!-- configure datasource -->
+	</target>
+
+	<target name="install:tomcat:LabViewer-webapp:re-configure" description="Configure LabViewer-webapp application, copies over externalized properties or configurations that are not part of the tomcat configuration" unless="exclude.tomcat" depends="init:install,init:common">
+
+    </target>
+
+	<target name="init:install" unless="upgrade.running">
+		<property name="install.running" value="true"/>
+		<!-- Set application.base.path based on platform -->
+		<condition property="application.base.path" value="${application.base.path.linux}">
+			<or>
+				<os family="unix" />
+				<os family="mac" />
+			</or>
+		</condition>
+	
+		<condition property="application.base.path" value="${application.base.path.windows}">
+			<os family="windows" />
+		</condition>
+		<echo message="application.base.path=${application.base.path}"/>
+
+        <!-- Ram changed this -->
+        <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
+        <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+
+    </target>
+
+	<target name="init:upgrade" depends="
+		init:upgrade:tomcat
+		" unless="install.running">
+	</target>
+
+	<target name="init:upgrade:tomcat" unless="install.running"
+		depends="
+		init:upgrade:prep,
+		init:readers:bda:tomcat,
+		init:readers:custom:tomcat
+		">
+	</target>
+
+	<target name="init:upgrade:prep">
+	
+		<properties-print
+			properties.list="application.base.path,jboss.home,tomcat.home,jboss.server.name"
+			/>
+		<!--  <if>
+			<not>
+				<isset property="application.base.path"/>
+			</not>
+			<then>
+				<condition property="application.base.path" value="${application.base.path.linux}">
+					<or>
+						<os family="unix" />
+						<os family="mac" />
+					</or>
+				</condition>
+			
+				<condition property="application.base.path" value="${application.base.path.windows}">
+					<os family="windows" />
+				</condition>
+				<echo message="application.base.path=${application.base.path}"/>
+				<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+			</then>
+		</if>
+			
+		<if>
+			<then>
+			</then>
+			<else>
+			</else>
+		</if>-->
+						
+		<property name="upgrade.running" value="true"/>
+		<!-- Upgrades always use port configs -->
+		<available file="${tomcat.home}" property="tomcat.exists"/>
+	</target>
+
+	<target name="init:readers:custom:tomcat" unless="install.running">
+		<!-- call your custom readers here, two properties included in these scripts that don't have readers are "fs-data.base.dir, mail.smtp.server" -->
+
+	</target>
+
+	<target name="init:readers:bda:tomcat" if="tomcat.exists">
+
+		<!-- Make sure the ${properties.file} has at least the following props -->
+		<properties-exist
+			properties.list="application.base.path,tomcat.home"
+			/>
+		<!-- Begin Tomcat readers, delete if you don't need -->
+		<osfamily property="os.family"/>
+		<if>
+			<or>
+				<equals arg1="${os.family}" arg2="unix"/>
+				<equals arg1="${os.family}" arg2="mac"/>
+			</or>
+			<then>
+				<property name="tomcat.hostname" value="${env.HOSTNAME}"/>
+			</then>
+		</if>
+		<if>
+			<equals arg1="${os.family}" arg2="windows"/>
+			<then>
+				<property name="tomcat.hostname" value="${env.COMPUTERNAME}"/>
+			</then>
+		</if>
+		<tomcat-read-ports
+			/>
+		<var name="tomcat.ssl.keystore.dir" value="${working.dir}/keys/tomcat"/>
+		<tomcat-read-ssl
+			copied.keystore.dir="${tomcat.ssl.keystore.dir}"
+			/>              
+		<tomcat-read-external-hostname
+			/>
+		<grid-read-index-url
+			grid.wsrf.dir="${tomcat.home}/webapps/wsrf"
+			/>
+		<var name="tomcat.grid.secure.dir" value="${working.dir}/keys/tomcat"/>
+		<tomcat-read-grid-secure
+			copied.keystore.dir="${tomcat.grid.secure.dir}"
+			/>
+		<!--
+		<property name="copied.tomcat.service-metadata.dir" value="${working.dir}/tomcat-grid"/>
+		<grid-copy-service-metadata
+			grid.wsrf.dir="${tomcat.home}/webapps/wsrf"
+			copied.service-metadata.dir="${copied.service-metadata.dir1}"
+			/>
+		-->
+		<grid-read-poc
+			grid.wsrf.dir="${tomcat.home}/webapps/wsrf"
+			grid.service.name="Sample"
+			/>                      
+
+
+		<!-- Fail if any read properties are not set -->
+		<echo message="All properties after readers"/>
+		<properties-print
+			properties.list="${read.properties.list},jboss.server.hostname,tomcat.hostname"
+			/>
+		<properties-exist
+			properties.list="${read.properties.list},jboss.server.hostname,tomcat.hostname"
+			/>
+		<properties-write
+			properties.list="${read.properties.list},jboss.server.hostname,tomcat.hostname"
+			/>
+	</target>
+
+	<target name="upgrade:post:tomcat">
+		<!-- place holder -->
+	</target>
+</project>

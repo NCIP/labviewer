@@ -1,0 +1,155 @@
+<project name="Caxchange Routing and Workflow Client" default="createClientZip" basedir=".">
+
+	<!-- Sets the properties -->
+	<property environment="env" />
+	<property file="build.properties" />
+	<property name="src.dir" value="src/java/main" />
+	<property name="v2.dir" value="v2tov3" />
+	<property name="v2Meta.dir" value="v2Meta" />
+	<property name="LAB_DATA.dir" value="LAB_DATA" />
+	<property name="junit.dir" value="junit" />
+	<property name="lib.home" value="lib" />
+	<property name="classes.dir" value="classes" />
+	<property name="conf" value="conf" />
+	<property name="dist.home" value="target" />
+	<property name="jar.file" value="CAXCHANGE.jar" />
+	<property name="zip.file" value="CAXCHANGEClient.zip" />
+	<property name="property.home" value="${dist.home}/properties" />
+	<property name="doc.dir" location="${basedir}/javadoc" />
+	<property name="artifacts.dir" location="${basedir}/artifacts" />
+	<property name="temp.dir" location="${basedir}/tmp" />
+	<property name="resources.dir" location="${basedir}/resources" />
+	<property name="resources.org" location="${basedir}/resources-org" />
+	<property name="ext.globus.dir" value="${env.GLOBUS_LOCATION}" />
+	
+	<path id="cp">
+		<fileset dir="${lib.home}">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement path="${classes.dir}" />
+		<fileset dir="${ext.globus.dir}/lib" >
+			  <include name="*.jar"/>
+			  <include name="*.zip"/>
+		</fileset>
+		<fileset dir="${resources.dir}" >
+		      <include name="*.*"/>
+		 </fileset>
+	</path>
+	
+	    	
+	<!-- Filters the project properties -->
+	<target name="init" depends="clean,replace">
+	<copy file="conf/project.properties.template" toFile="${src.dir}/project.properties" filtering="true" overwrite="true">
+				<filterset begintoken="@" endtoken="@">
+					<filter token="HELPDOC" value="${helpdocs}" />
+					<filter token="PROXYFILE" value="${PROXY.FILE}" />
+				</filterset>
+		</copy>
+	</target>	
+	<!-- Compiles the source files -->
+	<target name="compilebatch" depends="init">
+		<delete dir="${dist.home}" />
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}">
+			<include name="**/*.java" />
+			<classpath refid="cp" />
+		</javac>
+	</target>
+	 <!-- replaces the tokens with the property values -->
+	        <target name="replace">
+	         <copy file="${resources.org}/security-properties.xml" toFile="${resources.dir}/security-properties.xml" filtering="true" overwrite="true">
+	         	<filterset begintoken="@" endtoken="@">           
+	         	          <filter token="dorian.url" value="${dorian.url}"/>
+	                        <filter token="cds.url" value="${cds.url}"/>
+	                        <filter token="authentication.url" value="${authentication.url}"/>
+	                        <filter token="app.node.identity" value="${app.node.identity}"/>
+	                </filterset>
+	         </copy>
+	        <copy todir="${resources.dir}">
+	        	<resources>
+	        	      <file file="${resources.org}/security-beans.xml"/>
+	        		<file file="${resources.org}/security-properties.xsd"/>
+	        	</resources>		
+	        </copy>	
+	  </target>
+
+	<!-- Creates batch file -->
+	<target name="batch" depends="compilebatch" description="Creates batch file">
+		<copy todir="${dist.home}">
+			<fileset dir="${classes.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${src.dir}" includes="**/*.properties" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${resources.dir}" />
+		</copy>
+		<mkdir dir="${classes.dir}/resources"/>
+		<copy todir="${classes.dir}/resources">
+			<fileset dir="${resources.dir}"/>
+		</copy>
+		<jar jarfile="${lib.home}/websso.jar" basedir="${classes.dir}"
+						 includes="**/websso/**">
+					<manifest>
+						<attribute name="Class-Path" value=".."/>
+					</manifest>
+				</jar>
+		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}" />
+	</target>
+
+	<!-- Creates a zip file with CAXCHANGE.jar -->
+	<target name="createClientZip" depends="batch" description="zip file" >
+		<copy todir="${dist.home}\lib\">
+			<fileset dir="${lib.home}" includes="**/*.jar" />
+		</copy>
+		<copy todir="${dist.home}\v2tov3\">
+			<fileset dir="${v2.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}\v2Meta\">
+			<fileset dir="${v2Meta.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}\LAB_DATA\">
+			<fileset dir="${LAB_DATA.dir}" includes="**/*.*" />
+		</copy>
+		<mkdir dir="${dist.home}/resources"/>
+			<copy todir="${dist.home}/resources">
+				<fileset dir="${resources.dir}"/>
+			</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${conf}" includes="**/*.*" />
+		</copy>
+		<copy todir="${dist.home}">
+			<fileset dir="${artifacts.dir}" excludes="**/*.zip" />
+		</copy>
+		<zip destfile="${artifacts.dir}/CAXCHANGEClient.zip" basedir="${dist.home}" excludes="**/*.class, **/preprocessor.properties, **/log4j.properties"/>
+	</target>
+
+	<!-- Cleans up the classes directory -->
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+		<delete dir="${dist.home}" />
+	</target>
+	
+	<!-- Builds JavaDoc -->
+	<target name="javadoc" depends="compilebatch" description="Build the project Javadoc.">
+		<echo>Building project Javadoc ...</echo>
+		<mkdir dir="${temp.dir}" />
+		<delete dir="${doc.dir}" />
+		<mkdir dir="${doc.dir}" />
+		<javadoc destdir="${doc.dir}" Private="false" author="true" version="true" use="true" windowtitle="CCHC API">
+			<classpath refid="cp" />
+			<packageset dir="${src.dir}" defaultexcludes="yes">
+				<include name="gov/nih/nci/caxchange/**" />
+			</packageset>
+			<doctitle>Cancer Center Hub Client</doctitle>
+			<bottom>Copyright &#169; 2008 ScenPro, Inc. All Rights Reserved.</bottom>
+			<tag name="todo" scope="all" description="To do:" />
+			<group title="Source Package" packages="gov.nih.nci.cadsr.caxchange.client;gov.nih.nci.cadsr.caxchange.client.exceptions;gov.nih.nci.cadsr.caxchange.client.preprocess;" />
+			<link offline="true" href="http://java.sun.com/products/jdk/1.2/docs/api/" packagelistLoc="${temp.dir}" />
+		</javadoc>
+		<zip destfile="${artifacts.dir}/cchc_doc.zip">
+			<zipfileset dir="${doc.dir}" />
+		</zip>
+		<delete dir="${doc.dir}" />
+	</target>
+</project>

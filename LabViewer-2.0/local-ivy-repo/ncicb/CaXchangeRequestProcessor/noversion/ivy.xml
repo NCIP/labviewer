@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet type="text/xsl"
+                 href="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-xsl/ivy.xsl"?>
+<ivy-module version="1.3"            
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">  
+
+  <info organisation="ncicb" 
+        module="CaXchangeRequestProcessor"
+        revision="noversion" />
+        
+  <configurations>
+    <conf name="master"/>
+    <conf name="compile"/>
+    <conf name="runtime" extends="master"/>
+  </configurations>
+  
+  <!-- hmmm might be nice to separate client from service here? -->
+  <publications>
+    <artifact name="CaXchangeRequestProcessor-client" type="jar" conf="master, compile" />
+    <artifact name="CaXchangeRequestProcessor-common" type="jar" conf="master" />
+    <artifact name="CaXchangeRequestProcessor-service" type="jar" conf="master, compile" />
+    <artifact name="CaXchangeRequestProcessor-stubs" type="jar" conf="master" />
+     <artifact name="CaXchangeRequestProcessor-tests" type="jar" conf="master, compile" />
+    
+   </publications>
+  
+  <dependencies>  
+    <!-- boatload of stuff -->
+  </dependencies>
+  
+</ivy-module>

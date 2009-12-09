@@ -1,0 +1,984 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- bda-build-template version 1.1.1  -->
+<!--
+$Id: build.xml 1730 2009-05-28 18:53:06Z saksass $
+$HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-template/software/build/build.xml $
+-->
+
+<project name="build-labviewer" default="build:all" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
+	<description>
+		Builds the LabViewer application
+	</description>
+
+	<!-- Property file related properties and tasks -->
+	<property environment="env" />
+	<!-- The project.properties stores properties that are shared between both build.xml and install.xml. Typically properties that are related to the distribution directories, or files. -->
+	<property file="local.properties" />
+	<property file="project.properties" />
+
+
+	<!-- pass in the below property from commandline -->
+	<property name="properties.file" value="install.properties"/>
+    <!-- <property name="properties.file" value="install.properties"/> -->
+
+    <!-- RAM commented this out cause it is not an upgrade
+    <property name="upgrade.properties.file" value="upgrade.properties"/> -->
+	<echo message="Using properties file of ${properties.file}." />
+	<available file="${properties.file}" property="properties.file.exists" />
+	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
+
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2" />
+	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2" />
+	<property file="${properties.file}" />
+
+	<!-- Set application.base.path based on platform -->
+	<condition property="application.base.path" value="${application.base.path.linux}">
+		<or>
+		<os family="unix" />
+			<os family="mac" />
+		</or>
+	</condition>
+
+	<condition property="application.base.path" value="${application.base.path.windows}">
+		<os family="windows" />
+	</condition>
+    <!-- RAM on 10/21/2009 changed tomcat.home to ${tomcat.relative.path}
+    <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
+    -->
+    <property name="tomcat.home" value="${tomcat.relative.path}"/>
+
+
+    <!-- added for remote deployments since file is copied to root of install dir -->
+	<basename property="properties.file.name" file="${properties.file}" />
+	<!-- BDA standard structure -->
+	<property name="build.dir" location="." />
+	<property name="software.dir" location=".." />
+	<property name="common.dir" location="${software.dir}/common" />
+	<property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+	<property name="target.dir" location="${software.dir}/target" />
+	<property name="bda-download.dir" location="${common.dir}/bda-download" />
+	<property name="ivy.settings.dir" location="${common.dir}/ivy" />
+	<property name="lib.dir" location="${target.dir}/lib" />
+	<property name="temp.dir" location="${target.dir}/temp" />
+	<property name="reports.dir" location="${target.dir}/reports" />
+	<property name="bda-utils.dir" location="${target.dir}/bda-utils" />
+	<property name="log.dir" location="${target.dir}/logs" />
+	<property name="dist.dir" location="${target.dir}/dist" />
+	<property name="download.dir" location="${target.dir}/download" />
+	<property name="pt.dir" location="${target.dir}/persistent-transient" />
+	<property name="working.dir" location="${target.dir}/working" />
+	<property name="cacore-sdk.dir" location="${target.dir}/${cacore-sdk.binaries.relative.dir}"/>
+    <property name="unZip.dir" value="${temp.dir}"/>
+    <property name="stage.dir" value="${unZip.dir}/stage"/>
+    <property name="war-dist.dir" value="${stage.dir}/dist"/>
+    <property name="webapps.dir" value="${stage.dir}/webapps/ctom-wsrf/"/>
+
+
+
+	<!-- Ivy Related props -->
+	<property name="ivy.settings.file" value="ivy-settings.xml" />
+
+	<!-- Properties that relate to how to call build targets from sub-projects-->
+	<!-- Working directory passed to Ant tasks -->
+	<property name="ctodsdeploymentcontroller.base.dir" location="${software.dir}/cTODSDeploymentController-1.3"/>
+	<property name="ctomdatapersistence.base.dir" location="${software.dir}/CTOMDataPersistence-PG"/>
+    <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}"/>
+    <property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
+	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
+	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
+	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.3"/>
+	<property name="cchc.base.dir" location="${software.dir}/CancerCenterClient"/>
+
+	<!-- Build file names relative working dir above, if the basedir of the sub-project ant script is ".." you should set the *.basdir to and the build file should include the dir and build file name from the *.base.dir -->
+	<property name="ctodsdeploymentcontroller.build.file" value="build.xml" />
+	<property name="ctomdatapersistence.build.file" value="build.xml" />
+	<property name="ctomlabviewer.build.file" value="build.xml" />
+	<property name="registrationconsumerservice.build.file" value="build.xml" />
+	<property name="studyconsumerservice.build.file" value="build.xml" />
+	<property name="labloader.build.file" value="build.xml" />
+	<property name="cchc.build.file" value="build.xml" />
+
+	 <!-- The target name that should be called from the sub-project build file -->
+	    <property name="labviewer-clean.build.target" value="clean"/>
+	    <property name="labviewer-ivy-clean.build.target" value="ivy-clean"/>
+	    <property name="ctomdatapersistence.build.target" value="package-notest"/>
+	    <property name="ctomlabviewer.build.target" value="package-notest"/>
+	    <property name="registrationconsumerservice.build.target" value="jar-notest"/>
+	    <property name="studyconsumerservice.build.target" value="jar-notest"/>
+	    <property name="labloader.build.target" value="jar-notest"/>
+	    <property name="cchc.build.target" value="package-notest"/>
+	   <property name="ctomdeploymentcontroller.build.target" value="build-ctom-wsrf"/>
+
+	<!-- Maven comamnd line arguments, bda profile is inside profiles.xml that gets copied to ear folder before build to override exiting properties -->
+
+	<!-- Used by dist:*:prep to determin list of files to use for incremental build process.
+		Directory and files must be in svn to work.
+	-->
+	<property name="db.src.dir" value="${software.dir}/db" />
+	<property name="db-install.src.dir" value="${software.dir}/CTOMDataPersistence-PG/dbscripts/db-install" />  
+	<property name="db-upgrade.src.dir" value="${software.dir}/CTOMDataPersistence-PG/dbscripts/db-upgrade" />
+
+	<!-- Distribution Structure properties, used to copy files into the distribution area.
+       		Use project.propertie relative dir names becasue they are used by install also-->
+	<property name="dist.exploded.dir" value="${dist.dir}/exploded" />
+	<property name="LabViewer-api.dist.dir" value="${dist.exploded.dir}/${LabViewer-api.dist.relative.dir}" />
+	<property name="ctodslabviewer-webapp.dist.dir" value="${dist.exploded.dir}/${ctodslabviewer-webapp.dist.relative.dir}" />
+	<property name="ctom-wsrf-webapp.dist.dir" value="${dist.exploded.dir}/${ctom-wsrf-webapp.dist.relative.dir}"/>
+	<property name="cchc.dist.dir" value="${dist.exploded.dir}/${cchc.dist.relative.dir}"/>
+	<property name="ctomdatapersistence.dist.dir" value="${dist.exploded.dir}/${ctomdatapersistence.dist.relative.dir}"/>
+    <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/artifacts"/>
+    <!--<property name="labviewer.artifact.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}" />-->
+	<property name="tools.dist.dir" value="${dist.exploded.dir}/${tools.dist.relative.dir}" />
+	<property name="common.dist.dir" value="${dist.exploded.dir}/${common.dist.relative.dir}" />
+   	<property name="db-install.dist.dir" value="${dist.exploded.dir}/${db-install.dist.relative.dir}" />
+	<property name="db-upgrade.dist.dir" value="${dist.exploded.dir}/${db-upgrade.dist.relative.dir}" />
+
+	<!-- Selenium settings -->
+	<property name="selenium.jar" value="${lib.dir}/test-selenium/selenium-server-1.0-beta-1.jar" />
+	<property name="selenium.browser" value="*iexplore" />
+	<!--  What you would need for a ci server, recommend setting in local.properties
+	<property name="selenium.browser" value="*firefox /usr/lib64/firefox-1.5.0.12/firefox-bin"/>
+	-->
+	<property name="selenium.proxy.port" value="4444" />
+	<property name="selenium.report.dir" value="${reports.dir}/selenium" />
+	<property name="selenium.report.file" value="selenium-rpt.html" />
+	<property name="selenium.test.dir" value="${software.dir}/tests/functional/selenium" />
+	<property name="selenium.test.suite" value="${selenium.test.dir}/bdaTestSuite.html" />
+
+	<!-- Where to write files retrieved by get, into the distribution area.  The file names come from project.properties  -->
+	<property name="tomcat.dest.file" value="${download.dir}/${tomcat.binaries.file}" />
+	<property name="cagrid-libs.dest.file" value="${download.dir}/${cagrid-libs.binaries.file}" />
+	<property name="cagrid-base-war.dest.file" value="${download.dir}/${cagrid-base-war.binaries.file}" />
+
+	<!-- Default install time targets passed by deploy targets to the installer, can be overridden by being set on the command line if different target is desitred.  -->
+	<property name="install.target" value="install" />
+	<property name="upgrade.target" value="upgrade" />
+
+	<!-- Where grand stores it's outputed pdf reports of build files -->
+	<property name="grand.rpt.dir" value="${common.dir}/grand" />
+	<!-- Hot deploy variables -->
+	<property name="ctodslabviewer-webapp.name"  value="ctodslabviewer"/>
+	<property name="ctom-wsrf-webapp.name"  value="ctom-wsrf"/>
+	<property name="ctodslabviewer-webapp.file.name"  value="${ctodslabviewer-webapp.name}.war"/>
+	<property name="ctodslabviewer-webapp.src.dir" value="${ctodslabviewer.base.dir}/src/web"/>
+
+
+	<!-- retrive ivy.jar.files then retrieve bda files and librarires -->
+	<property name="commonlibrary.dir" value="" />
+	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
+	<!--
+	<mkdir dir="${bda-download.dir}" />
+	<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
+	<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
+	-->
+	<mkdir dir="${download.dir}" />
+    <ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">
+		<property name="bda.version" value="${bda.version}" />
+		<property name="bda-utils.dir" location="${bda-utils.dir}" />
+		<property name="lib.dir" location="${lib.dir}" />
+		<property name="software.dir" location="${software.dir}" />
+		<property name="commonlibrary.dir" location="${commonlibrary.dir}" />
+		<property name="target.dir" location="${target.dir}"/>
+	</ant>
+	
+	<!-- Paths -->
+	<path id="bda-utils.classpath">
+		<fileset dir="${bda-utils.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<path id="ivy.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Task definitions -->
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath" />
+	<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="bda-utils.classpath"/>
+
+	<!-- Includes- include BDA marcos -->
+	<import file="${bda-utils.dir}/bda-build-utils-${bda.version}.xml" />
+
+	<!-- Start logging -->
+	<mkdir dir="${log.dir}" />
+	<tstamp>
+		<format property="install.time" pattern="yyyy-MM-dd-HH-mm" />
+	</tstamp>
+	<record name="${log.dir}/install-${install.time}.log" action="start" />
+
+
+	<!-- Targets -->
+
+
+	<target name="diagnostics" description="diagnostics">
+		<echoproperties />
+		<diagnostics />
+	</target>
+
+	<target name="clean">
+		<delete dir="${dist.dir}" quiet="true"/>
+		<delete dir="${temp.dir}"  quiet="true"/>
+	</target>
+
+	<target name="init" description="Sets up build are and initalizes variables">
+		<echo message=" ______   ______   _______ " />
+		<echo message="(____  \ (______) (_______)" />
+		<echo message=" ____)  ) _     _  _______ " />
+		<echo message="|  __  ( | |   | ||  ___  |" />
+		<echo message="| |__)  )| |__/ / | |   | |" />
+		<echo message="|______/ |_____/  |_|   |_|" />
+		<mkdir dir="${target.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.exploded.dir}" />
+		<mkdir dir="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+		<mkdir dir="${ctodslabviewer-webapp.dist.dir}" />
+		<mkdir dir="${ctom-wsrf-webapp.dist.dir}"/>
+		<mkdir dir="${common.dist.dir}" />
+		<mkdir dir="${tools.dist.dir}" />
+		<mkdir dir="${temp.dir}" />
+		<mkdir dir="${download.dir}" />
+		<mkdir dir="${pt.dir}" />
+
+		<available file="${tomcat.dest.file}" property="tomcat.tools.exists" />
+		<available file="${cagrid-libs.dest.file}" property="cagrid-libs.tools.exists" />
+		<available file="${cagrid-base-war.dest.file}" property="cagrid-base-war.tools.exists" />
+ </target>
+
+	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
+		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
+		<ivy:cleancache />
+		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
+			<property name="bda-utils.dir" value="${bda-utils.dir}" />
+			<property name="lib.dir" value="${lib.dir}" />
+			<property name="software.dir" value="${software.dir}" />
+		</ant>
+		<!--
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-webapp.build.file}" target="ivy-clean" dir="${LabViewer-webapp.base.dir}" />
+		-->
+	</target>
+
+	<target name="validate:pre:build">
+		<validate-pre-build
+			/>
+	</target>
+
+	<target name="build:all" description="Builds all the sub projects, putting artifacts in the project level target directory, used by distribution targets to make distributions" depends="
+		validate:pre:build,
+		clean,
+		init,
+		build:ctomdatapersistence,
+        build:ctodslabviewer-webapp,
+        build:ctom-wsrf
+		" >
+	</target>
+       
+
+    <target name="build:ctomdatapersistence" depends="init" description="Call webapp sub-projects build target to produce artifiacts">
+        <!--  setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+		<ant inheritAll="false" inheritRefs="false" antfile="${ctomdatapersistence.build.file}" target="${ctomdatapersistence.build.target}" dir="${ctomdatapersistence.base.dir}">
+			<property name="dist.dir" value="${ctomdatapersistence.dist.dir}" />
+			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+			<property name="database.dialect" value="${database.dialect}"/>
+			<property name="database.driver" value="${database.driver}"/>
+			<property name="database.url" value="${database.url}"/>
+			<property name="database.user" value="${database.user}"/>
+			<property name="database.password" value="${database.password}"/>
+		</ant>
+	</target>
+	<target name="build:ctom-wsrf" depends="build:ctomdatapersistence">
+	 <ant inheritAll="false" inheritRefs="false" antfile="${ctodsdeploymentcontroller.build.file}" target="${ctomdeploymentcontroller.build.target}" dir="${ctodsdeploymentcontroller.base.dir}">
+		<property name="dist.dir" value="${ctom-wsrf-webapp.dist.dir}" />
+	 	<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+		<property name="database.dialect" value="${database.dialect}"/>
+		<property name="database.driver" value="${database.driver}"/>
+	    <property name="database.url" value="${database.url}"/>
+		<property name="database.user" value="${database.user}"/>
+		<property name="database.password" value="${database.password}"/>
+		<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+	 	<property name="dest.dir" value="${target.dir}/wsrf-tmp"/>
+       <!--  <property name="software.dir" value="S{software.dir}"/>-->
+         <property name="temp.dir" value="${target.dir}"/>
+		<property name="labLoader.dir" value="${labloader.base.dir}"/>
+		<property name="regConsumerService.dir" value="${registrationconsumerservice.base.dir}"/>
+		<property name="studyconsumerservice.dir" value="${studyconsumerservice.base.dir}"/>
+	 	<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+	 	<property name="labloader.dir.prefix" value="LabLoader-1.3"/>
+	 	<property name="registrationconsumerservice.dir.prefix" value="RegistrationConsumerService-1.3"/>
+	 	<property name="registrationconsumerservice.dir" value="${registrationconsumerservice.base.dir}"/>
+	 	<!--<property name="studyconsumerservice.dir.prefix" value="StudyConsumerService-1.3"/> -->
+	 	<property name="artifacts.dir.prefix" value="artifacts"/>
+        <property name="ctomdeploymentcontroller.dir" value="${ctodsdeploymentcontroller.base.dir}"/>
+         <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}" />
+         <!--<property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}" />-->
+         <property name="unZip.dir" value="${unZip.dir}"/>
+         <property name="stage.dir" value="${stage.dir}"/>
+         <property name="war-dist.dir" value="${war-dist.dir}"/>
+         <property name="webapps.dir" value="${webapps.dir}"/>
+
+         
+
+         <property name="cert.path" value="${cert.path}"/>
+			<property name="key.path" value="${key.path}"/>
+    </ant>
+		<!-- or if you have a static file then you copy it from your source -->
+		<!--<copy todir="${ctom-wsrf-webapp.dist.dir}">
+			  <fileset file="${war-dist.dir}/${war.name}.war" />
+		</copy>-->
+	</target>
+
+	<target name="build:ctodslabviewer-webapp" depends="init, build:ctomdatapersistence" description="Call webapp sub-projects build target to produce artifiacts">
+		<echo message="Using properties file of ${properties.file}." />
+        <echo message=" *************** PROPERTIES PASSED IN ************:"/>
+            <echo message="dist.dir= ${ctodslabviewer-webapp.dist.dir}" />
+			<echo message="env.GLOBUS_LOCATION= ${env.GLOBUS_LOCATION}"/>
+			<echo message="database.dialect= ${database.dialect}"/>
+			<echo message="database.driver= ${database.driver}"/>
+			<echo message="database.url= ${database.url}"/>
+			<echo message="database.user= ${database.user}"/>
+			<echo message="database.password= ${database.password}"/>
+			<echo message="artifacts.dir= ${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+            <echo message="ctomlabviewer.dir= ${ctomlabviewer.base.dir}"/>
+
+            <echo message="software.dir= ${software.dir}"/>
+           <echo message="log.dir= ${log.dir}"/>
+			<echo message="loadLabURLS= ${loadLabURLS}"/>
+			<echo message="BaseURLcaAERS= ${BaseURLcaAERS}"/>
+			<echo message="BaseURLC3D= ${BaseURLC3D}"/>
+            <echo message="BaseURLC3PR= ${BaseURLC3PR}"/>
+			<echo message="hotLink_NAME= ${hotLink_NAME}"/>
+			<echo message="testEnabled= ${testEnabled}"/>
+			<echo message="SmokeTestGridURL= ${SmokeTestGridURL}"/>
+
+			<echo message="websso.enabled= ${websso.enabled}"/>
+			<echo message="websso.cas.server= ${websso.cas.server}"/>
+			<echo message="websso.client.server= ${websso.client.server}"/>
+            <echo message="websso.cas.server.port= ${websso.cas.server.port}"/>
+			<echo message="websso.client.port= ${websso.client.port}"/>
+
+            <echo message="cert.path= ${cert.path}"/>
+			<echo message="key.path= ${key.path}"/>
+			<echo message="hotLink_NAME= ${hotLink_NAME}"/>
+			<echo message="testEnabled= ${testEnabled}"/>
+
+
+
+
+
+
+        <!-- ################################################################################################### -->
+        <!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+		<ant inheritAll="false" inheritRefs="false" antfile="${ctomlabviewer.build.file}" target="${ctomlabviewer.build.target}" dir="${ctomlabviewer.base.dir}">
+			<property name="dist.dir" value="${ctodslabviewer-webapp.dist.dir}" />
+			<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+			<property name="database.dialect" value="${database.dialect}"/>
+			<property name="database.driver" value="${database.driver}"/>
+			<property name="database.url" value="${database.url}"/>
+			<property name="database.user" value="${database.user}"/>
+			<property name="database.password" value="${database.password}"/>
+			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+            <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}"/>
+
+            <property name="software.dir" value="${software.dir}"/>
+           <property name="log.dir" value="${log.dir}"/>
+			<property name="loadLabURLS" value="${loadLabURLS}"/>
+			<property name="BaseURLcaAERS" value="${BaseURLcaAERS}"/>
+			<property name="BaseURLC3D" value="${BaseURLC3D}"/>
+            <property name="BaseURLC3PR" value="${BaseURLC3PR}"/>
+            <property name="tissueURL" value="${tissueURL}"/>
+			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
+			<property name="testEnabled" value="${testEnabled}"/>
+			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
+			
+			<property name="websso.enabled" value="${websso.enabled}"/>
+			<property name="websso.cas.server" value="${websso.cas.server}"/>
+			<property name="websso.client.server" value="${websso.client.server}"/>
+            <property name="websso.cas.server.port" value="${websso.cas.server.port}"/>
+			<property name="websso.client.port" value="${websso.client.port}"/>
+
+            <property name="cert.path" value="${cert.path}"/>
+			<property name="key.path" value="${key.path}"/>
+			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
+			<property name="testEnabled" value="${testEnabled}"/>
+			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
+		</ant>
+	</target>
+	
+	<target name="build:cchc" depends="init, build:ctomdatapersistence" description="Call webapp sub-projects build target to produce artifiacts">
+		<!-- setting the property in the ant call overrides the property in the sub-project allowing the artifact to be produced where needed -->
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-webapp.build.file}" target="${LabViewer-webapp.build.target}" dir="${LabViewer-webapp.base.dir}">
+			<property name="dist.dir" value="${cchc.dist.dir}" />
+			<property name="env.GLOBUS_LOCATION" value="${env.GLOBUS_LOCATION}"/>
+			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
+		    <property name="helpdocs" value="${helpdocs}"/>
+		    <property name="dorian.url" value="${dorian.url}"/>
+			<property name="cds.url" value="${cds.url}"/>
+			<property name="authentication.url" value="${authentication.url}"/>
+			<property name="app.node.identity" value="${app.node.identity}"/>
+		</ant>
+	</target>
+	<target name="dist" description="Makes all distributions: installer, upgrader and source" depends="
+		build:all,
+ 		dist:installer,
+ 		dist:upgrader,
+ 		dist:src
+		">
+	</target>
+
+	<target name="dist:src" description="Makes source distribution">
+		<!-- Add tasks here to zip up src into a distribution, may require some additoinal properties for distribution name" -->
+	</target>
+
+    <target name="dist:tools:retrieve" description="Downloads binary applications from commonlibrary repository" depends="
+        init,
+         dist:tools:retrieve:tomcat,
+         dist:tools:retrieve:cagrid
+        " >
+    </target>
+
+
+	<target name="dist:tools:retrieve:cagrid" unless="cagrid-libs.tools.exists" description="Downloads caGRID from binary repository and verifies checksum">
+		<get src="${cagrid-libs.src.url}" dest="${cagrid-libs.dest.file}" />
+		<get src="${cagrid-base-war.src.url}" dest="${cagrid-base-war.dest.file}" />
+	</target>
+
+
+    <target name="dist:tools:retrieve:tomcat" unless="tomcat.tools.exists" description="Downloads TOMCAT from binary repository and verifies checksum...">
+                 <echo message="Downloading Tomcat from: ${tomcat.src.url}"/>
+                 <get src="${tomcat.src.url}" dest="${tomcat.dest.file}" />
+                <!-- <get src="${tomcat.src.url.md5}" dest="${tomcat.dest.file}.md5" />-->
+                 <checksum file="${tomcat.dest.file}" verifyProperty="tomcat.cksum.ok" />
+                        <!--<if>
+                                <equals arg1="${tomcat.cksum.ok}" arg2="true" />
+                                <then>
+                                       <echo message="Downloaded tomcat sucessfully" />
+                                </then>
+                                <else>
+                                       <fail message="Failed to download tomcat file sucessfully." />
+                                </else>
+                        </if>-->
+        </target>
+    
+
+
+
+    <target name="dist:installer:prep" depends="build:all, dist:tools:retrieve"
+            description="Copies artifacts not generated by sub-project builds into the install distribution area">
+
+		<!-- Copy db-install and db-upgrade scripts from source into distribution area.
+		     The db files need to be under db-[install/upgard]/${database.type}.
+		     Because of this fact these files were not moved to the macro. -->
+		<copy todir="${db-install.dist.dir}" overwrite="true">
+			<fileset dir="${db-install.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<copy todir="${db-upgrade.dist.dir}" overwrite="true">
+			<fileset dir="${db-upgrade.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<dist-prep />
+		<copy todir="${tools.dist.dir}">
+			<fileset dir="${download.dir}">
+				<include name="cagrid*"/>
+			</fileset>
+		</copy>
+        <copy todir="${dist.exploded.dir}" file="server-template.xml" overwrite="true"/>
+
+    </target>
+
+
+    <target name="dist:installer" depends="dist:installer:prep"
+            description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
+		<delete file="${dist.dir}/${LabViewer-webapp.install.zip.file}" />
+		<!-- Set environment name to external -->
+		<delete file="${dist.exploded.dir}/upgrade.properties"/>
+
+
+        <replaceregexp file="${dist.exploded.dir}/install.properties" byline="true" match="^(env.name)=.*" replace="\1=external" />
+		<obfuscate-properties-file
+			properties.file="${dist.exploded.dir}/install.properties"
+			required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.server,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname"
+			optional.property.list="ldap.url,ldap.basedn"
+			delete.property.list="exclude.jboss.backup"
+			/>
+
+         <echo message="*** Copying ${properties.file} to ${dist.exploded.dir} ***"/>
+        <copy file="${properties.file}" todir="${dist.exploded.dir}" overwrite="true" />
+        <!--<zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />-->
+        <zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}"/>
+       <!-- <copy file="${ctodslabviewer-webapp.dist.dir}/ctomlabviewer.war" toDir="${target.dir}" overwrite="true"/>
+        <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${target.dir}" overwrite="true"/>
+        -->
+	</target>
+
+	<target name="dist:upgrader:prep" depends="build:all,dist:tools:retrieve" description="Copies artifacts not generated by sub-project builds into the install distribution area">
+	<!-- for DAC Upgrades (above)  -->
+	<!-- For non DAC upgrades (below)
+	<target name="dist:upgrader:prep" depends="build:all,dist:tools:retrieve:jboss-bindings" description="Copies artifacts not generated by sub-project builds into the install distribution area">
+	-->
+		<!-- Copy db-upgrade scripts from source into distribution area. The db files need to be under db-upgrade/${database.type}. This has not been moved to the macro because the source and dest structure may not be the same and thus this would need to be custom. -->
+		<copy todir="${db-upgrade.dist.dir}" overwrite="true">
+			<fileset dir="${db-upgrade.src.dir}">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+		<!-- For non DAC upgrades
+		<dist-prep
+			copy.tools.flag="N"
+			default.target="upgrade"
+			/>
+		-->
+		<!-- For DAC upgrades -->
+		<dist-prep
+			copy.tools.flag="Y"
+			default.target="upgrade"
+			/>
+
+	</target>
+
+	<target name="dist:upgrader" depends="dist:upgrader:prep" description="Produces zip file based on installer distribution area. Zip is used by deploy:remote:* or external installations">
+		<delete file="${dist.dir}/${LabViewer-webapp.upgrade.zip.file}" />
+		<!-- Set environment name to external -->
+		<copy todir="${dist.exploded.dir}" overwrite="true">
+			<fileset dir="${build.dir}">
+				<include name="upgrade.properties" />
+			</fileset>              
+		</copy>         
+		<delete file="${dist.exploded.dir}/install.properties"/>
+		<replaceregexp file="${dist.exploded.dir}/upgrade.properties" byline="true" match="^(env.name)=.*" replace="\1=external" />
+
+		<obfuscate-properties-file
+			properties.file="${dist.exploded.dir}/upgrade.properties"
+			comment.property.list="application.base.path.windows,application.base.path.linux,jboss.relative.path,tomcat.relative.path"
+			uncomment.property.list="application.base.path,tomcat.home,jboss.home"
+			required.property.list="application.base.path,jboss.home,jboss.server.name,tomcat.home"
+			optional.property.list=""
+			delete.property.list=""
+			/>
+		<replaceregexp file="${dist.exploded.dir}/build.xml" byline="true" match="(&lt;property name=&quot;properties.file&quot;\s+value=&quot;).*(&quot;\s*\/&gt;)" replace="\1upgrade.properties\2" />
+		<zip destfile="${dist.dir}/${LabViewer-webapp.upgrade.zip.file}" basedir="${dist.exploded.dir}" />
+
+	</target>
+
+	<target name="dist:upgrade:tier:db" depends="dist:installer:prep">
+		<delete file="${dist.dir}/${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-db.zip"/>
+		<zip destfile="${dist.dir}/${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-db.zip">
+			<zipfileset dir="${db-install.dist.dir}" prefix="${db-install.dist.relative.dir}" />
+			<zipfileset dir="${db-upgrade.dist.dir}" prefix="${db-upgrade.dist.relative.dir}" />
+			<!-- not needed for this target
+			<zipfileset dir="${LabViewer-webapp.dist.dir}" prefix="${LabViewer-webapp.dist.relative.dir}"/>
+			<zipfileset dir="${grid-sample.dist.dir}" prefix="${grid-sample.dist.relative.dir}"/>
+			<zipfileset dir="${tools.dist.dir}" prefix="${tools.dist.relative.dir}"/>
+			<zipfileset dir="${common.dist.dir}" prefix="${common.dist.relative.dir}"/>
+			-->
+			<zipfileset dir="${bda-utils.dir}" prefix="bda-utils"/>
+			<zipfileset dir="${dist.exploded.dir}">
+				<include name="build.xml" />
+				<include name="install.properties" />
+				<include name="properties.template" />
+				<include name="project.properties" />
+			</zipfileset>
+			<!--  might want to add this
+			<zipfileset dir="${build.dir}">
+				<include name="local.properties" />
+			</zipfileset>
+			-->
+		</zip>          
+	</target>
+
+	<target name="dist:upgrade:tier:tomcat" depends="dist:installer:prep">
+		<delete file="${dist.dir}/${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-tomcat.zip"/>
+		<zip destfile="${dist.dir}/${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-tomcat.zip">
+			<zipfileset dir="${LabViewer-webapp.dist.dir}" prefix="${LabViewer-webapp.dist.relative.dir}"/>
+			<zipfileset dir="${grid-sample.dist.dir}" prefix="${grid-sample.dist.relative.dir}"/>
+			<zipfileset dir="${tools.dist.dir}" prefix="${tools.dist.relative.dir}">
+				<include name="*tomcat*"/>
+			</zipfileset>
+			<zipfileset dir="${common.dist.dir}" prefix="${common.dist.relative.dir}"/>
+			<zipfileset dir="${bda-utils.dir}" prefix="bda-utils"/>
+			<zipfileset dir="${dist.exploded.dir}">
+				<include name="build.xml" />
+				<include name="${properties.file}" />
+				<include name="properties.template" />
+				<include name="project.properties" />
+			</zipfileset>
+		</zip>          
+	</target>
+
+	<target name="dist:upgrade:tier"
+		depends="
+		dist:upgrade:tier:db,
+ 		dist:upgrade:tier:tomcat
+		"/>
+
+	<target name="deploy:local:install" depends="build:all,dist:installer:prep"
+            description="Installs and configures the application and required binaries and re-creates the datbase
+            on the local machine. Used for developer desktops and ci environments.">
+		<!--
+		  * Requires a database installation.
+		  
+		  * Will use the target from install.xml specified in ${install.target} (defaults to install unless passed in on command line).
+		  * If you want properties to be used at install time they must be included in a proeprties file.
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install.
+		  * This target will use differnt properties based on linux (linux-install.properties) or windows (windows-install.properties) installs.
+		  * It only supports using those properties files for now, so if you want to change install time properites edit these files.
+		-->
+		<deploy-local target.name="${install.target}"/>
+	</target>
+
+    
+    <target name="deploy:local:upgrade" depends="build:all,dist:upgrader:prep" description="Upgrades and configures the application and database  on the local machine. Used for developer desktops and ci environments.">
+		<!--
+		  * Requires a database installation.
+		  * Will use the target from install.xml specified in ${upgrade.target} (defaults to install unless passed in on command line).
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install, if you want properties to be used at install time they must be included in a proeprties file.
+		  * This target will use differnt properties based on linux (linux-upgrade.properties) or windows (windows-upgrade.properties) installs.
+		  * It only supports using those properties files for now, so if you want to change install time properites edit these files.
+		-->
+		<deploy-local target.name="${upgrade.target}"
+			properties.file="${upgrade.properties.file}"
+			/>
+	</target>
+
+	<target name="deploy:remote:install" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
+		build:all,
+		dist:installer
+		">
+		<!--
+		  * Will use the target from install.xml specified in ${install.target} (defaults to install unless passed in on command line).
+		  * Requires specifying -Dproperties.file=@file@ on the command line to point installer to correct enviornment to install into.
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install, if you want properties to be used at install time they must be included in a proeprties file.
+		-->
+		<!-- Call macro to deploy files on desired server -->
+		<deploy-files dist.file="${LabViewer-webapp.install.zip.file}" />
+		<!-- SSH to machine ant run ant command line to install application -->
+		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${install.target}" />
+	</target>
+
+	<target name="deploy:remote:upgrade" description="Installs and configures the application and required binaries and re-creates the datbase  on a remote machine. Used for NCI tiers (dev, qa, stg, prod)" depends="
+		build:all,
+		dist:upgrader
+		">
+		<!--
+		  * Will use the target from install.xml specified in ${upgrade.target} (defaults to upgrade unless passed in on command line).
+		  * Requires specifying -Dproperties.file=@file@ on the command line to point installer to correct enviornment to install into.
+		  * Calls ant from exec task to ensure properties are do not carry over from current ant runtime and also to emulate a manual install, if you want properties to be used at install time they must be included in a proeprties file.
+		-->
+		<!-- Call macro to deploy files on desired server -->
+		<deploy-files dist.file="${LabViewer-webapp.upgrade.zip.file}" />
+		<!-- SSH to machine ant run ant command line to install application -->
+		<remote-ssh remotesshcommand=". .bash_profile;cd ${ssh.dir.temp}; ant -Dproperties.file=${properties.file.name} -Dforce.reinstall=true ${upgrade.target}" />
+	</target>
+
+	<target name="deploy:remote:upgrade:db"
+	       depends="
+		build:all,
+		dist:upgrade:tier:db
+		">
+		<deploy-files 
+			ssh.user="${db.ssh.server.username}"
+			ssh.host="${db.ssh.server.hostname}"
+			remote.directory.property.name="db.ssh.dir.temp"
+			dist.file="${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-db.zip"
+		       />
+	</target>
+
+	<target name="deploy:remote:upgrade:tomcat"
+	       depends="
+		build:all,
+		dist:upgrade:tier:tomcat
+		">
+		<deploy-files 
+			ssh.user="${tomcat.ssh.server.username}"
+			ssh.host="${tomcat.ssh.server.hostname}"
+			remote.directory.property.name="tomcat.ssh.dir.temp"
+			dist.file="${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-tomcat.zip"
+		       />
+	</target>
+
+	<target name="usage" description="Explains how to use this build script">
+		<echo message="To run a remote upgrade type: ant deploy:remote:upgrade -Dproperties.file=[path to environment proeprty file]" />
+	</target>
+
+	<target name="report:grand" depends="dist:installer:prep" description="Generates target flow diagrams for build files">
+		<!-- Temporary fix to make grand work for install.xml -->
+
+		<report-grand 
+			build.file.location="build.xml" 
+			output.file.dir="${grand.rpt.dir}" 
+			output.file.name="generic-root-build.xml" />
+		<report-grand 
+			build.file.location="${dist.exploded.dir}/build.xml" 
+			output.file.dir="${grand.rpt.dir}" 
+			output.file.name="generic-root-install.xml" />
+	</target>
+
+	<target name="test:all" description="Runs test target for all sub-projects" depends="
+		clean,
+		init,
+		test:LabViewer-api,
+		test:LabViewer-webapp
+		" >
+	</target>
+
+	<target name="test:LabViewer-api" depends="init" description="Calls test target for sub-project">
+		<!--
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-api.test.file}"
+			target="test"
+			dir="${LabViewer-api.base.dir}" >
+			<property name="dist" value="${LabViewer-api.dist.dir}" />
+		</ant>
+		-->
+	</target>
+
+	<target name="test:LabViewer-webapp" depends="init" description="Calls test target for sub-project">
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-webapp.test.file}" target="test" dir="${LabViewer-webapp.base.dir}">
+			<property name="dist.dir" value="${LabViewer-webapp.dist.dir}" />
+		</ant>
+	</target>
+
+	<target name="static-analysis:all" description="Runs static-analysis target for all sub-projects" depends="
+		clean,
+		init,
+		static-analysis:LabViewer-api,
+		static-analysis:LabViewer-webapp
+		" >
+	</target>
+
+	<target name="static-analysis:LabViewer-api" depends="init" description="Calls static-analysis target for sub-project">
+		<!--
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-api.build.file}"
+			target="static-analysis"
+			dir="${LabViewer-api.base.dir}" >
+			<property name="dist" value="${LabViewer-api.dist.dir}" />
+		</ant>
+		-->
+	</target>
+
+	<target name="static-analysis:LabViewer-webapp" depends="init" description="Calls static-analysis target for sub-project">
+		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-webapp.build.file}" target="static-analysis" dir="${LabViewer-webapp.base.dir}">
+			<property name="dist.dir" value="${LabViewer-webapp.dist.dir}" />
+		</ant>
+	</target>
+
+	<target name="continuous-integration" description="calls wrapper targets for continuous integration build" depends="
+		build:all,
+		static-analysis:all
+		" >
+	</target>
+
+	<target name="init:ivy" description="Initializes ivy-repo.based on ivy definition file and ivy settings file">
+		<mkdir dir="${local.repo.dir}" />
+		<property name="ivy.dep.file" value="${ivy.settings.dir}/ivy-test.xml" />
+		<ivy:settings file="${ivy.settings.dir}/ivy.settings.xml" />
+	</target>
+
+	<target name="ivy-test-selenium" depends="init:ivy" description="Downloads selenium libraries from ivy into library directory">
+		<ivy:resolve refresh="true" conf="test-selenium" />
+		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="test-selenium" />
+		<path id="project.test.selenium.classpath">
+			<fileset dir="${lib.dir}/test-selenium">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+	</target>
+
+	<target name="test:seleniumrc:start">
+		<echo message="${lib.dir}/test-selenium/selenium-server-0.9.0.jar" />
+		<java jar="${lib.dir}/test-selenium/selenium-server-0.9.0.jar" fork="true" spawn="true" />
+	</target>
+
+	<target name="test:seleniumrc:stop" description="Stops selenuimrc server when using selenium from java">
+		<get taskname="selenium-shutdown" src="http://localhost:${selenium.proxy.port}/selenium-server/driver/?cmd=shutDown" dest="${temp.dir}/result.txt" ignoreerrors="true" />
+	</target>
+
+	<target name="test:selenium:init" description="Sets up environment for running selenium tests">
+	<mkdir dir="${selenium.report.dir}" />
+	<if>
+	<not>
+	<socket server="${tomcat.hostname}" port="${tomcat.port.ssl}" />
+	</not>
+	<then>
+	<tomcat-start tomcat.home="${tomcat.home}"/>
+	</then>
+	</if>
+	</target>
+
+	<target name="test:selenium" description="Wrapper target to selenium test suite" depends="
+		ivy-test-selenium,
+		test:selenium:init,
+		test:selenium:run,
+		test:seleniumrc:stop
+		" >
+	</target>
+
+	<target name="test:selenium:run" description="Executes selenium test suite">
+		<!-- Another optoin  for running tests
+		<java jar="${selenium.jar}" fork="true">
+			<arg line=" -htmlSuite &quot;${selenium.browser}&quot;"/>
+			<arg line=" &quot;${selenium.url}&quot;"/>
+			<arg line=" &quot;${selenium.test.suite}&quot;"/>
+			<arg line=" &quot;${selenium.report.dir}/${selenium.report.file}&quot;"/>
+			<arg line=" -timeout 30"/>
+			<arg line=" -log ${temp.dir}/selenium-debug.log"/>
+		</java> 
+		-->
+		<osfamily property="os.family" />
+		<if>
+			<equals arg1="${os.family}" arg2="unix" />
+			<then>
+				<echo message="To be able to selenium tests on Unix platforms you need to meet the following conditions." />
+				<echo message="You need to be logged in on the console running X (developer linux or mac workstation)." />
+				<echo message=" If you are running it from a server that does not have a console (like a CI server) you need to be running at runlevel 3, running and xframe buffer ('Xvfb :1 -screen 0 1024x768x24', should be setup on a CI server) and have your DISPLAY environment variable sto to match your frame buffer ('DISPLAY=:1.0', should be set in .bash_profile on CI server)." />
+				<fail unless="env.DISPLAY" message="DISPLAY environment variable not set, please set it as outlined above and run again." />
+			</then>
+		</if>
+		<taskdef resource="selenium-ant.properties" classpathref="project.test.selenium.classpath" />
+		<selenese suite="${selenium.test.suite}" browser="${selenium.browser}" results="${selenium.report.dir}/${selenium.report.file}" multiWindow="falsE" timeoutInSeconds="60" port="${selenium.proxy.port}" startURL="${selenium.url}" />
+	</target>
+
+	<target name="ivy-resolve-all" depends="init:ivy" description="Downloads all libraries included in the ivy definition file from ivy into local lib directory">
+		<ivy:resolve refresh="true" />
+	</target>
+
+	<target name="report:ivy" description="Runs ivy reports on all dependencies in the ivy defnintion file, also produces dependency diagrams" depends="
+		ivy-resolve-all
+		">
+		<property name="ivy.report.dir" value="${reports.dir}/ivy" />
+		<delete dir="${ivy.report.dir}" />
+		<mkdir dir="${ivy.report.dir}" />
+		<ivy:report outputpattern="target/reports/ivy/[organisation]-[module]-[conf].[ext]" dot="true" graph="false" />
+		<util-dot-on-dir dot-file.dir="target/reports/ivy" />
+	</target>
+
+	<target name="deploy:hot" depends="build:all" description="Hot deploys the deployment artifact">
+	</target>
+
+	<target name="deploy:hot:jsp" description="Copies all current JSP code to the deployed application for quick update">
+		<for param="toDir">
+			<path>
+			</path>
+			<sequential>
+				<copy todir="@{toDir}" overwrite="true">
+					<fileset dir="${LabViewer-webapp.src.dir}">
+						<include name="**/*.jsp" />
+						<include name="**/*.jspf" />
+						<include name="**/*.css" />
+						<include name="**/*.js" />
+						<include name="**/*.jpg" />
+						<include name="**/*.gif" />
+						<include name="**/*.png" />
+						<include name="**/*.faces" />
+						<include name="**/*.tag" />
+						<include name="**/*.tagf" />
+					</fileset>
+				</copy>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="ivy:module:add2repo">
+		<!-- you would want to use this value instead and you can get rid of the mkdir below
+		<property name="ivy-repo.base.dir" location="${software.dir}/../../ivy-repo"/>
+		-->
+		<mkdir dir="${user.home}/tmp"/>
+		<ivy-module-add2repo
+			ivy-repo.base.dir="${user.home}/tmp/ivy-repo"
+			ivy.add.org="ncicb"
+			ivy.add.module="ssaksa-test-module3"
+			ivy.add.version="0.1.0"
+			ivy.add.module.src.dir="${build.dir}"
+			ivy.add.module.src.file.list="build.xml"
+			ivy.add.xml.src.location="${build.dir}/install.xml"
+			/>
+	</target>
+
+	<target name="database:prep" description="Copies db files with filtering">
+		<!-- set some db variables -->
+		<switch value="${database.type}">
+			<case value="oracle">
+				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
+				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
+				<property name="database.schema" value="${database.name}"/>
+			</case>
+			<case value="postgresql">
+				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
+				<property name="database.driver" value="org.postgresql.Driver"/>
+				<property name="database.schema" value="public"/>
+			</case>
+			<default>
+				<fail message="Invalid database type ${database.type}"/>
+			</default>
+		</switch>
+		<path id="jdbc.driver.classpath">
+			<pathelement location="${database.driver.file}"/>
+		</path>
+	
+		<echoproperties prefix="database"/>
+		<copy todir="${working.dir}/" filtering="true"  overwrite="true">
+			<fileset dir="${db.src.dir}">
+				<include name="**/db-upgrade/**/*"/>
+			</fileset>
+			<filterset>
+				<filtersfile file="${properties.file}"/>
+				<filtersfile file="project.properties"/>
+				<filter token="db-upgrade.run.dir" value="${working.dir}/db-upgrade/${database.type}"/>
+			</filterset>
+		</copy>
+	</target>
+
+	<target name="database:gencl" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+		depends="
+			database:prep
+			">
+			<database-genchangelog
+				database.changelog.file="${target.dir}/generated-change-log.xml"
+				/>
+	</target>
+
+	<target name="database:diff" description="Upgrades database using BDA Datbase Upgrade process." unless="exclude.database"
+		depends="
+			database:prep
+			">
+			<database-diff
+				output.file.txt="${target.dir}/generated-diff-log.txt"
+				output.file.xml="${target.dir}/generated-diff-log.xml"
+				/>
+	</target>
+
+	<target name="database:doc" description="Generates database documentation." unless="exclude.database"
+		depends="
+			database:prep
+			">
+		<mkdir dir="${reports.dir}/db"/>
+		<database-doc
+			output.dir="${reports.dir}/db"
+			database.changelog.file="${working.dir}/db-upgrade/db-upgrade.xml"
+			/>
+	</target>
+
+	<target name="report:erd">
+		<generate-erd   
+			schemaspy.jar="schemaspy-3.1.1.jar"
+			database.driver.jar="mysql-connector-java-5.0.5.jar"
+			/>                      
+	</target>
+
+	<target name="report:uml">
+		<property name="uml.dir" value="${reports.dir}/uml"/>
+		<path id="LabViewer.classpath.ref">
+			<fileset dir="${lib.dir}/runtime">
+				<include name="**/*.jar" />     
+			</fileset>              
+		</path>         
+		<generate-uml   
+			uml.dir="${uml.dir}"    
+			src.java.dir="${LabViewer-webapp.base.dir}/src/java"
+			uml.source.path="LabViewer.classpath.ref"
+			/>                      
+	</target>
+</project>

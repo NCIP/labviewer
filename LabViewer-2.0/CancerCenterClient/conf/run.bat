@@ -1,0 +1,1 @@
+java -jar -DDefaultProperties.File=properties/DefaultProperties.properties CAXCHANGE.jar

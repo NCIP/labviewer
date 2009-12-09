@@ -1,0 +1,1621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping version="1.2">
+   <components>
+      <component kind="scs" location="LAB_DATA.scs" type="source"/>
+      <component kind="h3s" location="PORT_MT030001.h3s" type="target"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="28"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="29"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="30"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="31"/>
+      <component group="constant" kind="core" name="constant" type="function" id="32">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="33">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="string" kind="core" name="Concatenate" type="function" id="34"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="35"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="36"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="37"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="38"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="39"/>
+      <component group="constant" kind="core" name="constant" type="function" id="40">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="string" kind="core" name="Concatenate" type="function" id="41"/>
+      <component group="constant" kind="core" name="constant" type="function" id="42">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="string" kind="core" name="Concatenate" type="function" id="43"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="44"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="45"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="46"/>
+      <component group="constant" kind="core" name="constant" type="function" id="47">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="string" kind="core" name="Concatenate" type="function" id="48"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="49"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="50"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="51"/>
+      <component group="constant" kind="core" name="constant" type="function" id="52">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="53">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="date" kind="core" name="changeFormat" type="function" id="54"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="55"/>
+      <component group="constant" kind="core" name="constant" type="function" id="58">
+         <data type="String" value="HHmm"/>
+      </component>
+      <component group="string" kind="core" name="Concatenate" type="function" id="56"/>
+      <component group="date" kind="core" name="changeFormat" type="function" id="57"/>
+      <component group="string" kind="core" name="Concatenate" type="function" id="59"/>
+   </components>
+   <links>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Protocol_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Protocol_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Protocol_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Protocol_Title"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.title.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Site_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.location.trialSite.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Site_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.location.trialSite.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Site_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.location.trialSite.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.PI_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.PI_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.PI_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.PI_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.investigatorNamedPerson.name.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_MRN_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_MRN_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_MRN_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Initials"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.name.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Gender_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Gender_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Gender_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Gender_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Gender_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Birth_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.35.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Birth_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.35.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.32.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.31.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.31.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.31.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.29.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.35.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.29.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.29.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.birthTime.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Race_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.raceCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Race_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.raceCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Race_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.raceCode.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Race_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.raceCode.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Subject_Race_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.raceCode.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Reason_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.reasonCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Reason_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.reasonCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Reason_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.reasonCode.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Reason_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.reasonCode.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Visit_Reason_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.reasonCode.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Number_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Number_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Number_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.33.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.34.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.34.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.30.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.28.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.28.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.34.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.30.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.activityTime.high.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.28.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.30.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Accession_Author_Laboratory_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.name.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.41.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.37.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.40.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.41.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.43.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.37.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Start_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.43.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Start_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.43.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.41.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.37.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.effectiveTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.36.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.38.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.42.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.36.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.39.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.38.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_End_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.39.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_End_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.39.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.38.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.effectiveTime.high.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.36.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Pause_Quantity_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.pauseQuantity.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Pause_Quantity_Units"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.pauseQuantity.unit"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.protocolStudyEvent.component.referenceEvent.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.protocolStudyEvent.component.referenceEvent.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.protocolStudyEvent.component.referenceEvent.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.protocolStudyEvent.component.referenceEvent.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.definition.protocolSpecimenCollection.componentOf.protocolStudyEvent.component.referenceEvent.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.value.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Units"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation2.ageAtVisit.value.unit"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.pertinentInformation1.fastingStatus.value.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.44.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.46.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.47.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.44.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.45.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.46.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.45.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Container_Registration_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.45.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.46.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf2.containerRegistration.effectiveTime.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.44.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Comment_Text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.subjectOf100.specimenComment.value.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Material_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.specimenNaturalMaterial.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Material_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.specimenNaturalMaterial.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Material_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.specimenNaturalMaterial.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Material_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.specimenNaturalMaterial.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Specimen_Material_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.specimenNaturalMaterial.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Battery_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Battery_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Battery_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Battery_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Battery_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.text.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Status_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.statusCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.50.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.54.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.52.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.50.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.49.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.54.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Start_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.49.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Start_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.49.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.54.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.activityTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.50.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.48.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.51.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.53.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.48.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.55.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.51.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_End_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.55.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_End_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.55.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.51.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.activityTime.high.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.48.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.confidentialityCode00.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.confidentialityCode00.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.confidentialityCode00.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.confidentialityCode00.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.confidentialityCode00.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reason_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.reasonCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.reasonCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.reasonCode.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.reasonCode.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reason_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.reasonCode.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.value.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Units"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.value.unit"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.interpretationCode00.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.interpretationCode00.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.interpretationCode00.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.interpretationCode00.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.interpretationCode00.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Method_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.methodCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Method_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.methodCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Method_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.methodCode.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Method_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.methodCode.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Method_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.methodCode.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Id_Root"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Id_Extension"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Id_Assigning_Authority"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.name.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Comment"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation100.testComment.text.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.code.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.value.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.value.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.value.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System_Version"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.value.codeSystemVersion"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_Display_Name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.pertinentInformation2.toxicityGrade.value.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reference_Range_Low"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.referenceRange.range.value.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reference_Range_High"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.referenceRange.range.value.high.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reference_Range_Units"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.referenceRange.range.value.high.unit"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Reference_Range_Units"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.referenceRange.range.value.low.unit"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Status"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.subjectOf.reportToSite.statusCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.56.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.57.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.58.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.56.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.59.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.57.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Date"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.59.inputs.0"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.59.inputs.1"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.57.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.subjectOf.reportToSite.effectiveTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="LAB_DATA.Date_Format"/>
+         </source>
+         <target>
+            <linkpointer kind="function" xmlPath="function.56.inputs.0"/>
+         </target>
+      </link>
+   </links>
+   <views>
+      <view component-id="source.scs.0" height="0" width="0" x="0" y="0"/>
+      <view component-id="target.h3s.0" height="0" width="0" x="0" y="0"/>
+      <view component-id="function.28" height="67" width="91" x="30" y="102"/>
+      <view component-id="function.29" height="67" width="121" x="372" y="24"/>
+      <view component-id="function.30" height="67" width="121" x="372" y="102"/>
+      <view component-id="function.31" height="67" width="91" x="264" y="24"/>
+      <view component-id="function.32" height="43" width="109" x="138" y="24"/>
+      <view component-id="function.33" height="43" width="109" x="138" y="102"/>
+      <view component-id="function.34" height="67" width="91" x="264" y="102"/>
+      <view component-id="function.35" height="67" width="91" x="30" y="24"/>
+      <view component-id="function.36" height="67" width="91" x="264" y="258"/>
+      <view component-id="function.37" height="67" width="121" x="372" y="180"/>
+      <view component-id="function.38" height="67" width="121" x="372" y="258"/>
+      <view component-id="function.39" height="67" width="91" x="30" y="258"/>
+      <view component-id="function.40" height="43" width="109" x="138" y="180"/>
+      <view component-id="function.41" height="67" width="91" x="264" y="180"/>
+      <view component-id="function.42" height="43" width="109" x="138" y="258"/>
+      <view component-id="function.43" height="67" width="91" x="30" y="180"/>
+      <view component-id="function.44" height="67" width="91" x="264" y="336"/>
+      <view component-id="function.45" height="67" width="91" x="30" y="336"/>
+      <view component-id="function.46" height="67" width="121" x="372" y="336"/>
+      <view component-id="function.47" height="43" width="109" x="138" y="336"/>
+      <view component-id="function.48" height="67" width="91" x="264" y="492"/>
+      <view component-id="function.49" height="67" width="91" x="30" y="414"/>
+      <view component-id="function.50" height="67" width="91" x="264" y="414"/>
+      <view component-id="function.51" height="67" width="121" x="372" y="492"/>
+      <view component-id="function.52" height="43" width="109" x="138" y="414"/>
+      <view component-id="function.53" height="43" width="109" x="138" y="492"/>
+      <view component-id="function.54" height="67" width="121" x="372" y="414"/>
+      <view component-id="function.55" height="67" width="91" x="30" y="492"/>
+      <view component-id="function.58" height="43" width="109" x="138" y="570"/>
+      <view component-id="function.56" height="67" width="91" x="264" y="576"/>
+      <view component-id="function.57" height="67" width="121" x="372" y="576"/>
+      <view component-id="function.59" height="67" width="91" x="30" y="570"/>
+   </views>
+</mapping>

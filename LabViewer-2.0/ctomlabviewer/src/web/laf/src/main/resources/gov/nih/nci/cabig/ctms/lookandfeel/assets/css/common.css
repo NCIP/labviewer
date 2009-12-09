@@ -1,0 +1,373 @@
+/**** GENERAL TAG STYLE OVERRIDES */
+
+body {
+  margin: 0; padding: 0;
+  background: url(../images/chrome/caBIG_footer.gif) no-repeat bottom right #eee;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10pt;
+  color: #000000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  color: #2E3257;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+h2 { font-size: 1.0em; }
+h3, h4 { font-size: 0.9em; }
+
+p { margin: 1em 0; }
+
+/**** COMMON TEMPLATE ELEMENTS */
+
+#header {
+
+  background: url(../images/chrome/header_BG.gif) repeat-x top;
+  min-width: 800px;
+}
+
+#header .background-R {
+  background: url(../images/chrome/header_BG_R.gif) no-repeat top right;
+  min-height: 40px;
+}
+
+#logo { vertical-align: top; }
+
+#login-action {
+  position: absolute; top: 0; right: 0;
+  padding: 4px 10px 0 20px;
+  font-size: 0.85em;
+}
+
+#login-action a { color: #FFFFFF; font-weight: bold; text-decoration: none; }
+
+#login-action a:hover { color: #FFFF00; }
+#login-id {
+  position: absolute; top: 22px; right: 0;
+  padding: 0 10px 4px 20px;
+  font-size: 0.7em;
+}
+
+#login-id a { color: #FFFFFF; font-weight: bold; text-decoration: none; }
+
+#footer { height: 65px; clear: both; }
+
+#sso-form { display: none }
+
+/**** COMMON TAB STYLES (shared across all three levels) */
+
+ul.tabs {
+  margin: 0;
+  padding: 0;
+}
+
+ul.tabs li {
+  display: block;
+  list-style-type: none;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+/**** SECTION TABS */
+
+#sections {
+  position: absolute;
+  top: 44px; left: 281px;
+  background: url(../images/chrome/section_L1.gif) no-repeat top left;
+  padding-left: 1px;
+  font-size: .85em;
+}
+
+#sections li {
+  background: url(../images/chrome/section_BG.gif) no-repeat top right;
+}
+
+#sections li.selected {
+  background-image: url(../images/chrome/section_BG_s.gif);
+}
+
+#sections li div {
+  background: url(../images/chrome/section_L.gif) no-repeat top left;
+  padding: 0 20px;
+  margin: 0;
+}
+
+#sections li.selected div {
+  background-image: url(../images/chrome/section_L_s.gif);
+}
+
+#sections a {
+  line-height: 20px;
+  display: block;
+  text-decoration: none; font-weight: bold;
+  color: #333333;
+}
+
+#sections a:hover { color: #efe; }
+#sections li.selected a:hover { color: #339; }
+
+/**** TASKS */
+
+#taskbar {
+  background: url(../images/chrome/taskbar_BG.gif) repeat-x top;
+  font-weight: bold;
+  padding: 6px 20px 0 12px;
+  height: 22px;
+  font-size: .85em;
+}
+
+#taskbar a {
+  font-weight: normal;
+  padding: 0 0 0 12px;
+  color: #002EE2;
+  text-decoration: none;
+}
+
+#current-task { font-weight: bold; }
+
+/**** PAGE CONTENT BOXES */
+
+#main {
+  margin: 0;
+  padding: 12px 18px 20px 18px;
+  clear: both;
+}
+
+#flash-message {
+  border: 1px solid #999;
+  border-width: 1px 0;
+  text-align: center;
+  background-color: #ccc;
+  margin: 1em auto;
+  width: 75%;
+  padding: 0.5em;
+}
+
+#flash-message.info {
+  border-color: #390;
+  background-color: #aea;
+}
+
+#flash-message.error {
+  border-color: #930;
+  background-color: #ea9;
+}
+
+/* A pane is a vertical subdivision of the page.
+   Individual panes will need to have their widths specified
+   if there's more than one in a page;
+   the total should be something less than 100%. */
+.pane {
+  float: left;
+  margin: 0 14px 12px 0;
+}
+
+/* Each pane will contain one or more "boxes" */
+.box {
+  background-color: #fff;
+  margin-bottom: 12px; 
+}
+.box .header {
+  background: url(../images/chrome/boxheader_BG.gif) repeat-x top #1972C7;
+}
+.box .header h2 {
+  color: #FFFFFF;
+  margin: 0;
+  padding: 6px 20px 4px 8px;
+}
+.box .header .background-L { background: url(../images/chrome/boxheader_BG_L.gif) no-repeat top left; }
+.box .header .background-R { background: url(../images/chrome/boxheader_BG_R.gif) no-repeat top right; }
+
+
+.border-T  { background: url(../images/chrome/box_T.gif)  repeat-x top; }
+.border-L  { background: url(../images/chrome/box_L.gif)  repeat-y left; }
+.border-R  { background: url(../images/chrome/box_R.gif)  repeat-y right; }
+.border-B  { background: url(../images/chrome/box_B.gif)  repeat-x bottom; }
+.border-TL { background: url(../images/chrome/box_TL.gif) no-repeat top left; }
+.border-TR { background: url(../images/chrome/box_TR.gif) no-repeat top right; }
+.border-BL { background: url(../images/chrome/box_BL.gif) no-repeat bottom left; }
+.border-BR { background: url(../images/chrome/box_BR.gif) no-repeat bottom right; }
+
+.box .interior {
+  margin: 0 8px 0 7px;
+  padding: 8px 0;
+  min-height: 28px;
+}
+
+.box.tabbed .interior {
+  padding-top: 0;
+}
+
+.box .content {
+  padding: 8px;
+}
+
+.box h3 {
+  position: relative;
+  border-top: solid 1px #000;
+  background: url(../images/chrome/boxsubhead_BG.png) repeat-x bottom #c9e3eb;
+  padding: 4px 8px;
+}
+
+/**** TABS WITHIN A BOX */
+
+.box ul.inner.tabs { /* this overspecific selector is necessary for IE */
+  background: url(../images/chrome/inner-tab_BG.gif) no-repeat top right;
+  padding: 4px 7px 0 0;
+  margin: 0 0 0 7px;
+  height: 20px;
+  font-size: .9em;
+}
+
+.box ul.inner.tabs li {
+  background: url(../images/chrome/inner-tab_L.gif) no-repeat top left;
+}
+
+.box ul.inner.tabs li.selected {
+  background-image: url(../images/chrome/inner-tab_L_s.gif);
+}
+
+.box ul.inner.tabs li div {
+  background: url(../images/chrome/inner-tab_R.gif) no-repeat top right;
+  padding: 0 20px;
+}
+
+.box ul.inner.tabs li.selected div {
+  background-image: url(../images/chrome/inner-tab_R_s.gif);
+}
+
+.box ul.inner.tabs a {
+  line-height: 20px;
+  display: block;
+  text-decoration: none;
+  font-weight: bold;
+  color: #333333;
+}
+.box ul.inner.tabs a:hover {
+  color: #002EE2;
+}
+
+/* two boxes with the additional class "paired" are displayed side-by-side */
+.box.paired {
+    float: left;
+    width: 45%;
+    margin: 1em;
+}
+
+.division {
+    clear: both;
+}
+
+/**** REUSABLE PAGE ELEMENTS/CLASSES */
+
+.required-indicator {
+  color: #a00; font-family: serif;
+}
+
+.required-for-submit {
+  color: #0a0; font-family: serif;
+  font-weight: bold;
+}
+
+.error input {
+  border-color: #c03;
+}
+.error .label {
+  color: #c03;
+}
+
+ul.errors, p.errors {
+  color: #c03;
+}
+ul.errors {
+    margin: 0; padding: 0 1em 0.2em 1em;
+}
+ul.errors li {
+  margin: 0 0.8em; padding: 0;
+}
+
+/* The delete checkbox which may go in a box's h3s */
+.delete-control {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  margin: 3px 4px 0 0;
+}
+
+/*
+    'row' is a class for label: value type rows.  The intent is
+    that each row would contain 2-3 subdivs:  a label (float: left), an optional extra
+    (float: right), and the value (positioned naturally).
+ */
+div.row {
+    padding: 2px;
+    margin: 1px 0;
+}
+/* Automatically clear after each row
+   Based on http://www.positioniseverything.net/easyclearing.html */
+div.row:after, .autoclear:after {
+    display: block ;
+    content: ' ';
+    clear: both ;
+    height: 0 ;
+    visibility: hidden ;
+}
+div.row div.label, div.row div.value {
+  line-height: 1.5em;
+}
+div.row div.label {
+  font-weight: bold;
+  float: left;
+  margin-left: 0.5em;
+  text-align: right;
+  /* default width; pages might override */
+  width: 10em;
+}
+div.row div.value {
+  font-weight: normal;
+  /* default; should be changed whenever .label width is changed */
+  margin-left: 11em;
+}
+
+img.indicator {
+    visibility: hidden;
+}
+
+/*
+  Styles for Table Data 
+*/
+table.tablecontent {
+    border-collapse: collapse;
+}
+
+.tablecontent td, .tablecontent th {
+    border: 1px solid #999;
+    padding: 0.5em;
+}
+
+.tablecontent th {
+    text-align: left;
+    border-color: #444 #999;
+    background-color: #ddd;
+}
+
+.tablecontent td {
+    border-color: #888 #ddd;
+    background-color: #fff;
+}
+
+a.help {
+    display: block;
+    float: right;
+    color: #fff;
+}
+a.help img {
+    border: none;
+}

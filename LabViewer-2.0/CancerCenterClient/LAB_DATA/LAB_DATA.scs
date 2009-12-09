@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csvMetadata xmlPath="csvMetadata" id="9fe8c27f-b771-4de6-8745-dcbf22ae68e6" version="1.2">
+   <segment name="LAB_DATA" id="a74d9324-196c-4799-90b6-8a10cfc84645" xmlPath="LAB_DATA">
+      <field column="1" name="Date_Format" id="6da18833-7dc8-4ab4-8937-b3325e307959" xmlPath="LAB_DATA.Date_Format"/>
+      <field column="2" name="Protocol_Id_Root" id="fffc9a71-e093-4cd4-947c-ccc6746d130d" xmlPath="LAB_DATA.Protocol_Id_Root"/>
+      <field column="3" name="Protocol_Id_Extension" id="13a3a746-a471-4b46-ad8a-789638d0d2c9" xmlPath="LAB_DATA.Protocol_Id_Extension"/>
+      <field column="4" name="Protocol_Id_Assigning_Authority" id="789dd871-a3bc-4d6b-b498-290a35fbbb79" xmlPath="LAB_DATA.Protocol_Id_Assigning_Authority"/>
+      <field column="5" name="Protocol_Title" id="d6492c5b-e9a2-4185-b372-547db232cb7c" xmlPath="LAB_DATA.Protocol_Title"/>
+      <field column="6" name="Site_Id_Root" id="0f5d2711-78c9-4d2a-bacf-958a712f4229" xmlPath="LAB_DATA.Site_Id_Root"/>
+      <field column="7" name="Site_Id_Extension" id="6ac7eb9b-ff94-4421-8c68-d9d859df2a4c" xmlPath="LAB_DATA.Site_Id_Extension"/>
+      <field column="8" name="Site_Id_Assigning_Authority" id="4da7551c-a1cd-42a3-9fc2-8693f61d451c" xmlPath="LAB_DATA.Site_Id_Assigning_Authority"/>
+      <field column="9" name="PI_Id_Root" id="18d20a1d-1597-448c-ab65-46483278f7ef" xmlPath="LAB_DATA.PI_Id_Root"/>
+      <field column="10" name="PI_Id_Extension" id="a3c17899-ccb2-4889-a3e4-91ca2bb87624" xmlPath="LAB_DATA.PI_Id_Extension"/>
+      <field column="11" name="PI_Id_Assigning_Authority" id="e416ab08-6fbb-46b7-85d3-d41013cf65db" xmlPath="LAB_DATA.PI_Id_Assigning_Authority"/>
+      <field column="12" name="PI_Name" id="f75a76cf-e268-4b22-96e6-fbb8a2bd864a" xmlPath="LAB_DATA.PI_Name"/>
+      <field column="13" name="Subject_MRN_Id_Root" id="4e07f485-b610-4064-a809-0dd5c7f6f76f" xmlPath="LAB_DATA.Subject_MRN_Id_Root"/>
+      <field column="14" name="Subject_MRN_Id_Extension" id="27a9ac55-f653-4b0a-969a-d8441ee54301" xmlPath="LAB_DATA.Subject_MRN_Id_Extension"/>
+      <field column="15" name="Subject_MRN_Id_Assigning_Authority" id="3e51b069-8338-4d7d-bc08-78bf929de134" xmlPath="LAB_DATA.Subject_MRN_Id_Assigning_Authority"/>
+      <field column="16" name="Subject_Initials" id="c93e6ac0-967b-44b5-ab07-02d5b012b313" xmlPath="LAB_DATA.Subject_Initials"/>
+      <field column="17" name="Subject_Gender_Code" id="6e28300f-8694-40b0-b4ad-33d80868e8f5" xmlPath="LAB_DATA.Subject_Gender_Code"/>
+      <field column="18" name="Subject_Gender_Code_System" id="b537dc8a-ca68-4b09-8dc4-bc7af18c5b7e" xmlPath="LAB_DATA.Subject_Gender_Code_System"/>
+      <field column="19" name="Subject_Gender_Code_System_Name" id="43696132-388f-4a91-b9a6-b6b08519b58e" xmlPath="LAB_DATA."/>
+      <field column="20" name="Subject_Gender_Code_System_Version" id="e585249b-0822-406d-90be-a2d69522fd74" xmlPath="LAB_DATA.Subject_Gender_Code_System_Name"/>
+      <field column="21" name="Subject_Gender_Code_Display_Name" id="88ce26f2-e7c7-493d-bd85-c6b888cb469e" xmlPath="LAB_DATA.Subject_Gender_Code_Display_Name"/>
+      <field column="22" name="Subject_Birth_Date" id="ad1c7742-f371-4acc-9de4-58a8226efa40" xmlPath="LAB_DATA.Subject_Birth_Date"/>
+      <field column="23" name="Subject_Birth_Time" id="79b6f361-0468-4add-beac-59b19c1441c6" xmlPath="LAB_DATA.Subject_Birth_Time"/>
+      <field column="24" name="Subject_Race_Code" id="545fa3f3-7989-4ba8-a4bb-956577b68059" xmlPath="LAB_DATA.Subject_Race_Code"/>
+      <field column="25" name="Subject_Race_Code_System" id="63112ba5-243b-479b-86fc-cc23d3278163" xmlPath="LAB_DATA.Subject_Race_Code_System"/>
+      <field column="26" name="Subject_Race_Code_System_Name" id="d9a27a0c-aa41-47b6-bdd7-f976af58b13e" xmlPath="LAB_DATA.Subject_Race_Code_System_Name"/>
+      <field column="27" name="Subject_Race_Code_System_Version" id="61542310-75bc-408b-b238-cfee45867b51" xmlPath="LAB_DATA.Subject_Race_Code_System_Version"/>
+      <field column="28" name="Subject_Race_Code_Display_Name" id="911cf816-f737-48c8-8cb5-9f5905e4d742" xmlPath="LAB_DATA.Subject_Race_Code_Display_Name"/>
+      <field column="29" name="Visit_Code" id="f3baf2a6-2d38-4988-a183-ff7c5fc8c3d3" xmlPath="LAB_DATA.Visit_Code"/>
+      <field column="30" name="Visit_Code_System" id="189cc1a0-7889-48ca-84d9-ed74ae5880d6" xmlPath="LAB_DATA.Visit_Code_System"/>
+      <field column="31" name="Visit_Code_System_Name" id="33668270-16a1-4a19-9a0f-cb4ce9a7f06f" xmlPath="LAB_DATA.Visit_Code_System_Name"/>
+      <field column="32" name="Visit_Code_System_Version" id="13de6e10-d416-4f62-bf53-bc916fc68f58" xmlPath="LAB_DATA.Visit_Code_System_Version"/>
+      <field column="33" name="Visit_Code_Display_Name" id="27342408-6017-444c-b3bc-73bf1fc31506" xmlPath="LAB_DATA.Visit_Code_Display_Name"/>
+      <field column="34" name="Visit_Reason_Code" id="4a81d956-7482-4e0c-ae0e-f85ea737cbea" xmlPath="LAB_DATA.Visit_Reason_Code"/>
+      <field column="35" name="Visit_Reason_Code_System" id="5bf50d97-e9a9-4eaf-994f-a2ce2cd63b67" xmlPath="LAB_DATA.Visit_Reason_Code_System"/>
+      <field column="36" name="Visit_Reason_Code_System_Name" id="d157aa6a-0201-4b19-905a-dacfaaf9a61a" xmlPath="LAB_DATA.Visit_Reason_Code_System_Name"/>
+      <field column="37" name="Visit_Reason_Code_System_Version" id="0793ffef-ec01-4d54-872d-373cc4e3b164" xmlPath="LAB_DATA.Visit_Reason_Code_System_Version"/>
+      <field column="38" name="Visit_Reason_Code_Display_Name" id="0b834ece-8635-47c6-8d82-d27ce9398d13" xmlPath="LAB_DATA.Visit_Reason_Code_Display_Name"/>
+      <field column="39" name="Accession_Number_Id_Root" id="dc2967df-d559-453b-9abd-32594d1ebb9a" xmlPath="LAB_DATA.Accession_Number_Id_Root"/>
+      <field column="40" name="Accession_Number_Id_Extension" id="fbeacb35-3490-4d83-be8c-50314580e0b6" xmlPath="LAB_DATA.Accession_Number_Id_Extension"/>
+      <field column="41" name="Accession_Number_Id_Assigning_Authority" id="d8a26285-ee95-409e-a06f-b9de8fb34580" xmlPath="LAB_DATA.Accession_Number_Id_Assigning_Authority"/>
+      <field column="42" name="Accession_Date" id="1fee9ec5-a467-4317-afdb-57474bccf051" xmlPath="LAB_DATA.Accession_Date"/>
+      <field column="43" name="Accession_Time" id="f93c0af5-3c17-4c76-ad46-44be0c0d0a13" xmlPath="LAB_DATA.Accession_Time"/>
+      <field column="44" name="Accession_Author_Laboratory_Id_Root" id="bb7ed681-1dca-4495-abed-52a4b718eef0" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Root"/>
+      <field column="45" name="Accession_Author_Laboratory_Id_Extension" id="cb416b2d-8aa9-40b9-908e-71f1a035825a" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Extension"/>
+      <field column="46" name="Accession_Author_Laboratory_Id_Assigning_Authority" id="5a458a9e-7623-4571-8f2a-5d98e8d56636" xmlPath="LAB_DATA.Accession_Author_Laboratory_Id_Assigning_Authority"/>
+      <field column="47" name="Accession_Author_Laboratory_Name" id="fa160026-b99a-475c-976a-062b028f667e" xmlPath="LAB_DATA.Accession_Author_Laboratory_Name"/>
+      <field column="48" name="Specimen_Id_Root" id="9c615a7a-553c-4a90-b95f-ce61536ff077" xmlPath="LAB_DATA.Specimen_Id_Root"/>
+      <field column="49" name="Specimen_Id_Extension" id="e7ad3363-b5f7-4afc-af6a-9c75de52355a" xmlPath="LAB_DATA.Specimen_Id_Extension"/>
+      <field column="50" name="Specimen_Id_Assigning_Authority" id="35c5e7b8-464f-4cca-877b-4853deaf933a" xmlPath="LAB_DATA.Specimen_Id_Assigning_Authority"/>
+      <field column="51" name="Specimen_Collection_Start_Date" id="80cfbb9a-ca39-48fd-8dfd-6143ff0b8821" xmlPath="LAB_DATA.Specimen_Collection_Start_Date"/>
+      <field column="52" name="Specimen_Collection_Start_Time" id="a93141c7-aaef-456a-ad1c-765389794f09" xmlPath="LAB_DATA.Specimen_Collection_Start_Time"/>
+      <field column="53" name="Specimen_Collection_End_Date" id="85365ec7-fad3-4629-8c3b-ed0e40435287" xmlPath="LAB_DATA.Specimen_Collection_End_Date"/>
+      <field column="54" name="Specimen_Collection_End_Time" id="572e09a7-86c7-4013-a8b4-fefbeddb56a5" xmlPath="LAB_DATA.Specimen_Collection_End_Time"/>
+      <field column="55" name="Specimen_Collection_Reference_Event_Pause_Quantity_Value" id="e89d2466-df11-4b77-a6dd-17f976be9629" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Pause_Quantity_Value"/>
+      <field column="56" name="Specimen_Collection_Reference_Event_Pause_Quantity_Units" id="4c3ac468-dd34-4b3b-8ed8-724dbbc8f865" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Pause_Quantity_Units"/>
+      <field column="57" name="Specimen_Collection_Reference_Event_Code" id="a9926e24-9a76-4906-a7bd-b9eb7b4ffdb5" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code"/>
+      <field column="58" name="Specimen_Collection_Reference_Event_Code_System" id="9d30b2a1-6aa8-4a8e-8aa4-929534034724" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System"/>
+      <field column="59" name="Specimen_Collection_Reference_Event_Code_System_Name" id="c8b7775a-2828-4fac-a053-79b17bdd0f9f" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System_Name"/>
+      <field column="60" name="Specimen_Collection_Reference_Event_Code_System_Version" id="c2415f4a-ca0a-4146-a088-1ee584a6d56b" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_System_Version"/>
+      <field column="61" name="Specimen_Collection_Reference_Event_Code_Display_Name" id="858f5984-d0c5-4531-9c39-f473d756d472" xmlPath="LAB_DATA.Specimen_Collection_Reference_Event_Code_Display_Name"/>
+      <field column="62" name="Specimen_Collection_Age_At_Visit_Code" id="82ef7479-4de2-4b8c-b152-61cd7c47b048" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code"/>
+      <field column="63" name="Specimen_Collection_Age_At_Visit_Code_System" id="d01ba9ef-03fa-444d-8135-249583e22a41" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System"/>
+      <field column="64" name="Specimen_Collection_Age_At_Visit_Code_System_Name" id="a9c0beea-77d3-484c-a95d-86854f0cf26c" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System_Name"/>
+      <field column="65" name="Specimen_Collection_Age_At_Visit_Code_System_Version" id="963c4e7f-610a-4285-82de-d67dedea70e4" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_System_Version"/>
+      <field column="66" name="Specimen_Collection_Age_At_Visit_Code_Display_Name" id="946de09a-4ea2-458d-9237-b6b108267eec" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Code_Display_Name"/>
+      <field column="67" name="Specimen_Collection_Age_At_Visit_Value" id="dba0a34d-045e-48d6-91bd-792c0a27b916" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Value"/>
+      <field column="68" name="Specimen_Collection_Age_At_Visit_Units" id="6cb2e52b-ce61-4680-9fb2-10afdfd491bd" xmlPath="LAB_DATA.Specimen_Collection_Age_At_Visit_Units"/>
+      <field column="69" name="Specimen_Collection_Fasting_Status_Code" id="8657ddd0-875a-4132-a69d-d10895de2f3a" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code"/>
+      <field column="70" name="Specimen_Collection_Fasting_Status_Code_System" id="cdc77f4d-d966-4093-b0a6-f0fb26611287" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System"/>
+      <field column="71" name="Specimen_Collection_Fasting_Status_Code_System_Name" id="3ceacd1f-d932-487d-b330-3e09daa95588" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System_Name"/>
+      <field column="72" name="Specimen_Collection_Fasting_Status_Code_System_Version" id="8caa5359-c739-4e28-9ccb-2617071918f0" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_System_Version"/>
+      <field column="73" name="Specimen_Collection_Fasting_Status_Code_Display_Name" id="21e62df0-5b41-4bb8-aed7-8422eaa793b8" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Code_Display_Name"/>
+      <field column="74" name="Specimen_Collection_Fasting_Status_Value" id="90850773-9903-48a9-8d05-fc7f4a560a03" xmlPath="LAB_DATA.Specimen_Collection_Fasting_Status_Value"/>
+      <field column="75" name="Specimen_Container_Registration_Code" id="9d509108-973b-4dea-865d-916e0b18b3a3" xmlPath="LAB_DATA.Specimen_Container_Registration_Code"/>
+      <field column="76" name="Specimen_Container_Registration_Code_System" id="a221bcc6-4d24-402c-b8bc-bfbb0965abd6" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System"/>
+      <field column="77" name="Specimen_Container_Registration_Code_System_Name" id="278a8389-d748-4793-8ed0-fcb6d878b8d7" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System_Name"/>
+      <field column="78" name="Specimen_Container_Registration_Code_System_Version" id="383bc1f5-9415-4d5a-82b6-67987b586630" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_System_Version"/>
+      <field column="79" name="Specimen_Container_Registration_Code_Display_Name" id="e52c8b04-e0ec-4800-9653-575898ba90a4" xmlPath="LAB_DATA.Specimen_Container_Registration_Code_Display_Name"/>
+      <field column="80" name="Specimen_Container_Registration_Date" id="67a7f9e2-83c8-4d8e-a4f1-c4e8557cd4e7" xmlPath="LAB_DATA.Specimen_Container_Registration_Date"/>
+      <field column="81" name="Specimen_Container_Registration_Time" id="c6176b59-cf2c-4bbe-8c1c-bce88693c338" xmlPath="LAB_DATA.Specimen_Container_Registration_Time"/>
+      <field column="82" name="Specimen_Comment_Code" id="2057e956-4f85-4371-a0b0-54fd83008b58" xmlPath="LAB_DATA.Specimen_Comment_Code"/>
+      <field column="83" name="Specimen_Comment_Code_System" id="eb4227da-add4-434c-8868-8a75e06a5820" xmlPath="LAB_DATA.Specimen_Comment_Code_System"/>
+      <field column="84" name="Specimen_Comment_Code_System_Name" id="56ebbd07-e957-48da-a141-4c609bd71e83" xmlPath="LAB_DATA.Specimen_Comment_Code_System_Name"/>
+      <field column="85" name="Specimen_Comment_Code_System_Version" id="35dad16a-06ff-47b8-bec8-383d1f8fe545" xmlPath="LAB_DATA.Specimen_Comment_Code_System_Version"/>
+      <field column="86" name="Specimen_Comment_Code_Display_Name" id="29408e1b-2a0b-4b2f-994b-862e9fe28b9a" xmlPath="LAB_DATA.Specimen_Comment_Code_Display_Name"/>
+      <field column="87" name="Specimen_Comment_Text" id="4c1fc25d-59bd-4b60-a0a5-2b8893dde705" xmlPath="LAB_DATA.Specimen_Comment_Text"/>
+      <field column="88" name="Specimen_Material_Code" id="72b99142-b670-4d6e-9444-622e494e5217" xmlPath="LAB_DATA.Specimen_Material_Code"/>
+      <field column="89" name="Specimen_Material_Code_System" id="a59992df-408c-45b4-acf5-9adc6b46fa68" xmlPath="LAB_DATA.Specimen_Material_Code_System"/>
+      <field column="90" name="Specimen_Material_Code_System_Name" id="850abb84-730f-4a3b-93a1-e93df2fc56a2" xmlPath="LAB_DATA.Specimen_Material_Code_System_Name"/>
+      <field column="91" name="Specimen_Material_Code_System_Version" id="d0083f98-96fe-4c9b-930b-0edb99194014" xmlPath="LAB_DATA.Specimen_Material_Code_System_Version"/>
+      <field column="92" name="Specimen_Material_Code_Display_Name" id="827612d1-a2c4-41e2-8f9a-efba7b35c942" xmlPath="LAB_DATA.Specimen_Material_Code_Display_Name"/>
+      <field column="93" name="Lab_Battery_Code" id="c7e8864b-f144-4f9d-94ae-026daf52558b" xmlPath="LAB_DATA.Lab_Battery_Code"/>
+      <field column="94" name="Lab_Battery_Code_System" id="27145ce5-068e-4e9b-a359-dbba5216200e" xmlPath="LAB_DATA.Lab_Battery_Code_System"/>
+      <field column="95" name="Lab_Battery_Code_System_Name" id="2acc3333-6f70-4e12-bb87-24351b633597" xmlPath="LAB_DATA.Lab_Battery_Code_System_Name"/>
+      <field column="96" name="Lab_Battery_Code_System_Version" id="addaf197-af63-4749-9afe-36768468feae" xmlPath="LAB_DATA.Lab_Battery_Code_System_Version"/>
+      <field column="97" name="Lab_Battery_Code_Display_Name" id="cfa90ffb-0adc-4a40-88b5-d785df56f7a2" xmlPath="LAB_DATA.Lab_Battery_Code_Display_Name"/>
+      <field column="98" name="Lab_Test_Code" id="6ee8cb93-a72d-4cb5-9209-165b2fdd6ecf" xmlPath="LAB_DATA.Lab_Test_Code"/>
+      <field column="99" name="Lab_Test_Code_System" id="808fe9e1-67a3-4068-b43e-8085af2df40c" xmlPath="LAB_DATA.Lab_Test_Code_System"/>
+      <field column="100" name="Lab_Test_Code_System_Name" id="a7d756da-64f5-4822-88ad-58ed5e034b16" xmlPath="LAB_DATA.Lab_Test_Code_System_Name"/>
+      <field column="101" name="Lab_Test_Code_System_Version" id="1eef33fc-1e2d-44df-97d2-caaaa26f072b" xmlPath="LAB_DATA.Lab_Test_Code_System_Version" />
+      <field column="102" name="Lab_Test_Code_Display_Name" id="12c3ff09-b0c4-4b4c-88c4-372539da50a6" xmlPath="LAB_DATA.Lab_Test_Code_Display_Name" />
+      <field column="103" name="Lab_Test_Text" id="69fff706-a2b4-463d-9e93-90ef3a836ba6" xmlPath="LAB_DATA.Lab_Test_Text" />
+      <field column="104" name="Lab_Test_Status_Code" id="2d70b648-ef11-4db6-b5f4-d0cd8e40c3f8" xmlPath="LAB_DATA.Lab_Test_Status_Code" />
+      <field column="105" name="Lab_Test_Status_Code_System" id="135b6968-0195-42cc-832b-755ca04db3a1" xmlPath="LAB_DATA.Lab_Test_Status_Code_System" />
+      <field column="106" name="Lab_Test_Status_Code_System_Name" id="02a3bc65-091b-459d-9559-05492ebf49a0" xmlPath="LAB_DATA.Lab_Test_Status_Code_System_Name" />
+      <field column="107" name="Lab_Test_Status_Code_System_Version" id="b2c7887d-e31b-4666-8fe3-c78c0fa5e5b5" xmlPath="LAB_DATA.Lab_Test_Status_Code_System_Version" />
+      <field column="108" name="Lab_Test_Status_Code_Display_Name" id="03ef1c5d-bfdb-4205-8cac-940b3ffbb07f" xmlPath="LAB_DATA.Lab_Test_Status_Code_Display_Name" />
+      <field column="109" name="Lab_Test_Start_Date" id="bef0adf4-3777-4a04-b189-08419011204d" xmlPath="LAB_DATA.Lab_Test_Start_Date" />
+      <field column="110" name="Lab_Test_Start_Time" id="d0333bf1-7bc9-4125-9ebd-aa308cc19d01" xmlPath="LAB_DATA.Lab_Test_Start_Time" />
+      <field column="111" name="Lab_Test_End_Date" id="ae8af4f9-e433-43fb-8013-2e8fd376e51a" xmlPath="LAB_DATA.Lab_Test_End_Date" />
+      <field column="112" name="Lab_Test_End_Time" id="2acfd1ca-baa1-40f2-a4af-d8d0a98371ac" xmlPath="LAB_DATA.Lab_Test_End_Time" />
+      <field column="113" name="Lab_Test_Confidentiality_Code" id="bd0223f3-3417-400f-a3a1-2e542fb997ee" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code" />
+      <field column="114" name="Lab_Test_Confidentiality_Code_System" id="e2debc7e-5a86-44fe-ba82-f4f711a06dbc" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System" />
+      <field column="115" name="Lab_Test_Confidentiality_Code_System_Name" id="a500b8b2-509c-4aa8-b640-39c8b6f66cd3" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System_Name" />
+      <field column="116" name="Lab_Test_Confidentiality_Code_System_Version" id="03dc2c07-c98e-4a9e-bb83-467dea283489" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_System_Version" />
+      <field column="117" name="Lab_Test_Confidentiality_Code_Display_Name" id="0584c679-cd9a-4b79-84fe-3ddef1223a67" xmlPath="LAB_DATA.Lab_Test_Confidentiality_Code_Display_Name" />
+      <field column="118" name="Lab_Test_Reason_Code" id="e5f677a4-7ea4-45d5-9b2d-869ad0e4902e" xmlPath="LAB_DATA.Lab_Test_Reason_Code" />
+      <field column="119" name="Lab_Test_Reason_Code_System" id="f4572a8c-8a4b-4470-b451-460415175c7d" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System" />
+      <field column="120" name="Lab_Test_Reason_Code_System_Name" id="44ce7454-4a7b-457b-b3f0-7749b172b93f" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System_Name" />
+      <field column="121" name="Lab_Test_Reason_Code_System_Version" id="166ed6ac-6e78-42db-91b6-9ddb48a64ac8" xmlPath="LAB_DATA.Lab_Test_Reason_Code_System_Version" />
+      <field column="122" name="Lab_Test_Reason_Code_Display_Name" id="1c8c8d0c-0d3e-47fe-b64f-6d9d1afb4668" xmlPath="LAB_DATA.Lab_Test_Reason_Code_Display_Name" />
+      <field column="123" name="Lab_Test_Value" id="6729b556-0f4e-485b-9ade-05451682aea5" xmlPath="LAB_DATA.Lab_Test_Value" />
+      <field column="124" name="Lab_Test_Units" id="461058ff-111b-4785-8af9-43368959c3f4" xmlPath="LAB_DATA.Lab_Test_Units" />
+      <field column="125" name="Lab_Test_Interpretation_Code" id="16d2191b-453f-46c1-b9d1-42823f73c63a" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code" />
+      <field column="126" name="Lab_Test_Interpretation_Code_System" id="dd08ce1f-384b-4f9f-9823-68905dc6c3d9" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System" />
+      <field column="127" name="Lab_Test_Interpretation_Code_System_Name" id="14262e8f-13e9-499c-9a92-04ab23449dc4" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System_Name" />
+      <field column="128" name="Lab_Test_Interpretation_Code_System_Version" id="e785cac2-1b30-4086-943a-6dd24ac2678d" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_System_Version" />
+      <field column="129" name="Lab_Test_Interpretation_Code_Display_Name" id="868b6c00-bc80-49b8-8a6d-4e9d504e74a4" xmlPath="LAB_DATA.Lab_Test_Interpretation_Code_Display_Name" />
+      <field column="130" name="Lab_Test_Method_Code" id="8b5e87a6-0a7b-4352-a1f9-66ad722f1799" xmlPath="LAB_DATA.Lab_Test_Method_Code" />
+      <field column="131" name="Lab_Test_Method_Code_System" id="eb912adc-bed9-41b0-bb74-6de827e3fde1" xmlPath="LAB_DATA.Lab_Test_Method_Code_System" />
+      <field column="132" name="Lab_Test_Method_Code_System_Name" id="ce167884-344c-4194-87b0-f6f308d51007" xmlPath="LAB_DATA.Lab_Test_Method_Code_System_Name"/>
+      <field column="133" name="Lab_Test_Method_Code_System_Version" id="28273d7a-0609-4063-9051-90b96217ee7b" xmlPath="LAB_DATA.Lab_Test_Method_Code_System_Version" />
+      <field column="134" name="Lab_Test_Method_Code_Display_Name" id="878e7274-dd8f-44cf-8013-95ab208fc436" xmlPath="LAB_DATA.Lab_Test_Method_Code_System_Name" />
+      <field column="135" name="Lab_Test_Performer_Laboratory_Id_Root" id="ae8a6e96-ea5c-47f7-88af-8c3b875fa95e" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Id_Root" />
+      <field column="136" name="Lab_Test_Performer_Laboratory_Id_Extension" id="ff2f0498-c4c8-4d98-8e49-85a17b728757" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Id_Extension" />
+      <field column="137" name="Lab_Test_Performer_Laboratory_Id_Assigning_Authority" id="26213157-a094-46f7-a001-d3404b10675a" xmlPath="LAB_DATA." />
+      <field column="138" name="Lab_Test_Performer_Laboratory_Name" id="9c5fa1a1-1945-46ab-9110-302ac52242ba" xmlPath="LAB_DATA.Lab_Test_Performer_Laboratory_Name" />
+      <field column="139" name="Lab_Test_Comment" id="cd30523c-7a36-43be-abc1-3aa0c5042053" xmlPath="LAB_DATA.Lab_Test_Comment" />
+      <field column="140" name="Lab_Test_Toxicity_Grade_Code" id="78be25ba-37d4-41ad-a6a5-200459b5d30e" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code" />
+      <field column="141" name="Lab_Test_Toxicity_Grade_Code_System" id="f2149c18-d688-4755-a350-61c5522858b1" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System" />
+      <field column="142" name="Lab_Test_Toxicity_Grade_Code_System_Name" id="1bc5b9a6-9476-45f4-97e2-919a5e75bc36" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System_Name" />
+      <field column="143" name="Lab_Test_Toxicity_Grade_Code_System_Version" id="405b1787-fc9e-4fa0-af47-e432e202f93c" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_System_Version" />
+      <field column="144" name="Lab_Test_Toxicity_Grade_Code_Display_Name" id="d02223ce-47dd-4de4-90c7-758fba0f2f85" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Code_Display_Name" />
+      <field column="145" name="Lab_Test_Toxicity_Grade_Value_Code" id="3bb4cb00-7e54-4321-b63d-1901775ea170" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code" />
+      <field column="146" name="Lab_Test_Toxicity_Grade_Value_Code_System" id="e263fab4-e74d-42b9-bd09-b2592fe4df2c" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System" />
+      <field column="147" name="Lab_Test_Toxicity_Grade_Value_Code_System_Name" id="823faac3-4387-463b-adab-9514d4379214" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System_Name" />
+      <field column="148" name="Lab_Test_Toxicity_Grade_Value_Code_System_Version" id="6963605e-36b4-4038-acee-e7f3c8f909f1" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_System_Version" />
+      <field column="149" name="Lab_Test_Toxicity_Grade_Value_Code_Display_Name" id="6b3f3c8b-f987-4f6e-8cc1-58c966b32167" xmlPath="LAB_DATA.Lab_Test_Toxicity_Grade_Value_Code_Display_Name" />
+      <field column="150" name="Lab_Test_Reference_Range_Low" id="5819d8e6-74e5-4169-98b6-a2d8f424036e" xmlPath="LAB_DATA.Lab_Test_Reference_Range_Low" />
+      <field column="151" name="Lab_Test_Reference_Range_High" id="15baa2c0-0c10-4085-aa65-fa5b4f1e32c1" xmlPath="LAB_DATA.Lab_Test_Reference_Range_High" />
+      <field column="152" name="Lab_Test_Reference_Range_Units" id="376bf8f0-a5f1-42a0-8646-8ffd6da15593" xmlPath="LAB_DATA.Lab_Test_Reference_Range_Units" />
+      <field column="153" name="Lab_Test_Report_To_Site_Status" id="284f46e6-1f66-4076-83e1-784aa7a5e1d9" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Status" />
+      <field column="154" name="Lab_Test_Report_To_Site_Date" id="fe85fda7-4c99-4b00-a2f5-3622d30707d4" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Date" />
+      <field column="155" name="Lab_Test_Report_To_Site_Time" id="4d0d7764-8ef8-4feb-a987-0aa48afde036" xmlPath="LAB_DATA.Lab_Test_Report_To_Site_Time" />
+   </segment>
+</csvMetadata>
