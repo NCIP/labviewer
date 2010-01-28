@@ -83,18 +83,16 @@ package gov.nih.nci.ctom.ctlab.handler;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 import gov.nih.nci.ctom.ctlab.persistence.SQLHelper;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-
 import org.apache.log4j.Logger;
 
 /**
  * ProtocolHandler persists Protocol object to the CTODS database
- * 
+ *
  * @author asharma
  */
 public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInterface
@@ -105,7 +103,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.ctom.ctlab.handler.HL7V3MessageHandler#persist(java.sql.Connection,
 	 *      gov.nih.nci.ctom.ctlab.domain.Protocol)
 	 */
@@ -149,7 +147,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 			{
 				//clean up
 				 ps = SQLHelper.closePreparedStatement(ps);
-				
+
 				// Save/update Identifier
 				HL7V3MessageHandlerFactory.getInstance().getHandler("PROTOCOL_IDENTIFIER").persist(
 						con, protocol);
@@ -228,6 +226,49 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 		{
 			HL7V3MessageHandlerFactory.getInstance().getHandler("HEALTH_CARE_SITE").persist(con,
 					protocol);
+		}
+	}
+
+	/**
+	 * Update.
+	 *
+	 * @param conn the connection
+	 * @param protocol the protocol
+	 */
+	public void update(Connection conn, Protocol protocol) throws Exception
+	{
+		logger.debug("Updating the Protocol");
+		String sql = "update PROTOCOL set NCI_IDENTIFIER = ?, " +
+				                         "LONG_TITLE_TEXT = ?, " +
+				                         "SHORT_TITLE_TEXT = ?, " +
+				                         "PHASE_CODE = ?, " +
+				                         "SPONSOR_CODE = ? " +
+				                         //"IDENTIFIER_ASSIGNING_AUTHORITY = ? " + // this is not available in PA StudyProtocol object
+				                   "WHERE ID = ?";
+		try
+		{
+		    PreparedStatement pstmt = conn.prepareStatement(sql);
+		    pstmt.setString(1, protocol.getNciIdentifier());
+		    pstmt.setString(2, protocol.getLongTxtTitle());
+		    pstmt.setString(3, protocol.getShortTxtTitle());
+		    pstmt.setString(4, protocol.getPhaseCode());
+		    pstmt.setString(5, protocol.getSponsorCode());
+		    //pstmt.setString(6, protocol.getIdAssigningAuth()); // this is not available in PA StudyProtocol object
+		    pstmt.setLong(6, protocol.getId());
+		    pstmt.execute();
+		    conn.commit();
+		}
+		catch (SQLException se)
+		{
+			logger.error("Error updating the Protocol",se);
+			throw (new Exception(se.getLocalizedMessage()));
+
+		}
+		
+		// save protocol status
+		if (protocol.getStatus() != null)
+		{
+			HL7V3MessageHandlerFactory.getInstance().getHandler("PROTOCOL_STATUS").persist(conn, protocol);
 		}
 	}
 
