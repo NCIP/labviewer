@@ -238,8 +238,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 	public void update(Connection conn, Protocol protocol) throws Exception
 	{
 		logger.debug("Updating the Protocol");
-		String sql = "update PROTOCOL set NCI_IDENTIFIER = ?, " +
-				                         "LONG_TITLE_TEXT = ?, " +
+		String sql = "update PROTOCOL set LONG_TITLE_TEXT = ?, " +
 				                         "SHORT_TITLE_TEXT = ?, " +
 				                         "PHASE_CODE = ?, " +
 				                         "SPONSOR_CODE = ? " +
@@ -248,13 +247,12 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 		try
 		{
 		    PreparedStatement pstmt = conn.prepareStatement(sql);
-		    pstmt.setString(1, protocol.getNciIdentifier());
-		    pstmt.setString(2, protocol.getLongTxtTitle());
-		    pstmt.setString(3, protocol.getShortTxtTitle());
-		    pstmt.setString(4, protocol.getPhaseCode());
-		    pstmt.setString(5, protocol.getSponsorCode());
-		    //pstmt.setString(6, protocol.getIdAssigningAuth()); // this is not available in PA StudyProtocol object
-		    pstmt.setLong(6, protocol.getId());
+		    pstmt.setString(1, protocol.getLongTxtTitle());
+		    pstmt.setString(2, protocol.getShortTxtTitle());
+		    pstmt.setString(3, protocol.getPhaseCode());
+		    pstmt.setString(4, protocol.getSponsorCode());
+		    //pstmt.setString(5, protocol.getIdAssigningAuth()); // this is not available in PA StudyProtocol object
+		    pstmt.setLong(5, protocol.getId());
 		    pstmt.execute();
 		    conn.commit();
 		}
