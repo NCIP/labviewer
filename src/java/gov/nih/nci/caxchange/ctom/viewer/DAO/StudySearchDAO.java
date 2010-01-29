@@ -91,7 +91,6 @@ import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
-import gov.nih.nci.caxchange.TargetResponseMessage;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
@@ -230,7 +229,6 @@ public class StudySearchDAO extends HibernateDaoSupport
 			{
 				ResponseMessage responseMessage = client.processRequestSynchronously(requestMessage);
 				responseReceived = true;
-				System.out.println(responseMessage.getResponse().getResponseStatus()); // lisa - ram - what does this do?
 				if (responseMessage.getResponse().getResponseStatus().equals(Statuses.SUCCESS))
 				{
 					List<Protocol> paStudies = getPAStudies(responseMessage.getResponse(), session);
@@ -364,8 +362,8 @@ public class StudySearchDAO extends HibernateDaoSupport
 			for (StudySearchResult ctodsSearchResult : ctodsSearchResults)
 			{
 				Query query = session.createQuery(QUERY);
-				query.setLong(0, ctodsSearchResult.getId().intValue()); // lisa - check data type of protocol_id, possibly use setInteger
-				List<ProtocolStatus> statusCodes = query.list();
+				query.setInteger(0, ctodsSearchResult.getId().intValue());
+				List<gov.nih.nci.caxchange.ctom.viewer.beans.ProtocolStatus> statusCodes = query.list();
 				
 				if (!statusCodes.isEmpty())
 				{
@@ -568,15 +566,15 @@ public class StudySearchDAO extends HibernateDaoSupport
 			Protocol paStudy = new Protocol();
 			String studyProtocolRoot = studyProtocol.getAssignedIdentifier().getRoot();
 			String studyProtocolExtension = studyProtocol.getAssignedIdentifier().getExtension();
-			paStudy.setNciIdentifier(studyProtocolRoot + "." + studyProtocolExtension);
-			paStudy.setLongTxtTitle(studyProtocol.getOfficialTitle() == null ? "" : studyProtocol.getOfficialTitle().getValue());
-			paStudy.setShortTxtTitle(studyProtocol.getPublicTitle() == null ? "" : studyProtocol.getPublicTitle().getValue());
-			paStudy.setPhaseCode(studyProtocol.getPhaseCode() == null ? "" : studyProtocol.getPhaseCode().getCode());
+			paStudy.setNciIdentifier(studyProtocolRoot + "." + studyProtocolExtension);			
+			paStudy.setLongTxtTitle(studyProtocol.getOfficialTitle().getValue());
+			paStudy.setShortTxtTitle(studyProtocol.getPublicTitle().getValue());
+			paStudy.setPhaseCode(studyProtocol.getPhaseCode().getCode());
 			paStudy.setSponsorCode(getPASponsorCode(studyProtocolRoot, studyProtocolExtension, session));
             // paStudy.setIdAssigningAuth(); // this is not available in PA StudyProtocol object
 			
 			ProtocolStatus status = new ProtocolStatus();
-			status.setStatus_code(studyProtocol.getStatusCode() == null ? "" : studyProtocol.getStatusCode().getCode());
+			status.setStatus_code(studyProtocol.getStatusCode().getCode());
 			status.setCtom_insert_date(new Date());
 			paStudy.setStatus(status);
 				
@@ -589,7 +587,7 @@ public class StudySearchDAO extends HibernateDaoSupport
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private String getPASponsorCode(String studyProtocolRoot, String studyProtocolExtension, HttpSession session)
 	{		
-		String sponsorCode = "";
+		String sponsorCode = null;
 		
 //		// create message element for caXchange message		
 //		Id studyProtocolId = new Id(); //import gov.nih.nci.coppa.services.pa.Id;
@@ -649,7 +647,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 			        		// to accomplish this, set the study status from PA to null in the Protocol object
 			        		// and a new row will not get inserted in the protocol_status table
 			        		String paStudyStatus = paStudy.getStatus().getStatus_code();
-			        		if (paStudyStatus.equals("") || paStudyStatus.equalsIgnoreCase(ctodsSearchResult.getStatus()))
+			        		if (paStudyStatus == null || paStudyStatus.equalsIgnoreCase(ctodsSearchResult.getStatus()))
 			        		{
 			        			paStudy.setStatus(null);
 			        		}
@@ -684,12 +682,12 @@ public class StudySearchDAO extends HibernateDaoSupport
 		StudySearchResult paSearchResult = new StudySearchResult();
 		
 		int index = paStudy.getNciIdentifier().indexOf(".");
-		paSearchResult.setStudyId(paStudy.getNciIdentifier().substring(0, index));
-		paSearchResult.setShortTitle(paStudy.getShortTxtTitle());
-		paSearchResult.setSponsorCode(paStudy.getSponsorCode());
-		paSearchResult.setPhaseCode(paStudy.getPhaseCode());
-		paSearchResult.setStatus(paStudy.getStatus().getStatus_code());			
-		paSearchResult.setGridId(paStudy.getNciIdentifier().substring(index + 1));			
+		paSearchResult.setStudyId(paStudy.getNciIdentifier().substring(index + 1));
+		paSearchResult.setShortTitle(paStudy.getLongTxtTitle() == null ? "" : paStudy.getLongTxtTitle());
+		paSearchResult.setSponsorCode(paStudy.getSponsorCode() == null ? "" : paStudy.getSponsorCode());
+		paSearchResult.setPhaseCode(paStudy.getPhaseCode() == null ? "" : paStudy.getPhaseCode());
+		paSearchResult.setStatus(paStudy.getStatus().getStatus_code() == null ? "" : paStudy.getStatus().getStatus_code());
+		paSearchResult.setGridId(paStudy.getNciIdentifier().substring(0, index));
 		
 		// TO DO: set the details
 		// link: https://cbvapp-d1017.nci.nih.gov:28443/c3pr/pages/study/viewStudy?studyId=14
