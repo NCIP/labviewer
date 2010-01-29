@@ -162,17 +162,20 @@
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>            
            <display:column  class="dataCellText" sortable="true" title="ID" maxLength="90" >
-           <a href="#" onclick="loadParticipant(${studyTable_rowNum})">${studyTable.studyId}</a>
+               <logic:empty name="studyTable" property="id">${studyTable.studyId}</logic:empty>
+               <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="loadParticipant(${studyTable_rowNum})">${studyTable.studyId}</a></logic:notEmpty>
            </display:column>
-           <display:column property="shortTitle"  class="dataCellText" sortable="true" title="Short Title" maxLength="200"/>
+           <display:column property="shortTitle"  class="dataCellText" sortable="true" title="Official Title" maxLength="200"/>
            <display:column property="sponsorCode" class="dataCellText" sortable="true" title="Sponsor code" />        
            <display:column property="phaseCode"  class="dataCellText" sortable="true" title="Phase code"  />
            <display:column property="status"  class="dataCellText" sortable="true" title="Status"  />
            <display:column class="dataCellText" sortable="true" title="HealthCare Site"  >
-		<a href="#"	onclick="showHealthCareSite(${studyTable_rowNum})">Details</a>
+               <logic:empty name="studyTable" property="id">NA</logic:empty>
+               <logic:notEmpty name="studyTable" property="id"><a href="#"	onclick="showHealthCareSite(${studyTable_rowNum})">View Details</a></logic:notEmpty>
            </display:column>
-           <display:column class="dataCellText" sortable="true" title="Principal Investigator"  >
-           <a href="#" onclick="showPI(${studyTable_rowNum})">Details</a>
+           <display:column class="dataCellText" sortable="true" title="Principal Investigator"  >           
+               <logic:empty name="studyTable" property="id">NA</logic:empty>
+               <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="showPI(${studyTable_rowNum})">View Details</a></logic:notEmpty>
            </display:column>
                                    
 	</display:table>	     
