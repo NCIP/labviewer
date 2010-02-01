@@ -1,6 +1,6 @@
 <security-config>
 	<upt-context-name>
-		<!-- Context Name for the UPT Application -->
+		labviewer
 	</upt-context-name>
 	<application-list>
 	<!-- For every application using the security api an entry should be made here -->
@@ -18,7 +18,7 @@
 					<!-- Fully qualified class name-->
 				</authorization-provider-class>
 				<hibernate-config-file>
-					@tomcat_dir@/conf/cabig/cTODSlabviewer.hibernate.cfg.xml
+					labviewer.csm.new.hibernate.cfg.xml
 				</hibernate-config-file>
 			</authorization>
 		</application>
