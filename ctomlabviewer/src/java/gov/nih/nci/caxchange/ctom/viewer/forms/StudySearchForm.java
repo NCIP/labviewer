@@ -102,7 +102,8 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 {
 
 	// studyPhrase is the studyPhrase the user searches with as an input
-	private String studyPhrase;
+	private String studyID;
+	private String studyTitle;
 
 	// list of studies
 	private List<StudySearchResult> studiesList;
@@ -112,18 +113,35 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 	/**
 	 * @return the studyPhrase
 	 */
-	public String getStudyPhrase()
+	public String getStudyID()
 	{
-		return studyPhrase;
+		return studyID;
 	}
 
 	/**
 	 * @param studyPhrase
 	 *            the studyPhrase to set
 	 */
-	public void setStudyPhrase(String studyPhrase)
+	public void setStudyID(String studyID)
 	{
-		this.studyPhrase = studyPhrase;
+		this.studyID = studyID.trim();
+	}
+	
+	/**
+	 * @return the studyPhrase
+	 */
+	public String getStudyTitle()
+	{
+		return studyTitle;
+	}
+
+	/**
+	 * @param studyPhrase
+	 *            the studyPhrase to set
+	 */
+	public void setStudyTitle(String studyTitle)
+	{
+		this.studyTitle = studyTitle.trim();
 	}
 
 	/*
@@ -139,9 +157,11 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 		if (errors == null)
 			errors = new ActionErrors();
 
-		if ((getStudyPhrase() == null) || (getStudyPhrase().length() < 1))
-			errors.add("studyPhrase",
-					new ActionError("error.studyPhrase.value"));
+		if ((studyID == null || studyID.length() < 1) && (studyTitle == null || studyTitle.length() < 1))
+		{
+			//errors.add("studyTitle", new ActionError("error.studyPhrase.value"));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.studyPhrase.value"));
+		}
 
 		return errors;
 
@@ -165,9 +185,8 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 	 */
 	public void resetForm()
 	{
-
-		this.studyPhrase = "";
-
+		studyID = "";
+		studyTitle = "";
 	}
 
 	/*
