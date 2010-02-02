@@ -292,8 +292,8 @@
 		
 		<action path="/studySearch"
 			type="gov.nih.nci.caxchange.ctom.viewer.actions.StudySearchAction"
-			name="StudySearchForm" scope="session" validate="false"
-			parameter="operation">
+			name="StudySearchForm" scope="session" validate="true"
+			parameter="operation" input="Tiles.StudySearch.Detail.Screen">
 			<forward name="LoginPage" path="Tiles.Login.Page" />
 			<forward name="LoadStudySearchSuccess"
 				path="Tiles.StudySearch.Detail.Screen" />
