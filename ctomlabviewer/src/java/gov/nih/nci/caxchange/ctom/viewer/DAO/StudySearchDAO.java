@@ -133,8 +133,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
+import org.apache.axis.types.URI.MalformedURIException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.globus.gsi.GlobusCredential;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.iso._21090.II;
@@ -150,7 +153,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 {
 	private static final Logger log = Logger.getLogger(StudySearchDAO.class);
 	
-    // The maxmium number of search results to be returned for a remote service method.
+	// The maxmium number of search results to be returned for a remote service method.
 	private static final int MAX_SEARCH_RESULTS = 500;
 	public static final String STUDY_PROTOCOL_IDENTIFIER_NAME = "NCI study protocol entity identifier";
 
@@ -166,70 +169,50 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 * @return searchResult
 	 * @throws Exception
 	 */
-	public SearchResult searchObjects(String studyPhrase, HttpSession session) throws Exception
-	{
-		log.debug("Study search called with search term" + studyPhrase);
-		String[] searchTermArray = studyPhrase.trim().split(" ");
-	    List<String> searchTermList = Arrays.asList(searchTermArray);
-	    List<String> searchTerms = new ArrayList<String>();
-	    for (Iterator<String> it = searchTermList.iterator(); it.hasNext(); )
-	    {
-	    	String searchTerm = (String) it.next();
-	        if (!searchTerm.equals(""))
-	        {
-	        	searchTerms.add(searchTerm);
-	        	// for now, break after one search term has been added to the list
-	        	// the search method in the PA study protocol service can only handle one search term
-	        	// this may be enhanced to accommodate multiple search terms in the future
-	        	break;
-	        }
-	    }
-		
-		List<StudySearchResult> studySearchResults = new ArrayList<StudySearchResult>();
-		try
-		{
-			studySearchResults = getStudySearchResults(session, searchTerms);
-		}
-		catch (Exception ex)
-		{
-			log.error(ex.getMessage());
-		}
-		
-		SearchResult searchResult = new SearchResult();
-		searchResult.setSearchResultObjects(studySearchResults);
-		session.setAttribute("SEARCH_RESULT_STUDY", searchResult);
-
-		return searchResult;
-	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private List<StudySearchResult> getStudySearchResults(HttpSession session, List<String> searchTerms) throws Exception
+	public SearchResult getStudySearchResults(String studyID, String studyTitle, HttpSession session) throws Exception
 	{
 		List<StudySearchResult> studySearchResults = null;
+		log.debug("Study search called with search term(s): " + studyID + studyTitle);
+
+		List<String> searchTerms = getSearchTerms(studyTitle);
 		
-		List<StudySearchResult> ctodsSearchResults = getCTODSSearchResults(searchTerms, session);
+		List<StudySearchResult> ctodsSearchResults = getCTODSSearchResults(studyID, searchTerms, session);
 		
 		// create message elements for caXchange message
-		List<MessageElement> messageElements = createMessageElements(searchTerms);
+		List<MessageElement> messageElements = createMessageElements(studyID, searchTerms);
 
 		// create caXchange message
 		Message requestMessage = createMessage(session, "STUDY_PROTOCOL", "search", messageElements);
 		
-		String caXchangeURL = (String) session.getAttribute("caXchangeURL");
-		GlobusCredential gridCredentials = (GlobusCredential) session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
-		log.info("grid credentials = " + gridCredentials.getIdentity());
-		CaXchangeRequestProcessorClient client = new CaXchangeRequestProcessorClient(caXchangeURL, gridCredentials);
+		CaXchangeRequestProcessorClient client = getCaXchangeClient(session);
 		
 		boolean responseReceived = false;
 		int attempts = 0;
 
 		while (!responseReceived)
 		{
+			ResponseMessage responseMessage = null;
 			try
 			{
-				ResponseMessage responseMessage = client.processRequestSynchronously(requestMessage);
+				responseMessage = client.processRequestSynchronously(requestMessage);
 				responseReceived = true;
-				if (responseMessage.getResponse().getResponseStatus().equals(Statuses.SUCCESS))
+			}
+			catch (Exception e)
+			{
+				attempts++;
+				log.info("No response from caxchange(attempt #" + attempts + ")", e);
+				if (attempts > 25)
+				{
+					log.error("Never got a response from caXchange");
+					throw new Exception("No response from hub");
+				}
+				
+				Thread.sleep(1000); // sleep 1 second
+			}
+			
+			if (responseReceived)
+			{
+			    if (responseMessage.getResponse().getResponseStatus().equals(Statuses.SUCCESS))
 				{
 					List<Protocol> paStudies = getPAStudies(responseMessage.getResponse(), session);
 					
@@ -240,21 +223,36 @@ public class StudySearchDAO extends HibernateDaoSupport
 				    studySearchResults = ctodsSearchResults;
 				}
 			}
-			catch (Exception e)
-			{
-				attempts++;
-				log.info("No response from caxchange(attempt #" + attempts + ")", e);
-				if (attempts > 25)
-				{
-					log.error("Never got a response from caXchange hub");
-					throw new Exception("No response from hub");
-				}
-				
-				Thread.sleep(1000); // sleep 1 second
-			}
 		} // end of while loop
 		
-		return studySearchResults;
+		SearchResult searchResult = new SearchResult();
+		searchResult.setSearchResultObjects(studySearchResults);
+		session.setAttribute("SEARCH_RESULT_STUDY", searchResult); // lisa - why is this added to session?
+
+		return searchResult;
+	}
+	
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private List<String> getSearchTerms(String studyTitle)
+	{	
+		List<String> searchTerms = new ArrayList<String>();
+		String[] searchTermArray = studyTitle.split(" ");
+	    List<String> searchTermList = Arrays.asList(searchTermArray);
+	    
+	    for (Iterator<String> it = searchTermList.iterator(); it.hasNext(); )
+	    {
+	    	String searchTerm = (String) it.next();	    	
+	        if (!searchTerm.equals("")) // this handles situation when user enters multiple spaces between search terms
+	        {
+	        	searchTerms.add(searchTerm);
+	        	// for now, break after one search term has been added to the list
+	        	// the search method in the PA study protocol service can only handle one search term
+	        	// this may be enhanced to accommodate multiple search terms in the future
+	        	break;
+	        }
+	    }
+	    
+	    return searchTerms;
 	}
 	
 	/**
@@ -265,7 +263,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 * @return
 	 * @throws Exception
 	 */
-	private List<StudySearchResult> getCTODSSearchResults(List<String> searchTerms, HttpSession session) throws Exception
+	private List<StudySearchResult> getCTODSSearchResults(String studyID, List<String> searchTerms, HttpSession session) throws Exception
 	{
 		CQLQuery query = new CQLQuery();
 		CQLObject target = new CQLObject();
@@ -275,20 +273,32 @@ public class StudySearchDAO extends HibernateDaoSupport
 		for (String searchTerm : searchTerms)
 		{
 		    group.addAttribute(new CQLAttribute("name", CQLPredicate.LIKE, "%" + searchTerm + "%")); // name correlates to long_title_text
-		    group.addAttribute(new CQLAttribute("shortTitle", CQLPredicate.LIKE, "%" + searchTerm + "%")); // shortTitle correlates to short_title_text
+		}
 		    
+		if (StringUtils.isNotBlank(studyID))
+		{
 		    CQLAssociation association = new CQLAssociation();
-			association.setName("gov.nih.nci.labhub.domain.II"); 
-			association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to nci_identifier
-			association.setAttribute(new CQLAttribute("extension", CQLPredicate.LIKE, "%" + searchTerm + "%"));
+		    association.setName("gov.nih.nci.labhub.domain.II"); 
+		    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to nci_identifier
+		    association.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, studyID));
 		    group.addAssociation(association);
 		}
 		
-		group.setLogicOperator(CQLLogicalOperator.OR);		
+		group.setLogicOperator(CQLLogicalOperator.AND);		
 		target.setGroup(group);
 		query.setTarget(target);
 		
-		List studies = ApplicationServiceProvider.getApplicationService().query(query);
+		List studies = null;
+		try
+		{
+		    studies = ApplicationServiceProvider.getApplicationService().query(query);
+		}
+		catch (Exception e)
+		{
+			log.error("Exception occurred while retrieving Study Search Results: ", e);
+			throw e;
+		}
+		
 		log.debug("Study search query result size = " + studies.size());
 		return convertCTODSStudies(studies, session);
 	}
@@ -302,11 +312,11 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 * @return
 	 * @throws ParseException
 	 */
-	private List<StudySearchResult> convertCTODSStudies(List<Study> studies, HttpSession session) throws ParseException
+	private List<StudySearchResult> convertCTODSStudies(List<Study> studies, HttpSession session) throws HibernateException
 	{
 		List<StudySearchResult> ctodsSearchResults = new ArrayList<StudySearchResult>();
 		
-		if (studies == null)
+		if (studies.size() <= 0)
 		{
 			return ctodsSearchResults;
 		}
@@ -319,7 +329,8 @@ public class StudySearchDAO extends HibernateDaoSupport
 	        gov.nih.nci.labhub.domain.II identifier = study.getStudyIdentifier().iterator().next();
 			ctodsStudy.setStudyId(identifier.getExtension() == null ? "" : identifier.getExtension());
 			
-			ctodsStudy.setShortTitle(study.getShortTitle() == null ? "" : study.getShortTitle());
+			// long title is not available in Study class in ctomlabapi-beans.jar - need to add to ORM
+			ctodsStudy.setLongTitle(study.getShortTitle() == null || study.getShortTitle().equals("null") ? "&nbsp;" : study.getShortTitle()); // lisa - figure out how the string "null" is getting stored in the database! and why have to use "&nbsp;" instead of "" 
 			
 			String sponsorCode = "";
 			if (study.getSponsorCode() != null && !study.getSponsorCode().equals("null")) // lisa - figure out how the string "null" is getting stored in the database!
@@ -352,7 +363,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 * 
 	 * @param studySearchResultList
 	 */
-	private List<StudySearchResult> setStatus(List<StudySearchResult> ctodsSearchResults)
+	private List<StudySearchResult> setStatus(List<StudySearchResult> ctodsSearchResults) throws HibernateException
 	{		
 		try
 		{
@@ -373,52 +384,49 @@ public class StudySearchDAO extends HibernateDaoSupport
 			
 			session.getTransaction().commit();
 		}
-		catch (Exception se)
+		catch (HibernateException e)
 		{
-			log.error("Error looking up Lab result", se);
+			log.error("HibernateException occurred while retrieving Study Status: ", e);
+			throw e;
 		}
 		
 		return ctodsSearchResults;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private List<MessageElement> createMessageElements(List<String> searchTerms)
+	private List<MessageElement> createMessageElements(String studyID, List<String> searchTerms) throws Exception
 	{
 		List<MessageElement> messageElements = new ArrayList<MessageElement>();
+		
+		StudyProtocol studyProtocol = new StudyProtocol();
+		
+		if (StringUtils.isNotBlank(studyID))
+		{
+		    II assignedIdentifier = new II();
+		    assignedIdentifier.setExtension(studyID);
+		    studyProtocol.setAssignedIdentifier(assignedIdentifier);
+		}
 		
 		// for now, the list of search terms contains only one search term
     	// the search method in the PA study protocol service can only handle one search term
     	// this may be enhanced to accommodate multiple search terms in the future
-		String searchTerm = searchTerms.get(0);
-		
-		II assignedIdentifier = new II();
-		assignedIdentifier.setExtension(searchTerm);
-		
-		ST title = new ST();
-		title.setValue(searchTerm);
-		
-		StudyProtocol studyProtocol = new StudyProtocol();
-//		studyProtocol.setAssignedIdentifier(assignedIdentifier);
-		studyProtocol.setOfficialTitle(title);
-//		studyProtocol.setPublicTitle(title);
+		for (String searchTerm : searchTerms)
+		{
+		    ST title = new ST();
+		    title.setValue(searchTerm);
+		    studyProtocol.setOfficialTitle(title);
+		}
 		
 		LimitOffset limit = new LimitOffset();
 		limit.setLimit(MAX_SEARCH_RESULTS);
 		limit.setOffset(0);
-        
-		try
-		{
-			// create message elements for the objects
-			QName qName = new QName("http://pa.services.coppa.nci.nih.gov", "StudyProtocol");
-			messageElements.add(createMessageElement(studyProtocol, qName));
+		
+		// create message elements for the objects
+		QName qName = new QName("http://pa.services.coppa.nci.nih.gov", "StudyProtocol");
+		messageElements.add(createMessageElement(studyProtocol, qName));
 			
-			qName = new QName("http://common.coppa.nci.nih.gov", "LimitOffset");
-			messageElements.add(createMessageElement(limit, qName));
-		}
-		catch (Exception e)
-		{
-			log.error("Exception occured while creating message elements", e);
-		}
+		qName = new QName("http://common.coppa.nci.nih.gov", "LimitOffset");
+		messageElements.add(createMessageElement(limit, qName));
 		
 		return messageElements;
 	}
@@ -434,16 +442,16 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 *            A stream containing the WSDD configuration
 	 * @throws Exception
 	 */
-	private MessageElement createMessageElement(Object object, QName qName)
+	private MessageElement createMessageElement(Object object, QName qName) throws Exception
 	{
-		MessageElement messageElement = null;
+		MessageElement messageElement = null;	
+		// create writer to place XML into
+		StringWriter writer = new StringWriter();
+		// create stream containing the WSDD configuration
+		InputStream wsdd = getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
+		
 		try
 		{
-			// create writer to place XML into
-			StringWriter writer = new StringWriter(); //PrintWriter writer = new PrintWriter("Org.xml");
-			// create stream containing the WSDD configuration
-			InputStream wsdd = 
-				getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
 			// serialize the object to XML
 			Utils.serializeObject(object, qName, writer, wsdd);
 			
@@ -462,64 +470,88 @@ public class StudySearchDAO extends HibernateDaoSupport
 		}
 		catch (Exception e)
 		{
-			log.error("Exception occured while serializing object", e);
+			log.error("Exception occured while creating message element: ", e);
+			throw e;
 		}
 		
 		return messageElement;
 	}
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private Message createMessage(HttpSession session, String serviceType, String operationName, List<MessageElement> messageElements) throws Exception
+	private Message createMessage(HttpSession session, String serviceType, String operationName, List<MessageElement> messageElements) throws MalformedURIException
 	{
 		Message message = new Message();
+		
+		String username = ((LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
+		String password = ((LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getPassword();
+		String credentialEpr = (String) session.getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
+		log.info("credential EPR = " + credentialEpr);
+			
+		Credentials credentials = new Credentials();
+		credentials.setUserName(username);
+		credentials.setPassword(password);
+		if (credentialEpr != null)
+		{
+			credentials.setDelegatedCredentialReference(credentialEpr);
+		}
+
+		Metadata metadata = new Metadata();
+		metadata.setExternalIdentifier("CTODS");
+		metadata.setServiceType(serviceType);
+		metadata.setOperationName(operationName);
+		metadata.setCredentials(credentials);
+
+		MessagePayload messagePayload = new MessagePayload();
+			
+		URI uri = new URI();
 		try
-		{
-			String username = ((LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId();
-			String password = ((LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT)).getPassword();
-			String credentialEpr = (String) session.getAttribute("CAGRID_SSO_DELEGATION_SERVICE_EPR");
-			log.info("credential EPR = " + credentialEpr);
-			
-			Credentials credentials = new Credentials();
-			credentials.setUserName(username);
-			credentials.setPassword(password);
-			if (credentialEpr != null)
-			{
-				credentials.setDelegatedCredentialReference(credentialEpr);
-			}
-
-			Metadata metadata = new Metadata();
-			metadata.setExternalIdentifier("CTODS");
-			metadata.setServiceType(serviceType);
-			metadata.setOperationName(operationName);
-			metadata.setCredentials(credentials);
-
-			MessagePayload messagePayload = new MessagePayload();
-			URI uri = new URI();
-			uri.setPath("http://coppa.nci.nih.gov");			
-			
-			MessageElement[] messageElementArray = new MessageElement[messageElements.size()];
-		    for (int i = 0; i < messageElements.size(); i++)
-			{
-				messageElementArray[i] = messageElements.get(i);
-			}
-			
-			messagePayload.setXmlSchemaDefinition(uri);
-			messagePayload.set_any(messageElementArray);
-			
-			message.setMetadata(metadata);
-			message.setRequest(new Request());
-			message.getRequest().setBusinessMessagePayload(messagePayload);
+		{			
+			uri.setPath("http://coppa.nci.nih.gov");
 		}
-		catch (Exception e)
+		catch (MalformedURIException e)
 		{
-			log.error("Exception occured while creating the caXchange message", e);
+			log.error("MalformedURIException occured while creating the caXchange message: ", e);
+			throw e;
 		}
+			
+		MessageElement[] messageElementArray = new MessageElement[messageElements.size()];
+		for (int i = 0; i < messageElements.size(); i++)
+		{
+			messageElementArray[i] = messageElements.get(i);
+		}
+			
+		messagePayload.setXmlSchemaDefinition(uri);
+		messagePayload.set_any(messageElementArray);
+			
+		message.setMetadata(metadata);
+		message.setRequest(new Request());
+		message.getRequest().setBusinessMessagePayload(messagePayload);
 
 		return message;
 	}
 	
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private CaXchangeRequestProcessorClient getCaXchangeClient(HttpSession session) throws Exception
+	{
+		String caXchangeURL = (String) session.getAttribute("caXchangeURL");
+		GlobusCredential gridCredentials = (GlobusCredential) session.getAttribute("CAGRID_SSO_GRID_CREDENTIAL");
+		log.info("grid credentials = " + gridCredentials.getIdentity());
+		CaXchangeRequestProcessorClient client = null;
+		try
+		{
+			client = new CaXchangeRequestProcessorClient(caXchangeURL, gridCredentials);
+		}
+		catch (Exception e)
+		{
+			log.error("Exception occured while creating the caXchange client: ", e);
+			throw e;
+		} 
+		
+		return client;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private List<Protocol> getPAStudies(Response response, HttpSession session)
+	private List<Protocol> getPAStudies(Response response, HttpSession session) throws Exception
 	{
 		List<StudyProtocol> studyProtocols = new ArrayList<StudyProtocol>();
 		
@@ -550,7 +582,8 @@ public class StudySearchDAO extends HibernateDaoSupport
 		}
 		catch (Exception e)
 		{
-			log.error(e.getLocalizedMessage());
+			log.error("Exception occured while getting PA study protocols: ", e);
+			throw e;
 		}
 		
 		return convertPAStudies(studyProtocols, session);
@@ -570,7 +603,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 			paStudy.setLongTxtTitle(studyProtocol.getOfficialTitle().getValue());
 			paStudy.setShortTxtTitle(studyProtocol.getPublicTitle().getValue());
 			paStudy.setPhaseCode(studyProtocol.getPhaseCode().getCode());
-			paStudy.setSponsorCode(getPASponsorCode(studyProtocolRoot, studyProtocolExtension, session));
+			paStudy.setSponsorCode(getPASponsorCodes(studyProtocolRoot, studyProtocolExtension, session));
             // paStudy.setIdAssigningAuth(); // this is not available in PA StudyProtocol object
 			
 			ProtocolStatus status = new ProtocolStatus();
@@ -585,31 +618,106 @@ public class StudySearchDAO extends HibernateDaoSupport
 	}
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private String getPASponsorCode(String studyProtocolRoot, String studyProtocolExtension, HttpSession session)
+	private String getPASponsorCodes(String studyProtocolRoot, String studyProtocolExtension, HttpSession session)
 	{		
-		String sponsorCode = null;
+		String sponsorCodes = null;
 		
 //		// create message element for caXchange message		
-//		Id studyProtocolId = new Id(); //import gov.nih.nci.coppa.services.pa.Id;
+//		Id studyProtocolId = new Id(); // gov.nih.nci.coppa.services.pa.Id;
 //		studyProtocolId.setIdentifierName(STUDY_PROTOCOL_IDENTIFIER_NAME); // lisa - is this necessary? 
 //		studyProtocolId.setRoot(studyProtocolRoot);        
 //		studyProtocolId.setExtension(studyProtocolExtension);
 //        
-//        List<MessageElement> messageElements = new ArrayList<MessageElement>();        
+//        List<MessageElement> messageElements = new ArrayList<MessageElement>(); 
+//        Message requestMessage;
 //		try
 //		{
 //			QName qName = new QName("http://pa.services.coppa.nci.nih.gov", "Id");
 //			messageElements.add(createMessageElement(studyProtocolId, qName));
 //			
 //			// create caXchange message
-//			Message requestMessage = createMessage(session, "STUDY_RESOURCING", "getStudyResourceByStudyProtocol", messageElements);
+//			requestMessage = createMessage(session, "STUDY_RESOURCING", "getStudyResourceByStudyProtocol", messageElements);
 //		}
 //		catch (Exception e)
 //		{
-//			logDB.error("Exception occured while creating message elements", e);
+//			log.error("Exception occured while creating message elements", e);
 //		}
+//		
+//		boolean responseReceived = false;
+//		int attempts = 0;
+//
+//		while (!responseReceived)
+//		{
+//			try
+//			{
+//				ResponseMessage responseMessage = getCaXchangeClient(session).processRequestSynchronously(requestMessage);
+//				responseReceived = true;
+//				if (responseMessage.getResponse().getResponseStatus().equals(Statuses.SUCCESS))
+//				{
+//					List<StudyResourcing> studyResourcings = new ArrayList<StudyResourcing>();
+//					
+//					try
+//					{
+//						Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//						MessageElement messageElement = responseMessage.getResponse().getTargetResponse()[0].getTargetBusinessMessage().get_any()[0];
+//						List<MessageElement> childElements = messageElement.getChildren();
+//						
+//						if (childElements != null)
+//						{
+//							for (MessageElement childElement : childElements)
+//							{
+//								Element element = childElement.getAsDOM();
+//								StringWriter writer = new StringWriter();
+//								// transform XML element to a result
+//								transformer.transform(new DOMSource(element), new StreamResult(writer));
+//								// create reader for the XML
+//								StringReader reader = new StringReader(writer.toString());
+//								// create stream containing the WSDD configuration
+//								InputStream wsdd = 
+//									getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
+//								// deserialize XML into StudyResourcing object
+//								StudyResourcing studyResourcing = (StudyResourcing) Utils.deserializeObject(reader, StudyResourcing.class, wsdd);
+//								studyResourcings.add(studyResourcing);
+//							}
+//						}
+//					}
+//					catch (Exception e)
+//					{
+//						log.error(e.getLocalizedMessage());
+//					}
+//					
+//					for (StudyResourcing studyResourcing : studyResourcings)
+//					{			
+//						String sponsorCode = studyResourcing.getNihInstitutionCode().getCode();
+//						// or studyResourcing.getNciDivisionProgramCode() depending on which one is populated
+//						
+//						if (sponsorCode != null)
+//						{
+//							if (sponsorCodes == null)
+//							{
+//								sponsorCodes = "";
+//							}
+//							
+//						    sponsorCodes += sponsorCode;
+//						}
+//					}
+//				}
+//			}
+//			catch (Exception e)
+//			{
+//				attempts++;
+//				log.info("No response from caxchange(attempt #" + attempts + ")", e);
+//				if (attempts > 25)
+//				{
+//					log.error("Never got a response from caXchange hub");
+//					throw new Exception("No response from hub");
+//				}
+//				
+//				Thread.sleep(1000); // sleep 1 second
+//			}
+//		} // end of while loop
 		
-		return sponsorCode;
+		return sponsorCodes;
 	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -640,7 +748,12 @@ public class StudySearchDAO extends HibernateDaoSupport
 		        	
 			        for (StudySearchResult ctodsSearchResult : ctodsSearchResults)
 			        {
-			        	if (paStudy.getNciIdentifier().equals(ctodsSearchResult.getGridId() + "." + ctodsSearchResult.getStudyId()))
+			        	// for now, just compare the study ID's (do not include the grid ID's)
+			        	// the search method in the PA study protocol service always returns the root as null
+			        	// this will be fixed in 3.2
+			        	int index = paStudy.getNciIdentifier().indexOf(".");
+			        	if (paStudy.getNciIdentifier().substring(index + 1).equals(ctodsSearchResult.getStudyId()))
+			        	//if (paStudy.getNciIdentifier().equals(ctodsSearchResult.getGridId() + "." + ctodsSearchResult.getStudyId()))
 			            {						        								        	
 			        		// if the study status from PA is the same as the current study status stored in the CTODS database,
 			        		// leave the current status as is (i.e. do not insert a new row in the protocol_status table)
@@ -683,7 +796,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		
 		int index = paStudy.getNciIdentifier().indexOf(".");
 		paSearchResult.setStudyId(paStudy.getNciIdentifier().substring(index + 1));
-		paSearchResult.setShortTitle(paStudy.getLongTxtTitle() == null ? "" : paStudy.getLongTxtTitle());
+		paSearchResult.setLongTitle(paStudy.getLongTxtTitle() == null ? "" : paStudy.getLongTxtTitle());
 		paSearchResult.setSponsorCode(paStudy.getSponsorCode() == null ? "" : paStudy.getSponsorCode());
 		paSearchResult.setPhaseCode(paStudy.getPhaseCode() == null ? "" : paStudy.getPhaseCode());
 		paSearchResult.setStatus(paStudy.getStatus().getStatus_code() == null ? "" : paStudy.getStatus().getStatus_code());
@@ -698,15 +811,15 @@ public class StudySearchDAO extends HibernateDaoSupport
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private void updateCTODSStudy(Protocol paStudy)
-	{		
+	{	
+		ProtocolHandler protocolDAO = new ProtocolHandler();
 		try
 		{
-			ProtocolHandler protocolDAO = new ProtocolHandler();
 			protocolDAO.update(protocolDAO.getConnection(), paStudy);
 		}
-		catch (Exception se)
+		catch (Exception e)
 		{
-			log.error("Error persisting Protocol details", se);
+			log.error("Exception occured while updating CTODS study: ", e);
 
 		}
 	}
