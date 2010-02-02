@@ -54,26 +54,34 @@
 																		<tr>
 																			<td>
 																				<center>
-																					<table cellpadding="0" cellspacing="0" border="0">
+																				<html:errors />
+																					<table cellpadding="0" cellspacing="3" border="0">
+																					    <tr>
+													                                        <td>
+													                                            <font size="2" face="arial">Study ID:</font>
+													                                        </td>
+													                                        <td>
+														                                        <html:text style="width: 2in" property="studyID"/>
+													                                        </td>
+												                                        </tr>
+												                                        <tr>
+													                                        <td>
+													                                            <font size="2" face="arial">Study Title:</font>
+													                                        </td>
+													                                        <td>
+														                                        <html:text style="width: 2in" property="studyTitle"/>
+													                                        </td>
+												                                        </tr>												                                      
 																						<tr>
-																							<td>
-																								<html:text style="width: 4in"
-																									property="studyPhrase" />
-																							</td>
-																							<td>
-																								<!-- action buttons begins -->
-																								<html:submit style="actionButton">Search</html:submit>
+																							<td colspan="2">																							
+																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title</font>
 																							</td>
 																						</tr>
 																						<tr>
-																							<td>
-																								<font size="2" face="arial"> <br> *
-																									Please enter one or more search terms above and
-																									select the "Search" button.<br> ** Search
-																									will perform search in Study Title and
-																									Identifier. </font>
-																							</td>
-																						</tr>
+												                                            <td colspan="2" align="center">														                                     
+														                                        <html:submit style="actionButton">Search</html:submit>
+													                                        </td>
+													                                    </tr>
 																					</table>
 																				</center>
 																			</td>
@@ -114,7 +122,8 @@
 							<div class="background-R">
 								<h2>
 									Search Results:
-									<bean:write name="StudySearchForm" property="studyPhrase" />
+									<bean:write name="StudySearchForm" property="studyID" />
+									<bean:write name="StudySearchForm" property="studyTitle" />
 									</h2>
 							</div>
 						</div>
@@ -165,7 +174,7 @@
                <logic:empty name="studyTable" property="id">${studyTable.studyId}</logic:empty>
                <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="loadParticipant(${studyTable_rowNum})">${studyTable.studyId}</a></logic:notEmpty>
            </display:column>
-           <display:column property="shortTitle"  class="dataCellText" sortable="true" title="Official Title" maxLength="200"/>
+           <display:column property="longTitle"  class="dataCellText" sortable="true" title="Official Title" maxLength="200"/>
            <display:column property="sponsorCode" class="dataCellText" sortable="true" title="Sponsor code" />        
            <display:column property="phaseCode"  class="dataCellText" sortable="true" title="Phase code"  />
            <display:column property="status"  class="dataCellText" sortable="true" title="Status"  />
