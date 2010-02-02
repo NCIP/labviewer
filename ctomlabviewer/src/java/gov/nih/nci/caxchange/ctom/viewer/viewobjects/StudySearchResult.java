@@ -68,7 +68,7 @@ public class StudySearchResult
 {
 	private Integer id;
 	private String studyId = "";
-	private String shortTitle = "";
+	private String longTitle = "";
 	private String sponsorCode = "";
 	private String phaseCode = "";
 	private String status = "";
@@ -100,17 +100,17 @@ public class StudySearchResult
 	}
 
 	/**
-	 * @return the shortTitle
+	 * @return the longTitle
 	 */
-	public String getShortTitle() {
-		return shortTitle;
+	public String getLongTitle() {
+		return longTitle;
 	}
 
 	/**
-	 * @param shortTitle the shortTitle to set
+	 * @param longTitle the longTitle to set
 	 */
-	public void setShortTitle(String shortTitle) {
-		this.shortTitle = shortTitle;
+	public void setLongTitle(String longTitle) {
+		this.longTitle = longTitle;
 	}
 
 	/**
