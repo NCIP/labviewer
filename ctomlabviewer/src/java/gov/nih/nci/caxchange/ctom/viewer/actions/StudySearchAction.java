@@ -149,7 +149,7 @@ public class StudySearchAction extends DispatchAction
 		{
 			StudySearchDAO studySearchDAO = new StudySearchDAO();
 			// search based on the given search criteria
-			SearchResult searchResult = studySearchDAO.searchObjects(sForm.getStudyPhrase(), session);
+			SearchResult searchResult = studySearchDAO.getStudySearchResults(sForm.getStudyID(), sForm.getStudyTitle(), session);
 			sForm.setStudiesList(searchResult.getSearchResultObjects());
 			// if the search returned nothing/null; display message
 			if (searchResult.getSearchResultObjects() == null
