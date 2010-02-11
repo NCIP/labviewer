@@ -487,7 +487,7 @@ function SelectAll()
 
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 90);
+//var t = new ScrollableTable(document.getElementById('myScrollTable'), 90);
 </script>
 </head>
 
