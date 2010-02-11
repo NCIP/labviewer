@@ -18,7 +18,7 @@
    	<link rel="stylesheet" href="laf/src/main/resources/gov/nih/nci/cabig/ctms/lookandfeel/assets/css/tabbedflow.css" type="text/css" />
 	<script language="JavaScript" src="scripts/script.js"></script>
 	<script language="JavaScript" src="scripts/sorttable.js"></script>
-	<script type="text/javascript" src="scripts/webtoolkit.scrollabletable.js"></script>
+<!--	<script type="text/javascript" src="scripts/webtoolkit.scrollabletable.js"></script>-->
 	<script type="text/javascript">
 	
 	function addLoadListener(fn){
@@ -50,7 +50,7 @@
 	<!-- Page Title ends -->
 	</head>
 <body>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="90%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
 
 	<!-- NCI hdr begins -->
   <tr>
@@ -59,8 +59,8 @@
   </tr>
   <!-- NCI hdr ends -->
   <tr>
-    <td height="100%" align="center" valign="top">
-      <table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" width="90%">
+    <td align="center" valign="top">
+      <table summary="" cellpadding="0" cellspacing="0" border="0" width="90%">
     	            
 			  <!-- main content begins -->
               <tr>
