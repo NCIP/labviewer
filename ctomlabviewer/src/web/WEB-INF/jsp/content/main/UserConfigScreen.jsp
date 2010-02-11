@@ -144,7 +144,7 @@
 </html:form>
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 150);
+//var t = new ScrollableTable(document.getElementById('myScrollTable'), 150);
 
 //Function handles Edit
 function handleModify(iterateId)

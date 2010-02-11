@@ -166,7 +166,7 @@
 	</html:form>
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 250);
+//var t = new ScrollableTable(document.getElementById('myScrollTable'), 250);
 
 //handles Save User action
 function handleSaveUser(){
