@@ -38,7 +38,7 @@
 				
 		<dependency org="ncicb" name="C3DGridService" rev="noversion" conf="compile->master" />
 		<dependency org="ncicb" name="LabConsumerService" rev="1.3" conf="compile->master" />
-		<dependency org="ncicb" name="CoreServices" rev="noversion" conf="compile->master" />
+		<dependency org="ncicb" name="CoreServices" rev="3.1" conf="compile->master" />
 		<dependency org="ncicb" name="SmokeTestService" rev="0.1" conf="compile->master" />
 		<dependency org="ncicb" name="CaXchangeRequestProcessor" rev="noversion" conf="compile->master" />
 		<dependency org="ncicb" name="PAServices" rev="noversion" conf="compile->master" />
@@ -46,7 +46,7 @@
 		<dependency org="ncicb" name="coppa-commons" rev="1.1-SNAPSHOT" conf="compile->master" />
 				
 		 <!-- Ram on 02/01/2010 added PA jars dependency -->
-        <dependency org="ncicb" name="PAServices" rev="noversion" conf="compile->master" />
+        <dependency org="ncicb" name="PAServices" rev="3.1" conf="compile->master" />
 		
 		<!--  caGrid 1.3 jars -->
 		<dependency org="caGrid" name="cql" rev="1.3" conf="compile->jars" />
