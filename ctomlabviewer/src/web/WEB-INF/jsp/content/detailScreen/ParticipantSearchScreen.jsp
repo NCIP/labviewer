@@ -172,7 +172,7 @@
 </html:form>
 <head>
 <script type="text/javascript">
-var t = new ScrollableTable(document.getElementById('myScrollTable'), 82);
+//var t = new ScrollableTable(document.getElementById('myScrollTable'), 82);
 //handles load action
 function loadLabs(indexValue){
  
