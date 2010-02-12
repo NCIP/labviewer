@@ -19,8 +19,8 @@ public class StudySearchDecorator extends TableDecorator
 	  {
 		StudySearchResult studySearchResult = (StudySearchResult)getCurrentRowObject();
 	    String shortTitle = NBSP;
-	    if(studySearchResult.getShortTitle()!= null && !studySearchResult.getShortTitle().equals("") && !studySearchResult.getShortTitle().equals("null")){
-	    	shortTitle = studySearchResult.getShortTitle(); 
+	    if(studySearchResult.getLongTitle()!= null && !studySearchResult.getLongTitle().equals("") && !studySearchResult.getLongTitle().equals("null")){
+	    	shortTitle = studySearchResult.getLongTitle(); 
 	    }
 	    return shortTitle;
 	  }
