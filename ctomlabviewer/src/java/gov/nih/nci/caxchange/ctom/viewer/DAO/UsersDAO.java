@@ -83,12 +83,21 @@ package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
 import gov.nih.nci.caxchange.ctom.viewer.beans.Users;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.security.authorization.domainobjects.UserProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
+import gov.nih.nci.security.authorization.domainobjects.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -161,17 +170,47 @@ public class UsersDAO extends HibernateDaoSupport
 	{
 		boolean successfulAdd = false;
 		Session session = null;
+        //Session session2 = null;
+        Connection con = null;
 		try
 		{
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
 			session.save(user);
-			session.getTransaction().commit();
+            session.getTransaction().commit();
+
+            /*  Now first retrieve csm_user  */
+            session = HibernateUtil.getSessionFactory().getCurrentSession();
+            session.beginTransaction();
+            Query userQuery = session.createQuery(" From Users u WHERE u.loginName = '"+ user.getLoginName() + "'");
+            List<Users> csmUserList = userQuery.list();
+            assert csmUserList.size() == 1;
+            Users csmUser = csmUserList.get(0);
+
+            con = session.connection();
+            String sql = "insert into csm_user_pe( PROTECTION_ELEMENT_ID,USER_ID,UPDATE_DATE) " +
+                    " values(2,?,now())";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setObject(1, csmUser.getId());
+            ps.executeUpdate();
+            con.commit();
+            ps.close();
+            successfulAdd = true;
+
 		}
-		catch (Exception se)
-		{
+		catch (Exception se) {
 			log.error("Error adding users", se);
 		}
+        finally {
+            try {
+                if (con != null)
+                con.close();
+                if (session.isOpen()) session.close();
+            }catch(SQLException sqle) {
+                log.error("Error adding users", sqle);
+                successfulAdd = false;
+            }
+        }
 
 		return successfulAdd;
 	}
