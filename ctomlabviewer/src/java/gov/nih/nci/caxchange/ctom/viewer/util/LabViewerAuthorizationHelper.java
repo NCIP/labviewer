@@ -106,7 +106,7 @@ public class LabViewerAuthorizationHelper
 {
 	private static final Logger logger =
 			Logger.getLogger(LabViewerAuthorizationHelper.class);
-	private final String APPLICATION_CONTEXT = "labviewer";
+	public final static String APPLICATION_CONTEXT = "labviewer";
 
 	public boolean isAuthorized(String username)
 	{
