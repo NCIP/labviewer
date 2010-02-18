@@ -234,7 +234,7 @@ function SelectAll()
 																									<display:table
 																										name="${SEARCH_RESULT.searchResultObjects}"
 																										sort="list" cellspacing="0" cellpadding="3"
-																										pagesize="15" id="labtable" export="true"
+																										id="labtable" export="true"
 																										size="totalLabs" defaultsort="5"
 																										defaultorder="ascending" requestURI="/search.do"
 																										decorator="gov.nih.nci.caxchange.ctom.viewer.util.LabSearchDecorator"
