@@ -333,8 +333,8 @@ public class UserConfigAction extends DispatchAction
 										.getLoginId()
 								+ "|"
 								+ baseDBForm.getFormName()
-								+ "|User delete|Success|The user was successfully added"
-								+ baseDBForm.getFormName() + " object|"
+								+ "The user {"+ user.getLoginName() +"} was successfully added"
+								+ baseDBForm.getFormName() + " object |"
 								+ form.toString() + "|");
 		}
 		else
@@ -348,8 +348,8 @@ public class UserConfigAction extends DispatchAction
 						+ ((LoginForm) session
 								.getAttribute(DisplayConstants.LOGIN_OBJECT))
 								.getLoginId() + "|" + baseDBForm.getFormName()
-						+ "|User delete|Failure|The user could not be added"
-						+ baseDBForm.getFormName() + " object|"
+						+ "The user {"+ user.getLoginName() + "} could not be added"
+						+ baseDBForm.getFormName() + " object |"
 						+ form.toString() + "|");
 		}
 
