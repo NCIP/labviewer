@@ -2,6 +2,7 @@ package gov.nih.nci.cabig.labviewer.grid;
 
 import gov.nih.nci.cabig.ccts.domain.HealthcareSiteType;
 import gov.nih.nci.cabig.ccts.domain.IdentifierType;
+import gov.nih.nci.cabig.ccts.domain.InvestigatorType;
 import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
@@ -214,30 +215,12 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 					{
 						// save the investigator data
 						logger.info("payload has Investigator information");
-						studyInvestigator.setNciId(investigator
-								.getHealthcareSiteInvestigator()
-								.getInvestigator(0).getNciIdentifier());
-						String fullName =
-								investigator.getHealthcareSiteInvestigator()
-										.getInvestigator(0).getFullName();
-						String[] result = fullName.split("\\s");
-						if (result.length == 3)
-						{
-							studyInvestigator.setFirstName(result[0]);
-							studyInvestigator.setInitials(result[1]);
-							studyInvestigator.setLastName(result[2]);
-						}
-						else if (result.length == 2)
-						{
-							studyInvestigator.setFirstName(result[0]);
-							studyInvestigator.setLastName(result[1]);
-						}
-						else if (result.length == 1)
-						{
-							studyInvestigator.setFirstName(result[0]);
-						}
+						InvestigatorType healthCareSiteInvestigator = investigator.getHealthcareSiteInvestigator().getInvestigator(0);
+						studyInvestigator.setNciId(healthCareSiteInvestigator.getNciIdentifier());
+						studyInvestigator.setFirstName(healthCareSiteInvestigator.getFirstName());
+						studyInvestigator.setLastName(healthCareSiteInvestigator.getLastName());
+						studyInvestigator.setPhone(healthCareSiteInvestigator.getPhoneNumber());
 						protocol.setInvestigator(studyInvestigator);
-
 					}
 					else
 					{
