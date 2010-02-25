@@ -137,6 +137,8 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	 */
 	private void populateProtocol(Protocol protocol, Study study)
 	{
+		try
+		{
 		java.util.Date now = new Date();
 		protocol.setLongTxtTitle(study.getLongTitleText());
 		protocol.setShortTxtTitle(study.getShortTitleText());
@@ -162,7 +164,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		for (int i = 0; i < identifiers.length; i++)
 		{
 			IdentifierType ident = identifiers[i];
-			if (ident.getPrimaryIndicator().booleanValue())
+			if (ident.getPrimaryIndicator() != null && ident.getPrimaryIndicator().booleanValue())
 			{
 				Identifier id = new Identifier();
 				if (ident instanceof OrganizationAssignedIdentifierType)
@@ -230,7 +232,11 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				}// end if
 			}// end if
 		}
-
+		}
+		catch (Exception e)
+		{
+			logger.error("populateProtocol: Exception occurred: ", e);
+		}
 	}
 
 	/**
