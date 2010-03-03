@@ -85,12 +85,12 @@ import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.caxchange.ResponseMessage;
 import gov.nih.nci.caxchange.Statuses;
-import gov.nih.nci.caxchange.ctom.viewer.beans.HCSite;
+import gov.nih.nci.caxchange.ctom.viewer.beans.PrincipalInvestigator;
 import gov.nih.nci.coppa.po.Id;
-import gov.nih.nci.coppa.po.Organization;
-import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
+import gov.nih.nci.coppa.po.Person;
+import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
-import gov.nih.nci.ctom.ctlab.handler.HealthCareSiteHandler;
+import gov.nih.nci.ctom.ctlab.handler.InvestigatorHandler;
 import gov.nih.nci.ctom.ctlab.persistence.CTLabDAO;
 
 import java.io.InputStream;
@@ -107,13 +107,16 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.iso._21090.ADXP;
 import org.iso._21090.AddressPartType;
+import org.iso._21090.ENXP;
+import org.iso._21090.EntityNamePartType;
+import org.iso._21090.TEL;
 
 /**
  * @author Lisa Kelley
  */
-public class HealthCareSiteDAO
+public class PrincipalInvestigatorDAO
 {
-	private static final Logger log = Logger.getLogger(HealthCareSiteDAO.class);
+	private static final Logger log = Logger.getLogger(PrincipalInvestigatorDAO.class);
 	private static final String NBSP = "&nbsp;";
 
 	/**
@@ -121,9 +124,9 @@ public class HealthCareSiteDAO
 	 * @param baseDBForm
 	 * @throws Exception
 	 */
-	public List<HCSite> getHealthCareSites(Long protocolId, HttpSession session) throws Exception
+	public List<PrincipalInvestigator> getInvestigators(Long protocolId, HttpSession session) throws Exception
 	{
-		List<HCSite> healthCareSites = new ArrayList<HCSite>();
+		List<PrincipalInvestigator> investigators = new ArrayList<PrincipalInvestigator>();
 
 		// using the protocolId obtain the CTEP id for the HCS from CTODS DB
 		List<String> ctepIds = getCtepIds(protocolId);
@@ -134,7 +137,7 @@ public class HealthCareSiteDAO
 			List<MessageElement> messageElements = createMessageElements(ctepId);
 
 			// create caXchange message
-			Message requestMessage = COPPAServiceHelper.createMessage(session, "ORGANIZATION_BUSINESS_SERVICE", "getOrganizationByCTEPId", messageElements);
+			Message requestMessage = COPPAServiceHelper.createMessage(session, "PERSON_BUSINESS_SERVICE", "getPersonByCTEPId", messageElements);
 			
 			CaXchangeRequestProcessorClient client = COPPAServiceHelper.getCaXchangeClient(session);
 
@@ -166,39 +169,39 @@ public class HealthCareSiteDAO
 				{
 					// note that the HealthCareSite class is a domain class and the HCSite class is a viewer bean used in the jsp
 					// lisa - this is a little confusing, maybe change the names later
-					HCSite healthCareSiteView = null;
+					PrincipalInvestigator investigatorView = null;
 					
 					if (responseMessage.getResponse().getResponseStatus().equals(Statuses.SUCCESS))
 					{
-						Organization organization = getPOOrganization(responseMessage.getResponse());
+						Person person = getPOPerson(responseMessage.getResponse());
 						
-						if (organization != null)
+						if (person != null)
 						{
-						    HealthCareSite healthCareSite = createHealthCareSite(organization);
-						    healthCareSite.setNciInstituteCd(ctepId);
+							Investigator investigator = createInvestigator(person);
+							investigator.setNciId(ctepId);
 						
-						    persistHealthCareSite(protocolId, healthCareSite);
+						    persistInvestigator(protocolId, investigator);
 						
-						    healthCareSiteView = createHealthCareSiteView(healthCareSite);
-						    healthCareSiteView.setUpdatedDate(new Date().toString());
-						    healthCareSiteView.setCoppaUpdate("Y"); // lisa - figure out how this is used and why it's not a boolean
+						    investigatorView = createInvestigatorView(investigator);
+						    investigatorView.setUpdatedDate(new Date().toString());
+						    investigatorView.setCoppaUpdate("Y"); // lisa - figure out how this is used and why it's not a boolean
 						}
 					}
 					
-					if (healthCareSiteView == null)
+					if (investigatorView == null)
 					{
 						// retrieve the HCS details based on the CTEP Identifier
-						HealthCareSite healthCareSite = getHealthCareSite(ctepId);
-						healthCareSiteView = createHealthCareSiteView(healthCareSite);
-						healthCareSiteView.setUpdatedDate(healthCareSite.getCtomUpdateDt().toString());
+						Investigator investigator = getInvestigator(ctepId);
+						investigatorView = createInvestigatorView(investigator);
+						investigatorView.setUpdatedDate(investigator.getCtomUpdateDt().toString());
 					}
 					
-					healthCareSites.add(healthCareSiteView);
+					investigators.add(investigatorView);
 				}
 			}
 		}
 		
-		return healthCareSites;
+		return investigators;
 	}
 	
 	/**
@@ -212,7 +215,7 @@ public class HealthCareSiteDAO
 		try
 		{
 			CTLabDAO dao = new CTLabDAO();
-			ctepIds = dao.retrieveCTEPIDForHCS(dao.getConnection(), protocolId);
+			ctepIds = dao.retrieveCTEPIDForPI(dao.getConnection(), protocolId);
 		}
 		catch (Exception e)
 		{
@@ -220,8 +223,7 @@ public class HealthCareSiteDAO
 			throw e;
 		}
 		
-//		ctepIds.add("MN026"); // for PO service testing
-//		ctepIds.add("CTEP");  // for PO service testing
+//		ctepIds.add("69443"); // for PO service testing
 		
 		return ctepIds;
 	}
@@ -246,103 +248,130 @@ public class HealthCareSiteDAO
 	}
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private Organization getPOOrganization(Response response) throws Exception
+	private Person getPOPerson(Response response) throws Exception
 	{		
 		String resourceName = "/gov/nih/nci/coppa/services/client/client-config.wsdd";
 		COPPAServiceHelper helper = new COPPAServiceHelper(); // lisa - try COPPAServiceHelper.getInstance()
-		Organization organization = (Organization) helper.getCOPPAObject(response, resourceName, Organization.class);
-		return organization;
+		Person person = (Person) helper.getCOPPAObject(response, resourceName, Person.class);
+		return person;
 	}
-
+	
 	/**
 	 * @param poPerson
 	 * @return
 	 */
-	private HealthCareSite createHealthCareSite(Organization organization)
+	private Investigator createInvestigator(Person person)
 	{
-		HealthCareSite healthCareSite = new HealthCareSite();
+		Investigator investigator = new Investigator();
 
 		// get the name
-		healthCareSite.setName(organization.getName().getPart().get(0).getValue());
+		for (Iterator<ENXP> it = person.getName().getPart().iterator(); it.hasNext(); )
+		{
+			ENXP part = (ENXP) it.next();
+			if (EntityNamePartType.FAM == part.getType())
+			{
+				investigator.setLastName(part.getValue());
+			}
+			else if (EntityNamePartType.GIV == part.getType())
+			{
+				if (investigator.getFirstName() == null)
+				{
+					investigator.setFirstName(part.getValue());
+				}
+				else
+				{
+					investigator.setMiddleNAle(part.getValue());
+				}
+			}
+		}
 		
 		// get the address
-		for (Iterator<ADXP> it = organization.getPostalAddress().getPart().iterator(); it.hasNext(); )
+		for (Iterator<ADXP> it = person.getPostalAddress().getPart().iterator(); it.hasNext(); )
 	    {
 			ADXP part = (ADXP) it.next();
 			AddressPartType type = part.getType();
 			
 			if (AddressPartType.AL == type)
 			{
-				healthCareSite.setStreetAddr(part.getValue() == null ? "" : part.getValue());
+				investigator.setStreetAddr(part.getValue() == null ? "" : part.getValue());
 			}
 			else if (AddressPartType.ADL == type)
 			{
-				healthCareSite.setStreetAddr(healthCareSite.getStreetAddr() + part.getValue() == null ? "" : part.getValue());
+				investigator.setStreetAddr(investigator.getStreetAddr() + part.getValue() == null ? "" : part.getValue());
 			}
 			else if (AddressPartType.CTY == type)
 			{
-				healthCareSite.setCity(part.getValue() == null ? "" : part.getValue());
+				investigator.setCity(part.getValue() == null ? "" : part.getValue());
 			}
 			else if (AddressPartType.STA == type)
 			{
-				healthCareSite.setStateCode(part.getValue() == null ? "" : part.getValue());
+				investigator.setState(part.getValue() == null ? "" : part.getValue());
 			}
 			else if (AddressPartType.ZIP == type)
 			{
-				healthCareSite.setPostalCode(part.getValue() == null ? "" : part.getValue());
+				investigator.setZipCode(part.getValue() == null ? "" : part.getValue());
 			}
 			else if (AddressPartType.CNT == type)
 			{
-				healthCareSite.setCountryCode(part.getCode() == null ? "" : part.getCode());
+				investigator.setCountryCode(part.getCode() == null ? "" : part.getCode());
 			}
 	    }
 		
-		// get the Telecom Address
-		healthCareSite.setTelecomAddr(organization.getTelecomAddress().getItem().get(0).getValue());
+		List<TEL> contactInfo = person.getTelecomAddress().getItem();
+		investigator.setTelecomAddr(contactInfo.get(0).getValue());
+		investigator.setPhone(contactInfo.get(1).getValue());
 		
-		return healthCareSite;
+		return investigator;
 	}
-
+	
 	/**
+	 * Persist the PI details retrieved from COPPA Service into CTODS DB
+	 * 
 	 * @param investigator
+	 * @param protocol
 	 */
-	private void persistHealthCareSite(Long protocolId, HealthCareSite healthCareSite)
+	private void persistInvestigator(Long protocolId, Investigator investigator)
 	{
 		Protocol protocol = new Protocol();
 		protocol.setId(protocolId);
-		protocol.setHealthCareSite(healthCareSite);
-		HealthCareSiteHandler dao = new HealthCareSiteHandler();
-		
+		protocol.setInvestigator(investigator);
+		InvestigatorHandler dao = new InvestigatorHandler();
+
 		try
-		{			
+		{
 			dao.update(dao.getConnection(), protocol);
 		}
 		catch (Exception e)
 		{
-			log.error("persistHealthCareSite: Exception occurred: ", e);
+			log.error("persistInvestigator: Exception occurred: ", e);
 		}
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// note that the HealthCareSite class is a domain class and the HCSite class is a viewer bean used in the jsp
 	// lisa - this is a little confusing, maybe change the names later
-	private HCSite createHealthCareSiteView(HealthCareSite healthCareSite)
+	private PrincipalInvestigator createInvestigatorView(Investigator investigator)
 	{
-		HCSite healthCareSiteView = new HCSite();
-		// lisa - figure out why these fields are not 'null' when not populated
-		healthCareSiteView.setName(StringUtils.isEmpty(healthCareSite.getName()) ? NBSP : healthCareSite.getName());
+		PrincipalInvestigator investigatorView = new PrincipalInvestigator();
 		
-		String streetAddress = StringUtils.isEmpty(healthCareSite.getStreetAddr())  ? "" : healthCareSite.getStreetAddr() + " ";
-		String city          = StringUtils.isEmpty(healthCareSite.getCity())        ? "" : healthCareSite.getCity() + " ";
-		String stateCode     = StringUtils.isEmpty(healthCareSite.getStateCode())   ? "" : healthCareSite.getStateCode() + " ";
-		String postalCode    = StringUtils.isEmpty(healthCareSite.getPostalCode())  ? "" : healthCareSite.getPostalCode() + " ";
-		String countryCode   = StringUtils.isEmpty(healthCareSite.getCountryCode()) ? "" : healthCareSite.getCountryCode();
+		String firstName  = StringUtils.isEmpty(investigator.getFirstName())  ? "" : investigator.getFirstName() + " ";
+		String middleName = StringUtils.isEmpty(investigator.getMiddleNAle()) ? "" : investigator.getMiddleNAle() + " ";
+		String lastName   = StringUtils.isEmpty(investigator.getLastName())   ? "" : investigator.getLastName();
+		String fullName = firstName + middleName + lastName;
+		investigatorView.setName(StringUtils.isEmpty(fullName) ? NBSP : fullName);
+		
+		String streetAddress = StringUtils.isEmpty(investigator.getStreetAddr())  ? "" : investigator.getStreetAddr() + " ";
+		String city          = StringUtils.isEmpty(investigator.getCity())        ? "" : investigator.getCity() + " ";
+		String stateCode     = StringUtils.isEmpty(investigator.getState())       ? "" : investigator.getState() + " ";
+		String postalCode    = StringUtils.isEmpty(investigator.getZipCode())     ? "" : investigator.getZipCode() + " ";
+		String countryCode   = StringUtils.isEmpty(investigator.getCountryCode()) ? "" : investigator.getCountryCode();
 		String address = streetAddress + city + stateCode + postalCode + countryCode;
-		healthCareSiteView.setAddress(StringUtils.isEmpty(address) ? NBSP : address);
+		investigatorView.setAddress(StringUtils.isEmpty(address) ? NBSP : address);
 			
-		healthCareSiteView.setEmail(StringUtils.isEmpty(healthCareSite.getTelecomAddr()) ? NBSP : healthCareSite.getTelecomAddr());
+		investigatorView.setEmail(StringUtils.isEmpty(investigator.getTelecomAddr()) ? NBSP : investigator.getTelecomAddr());
+		investigatorView.setPhone(StringUtils.isEmpty(investigator.getPhone())       ? NBSP : investigator.getPhone());
 		
-		return healthCareSiteView;
+		return investigatorView;
 	}
 
 	/**
@@ -352,20 +381,20 @@ public class HealthCareSiteDAO
 	 * @param ctepId
 	 * @param baseDBForm
 	 */
-	private HealthCareSite getHealthCareSite(String ctepId) throws Exception
+	private Investigator getInvestigator(String ctepId) throws Exception
 	{
-		HealthCareSite healthCareSite;
+		Investigator investigator;
 		CTLabDAO dao = new CTLabDAO();
 		try
 		{
-			healthCareSite = dao.retrieveHealCareSite(dao.getConnection(), ctepId);
+			investigator = dao.retrieveInvestigator(dao.getConnection(), ctepId);
 		}
 		catch (Exception e)
 		{
-			log.error("getHealthCareSite: Exception occurred: ", e);
+			log.error("getInvestigator: Exception occurred: ", e);
 			throw e;
 		}
 		
-		return healthCareSite;
+		return investigator;
 	}
 }
