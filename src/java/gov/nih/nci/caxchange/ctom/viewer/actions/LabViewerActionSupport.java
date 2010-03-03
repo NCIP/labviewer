@@ -83,79 +83,110 @@ package gov.nih.nci.caxchange.ctom.viewer.actions;
 
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
-import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.ServletRequestAware;
+
+import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * @author Lisa Kelley
  */
-public class HomeAction extends LabViewerActionSupport
+public class LabViewerActionSupport extends ActionSupport implements ServletRequestAware
 {
-	private static final Logger log = Logger.getLogger(HomeAction.class);
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
+	private static final Logger log = Logger.getLogger(LabViewerActionSupport.class);
+	protected HttpServletRequest request;
+	protected HttpSession session;
+	private String tableId = null;
+	
+	/**
+	 * set method for the servlet request
+	 *
+	 * @param request - servlet request
 	 */
-
-	public String execute()
+	public void setServletRequest(HttpServletRequest request)
 	{
-		LoginForm loginForm = (LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT);
+		this.request = request;
+		session = request.getSession();
+	}
+	
+	public String getLoginStatus()
+	{
+		if (session.isNew() || // lisa - ask about this
+		    session.getAttribute(DisplayConstants.LOGIN_OBJECT) == null)
+		{
+			if (log.isDebugEnabled()) // lisa - ask about this
+				log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
+			return ForwardConstants.LOGIN_PAGE;
+		}
 
-		// check for the user login information
+		// clear the session attributes 
 		CommonUtil util = new CommonUtil();
-		String loginID = util.checkUserLogin(session);
+		util.clearMenuSessionData(session);
 
-		if (loginForm == null && loginID == null)
+		if (log.isDebugEnabled())
+			log.debug(session.getId()
+					+ "|"
+					+ ((LoginForm) session
+							.getAttribute(DisplayConstants.LOGIN_OBJECT))
+							.getLoginId() + "|"
+					+ tableId
+					+ "|Forward|Success|Forwarding to the "
+					+ tableId + " Home Page||");
+		
+		return SUCCESS;
+	}
+      
+      /**
+	   * get method for the boolean that returns true if the chart contains all null values or returns false if the chart
+	   * contains a value that is not null
+	   * 
+	   * @return boolean - true if the chart contains all null values, otherwise false
+	   */
+	public boolean getIsWebssoCasLogout()
+	{
+		boolean isWebssoCasLogout = false;
+		String webssoEnabled = (String)session.getAttribute("webssoEnabled");
+		
+	    if (session.getAttribute("CAGRID_SSO_GRID_IDENTITY") != null && 
+	    	webssoEnabled != null &&
+	       (webssoEnabled.equalsIgnoreCase("true") || session.getAttribute("HOT_LINK") == "true"))
+	    {
+	    	isWebssoCasLogout = true;
+	    }
+	    
+	    return isWebssoCasLogout;
+	}
+	
+	/**
+	   * get method for the boolean that returns true if the chart contains all null values or returns false if the chart
+	   * contains a value that is not null
+	   * 
+	   * @return boolean - true if the chart contains all null values, otherwise false
+	   */
+	public String getTableId()
+	{
+		if (tableId == null)
 		{
-			log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
-			return ForwardConstants.LOGIN_FAILURE;
+			tableId = DisplayConstants.HOME_ID; // default
 		}
-
-		util.clearSessionData(session);
-		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID, DisplayConstants.HOME_ID);
-
-		// If they got here by WebSSO then check authorization and set things up
-		if (loginID != null)
-		{
-			// Check their authorization
-			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
-			boolean authorized = lvaHelper.isAuthorized(loginID);
-
-			if (!authorized)
-			{
-				log.error("User authenticated but not authorized");
-				this.addActionError("User does not have permissions for this application");
-				return ForwardConstants.LOGIN_FAILURE; // lisa - test this!
-			}
-			
-			loginForm = new LoginForm();			
-			loginForm.setLoginId(loginID);
-			loginForm.setGridProxy("test");
-			
-			// retrieve and set properties
-			util.getProperties(session);
-			session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
-			
-			if (session.getAttribute("HOT_LINK") == "true")
-			{
-				LabActivitiesSearchForm labFm = (LabActivitiesSearchForm) session.getAttribute("CURRENT_FORM"); // lisa - test if this line and the next line are really necessary?
-				session.setAttribute("CURRENT_FORM", labFm);
-				return ForwardConstants.LOGIN_SUCCESS_HOTLINK;
-			}
-
-			return ForwardConstants.LOGIN_SUCCESS;
-		}
-
-		return null; // lisa - figure out if this is correct?
+		
+		return tableId;
+	}
+	
+	/**
+	   * set method for the unit name.  Unit name is URL-encoded, decode it before saving.
+	   * 
+	   * @param unitName - the unit name
+	   */
+	public void setTableId(String tableId)
+	{
+	    this.tableId = tableId;
 	}
 
 }
