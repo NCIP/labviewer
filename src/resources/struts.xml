@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC 
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+    "http://struts.apache.org/dtds/struts-2.1.dtd">
+
+<struts>
+    <package name="ctomlabviewer" extends="struts-default">
+        
+        <result-types>
+            <result-type name="tiles" class="org.apache.struts2.views.tiles.TilesResult" />
+        </result-types>
+		
+		<action name="Home" method="execute" class="gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction">
+            <result name="LoginSuccess" type="tiles">Tiles.Home.Page</result>
+            <result name="LoginSuccessHotLink" type="tiles">/LabActivitiesDBOperation.do</result><!-- lisa - ask TJ about this -->
+            <result name="LoginFailure" type="tiles">Tiles.Login.Page</result>
+        </action>
+        
+        <action name="*Study" method="{1}" class="gov.nih.nci.caxchange.ctom.viewer.actions.StudyAction">
+            <result name="success" type="tiles">Tiles.StudySearch.Detail.Screen</result>
+            <result name="LoginPage" type="tiles">Tiles.Login.Page</result>
+        </action>
+        
+        <action name="HealthCareSite" method="display" class="gov.nih.nci.caxchange.ctom.viewer.actions.HealthCareSiteAction">
+            <result name="success" type="tiles">Tiles.HealthCareSite.Page</result>
+            <result name="LoginPage" type="tiles">Tiles.Login.Page</result>
+        </action>
+        
+        <action name="PrincipalInvestigator" method="display" class="gov.nih.nci.caxchange.ctom.viewer.actions.PrincipalInvestigatorAction">
+            <result name="success" type="tiles">Tiles.PI.Page</result>
+            <result name="LoginPage" type="tiles">Tiles.Login.Page</result>
+        </action>
+        
+        <action name="*Participant" method="{1}" class="gov.nih.nci.caxchange.ctom.viewer.actions.ParticipantAction">
+            <result name="success" type="tiles">Tiles.ParticipantSearch.Detail.Screen</result>
+            <result name="LoginPage" type="tiles">Tiles.Login.Page</result>
+        </action>
+        
+    </package>
+</struts>
