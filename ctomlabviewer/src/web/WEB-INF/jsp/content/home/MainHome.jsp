@@ -1,15 +1,4 @@
-
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
-<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
-
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
-
-<script>
-<!--
-    	
-//-->
-
-</script>
 
 <!-- laf box 1st half -->
 <div class="box">
