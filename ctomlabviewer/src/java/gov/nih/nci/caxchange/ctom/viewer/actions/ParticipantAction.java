@@ -81,81 +81,191 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
-import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
-import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
-import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
-import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
-import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.caxchange.ctom.viewer.DAO.ParticipantDAO;
+import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 /**
+ * This class performs the study search action. The search action calls the
+ * searchObjects method with the user entered search criteria and queries the
+ * database. If the search returns a non null result set; it forwards the user
+ * to study search page and displays the results.
+ * 
  * @author Lisa Kelley
  */
-public class HomeAction extends LabViewerActionSupport
+public class ParticipantAction extends LabViewerActionSupport
 {
-	private static final Logger log = Logger.getLogger(HomeAction.class);
+	private static final Logger log = Logger.getLogger(ParticipantAction.class);
+	private static final String PARTICIPANT_SEARCH_TERM        = "PARTICIPANT_SEARCH_TERM";
+	private static final String PARTICIPANT_STUDY_SEARCH_ID    = "PARTICIPANT_STUDY_SEARCH_ID";
+	private static final String PARTICIPANT_STUDY_SEARCH_TITLE = "PARTICIPANT_STUDY_SEARCH_TITLE";	
+	private List<ParticipantSearchResult> searchResults;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping,
-	 *      org.apache.struts.action.ActionForm,
-	 *      javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse)
-	 */
-
-	public String execute()
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public String display()
 	{
-		LoginForm loginForm = (LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT);
-
-		// check for the user login information
-		CommonUtil util = new CommonUtil();
-		String loginID = util.checkUserLogin(session);
-
-		if (loginForm == null && loginID == null)
+		String loginStatus = this.getLoginStatus();
+		if (!loginStatus.equals(SUCCESS))
 		{
-			log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
-			return ForwardConstants.LOGIN_FAILURE;
+			return loginStatus;
+		}
+		
+// lisa - why is this done all over the place and not just once, when application is accessed? 
+//		UserInfoHelper.setUserInfo(((LoginForm) session
+//				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
+//				session.getId());
+		
+		String studyId = (String)session.getAttribute(PARTICIPANT_STUDY_SEARCH_ID);
+				
+		try
+		{
+			ParticipantDAO participantDAO = new ParticipantDAO();
+			searchResults = participantDAO.getSearchResults(studyId);
+		}
+		catch (Exception e)
+		{
+			// error message has already been logged
+			this.addActionError(e.getMessage());
 		}
 
-		util.clearSessionData(session);
-		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID, DisplayConstants.HOME_ID);
-
-		// If they got here by WebSSO then check authorization and set things up
-		if (loginID != null)
+		return SUCCESS;
+	}
+	
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public String search()
+	{
+		String loginStatus = this.getLoginStatus();
+		if (!loginStatus.equals(SUCCESS))
 		{
-			// Check their authorization
-			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
-			boolean authorized = lvaHelper.isAuthorized(loginID);
-
-			if (!authorized)
-			{
-				log.error("User authenticated but not authorized");
-				this.addActionError("User does not have permissions for this application");
-				return ForwardConstants.LOGIN_FAILURE; // lisa - test this!
-			}
+			return loginStatus;
+		}
+		
+// lisa - why is this done all over the place and not just once, when application is accessed? 
+//		UserInfoHelper.setUserInfo(((LoginForm) session
+//				.getAttribute(DisplayConstants.LOGIN_OBJECT)).getLoginId(),
+//				session.getId());
+		
+		String searchTerm = (String)session.getAttribute(PARTICIPANT_SEARCH_TERM);
+		String studyId    = (String)session.getAttribute(PARTICIPANT_STUDY_SEARCH_ID);
+		String studyTitle = (String)session.getAttribute(PARTICIPANT_STUDY_SEARCH_TITLE);
+		
+		if (studyId != null)
+		{
+			List<String> searchTerms = getSearchTerms(searchTerm);
 			
-			loginForm = new LoginForm();			
-			loginForm.setLoginId(loginID);
-			loginForm.setGridProxy("test");
-			
-			// retrieve and set properties
-			util.getProperties(session);
-			session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
-			
-			if (session.getAttribute("HOT_LINK") == "true")
-			{
-				LabActivitiesSearchForm labFm = (LabActivitiesSearchForm) session.getAttribute("CURRENT_FORM"); // lisa - test if this line and the next line are really necessary?
-				session.setAttribute("CURRENT_FORM", labFm);
-				return ForwardConstants.LOGIN_SUCCESS_HOTLINK;
-			}
-
-			return ForwardConstants.LOGIN_SUCCESS;
+			try
+		    {
+			    ParticipantDAO participantDAO = new ParticipantDAO();
+			    searchResults = participantDAO.getSearchResults(studyId, searchTerms);
+		    }
+		    catch (Exception e)
+		    {
+			    // error message has already been logged
+			    this.addActionError(e.getMessage());
+		    }
 		}
 
-		return null; // lisa - figure out if this is correct?
+		return SUCCESS;
+	}
+	
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	private List<String> getSearchTerms(String searchTermString)
+	{
+		if (searchTermString == null)
+		{
+			return null;
+		}
+		
+		List<String> searchTerms = new ArrayList<String>();
+		String[] searchTermsArray = searchTermString.split(" ");
+	    List<String> searchTermsList = Arrays.asList(searchTermsArray);
+	    
+	    for (Iterator<String> it = searchTermsList.iterator(); it.hasNext(); )
+	    {
+	    	String searchTerm = (String) it.next();	    	
+	        if (!searchTerm.equals("")) // this handles situation when user enters multiple spaces between search terms
+	        {
+	        	searchTerms.add(searchTerm);
+	        }
+	    }
+	    
+	    return searchTerms;
+	}
+	
+	/**
+	   * set method for the unit name.  Unit name is URL-encoded, decode it before saving.
+	   * 
+	   * @param unitName - the unit name
+	   */
+	public void setSearchTerm(String searchTerm)
+	{
+		session.setAttribute(PARTICIPANT_SEARCH_TERM, searchTerm);
+	}
+
+	  /**
+	   * get method for the unit name
+	   * 
+	   * @return String - unit name
+	   */
+	public String getSearchTerm()
+	{
+		return (String)session.getAttribute(PARTICIPANT_SEARCH_TERM);
+	}
+	
+	/**
+	   * set method for the unit name.  Unit name is URL-encoded, decode it before saving.
+	   * 
+	   * @param unitName - the unit name
+	   */
+	public void setStudyId(String studyId)
+	{
+		session.setAttribute(PARTICIPANT_STUDY_SEARCH_ID, studyId);
+	}
+	
+	/**
+	   * get method for the unit name
+	   * 
+	   * @return String - unit name
+	   */
+	public String getStudyId()
+	{
+	    return (String)session.getAttribute(PARTICIPANT_STUDY_SEARCH_ID);
+	}
+	
+	/**
+	   * set method for the unit name.  Unit name is URL-encoded, decode it before saving.
+	   * 
+	   * @param unitName - the unit name
+	   */
+	public void setStudyTitle(String studyTitle)
+	{
+		session.setAttribute(PARTICIPANT_STUDY_SEARCH_TITLE, studyTitle);
+	}
+	
+	/**
+	   * get method for the unit name
+	   * 
+	   * @return String - unit name
+	   */
+	public String getStudyTitle()
+	{
+	    return (String)session.getAttribute(PARTICIPANT_STUDY_SEARCH_TITLE);
+	}
+	
+	/**
+	   * get method for the list of workload objects
+	   * 
+	   * @return List<Workload> - list of workload objects
+	   */
+	public List<ParticipantSearchResult> getSearchResults()
+	{
+	    return searchResults;
 	}
 
 }
