@@ -170,8 +170,11 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>   
-           <display:column class="dataCellText" sortable="true" title=" Participant ID (MRN)">
+           <display:column class="dataCellText" sortable="true" title="Participant ID (MRN)" media="html" >
                <a href="#" onclick="displayLabs('<%=DisplayConstants.LABACTIVITES_ID%>', ${participantTable_rowNum})">${participantTable.patientId}</a>
+           </display:column>
+           <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
+               ${participantTable.patientId}
            </display:column>
            <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name"/>
            <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />        
