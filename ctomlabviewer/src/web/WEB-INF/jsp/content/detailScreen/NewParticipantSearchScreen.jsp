@@ -136,7 +136,7 @@
      <display:table name="${sessionScope.ParticipantSearchForm.participantsList}" sort="list" cellspacing="0" cellpadding="3"
 			               pagesize="25" id="participantTable" export="true" 
 			               size="totalParticipants" 
-			               defaultsort="1" defaultorder="descending"
+			               defaultsort="1"
                         requestURI=""
                         decorator="gov.nih.nci.caxchange.ctom.viewer.util.ParticipantSearchDecorator"                        
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
@@ -152,7 +152,7 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>   
-           <display:column class="dataCellText" sortable="true" title="Participant ID (MRN)" maxLength="90" media="html" >
+           <display:column class="dataCellText" sortable="true" sortProperty="patientId" title="Participant ID (MRN)" maxLength="90" media="html" >
                <a href="#" onclick="loadLabs(${participantTable_rowNum})"> ${participantTable.patientId}</a>
            </display:column>
            <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
