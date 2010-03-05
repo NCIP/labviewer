@@ -74,7 +74,7 @@
 												                                        </tr>												                                      
 																						<tr>
 																							<td colspan="2">																							
-																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title</font>
+																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title.<br>Searches are case sensitive.  The wildcard character is "%".</font>
 																							</td>
 																						</tr>
 																						<tr>
