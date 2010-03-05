@@ -159,8 +159,7 @@
                ${participantTable.patientId}
            </display:column>
            <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name" maxLength="200"/>
-           <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />        
-           <display:column property="studyId"  class="dataCellText" sortable="true" title="Study ID"  />
+           <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />
           </display:table>	                       
 	      <input type="hidden" name="index" value=""/>
 																				</td>
