@@ -154,7 +154,7 @@
 			 <display:table name="${sessionScope.StudySearchForm.studiesList}" sort="list" cellspacing="0" cellpadding="3"
 			               pagesize="25" id="studyTable" export="true" 
 			               size="totalStudies" 
-			               defaultsort="10" defaultorder="descending"
+			               defaultsort="1"
                         requestURI=""
                         decorator="gov.nih.nci.caxchange.ctom.viewer.util.StudySearchDecorator"                        
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
@@ -170,7 +170,7 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>            
-           <display:column  class="dataCellText" sortable="true" title="ID" maxLength="90" >
+           <display:column  class="dataCellText" sortable="true" sortProperty="studyId" title="Study ID" maxLength="90" >
                <logic:empty name="studyTable" property="id">${studyTable.studyId}</logic:empty>
                <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="loadParticipant(${studyTable_rowNum})">${studyTable.studyId}</a></logic:notEmpty>
            </display:column>
