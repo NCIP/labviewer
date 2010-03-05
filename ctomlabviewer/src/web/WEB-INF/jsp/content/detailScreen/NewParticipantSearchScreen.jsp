@@ -152,12 +152,15 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>   
-           <display:column class="dataCellText" sortable="true" title="ID[MRN]" maxLength="90">
-            <a href="#" onclick="loadLabs(${participantTable_rowNum})"> ${participantTable.patientId}</a>
+           <display:column class="dataCellText" sortable="true" title="Participant ID (MRN)" maxLength="90" media="html" >
+               <a href="#" onclick="loadLabs(${participantTable_rowNum})"> ${participantTable.patientId}</a>
+           </display:column>
+           <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
+               ${participantTable.patientId}
            </display:column>
            <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name" maxLength="200"/>
            <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />        
-           <display:column property="studyId"  class="dataCellText" sortable="true" title="Study Id"  />
+           <display:column property="studyId"  class="dataCellText" sortable="true" title="Study ID"  />
           </display:table>	                       
 	      <input type="hidden" name="index" value=""/>
 																				</td>
