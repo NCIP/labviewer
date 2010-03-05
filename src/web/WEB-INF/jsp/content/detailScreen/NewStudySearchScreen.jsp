@@ -152,7 +152,7 @@
 																				<td>
 																				
 			 <display:table name="${sessionScope.StudySearchForm.studiesList}" sort="list" cellspacing="0" cellpadding="3"
-			               pagesize="25" id="studyTable" export="true" 
+			               id="studyTable" export="true" 
 			               size="totalStudies" 
 			               defaultsort="1"
                         requestURI=""
