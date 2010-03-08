@@ -272,7 +272,9 @@ public class StudySearchDAO extends HibernateDaoSupport
 		
 		for (String searchTerm : searchTerms)
 		{
-		    group.addAttribute(new CQLAttribute("name", CQLPredicate.LIKE, "%" + searchTerm + "%")); // name correlates to long_title_text
+			// long title is not available in Study class in ctomlabapi-beans.jar - need to add to ORM
+			//group.addAttribute(new CQLAttribute("name", CQLPredicate.LIKE, "%" + searchTerm + "%")); // name correlates to long_title_text
+			group.addAttribute(new CQLAttribute("shortTitle", CQLPredicate.LIKE, "%" + searchTerm + "%"));
 		}
 		    
 		if (StringUtils.isNotBlank(studyID))
@@ -601,7 +603,9 @@ public class StudySearchDAO extends HibernateDaoSupport
 			String studyProtocolExtension = studyProtocol.getAssignedIdentifier().getExtension();
 			paStudy.setNciIdentifier(studyProtocolRoot + "." + studyProtocolExtension);			
 			paStudy.setLongTxtTitle(studyProtocol.getOfficialTitle().getValue());
-			paStudy.setShortTxtTitle(studyProtocol.getPublicTitle().getValue());
+			// long title is not available in Study class in ctomlabapi-beans.jar - need to add to ORM
+			//paStudy.setShortTxtTitle(studyProtocol.getPublicTitle().getValue());
+			paStudy.setShortTxtTitle(studyProtocol.getOfficialTitle().getValue());
 			paStudy.setPhaseCode(studyProtocol.getPhaseCode().getCode());
 			paStudy.setSponsorCode(getPASponsorCodes(studyProtocolRoot, studyProtocolExtension, session));
             // paStudy.setIdAssigningAuth(); // this is not available in PA StudyProtocol object
