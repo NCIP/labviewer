@@ -542,9 +542,8 @@ public class LabSearchDAO extends HibernateDaoSupport
 	{
 		if (date == null)
 			return "-";
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		String str = formatter.format(date);
-		return str;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+		return formatter.format(date);
 	}
 
 	/**
@@ -592,14 +591,12 @@ public class LabSearchDAO extends HibernateDaoSupport
 						if (lvs.isCdmsIndicator().equals("true"))
 						{
 							labActivityResult.setLabLoadedToCDMS(true);
-							labActivityResult.setLabLoadedToCDMSDate(lvs
-									.getCdmsSentDate().toString());
+							labActivityResult.setLabLoadedToCDMSDate(convertToString(lvs.getCdmsSentDate()));
 						}
 						if (lvs.isAdverseEventIndicator().equals("true"))
 						{
 							labActivityResult.setAdverseEventReported(true);
-							labActivityResult.setAdverseEventReportedDate(lvs
-									.getAdverseEventSentDate().toString());
+							labActivityResult.setAdverseEventReportedDate(convertToString(lvs.getAdverseEventSentDate()));
 						}
 					}
 				}
