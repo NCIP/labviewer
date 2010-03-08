@@ -280,7 +280,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		    CQLAssociation association = new CQLAssociation();
 		    association.setName("gov.nih.nci.labhub.domain.II"); 
 		    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to nci_identifier
-		    association.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, studyID));
+		    association.setAttribute(new CQLAttribute("extension", CQLPredicate.LIKE, "%" + studyID + "%"));
 		    group.addAssociation(association);
 		}
 		
@@ -403,7 +403,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		if (StringUtils.isNotBlank(studyID))
 		{
 		    II assignedIdentifier = new II();
-		    assignedIdentifier.setExtension(studyID);
+		    assignedIdentifier.setExtension("%" + studyID + "%");
 		    studyProtocol.setAssignedIdentifier(assignedIdentifier);
 		}
 		
