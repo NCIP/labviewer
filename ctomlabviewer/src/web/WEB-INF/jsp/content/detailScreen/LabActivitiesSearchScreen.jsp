@@ -155,7 +155,7 @@
 																																<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Reset</html:cancel>
 																															</td>
 																															<td>
-																																<html:submit style="actionButton">Search</html:submit>
+																																<html:submit style="actionButton">Filter</html:submit>
 																															</td>
 																														</tr>
 																													</table>
