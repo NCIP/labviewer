@@ -175,6 +175,10 @@ public class StudySearchDAO extends HibernateDaoSupport
 		log.debug("Study search called with search term(s): " + studyID + studyTitle);
 
 		List<String> searchTerms = getSearchTerms(studyTitle);
+		if (StringUtils.isBlank(studyID) && searchTerms.isEmpty())
+		{
+			studyID = "%";
+		}
 		
 		List<StudySearchResult> ctodsSearchResults = getCTODSSearchResults(studyID, searchTerms, session);
 		
