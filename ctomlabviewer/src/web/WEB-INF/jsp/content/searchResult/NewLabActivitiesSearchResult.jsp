@@ -333,11 +333,6 @@ function SelectAll()
 																										border="0">
 																										<tr>
 																											<td>
-																												<html:cancel style="actionButton"
-																													property="org.apache.struts.taglib.html.CANCEL"
-																													value="Cancel">Back</html:cancel>
-																											</td>
-																											<td>
 																												<html:button style="actionButton"
 																													property="loadActivitiesTocaAERS"
 																													onclick="setAndSubmit('loadActivitiesTocaAERS');">Load Labs to caAERS</html:button>
