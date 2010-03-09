@@ -150,22 +150,22 @@ public class StudySearchForm extends ActionForm implements BaseAssociationForm
 	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping,
 	 *      javax.servlet.http.HttpServletRequest)
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request)
-	{
-		ActionErrors errors = super.validate(mapping, request);
-		if (errors == null)
-			errors = new ActionErrors();
-
-		if ((studyID == null || studyID.length() < 1) && (studyTitle == null || studyTitle.length() < 1))
-		{
-			//errors.add("studyTitle", new ActionError("error.studyPhrase.value"));
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.studyPhrase.value"));
-		}
-
-		return errors;
-
-	}
+//	public ActionErrors validate(ActionMapping mapping,
+//			HttpServletRequest request)
+//	{
+//		ActionErrors errors = super.validate(mapping, request);
+//		if (errors == null)
+//			errors = new ActionErrors();
+//
+//		if ((studyID == null || studyID.length() < 1) && (studyTitle == null || studyTitle.length() < 1))
+//		{
+//			//errors.add("studyTitle", new ActionError("error.studyPhrase.value"));
+//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.studyPhrase.value"));
+//		}
+//
+//		return errors;
+//
+//	}
 
 	/*
 	 * (non-Javadoc)
