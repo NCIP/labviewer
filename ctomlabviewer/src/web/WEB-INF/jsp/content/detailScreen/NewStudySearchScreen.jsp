@@ -74,7 +74,7 @@
 												                                        </tr>												                                      
 																						<tr>
 																							<td colspan="2">																							
-																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title.<br>Searches are case sensitive.  The wildcard character is "%".</font>
+																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title. Searches are case sensitive.</font>
 																							</td>
 																						</tr>
 																						<tr>
@@ -150,7 +150,7 @@
 																			width="100%" height="100%" class="contentBegins">
 																			<tr>
 																				<td>
-																				
+			<!-- pagesize="200" -->																	
 			 <display:table name="${sessionScope.StudySearchForm.studiesList}" sort="list" cellspacing="0" cellpadding="3"
 			               id="studyTable" export="true" 
 			               size="totalStudies" 
