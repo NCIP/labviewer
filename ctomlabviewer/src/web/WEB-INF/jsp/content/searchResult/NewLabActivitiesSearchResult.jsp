@@ -314,12 +314,12 @@ function SelectAll()
 																											class="dataCellText" sortable="true"
 																											title="Upper Limit" />
 
-                                                                                                        <display:column property="labLoadedToCDMSDate"
+                                                                                                        <display:column property="labsToCDMS"
 																												class="dataCellText" sortable="true"
 																												title="Sent to CDMS" />
 
                                                                                                         <display:column
-																												property="adverseEventReportedDate"
+																												property="labsToAE"
 																												class="dataCellText" sortable="true"
 																												title="Sent to caAERS" />
 																										
