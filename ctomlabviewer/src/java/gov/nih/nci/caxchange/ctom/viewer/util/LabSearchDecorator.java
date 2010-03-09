@@ -148,22 +148,9 @@ public class LabSearchDecorator extends TableDecorator
 
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
 		String labsToCDMS = " NOT SENT ";
-        //Date labsToCDMS = null;
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (labSearchResult.isLabLoadedToCDMS())
+		if (labSearchResult.isLabLoadedToCDMS())
 		{
-          try {
-
-            if (labSearchResult.getLabLoadedToCDMSDate() != null) labsToCDMS = df.format(df.parse(labSearchResult.getLabLoadedToCDMSDate()));
-           } catch( ParseException e) {
-			   DateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-			   try {
-                labsToCDMS = df.format(df1.parse(labSearchResult.getLabLoadedToCDMSDate()));
-			   } catch(Throwable t) {
-					labsToCDMS=null;
-			   }
-
-           }
+			labsToCDMS = labSearchResult.getLabLoadedToCDMSDate();
 		}
 		return labsToCDMS;
 	}
@@ -178,22 +165,10 @@ public class LabSearchDecorator extends TableDecorator
 
 		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
 		String labsToAE = " NOT SENT ";
-         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (labSearchResult.isAdverseEventReported())
+		if (labSearchResult.isAdverseEventReported())
 		{
-			try {
-                if (labSearchResult.getAdverseEventReportedDate() != null)
-                                labsToAE = df.format(df.parse(labSearchResult.getAdverseEventReportedDate()));
-            } catch( ParseException e) {
-                DateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
-                try {
-                  labsToAE = df.format(df1.parse(labSearchResult.getAdverseEventReportedDate()));
-                } catch(Throwable t) {
-                     labsToAE=null;
-                }
-
-            }
-        }
+			labsToAE = labSearchResult.getAdverseEventReportedDate();
+		}
 		return labsToAE;
 	}
 	
