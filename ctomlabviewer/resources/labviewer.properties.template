@@ -3,6 +3,7 @@ testEnabled=@testEnabled@
 SmokeTestGridURL=@SmokeTestGridURL@
 websso.enabled=@websso.enabled@
 websso.cas.server=@websso.cas.server@
+websso.cas.server.port=@websso.cas.server.port@
 version=@version@
 hotLink_Type=@hotLink_Type@
 propertyFilePath=@propertyFilePath@
