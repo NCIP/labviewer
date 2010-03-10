@@ -809,6 +809,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<filter token="websso.enabled" value="${websso.enabled}" />	
 				<filter token="websso.cas.server" value="${websso.cas.server}" />
 				<filter token="websso.cas.server.port" value="${websso.cas.server.port}" />
+				<filter token="version" value="${version}"/>
+				
 			</filterset>
 	    </copy>
 	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.properties"
