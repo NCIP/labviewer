@@ -81,14 +81,15 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.viewobjects;
 
-import java.util.Date;
-
 import gov.nih.nci.labhub.domain.LaboratoryResult;
 import gov.nih.nci.labhub.domain.SubjectAssignment;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class LabActivityResult
 {
-
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 	private SubjectAssignment subjectAssignment = null;
 	private LaboratoryResult labResult = null;
 	private Date actualDate = null;
@@ -109,47 +110,8 @@ public class LabActivityResult
 	private boolean labLoadedToCDMS = false;
 	private String labLoadedToCDMSDate = "";
 	private String siteId = "";
-    private String labsToCDMS="";
-    private String labsToAE="";
-	
-	/**
-	 * @return the labsToCDMS
-	 */
-	public String getLabsToCDMS()
-	{
-	
-		return labsToCDMS;
-	}
-
-	
-	/**
-	 * @param labsToCDMS the labsToCDMS to set
-	 */
-	public void setLabsToCDMS(String labsToCDMS)
-	{
-	
-		this.labsToCDMS = labsToCDMS;
-	}
-
-	
-	/**
-	 * @return the labsToAE
-	 */
-	public String getLabsToAE()
-	{
-	
-		return labsToAE;
-	}
-
-	
-	/**
-	 * @param labsToAE the labsToAE to set
-	 */
-	public void setLabsToAE(String labsToAE)
-	{
-	
-		this.labsToAE = labsToAE;
-	}
+    private Date labsToCDMSDate;
+    private Date labsToAEDate;
 
 	/**
 	 * @return the siteId
@@ -378,6 +340,42 @@ public class LabActivityResult
 	public void setAdverseEventReported(boolean adverseEventReported)
 	{
 		this.adverseEventReported = adverseEventReported;
+	}
+	
+	public void setLabsToCDMSDate(Date labsToCDMSDate)
+	{
+		this.labsToCDMSDate = labsToCDMSDate;
+	}
+
+	public Date getLabsToCDMSDate()
+	{
+		return labsToCDMSDate;
+	}
+	
+	public void setLabsToAEDate(Date labsToAEDate)
+	{
+		this.labsToAEDate = labsToAEDate;
+	}
+
+	public Date getLabsToAEDate()
+	{
+		return labsToAEDate;
+	}
+	
+	/**
+	 * @return the labsToCDMS
+	 */
+	public String getLabsToCDMSDateFormatted()
+	{	
+		return formatter.format(labsToCDMSDate);
+	}
+
+	/**
+	 * @return the labsToAE
+	 */
+	public String getLabsToAEDateFormatted()
+	{	
+		return formatter.format(labsToAEDate);
 	}
 
 }
