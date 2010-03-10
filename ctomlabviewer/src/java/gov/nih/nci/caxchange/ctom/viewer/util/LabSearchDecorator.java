@@ -138,38 +138,4 @@ public class LabSearchDecorator extends TableDecorator
 		return high;
 	}
 	
-	/**
-	 * Gets the labs to cdms.
-	 * 
-	 * @return the labs to cdms
-	 */
-	public final String getLabsToCDMS()        /* Ram changed on 12/04/2009 from String to Date */
-	{
-
-		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
-		String labsToCDMS = " NOT SENT ";
-		if (labSearchResult.isLabLoadedToCDMS())
-		{
-			labsToCDMS = labSearchResult.getLabLoadedToCDMSDate();
-		}
-		return labsToCDMS;
-	}
-	
-	/**
-	 * Gets the labs to ae.
-	 * 
-	 * @return the labs to ae
-	 */
-	public final String getLabsToAE()  /* Ram changed on 12/04/2009 from String to Date */
-	{
-
-		LabActivityResult labSearchResult = (LabActivityResult) getCurrentRowObject();
-		String labsToAE = " NOT SENT ";
-		if (labSearchResult.isAdverseEventReported())
-		{
-			labsToAE = labSearchResult.getAdverseEventReportedDate();
-		}
-		return labsToAE;
-	}
-	
 }
