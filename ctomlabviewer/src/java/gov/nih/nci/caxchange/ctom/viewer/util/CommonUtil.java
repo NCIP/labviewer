@@ -163,6 +163,8 @@ public class CommonUtil
 			session.setAttribute("webssoEnabled", webssoEnabled);
 			String webssoCasServer = (String) props.getProperty("websso.cas.server");
 			session.setAttribute("webssoCasServer", webssoCasServer);
+			String webssoCasServerPort = (String) props.getProperty("websso.cas.server.port");
+			session.setAttribute("webssoCasServerPort", webssoCasServerPort);
 			String version = (String) props.getProperty("version");
 			session.setAttribute("version", version);
 			// hotlink type can be _blank,_self,${hotLink_NAME}:value set in
