@@ -107,10 +107,8 @@ import gov.nih.nci.system.query.cql.CQLLogicalOperator;
 import gov.nih.nci.system.query.cql.CQLObject;
 import gov.nih.nci.system.query.cql.CQLPredicate;
 import gov.nih.nci.system.query.cql.CQLQuery;
-import gov.nih.nci.system.query.hibernate.HQLCriteria;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -381,8 +379,6 @@ public class LabSearchDAO extends HibernateDaoSupport
 							(SpecimenCollection) activityIterator.next();
 
 					actualDate = activity.getActualStartDateTime();
-					date = convertToString(activity.getActualStartDateTime());
-					labActivityResult.setDate(date);
 					labActivityResult.setActualDate(actualDate);
 					Collection specimenCollection =
 							activity.getSpecimenCollection();
@@ -535,18 +531,6 @@ public class LabSearchDAO extends HibernateDaoSupport
 	}
 
 	/**
-	 * @param date
-	 * @return
-	 */
-	private static String convertToString(java.util.Date date)
-	{
-		if (date == null)
-			return "-";
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
-		return formatter.format(date);
-	}
-
-	/**
 	 * @param identifiers
 	 * @return
 	 */
@@ -591,12 +575,12 @@ public class LabSearchDAO extends HibernateDaoSupport
 						if (lvs.isCdmsIndicator().equals("true"))
 						{
 							labActivityResult.setLabLoadedToCDMS(true);
-							labActivityResult.setLabLoadedToCDMSDate(convertToString(lvs.getCdmsSentDate()));
+							labActivityResult.setLabsToCDMSDate(lvs.getCdmsSentDate());
 						}
 						if (lvs.isAdverseEventIndicator().equals("true"))
 						{
 							labActivityResult.setAdverseEventReported(true);
-							labActivityResult.setAdverseEventReportedDate(convertToString(lvs.getAdverseEventSentDate()));
+							labActivityResult.setLabsToAEDate(lvs.getAdverseEventSentDate());
 						}
 					}
 				}
