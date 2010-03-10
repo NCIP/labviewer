@@ -283,9 +283,9 @@ function SelectAll()
 																										<display:column property="siteId"
 																											class="dataCellText" sortable="true"
 																											title="Site" maxLength="200" />
-																										<display:column property="date"
-																											class="dataCellText" sortable="true"
-																											title="Date / Time" />
+																											
+																										<display:column title="Date / Time" property="actualDate" format="{0,date,yyyy-MM-dd} {0,time,hh:mm:ss a}" class="dataCellText" sortable="true" />																										
+																											
 																										<display:column property="labTestId"
 																											class="dataCellText" sortable="true"
 																											title="Lab Test" />
@@ -313,15 +313,16 @@ function SelectAll()
 																										<display:column property="highRange"
 																											class="dataCellText" sortable="true"
 																											title="Upper Limit" />
-
-                                                                                                        <display:column property="labsToCDMS"
-																												class="dataCellText" sortable="true"
-																												title="Sent to CDMS" />
-
-                                                                                                        <display:column
-																												property="labsToAE"
-																												class="dataCellText" sortable="true"
-																												title="Sent to caAERS" />
+																											
+                                                                                                        <display:column title="Sent to CDMS" class="dataCellText" sortable="true" sortProperty="labsToCDMSDate" >
+                                                                                                            <logic:empty name="labtable" property="labsToCDMSDate">Not Sent</logic:empty>
+                                                                                                            <logic:notEmpty name="labtable" property="labsToCDMSDate">${labtable.labsToCDMSDateFormatted}</logic:notEmpty>
+                                                                                                        </display:column>
+                                                                                                        
+                                                                                                        <display:column title="Sent to caAERS" class="dataCellText" sortable="true" sortProperty="labsToAEDate" >
+                                                                                                            <logic:empty name="labtable" property="labsToAEDate">Not Sent</logic:empty>
+                                                                                                            <logic:notEmpty name="labtable" property="labsToAEDate">${labtable.labsToAEDateFormatted}</logic:notEmpty>
+                                                                                                        </display:column>
 																										
 																									</display:table>
 																								</td>
