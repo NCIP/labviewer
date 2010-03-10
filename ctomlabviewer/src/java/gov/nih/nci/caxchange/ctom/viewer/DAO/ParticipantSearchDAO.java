@@ -202,7 +202,7 @@ public class ParticipantSearchDAO extends HibernateDaoSupport
 		subjectAssignmentAssociation1
 				.setTargetRoleName("participantIdentifier");
 		subjectAssignmentAssociation1.setAttribute(new CQLAttribute(
-				"extension", CQLPredicate.EQUAL_TO, phrase.trim()));
+				"extension", CQLPredicate.LIKE, searchTerm));
 
 		// Set the search term conditions
 		CQLGroup group = new CQLGroup();
