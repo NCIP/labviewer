@@ -134,7 +134,7 @@
 																			<tr>
 																				<td>
      <display:table name="${sessionScope.ParticipantSearchForm.participantsList}" sort="list" cellspacing="0" cellpadding="3"
-			               pagesize="25" id="participantTable" export="true" 
+			               id="participantTable" export="true" 
 			               size="totalParticipants" 
 			               defaultsort="1"
                         requestURI=""
