@@ -153,7 +153,7 @@
 			  toFile="${ctomlabviewer.build.resourceDir.0}/labviewer.properties" filtering="true" overwrite="true">
 
 			<filterset begintoken="@" endtoken="@">
-                <filter token="version" value="${LabViewer-webapp.version}" />
+               <!-- <filter token="version" value="${LabViewer-webapp.version}" /> -->
 				<filter token="propertyFilePath" value="${propertyFilePath}" />
 			</filterset>
 
