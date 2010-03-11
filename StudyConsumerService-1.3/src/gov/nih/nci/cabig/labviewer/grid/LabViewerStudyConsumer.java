@@ -147,8 +147,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		{
 			ProtocolStatus protocolStatus = new ProtocolStatus();
 			protocolStatus.setCtom_insert_date(now);
-			protocolStatus.setStatus_code(study
-					.getCoordinatingCenterStudyStatus().getValue());
+			protocolStatus.setStatus_code(camelCase(study.getCoordinatingCenterStudyStatus().getValue()));
 			protocol.setStatus(protocolStatus);
 		}
 		else
@@ -339,4 +338,15 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		logger.info("deleted study");
 	}
+	
+	private static String camelCase(String string)
+	{
+        switch (string.length())
+        {
+            case 0:  return string;
+            case 1:  return string.toUpperCase();
+            default: return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+        }
+	}
+	
 }
