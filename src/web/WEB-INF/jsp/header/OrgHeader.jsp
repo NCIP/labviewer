@@ -38,8 +38,7 @@ function MM_findObj(n, d) { //v4.0
 function MM_swapImage() { //v3.0
   var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
-}
-    	
+}  	
     	
    // -->
 </script>
@@ -88,7 +87,7 @@ function MM_swapImage() { //v3.0
        <logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
        <% if(session.getAttribute("CAGRID_SSO_GRID_IDENTITY")!=null && session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
-         <a href="https://<%=session.getAttribute("webssoCasServer")%>:<%=session.getAttribute("webssoCasServerPort")%>/webssoserver/logout" style="font-size: .8em; color: blue;">Log out</a>
+         <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>
        <%}}else{ %>
    		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>    
        <%} %>
