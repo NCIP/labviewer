@@ -181,10 +181,19 @@ public class LogoutAction extends Action
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
 
+		String webssoCasServer = (String)session.getAttribute("webssoCasServer");
+		String webssoCasServerPort = (String)session.getAttribute("webssoCasServerPort");
+		
 		session.invalidate();
+		
 		if (loggedInthroWEBSSO)
 		{
-			return (mapping.findForward(ForwardConstants.WEBSSO_LOGOUT_SUCCESS));
+			ActionForward fwd = new ActionForward();
+			fwd.setPath("https://" + webssoCasServer + ":" + webssoCasServerPort + "/webssoserver/logout");
+			fwd.setContextRelative(false);
+			fwd.setRedirect(true);
+			
+			return fwd;
 		}
 		else
 		{
