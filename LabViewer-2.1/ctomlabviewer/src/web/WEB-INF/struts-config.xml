@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<data-sources />
+	<form-beans>
+		<form-bean name="LoginForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm" />
+		<form-bean name="MenuForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.MenuForm" />
+		<form-bean name="LabActivitiesForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm" />
+		<form-bean name="LabActivitiesSearchResultForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchResultForm" />
+		<form-bean name="StudySearchForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.StudySearchForm" />
+		<form-bean name="HealthCareSiteForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.HealthCareSiteForm" />
+		<form-bean name="PIForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.PIForm" />		
+		<form-bean name="ParticipantSearchForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.ParticipantSearchForm" />
+		<form-bean name="AdministartionForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.AdministrationForm" />
+		<form-bean name="UserConfigForm"
+			type="gov.nih.nci.caxchange.ctom.viewer.forms.UserConfigForm" />
+	</form-beans>
+	<global-exceptions>
+		<exception key="" scope="request" type="java.lang.Exception"
+			path="Tiles.500.Error.Page"
+			handler="gov.nih.nci.caxchange.ctom.viewer.exceptionHandler.DefaultExceptionHandler" />
+	</global-exceptions>
+	<global-forwards>
+		<forward name="Login" path="/Login.do" />
+		<forward name="Home" path="/Home.do" />
+		<forward name="MenuSelection" path="/MenuSelection.do" />
+		<forward name="LoginPage" path="Tiles.Login.Page" />
+		<forward name="AdminHome" path="/AdminHome.do" />
+		<forward name="studysubject" path="/studysubject.do" />
+	</global-forwards>
+	<action-mappings>
+
+		<action path="/FooterContactUs"
+			forward="Tiles.Footer.ContactUs" />
+		<action path="/FooterApplicationSupport"
+			forward="Tiles.Footer.ApplicationSupport" />
+		<action path="/FooterAccessibility"
+			forward="Tiles.Footer.Accessibility" />
+		<action path="/FooterPrivacy" forward="Tiles.Footer.Privacy" />
+		<action path="/FooterDisclaimer"
+			forward="Tiles.Footer.Disclaimer" />
+
+		<action path="/ViewErrorDetails"
+			forward="Tiles.500.Error.DetailsPage" />
+
+		<action path="/Home"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.HomeAction"
+			input="Tiles.Login.Page">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoginSuccess" path="Tiles.Home.Page" />
+			<forward name="LoginFailure" path="Tiles.Login.Page" />
+			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="LoginSuccessHotLink"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+
+		<action path="/Login"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoginAction"
+			name="LoginForm" scope="session" parameter="operation"
+			input="Tiles.Login.Page">
+			<forward name="LoginSuccess" path="Tiles.Home.Page" />
+			<forward name="AdminLoginSuccess"
+				path="Tiles.SuperAdmin.Home.Page" />
+			<forward name="LoginFailure" path="Tiles.Login.Page" />
+			<forward name="LoginSuccessHotLink"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+
+		<action path="/Logout"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LogoutAction">
+			<forward name="LogoutSuccess" path="Tiles.Login.Page" />
+			<forward name="WebSSOLogoutSuccess"
+				path="Tiles.Logout.Page" />
+		</action>
+
+		<action path="/Happy"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.HappyAction">
+			<forward name="LoadTestSuccess" path="Tiles.Happy.Page" />
+			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="AdminHomePage"
+				path="Tiles.SuperAdmin.Home.Page" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LogoutAction" path="/Logout.do" />
+		</action>
+
+		<action path="/MenuSelection"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.MenuSelectionAction"
+			name="MenuForm" scope="session" input="Tiles.Login.Page">
+			<forward name="ApplicationHomePage"
+				path="Tiles.Application.Home" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="AdminHomePage"
+				path="Tiles.SuperAdmin.Home.Page" />
+			<forward name="LogoutAction" path="/Logout.do" />
+			<forward name="LoadTestSuccess" path="/Happy.do" />
+			<forward name="LoadAdminSuccess" path="/LoadAdmin.do" />
+			<forward name="LoadUsersSuccess"
+				path="/UserConfig.do?operation=loadUsers" />
+		</action>
+
+		<action path="/LabActivitiesDBOperation"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadSearchSetupAction"
+			name="LabActivitiesForm" scope="session" validate="false"
+			parameter="operation" input="Tiles.LabActivities.Detail.Screen">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/search"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.SearchAction"
+			name="LabActivitiesForm" scope="session"
+			input="Tiles.LabActivities.Detail.Screen">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Search.Result" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Search.Result" />
+			<forward name="SearchSuccess" path="/LabActivitiesDB.do" />
+			<!--  <forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />	-->
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/LabActivitiesDB"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadSearchResultSetupAction"
+			name="LabActivitiesSearchResultForm" scope="session"
+			parameter="operation">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadToCTMSSuccess" path="/loadToCTMS.do" />
+			<forward name="SubmitAdverseEventSuccess"
+				path="/submitAdverseEvent.do" />
+		</action>
+
+		<action path="/submitAdverseEvent"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.SubmitAdverseEventAction"
+			name="LabActivitiesSearchResultForm" scope="session"
+			parameter="operation" input="Tiles.LabActivities.Search.Result">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchSuccess"
+				path="TilesLabActivities.Detail.Screen" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SubmitAdverseEventSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadToCTMSSuccess" path="/loadToCTMS.do" />
+		</action>
+
+		<action path="/loadToCTMS"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadToCTMSAction"
+			name="LabActivitiesSearchResultForm" scope="session"
+			parameter="operation" input="Tiles.LabActivities.Search.Result">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SubmitAdverseEventSuccess"
+				path="/submitAdverseEvent.do" />
+			<forward name="LoadToCTMSSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/loadTocaAERS"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadTocaAERSAction"
+			name="LabActivitiesSearchResultForm" scope="session"
+			parameter="operation" input="Tiles.LabActivities.Search.Result">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SubmitAdverseEventSuccess"
+				path="/submitAdverseEvent.do" />
+			<forward name="LoadTocaAERSSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/saveToCSV"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.SaveToCSVAction"
+			name="LabActivitiesSearchResultForm" scope="session"
+			parameter="operation" input="Tiles.LabActivities.Search.Result">
+			<forward name="LoadHomeSuccess"
+				path="Tiles.LabActivities.Home" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadSearchResultSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="ReadFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SubmitAdverseEventSuccess"
+				path="/submitAdverseEvent.do" />
+			<forward name="LoadToCTMSSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+			<forward name="SaveToCSVSuccess"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/studysubject"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.StudySubjectAction"
+			scope="session" parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="HomePage" path="Tiles.Home.Page" />
+			<forward name="LoginSuccessHotLink"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="SearchFailure"
+				path="Tiles.LabActivities.Detail.Screen" />
+		</action>
+
+		<action path="/loadStudySearch"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadStudySearchAction"
+			name="StudySearchForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+		
+		<action path="/loadParticipantSearch"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadParticipantSearchAction"
+			name="ParticipantSearchForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+		
+		<action path="/studySearch"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.StudySearchAction"
+			name="StudySearchForm" scope="session" validate="true"
+			parameter="operation" input="Tiles.StudySearch.Detail.Screen">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadHealthCareSiteSuccess"
+				path="/loadHealthCareSite.do" />
+			<forward name="LoadPISuccess"
+				path="/loadPI.do" />	
+		</action>
+		
+		<action path="/loadHealthCareSite"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadHealthCareSiteAction"
+			name="HealthCareSiteForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadHealthCareSiteSuccess"
+				path="Tiles.HealthCareSite.Page" />
+		</action>
+		
+		<action path="/loadPI"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadPIAction"
+			name="PIForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadPISuccess" path="Tiles.PI.Page" />	
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+		
+		<action path="/participantSearch"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.ParticipantSearchAction"
+			name="ParticipantSearchForm" scope="session"
+			input="Tiles.ParticipantSearch.Detail.Screen"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+		</action>
+		
+		<action path="/LoadAdmin"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.LoadAdminAction"
+			name="AdministartionForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadAdminSuccess" path="Tiles.Admin.Page" />
+			<forward name="LoadUsersSuccess"
+				path="/UserConfig.do?operation=loadUsers" />
+		</action>
+		
+		<action path="/SaveAdminConfg"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.SaveAdminConfgAction"
+			name="AdministartionForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadAdminSuccess" path="Tiles.Admin.Page" />
+			<forward name="UpdateSuccess" path="Tiles.Admin.Page" />
+			<forward name="LoadUsersSuccess"
+				path="/UserConfig.do?operation=loadUsers" />
+		</action>
+		
+		<action path="/UserConfig"
+			type="gov.nih.nci.caxchange.ctom.viewer.actions.UserConfigAction"
+			name="UserConfigForm" scope="session" validate="false"
+			parameter="operation">
+			<forward name="LoginPage" path="Tiles.Login.Page" />
+			<forward name="LoadStudySearchSuccess"
+				path="Tiles.StudySearch.Detail.Screen" />
+			<forward name="LoadPartSearchSuccess"
+				path="Tiles.ParticipantSearch.Detail.Screen" />
+			<forward name="LoadSearchSuccess"
+				path="/LabActivitiesDBOperation.do" />
+			<forward name="LoadAdminSuccess" path="/LoadAdmin.do" />
+			<forward name="reset"
+				path="/UserConfig.do?operation=loadUsers" />
+			<forward name="LoadUsersSuccess" path="Tiles.Users.Page" />
+			<forward name="LoadAddUser" path="Tiles.AddUser.Page" />
+			<forward name="LoadModifyUser" path="Tiles.ModifyUser.Page" />
+		</action>
+		
+		<!-- <action path="/addUsersAction" 
+			type="org.apache.struts.actions.ForwardAction"
+			name="UserConfigForm" scope="request" input="/WEB-INF/jsp/content/main/AddUserScreen.jsp"
+			parameter="/WEB-INF/jsp/content/main/AddUserScreen.jsp"> 
+			</action> -->
+	</action-mappings>
+
+	<controller bufferSize="4096" debug="0" />
+
+	<message-resources parameter="ApplicationResources" />
+
+	<!--Additional plug-ins -->
+
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config"
+			value="/WEB-INF/tiles.xml" />
+		<set-property property="debug" value="DEBUG" />
+		<set-property property="definitions-parser-validate"
+			value="true" />
+	</plug-in>
+
+	<!--  <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+		<set-property property="pathnames"
+		value="/WEB-INF/conf/validator-rules.xml,/WEB-INF/conf/validation.xml" />
+		</plug-in>-->
+</struts-config>
+

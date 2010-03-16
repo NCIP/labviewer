@@ -1,0 +1,10 @@
+http\://labviewer.cagrid.nci.nih.gov/LabLoader=gov.nih.nci.cagrid.labviewer.stubs
+http\://labviewer.cagrid.nci.nih.gov/LabLoader/bindings=gov.nih.nci.cagrid.labviewer.stubs.bindings
+http\://labviewer.cagrid.nci.nih.gov/LabLoader/service=gov.nih.nci.cagrid.labviewer.stubs.service
+http\://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=gov.nih.nci.cagrid.introduce.security.stubs
+
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata
+http\://labviewer.cagrid.nci.nih.gov/LabLoader/types=gov.nih.nci.cagrid.labviewer.stubs.types
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service
+gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common

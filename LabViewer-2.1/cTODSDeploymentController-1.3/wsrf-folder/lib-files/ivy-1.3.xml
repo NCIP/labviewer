@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
+
+  <info organisation="caGrid" module="syncgts" revision="1.3" status="release" publication="20091007185736">
+    <license name="caGrid" url="http://cagrid.org/wiki/CaGrid:LICENSE-1.3"/>
+    <description>caGrid SyncGTS</description>
+  </info>
+
+  <configurations>
+    <!-- Private Configurations-->
+    <conf name="target_grid" visibility="private"/>
+
+    <conf name="impl" visibility="private" extends="service"/>
+    <conf name="globus-patches" visibility="private"/>
+    <conf name="impl-test" visibility="private"/>
+     <conf name="serviceTools" visibility="private"/>
+
+    <!-- Public Configurations-->
+    <conf name="stubs" visibility="public"/>
+    <conf name="common" extends="stubs" visibility="public"/>
+    <conf name="client" extends="common" visibility="public"/>
+
+    <conf name="service" visibility="public" extends="client"/>
+    <conf name="test" visibility="public" extends="service,impl-test"/>
+
+  </configurations>
+
+
+  <publications>
+    <artifact name="caGrid-syncgts-stubs" conf="stubs" type="jar"/>
+    <artifact name="caGrid-syncgts-common" conf="common" type="jar"/>
+    <artifact name="caGrid-syncgts-client" conf="client" type="jar"/>
+    <artifact name="caGrid-syncgts-service" conf="service" type="jar"/>
+    <artifact name="caGrid-syncgts-tests" conf="test" type="jar"/>
+  </publications>
+
+  <dependencies>
+
+    <!-- Standard caGrid Service Dependencies -->
+    <dependency rev="1.3" org="caGrid" name="core" conf="service->default;impl-test->test"/>
+    <dependency rev="1.3" org="caGrid" name="metadata" conf="service->schemas;client->common.jars"/>
+    <dependency rev="1.3" org="caGrid" name="service-security-provider" conf="client->client;service->service"/>
+    <dependency rev="1.3" org="caGrid" name="advertisement" conf="service->default"/>
+    
+    <dependency rev="1.3" org="caGrid" name="introduce-servicetools" conf="service->default"/>
+
+    <dependency rev="training-1.3" org="caGrid" name="target_grid" conf="target_grid->urls,certs,syncdesc"/>
+      
+    <!--  Build file dependencies -->
+    <dependency rev="1.3" org="caGrid" name="introduce-buildtools" conf="serviceTools->default"/>
+    <dependency rev="1.0b3" org="ant-contrib" name="ant-contrib" conf="serviceTools->*"/>
+    <!--
+      This is non-transitive, because we already have all the extension jars in the service, and the
+      deploy time validation which uses this uses the service's classpath too.
+    -->
+    <dependency rev="1.3" org="caGrid" name="metadata-validator" conf="serviceTools->default" transitive="false"/>
+      
+
+    <!-- Specific caGrid Service Dependencies -->
+    <dependency rev="1.3" org="caGrid" name="gaards-core" conf="client,service->default"/>
+    <dependency rev="1.3" org="caGrid" name="gts" conf="service->service;client->client"/>
+
+    <!-- External Dependencies -->
+    <dependency rev="1.0" org="jdom" name="jdom" conf="service->*"/>
+    <dependency rev="1.1" org="mobius" name="mobius" conf="common->common-client"/>    
+    <dependency rev="syncgts-patched-4.0.3" org="globus" name="jcog" conf="globus-patches->*"/>
+    <dependency rev="4.4" org="junit" name="junit" conf="impl-test->default"/>
+    
+
+  </dependencies>
+</ivy-module>

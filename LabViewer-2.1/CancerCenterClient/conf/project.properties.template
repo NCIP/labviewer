@@ -1,0 +1,3 @@
+# project properties
+helpDoc=@HELPDOC@
+proxyFile=@PROXYFILE@

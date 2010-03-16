@@ -1,0 +1,423 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
+           xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">Registartion schema
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="identifier" type="IdentifierType"/>
+    <xs:element name="organizationAssignedIdentifier" substitutionGroup="identifier"
+                type="OrganizationAssignedIdentifierType"/>
+    <xs:element name="systemAssignedIdentifier" substitutionGroup="identifier"
+                type="SystemAssignedIdentifierType"/>
+
+
+    <xs:element name="registration" type="Registration"/>
+    <xs:element name="study" type="Study"/>
+
+    <xs:element name="eligibilityCriteria" type="EligibilityCriteriaType"/>
+    <xs:element name="exclusionCriteria" substitutionGroup="eligibilityCriteria"
+                type="ExclusionEligibilityCriteriaType"/>
+    <xs:element name="inclusionCriteria" substitutionGroup="eligibilityCriteria"
+                type="InclusionEligibilityCriteriaType"/>
+
+
+    <xs:element name="epoch" type="EpochType"/>
+    <xs:element name="treatmentEpoch" substitutionGroup="epoch" type="TreatmentEpochType"/>
+    <xs:element name="nonTreatmentEpoch" substitutionGroup="epoch" type="NonTreatmentEpochType"/>
+
+    <xs:element name="scheduledEpoch" type="ScheduledEpochType"/>
+    <xs:element name="scheduledTreatmentEpoch" substitutionGroup="scheduledEpoch"
+                type="ScheduledTreatmentEpochType"/>
+    <xs:element name="scheduledNonTreatmentEpoch" substitutionGroup="scheduledEpoch"
+                type="ScheduledNonTreatmentEpochType"/>
+
+    <xs:element name="studyOrganization" type="StudyOrganizationType"/>
+    <xs:element name="studySite" substitutionGroup="studyOrganization" type="StudySiteType"/>
+    <xs:element name="studyFundingSponsor" substitutionGroup="studyOrganization"
+                type="StudyFundingSponsorType"/>
+    <xs:element name="studyCoordinatingCenter" substitutionGroup="studyOrganization"
+                type="StudyCoordinatingCenterType"/>
+
+
+    <xs:complexType name="AddressType">
+        <xs:sequence>
+            <xs:element name="streetAddress" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="city" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="stateCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="postalCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="countryCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ArmType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="descriptionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="targetAccrualNumber" type="xs:int" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="DiseaseTermType">
+        <xs:sequence>
+            <xs:element name="term" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="ctepTerm" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="medraCode" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="EligibilityCriteriaType">
+        <xs:sequence>
+            <xs:element name="notApplicableIndicator" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="questionNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="questionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="EpochType" abstract="true">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="descriptionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="ExclusionEligibilityCriteriaType">
+        <xs:complexContent>
+            <xs:extension base="EligibilityCriteriaType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="HealthcareSiteType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="descriptionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="address" type="AddressType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="nciInstituteCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="HealthcareSiteInvestigatorType">
+        <xs:sequence>
+            <xs:element name="investigator" type="InvestigatorType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InvestigatorType">
+        <xs:sequence>
+            <xs:element name="nciIdentifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="firstName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="lastName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="externalId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="email" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="phoneNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="faxNumber" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InclusionEligibilityCriteriaType">
+        <xs:complexContent>
+            <xs:extension base="EligibilityCriteriaType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="IdentifierType" abstract="true">
+        <xs:sequence>
+            <xs:element name="source" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="primaryIndicator" type="xs:boolean" default="false" minOccurs="0"
+                        maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="NonTreatmentEpochType">
+        <xs:complexContent>
+            <xs:extension base="EpochType">
+                <xs:sequence>
+                    <xs:element name="accrualCeiling" type="xs:int" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="accrualIndicator" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="reservationIndicator" type="xs:string" minOccurs="0"
+                                maxOccurs="1"/>
+                    <xs:element name="enrollmentIndicator" type="xs:string" minOccurs="0"
+                                maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="OrganizationAssignedIdentifierType">
+        <xs:complexContent>
+            <xs:extension base="IdentifierType">
+                <xs:sequence>
+                    <xs:element name="healthcareSite" type="HealthcareSiteType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ParticipantType">
+        <xs:sequence>
+            <xs:element name="firstName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="lastName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="address" type="AddressType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="administrativeGenderCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="birthDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="ethnicGroupCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="maritalStatusCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="raceCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="identifier" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="Registration">
+        <xs:sequence>
+            <xs:element name="studySite" type="StudySiteType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="studyRef" type="StudyRefType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="participant" type="ParticipantType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="startDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="informedConsentFormSignedDate" type="xs:date" minOccurs="0"
+                        maxOccurs="1"/>
+            <xs:element name="informedConsentVersion" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="identifier" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="regDataEntryStatus" type="RegDataEntryStatusType" minOccurs="0"
+                        maxOccurs="1"/>
+            <xs:element name="regWorkflowStatus" type="RegWorkflowStatusType" minOccurs="0"
+                        maxOccurs="1"/>
+            <xs:element ref="scheduledEpoch" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="stratumGroup" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="offStudyReasonText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="offStudyDate" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:simpleType name="RegDataEntryStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INCOMPLETE"/>
+            <xs:enumeration value="COMPLETE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="RegWorkflowStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="UNREGISTERED"/>
+            <xs:enumeration value="PENDING"/>
+            <xs:enumeration value="DISAPPROVED"/>
+            <xs:enumeration value="RESERVED"/>
+            <xs:enumeration value="REGISTERED"/>
+            <xs:enumeration value="OFF_STUDY"/>
+            <xs:enumeration value="INVALID"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="StratumGroupType">
+        <xs:sequence>
+            <xs:element name="gridId" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ScheduledEpochType" abstract="true">
+        <xs:sequence>
+            <xs:element name="startDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+            <xs:element ref="epoch" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="ScheduledNonTreatmentEpochType">
+        <xs:complexContent>
+            <xs:extension base="ScheduledEpochType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ScheduledTreatmentEpochType">
+        <xs:complexContent>
+            <xs:extension base="ScheduledEpochType">
+                <xs:sequence>
+                    <xs:element name="scheduledArm" type="ScheduledArmType" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="eligibilityIndicator" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="ScheduledArmType">
+        <xs:sequence>
+            <xs:element name="arm" type="ArmType" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Study">
+        <xs:sequence>
+            <xs:element name="blindedIndicator" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="multiInstitutionIndicator" type="xs:string" minOccurs="0"
+                        maxOccurs="1"/>
+            <xs:element name="randomizedIndicator" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="shortTitleText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="longTitleText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="descriptionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="precisText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="phaseCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="dataEntryStatus" type="StudyDataEntryStatusType" minOccurs="0"
+                        maxOccurs="1"/>
+            <xs:element name="coordinatingCenterStudyStatus"
+                        type="CoordinatingCenterStudyStatusType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="primaryIdentifier" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="targetAccrualNumber" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="identifier" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="epoch" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="studyOrganization" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+        <xs:attribute name="version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="StudyRefType">
+        <xs:sequence>
+            <xs:element name="shortTitleText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="longTitleText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element ref="identifier" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:simpleType name="StudyDataEntryStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INCOMPLETE"/>
+            <xs:enumeration value="COMPLETE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="CoordinatingCenterStudyStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ACTIVE"/>
+            <xs:enumeration value="PENDING"/>
+            <xs:enumeration value="AMENDMENT_PENDING"/>
+            <xs:enumeration value="CLOSED_TO_ACCRUAL_AND_TREATMENT"/>
+            <xs:enumeration value="CLOSED_TO_ACCRUAL"/>
+            <xs:enumeration value="TEMPORARILY_CLOSED_TO_ACCRUAL_AND_TREATMENT"/>
+            <xs:enumeration value="TEMPORARILY_CLOSED_TO_ACCRUAL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:complexType name="StudyOrganizationType" abstract="true">
+        <xs:sequence>
+            <xs:element name="healthcareSite" type="HealthcareSiteType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+            <xs:element name="studyInvestigator" type="StudyInvestigatorType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="StudyInvestigatorType">
+        <xs:sequence>
+            <xs:element name="roleCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="statusCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="startDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="endDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="healthcareSiteInvestigator" type="HealthcareSiteInvestigatorType" minOccurs="0"
+                        maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StudySiteType">
+        <xs:complexContent>
+            <xs:extension base="StudyOrganizationType">
+                <xs:sequence>
+                    <xs:element name="irbApprovalDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="roleCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="startDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="siteStudyStatus" type="SiteStudyStatusType" minOccurs="0"
+                                maxOccurs="1"/>
+                    <xs:element name="endDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="SiteStudyStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ACTIVE"/>
+            <xs:enumeration value="PENDING"/>
+            <xs:enumeration value="AMENDMENT_PENDING"/>
+            <xs:enumeration value="CLOSED_TO_ACCRUAL_AND_TREATMENT"/>
+            <xs:enumeration value="CLOSED_TO_ACCRUAL"/>
+            <xs:enumeration value="TEMPORARILY_CLOSED_TO_ACCRUAL_AND_TREATMENT"/>
+            <xs:enumeration value="TEMPORARILY_CLOSED_TO_ACCRUAL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="StudyFundingSponsorType">
+        <xs:complexContent>
+            <xs:extension base="StudyOrganizationType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="StudyCoordinatingCenterType">
+        <xs:complexContent>
+            <xs:extension base="StudyOrganizationType"></xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="SystemAssignedIdentifierType">
+        <xs:complexContent>
+            <xs:extension base="IdentifierType">
+                <xs:sequence>
+                    <xs:element name="systemName" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="StudyDiseaseType">
+        <xs:sequence>
+            <xs:element name="leadDisease" type="xs:boolean" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="diseaseTerm" type="DiseaseTermType" minOccurs="0"
+                        maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="gridId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="StratificationCriterionType">
+        <xs:sequence>
+            <xs:element name="questionNumber" type="xs:int" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="questionText" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="permissibleAnswer" type="StratificationCriterionPermissibleAnswerType"
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="StratificationCriterionPermissibleAnswerType">
+        <xs:sequence>
+            <xs:element name="permissibleAnswer" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TreatmentEpochType">
+        <xs:complexContent>
+            <xs:extension base="EpochType">
+                <xs:sequence>
+                    <xs:element name="arm" type="ArmType" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element ref="eligibilityCriteria" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="stratificationCriteria" type="StratificationCriterionType"
+                                minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+</xs:schema>

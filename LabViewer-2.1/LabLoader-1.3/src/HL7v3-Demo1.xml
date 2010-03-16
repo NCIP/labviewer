@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- section='HM' subSection='PO' realm='UV' artifact='MT-deprecated' domain='RT' xmlns:mif='urn:hl7-org:v3/mif' version='01' root='DEFN'-->
+<ClinicalTrial xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="CLNTRL" moodCode="EVN">
+   <id assigningAuthorityName="NCI" extension="04_C_0121" root="db762d64-e213-4bf9-9f9b-bccd36be56e7" xsi:type="II"/>
+   <title xsi:type="ST">RANDOMIZED PHASE I/II STUDY OF VACCINIA-CEA(6D)-TRICOM AND FOWLPOX-(6D)-TRICOM WITH GM-CSF IN COMBINATION WITH DOCETAXEL IN PATIENTS WITH CEA-BEARING CANCERS</title>
+   <component typeCode="COMP" contextConductionInd="true">
+      <trialAtSite classCode="CLNTRL" moodCode="EVN">
+         <location typeCode="LOC" contextControlCode="OP">
+            <trialSite classCode="SDLOC">
+               <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+            </trialSite>
+         </location>
+         <component typeCode="COMP" contextConductionInd="true">
+            <investigatorAtSite classCode="CLNTRL" moodCode="EVN">
+               <responsibleParty typeCode="RESP" contextControlCode="OP">
+                  <trialInvestigator classCode="CRINV">
+                     <id assigningAuthorityName="PlaceHolder" extension="PlaceHolder" root="2.16.840.1.113883.19" xsi:type="II"/>
+                     <investigatorNamedPerson classCode="PSN" determinerCode="INSTANCE">
+                        <name xsi:type="TN">PlaceHolder</name>
+                     </investigatorNamedPerson>
+                  </trialInvestigator>
+               </responsibleParty>
+               <component typeCode="COMP" contextConductionInd="true">
+                  <subjectAssignment classCode="CLNTRL" moodCode="EVN">
+                     <recordTarget typeCode="RCT" contextControlCode="OP">
+                        <enrolledSubject classCode="RESBJ">
+			     <id extension="80-00-11-2" root="2.16.840.1.113883.19" xsi:type="II"/>
+			      <subjectPerson classCode="PSN" determinerCode="INSTANCE">
+			      <name xsi:type="PN">
+				 <suffix/>
+				 <family>Reynolds</family>
+				 <given>Karla</given>
+				 <prefix/>
+			      </name>
+			      <administrativeGenderCode codeSystem="2.16.840.1.113883.19" code="F" xsi:type="CV"/>
+			      <birthTime value="19441206" xsi:type="TS"/>
+			      <asSpareSubject classCode="RESBJ">
+				 <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+			      </asSpareSubject>
+			   </subjectPerson>
+			</enrolledSubject>
+                     </recordTarget>
+                     <component typeCode="COMP" contextConductionInd="true">
+                        <studyEvent classCode="CTTEVENT" moodCode="EVN">
+                           <code codeSystem="2.16.840.1.113883.19" code="7235532223" xsi:type="CV"/>
+                           <component typeCode="COMP" contextConductionInd="true">
+                              <accession classCode="ACSN" moodCode="EVN">
+                                 <author typeCode="AUT" contextControlCode="OP">
+                                    <agent classCode="AGNT">
+                                       <representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+                                          <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+                                       </representedLaboratory>
+                                    </agent>
+                                 </author>
+                                 <component typeCode="COMP" contextConductionInd="true">
+                                    <baseSpecimenDefinition classCode="ACT" moodCode="EVN">
+                                       <subject typeCode="SBJ" contextControlCode="OP">
+                                          <baseSpecimen classCode="SPEC">
+                                             <productOf typeCode="PRD" contextControlCode="OP">
+                                                <specimenCollectionProcedure classCode="PROC" moodCode="EVN">
+                                                   <effectiveTime operator="I" xsi:type="IVL_TS">
+                                                      <low inclusive="true" value="20080429222800"/>
+                                                      <high inclusive="true" value="20080429222800"/>
+                                                   </effectiveTime>
+                                                </specimenCollectionProcedure>
+                                             </productOf>
+                                          </baseSpecimen>
+                                       </subject>
+                                       <component typeCode="COMP" contextConductionInd="true">
+                                          <baseBattery classCode="OBS" moodCode="EVN">
+                                             <component typeCode="COMP" contextConductionInd="true">
+                                                <baseUnitaryResult classCode="OBS" moodCode="EVN">
+                                                   <code codeSystem="2.16.840.1.113883.19" displayName="EOS %" code="EOSIN" xsi:type="CV"/>
+                                                   <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">EOSIN</text>
+                                                   <statusCode code="completed"/>
+                                                   <value unit="%" value="0.8" xsi:type="PQ"/>
+                                                   <performer typeCode="PRF" contextControlCode="OP">
+                                                      <agent classCode="AGNT">
+                                                         <representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+                                                            <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+                                                         </representedLaboratory>
+                                                      </agent>
+                                                   </performer>
+                                                 <referenceRange typeCode="REFV" contextConductionInd="true">
+                                                      <range classCode="OBS" moodCode="EVN">
+                                                         <value operator="I" unit="1" xsi:type="IVL_PQ">
+                                                            <high inclusive="true" unit="1" value="8.0"/>
+                                                            <low inclusive="true" unit="1" value="0.0"/>
+                                                         </value>
+                                                      </range>
+                                                   </referenceRange>  
+                                                </baseUnitaryResult>
+                                             </component>
+                                          </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+                                          <baseBattery classCode="OBS" moodCode="EVN">
+                                             <component typeCode="COMP" contextConductionInd="true">
+                                                <baseUnitaryResult classCode="OBS" moodCode="EVN">
+                                                   <code codeSystem="2.16.840.1.113883.19" displayName="SGOT_AST" code="SGOT_AST" xsi:type="CV"/>
+                                                   <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">SGOT_AST</text>
+                                                   <statusCode code="completed"/>
+                                                    <value unit="U/L" value="27" xsi:type="PQ"/>
+                                                   <performer typeCode="PRF" contextControlCode="OP">
+                                                      <agent classCode="AGNT">
+                                                         <representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+                                                            <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+                                                         </representedLaboratory>
+                                                      </agent>
+                                                   </performer>
+                                                   <referenceRange typeCode="REFV" contextConductionInd="true">
+							 <range classCode="OBS" moodCode="EVN">
+							    <value operator="I" unit="1" xsi:type="IVL_PQ">
+							       <high inclusive="true" unit="1" value="34.0"/>
+							       <low inclusive="true" unit="1" value="9.0"/>
+							    </value>
+							 </range>
+                                                   </referenceRange>  
+                                                </baseUnitaryResult>
+                                             </component>
+                                          </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="CHLORIDE" code="CHLORIDE" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">CHLORIDE</text>
+						  <statusCode code="completed"/>
+						  <value unit="mmol/L" value="104" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="107.0"/>
+						       <low inclusive="true" unit="1" value="99.0"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="BANDS" code="BANDS" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">BANDS with Polys</text>
+						  <statusCode code="completed"/>
+						   <value unit="" value="" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="4.0"/>
+						       <low inclusive="true" unit="1" value="0.0"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="CALCIUM" code="CALCIUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">CALCIUM</text>
+						  <statusCode code="completed"/>
+						   <value unit="mmol/L" value="2.39" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="2.5"/>
+						       <low inclusive="true" unit="1" value="2.05"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="SODIUM" code="SODIUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">SODIUM</text>
+						  <statusCode code="completed"/>
+						  <value unit="mmol/L" value="136" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="144.0"/>
+						       <low inclusive="true" unit="1" value="135.0"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="CREATININE" code="CREATININE" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">CREATININE</text>
+						  <statusCode code="completed"/>
+						  <value unit="mg/dL" value="0.7" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="1.3"/>
+						       <low inclusive="true" unit="1" value="0.7"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="ALBUMIN_SERUM" code="ALBUMIN_SERUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">ALBUMIN_SERUM</text>
+						  <statusCode code="completed"/>
+						  <value unit="g/dL" value="3.8" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="4.7"/>
+						       <low inclusive="true" unit="1" value="3.7"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="MAGNESIUM" code="MAGNESIUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">MAGNESIUM</text>
+						  <statusCode code="completed"/>
+						  <value unit="mmol/L" value="0.90" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="1.0"/>
+						       <low inclusive="true" unit="1" value="0.75"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="BICARB_SERUM" code="BICARB_SERUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">BICARB_SERUM</text>
+						  <statusCode code="completed"/>
+						   <value unit="mmol/L" value="25" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="31.0"/>
+						       <low inclusive="true" unit="1" value="21.0"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="HEMOGLOBIN" code="HEMOGLOBIN" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">HEMOGLOBIN</text>
+						  <statusCode code="completed"/>
+						  <value unit="g/dL" value="12.0" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="15.0"/>
+						       <low inclusive="true" unit="1" value="11.1"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="LYMPHOCYTES_SERUM" code="LYMPHOCYTES_SERUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">LYMPHOCYTES_SERUM</text>
+						  <statusCode code="completed"/>
+						  <value unit="%" value="45.0" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="51.0"/>
+						       <low inclusive="true" unit="1" value="14.0"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                       <component typeCode="COMP" contextConductionInd="true">
+					 <baseBattery classCode="OBS" moodCode="EVN">
+					    <component typeCode="COMP" contextConductionInd="true">
+					       <baseUnitaryResult classCode="OBS" moodCode="EVN">
+						  <code codeSystem="2.16.840.1.113883.19" displayName="POTASSIUM" code="POTASSIUM" xsi:type="CV"/>
+						  <text mediaType="text/plain" representation="TXT" integrityCheckAlgorithm="SHA-1" xsi:type="ED">POTASSIUM</text>
+						  <statusCode code="completed"/>
+						  <value unit="mmol/L" value="4.0" xsi:type="PQ"/>
+						  <performer typeCode="PRF" contextControlCode="OP">
+						     <agent classCode="AGNT">
+							<representedLaboratory classCode="ORG" determinerCode="INSTANCE">
+							   <id extension="1" root="2.16.840.1.113883.19" xsi:type="II"/>
+							</representedLaboratory>
+						     </agent>
+						  </performer>
+						  <referenceRange typeCode="REFV" contextConductionInd="true">
+						 <range classCode="OBS" moodCode="EVN">
+						    <value operator="I" unit="1" xsi:type="IVL_PQ">
+						       <high inclusive="true" unit="1" value="5.1"/>
+						       <low inclusive="true" unit="1" value="3.3"/>
+						    </value>
+						 </range>
+						  </referenceRange>  
+					       </baseUnitaryResult>
+					    </component>
+					 </baseBattery>
+                                       </component>
+                                   </baseSpecimenDefinition>
+                                 </component>
+                              </accession>
+                           </component>
+                        </studyEvent>
+                     </component>
+                  </subjectAssignment>
+               </component>
+            </investigatorAtSite>
+         </component>
+      </trialAtSite>
+   </component>
+</ClinicalTrial>

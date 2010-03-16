@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="SyncGTS" targetNamespace="http://cagrid.nci.nih.gov/SyncGTS/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://cagrid.nci.nih.gov/SyncGTS/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/SyncGTS/bindings" location="SyncGTS_bindings.wsdl"/>
+  <wsdl:service name="SyncGTSService">
+    <wsdl:port name="SyncGTSPortTypePort" binding="binding:SyncGTSPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

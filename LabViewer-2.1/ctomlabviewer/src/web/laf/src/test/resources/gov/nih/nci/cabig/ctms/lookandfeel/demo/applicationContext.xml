@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+    
+    <bean id="urlResolver" class="gov.nih.nci.cabig.ctms.lookandfeel.demo.IdentityUrlResolver"/>
+
+    <bean id="sectionTemplate" class="gov.nih.nci.cabig.ctms.web.chrome.Section"
+          p:mainController="#" abstract="true">
+        <property name="urlResolver">
+            <ref bean="urlResolver"/>
+        </property>
+    </bean>
+
+    <bean id="sections" class="java.util.LinkedList">
+        <constructor-arg>
+            <list>
+                <bean parent="sectionTemplate" p:displayName="Home"/>
+                <bean parent="sectionTemplate" p:displayName="Studies"/>
+                <bean parent="sectionTemplate" p:displayName="Participants"/>
+                <bean parent="sectionTemplate" p:displayName="Reports"/>
+                <ref bean="currentSection"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="currentSection" parent="sectionTemplate" p:displayName="Administration">
+        <property name="tasks">
+            <list>
+                <bean class="gov.nih.nci.cabig.ctms.web.chrome.Task" autowire="byType"
+                    p:displayName="Configure application" p:linkName="#"/>
+                <bean class="gov.nih.nci.cabig.ctms.web.chrome.Task" autowire="byType"
+                    p:displayName="Import codes" p:linkName="#"/>
+            </list>
+        </property>
+    </bean>
+</beans>

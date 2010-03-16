@@ -1,0 +1,2 @@
+This document is placed here just for CVS to work properly. This should be removed as soon as the folder starts containing the actual files.
+This file is checked into CVS so you have to remove it from CVS and then commit to confirm removal.

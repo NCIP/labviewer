@@ -1,0 +1,174 @@
+<ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
+ <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns2:Namespace location="./ccts-domain.xsd" namespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" packageName="gov.nih.nci.cabig.ccts.domain" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="eligibilityCriteria" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="epoch" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="exclusionCriteria" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="identifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="inclusionCriteria" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonTreatmentEpoch" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="organizationAssignedIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="registration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="scheduledEpoch" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="scheduledNonTreatmentEpoch" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="scheduledTreatmentEpoch" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="study" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="studyCoordinatingCenter" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="studyFundingSponsor" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="studyOrganization" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="studySite" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="systemAssignedIdentifier" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="treatmentEpoch" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace namespace="http://www.w3.org/2001/XMLSchema" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="anySimpleType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyType" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="anyURI" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="base64Binary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="boolean" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="byte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="date" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="dateTime" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="decimal" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="double" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="duration" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITIES" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ENTITY" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="float" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gMonthDay" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYear" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="gYearMonth" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="hexBinary" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ID" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREF" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="IDREFS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="int" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="integer" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="language" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="long" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Name" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NCName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="negativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKEN" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NMTOKENS" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonNegativeInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="nonPositiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="normalizedString" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="NOTATION" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="positiveInteger" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="QName" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="short" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="string" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="time" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="token" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedByte" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedInt" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedLong" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="unsignedShort" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace location="./StudyConsumerTypes.xsd" namespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types" packageName="gov.nih.nci.ccts.grid.studyconsumer.stubs.types" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="InvalidStudyException" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StudyConsumerReference" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="StudyCreationException" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+  <ns2:Namespace generateStubs="false" location="./xsd/cagrid/types/security/security.xsd" namespace="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" packageName="gov.nih.nci.cagrid.metadata.security" xsi:type="ns2:NamespaceType">
+   <ns2:SchemaElement type="CommunicationMechanism" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="CommunicationStyle" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureConversation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSISecureMessage" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="GSITransport" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="None" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="Operation" xsi:type="ns2:SchemaElementType"/>
+   <ns2:SchemaElement type="ServiceSecurityMetadata" xsi:type="ns2:SchemaElementType"/>
+  </ns2:Namespace>
+ </ns2:Namespaces>
+ <ns3:Services xsi:type="ns3:ServicesType" xmlns:ns3="gme://gov.nih.nci.cagrid.introduce/1/Services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ns3:Service name="StudyConsumer" namespace="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer" packageName="gov.nih.nci.ccts.grid.studyconsumer" xsi:type="ns3:ServiceType">
+   <ns4:Methods xsi:type="ns4:MethodsType" xmlns:ns4="gme://gov.nih.nci.cagrid.introduce/1/Methods">
+    <ns4:Method isImported="true" isProvided="true" name="getServiceSecurityMetadata" xsi:type="ns4:MethodType">
+     <ns4:Output qName="ns5:ServiceSecurityMetadata" isArray="false" isClientHandle="false" xmlns:ns5="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security"/>
+     <ns6:MethodSecurity xsi:type="ns6:MethodSecurity" xmlns:ns6="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns6:SecuritySetting xsi:type="ns6:SecuritySetting">None</ns6:SecuritySetting>
+      <ns6:MethodAuthorization xsi:type="ns6:MethodAuthorization">
+       <ns6:NoAuthorization xsi:type="ns6:NoAuthorization"/>
+      </ns6:MethodAuthorization>
+     </ns6:MethodSecurity>
+     <ns4:ImportInformation namespace="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity" packageName="gov.nih.nci.cagrid.introduce.security.stubs" portTypeName="ServiceSecurityPortType" wsdlFile="ServiceSecurity.wsdl"/>
+     <ns4:ProviderInformation providerClass="gov.nih.nci.cagrid.introduce.security.service.globus.ServiceSecurityProviderImpl"/>
+    </ns4:Method>
+    <ns4:Method description="" isImported="false" isProvided="false" name="createStudy" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns7:study" description="" isArray="false" name="study" xmlns:ns7="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns8:InvalidStudyException" xmlns:ns8="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+      <ns4:Exception description="" name="StudyCreationException" qname="ns9:StudyCreationException" xmlns:ns9="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method description="" isImported="false" isProvided="false" name="commit" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns10:study" description="" isArray="false" name="study" xmlns:ns10="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns11:InvalidStudyException" xmlns:ns11="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method description="" isImported="false" isProvided="false" name="rollback" xsi:type="ns4:MethodType">
+     <ns4:Inputs>
+      <ns4:Input qName="ns12:study" description="" isArray="false" name="study" xmlns:ns12="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"/>
+     </ns4:Inputs>
+     <ns4:Output qName="void" description="" isArray="false"/>
+     <ns4:Exceptions>
+      <ns4:Exception description="" name="InvalidStudyException" qname="ns13:InvalidStudyException" xmlns:ns13="http://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer/types"/>
+     </ns4:Exceptions>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetMultipleResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns14:MethodSecurity xsi:type="ns14:MethodSecurity" xmlns:ns14="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns14:SecuritySetting xsi:type="ns14:SecuritySetting">None</ns14:SecuritySetting>
+     </ns14:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns15:GetMultipleResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns15:GetMultipleResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetMultipleResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns15="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetMRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="GetResourceProperty" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns16:MethodSecurity xsi:type="ns16:MethodSecurity" xmlns:ns16="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns16:SecuritySetting xsi:type="ns16:SecuritySetting">None</ns16:SecuritySetting>
+     </ns16:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns17:GetResourcePropertyRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns17:GetResourcePropertyResponse" packageName="org.oasis.wsrf.properties" portTypeName="GetResourceProperty" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns17="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="GetRPProvider"/>
+    </ns4:Method>
+    <ns4:Method isImported="true" isProvided="true" name="QueryResourceProperties" xsi:type="ns4:MethodType">
+     <ns4:Output qName="void" isArray="false"/>
+     <ns18:MethodSecurity xsi:type="ns18:MethodSecurity" xmlns:ns18="gme://gov.nih.nci.cagrid.introduce/1/Security">
+      <ns18:SecuritySetting xsi:type="ns18:SecuritySetting">None</ns18:SecuritySetting>
+     </ns18:MethodSecurity>
+     <ns4:ImportInformation fromIntroduce="false" inputMessage="ns19:QueryResourcePropertiesRequest" namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" outputMessage="ns19:QueryResourcePropertiesResponse" packageName="org.oasis.wsrf.properties" portTypeName="QueryResourceProperties" wsdlFile="../wsrf/properties/WS-ResourceProperties.wsdl" xmlns:ns19="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl"/>
+     <ns4:ProviderInformation providerClass="QueryRPProvider"/>
+    </ns4:Method>
+   </ns4:Methods>
+   <ns20:ServiceSecurity xsi:type="ns20:ServiceSecurity" xmlns:ns20="gme://gov.nih.nci.cagrid.introduce/1/Security">
+    <ns20:SecuritySetting xsi:type="ns20:SecuritySetting">Custom</ns20:SecuritySetting>
+    <ns20:TransportLevelSecurity xsi:type="ns20:TransportLevelSecurity">
+     <ns20:CommunicationMethod xsi:type="ns20:CommunicationMethod">Privacy</ns20:CommunicationMethod>
+    </ns20:TransportLevelSecurity>
+    <ns20:RunAsMode xsi:type="ns20:RunAsMode">System</ns20:RunAsMode>
+    <ns20:AnonymousClients xsi:type="ns20:AnonymousCommunication">No</ns20:AnonymousClients>
+    <ns20:ServiceAuthorization xsi:type="ns20:ServiceAuthorization">
+     <ns20:NoAuthorization xsi:type="ns20:NoAuthorization"/>
+    </ns20:ServiceAuthorization>
+   </ns20:ServiceSecurity>
+   <ns3:description xsi:type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"></ns3:description>
+   <ns3:ResourceFrameworkOptions xsi:type="ns3:ResourceFrameworkOptions">
+    <ns3:Singleton xsi:type="ns3:Singleton"/>
+    <ns3:Identifiable xsi:type="ns3:Identifiable"/>
+    <ns3:ResourcePropertyManagement xsi:type="ns3:ResourcePropertyManagement"/>
+   </ns3:ResourceFrameworkOptions>
+  </ns3:Service>
+ </ns3:Services>
+ <ns21:Extensions xsi:type="ns21:ExtensionsType" xmlns:ns21="gme://gov.nih.nci.cagrid.introduce/1/Extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+</ns1:ServiceDescription>

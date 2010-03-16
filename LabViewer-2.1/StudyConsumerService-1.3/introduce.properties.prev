@@ -1,0 +1,11 @@
+#Introduce Properties
+#Wed Feb 17 10:58:50 EST 2010
+introduce.skeleton.services.list=StudyConsumer
+introduce.skeleton.extensions=
+introduce.skeleton.timestamp=1266005970272
+introduce.skeleton.service.name=StudyConsumer
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=/Users/kruttikagarwal/Documents/workspace-c3pr/ctms-commons/trunk/grid/ccts-grid-services/cagrid13-services/StudyConsumerGridService-caGrid1.3.1
+introduce.skeleton.namespace.domain=http\://studyconsumer.grid.ccts.nci.nih.gov/StudyConsumer
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security
+introduce.soap.binding.excludes=\ 

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project default="deploySkeletonService" name="CTMS LabLoader grid service" basedir=".">
+
+    <property name="project.name" value="LabLoader_Grid_Service"/>
+
+    <property name="build.dir" value="${basedir}/build"/>
+
+    <property name="zip.filename" value="${project.name}.zip"/>
+
+
+    <target name="deploySkeletonService">
+
+        <!--override tomcat env variable to write out to temp location-->
+         <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+        <property name="tomcat.dir" value="${build.dir}/tempTomcat"/>
+        <ant antfile="build.xml" inheritall="true" target="deployTomcat"/>
+
+        <zip basedir="${tomcat.dir}" destfile="${build.dir}/${zip.filename}"/>
+        
+    </target>
+
+</project>
