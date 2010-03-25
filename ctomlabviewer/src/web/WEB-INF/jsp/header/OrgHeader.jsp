@@ -31,7 +31,7 @@
             this applies throughout this jsp --%> <!-- lisa - ask about this -->
        <s:if test="#session.LOGIN_OBJECT != null"> 
            <s:if test="isWebssoCasLogout">
-               <a href="https://<s:property value="#session.webssoCasServer"/>/cas/logout" style="font-size: .8em; color: blue;">Log out</a>
+               <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>
            </s:if>
            <s:else>
    		       <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>    
