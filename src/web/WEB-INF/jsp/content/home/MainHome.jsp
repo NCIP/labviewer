@@ -28,6 +28,13 @@
 								Welcome to the CTODS Lab Viewer Tool. You may 
 								<br>
 								begin by clicking on any menu option above.
+								<br>
+								<br>
+								Recommend not using your browser's "Back" button
+								<br>
+                                to navigate once you have logged in. Doing so
+                                <br>
+                                may cause the tool to function incorrectly.
 								</font>
 								</td>
 							</tr>
