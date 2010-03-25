@@ -401,6 +401,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
 			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
+			<property  name="LabViewer-webapp.version" value="${version}"/>
 		</ant>
 	</target>
 	
