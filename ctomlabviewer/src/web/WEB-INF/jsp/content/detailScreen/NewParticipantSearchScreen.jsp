@@ -154,7 +154,7 @@
 																			<tr>
 																				<td>
      <display:table name="searchResults" sort="list" cellspacing="0" cellpadding="3"
-			               pagesize="25" id="participantTable" export="true"
+			               id="participantTable" export="true"
 			               defaultsort="1"
                         requestURI=""                       
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">   
@@ -170,15 +170,17 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>   
-           <display:column class="dataCellText" sortable="true" title="Participant ID (MRN)" media="html" >
+           <display:column class="dataCellText" sortable="true" sortProperty="patientId" title="Participant ID (MRN)" media="html" >
                <a href="#" onclick="displayLabs('<%=DisplayConstants.LABACTIVITES_ID%>', ${participantTable_rowNum})">${participantTable.patientId}</a>
            </display:column>
            <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
                ${participantTable.patientId}
            </display:column>
+           <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
+               ${participantTable.patientId}
+           </display:column>
            <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name"/>
-           <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />        
-           <display:column property="studyId"  class="dataCellText" sortable="true" title="Study ID"  />
+           <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />
           </display:table>
 																				</td>
 																			</tr>

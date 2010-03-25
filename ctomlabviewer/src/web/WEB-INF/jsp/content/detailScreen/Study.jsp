@@ -65,7 +65,7 @@
 												                                        </tr>												                                      
 																						<tr>
 																							<td colspan="2">																							
-																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title</font>
+																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title.<br>Searches are case sensitive.  The wildcard character is "%".</font>
 																							</td>
 																						</tr>
 																						<tr>
@@ -140,7 +140,7 @@
 																			<tr>
 																				<td>																				
 			 <display:table name="studySearchResults" sort="list" cellspacing="0" cellpadding="3"
-			               pagesize="25" id="studyTable" export="true" requestURI="" 
+			               id="studyTable" export="true" requestURI="" 
 			               defaultsort="1"
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
            <display:setProperty name="paging.banner.placement" value="bottom" />    
@@ -155,7 +155,7 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>
-           <display:column  class="dataCellText" sortable="true" title="Study ID" media="html" >
+           <display:column  class="dataCellText" sortable="true" sortProperty="studyId" title="Study ID" media="html" >
                <s:if test="#attr.studyTable.id == null">
                    ${studyTable.studyId}
                </s:if>
@@ -163,7 +163,7 @@
                    <a href="#" onclick="displayParticipants('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>', '${studyTable.studyId}', '${studyTable.longTitle}')">${studyTable.studyId}</a>
                </s:else>
            </display:column>
-           <display:column property="studyId" class="dataCellText" sortable="true" title="Study ID" media="csv excel xml" />
+           <display:column property="studyId" class="dataCellText" title="Study ID" media="csv excel xml" />
            <display:column property="longTitle"  class="dataCellText" sortable="true" title="Official Title" maxLength="200"/>
            <display:column property="sponsorCode" class="dataCellText" sortable="true" title="Sponsor Code" />        
            <display:column property="phaseCode"  class="dataCellText" sortable="true" title="Phase Code"  />

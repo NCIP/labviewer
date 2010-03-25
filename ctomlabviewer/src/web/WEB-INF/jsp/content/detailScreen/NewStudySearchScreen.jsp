@@ -74,7 +74,7 @@
 												                                        </tr>												                                      
 																						<tr>
 																							<td colspan="2">																							
-																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title</font>
+																								<font size="2" face="arial">Enter a Study ID and/or a term from the Study Title. Searches are case sensitive.</font>
 																							</td>
 																						</tr>
 																						<tr>
@@ -151,10 +151,11 @@
 																			<tr>
 																				<td>
 																				
+			 <!-- pagesize="200" -->
 			 <display:table name="${sessionScope.StudySearchForm.studiesList}" sort="list" cellspacing="0" cellpadding="3"
-			               pagesize="25" id="studyTable" export="true" 
+			               id="studyTable" export="true" 
 			               size="totalStudies" 
-			               defaultsort="10" defaultorder="descending"
+			               defaultsort="1"
                         requestURI=""
                         decorator="gov.nih.nci.caxchange.ctom.viewer.util.StudySearchDecorator"                        
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
@@ -170,19 +171,20 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>            
-           <display:column  class="dataCellText" sortable="true" title="ID" maxLength="90" >
+           <display:column  class="dataCellText" sortable="true" sortProperty="studyId" title="Study ID" maxLength="90" media="html" >
                <logic:empty name="studyTable" property="id">${studyTable.studyId}</logic:empty>
                <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="loadParticipant(${studyTable_rowNum})">${studyTable.studyId}</a></logic:notEmpty>
            </display:column>
+           <display:column property="studyId" class="dataCellText" title="Study ID" media="csv excel xml" />
            <display:column property="longTitle"  class="dataCellText" sortable="true" title="Official Title" maxLength="200"/>
-           <display:column property="sponsorCode" class="dataCellText" sortable="true" title="Sponsor code" />        
-           <display:column property="phaseCode"  class="dataCellText" sortable="true" title="Phase code"  />
+           <display:column property="sponsorCode" class="dataCellText" sortable="true" title="Sponsor Code" />        
+           <display:column property="phaseCode"  class="dataCellText" sortable="true" title="Phase Code"  />
            <display:column property="status"  class="dataCellText" sortable="true" title="Status"  />
-           <display:column class="dataCellText" sortable="true" title="HealthCare Site"  >
+           <display:column class="dataCellText" sortable="true" title="HealthCare Site" media="html" >
                <logic:empty name="studyTable" property="id">NA</logic:empty>
                <logic:notEmpty name="studyTable" property="id"><a href="#"	onclick="showHealthCareSite(${studyTable_rowNum})">View Details</a></logic:notEmpty>
            </display:column>
-           <display:column class="dataCellText" sortable="true" title="Principal Investigator"  >           
+           <display:column class="dataCellText" sortable="true" title="Principal Investigator" media="html" >           
                <logic:empty name="studyTable" property="id">NA</logic:empty>
                <logic:notEmpty name="studyTable" property="id"><a href="#" onclick="showPI(${studyTable_rowNum})">View Details</a></logic:notEmpty>
            </display:column>
