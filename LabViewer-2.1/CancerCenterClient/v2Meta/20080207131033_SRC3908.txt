@@ -1,7 +1,0 @@
-_ NEGATIVE: No EBV DNA detected in this specimen by quantitative PCR.
- 
- Nolte, F.S. et al. 1995. Early Detection of Human Cytomegalovirus Viremia in Bone Marrow Transplant Recipients by DNA Amplification.  Journal of Clinical Microbiology, 33:1263-66.
- 
- Gozlan, J. et al. 1995. A Prospective Evaluation of Clinical Criteria and Polymerase Chain Reaction Assay of Cerebrospinal Fluid for the Diagnosis of Cytomegalovirus-related Neurological Diseases during AIDS.  AIDS, 9: 253-260.
- 
- Rowe, D.T. et al. 1996. Use of Quantitative Competitive PCR To Measure

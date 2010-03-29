@@ -1,6 +1,0 @@
-#Connection properties
-
-driver=@database.driver@
-url=@database.url@
-user=@database.username@
-passwd=@database.password@
