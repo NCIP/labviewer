@@ -1,0 +1,73 @@
+#debug, #debug h1, #debug h2 {
+    font-family: 'Andale Mono',Courier,monospace ;
+    color: #5F1 ;
+}
+
+#debug {
+    margin: 4em 2em ;
+    padding: 0 ;
+    background-color: green ;
+    border: 3px #5F1 double ;
+    font-size: 10pt ;
+    text-align: left ;
+    overflow-x: scroll ;
+}
+
+#debug h1, #debug h2 {
+    margin: 0 0 1em 0 ;
+    font-size: 1em ;
+    font-weight: normal ;
+}
+
+#debug h1 {
+    margin: 1em 0 ;
+    text-transform: uppercase ;
+    background-color: #5F1 ;
+    color: green ;
+    padding: 5px 1em ;
+}
+
+#debug h2 {
+    margin: 1em ;
+    border-bottom: 1px solid ;
+}
+
+#debug dl, #debug p {
+    margin: .5em 1em .5em 3em ;
+}
+
+#debug dt {
+    margin-top: .5em;
+}
+
+#debug dt.var {
+    text-decoration: underline ;
+}
+
+#debug dt.sql {
+    text-decoration: none ;
+    padding-top: 6px ;
+    border-top: 1px solid ;
+}
+
+#debug dl p {
+    margin: 0 ;
+    padding: 0 0 0 2em ;
+    text-indent: -2em ;
+}
+
+#debug dd ul {
+    padding: 0 ;
+    margin: 1em ;
+}
+
+#debug dd ul li {
+    margin: 0.25em 0 ;
+    padding: 0 ;
+    list-style-type: circle ;
+}
+
+#debug dd em.clazz {
+    display: block ;
+    text-align: right ;
+}

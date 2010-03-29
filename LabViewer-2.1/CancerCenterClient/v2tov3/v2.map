@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping version="1.2">
+   <components>
+     <component kind="scs" location="./v2tov3/v2.scs" type="source"/>
+      <component kind="h3s" location="./v2tov3/PORT_MT030001.h3s" type="target"/>
+      <component group="constant" kind="core" name="constant" type="function" id="0">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="1">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="2">
+         <data type="String" value="PROTOCOL ID ROOT"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="3">
+         <data type="String" value="PROTOCOL ID EXT"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="4">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="5">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="6">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="7">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="8">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="9">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="10">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="11">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="12">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="13">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="14">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="15">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="16">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="17">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="18">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="19">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="20">
+         <data type="String" value="2.16.840.1.113883.19"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="21">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="22">
+         <data type="String" value="1"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="23">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="24">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="25">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="26">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="27">
+         <data type="String" value="1.26.840.1.113883"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="28">
+         <data type="String" value="PROTOCOL ID ASSIGN AUTH"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="29">
+         <data type="String" value="PROTOCOL TITLE"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="33">
+         <data type="String" value="PI ID ASSIGN AUTH"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="31">
+         <data type="String" value="PI ID ROOT"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="30">
+         <data type="String" value="PI ID EXT"/>
+      </component>
+      <component group="constant" kind="core" name="constant" type="function" id="32">
+         <data type="String" value="PI NAME"/>
+      </component>
+   </components>
+   <links>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.3.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.2.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.1.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.location.trialSite.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.0.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.location.trialSite.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID2_CX_PATIENT_ID.C1_ST_ID"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.4.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID5_XPN_PATIENT_NAME.C1_FN_family_name_S1_ST_surname"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.name.family.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID5_XPN_PATIENT_NAME.C2_ST_given_name"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.name.given.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID5_XPN_PATIENT_NAME.C4_ST_suffix_eg"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.name.suffix.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID5_XPN_PATIENT_NAME.C5_ST_prefix_eg"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.name.prefix.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID8_IS_ADMINISTRATIVE_SEX.Administrative_Sex"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.5.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.administrativeGenderCode.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PID.PID7_TS_DATE_TIME_OF_BIRTH.Date_Time_Of_Birth"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.birthTime.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.6.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.asSpareSubject.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.7.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.recordTarget00.enrolledSubject.subjectPerson.asSpareSubject.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.PV1.PV119_CX_VISIT_NUMBER.C1_ST_ID"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.8.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.9.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.10.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.author.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR14_TS_SPECIMEN_RECEIVED_DATE_TIME.Specimen_Received_Date_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.subject00.baseSpecimen.productOf.specimenCollectionProcedure.effectiveTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR1_SI_SET_ID_OBR.Set_ID_OBR"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.11.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_ST.OBX_ST3_CE_OBSERVATION_IDENTIFIER.C1_ST_identifier"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_ST.OBX_ST3_CE_OBSERVATION_IDENTIFIER.C3_IS_name_of_coding_system"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.12.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_ST.OBX_ST3_CE_OBSERVATION_IDENTIFIER.C2_ST_text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_ST.OBX_ST5_ST_OBSERVATION_VALUE.Observation_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.text.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR7_TS_OBSERVATION_DATE_TIME.Observation_Date_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.activityTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.13.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.14.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_ST"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component00"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_TX"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_NM"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR1_SI_SET_ID_OBR.Set_ID_OBR"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR1_SI_SET_ID_OBR.Set_ID_OBR"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR1_SI_SET_ID_OBR.Set_ID_OBR"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.21.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_TX.OBX_TX3_CE_OBSERVATION_IDENTIFIER.C1_ST_identifier"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_TX.OBX_TX3_CE_OBSERVATION_IDENTIFIER.C2_ST_text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_TX.OBX_TX3_CE_OBSERVATION_IDENTIFIER.C3_IS_name_of_coding_system"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.23.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_TX.OBX_TX5_TX_OBSERVATION_VALUE.Observation_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.text.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR7_TS_OBSERVATION_DATE_TIME.Observation_Date_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.activityTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.22.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.24.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component01.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.15.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_NM.OBX_NM3_CE_OBSERVATION_IDENTIFIER.C1_ST_identifier"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_NM.OBX_NM3_CE_OBSERVATION_IDENTIFIER.C2_ST_text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_NM.OBX_NM3_CE_OBSERVATION_IDENTIFIER.C3_IS_name_of_coding_system"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.20.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR7_TS_OBSERVATION_DATE_TIME.Observation_Date_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.activityTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.16.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.17.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.27.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE3_CE_OBSERVATION_IDENTIFIER.C1_ST_identifier"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.code.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE3_CE_OBSERVATION_IDENTIFIER.C2_ST_text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.code.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE3_CE_OBSERVATION_IDENTIFIER.C3_IS_name_of_coding_system"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.code.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.26.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.code.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE5_CE_OBSERVATION_VALUE.C1_ST_identifier"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.interpretationCode00.code"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE5_CE_OBSERVATION_VALUE.C2_ST_text"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.interpretationCode00.displayName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_CE.OBX_CE5_CE_OBSERVATION_VALUE.C3_IS_name_of_coding_system"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.interpretationCode00.codeSystemName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.25.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.interpretationCode00.codeSystem"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBR.OBR7_TS_OBSERVATION_DATE_TIME.Observation_Date_Time"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.activityTime.low.value"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.18.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.19.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component03.baseBattery.component00.baseUnitaryResult.performer.agent.representedLaboratory.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="scs" xmlPath="ORU_R01.OBX_NM.OBX_NM5_NM_OBSERVATION_VALUE.Observation_Value"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.component00.subjectAssignment.component00.studyEvent.component00.accession.component00.baseSpecimenDefinition.component02.baseBattery.component00.baseUnitaryResult.text.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.28.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.33.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.assigningAuthorityName"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.30.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.extension"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.31.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.id.root"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.32.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.component00.trialAtSite.component00.investigatorAtSite.responsibleParty.trialInvestigator.investigatorNamedPerson.name.inlineText"/>
+         </target>
+      </link>
+      <link>
+         <source>
+            <linkpointer kind="function" xmlPath="function.29.outputs.0"/>
+         </source>
+         <target>
+            <linkpointer kind="h3s" xmlPath="ClinicalTrial.title.inlineText"/>
+         </target>
+      </link>
+   </links>
+   <views>
+      <view component-id="source.scs.0" height="0" width="0" x="0" y="0"/>
+      <view component-id="target.h3s.0" height="0" width="0" x="0" y="0"/>
+      <view component-id="function.0" height="43" width="109" x="72" y="156"/>
+      <view component-id="function.1" height="43" width="109" x="72" y="108"/>
+      <view component-id="function.2" height="43" width="109" x="72" y="54"/>
+      <view component-id="function.3" height="43" width="109" x="72" y="6"/>
+      <view component-id="function.4" height="43" width="109" x="72" y="210"/>
+      <view component-id="function.5" height="43" width="109" x="72" y="264"/>
+      <view component-id="function.6" height="43" width="109" x="72" y="318"/>
+      <view component-id="function.7" height="43" width="109" x="72" y="366"/>
+      <view component-id="function.8" height="43" width="109" x="72" y="420"/>
+      <view component-id="function.9" height="43" width="109" x="72" y="474"/>
+      <view component-id="function.10" height="43" width="109" x="72" y="522"/>
+      <view component-id="function.11" height="43" width="109" x="72" y="576"/>
+      <view component-id="function.12" height="43" width="109" x="72" y="630"/>
+      <view component-id="function.13" height="43" width="109" x="72" y="684"/>
+      <view component-id="function.14" height="43" width="109" x="72" y="732"/>
+      <view component-id="function.15" height="43" width="109" x="72" y="996"/>
+      <view component-id="function.16" height="43" width="109" x="72" y="1104"/>
+      <view component-id="function.17" height="43" width="109" x="72" y="1152"/>
+      <view component-id="function.18" height="43" width="109" x="72" y="1368"/>
+      <view component-id="function.19" height="43" width="109" x="72" y="1416"/>
+      <view component-id="function.20" height="43" width="109" x="72" y="1050"/>
+      <view component-id="function.21" height="43" width="109" x="72" y="786"/>
+      <view component-id="function.22" height="43" width="109" x="72" y="894"/>
+      <view component-id="function.23" height="43" width="109" x="72" y="840"/>
+      <view component-id="function.24" height="43" width="109" x="72" y="942"/>
+      <view component-id="function.25" height="43" width="109" x="72" y="1314"/>
+      <view component-id="function.26" height="43" width="109" x="72" y="1260"/>
+      <view component-id="function.27" height="43" width="109" x="72" y="1206"/>
+      <view component-id="function.28" height="43" width="109" x="282" y="12"/>
+      <view component-id="function.29" height="43" width="109" x="282" y="78"/>
+      <view component-id="function.33" height="43" width="109" x="282" y="144"/>
+      <view component-id="function.31" height="43" width="109" x="282" y="240"/>
+      <view component-id="function.30" height="43" width="109" x="282" y="192"/>
+      <view component-id="function.32" height="43" width="109" x="282" y="306"/>
+   </views>
+</mapping>

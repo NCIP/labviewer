@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+
+    <bean id="labActivityResultComparator" class="gov.nih.nci.caxchange.ctom.viewer.viewobjects.LabActivityResultComparator">
+    	<property name="order" value="DESCENDING"/>
+    </bean>
+    
+    <!-- BEGIN: ADDED by RAM on 10/21/2009 as per new caGRID 1.3 security document for WebSSO -->
+    <bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="/WEB-INF/classes/cas-client.properties" />
+	</bean>
+
+	<bean name="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter"
+		p:casServerLoginUrl="${cas.server.url}" p:renew="${cas.server.renew}" p:gateway="${cas.server.gateway}" p:service="${cas.client.service}" />
+
+	<bean name="casValidationFilter" class="org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter"
+		p:service="${cas.client.service}" p:redirectAfterValidation="true">
+		<property name="ticketValidator">
+			<bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator">
+				<constructor-arg index="0" value="${cas.server.url}" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetClass" value="sun.net.www.protocol.https.HttpsURLConnectionImpl" />
+		<property name="targetMethod" value="setDefaultHostnameVerifier" />
+		<property name="arguments">
+			<list>
+				<bean class="org.cagrid.websso.common.WebSSOHostNameVerifier" />
+			</list>
+		</property>
+	</bean>    
+
+
+
+    <!-- END RAM 10/21/2009 -->
+
+</beans>
+
+
+

@@ -1,0 +1,10 @@
+#Introduce Properties
+#Thu Oct 08 20:54:20 CDT 2009
+introduce.skeleton.services.list=StudyLookupService
+introduce.skeleton.extensions=cagrid_metadata
+introduce.skeleton.destination.dir=D\:\\caGrid-1.3\\services upgrade to 1.3\\StudyLookupService-1.2
+introduce.skeleton.namespace.domain=http\://grid.labviewer.cagrid.nci.nih.gov/StudyLookupService
+introduce.skeleton.service.name=StudyLookupService
+introduce.skeleton.timestamp=1200944115837
+introduce.soap.binding.excludes=\ 
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security
