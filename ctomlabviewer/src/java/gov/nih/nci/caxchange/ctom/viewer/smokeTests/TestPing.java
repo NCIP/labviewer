@@ -163,4 +163,7 @@ public class TestPing
 		return status;
 	}
 
+    public TestPing(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
+    }
 }
