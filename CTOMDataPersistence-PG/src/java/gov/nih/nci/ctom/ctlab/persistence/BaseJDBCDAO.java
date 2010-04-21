@@ -190,10 +190,10 @@ public abstract class BaseJDBCDAO
 			DatabaseMetaData metaData = con.getMetaData();
 			String databaseName = metaData.getDatabaseProductName();
 			//retrieve the next id to insert into database table  for Oracle
-			if (databaseName.indexOf("Oracle") > 0)
+			if (databaseName.indexOf("Oracle") >= 0)
 			{
 
-				rs = stmt.executeQuery("select" + seq + ".nextval from dual");
+				rs = stmt.executeQuery("select " + seq + ".nextval from dual");
 				rs.next();
 				nextValue = rs.getLong(1);
 			}
