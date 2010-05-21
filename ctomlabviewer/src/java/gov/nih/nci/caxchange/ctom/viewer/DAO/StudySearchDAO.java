@@ -175,7 +175,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		log.debug("Study search called with search term(s): " + studyID + studyTitle);
 
 		List<String> searchTerms = getSearchTerms(studyTitle);
-		if (StringUtils.isBlank(studyID) && searchTerms.isEmpty())
+		if (StringUtils.isEmpty(studyID.trim()) && searchTerms.isEmpty())
 		{
 			studyID = "%";
 		}
@@ -281,7 +281,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 			group.addAttribute(new CQLAttribute("shortTitle", CQLPredicate.LIKE, "%" + searchTerm + "%"));
 		}
 		    
-		if (StringUtils.isNotBlank(studyID))
+		if (StringUtils.isNotEmpty(studyID))
 		{
 		    CQLAssociation association = new CQLAssociation();
 		    association.setName("gov.nih.nci.labhub.domain.II"); 
@@ -406,7 +406,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		
 		StudyProtocol studyProtocol = new StudyProtocol();
 		
-		if (StringUtils.isNotBlank(studyID))
+		if (StringUtils.isNotEmpty(studyID))
 		{
 		    II assignedIdentifier = new II();
 		    assignedIdentifier.setExtension("%" + studyID + "%");
