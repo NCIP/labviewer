@@ -6,7 +6,7 @@
     <session-factory>
         <!-- properties  -->
 	  <property name="connection.driver_class">@database_driver@</property>
-	  <property name="connection.url">@database_url@</property>
+	  <property name="connection.url">@database_csm_url@</property>
 	  <property name="connection.username">@database_user@</property>
 	  <property name="connection.password">@database_passwd@</property>
         <property name="hibernate.show_sql">true</property>
@@ -14,6 +14,7 @@
 
         <mapping resource="gov/nih/nci/security/authorization/domainobjects/Privilege.hbm.xml"/>
         <mapping resource="gov/nih/nci/security/authorization/domainobjects/Application.hbm.xml"/>
+        <mapping resource="gov/nih/nci/security/authorization/domainobjects/FilterClause.hbm.xml"/>
         <mapping resource="gov/nih/nci/security/authorization/domainobjects/Role.hbm.xml"/>
         <mapping resource="gov/nih/nci/security/dao/hibernate/RolePrivilege.hbm.xml"/>
         <mapping resource="gov/nih/nci/security/dao/hibernate/UserGroup.hbm.xml"/>
