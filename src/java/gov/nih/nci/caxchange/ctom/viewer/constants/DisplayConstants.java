@@ -177,5 +177,7 @@ public class DisplayConstants
 
 	public static final byte ONE = 1;
 	public static final byte ZERO = 0;
+	
+	public static final String USER_ROLES = "USER_ROLES";
 
 }
