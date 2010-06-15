@@ -7,6 +7,8 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested" prefix="nested"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
+<%@ page import="java.util.Set"%>
+<%@ page import="gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole"%>
 
 <script>
   <!--
@@ -46,6 +48,7 @@ function MM_swapImage() { //v3.0
 <html:form styleId="menuForm" action="<%=\"/MenuSelection\"%>">
 	<%
 	String tableId;
+	Set userRoles = (Set) session.getAttribute(DisplayConstants.USER_ROLES);
 	try
 	{
 		tableId = (String)session.getAttribute(DisplayConstants.CURRENT_TABLE_ID);
@@ -112,32 +115,47 @@ function MM_swapImage() { //v3.0
 			<%} else {%>
 	    		<li class=""><div><a href="javascript: set('<%=DisplayConstants.HOME_ID%>')">Home</a></div></li>
 			<%}%>
-			<%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
- 	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
- 			<%} else {%>
- 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
- 			<%}%>
- 	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.PARTICIPANTSEARCH_ID)){%>
- 	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">Participant</a></div></li>
- 			<%} else {%>
- 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">Participant</a></div></li>
- 			<%}%>
+			
+			<%if (userRoles.contains(SuiteRole.LAB_DATA_USER)) {%>
+			    <%if (tableId.equalsIgnoreCase(DisplayConstants.STUDYSEARCH_ID)){%>
+ 	    		    <li class="selected"><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
+ 			    <%} else {%>
+ 		    	    <li class=""><div><a href="javascript: set('<%=DisplayConstants.STUDYSEARCH_ID%>')">Study</a></div></li>
+ 		    	<%}%>
+ 			
+ 	    	    <%if (tableId.equalsIgnoreCase(DisplayConstants.PARTICIPANTSEARCH_ID)){%>
+ 	    		    <li class="selected"><div><a href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">Participant</a></div></li>
+ 			    <%} else {%>
+ 		    	    <li class=""><div><a href="javascript: set('<%=DisplayConstants.PARTICIPANTSEARCH_ID%>')">Participant</a></div></li>
+ 			    <%}%>
 	
-	    	<%if (tableId.equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID)){%>
-	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">Labs</a></div></li>
-			<%} else {%>
-		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">Labs</a></div></li>
+	    	    <%if (tableId.equalsIgnoreCase(DisplayConstants.LABACTIVITES_ID)){%>
+	    		    <li class="selected"><div><a href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">Labs</a></div></li>
+			    <%} else {%>
+		    	    <li class=""><div><a href="javascript: set('<%=DisplayConstants.LABACTIVITES_ID%>')">Labs</a></div></li>
+			    <%}%>
 			<%}%>
+			
 			<%if( session.getAttribute("testEnabled").equals("true")){ %>
 		<%if (tableId.equalsIgnoreCase(DisplayConstants.TEST_ID)){%>
 	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
 			<%} else {%>
 		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.TEST_ID%>')">Test</a></div></li>
 			<%}}%>
-			<%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID)){%>
-	    		<li class="selected"><div><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')">Administration</a></div></li>
-			<%} else {%>
-		    	<li class=""><div><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')">Administration</a></div></li>
+			
+			<%if (userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || userRoles.contains(SuiteRole.USER_ADMINISTRATOR)) {%>
+			    <%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID)){%>			        
+	    		    <li class="selected">
+	    		<%} else {%>
+	    		    <li class="">
+	    		<%}%>
+	    		<div>
+	    		<%if (userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR)) {%>
+	    		    <a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')">
+	    		<%} else {%>
+	    		    <a href="javascript: set('<%=DisplayConstants.USER_CONFG_ID%>')">
+	    		<%}%>
+	    		Administration</a></div></li>
 			<%}%>
 	    </ul>
 	    </div>
@@ -162,8 +180,11 @@ function MM_swapImage() { //v3.0
 			    <font color="blue" size="2"><%=session.getAttribute("pageTitle")%></font>
 			<%}else{%>Tasks: <font color="blue" size="2">Participant Search</font>
 			<%}}%>
-			<%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID)){%>
-	            	 <font color="blue" size="2" ><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')" class="favBtn"> Admin Configuration</a> </font>::<a href="javascript: set('<%=DisplayConstants.USER_CONFG_ID%>')" style="font-size: .9em; color: blue;" class="favBtn">User Configuration</a> 
+			
+			<%if (tableId.equalsIgnoreCase(DisplayConstants.ADMIN_ID) && 
+			      userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) && 
+			      userRoles.contains(SuiteRole.USER_ADMINISTRATOR)) {%>
+	            <font color="blue" size="2" ><a href="javascript: set('<%=DisplayConstants.ADMIN_ID%>')" class="favBtn"> Admin Configuration</a> </font>:: <a href="javascript: set('<%=DisplayConstants.USER_CONFG_ID%>')" style="font-size: .9em; color: blue;" class="favBtn">User Configuration</a> 
 			<%}%>
 		</logic:present>
     </div>
