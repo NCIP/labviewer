@@ -1,6 +1,7 @@
 <ivysettings>
 	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" />
 	<property name="cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3"/>
+	<property name="cbiit-ivy-repo" value="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk"/>
 	<settings defaultResolver="nci-chain" />
 	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
 	<resolvers>
@@ -19,7 +20,21 @@
 				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact].[ext]" />
 			</url>
-			
+			<url name="cbiit-ivy-repo" m2compatible="false">
+			    <ivy pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+			</url>			
+			<url name="springsource-release">
+                <ivy pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            </url>
+            <url name="springsource-external">
+                <ivy pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            </url>
 		</chain>
+		<chain name="libraries">
+            <ibiblio name="m2" m2compatible="true"/>
+        </chain>
 	</resolvers>
 </ivysettings>
