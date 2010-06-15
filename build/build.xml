@@ -76,7 +76,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 
 	<!-- Ivy Related props -->
-	<property name="ivy.settings.file" value="ivy-settings.xml" />
+	<property name="ivy.settings.file" value="ivysettings.xml" />
 
 	<!-- Properties that relate to how to call build targets from sub-projects-->
 	<!-- Working directory passed to Ant tasks -->
@@ -246,7 +246,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
  </target>
 
 	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
+		<ivy:settings file="${common.dir}/${ivy.settings.file}" />
 		<ivy:cleancache />
 		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
 			<property name="bda-utils.dir" value="${bda-utils.dir}" />
@@ -284,6 +284,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.url" value="${database.csm.url}"/>
 		</ant>
 	</target>
 	<target name="build:ctom-wsrf" depends="build:ctomdatapersistence">
@@ -295,6 +296,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	    <property name="database.url" value="${database.url}"/>
 		<property name="database.user" value="${database.user}"/>
 		<property name="database.password" value="${database.password}"/>
+	 	<property name="database.csm.url" value="${database.csm.url}"/>
 		<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="dest.dir" value="${target.dir}/wsrf-tmp"/>
        <!--  <property name="software.dir" value="S{software.dir}"/>-->
@@ -337,6 +339,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<echo message="database.url= ${database.url}"/>
 			<echo message="database.user= ${database.user}"/>
 			<echo message="database.password= ${database.password}"/>
+		    <echo message="database.csm.url= ${database.csm.url}"/>
 			<echo message="artifacts.dir= ${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <echo message="ctomlabviewer.dir= ${ctomlabviewer.base.dir}"/>
 
@@ -376,6 +379,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.url" value="${database.csm.url}"/>
 			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}"/>
 
@@ -773,7 +777,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<target name="init:ivy" description="Initializes ivy-repo.based on ivy definition file and ivy settings file">
 		<mkdir dir="${local.repo.dir}" />
 		<property name="ivy.dep.file" value="${ivy.settings.dir}/ivy-test.xml" />
-		<ivy:settings file="${ivy.settings.dir}/ivy.settings.xml" />
+		<ivy:settings file="${common.dir}/ivy.settings.xml" />
 	</target>
 
 	<target name="ivy-test-selenium" depends="init:ivy" description="Downloads selenium libraries from ivy into library directory">
@@ -850,8 +854,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<property name="ivy.report.dir" value="${reports.dir}/ivy" />
 		<delete dir="${ivy.report.dir}" />
 		<mkdir dir="${ivy.report.dir}" />
-		<ivy:report outputpattern="target/reports/ivy/[organisation]-[module]-[conf].[ext]" dot="true" graph="false" />
-		<util-dot-on-dir dot-file.dir="target/reports/ivy" />
+		<ivy:report outputpattern="../target/reports/ivy/[organisation]-[module]-[conf].[ext]" dot="true" graph="false" />
+		<util-dot-on-dir dot-file.dir="../target/reports/ivy" />
 	</target>
 
 	<target name="deploy:hot" depends="build:all" description="Hot deploys the deployment artifact">
