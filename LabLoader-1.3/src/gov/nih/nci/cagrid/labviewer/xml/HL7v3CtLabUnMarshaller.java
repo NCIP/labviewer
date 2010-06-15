@@ -22,16 +22,62 @@ import java.io.ByteArrayInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-public class HL7v3CtLabUnMarshaller implements UnMarshaller {
+public class HL7v3CtLabUnMarshaller implements UnMarshaller
+{
+	private static final Logger log = Logger.getLogger(HL7v3CtLabUnMarshaller.class);
+	
+	public String getStudyId(String xml)
+	{
+		String studyId = null;
+		
+		try
+		{
+			ByteArrayInputStream xmlInputStream = new ByteArrayInputStream(xml.getBytes());
+		    Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlInputStream);
+		    doc.getDocumentElement().normalize();
+		    XPath xPath = XPathFactory.newInstance().newXPath();
+			String expression = "/ClinicalTrial/id/@extension";
+			Node node = (Node) xPath.evaluate(expression, doc, XPathConstants.NODE);
+			studyId = node.getNodeValue();
+		}
+		catch (Exception e)
+		{
+			log.error("Error retrieving study ID from HL7v3 lab message: ", e);
+		}
+		
+		return studyId;
+	}
+	
+	public String getSiteNciInstituteCode(String xml)
+	{
+		String siteNciInstituteCode = null;
+		
+		try
+		{
+			ByteArrayInputStream xmlInputStream = new ByteArrayInputStream(xml.getBytes());
+		    Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xmlInputStream);
+		    doc.getDocumentElement().normalize();
+		    XPath xPath = XPathFactory.newInstance().newXPath();
+			String expression = "//trialSite/id/@extension";
+			Node node = (Node) xPath.evaluate(expression, doc, XPathConstants.NODE);
+			siteNciInstituteCode = node.getNodeValue();
+		}
+		catch (Exception e)
+		{
+			log.error("Error retrieving site NCI institute code from HL7v3 lab message: ", e);
+		}
+		
+		return siteNciInstituteCode;
+	}
 
 	public Object parseXmlToObject(String xml) throws Exception {
 		XPathFactory factory = XPathFactory.newInstance();
