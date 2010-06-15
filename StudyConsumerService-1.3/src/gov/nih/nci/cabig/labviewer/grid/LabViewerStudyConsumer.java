@@ -6,6 +6,10 @@ import gov.nih.nci.cabig.ccts.domain.InvestigatorType;
 import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
+import gov.nih.nci.cabig.ccts.domain.StudyOrganizationType;
+import gov.nih.nci.cabig.ccts.domain.StudySiteType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.studyconsumer.common.StudyConsumerI;
 import gov.nih.nci.ccts.grid.studyconsumer.service.globus.StudyConsumerAuthorization;
@@ -21,10 +25,13 @@ import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse;
 import org.oasis.wsrf.properties.GetMultipleResourceProperties_Element;
@@ -34,11 +41,12 @@ import org.oasis.wsrf.properties.QueryResourceProperties_Element;
 
 public class LabViewerStudyConsumer implements StudyConsumerI
 {
-	Logger logger = Logger.getLogger(getClass());
+	Logger log = Logger.getLogger(getClass());
 	static final int MILLIS_PER_MINUTE = 60 * 1000;
 	static final int THRESHOLD_MINUTE = 1;
 	private ProtocolHandler dao = new ProtocolHandler();
 	private Connection con;
+	private LabViewerAuthorizationHelper authorizationHelper;
 
 	public void commit(Study study) throws RemoteException,
 			InvalidStudyException
@@ -72,63 +80,139 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	public void createStudy(Study study) throws RemoteException,
 			InvalidStudyException, StudyCreationException
 	{
-		logger.info("Create Study message received");
+		log.info("Create Study message received");
+		checkAuthorization(StudyConsumerAuthorization.getCallerIdentity(), study);
 
-		// Authorization code
-		String username = StudyConsumerAuthorization.getCallerIdentity();
-
-		if (!authorized(username))
+		// save the study data
+		log.info("payload has Study information");
+		Protocol protocol = new Protocol();
+		// populate the Protocol object with Study message data
+		populateProtocol(protocol, study);
+		// obtain connection
+		con = dao.getConnection();
+		log.info("Create Study message validated");
+		try
 		{
-			logger.error("Error saving Study");
+			// save Protocol
+			dao.persist(con, protocol);
+			log.info("Persisted the study");
+		}
+		catch (SQLException e)
+		{
+			log.error("Error creating study", e);
 			StudyCreationException rce = new StudyCreationException();
-			rce.setFaultString("User " + username
-					+ " not authorized for this operation");
+			rce.setFaultString(e.getMessage());
 			throw rce;
 		}
-		else
+		catch (Exception e)
 		{
-
-			// save the study data
-			logger.info("payload has Study information");
-			Protocol protocol = new Protocol();
-			// populate the Protocol object with Study message data
-			populateProtocol(protocol, study);
-			// obtain connection
-			con = dao.getConnection();
-			logger.info("Create Study message validated");
+			log.error("Error creating study", e);
+			StudyCreationException rce = new StudyCreationException();
+			rce.setFaultString(e.getMessage());
+			throw rce;
+		}
+		finally
+		{
 			try
 			{
-				// save Protocol
-				dao.persist(con, protocol);
-				logger.info("Persisted the study");
+				con.close();
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error creating study", e);
-				StudyCreationException rce = new StudyCreationException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
+				log.error("Error closing connection", e);
 			}
-			catch (Exception e)
+		}
+		log.info("Study created");
+	}
+	
+	/**
+	 * @param callerId
+	 * @throws StudyCreationException
+	 */
+	private void checkAuthorization(String callerId, Study study) throws StudyCreationException
+	{	
+		if (callerId == null)
+		{
+			log.error("Error saving study - no user credentials provided");
+			StudyCreationException exception = new StudyCreationException();
+			exception.setFaultString("No user credentials provided");
+			throw exception;
+		}
+
+		log.debug("Service called by: " + callerId);
+		
+		int beginIndex = callerId.lastIndexOf("=") + 1;
+		int endIndex = callerId.length();
+		String username = callerId.substring(beginIndex, endIndex);
+		
+		try
+		{
+		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.STUDY_QA_MANAGER, getStudyId(study), getSiteNciInstituteCodes(study));
+		}
+		catch (SuiteAuthorizationAccessException e)
+		{
+			log.error("Error saving study: ", e);
+			StudyCreationException exception = new StudyCreationException();
+			exception.setFaultString(e.getMessage());
+			throw exception;
+		}
+	}
+	
+	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new LabViewerAuthorizationHelper();
+        }
+        
+        return authorizationHelper;
+    }
+	
+	private String getStudyId(Study study)
+	{
+		String studyId = null;
+		
+		IdentifierType identifiers[] = study.getIdentifier();
+		for (IdentifierType identifier : identifiers)
+		{
+			if (identifier.getPrimaryIndicator())
 			{
-				logger.error("Error creating study", e);
-				StudyCreationException rce = new StudyCreationException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
+				studyId = identifier.getValue();
+				break; // since match has been found
 			}
-			finally
-			{
-				try
-				{
-					con.close();
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error closing connection", e);
+		}
+		
+		return studyId;
+	}
+	
+	private List<String> getSiteNciInstituteCodes(Study study)
+	{
+		List<String> siteNciInstituteCodes = new ArrayList<String>();
+		
+		StudyOrganizationType studyOrganizationTypes[] = study.getStudyOrganization();
+		if (studyOrganizationTypes != null)
+		{
+			for (StudyOrganizationType studyOrganizationType : studyOrganizationTypes)
+		    {			
+			    if (studyOrganizationType instanceof StudySiteType)
+			    {
+				    StudySiteType studySiteType = (StudySiteType)studyOrganizationType;
+				    HealthcareSiteType healthCareSiteTypes[] = studySiteType.getHealthcareSite();
+				    if (healthCareSiteTypes != null)
+				    {
+				    	for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+				        {
+					        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
+					        {
+					        	siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+					        }
+				        }
+				    }
 				}
 			}
-			logger.info("Study created");
-		}// end of else
+		}
+		
+		return siteNciInstituteCodes;
 	}
 
 	/**
@@ -190,7 +274,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 
 			if (study.getStudyOrganization(0).getHealthcareSite() != null)
 			{
-				logger.info("payload has HealthcareSite information");
+				log.info("payload has HealthcareSite information");
 				HealthcareSiteType hcsType =
 						study.getStudyOrganization(0).getHealthcareSite(0);
 				HealthCareSite healthCare = new HealthCareSite();
@@ -201,7 +285,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			}
 			else
 			{
-				logger.info("payload has no HealthcareSite information");
+				log.info("payload has no HealthcareSite information");
 				protocol.setHealthCareSite(null);
 			}
 			if (study.getStudyOrganization(0).getStudyInvestigator() != null)
@@ -215,7 +299,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 							.getInvestigator() != null)
 					{
 						// save the investigator data
-						logger.info("payload has Investigator information");
+						log.info("payload has Investigator information");
 						InvestigatorType healthCareSiteInvestigator = investigator.getHealthcareSiteInvestigator().getInvestigator(0);
 						studyInvestigator.setNciId(healthCareSiteInvestigator.getNciIdentifier());
 						studyInvestigator.setFirstName(healthCareSiteInvestigator.getFirstName());
@@ -225,7 +309,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 					}
 					else
 					{
-						logger.info("payload has no Investigator information");
+						log.info("payload has no Investigator information");
 						protocol.setInvestigator(null);
 					}
 				}// end if
@@ -234,43 +318,8 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		catch (Exception e)
 		{
-			logger.error("populateProtocol: Exception occurred: ", e);
+			log.error("populateProtocol: Exception occurred: ", e);
 		}
-	}
-
-	/**
-	 * @param username
-	 * @return
-	 * @throws StudyCreationException
-	 */
-	private boolean authorized(String username) throws StudyCreationException
-	{
-		boolean userAuthorized = false;
-		String user = "";
-		if (username == null)
-		{
-			logger.error("Error saving Study no username provided");
-			StudyCreationException rce = new StudyCreationException();
-			rce.setFaultString("No user credentials provided");
-			throw rce;
-		}
-		else
-		{
-			logger.debug("User who called the service was " + username);
-			// instantiate Lab Viewer authorization
-			LabViewerAuthorizationHelper lvaHelper =
-					new LabViewerAuthorizationHelper();
-			if (username != null)
-			{
-				int beginIndex = username.lastIndexOf("=");
-				int endIndex = username.length();
-				user = username.substring(beginIndex + 1, endIndex);
-			}
-			// check if authorized
-			userAuthorized = lvaHelper.isAuthorized(user);
-		}
-		return userAuthorized;
-
 	}
 
 	/*
@@ -282,7 +331,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			InvalidStudyException
 	{
 		String studyGridId = study.getGridId();
-		logger.debug("Received a Study Rollback StudyGridId" + studyGridId);
+		log.debug("Received a Study Rollback StudyGridId" + studyGridId);
 		// Obtain Connection
 		con = dao.getConnection();
 		try
@@ -304,7 +353,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				}
 				else
 				{
-					logger
+					log
 							.info("There is no study with in the threshold time for rollback");
 				}
 			}
@@ -314,13 +363,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				StudyCreationException ire = new StudyCreationException();
 				ire
 						.setFaultString("Invalid study rollback message- no study found with given gridid");
-				logger.fatal(ire);
+				log.fatal(ire);
 				throw (ire);
 			}
 		}
 		catch (SQLException se)
 		{
-			logger.error("Error deleting study", se);
+			log.error("Error deleting study", se);
 		}
 		finally
 		{
@@ -330,13 +379,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error closing connection", e);
+				log.error("Error closing connection", e);
 				String msg =
 						"Lab Viewer unable to rollback study" + e.getMessage();
 				throw new RemoteException(msg);
 			}
 		}
-		logger.info("deleted study");
+		log.info("deleted study");
 	}
 	
 	private static String camelCase(String string)
