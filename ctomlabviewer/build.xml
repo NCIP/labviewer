@@ -391,7 +391,15 @@
 	    <!-- Packagee target                                                         -->
 	    <!-- ====================================================================== -->
 
-	    <target name="war">
+	        <target name="createAuthJar" description="Creates auth jar">	  	
+			   	<jar jarfile="${artifacts.dir}/labviewerauth.jar">
+			   		<fileset dir="${ctomlabviewer.build.outputDir}">
+			   	        <include name="**/LabViewerAuthorizationHelper.class" />
+			   	    </fileset>
+			   	</jar>
+		  	</target>
+	
+		    <target name="war" depends="createAuthJar">
 		        <copy todir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
 		            <fileset dir="${ctomlabviewer.dir}/target/ctomlabviewer/lib/ctomlabviewer/compile"/>
 		        </copy>
