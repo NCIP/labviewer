@@ -9,6 +9,15 @@
 				labviewer
 			</context-name>
 			<authentication>
+			    <lockout-time>
+			        <!-- @lockout.time.milliseconds@ -->	
+				</lockout-time>
+				<allowed-login-time>
+				    <!-- @login.time.milliseconds@ -->
+				</allowed-login-time>
+				<allowed-attempts>
+				    <!-- @no.of.allowed.attempts@ -->			
+				</allowed-attempts>
 				<authentication-provider-class>
 				<!-- Fully qualified class name-->
 				</authentication-provider-class>
