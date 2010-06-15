@@ -81,16 +81,24 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.util;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.AuthorizationHelper;
+import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
-import gov.nih.nci.security.UserProvisioningManager;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionElement;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionElementPrivilegeContext;
+import gov.nih.nci.security.authorization.domainobjects.Group;
+import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -104,66 +112,254 @@ import org.apache.log4j.Logger;
  */
 public class LabViewerAuthorizationHelper
 {
-	private static final Logger logger =
-			Logger.getLogger(LabViewerAuthorizationHelper.class);
-	public final static String APPLICATION_CONTEXT = "labviewer";
+	private static final Logger log = Logger.getLogger(LabViewerAuthorizationHelper.class);
+	private AuthorizationManager authorizationManager;
+	private AuthorizationHelper authorizationHelper;
+	private final static String APPLICATION_CONTEXT = "labviewer";
+	
+	private synchronized AuthorizationManager getAuthorizationManager() throws SuiteAuthorizationAccessException
+	{
+		if (authorizationManager == null)
+		{
+		    try
+		    {
+			    authorizationManager = SecurityServiceProvider.getAuthorizationManager(APPLICATION_CONTEXT);
+		    }
+		    catch (CSException e)
+		    {
+			    throw new SuiteAuthorizationAccessException(e);
+		    }
+		}
+		
+		return authorizationManager;
+	}
+	
+	private synchronized AuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new AuthorizationHelper();
+            authorizationHelper.setAuthorizationManager(getAuthorizationManager());
+        }
+        
+        return authorizationHelper;
+    }
+	
+	private long getUserId(String username) throws SuiteAuthorizationAccessException
+	{
+		long userId = 0;
 
+		User user = getAuthorizationManager().getUser(username);
+		if (user == null)
+		{
+			throw new SuiteAuthorizationAccessException("Username %s is not a CSM user", username);
+		}
+		else
+		{
+			userId = user.getUserId().longValue();
+		}
+
+		return userId;
+	}
+	
+	public void checkAuthorization(String username, SuiteRole role, String studyId, List<String> siteNciInstituteCodes) throws SuiteAuthorizationAccessException
+	{
+		long userId = getUserId(username);
+		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
+	    if (roleMemberships.isEmpty())
+        {
+	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
+        }
+	    
+    	if (roleMemberships.containsKey(role))
+    	{
+    		if (role.isScoped())
+    		{
+    			SuiteRoleMembership roleMembership = roleMemberships.get(role);
+    			        			
+    			if (role.isStudyScoped())
+    			{
+    				if (studyId == null)
+    				{
+    					throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", role.getDisplayName());
+    				}
+    				// if the user has permission to access specific studies (not all studies), then verify the study
+    				else if (!roleMembership.isAllStudies() && !roleMembership.getStudyIdentifiers().contains(studyId))
+    			    {
+    					throw new SuiteAuthorizationAccessException("Username %s does not have permission for study %s", username, studyId);
+    			    }
+    			}
+    			
+    			if (role.isSiteScoped())
+    			{
+    				if (siteNciInstituteCodes == null)
+    				{
+    					throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", role.getDisplayName());
+    				}
+    				// if the user has permission to access specific sites (not all sites), then verify the sites
+    				else if (!roleMembership.isAllSites())
+    			    {
+    					for (String siteNciInstituteCode : siteNciInstituteCodes)
+    					{
+    						if (!roleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+    						{
+    					        throw new SuiteAuthorizationAccessException("Username %s does not have permission for site %s", username, siteNciInstituteCode);
+    						}
+    					}
+    			    }
+    			}
+    		}
+    	}
+    	else
+    	{
+    		throw new SuiteAuthorizationAccessException("Username %s is not associated with role %s", username, role.getDisplayName());
+    	}
+	}
+
+	public Set<SuiteRole> getUserRoles(String username) throws SuiteAuthorizationAccessException
+	{	
+		long userId = getUserId(username);
+		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
+	    if (roleMemberships.isEmpty())
+        {
+	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
+        }
+
+		return roleMemberships.keySet();
+	}
+	
+	public List<String> getProtectionStudies(String username, SuiteRole role)
+	{
+		List<String> protectionStudies = new ArrayList<String>();
+		
+		List<String> protectionGroups = getProtectionGroups(username, role);		
+	    for (String protectionGroup : protectionGroups)
+	    {
+    		if (protectionGroup.startsWith(ScopeType.STUDY.getScopeCsmNamePrefix()))
+    		{
+    			protectionStudies.add(protectionGroup.substring(ScopeType.STUDY.getScopeCsmNamePrefix().length()));
+    		}
+	    }
+	    
+	    if (protectionStudies.isEmpty())
+        {
+	    	if (protectionGroups.contains(ScopeType.STUDY.getAllScopeCsmName()))
+	    	{
+	    		protectionStudies.add(ScopeType.STUDY.getAllScopeCsmName());
+	    	}
+	    	else
+	    	{
+	            log.error("Protection groups contain no studies");
+	    	}
+        }
+
+		return protectionStudies;
+	}
+	
+	public List<String> getProtectionSites(String username, SuiteRole role)
+	{
+		List<String> protectionSites = new ArrayList<String>();
+		
+		List<String> protectionGroups = getProtectionGroups(username, role);		
+	    for (String protectionGroup : protectionGroups)
+	    {
+    	    if (protectionGroup.startsWith(ScopeType.SITE.getScopeCsmNamePrefix()))
+    		{
+    			protectionSites.add(protectionGroup.substring(ScopeType.SITE.getScopeCsmNamePrefix().length()));
+    		}
+	    }
+	    
+	    if (protectionSites.isEmpty())
+        {
+	    	if (protectionGroups.contains(ScopeType.SITE.getAllScopeCsmName()))
+	    	{
+	    		protectionSites.add(ScopeType.SITE.getAllScopeCsmName());
+	    	}
+	    	else
+	    	{
+	            log.error("Protection groups contain no sites");
+	    	}
+        }
+
+		return protectionSites;
+	}
+	
+	private List<String> getProtectionGroups(String username, SuiteRole role)
+	{
+		List<String> protectionGroups = new ArrayList<String>();
+		
+		if (authorizationManager != null)
+		{
+			String userId = Long.toString(getUserId(username));
+			if (userId != null)
+			{
+			    try
+			    {
+				    Set<ProtectionGroupRoleContext> protectionGroupRoleContexts = authorizationManager.getProtectionGroupRoleContextForUser(userId);
+			        if (protectionGroupRoleContexts.isEmpty())
+			        {
+				        log.error("Username: " + username + " has no associated CSM protection groups");
+			        }
+			        else
+			        {			    	
+			    	    for (ProtectionGroupRoleContext protectionGroupRoleContext : protectionGroupRoleContexts)
+					    {
+			    	    	Set<Role> protectionGroupRoles = protectionGroupRoleContext.getRoles();
+			    	    	
+			    	    	for (Role protectionGroupRole : protectionGroupRoles)
+						    {
+			    	    		if (protectionGroupRole.getName().equals(role.getCsmName()))
+			    	    		{
+			    	    			protectionGroups.add(protectionGroupRoleContext.getProtectionGroup().getProtectionGroupName());
+			    	    			break; // since match has been found
+			    	    		}
+						    }
+					    }
+			    	    
+			    	    if (protectionGroups.isEmpty())
+				        {
+					        log.error("Username: " + username + " has no CSM protection groups associated with role: " + role.getCsmName());
+				        }
+					}
+			    }
+			    catch (CSObjectNotFoundException e)
+	 	        {
+			        log.error("Error getting protection groups", e);
+	 	        }
+		    }			
+		}
+
+		return protectionGroups;
+	}
+	
+	// eventually remove ///////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean isAuthorized(String username)
 	{
 		boolean authorized = false;
 
-		AuthorizationManager authorizationManager = null;
-		UserProvisioningManager userProvisioningManager = null;
-		Set<ProtectionElementPrivilegeContext> protectionElementPrivilegeContextSet =
-				null;
-
 		try
 		{
-			authorizationManager =
-					SecurityServiceProvider
-							.getAuthorizationManager(APPLICATION_CONTEXT);
-			userProvisioningManager =
-					SecurityServiceProvider
-							.getUserProvisioningManager(APPLICATION_CONTEXT);
-			User user = null;
-
+			AuthorizationManager authorizationManager = SecurityServiceProvider.getAuthorizationManager(APPLICATION_CONTEXT);
 			if (authorizationManager != null)
-				user = authorizationManager.getUser(username);
-
-			if (user != null && userProvisioningManager != null)
 			{
-				protectionElementPrivilegeContextSet =
-						userProvisioningManager
-								.getProtectionElementPrivilegeContextForUser(user
-										.getUserId().toString());
-
+				User user = authorizationManager.getUser(username);
+				if (user == null)
+				{
+					log.error("Username: " + username + " is not a CSM user");
+				}
+				else
+				{
+					authorized = true;
+				}
 			}
 		}
 		catch (CSConfigurationException e)
 		{
-			logger.error("Error during authorization check", e);
-
-		}
-		catch (CSObjectNotFoundException e)
-		{
-			logger.error("Error during authorization check", e);
+			log.error("Error during authorization check", e);
 		}
 		catch (CSException e)
 		{
-			logger.error("Error during authorization check", e);
-		}
-
-		if (protectionElementPrivilegeContextSet != null)
-		{
-			for (ProtectionElementPrivilegeContext pepc : protectionElementPrivilegeContextSet)
-			{
-				ProtectionElement pe = pepc.getProtectionElement();
-				logger.debug("Protection Element: "
-						+ pe.getProtectionElementName());
-				if (pe.getProtectionElementName().equalsIgnoreCase(
-						APPLICATION_CONTEXT))
-					authorized = true;
-			}
+			log.error("Error during authorization check", e);
 		}
 
 		return authorized;
