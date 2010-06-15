@@ -81,12 +81,15 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,11 +160,13 @@ public class HomeAction extends Action
 			loginForm.setLoginId(username);
 
 			// Check their authorization
-			LabViewerAuthorizationHelper lvaHelper =
+			LabViewerAuthorizationHelper authHelper =
 					new LabViewerAuthorizationHelper();
-			boolean authorized = lvaHelper.isAuthorized(username);
+			Set<SuiteRole> userRoles = authHelper.getUserRoles(username);
 
-			if (!authorized)
+			if (!(userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || 
+				  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
+			      userRoles.contains(SuiteRole.LAB_DATA_USER)))
 			{
 				log.error("User authenticated but not authorized");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -180,6 +185,9 @@ public class HomeAction extends Action
 				session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
 				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 						DisplayConstants.HOME_ID);
+				
+				session.setAttribute(DisplayConstants.USER_ROLES, userRoles);
+				
 				if (session.getAttribute("HOT_LINK") == "true")
 				{
 					LabActivitiesSearchForm labFm =
