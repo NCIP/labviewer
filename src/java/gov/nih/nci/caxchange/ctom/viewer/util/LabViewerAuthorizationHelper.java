@@ -82,13 +82,13 @@
 package gov.nih.nci.caxchange.ctom.viewer.util;
 
 import gov.nih.nci.cabig.ctms.suite.authorization.AuthorizationHelper;
+import gov.nih.nci.cabig.ctms.suite.authorization.CsmHelper;
 import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
-import gov.nih.nci.security.authorization.domainobjects.Group;
 import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
@@ -115,7 +115,6 @@ public class LabViewerAuthorizationHelper
 	private static final Logger log = Logger.getLogger(LabViewerAuthorizationHelper.class);
 	private AuthorizationManager authorizationManager;
 	private AuthorizationHelper authorizationHelper;
-	private final static String APPLICATION_CONTEXT = "labviewer";
 	
 	private synchronized AuthorizationManager getAuthorizationManager() throws SuiteAuthorizationAccessException
 	{
@@ -123,7 +122,7 @@ public class LabViewerAuthorizationHelper
 		{
 		    try
 		    {
-			    authorizationManager = SecurityServiceProvider.getAuthorizationManager(APPLICATION_CONTEXT);
+			    authorizationManager = SecurityServiceProvider.getAuthorizationManager(CsmHelper.SUITE_APPLICATION_NAME);
 		    }
 		    catch (CSException e)
 		    {
@@ -226,6 +225,24 @@ public class LabViewerAuthorizationHelper
         }
 
 		return roleMemberships.keySet();
+	}
+	
+	public SuiteRoleMembership getUserRoleMembership(String username, SuiteRole role) throws SuiteAuthorizationAccessException
+	{		
+		long userId = getUserId(username);
+		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
+	    if (roleMemberships.isEmpty())
+        {
+	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
+        }
+	    
+	    SuiteRoleMembership roleMembership = roleMemberships.get(role);
+	    if (roleMembership == null)
+        {
+	        throw new SuiteAuthorizationAccessException("Username %s has no CSM protection groups associated with role ", username, role.getDisplayName());
+        }
+
+		return roleMembership;
 	}
 	
 	public List<String> getProtectionStudies(String username, SuiteRole role)
@@ -339,7 +356,7 @@ public class LabViewerAuthorizationHelper
 
 		try
 		{
-			AuthorizationManager authorizationManager = SecurityServiceProvider.getAuthorizationManager(APPLICATION_CONTEXT);
+			AuthorizationManager authorizationManager = SecurityServiceProvider.getAuthorizationManager(CsmHelper.SUITE_APPLICATION_NAME);
 			if (authorizationManager != null)
 			{
 				User user = authorizationManager.getUser(username);
