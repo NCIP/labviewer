@@ -83,6 +83,7 @@ package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
 import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
@@ -297,19 +298,18 @@ public class StudySearchDAO extends HibernateDaoSupport
 		CommonUtil util = new CommonUtil();		
 		String username = util.checkUserLogin(session);
 		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
-		List<String> protectionStudies = authHelper.getProtectionStudies(username, SuiteRole.LAB_DATA_USER);
-		List<String> protectionSites = authHelper.getProtectionSites(username, SuiteRole.LAB_DATA_USER);
+		SuiteRoleMembership roleMembership = authHelper.getUserRoleMembership(username, SuiteRole.LAB_DATA_USER);
 		
 		// if the user has permission to access specific studies (not all studies), then filter based upon these specific studies
-		if (!protectionStudies.contains(ScopeType.STUDY.getAllScopeCsmName()))
+		if (!roleMembership.isAllStudies())
 		{
 			CQLGroup innerGroup = new CQLGroup();
-			for (String protectionStudy : protectionStudies)
+			for (String studyId : roleMembership.getStudyIdentifiers())
 			{
 				CQLAssociation association = new CQLAssociation();
 			    association.setName("gov.nih.nci.labhub.domain.II"); 
 			    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to identifier table
-			    association.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, protectionStudy));
+			    association.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, studyId));
 			    innerGroup.addAssociation(association);
 			}
 			
@@ -318,15 +318,15 @@ public class StudySearchDAO extends HibernateDaoSupport
 	    }
 		
 		// if the user has permission to access specific sites (not all sites), then filter based upon these specific sites
-		if (!protectionSites.contains(ScopeType.SITE.getAllScopeCsmName()))
+		if (!roleMembership.isAllSites())
 		{
 			CQLGroup innerGroup = new CQLGroup();
-			for (String protectionSite : protectionSites)
+			for (String siteId : roleMembership.getSiteIdentifiers())
 			{
 				CQLAssociation innerAssociation = new CQLAssociation();
 				innerAssociation.setName("gov.nih.nci.labhub.domain.HealthCareSite"); 
 				innerAssociation.setTargetRoleName("healthCareSite");
-				innerAssociation.setAttribute(new CQLAttribute("nci_institute_code", CQLPredicate.EQUAL_TO, protectionSite));
+				innerAssociation.setAttribute(new CQLAttribute("nci_institute_code", CQLPredicate.EQUAL_TO, siteId));
 			    
 				CQLAssociation association = new CQLAssociation();
 			    association.setName("gov.nih.nci.labhub.domain.StudySite"); 
@@ -789,12 +789,13 @@ public class StudySearchDAO extends HibernateDaoSupport
 		else
 		{
 			if (ctodsSearchResults.isEmpty())
-			{					
-				for (Protocol paStudy : paStudies)
-		        {
-					StudySearchResult paSearchResult = createSearchResult(paStudy);
-					studySearchResults.add(paSearchResult);
-		        }
+			{	
+// users decided they just wanted CTODS search results displayed - need to clean this up				
+//				for (Protocol paStudy : paStudies)
+//		        {
+//					StudySearchResult paSearchResult = createSearchResult(paStudy);
+//					studySearchResults.add(paSearchResult);
+//		        }
 			}
 			else
 			{
@@ -832,10 +833,12 @@ public class StudySearchDAO extends HibernateDaoSupport
 			            }
 			        }
 			        						        
-			        studySearchResults.add(paSearchResult);
-			        if (removeObject != null){
-			            ctodsSearchResults.remove(removeObject);
-			        }
+// users decided they just wanted CTODS search results displayed - need to clean this up
+//			        studySearchResults.add(paSearchResult);
+//			        if (removeObject != null)
+//			        {
+//			            ctodsSearchResults.remove(removeObject);
+//			        }
 			    }
 		        
 		        // add any remaining CTODS search results
