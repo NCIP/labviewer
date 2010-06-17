@@ -1,6 +1,6 @@
 package gov.nih.nci.cagrid.labviewer.service;
 
-import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cagrid.labviewer.service.globus.LabLoaderAuthorization;
 import gov.nih.nci.cagrid.labviewer.xml.HL7v3CtLabUnMarshaller;
@@ -9,6 +9,7 @@ import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 
 import java.rmi.RemoteException;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -22,8 +23,7 @@ import org.apache.log4j.Logger;
 public class LabLoaderImpl extends LabLoaderImplBase
 {
 	Logger log = Logger.getLogger(getClass());
-	private final static String HEALTHCARE_SITE = "HealthcareSite";
-	private final static String STUDY = "Study";
+	private LabViewerAuthorizationHelper authorizationHelper;
 
 	public LabLoaderImpl() throws RemoteException
 	{
@@ -99,7 +99,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 	 * @throws RemoteException
 	 */
 	private void checkAuthorization(String callerId, String xml) throws RemoteException
-	{	
+	{
 		if (callerId == null)
 		{
 			log.error("Error saving lab - no user credentials provided");
@@ -112,39 +112,32 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		
-		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
-		List<String> protectionStudies = authHelper.getProtectionStudies(username, SuiteRole.LAB_DATA_USER);
-		List<String> protectionSites = authHelper.getProtectionSites(username, SuiteRole.LAB_DATA_USER);
-		if (protectionStudies.isEmpty() || protectionSites.isEmpty())
+		HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
+		String studyId = unMarshaller.getStudyId(xml);
+		
+		List<String> siteNciInstituteCodes = new ArrayList<String>();
+		siteNciInstituteCodes.add(unMarshaller.getSiteNciInstituteCode(xml));
+		
+		try
 		{
-			log.error("Error saving lab - user " + username + " not authorized for this operation");
-			throw new RemoteException("User " + username + " not authorized for this operation");
+		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.LAB_DATA_USER, studyId, siteNciInstituteCodes);
 		}
-		
-		// if the user has permission to access specific studies (not all studies), then verify the study in the lab message
-		if (!protectionStudies.contains(ScopeType.STUDY.getAllScopeCsmName()))
+		catch (SuiteAuthorizationAccessException e)
 		{
-			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
-			String studyId = unMarshaller.getStudyId(xml);
-			if (studyId != null && !protectionStudies.contains(studyId))
-		    {
-		    	log.error("Error saving lab - user " + username + " does not have permission for this study");
-				throw new RemoteException("User " + username + " does not have permission for this study");
-		    }
-	    }
-		
-		// if the user has permission to access specific sites (not all sites), then verify the sites in the lab message
-		if (!protectionSites.contains(ScopeType.SITE.getAllScopeCsmName()))
-		{
-			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
-			String siteNciInstituteCode = unMarshaller.getSiteNciInstituteCode(xml);
-			if (siteNciInstituteCode != null && !protectionSites.contains(siteNciInstituteCode))
-			{
-		    	log.error("Error saving lab - user " + username + " does not have permission for this healthcare site");
-				throw new RemoteException("User " + username + " does not have permission for this healthcare site");
-			}
-	    }
+			log.error("Error saving lab: ", e);
+			throw new RemoteException(e.getMessage());
+		}
 	}
+	
+	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new LabViewerAuthorizationHelper();
+        }
+        
+        return authorizationHelper;
+    }
 
 	/**
 	 * @param string
