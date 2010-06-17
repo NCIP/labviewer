@@ -8,6 +8,7 @@ import gov.nih.nci.cabig.ccts.domain.Registration;
 import gov.nih.nci.cabig.ccts.domain.StudyRefType;
 import gov.nih.nci.cabig.ccts.domain.StudySiteType;
 import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumerI;
@@ -47,6 +48,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 			Logger.getLogger(LabViewerRegistrationConsumer.class);
 	private ProtocolHandler dao = new ProtocolHandler();
 	private Connection con;
+	private LabViewerAuthorizationHelper authorizationHelper;
 
 	/**
 	 * commit is not currently implemented but is included in the grid service
@@ -248,46 +250,28 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		
-		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
-		List<String> protectionStudies = authHelper.getProtectionStudies(username, SuiteRole.REGISTRAR);
-		List<String> protectionSites = authHelper.getProtectionSites(username, SuiteRole.REGISTRAR);
-		if (protectionStudies.isEmpty() || protectionSites.isEmpty())
+		try
 		{
-			log.error("Error saving participant - user " + username + " not authorized for this operation");
-			RegistrationConsumptionException exception = new RegistrationConsumptionException();
-			exception.setFaultString("User " + username + " not authorized for this operation");
-			throw exception;
+		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.REGISTRAR, getStudyId(registration), getSiteNciInstituteCodes(registration));
 		}
-		
-		// if the user has permission to access specific studies (not all studies), then verify the study in the registration message
-		if (!protectionStudies.contains(ScopeType.STUDY.getAllScopeCsmName()))
+		catch (SuiteAuthorizationAccessException e)
 		{
-			String studyId = getStudyId(registration);
-			if (studyId != null && !protectionStudies.contains(studyId))
-		    {
-		    	log.error("Error saving participant - user " + username + " does not have permission for this study");
-		    	RegistrationConsumptionException exception = new RegistrationConsumptionException();
-				exception.setFaultString("User " + username + " does not have permission for this study");
-				throw exception;
-		    }
-	    }
-		
-		// if the user has permission to access specific sites (not all sites), then verify the sites in the registration message
-		if (!protectionSites.contains(ScopeType.SITE.getAllScopeCsmName()))
-		{
-			List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
-			if (!siteNciInstituteCodes.isEmpty())
-			{
-			    if (!protectionSites.containsAll(siteNciInstituteCodes))
-			    {
-			    	log.error("Error saving participant - user " + username + " does not have permission for this healthcare site");
-			    	RegistrationConsumptionException exception = new RegistrationConsumptionException();
-					exception.setFaultString("User " + username + " does not have permission for this healthcare site");
-					throw exception;
-			    }
-			}
-	    }
+			log.error("Error saving participant: ", e);
+			RegistrationConsumptionException exception = new RegistrationConsumptionException();
+			exception.setFaultString(e.getMessage());
+			throw exception;
+		}				
 	}
+	
+	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new LabViewerAuthorizationHelper();
+        }
+        
+        return authorizationHelper;
+    }
 	
 	private String getStudyId(Registration registration)
 	{
