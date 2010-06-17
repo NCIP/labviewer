@@ -81,6 +81,7 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
@@ -160,13 +161,26 @@ public class HomeAction extends Action
 			loginForm.setLoginId(username);
 
 			// Check their authorization
-			LabViewerAuthorizationHelper authHelper =
-					new LabViewerAuthorizationHelper();
-			Set<SuiteRole> userRoles = authHelper.getUserRoles(username);
-
-			if (!(userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || 
-				  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
-			      userRoles.contains(SuiteRole.LAB_DATA_USER)))
+			LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
+			Set<SuiteRole> userRoles = null;
+			try
+			{
+			    userRoles = authHelper.getUserRoles(username);
+			    
+			    if (!(userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || 
+						  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
+					      userRoles.contains(SuiteRole.LAB_DATA_USER)))
+				{
+					log.error("User authenticated but not authorized");
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							DisplayConstants.ERROR_ID,
+							"User does not have permissions for this application"));
+					saveErrors(request, errors);
+					loggedIn = false;
+					forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
+				}
+			}
+			catch (SuiteAuthorizationAccessException e)
 			{
 				log.error("User authenticated but not authorized");
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
