@@ -24,17 +24,7 @@
 			    <ivy pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/ivy.xml" />
 				<artifact pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</url>			
-			<url name="springsource-release">
-                <ivy pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-                <artifact pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            </url>
-            <url name="springsource-external">
-                <ivy pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-                <artifact pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            </url>
+			<ibiblio name="nci-ivy-repo" root="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/" pattern="[organization]/[module]/[revision]/[artifact]-[revision].[ext]" />
 		</chain>
-		<chain name="libraries">
-            <ibiblio name="m2" m2compatible="true"/>
-        </chain>
 	</resolvers>
 </ivysettings>
