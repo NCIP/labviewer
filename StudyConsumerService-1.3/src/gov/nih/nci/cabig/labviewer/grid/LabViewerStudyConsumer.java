@@ -147,7 +147,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		
 		try
 		{
-		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.STUDY_QA_MANAGER, getStudyId(study), getSiteNciInstituteCodes(study));
+		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.STUDY_CREATOR, getStudyId(study), getSiteNciInstituteCodes(study));
 		}
 		catch (SuiteAuthorizationAccessException e)
 		{
