@@ -736,6 +736,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<filterset begintoken="@" endtoken="@">
 					  <filter token="database_dialect" value="${database.dialect}" />
 					  <filter token="database_driver" value="${database.driver}" />
+					  <filter token="database_csm_username" value="${database.csm.username}" />
+					  <filter token="database_csm_password" value="${database.csm.password}" />
 					  <filter token="database_csm_url" value="${database.csm.url}" />
 					  <filter token="database_user" value="${database.user}" />
 					  <filter token="database_passwd" value="${database.password}" />
@@ -843,6 +845,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	            <filterset begintoken="@" endtoken="@">
 					<filter token="database_dialect" value="${database.dialect}" />
 					<filter token="database_driver" value="${database.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
 	            	<filter token="database_csm_url" value="${database.csm.url}" />
 					<filter token="database_user" value="${database.user}" />
 					<filter token="database_passwd" value="${database.password}" />
