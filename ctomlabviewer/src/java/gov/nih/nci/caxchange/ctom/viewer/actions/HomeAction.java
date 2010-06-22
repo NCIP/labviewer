@@ -171,22 +171,14 @@ public class HomeAction extends Action
 						  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
 					      userRoles.contains(SuiteRole.LAB_DATA_USER)))
 				{
-					log.error("User authenticated but not authorized");
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							DisplayConstants.ERROR_ID,
-							"User does not have permissions for this application"));
-					saveErrors(request, errors);
+					log.error("User not authorized for LabViewer");
 					loggedIn = false;
 					forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
 				}
 			}
 			catch (SuiteAuthorizationAccessException e)
 			{
-				log.error("User authenticated but not authorized");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						DisplayConstants.ERROR_ID,
-						"User does not have permissions for this application"));
-				saveErrors(request, errors);
+				log.error("Error authorizing user for LabViewer: ", e);
 				loggedIn = false;
 				forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
 			}
