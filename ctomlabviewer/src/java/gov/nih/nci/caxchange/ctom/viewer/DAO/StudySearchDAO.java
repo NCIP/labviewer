@@ -81,7 +81,6 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
-import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
