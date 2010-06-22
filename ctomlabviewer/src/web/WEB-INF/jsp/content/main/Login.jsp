@@ -7,7 +7,7 @@
 	<div class="pane" align=center>
 	    <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
-	      <h2>Please log in</h2>
+	      <h2>Lab Activity Viewer</h2>
 	    </div></div></div>
 	    <!-- end header -->
 	    <!-- inner border -->
@@ -17,32 +17,30 @@
 <!-- laf box 1st half -->
 			<table summary="" cellpadding="0" cellspacing="0" border="0"
 				class="contentPage" width="60%" height="80%" >
-					<html:form action="/Login">
 					<tr>
-						<table cellpadding="2" cellspacing="0" border="0" >
+						<table cellpadding="0" cellspacing="0" border="0" >
+						    <tr>
+								<td align=center>
+								    <h2>Error</h2>
+								</td>
+							</tr>
 							<tr>
 								<td colspan="2"><html:errors /></td>
 							</tr>
-							<tr> <td height=18> </td></tr>  <!-- space on top -->
 							<tr>
-								<td class="sidebarLogin" align="right"><label for="loginId">LOGIN
-								ID</label></td>
-								<td class="formFieldLogin"><html:text style="formField"
-									size="14" property="loginId" value="" /></td>
+								<td><font size="2" face="verdana">
+								<p>
+								User is not authorized to access LabViewer.
+								<br>
+								Contact user administrator for authorization to access LabViewer.
+								</font>
+								</td>
 							</tr>
-							<tr>
-								<td class="sidebarLogin" align="right"><label
-									for="password">PASSWORD</label></td>
-								<td class="formFieldLogin"><html:password style="formField"
-									size="14" property="password" value="" /></td>
-							</tr>
-							<tr>
-								<td>&nbsp;</td>
-								<td><html:submit style="actionButton" value="Login" /></td>
+							<tr class="home">
+								<td class="home" colspan="0">&nbsp;</td>
 							</tr>
 						</table>
 					</tr>
-				</html:form> 
 			</table>
 <!-- laf box 2nd half -->
 	        </div>  <!-- content -->
