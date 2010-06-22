@@ -284,6 +284,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.username" value="${database.csm.username}"/>
+			<property name="database.csm.password" value="${database.csm.password}"/>
 			<property name="database.csm.url" value="${database.csm.url}"/>
 		</ant>
 	</target>
@@ -296,6 +298,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	    <property name="database.url" value="${database.url}"/>
 		<property name="database.user" value="${database.user}"/>
 		<property name="database.password" value="${database.password}"/>
+	 	<property name="database.csm.username" value="${database.csm.username}"/>
+	 	<property name="database.csm.password" value="${database.csm.password}"/>
 	 	<property name="database.csm.url" value="${database.csm.url}"/>
 		<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="dest.dir" value="${target.dir}/wsrf-tmp"/>
@@ -339,6 +343,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<echo message="database.url= ${database.url}"/>
 			<echo message="database.user= ${database.user}"/>
 			<echo message="database.password= ${database.password}"/>
+		    <echo message="database.csm.username= ${database.csm.username}"/>
+		    <echo message="database.csm.password= ${database.csm.password}"/>
 		    <echo message="database.csm.url= ${database.csm.url}"/>
 			<echo message="artifacts.dir= ${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <echo message="ctomlabviewer.dir= ${ctomlabviewer.base.dir}"/>
@@ -379,6 +385,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.username" value="${database.csm.username}"/>
+			<property name="database.csm.password" value="${database.csm.password}"/>
 			<property name="database.csm.url" value="${database.csm.url}"/>
 			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}"/>
