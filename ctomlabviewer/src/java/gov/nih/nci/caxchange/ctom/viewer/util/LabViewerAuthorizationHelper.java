@@ -81,22 +81,17 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.util;
 
-import gov.nih.nci.cabig.ctms.suite.authorization.AuthorizationHelper;
 import gov.nih.nci.cabig.ctms.suite.authorization.CsmHelper;
-import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembershipLoader;
 import gov.nih.nci.security.AuthorizationManager;
 import gov.nih.nci.security.SecurityServiceProvider;
-import gov.nih.nci.security.authorization.domainobjects.ProtectionGroupRoleContext;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
-import gov.nih.nci.security.exceptions.CSObjectNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -114,7 +109,7 @@ public class LabViewerAuthorizationHelper
 {
 	private static final Logger log = Logger.getLogger(LabViewerAuthorizationHelper.class);
 	private AuthorizationManager authorizationManager;
-	private AuthorizationHelper authorizationHelper;
+	private SuiteRoleMembershipLoader authorizationHelper;
 	
 	private synchronized AuthorizationManager getAuthorizationManager() throws SuiteAuthorizationAccessException
 	{
@@ -133,11 +128,11 @@ public class LabViewerAuthorizationHelper
 		return authorizationManager;
 	}
 	
-	private synchronized AuthorizationHelper getAuthorizationHelper()
+	private synchronized SuiteRoleMembershipLoader getAuthorizationHelper()
 	{
         if (authorizationHelper == null)
         {
-            authorizationHelper = new AuthorizationHelper();
+            authorizationHelper = new SuiteRoleMembershipLoader();
             authorizationHelper.setAuthorizationManager(getAuthorizationManager());
         }
         
