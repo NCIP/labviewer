@@ -95,9 +95,6 @@ function MM_swapImage() { //v3.0
    		 <a href="javascript: set('<%=DisplayConstants.LOGOUT_ID%>')" style="font-size: .8em; color: blue;">Log out</a>    
        <%} %>
        </logic:present>
-       <logic:notPresent name="<%=DisplayConstants.LOGIN_OBJECT%>">
-       <a href="javascript: set('<%=DisplayConstants.HOME_ID%>')" style="font-size: .8em; color: blue;">Log in</a>    
-       </logic:notPresent>
      </div>
 
 	<!-- if log in, enable menu and login id -->
