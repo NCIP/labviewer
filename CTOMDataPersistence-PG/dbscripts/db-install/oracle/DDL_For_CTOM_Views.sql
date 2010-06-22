@@ -212,7 +212,12 @@ UNION
 SELECT p.id                  id,
        p.identifier          identifier,
        p.name                name
-FROM   performing_laboratory p;
+FROM   performing_laboratory p
+UNION
+SELECT h.id                  id,
+       h.nci_institute_code  identifier,
+       h.name                name
+FROM   healthcare_site AS h;
 
 
 CREATE OR REPLACE VIEW LAB_HUB_PERSON
