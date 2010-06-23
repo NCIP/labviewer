@@ -23,16 +23,7 @@
 			<url name="cbiit-ivy-repo" m2compatible="false">
 			    <ivy pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/ivy.xml" />
 				<artifact pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-			</url>	
-			<!-- are these springsource repos nci approved? -->		
-			<url name="springsource-release">
-                <ivy pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-                <artifact pattern="http://repository.springsource.com/ivy/bundles/release/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            </url>
-            <url name="springsource-external">
-                <ivy pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-                <artifact pattern="http://repository.springsource.com/ivy/bundles/external/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-            </url>
+			</url>
             <ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />
 		</chain>
 	</resolvers>
