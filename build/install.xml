@@ -731,19 +731,20 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>
 
 	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/applicationContext.xml"
 	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
 				<filterset begintoken="@" endtoken="@">
-					  <filter token="database_dialect" value="${database.dialect}" />
-					  <filter token="database_driver" value="${database.driver}" />
-					  <filter token="database_csm_username" value="${database.csm.username}" />
-					  <filter token="database_csm_password" value="${database.csm.password}" />
-					  <filter token="database_csm_url" value="${database.csm.url}" />
-					  <filter token="database_user" value="${database.user}" />
-					  <filter token="database_passwd" value="${database.password}" />
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
+	            	<filter token="database_csm_url" value="${database.csm.url}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
 				</filterset>
 			</copy>		
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/applicationContext.xml"
 	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes" overwrite="true"/>	     				   
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>
 
@@ -757,7 +758,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			
 			<antcall target="configure-csm"/>
 			<antcall target="configure-ctods-hibernate"/>
-			<antcall target="configure-csm-app-security"/>
 			<antcall target="configure-log4j"/>
 			<antcall target="configure-labviewer-properties"/> 
 			<antcall target="configure-baseURL-properties"/>
@@ -840,19 +840,20 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	
 	<target name="configure-csm">
 		<echo message="configure-csm"/>
-		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/applicationContext.xml"
 	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
 	            <filterset begintoken="@" endtoken="@">
-					<filter token="database_dialect" value="${database.dialect}" />
-					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
 	            	<filter token="database_csm_username" value="${database.csm.username}" />
 	            	<filter token="database_csm_password" value="${database.csm.password}" />
 	            	<filter token="database_csm_url" value="${database.csm.url}" />
-					<filter token="database_user" value="${database.user}" />
-					<filter token="database_passwd" value="${database.password}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
 				</filterset>
 	    </copy>
-	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/applicationContext.xml"
 	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>
 	        
 	</target>
@@ -870,18 +871,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				</filterset>
 	    </copy>
 	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cTODSlabviewer.hibernate.cfg.xml"
-	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
-	</target>
-
-	<target name="configure-csm-app-security">
-		<echo message="configure-csm-app-security"/>
-		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/ApplicationSecurityConfig.xml"
-	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
-	            <filterset begintoken="@" endtoken="@">
-								<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
-				</filterset>
-	    </copy>
-	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/ApplicationSecurityConfig.xml"
 	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
 	</target>
 
