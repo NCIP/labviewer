@@ -245,16 +245,10 @@
 		<copy todir="${webapps.dir}/WEB-INF/classes">
 			<fileset dir="wsrf-folder/classes" />
 		</copy>
-		<copy file="labviewer.hibernate.cfg.xml.template" toFile="${webapps.dir}/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml" filtering="true" overwrite="true">
-<!--
-		 <filterset begintoken="@" endtoken="@">
-		  <filter token="database_dialect" value="${database.dialect}" />
-		  <filter token="database_driver" value="${database.driver}" />
-		  <filter token="database_url" value="${database.url}" />
-		  <filter token="database_user" value="${database.user}" />
-		  <filter token="database_passwd" value="${database.password}" />
-		</filterset>
--->
+
+
+		<copy file="${software.dir}/ctomlabviewer/resources/applicationContext.xml.template" 
+			  toFile="${webapps.dir}/WEB-INF/classes/applicationContext.xml" filtering="true" overwrite="true">
 		</copy>
 	</target>
 
