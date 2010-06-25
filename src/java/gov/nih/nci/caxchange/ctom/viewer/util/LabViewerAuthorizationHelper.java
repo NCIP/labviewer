@@ -91,7 +91,9 @@ import gov.nih.nci.security.SecurityServiceProvider;
 import gov.nih.nci.security.authorization.domainobjects.User;
 import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
+import gov.nih.nci.security.provisioning.AuthorizationManagerImpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -113,20 +115,15 @@ public class LabViewerAuthorizationHelper
 	
 	private synchronized AuthorizationManager getAuthorizationManager() throws SuiteAuthorizationAccessException
 	{
+
 		if (authorizationManager == null)
 		{
-		    try
-		    {
-			    authorizationManager = SecurityServiceProvider.getAuthorizationManager(CsmHelper.SUITE_APPLICATION_NAME);
-		    }
-		    catch (CSException e)
-		    {
-			    throw new SuiteAuthorizationAccessException(e);
-		    }
+		        authorizationManager = (AuthorizationManagerImpl)ObjectFactory.getObject("csmUserProvisioningManager");
 		}
 		
 		return authorizationManager;
 	}
+	
 	
 	private synchronized SuiteRoleMembershipLoader getAuthorizationHelper()
 	{
@@ -272,4 +269,14 @@ public class LabViewerAuthorizationHelper
 
 		return authorized;
 	}
+	
+	private static HashMap<String, String> csmConnectionProperties() {
+        HashMap<String, String> connectionProperties = new HashMap<String, String>();
+        connectionProperties.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/csm");
+        connectionProperties.put("hibernate.connection.driver_class", "org.postgresql.Driver");
+        connectionProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        connectionProperties.put("hibernate.connection.username", "scott");
+        connectionProperties.put("hibernate.connection.password", "tiger");
+        return connectionProperties;
+    }	
 }
