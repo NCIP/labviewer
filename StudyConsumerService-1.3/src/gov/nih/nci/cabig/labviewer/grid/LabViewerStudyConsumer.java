@@ -7,7 +7,6 @@ import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
 import gov.nih.nci.cabig.ccts.domain.StudyOrganizationType;
-import gov.nih.nci.cabig.ccts.domain.StudySiteType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
@@ -145,9 +144,22 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		
+		List<SuiteRole> studyConsumerRoles = new ArrayList<SuiteRole>();
+		studyConsumerRoles.add(SuiteRole.STUDY_CREATOR);
+		studyConsumerRoles.add(SuiteRole.STUDY_QA_MANAGER);
+		
+		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
+		if (siteNciInstituteCodes.isEmpty())
+		{
+			log.error("Error saving study - no site NCI institure codes provided");
+			StudyCreationException exception = new StudyCreationException();
+			exception.setFaultString("No site NCI institure codes provided");
+			throw exception;
+		}
+		
 		try
 		{
-		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.STUDY_CREATOR, getStudyId(study), getSiteNciInstituteCodes(study));
+		    getAuthorizationHelper().checkAuthorization(username, studyConsumerRoles, null, siteNciInstituteCodes);
 		}
 		catch (SuiteAuthorizationAccessException e)
 		{
@@ -168,23 +180,6 @@ public class LabViewerStudyConsumer implements StudyConsumerI
         return authorizationHelper;
     }
 	
-	private String getStudyId(Study study)
-	{
-		String studyId = null;
-		
-		IdentifierType identifiers[] = study.getIdentifier();
-		for (IdentifierType identifier : identifiers)
-		{
-			if (identifier.getPrimaryIndicator())
-			{
-				studyId = identifier.getValue();
-				break; // since match has been found
-			}
-		}
-		
-		return studyId;
-	}
-	
 	private List<String> getSiteNciInstituteCodes(Study study)
 	{
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
@@ -193,22 +188,21 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		if (studyOrganizationTypes != null)
 		{
 			for (StudyOrganizationType studyOrganizationType : studyOrganizationTypes)
-		    {			
-			    if (studyOrganizationType instanceof StudySiteType)
+		    {
+			    HealthcareSiteType healthCareSiteTypes[] = studyOrganizationType.getHealthcareSite();
+			    if (healthCareSiteTypes != null)
 			    {
-				    StudySiteType studySiteType = (StudySiteType)studyOrganizationType;
-				    HealthcareSiteType healthCareSiteTypes[] = studySiteType.getHealthcareSite();
-				    if (healthCareSiteTypes != null)
-				    {
-				    	for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+			    	for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+			        {
+				        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
 				        {
-					        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
-					        {
-					        	siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
-					        }
+				        	if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
+				        	{
+				        	    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+				        	}
 				        }
-				    }
-				}
+			        }
+			    }
 			}
 		}
 		
