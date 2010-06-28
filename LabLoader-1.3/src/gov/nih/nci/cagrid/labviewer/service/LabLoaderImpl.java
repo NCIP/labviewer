@@ -114,9 +114,19 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		
 		HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
 		String studyId = unMarshaller.getStudyId(xml);
+		if (studyId == null)
+		{
+			log.error("Error saving lab - no study identifier provided");
+			throw new RemoteException("No study identifier provided");
+		}
 		
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
 		siteNciInstituteCodes.add(unMarshaller.getSiteNciInstituteCode(xml));
+		if (siteNciInstituteCodes.isEmpty())
+		{
+			log.error("Error saving lab - no site NCI institure codes provided");
+			throw new RemoteException("No site NCI institure codes provided");
+		}
 		
 		try
 		{
