@@ -7,7 +7,6 @@ import gov.nih.nci.cabig.ccts.domain.ParticipantType;
 import gov.nih.nci.cabig.ccts.domain.Registration;
 import gov.nih.nci.cabig.ccts.domain.StudyRefType;
 import gov.nih.nci.cabig.ccts.domain.StudySiteType;
-import gov.nih.nci.cabig.ctms.suite.authorization.ScopeType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
@@ -250,9 +249,27 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		
+		String studyId = getStudyId(registration);
+		if (studyId == null)
+		{
+			log.error("Error saving participant - no study identifier provided");
+			RegistrationConsumptionException exception = new RegistrationConsumptionException();
+			exception.setFaultString("No study identifier provided");
+			throw exception;
+		}
+		
+		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
+		if (siteNciInstituteCodes.isEmpty())
+		{
+			log.error("Error saving participant - no site NCI institure codes provided");
+			RegistrationConsumptionException exception = new RegistrationConsumptionException();
+			exception.setFaultString("No site NCI institure codes provided");
+			throw exception;
+		}
+		
 		try
 		{
-		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.REGISTRAR, getStudyId(registration), getSiteNciInstituteCodes(registration));
+		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.REGISTRAR, studyId, siteNciInstituteCodes);
 		}
 		catch (SuiteAuthorizationAccessException e)
 		{
@@ -304,7 +321,10 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		        {
 			        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
 			        {
-			        	siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+			        	if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
+			        	{
+			        	    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+			        	}
 			        }
 		        }
 		    }
