@@ -101,9 +101,10 @@
 
         <dependency org="ncicb" name="wsrf-core" rev="noversion"/>
         <dependency org="ncicb" name="clm" rev="4.0"/>
-        <dependency org="gov.nih.nci.cabig.ctms" name="ctms-commons-suite-authorization" rev="0.3.0.RELEASE" conf="compile->runtime" >
+        <dependency org="gov.nih.nci.cabig.ctms" name="ctms-commons-suite-authorization" rev="0.3.0.RELEASE" conf="compile->runtime" > <!-- lisa - try transitive="false" -->
             <exclude module="commons-lang" /> <!-- this excludes v1.0.1, display tag needs v2.x -->
             <exclude module="jdom" /> <!-- transitive dependency from csm to jdom doesn't work, so have to exclude and include below -->
+            <exclude module="com.springsource.org.apache.commons.attributes" /> <!-- exclude because of invalid manifest -->
         </dependency>
         <dependency org="jdom" name="jdom" rev="1.0" />
       
