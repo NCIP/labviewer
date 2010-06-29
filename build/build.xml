@@ -485,7 +485,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
         <replaceregexp file="${dist.exploded.dir}/install.properties" byline="true" match="^(env.name)=.*" replace="\1=external" />
 		<obfuscate-properties-file
 			properties.file="${dist.exploded.dir}/install.properties"
-			required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.server,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname"
+			required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.host,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname"
 			optional.property.list="ldap.url,ldap.basedn"
 			delete.property.list="exclude.jboss.backup"
 			/>
