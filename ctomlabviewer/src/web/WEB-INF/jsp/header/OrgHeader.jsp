@@ -86,7 +86,7 @@ function MM_swapImage() { //v3.0
        <% if(session.getAttribute("version")!= null){ %>
          	<font color=blue>CTODS LabViewer V<%=session.getAttribute("version")%></font> ||
          <%} %>
-       <a href="helpdocs/CTODS Lab Viewer End User Guide.doc" style="color: blue; font-size: .8em;">Help</a> ||
+       <a href="https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT" target="_blank" style="color: blue; font-size: .8em;">Help</a> ||
        <logic:present name="<%=DisplayConstants.LOGIN_OBJECT%>">
        <% if(session.getAttribute("CAGRID_SSO_GRID_IDENTITY")!=null && session.getAttribute("webssoEnabled")!= null){ %>
        <% if(session.getAttribute("webssoEnabled").equals("TRUE") || session.getAttribute("webssoEnabled").equals("true")|| (session.getAttribute("HOT_LINK") == "true")){ %>
