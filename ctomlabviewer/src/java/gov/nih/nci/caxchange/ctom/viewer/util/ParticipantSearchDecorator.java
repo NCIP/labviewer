@@ -18,7 +18,7 @@ public class ParticipantSearchDecorator extends TableDecorator
 		super();
 	}
 
-	public final String getFristName()
+	public final String getFirstName()
 	{
 
 		ParticipantSearchResult partSearchResult = (ParticipantSearchResult) getCurrentRowObject();
