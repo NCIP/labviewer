@@ -1,36 +1,3 @@
-/* *****************************************************************************
-********************************************************************************
-
-SCRIPT NAME:  DDL_For_CTOM_Sequences.sql 
-PURPOSE:      Create or recreate sequences for CTOM tables. 
-AUTHOR:		  ScenPro, Inc.
-DATE:		  March, 2006 
-VERSION: 	  CTOM v0.5.3 
-NOTE:		  This script was created in Toad and is best viewed through that tool.
-UPDATE LOG: 
-Date        Description 
-----------  --------------------------------------------------------------------
-2007-05-15  Dropped adverse_event_report_seq 
-2007-05-17  Dropped sequences for all subclass tables, pat_hash_seq, and 
-			patient_hash_seq too 
-2007-05-21  Removed the drop/create for sift_and_merge_log_seq 
-2007-08-07  Removed INVESTIGATOR_SEQ AND PARTICIPANT_SEQ as sequences, created
-            PERSON_SEQ as a sequence and created synonyms to it called INVESTIGATOR_SEQ
-            and PARTICIPANT_SEQ
-2007-08-27  Added sequence for healthcare_site_investigator
-2007-10-05  Dropped healthcare_site_seq and replaced it with organizaton_seq and 
-            synonyms for healthcare site, performing and central laboratories
-            pointing to it to support both original and new caXchange organizations
-2007-10-16  Added LAB_VIEWER_STATUS_SEQ
-2007-10-17  Added IDENTIFIER_SEQ
-
-********************************************************************************
-***************************************************************************** */
-
---SET ECHO ON
-
---SPOOL DDL_For_CTOM_Sequences.lst
-
 
 DROP SEQUENCE IF EXISTS ACTIVITY_RELATIONSHIP_SEQ;
 DROP SEQUENCE IF EXISTS ACTIVITY_SEQ;
@@ -119,6 +86,3 @@ CREATE SEQUENCE STUDY_SITE_SEQ START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE STUDY_TIME_POINT_SEQ START WITH 1 INCREMENT BY 1;
 
 
---SPOOL OFF
-
---SET ECHO OFF
