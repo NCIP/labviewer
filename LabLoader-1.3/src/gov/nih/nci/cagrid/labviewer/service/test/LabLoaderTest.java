@@ -21,8 +21,8 @@ public class LabLoaderTest
 		//"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/LabLoader"; // Dev1
         // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/LabLoader"; // Dev2
 
-	String sampleFileDirectory = "D:/My Documents/CCTS/HL7v3Files/PollDirectory";
-	String proxyFile = "D:/My Documents/CCTS/proxy";
+	String sampleFileDirectory = "D:/ccts/files/labs/SmokeTestLabs";
+	String proxyFile = "D:/ccts/files/proxy/proxy";
     private Logger logger = Logger.getLogger(getClass());
 
 	/**
