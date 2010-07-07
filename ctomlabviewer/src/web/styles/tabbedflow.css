@@ -1,0 +1,100 @@
+/*
+ * Styles for tabbed flow controllers
+ */
+
+/* second-level tabs */
+
+#workflow-tabs {
+  background: #A2A2A2 url(../images/chrome/workflow-tab_R.gif) no-repeat center left;
+  padding-right: 12px;
+  min-height: 18px; font-size: .85em;
+  border-bottom: 1px solid #001779;
+}
+
+#workflow-tabs li {
+  background: url(../images/chrome/workflow-tab_BG.gif) no-repeat top left;
+  padding: 2px 0;
+  line-height: 14px;
+  border: 0 solid #000;
+  border-right-width: 1px;
+}
+
+#workflow-tabs li.selected {
+  background-image: url(../images/chrome/workflow-tab_BG_s.gif);
+}
+
+#workflow-tabs li div {
+  position: relative;
+  left: 6px;
+  background: url(../images/chrome/workflow-tab_R.gif) no-repeat top right; 
+  padding: 0 16px 0 10px;
+}
+
+#workflow-tabs li.selected div {
+  background-image: url(../images/chrome/workflow-tab_R_s.gif);
+}
+
+#workflow-tabs li.last div {
+  background-image: none;
+}
+
+#workflow-tabs a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333333;
+}
+
+#workflow-tabs a:hover {
+  color: #002EE2;
+}
+
+/**** MAJOR PAGE DIVISIONS */
+
+#summary-pane {
+  width: 25%;
+}
+
+#summary-pane .row .label {
+  width: 35%;
+}
+
+#summary-pane .row .value {
+  margin-left: 40%;
+}
+
+#main-pane {
+  width: 70%;
+}
+
+/**** FLOW-SPECIFIC CONTROLS */
+
+.buttons {
+  border-top: 1px solid #000;
+  clear: both;
+}
+
+.buttons input {
+  padding: 2px;
+  margin: 3px;
+}
+
+.local-buttons {
+  float: right;
+  clear: both;
+}
+
+.local-buttons input {
+    font-size: 0.9em;
+}
+
+.flow-buttons {
+  clear: both;
+  margin-top: 8px;
+}
+
+.flow-buttons .prev {
+  float: left;
+}
+.flow-buttons .next {
+  float: right;
+}
