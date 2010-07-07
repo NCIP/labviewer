@@ -111,7 +111,7 @@
     <classpathentry kind="var" path="GLOBUS_LIB/xalan.jar"/>
     <classpathentry kind="var" path="GLOBUS_LIB/xercesImpl.jar"/>
     <classpathentry kind="var" path="GLOBUS_LIB/xml-apis.jar"/>
-    <classpathentry kind="var" path="PA_GLOBUS/LIB/wss4j.jar"/>
+    <classpathentry kind="var" path="GLOBUS_LIB/wss4j.jar"/>
 
     <classpathentry kind="var" path="GLOBUS_LIB/xmlsec.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-testing-unit-1.0.5.RELEASE.jar"/>
