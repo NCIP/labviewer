@@ -125,13 +125,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
 				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="db.install.create.file.list" value="${db.install.create.oracle.file.list}"/>
 				<property name="database.schema" value="${database.name}"/>
-			</case>
-			<case value="mysql">
-				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
-				<property name="database.driver" value="com.mysql.jdbc.Driver"/>
-				<property name="database.schema" value="${database.name}"/>
+				<property name="sql.delimiter" value="/" />
+				<property name="database.url" value="jdbc:${database.type}:thin://${database.host}:${database.port}/${database.name}" />
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

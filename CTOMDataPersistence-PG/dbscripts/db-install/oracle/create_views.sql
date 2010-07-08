@@ -1,36 +1,3 @@
-/* *****************************************************************************
-********************************************************************************
-
-SCRIPT NAME:  DDL_For_CTOM_Views.sql 
-PURPOSE:      Create or recreate views on CTOM tables. 
-AUTHOR:       ScenPro, Inc.
-DATE:         June, 2007 
-VERSION:      CTOM v0.5.3 
-NOTE:         This script was created in Toad and is best viewed through that tool.
-UPDATE LOG:
-DATE        DESCRIPTION
-----------  --------------------------------------------------------------------
-2007-06-29  Added new columns to Person_View.
-2007-07-18  Modified Organization_View name so that it is name and code.
-2007-08-07  Added security_enabled column to Person_View.
-2007-09-10  Added second decode to org view to handle null nci_institute_code 
-2007-10-05  Added edited views to support caXchange's Lab Hub requirements.
-            NOTE:  leaving the existing caCTUS/CTOMAPI views alone for now since
-                   they are not used by caXchange and caCTUS will still need
-                   the current definition - will have to change them once all apps
-                   use the concept_descriptor for codes rather than embedded columns.
-2007-10-17  Fixed bug in LAB_HUB_INVESTIGATOR
-2007-10-29  Added lab_result_id to LAB_HUB_LAB_TEST view
-2007-11-07  Added LAB_RESULT_ID to column name list in LAB_HUB_LAB_TEST view
-
-********************************************************************************
-***************************************************************************** */
-
-SET ECHO ON
-
-SPOOL DDL_For_CTOM_Views.lst
-
-
 CREATE OR REPLACE VIEW PERSON_VIEW
 (ID, LAST_NAME, FIRST_NAME, MIDDLE_NAME, BIRTH_DATE, BIRTH_DATE_ORIG, 
  TELECOM_ADDRESS, ADMINISTRATIVE_GENDER_CODE, STREET_ADDRESS, CITY, STATE, ZIP_CODE, COUNTRY_CODE, PHONE, EDUCATION_LEVEL_CODE, ETHNIC_GROUP_CODE, 
@@ -93,7 +60,8 @@ SELECT ID
        , CTOM_UPDATE_DATE
        , SECURITY_KEY
        , 'T'
-  FROM PARTICIPANT;
+  FROM PARTICIPANT
+/
 
 
 CREATE OR REPLACE VIEW ORGANIZATION_VIEW
@@ -106,7 +74,8 @@ SELECT ID, NAME||decode(name, null, '('||nci_institute_code||')', decode(nci_ins
          , DESCRIPTION_TEXT, STATUS_CODE, STATUS_DATE, STATUS_DATE_ORIG
          , STREET_ADDRESS, CITY, STATE_CODE, POSTAL_CODE, COUNTRY_CODE, TELECOM_ADDRESS
          , SOURCE, SOURCE_EXTRACT_DATE, CTOM_INSERT_DATE, CTOM_UPDATE_DATE
-FROM HEALTHCARE_SITE;
+FROM HEALTHCARE_SITE
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_ACTIVITY
@@ -125,7 +94,8 @@ SELECT a.id                              id,
        a.study_participant_assignmnt_id  subject_assignment_id
 FROM   activity                        a,
        study_time_point                s
-WHERE  a.id = s.activity_id;
+WHERE  a.id = s.activity_id
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_INVESTIGATOR
@@ -142,7 +112,8 @@ SELECT i.id                              id,
        i.race_concept_descriptor_id      race_concept_descriptor_id
 FROM   investigator                      i,
        study_investigator                s
-WHERE  i.id = s.investigator_id;
+WHERE  i.id = s.investigator_id
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_LAB_RESULT
@@ -170,7 +141,8 @@ SELECT r.id                              id,
        r.performing_laboratory_id        performing_laboratory_id
 FROM   clinical_result                   r,
        observation                       o
-WHERE  o.id = r.id;
+WHERE  o.id = r.id
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_LAB_TEST
@@ -198,7 +170,8 @@ WHERE  o.id          = r.id
 AND    o.activity_id = a.id
 AND    a.id          = p.id
 AND    p.id          = sc.id
-AND    sc.id         = s.specimen_collection_id;
+AND    sc.id         = s.specimen_collection_id
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_ORGANIZATION
@@ -213,11 +186,7 @@ SELECT p.id                  id,
        p.identifier          identifier,
        p.name                name
 FROM   performing_laboratory p
-UNION
-SELECT h.id                  id,
-       h.nci_institute_code  identifier,
-       h.name                name
-FROM   healthcare_site AS h;
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_PERSON
@@ -235,7 +204,8 @@ SELECT p.id                              id,
        p.initials                        initials,
        p.adm_gndr_concept_descriptor_id  sex_concept_descriptor_id,
        p.race_concept_descriptor_id      race_concept_descriptor_id
-FROM   participant                       p;
+FROM   participant                       p
+/
 
 
 CREATE OR REPLACE VIEW LAB_HUB_SPECIMEN_COLLECTION
@@ -264,10 +234,6 @@ FROM   activity                          a,
        study_time_point                  t
 WHERE  a.id = p.id
 AND    p.id = s.id
-AND    a.id = t.activity_id;
-
-
-SPOOL OFF
-
-SET ECHO OFF
+AND    a.id = t.activity_id
+/
 
