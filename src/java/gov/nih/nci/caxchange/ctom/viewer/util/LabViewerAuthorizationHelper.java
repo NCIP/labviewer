@@ -93,9 +93,7 @@ import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.provisioning.AuthorizationManagerImpl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -106,7 +104,7 @@ import org.apache.log4j.Logger;
  * viewer
  * <P>
  * 
- * @author mholck
+ * @author Lisa Kelley
  */
 public class LabViewerAuthorizationHelper
 {
@@ -114,17 +112,15 @@ public class LabViewerAuthorizationHelper
 	private AuthorizationManager authorizationManager;
 	private SuiteRoleMembershipLoader authorizationHelper;
 	
-	private synchronized AuthorizationManager getAuthorizationManager() throws SuiteAuthorizationAccessException
+	private synchronized AuthorizationManager getAuthorizationManager()
 	{
-
 		if (authorizationManager == null)
 		{
-		        authorizationManager = (AuthorizationManagerImpl)ObjectFactory.getObject("csmUserProvisioningManager");
+		    authorizationManager = (AuthorizationManagerImpl)ObjectFactory.getObject("csmUserProvisioningManager");
 		}
 		
 		return authorizationManager;
 	}
-	
 	
 	private synchronized SuiteRoleMembershipLoader getAuthorizationHelper()
 	{
@@ -154,135 +150,36 @@ public class LabViewerAuthorizationHelper
 		return userId;
 	}
 	
-	public void checkAuthorization(String username, List<SuiteRole> roles, String studyId, List<String> siteNciInstituteCodes) throws SuiteAuthorizationAccessException
-	{		
+	public Map<SuiteRole, SuiteRoleMembership> getUserRoleMemberships(String username) throws SuiteAuthorizationAccessException
+	{
 		long userId = getUserId(username);
-		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
-	    if (roleMemberships.isEmpty())
+		Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
+	    if (userRoleMemberships.isEmpty())
         {
 	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
         }
 	    
-	    boolean userAssociatedWithAtLeastOneRole = false;
-	    boolean userAssociatedWithStudy = false;
-	    boolean userAssociatedWithAtLeastOneSite = false;
-	    
-	    for (SuiteRole role : roles)
-	    {
-	    	if (roleMemberships.containsKey(role))
-	    	{
-	    		userAssociatedWithAtLeastOneRole = true;
-	    		
-	    		if (role.isScoped())
-	        	{
-				    SuiteRoleMembership roleMembership = roleMemberships.get(role);
-				    
-				    if (role.isStudyScoped())
-	    			{
-				    	if (roleMembership.isAllStudies()) // the user has permission to access all studies
-					    {
-				    		userAssociatedWithStudy = true;
-					    }
-				    	// the user has permission to access specific studies, so verify the study
-				    	else if (roleMembership.getStudyIdentifiers().contains(studyId))
-	    			    {
-	    					userAssociatedWithStudy = true;
-	    			    }
-	    			}
-				
-				    if (role.isSiteScoped())
-				    {
-					    if (roleMembership.isAllSites()) // the user has permission to access all sites
-					    {
-						    userAssociatedWithAtLeastOneSite = true;
-					    }
-					    else // the user has permission to access specific sites, so verify the sites
-				        {
-					    	for (String siteNciInstituteCode : siteNciInstituteCodes)
-						    {
-							    if (roleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
-							    {
-								    userAssociatedWithAtLeastOneSite = true;
-							    }
-							}
-						}
-				    }
-			    }
-	    	}	    	
-	    }
-	    
-	    if (!userAssociatedWithAtLeastOneRole)
-	    {
-	    	StringBuffer roleNames = new StringBuffer();
-	    	for (SuiteRole role : roles)
-		    {
-	    		if (roleNames.length() > 0)
-	    		{
-	    			roleNames.append(" or role ");
-	    		}	
-	    		roleNames.append(role.getDisplayName());
-		    }
-	    	
-	    	throw new SuiteAuthorizationAccessException("Username %s is not associated with role %s", username, roleNames.toString());
-	    }
-	    
-	    if (studyId != null && !userAssociatedWithStudy)
-		{	
-	    	throw new SuiteAuthorizationAccessException("Username %s does not have permission for study %s", username, studyId);
-		}
-	    
-	    if (siteNciInstituteCodes != null && !userAssociatedWithAtLeastOneSite)
-		{
-	    	StringBuffer siteNciInstituteCodeNames = new StringBuffer();
-	    	for (String siteNciInstituteCode : siteNciInstituteCodes)
-		    {
-	    		if (siteNciInstituteCodeNames.length() > 0)
-	    		{
-	    			siteNciInstituteCodeNames.append(" or site ");
-	    		}	
-	    		siteNciInstituteCodeNames.append(siteNciInstituteCode);
-		    }
-	    	
-	        throw new SuiteAuthorizationAccessException("Username %s does not have permission for site %s", username, siteNciInstituteCodeNames.toString());
-		}
-	}
-	
-	public void checkAuthorization(String username, SuiteRole role, String studyId, List<String> siteNciInstituteCodes) throws SuiteAuthorizationAccessException
-	{
-		List<SuiteRole> roles = new ArrayList<SuiteRole>();
-		roles.add(role);
-		
-		checkAuthorization(username, roles, studyId, siteNciInstituteCodes);
+	    return userRoleMemberships;
 	}
 
 	public Set<SuiteRole> getUserRoles(String username) throws SuiteAuthorizationAccessException
 	{	
-		long userId = getUserId(username);
-		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
-	    if (roleMemberships.isEmpty())
-        {
-	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
-        }
-
-		return roleMemberships.keySet();
+		Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getUserRoleMemberships(username);
+		
+		return userRoleMemberships.keySet();
 	}
 	
 	public SuiteRoleMembership getUserRoleMembership(String username, SuiteRole role) throws SuiteAuthorizationAccessException
-	{		
-		long userId = getUserId(username);
-		Map<SuiteRole, SuiteRoleMembership> roleMemberships = getAuthorizationHelper().getRoleMemberships(userId);
-	    if (roleMemberships.isEmpty())
-        {
-	        throw new SuiteAuthorizationAccessException("Username %s has no associated CSM roles", username);
-        }
+	{
+		Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getUserRoleMemberships(username);
 	    
-	    SuiteRoleMembership roleMembership = roleMemberships.get(role);
-	    if (roleMembership == null)
+	    SuiteRoleMembership userRoleMembership = userRoleMemberships.get(role);
+	    if (userRoleMembership == null)
         {
-	        throw new SuiteAuthorizationAccessException("Username %s has no CSM protection groups associated with role ", username, role.getDisplayName());
+	        throw new SuiteAuthorizationAccessException("Username %s has no CSM protection groups associated with role %s", username, role.getDisplayName());
         }
 
-		return roleMembership;
+		return userRoleMembership;
 	}
 	
 	// eventually remove ///////////////////////////////////////////////////////////////////////////////////////////////
