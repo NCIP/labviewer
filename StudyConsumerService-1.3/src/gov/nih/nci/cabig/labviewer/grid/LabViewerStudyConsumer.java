@@ -9,6 +9,7 @@ import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
 import gov.nih.nci.cabig.ccts.domain.StudyOrganizationType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.studyconsumer.common.StudyConsumerI;
 import gov.nih.nci.ccts.grid.studyconsumer.service.globus.StudyConsumerAuthorization;
@@ -27,6 +28,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -132,42 +134,79 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	{	
 		if (callerId == null)
 		{
-			log.error("Error saving study - no user credentials provided");
-			StudyCreationException exception = new StudyCreationException();
-			exception.setFaultString("No user credentials provided");
-			throw exception;
+			log.error("Error saving study: no user credentials provided");
+			throw createStudyCreationException("No user credentials provided");
 		}
 
-		log.debug("Service called by: " + callerId);
-		
+		log.debug("Service called by: " + callerId);		
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
+		
+		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
+		if (siteNciInstituteCodes == null)
+		{
+			log.error("Error saving study: site NCI institute code is null");
+			throw createStudyCreationException("Site NCI institute code is null");
+		}
 		
 		List<SuiteRole> studyConsumerRoles = new ArrayList<SuiteRole>();
 		studyConsumerRoles.add(SuiteRole.STUDY_CREATOR);
 		studyConsumerRoles.add(SuiteRole.STUDY_QA_MANAGER);
 		
-		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
-		if (siteNciInstituteCodes.isEmpty())
-		{
-			log.error("Error saving study - no site NCI institure codes provided");
-			StudyCreationException exception = new StudyCreationException();
-			exception.setFaultString("No site NCI institure codes provided");
-			throw exception;
-		}
-		
 		try
 		{
-		    getAuthorizationHelper().checkAuthorization(username, studyConsumerRoles, null, siteNciInstituteCodes);
+			Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
+			boolean userAuthorizedForStudyConsumerRole = false;
+			boolean userAuthorizedForSite = false;
+			
+			for (SuiteRole studyConsumerRole : studyConsumerRoles)
+			{
+				if (userRoleMemberships.containsKey(studyConsumerRole))
+				{
+					userAuthorizedForStudyConsumerRole = true;										
+					
+					SuiteRoleMembership userRoleMembership = userRoleMemberships.get(studyConsumerRole);
+					// if the user has permission to access specific sites (not all sites), then verify the sites
+					if (userRoleMembership.isAllSites())
+					{
+						userAuthorizedForSite = true;
+					}
+					else
+				    {
+						for (String siteNciInstituteCode : siteNciInstituteCodes)
+						{
+							if (userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+							{
+								userAuthorizedForSite = true;
+							}
+						}
+				    }
+				}
+			}
+			
+			if (!userAuthorizedForStudyConsumerRole)
+	    	{
+				throw new SuiteAuthorizationAccessException("Username %s is not authorized for roles %s", username, studyConsumerRoles.toString());
+	    	}
+			
+			if (!userAuthorizedForSite)
+	    	{
+				throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
+	    	}
 		}
 		catch (SuiteAuthorizationAccessException e)
 		{
 			log.error("Error saving study: ", e);
-			StudyCreationException exception = new StudyCreationException();
-			exception.setFaultString(e.getMessage());
-			throw exception;
+			throw createStudyCreationException(e.getMessage());
 		}
+	}
+	
+	private StudyCreationException createStudyCreationException(String message)
+	{
+		StudyCreationException exception = new StudyCreationException();
+		exception.setFaultString(message);
+		return exception;
 	}
 	
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
@@ -183,7 +222,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	private List<String> getSiteNciInstituteCodes(Study study)
 	{
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
-		
+
 		StudyOrganizationType studyOrganizationTypes[] = study.getStudyOrganization();
 		if (studyOrganizationTypes != null)
 		{
@@ -192,20 +231,20 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			    HealthcareSiteType healthCareSiteTypes[] = studyOrganizationType.getHealthcareSite();
 			    if (healthCareSiteTypes != null)
 			    {
-			    	for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
-			        {
-				        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
-				        {
-				        	if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
-				        	{
-				        	    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
-				        	}
-				        }
-			        }
+				for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+				{
+					if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
+					{
+						if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
+						{
+						    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+						}
+					}
+				}
 			    }
 			}
 		}
-		
+
 		return siteNciInstituteCodes;
 	}
 
