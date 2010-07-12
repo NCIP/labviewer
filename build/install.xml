@@ -700,19 +700,32 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 			<echo message="Executing replace-ctom-wsrf"/>
 
-            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>			
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml"
-	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">		
-               <filterset begintoken="@" endtoken="@">
-                    <filter token="cert.path" value="${cert.path}" />
-                    <filter token="key.path" value="${key.path}" />
-                </filterset>			
+            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>	
+	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
+            
+			<copy todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">	
+				  <fileset dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core">
+					<include name="global_security_descriptor.xml"/>
+					<include name="server-config.wsdd"/>
+				  </fileset>
+	            
+				   <filterset begintoken="@" endtoken="@">
+						<filter token="cert.path" value="${cert.path}" />
+						<filter token="key.path" value="${key.path}" />
+						<filter token="tomcat_hostname" value="${tomcat.hostname}" />
+					</filterset>			
 			</copy>		
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp/global_security_descriptor.xml"
-	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true"/>	     				   
+
+			<copy todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true">	
+				  <fileset dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp">
+					<include name="global_security_descriptor.xml"/>
+					<include name="server-config.wsdd"/>
+				  </fileset>
+			</copy>		
+
+	               
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>
 
-	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
 			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/applicationContext.xml"
 	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
 				<filterset begintoken="@" endtoken="@">
@@ -728,6 +741,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			</copy>		
 			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/applicationContext.xml"
 	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes" overwrite="true"/>	     				   
+
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>
 
 		    <echo message="target replace-ctom-wsrf completed"/>
