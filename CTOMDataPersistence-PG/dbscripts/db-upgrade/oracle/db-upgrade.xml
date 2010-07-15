@@ -14,10 +14,10 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
 </preConditions>
 	<changeSet id="1" author="Anupama">
 		<comment>Need to have at least one changeset to allow tagging to work.</comment>
-		<sql>select now()</sql>
+		<sql>select * from dual</sql>
 	</changeSet>
     <changeSet id="2" author="Naveen">
-        <comment>execute lab_hub_org_view.sql.sql</comment>
+        <comment>execute oracle lab_hub_org_view.sql.sql</comment>
         <sqlFile path="@db-upgrade.run.dir@/2.2/lab_hub_org_view.sql"/>
     </changeSet>
 

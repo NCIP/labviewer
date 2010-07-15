@@ -101,10 +101,23 @@
 
         <dependency org="ncicb" name="wsrf-core" rev="noversion"/>
         <dependency org="ncicb" name="clm" rev="4.0"/>
-        <dependency org="gov.nih.nci.cabig.ctms" name="ctms-commons-suite-authorization" rev="0.3.0.RELEASE" conf="compile->runtime" > <!-- lisa - try transitive="false" -->
+        <dependency org="gov.nih.nci.cabig.ctms" name="ctms-commons-suite-authorization" rev="0.4.1.RELEASE" conf="compile->runtime" >
             <exclude module="commons-lang" /> <!-- this excludes v1.0.1, display tag needs v2.x -->
             <exclude module="jdom" /> <!-- transitive dependency from csm to jdom doesn't work, so have to exclude and include below -->
             <exclude module="com.springsource.org.apache.commons.attributes" /> <!-- exclude because of invalid manifest -->
+            <!-- exclude the remaining to avoid adding springsource repositories to ivysettings.xml -->
+            <exclude module="com.springsource.org.apache.commons.lang" />
+            <exclude module="com.springsource.org.hibernate" />
+            <exclude module="com.springsource.org.hibernate.annotations" />
+            <exclude module="com.springsource.javax.persistence" />
+            <exclude module="org.springframework.beans" />
+            <exclude module="org.springframework.context" />
+            <exclude module="org.springframework.core" />
+            <exclude module="org.springframework.orm" />
+            <exclude module="org.springframework.transaction" />
+            <exclude module="com.springsource.org.apache.tools.ant" />
+            <exclude module="com.springsource.org.junit" />
+            <exclude module="com.springsource.org.hsqldb" />
         </dependency>
         <dependency org="jdom" name="jdom" rev="1.0" />
       

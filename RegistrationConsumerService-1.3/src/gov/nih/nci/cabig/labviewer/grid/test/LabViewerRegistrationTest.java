@@ -33,8 +33,8 @@ public class LabViewerRegistrationTest
 		//"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // Dev1
         // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/RegistrationConsumer"; // Dev2
 	
-	String sampleFile = "D:/My Documents/CCTS/XMLs/REGISTER_SUBJECT.xml";
-	String proxyFile = "D:/My Documents/CCTS/proxy";
+	String sampleFile = "D:/CCTS/FILES/XML/REGISTER_SUBJECT.xml";
+	String proxyFile = "D:/CCTS/FILES/PROXY/proxy";
 	private Logger logger = Logger.getLogger(getClass());
 
 	/**

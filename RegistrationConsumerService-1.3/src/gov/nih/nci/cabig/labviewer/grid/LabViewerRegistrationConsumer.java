@@ -9,6 +9,7 @@ import gov.nih.nci.cabig.ccts.domain.StudyRefType;
 import gov.nih.nci.cabig.ccts.domain.StudySiteType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumerI;
 import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
@@ -27,6 +28,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -237,47 +239,79 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	{	
 		if (callerId == null)
 		{
-			log.error("Error saving participant - no user credentials provided");
-			RegistrationConsumptionException exception = new RegistrationConsumptionException();
-			exception.setFaultString("No user credentials provided");
-			throw exception;
+			log.error("Error saving participant: no user credentials provided");
+			throw createRegistrationConsumptionException("No user credentials provided");
 		}
 
-		log.debug("Service called by: " + callerId);
-		
+		log.debug("Service called by: " + callerId);		
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		
-		String studyId = getStudyId(registration);
-		if (studyId == null)
-		{
-			log.error("Error saving participant - no study identifier provided");
-			RegistrationConsumptionException exception = new RegistrationConsumptionException();
-			exception.setFaultString("No study identifier provided");
-			throw exception;
-		}
-		
-		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
-		if (siteNciInstituteCodes.isEmpty())
-		{
-			log.error("Error saving participant - no site NCI institure codes provided");
-			RegistrationConsumptionException exception = new RegistrationConsumptionException();
-			exception.setFaultString("No site NCI institure codes provided");
-			throw exception;
-		}
-		
 		try
 		{
-		    getAuthorizationHelper().checkAuthorization(username, SuiteRole.REGISTRAR, studyId, siteNciInstituteCodes);
+		    Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
+		    SuiteRole registrationConsumerRole = SuiteRole.REGISTRAR;
+		    if (userRoleMemberships.containsKey(registrationConsumerRole))
+		    {
+		    	if (registrationConsumerRole.isScoped())
+		    	{
+		    		SuiteRoleMembership userRoleMembership = userRoleMemberships.get(registrationConsumerRole);
+
+		    		if (registrationConsumerRole.isStudyScoped())
+		    		{
+		    			String studyId = getStudyId(registration);
+		    			if (studyId == null)
+		    			{
+		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", registrationConsumerRole.getDisplayName());
+		    			}
+		    			
+		    			// if the user has permission to access specific studies (not all studies), then verify the study
+		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
+		    		    {
+		    				throw new SuiteAuthorizationAccessException("Username %s is not authorized for study %s", username, studyId);
+		    		    }
+		    		}
+
+		    		if (registrationConsumerRole.isSiteScoped())
+		    		{
+		    			List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
+		    			if (siteNciInstituteCodes.isEmpty())
+		    			{
+		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", registrationConsumerRole.getDisplayName());
+		    			}
+		    			
+		    			// if the user has permission to access specific sites (not all sites), then verify the sites
+		    			if (!userRoleMembership.isAllSites())
+		    		    {
+		    				for (String siteNciInstituteCode : siteNciInstituteCodes)
+		    				{
+		    					if (!userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+		    					{
+		    					    throw new SuiteAuthorizationAccessException("Username %s is not authorized for site %s", username, siteNciInstituteCode);
+		    					}
+		    				}
+		    		    }
+		    		}
+		    	}
+		    }
+		    else
+		    {
+		    	throw new SuiteAuthorizationAccessException("Username %s is not authorized for role %s", username, registrationConsumerRole.getDisplayName());
+		    }
 		}
 		catch (SuiteAuthorizationAccessException e)
 		{
 			log.error("Error saving participant: ", e);
-			RegistrationConsumptionException exception = new RegistrationConsumptionException();
-			exception.setFaultString(e.getMessage());
-			throw exception;
+			throw createRegistrationConsumptionException(e.getMessage());
 		}				
+	}
+	
+	private RegistrationConsumptionException createRegistrationConsumptionException(String message)
+	{
+		RegistrationConsumptionException exception = new RegistrationConsumptionException();
+		exception.setFaultString(message);
+		return exception;
 	}
 	
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
