@@ -130,6 +130,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<property name="sql.delimiter" value="/" />
 				<property name="database.url" value="jdbc:${database.type}:thin://${database.host}:${database.port}/${database.name}" />
 				<property name="database.csm.url" value="jdbc:${database.csm.type}:thin://${database.csm.host}:${database.csm.port}/${database.csm.name}" />
+				<property name="database.csm.dialect" value="org.hibernate.dialect.OracleDialect"/>
+				<property name="database.csm.driver" value="oracle.jdbc.driver.OracleDriver"/>
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
@@ -139,6 +141,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<property name="database.schema" value="public"/>
 				<property name="database.url" value="jdbc:${database.type}://${database.host}:${database.port}/${database.name}" />
 				<property name="database.csm.url" value="jdbc:${database.csm.type}://${database.csm.host}:${database.csm.port}/${database.csm.name}" />
+				<property name="database.csm.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+				<property name="database.csm.driver" value="org.postgresql.Driver"/>
 			</case>
 			<default>
 				<fail message="Invalid database type ${database.type}"/>
