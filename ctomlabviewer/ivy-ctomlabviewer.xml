@@ -119,19 +119,16 @@
             <exclude module="com.springsource.org.junit" />
             <exclude module="com.springsource.org.hsqldb" />
         </dependency>
+        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.5" />
         <dependency org="jdom" name="jdom" rev="1.0" />
-      
-          <dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile->master">
-            <exclude module="pull-parser"/>
-         </dependency>
+        <dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile->master">
+           <exclude module="pull-parser"/>
+        </dependency>
 
         <dependency org="stax" name="stax-api" rev="1.0" />
-         <dependency org="jaxb" name="jaxb-impl" rev="2.0.1"/>
-        
-
-
-         <dependency org="cglib" name="cglib" rev="2.1_3"/>
-         <dependency org="javax.transaction" name="jta" rev="1.0.1B"/>
+        <dependency org="jaxb" name="jaxb-impl" rev="2.0.1"/>
+        <dependency org="cglib" name="cglib" rev="2.1_3"/>
+        <dependency org="javax.transaction" name="jta" rev="1.0.1B"/>
         <dependency org="org.antlr" name="antlr" rev="2.7.6"/>
         <dependency org="javax.activation" name="activation" rev="1.0.2"/>
         <dependency org="javax.mail" name="mail" rev="1.2"/>
