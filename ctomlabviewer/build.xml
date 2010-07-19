@@ -435,7 +435,7 @@
 
 	    <target name="package-notest-noivy" depends="compile,war"/>
 
-	    <target name="package-notest" depends="ivy-get,compile,war"
+	    <target name="package-notest" depends="clean,ivy-get,compile,war"
 	            description="Package the application.  Do not run tests."/>
 
 	    <target name="package" depends="ivy-get,compile,test-all,war" 
