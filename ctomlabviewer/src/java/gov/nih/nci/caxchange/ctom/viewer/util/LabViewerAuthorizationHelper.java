@@ -215,13 +215,4 @@ public class LabViewerAuthorizationHelper
 		return authorized;
 	}
 	
-	private static HashMap<String, String> csmConnectionProperties() {
-        HashMap<String, String> connectionProperties = new HashMap<String, String>();
-        connectionProperties.put("hibernate.connection.url", "jdbc:postgresql://localhost:5432/csm");
-        connectionProperties.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        connectionProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        connectionProperties.put("hibernate.connection.username", "scott");
-        connectionProperties.put("hibernate.connection.password", "tiger");
-        return connectionProperties;
-    }	
 }
