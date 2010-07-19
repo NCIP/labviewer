@@ -78,7 +78,6 @@
 		<dependency org="apache" name="jarkarta-commons-httpclient-contrib" rev="3.0"/>
 		<dependency org="apache" name="commons-beanutils" rev="1.7.0"/>
 		<dependency org="apache" name="commons-codec" rev="1.3"/>
-		<dependency org="apache" name="commons-lang" rev="2.2"/>
 		<dependency org="apache" name="commons-logging" rev="1.1"/>
 		<dependency org="apache" name="log4j" rev="1.2.15" conf="default" />
 			                
@@ -118,8 +117,11 @@
             <exclude module="com.springsource.org.apache.tools.ant" />
             <exclude module="com.springsource.org.junit" />
             <exclude module="com.springsource.org.hsqldb" />
+            <exclude module="slf4j-api"/>
         </dependency>
-        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.5" />
+        <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.5.5" conf="compile->master"/>
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.5.11" conf="compile->master"/>
+        <dependency org="commons-lang" name="commons-lang" rev="2.4" conf="compile->master"/>
         <dependency org="jdom" name="jdom" rev="1.0" />
         <dependency org="dom4j" name="dom4j" rev="1.6.1" conf="compile->master">
            <exclude module="pull-parser"/>
