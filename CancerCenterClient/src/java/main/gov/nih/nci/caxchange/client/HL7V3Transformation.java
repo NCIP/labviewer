@@ -1,5 +1,5 @@
-/*package gov.nih.nci.caxchange.client;
-*//**
+package gov.nih.nci.caxchange.client;
+/**
  * Copyright Notice.  Copyright 2008  Scenpro, Inc ("caBIG(TM) Participant").caXchange
  * was created with NCI funding and is part of the caBIG(TM) initiative. 
  * The software subject to this notice and license includes both human readable source code form and 
@@ -58,7 +58,7 @@
  * 		OUT OF THE USE OF THIS caBIG(TM) SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * 
- *//*
+ */
 import static java.util.concurrent.TimeUnit.SECONDS;
 import gov.nih.nci.caadapter.common.validation.ValidatorResults;
 import gov.nih.nci.caadapter.hl7.transformation.TransformationService;
@@ -95,7 +95,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-*//**
+/**
  * HL7V3Transformation class performs the transformation of .CSV file to a HL7V3
  * message by invoking the caAdapter API. It performs the StudyLookup for the
  * participant in the transformed HL7V3 message and populates the study details-
@@ -104,7 +104,7 @@ import org.xml.sax.SAXException;
  * 
  * @author asharma
  * 
- *//*
+ */
 public class HL7V3Transformation {
 
 	CancerCenterClient cancerCenterClient;
@@ -123,11 +123,11 @@ public class HL7V3Transformation {
 		cancerCenterClient = client;
 	}
 
-	*//**
+	/**
 	 * Starts a thread to poll the directory for .CSV files. It invokes the
 	 * caAdapter API to convert a .CSV file to HL7V3. Invokes the grid service
 	 * to persist the generated HL7V3 message.
-	 *//*
+	 */
 	public void process(ArrayList<ScheduledExecutorService> threadList) {
 		threadList.add(scheduler);
 
@@ -206,9 +206,9 @@ public class HL7V3Transformation {
 						.getPollingInterval_long(), SECONDS);
 	}
 
-	*//**
+	/**
 	 * @param fileName
-	 *//*
+	 */
 	private void setUpToInvokeGrid(String fileName) {
 		// invokes the grid service to persist the HL7V3
 		// message.
@@ -253,7 +253,7 @@ public class HL7V3Transformation {
  			}
 				if(messageElement!=null){
 					InvokeGridService invokeGridService = new InvokeGridService(cancerCenterClient);	
-					invokeGridService.invokeGridService(messageElement,lab,hl7v3XML);
+					//invokeGridService.invokeGridService(messageElement,lab,hl7v3XML); // lisa commented out to get to compile for medidata work!
 				}
 				counter++;
 		 }
@@ -263,14 +263,14 @@ public class HL7V3Transformation {
 
 	}
 
-	*//**
+	/**
 	 * Invokes the caAdapter API to convert the .csv file to HL7V3 message.
 	 * 
 	 * @param filePath
 	 * @param mapFile
 	 * @return hl7MessageXml
 	 * @throws Exception
-	 *//*
+	 */
 	public ArrayList<String> invokecaAdapterAPI(String filePath, String mapFile)
 			throws Exception {
 		// Transformation Service
@@ -303,13 +303,13 @@ public class HL7V3Transformation {
 		return hl7MessageXml;
 	}
 
-	*//**
+	/**
 	 * Creates a file for the HL7V3 message.
 	 * 
 	 * @param fileName
 	 * @param HL7V3
 	 * @return hl7v3XML
-	 *//*
+	 */
 	private File createHL7V3File(String fileName, String HL7V3, int index) {
 		// Create the HL7V3 file
 		File hl7v3XML = null;
@@ -328,12 +328,12 @@ public class HL7V3Transformation {
 		return hl7v3XML;
 	}
 
-	*//**
+	/**
 	 * Accepts an inputStream and returns the org.w3c.dom.Document
 	 * 
 	 * @param stream
 	 * @return document
-	 *//*
+	 */
 	private Document getDocument(ByteArrayInputStream stream) {
 		Document document = null;
 		try {
@@ -354,13 +354,13 @@ public class HL7V3Transformation {
 		return document;
 	}
 
-	*//**
+	/**
 	 * Invokes the StudyLookup Service to lookup study information for a
 	 * participant in the HL7V3 message.
 	 * 
 	 * @param HL7V3
 	 * @return study
-	 *//*
+	 */
 	private Study invokeStudyLookupService(ByteArrayInputStream HL7V3) {
 		Registration registration = new Registration();
 		Study study = null;
@@ -402,14 +402,14 @@ public class HL7V3Transformation {
 		return study;
 	}
 
-	*//**
+	/**
 	 * Replaces the values of the attributes in the XML with the values in the
 	 * Study received from Grid Service call.
 	 * 
 	 * @param xml
 	 * @param study
 	 * @return xlm8 modified XML as String
-	 *//*
+	 */
 	private String changeXMLAttvalues(String xml, Study study) {
 		String xml1 = xml.replace("PROTOCOL ID ASSIGN AUTH", "NCI");
 		String xml2 = xml1.replace("PROTOCOL ID ROOT", study.getIdentifier(0)
@@ -425,4 +425,3 @@ public class HL7V3Transformation {
 	}
 
 }
-*/
