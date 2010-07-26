@@ -142,28 +142,31 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
-		
+		log.info("username : " + username);  
 		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
 		if (siteNciInstituteCodes == null)
 		{
 			log.error("Error saving study: site NCI institute code is null");
 			throw createStudyCreationException("Site NCI institute code is null");
 		}
-		
+
 		List<SuiteRole> studyConsumerRoles = new ArrayList<SuiteRole>();
 		studyConsumerRoles.add(SuiteRole.STUDY_CREATOR);
 		studyConsumerRoles.add(SuiteRole.STUDY_QA_MANAGER);
 		
 		try
 		{
+		    log.info(" accessing  getUserRoleMemberships ...");
 			Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
+			log.info(" retrieved  UserRoleMemberships ..." + userRoleMemberships);
 			boolean userAuthorizedForStudyConsumerRole = false;
 			boolean userAuthorizedForSite = false;
-			
+			log.info(" checking roles ...");
 			for (SuiteRole studyConsumerRole : studyConsumerRoles)
 			{
 				if (userRoleMemberships.containsKey(studyConsumerRole))
 				{
+				    log.info(" user roles = "+studyConsumerRole.getDisplayName());
 					userAuthorizedForStudyConsumerRole = true;										
 					
 					SuiteRoleMembership userRoleMembership = userRoleMemberships.get(studyConsumerRole);
@@ -184,12 +187,12 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				    }
 				}
 			}
-			
+			log.info(" userAuthorizedForStudyConsumerRole = "+userAuthorizedForStudyConsumerRole);
 			if (!userAuthorizedForStudyConsumerRole)
 	    	{
 				throw new SuiteAuthorizationAccessException("Username %s is not authorized for roles %s", username, studyConsumerRoles.toString());
 	    	}
-			
+			log.info(" userAuthorizedForSite = "+userAuthorizedForSite);
 			if (!userAuthorizedForSite)
 	    	{
 				throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
@@ -200,6 +203,11 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			log.error("Error saving study: ", e);
 			throw createStudyCreationException(e.getMessage());
 		}
+		catch (Exception e)
+        {
+            log.error("Error saving study: ", e);
+            throw createStudyCreationException(e.getMessage());
+        }		
 	}
 	
 	private StudyCreationException createStudyCreationException(String message)
@@ -222,7 +230,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	private List<String> getSiteNciInstituteCodes(Study study)
 	{
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
-
+		log.info("entering get getSiteNciInstituteCodes" );
 		StudyOrganizationType studyOrganizationTypes[] = study.getStudyOrganization();
 		if (studyOrganizationTypes != null)
 		{
@@ -244,7 +252,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			    }
 			}
 		}
-
+		log.info("leaving  getSiteNciInstituteCodes" );
 		return siteNciInstituteCodes;
 	}
 

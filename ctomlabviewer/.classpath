@@ -7,7 +7,7 @@
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/csmapi-4.2.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/servlet-2.2.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/iso-datatypes-1.1.jar"/>
-    <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/commons-lang-2.2.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/commons-lang-2.4.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctomlabapi-beans.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/sdk-client-framework-noversion.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/log4j-1.2.13.jar"/>
