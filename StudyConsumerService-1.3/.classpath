@@ -46,7 +46,7 @@
     <classpathentry kind="lib" path="lib/ctomlabapi-beans.jar"/>
     <classpathentry kind="lib" path="lib/ctomlabapi-orm.jar"/>
     <classpathentry kind="lib" path="lib/labviewerauth.jar"/>
-    <classpathentry kind="lib" path="lib/commons-lang-2.2.jar"/>
+    <classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
     <classpathentry kind="var" path="GLOBUS_LIB/addressing-1.0.jar"/>
     <classpathentry kind="var" path="GLOBUS_LIB/axis.jar"/>
     <classpathentry kind="var" path="GLOBUS_LIB/axis-url.jar"/>
@@ -117,6 +117,6 @@
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-base-1.0.5.RELEASE.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-core-1.0.5.RELEASE.jar"/>
     <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-lang-1.0.5.RELEASE.jar"/>
-    <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-suite-authorization-0.4.1.RELEASE.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB/target/ctomlabviewer/lib/ctomlabviewer/compile/ctms-commons-suite-authorization-0.4.2.RELEASE.jar"/>
     <classpathentry kind="output" path="bin"/>
 </classpath>
