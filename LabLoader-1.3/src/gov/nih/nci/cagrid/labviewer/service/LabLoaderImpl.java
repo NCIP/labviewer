@@ -110,6 +110,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
+		log.debug("Username = " + username);
 		
 		try
 		{
@@ -117,40 +118,48 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		    SuiteRole labLoaderRole = SuiteRole.LAB_DATA_USER;
 		    if (userRoleMemberships.containsKey(labLoaderRole))
 		    {
+		    	log.debug("User role memberships contains role: " + labLoaderRole.toString());
 		    	if (labLoaderRole.isScoped())
 		    	{
+		    		log.debug("Role is scoped: " + labLoaderRole.toString());
 		    		SuiteRoleMembership userRoleMembership = userRoleMemberships.get(labLoaderRole);
 
 		    		if (labLoaderRole.isStudyScoped())
 		    		{
+		    			log.debug("Role is study scoped: " + labLoaderRole.toString());
 		    			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
 		    			String studyId = unMarshaller.getStudyId(xml);
 		    			if (studyId == null)
 		    			{
 		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", labLoaderRole.getDisplayName());
 		    			}
+		    			log.debug("StudyId = " + studyId);
 		    			
 		    			// if the user has permission to access specific studies (not all studies), then verify the study
 		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
 		    		    {
 		    				throw new SuiteAuthorizationAccessException("Username %s is not authorized for study %s", username, studyId);
 		    		    }
+		    			log.debug("User is authorized for study");
 		    		}
 
 		    		if (labLoaderRole.isSiteScoped())
 		    		{
+		    			log.debug("Role is site scoped: " + labLoaderRole.toString());
 		    			HL7v3CtLabUnMarshaller unMarshaller = new HL7v3CtLabUnMarshaller();
 		    			String siteNciInstituteCode = unMarshaller.getSiteNciInstituteCode(xml);
 		    			if (siteNciInstituteCode == null)
 		    			{
 		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", labLoaderRole.getDisplayName());
 		    			}
+		    			log.debug("Site NCI institute code = " + siteNciInstituteCode);
 		    			
 		    			// if the user has permission to access specific sites (not all sites), then verify the sites
 		    			if (!userRoleMembership.isAllSites() && !userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
 		    		    {
 		    				throw new SuiteAuthorizationAccessException("Username %s is not authorized for site %s", username, siteNciInstituteCode);
 		    		    }
+		    			log.debug("User is authorized for site");
 		    		}
 		    	}
 		    }
