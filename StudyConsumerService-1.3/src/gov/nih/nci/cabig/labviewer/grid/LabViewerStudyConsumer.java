@@ -142,8 +142,10 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
-		log.info("username : " + username);  
+		log.debug("Username = " + username);
+
 		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
+		log.debug("Site NCI institute codes = " + siteNciInstituteCodes.toString());
 		if (siteNciInstituteCodes == null)
 		{
 			log.error("Error saving study: site NCI institute code is null");
@@ -156,43 +158,47 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		
 		try
 		{
-		    log.info(" accessing  getUserRoleMemberships ...");
 			Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
-			log.info(" retrieved  UserRoleMemberships ..." + userRoleMemberships);
 			boolean userAuthorizedForStudyConsumerRole = false;
 			boolean userAuthorizedForSite = false;
-			log.info(" checking roles ...");
+
 			for (SuiteRole studyConsumerRole : studyConsumerRoles)
 			{
+				log.debug("Checking study consumer role: " + studyConsumerRole.toString());
 				if (userRoleMemberships.containsKey(studyConsumerRole))
 				{
-				    log.info(" user roles = "+studyConsumerRole.getDisplayName());
+					log.debug("User role memberships contains role: " + studyConsumerRole.toString());
 					userAuthorizedForStudyConsumerRole = true;										
 					
 					SuiteRoleMembership userRoleMembership = userRoleMemberships.get(studyConsumerRole);
 					// if the user has permission to access specific sites (not all sites), then verify the sites
 					if (userRoleMembership.isAllSites())
 					{
+						log.debug("User is authorized for all sites");
 						userAuthorizedForSite = true;
 					}
 					else
 				    {
 						for (String siteNciInstituteCode : siteNciInstituteCodes)
 						{
+							log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
 							if (userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
 							{
+								log.debug("User is authorized for site NCI institute code: " + siteNciInstituteCode);
 								userAuthorizedForSite = true;
 							}
 						}
 				    }
 				}
 			}
-			log.info(" userAuthorizedForStudyConsumerRole = "+userAuthorizedForStudyConsumerRole);
+			
+			log.info("userAuthorizedForStudyConsumerRole = " + userAuthorizedForStudyConsumerRole);
 			if (!userAuthorizedForStudyConsumerRole)
 	    	{
 				throw new SuiteAuthorizationAccessException("Username %s is not authorized for roles %s", username, studyConsumerRoles.toString());
 	    	}
-			log.info(" userAuthorizedForSite = "+userAuthorizedForSite);
+			
+			log.info("userAuthorizedForSite = " + userAuthorizedForSite);
 			if (!userAuthorizedForSite)
 	    	{
 				throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
