@@ -247,6 +247,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
+		log.debug("Username = " + username);
 		
 		try
 		{
@@ -254,28 +255,35 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    SuiteRole registrationConsumerRole = SuiteRole.REGISTRAR;
 		    if (userRoleMemberships.containsKey(registrationConsumerRole))
 		    {
+		    	log.debug("User role memberships contains role: " + registrationConsumerRole.toString());
 		    	if (registrationConsumerRole.isScoped())
 		    	{
+		    		log.debug("Role is scoped: " + registrationConsumerRole.toString());
 		    		SuiteRoleMembership userRoleMembership = userRoleMemberships.get(registrationConsumerRole);
 
 		    		if (registrationConsumerRole.isStudyScoped())
 		    		{
+		    			log.debug("Role is study scoped: " + registrationConsumerRole.toString());
 		    			String studyId = getStudyId(registration);
 		    			if (studyId == null)
 		    			{
 		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", registrationConsumerRole.getDisplayName());
 		    			}
+		    			log.debug("StudyId = " + studyId);
 		    			
 		    			// if the user has permission to access specific studies (not all studies), then verify the study
 		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
 		    		    {
 		    				throw new SuiteAuthorizationAccessException("Username %s is not authorized for study %s", username, studyId);
 		    		    }
+		    			log.debug("User is authorized for study");
 		    		}
 
 		    		if (registrationConsumerRole.isSiteScoped())
 		    		{
+		    			log.debug("Role is site scoped: " + registrationConsumerRole.toString());
 		    			List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
+		    			log.debug("Site NCI institute codes = " + siteNciInstituteCodes.toString());
 		    			if (siteNciInstituteCodes.isEmpty())
 		    			{
 		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", registrationConsumerRole.getDisplayName());
@@ -284,12 +292,15 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    			// if the user has permission to access specific sites (not all sites), then verify the sites
 		    			if (!userRoleMembership.isAllSites())
 		    		    {
+		    				log.debug("User is NOT authorized for all sites");
 		    				for (String siteNciInstituteCode : siteNciInstituteCodes)
 		    				{
+		    					log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
 		    					if (!userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
 		    					{
 		    					    throw new SuiteAuthorizationAccessException("Username %s is not authorized for site %s", username, siteNciInstituteCode);
 		    					}
+		    					log.debug("User is authorized for this site");
 		    				}
 		    		    }
 		    		}
@@ -304,7 +315,12 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		{
 			log.error("Error saving participant: ", e);
 			throw createRegistrationConsumptionException(e.getMessage());
-		}				
+		}
+		catch (Exception e)
+        {
+            log.error("Error saving participant: ", e);
+            throw createRegistrationConsumptionException(e.getMessage());
+        }
 	}
 	
 	private RegistrationConsumptionException createRegistrationConsumptionException(String message)
