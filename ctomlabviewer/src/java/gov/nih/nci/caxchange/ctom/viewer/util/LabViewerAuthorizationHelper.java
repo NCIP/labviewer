@@ -145,6 +145,7 @@ public class LabViewerAuthorizationHelper
 		else
 		{
 			userId = user.getUserId().longValue();
+			log.debug("UserId = " + userId);
 		}
 
 		return userId;
