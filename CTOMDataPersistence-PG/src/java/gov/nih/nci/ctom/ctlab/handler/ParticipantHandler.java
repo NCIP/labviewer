@@ -252,6 +252,7 @@ public class ParticipantHandler extends CTLabDAO implements HL7V3MessageHandlerI
 					ps.setTimestamp(8, new java.sql.Timestamp(participant.getCtomInsertDate()
 							.getTime()));
 				}
+				ps.setLong(9, participant.getId());
 				ps.executeUpdate();
 				con.commit();
 			}
