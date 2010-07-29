@@ -173,6 +173,11 @@ public class LabLoaderImpl extends LabLoaderImplBase
 			log.error("Error saving lab: ", e);
 			throw new RemoteException(e.getMessage());
 		}
+		catch (Exception e)
+		{
+			log.error("Error saving lab: ", e);
+			throw new RemoteException(e.getMessage());
+		}
 	}
 	
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
