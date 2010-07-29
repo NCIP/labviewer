@@ -104,6 +104,21 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
+	
+	private static final String HEALTHCARE_SITE_INSERT = "INSERT INTO healthcare_site (id, " +
+																				      "nci_institute_code, " +
+																				      "name, " +
+																				      "street_address, " +
+																				      "city, " +
+																				      "state_code, " +
+																				      "postal_code, " +
+																				      "country_code, " +
+																				      "telecom_address, " +
+																				      "source, " +
+																				      "source_extract_date, " +
+																				      "ctom_update_date, " +
+																				      "description_text) " +
+																			   "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";	
 
 	/*
 	 * (non-Javadoc)
@@ -150,17 +165,17 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 				// insert into HealthCare_Site
 				ps =
 						con
-								.prepareStatement("insert into HEALTHCARE_SITE (ID, NCI_INSTITUTE_CODE, NAME, STREET_ADDRESS, CITY, STATE_CODE, POSTAL_CODE, COUNTRY_CODE, TELECOM_ADDRESS, SOURCE, SOURCE_EXTRACT_DATE, CTOM_UPDATE_DATE)  values(?,?,?,?,?,?,?,?,?,?,?,?)");
+								.prepareStatement(HEALTHCARE_SITE_INSERT);
 
 				ps.setLong(1, hsId);
 				ps.setString(2, hcSite.getNciInstituteCd() != null ? hcSite.getNciInstituteCd()
 						: "");
 				ps.setString(3, String.valueOf(hcSite.getName() != null ? hcSite.getName() : ""));
-				ps.setString(4, String.valueOf(hcSite.getStreetAddr() != null ? hcSite.getStreetAddr() : ""));
-				ps.setString(5, String.valueOf(hcSite.getCity() != null ? hcSite.getCity() : ""));
-				ps.setString(6, String.valueOf(hcSite.getStateCode() != null ? hcSite.getStateCode() : ""));
-				ps.setString(7, String.valueOf(hcSite.getPostalCode() != null ? hcSite.getPostalCode() : ""));
-				ps.setString(8, String.valueOf(hcSite.getCountryCode() != null ? hcSite.getCountryCode() : ""));
+				ps.setString(4, hcSite.getStreetAddr());
+				ps.setString(5, hcSite.getCity());
+				ps.setString(6, hcSite.getStateCode());
+				ps.setString(7, hcSite.getPostalCode());
+				ps.setString(8, hcSite.getCountryCode());
 				ps.setString(9, String.valueOf(hcSite.getTelecomAddr() != null ? hcSite.getTelecomAddr() : ""));
 				ps.setString(10, String.valueOf(hcSite.getSource() != null ? hcSite.getSource() : ""));
 				Date srcExtractDt =
@@ -172,6 +187,8 @@ public class HealthCareSiteHandler extends CTLabDAO implements HL7V3MessageHandl
 			    	hcSite.getCtomUpdateDt() != null ? hcSite.getCtomUpdateDt() : new Date();
 			    
 					ps.setDate(12, new java.sql.Date(ctomUpdateDt.getTime()));
+					
+				ps.setString(13, hcSite.getDescpTxt());
 								
 				ps.execute();
 			}
