@@ -274,6 +274,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		protocol.setLongTxtTitle(study.getLongTitleText());
 		protocol.setShortTxtTitle(study.getShortTitleText());
 		protocol.setPhaseCode(study.getPhaseCode());
+		protocol.setBlindedId(StringUtils.isBlank(study.getBlindedIndicator()) ? null : study.getBlindedIndicator());
+		protocol.setMultiInstId(StringUtils.isBlank(study.getMultiInstitutionIndicator()) ? null : study.getMultiInstitutionIndicator());
+		protocol.setRandomId(StringUtils.isBlank(study.getRandomizedIndicator()) ? null : study.getRandomizedIndicator());
+		protocol.setDescTxt(StringUtils.isBlank(study.getDescriptionText()) ? null : study.getDescriptionText());
+		protocol.setPrecisTxt(StringUtils.isBlank(study.getPrecisText()) ? null : study.getPrecisText());
+		protocol.setIntentCode(StringUtils.isBlank(study.getType()) ? null : study.getType());
+		protocol.setTargetAccNum(study.getTargetAccrualNumber() == null ? null : study.getTargetAccrualNumber().longValue());
 		if (study.getCoordinatingCenterStudyStatus() != null)
 		{
 			ProtocolStatus protocolStatus = new ProtocolStatus();
@@ -327,6 +334,15 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				HealthCareSite healthCare = new HealthCareSite();
 				healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
 				healthCare.setName(hcsType.getName());
+				healthCare.setDescpTxt(StringUtils.isBlank(hcsType.getDescriptionText()) ? null : hcsType.getDescriptionText());
+				if (hcsType.getAddress() != null)
+	            {
+					healthCare.setStreetAddr(StringUtils.isBlank(hcsType.getAddress().getStreetAddress()) ? null : hcsType.getAddress().getStreetAddress());
+					healthCare.setCity(StringUtils.isBlank(hcsType.getAddress().getCity()) ? null : hcsType.getAddress().getCity());
+					healthCare.setStateCode(StringUtils.isBlank(hcsType.getAddress().getStateCode()) ? null : hcsType.getAddress().getStateCode());
+					healthCare.setPostalCode(StringUtils.isBlank(hcsType.getAddress().getPostalCode()) ? null : hcsType.getAddress().getPostalCode());
+					healthCare.setCountryCode(StringUtils.isBlank(hcsType.getAddress().getCountryCode()) ? null : hcsType.getAddress().getCountryCode());
+	            }
 				healthCare.setCtomInsertDt(now);
 				protocol.setHealthCareSite(healthCare);
 			}
@@ -352,6 +368,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 						studyInvestigator.setFirstName(healthCareSiteInvestigator.getFirstName());
 						studyInvestigator.setLastName(healthCareSiteInvestigator.getLastName());
 						studyInvestigator.setPhone(healthCareSiteInvestigator.getPhoneNumber());
+						studyInvestigator.setTelecomAddr(StringUtils.isBlank(healthCareSiteInvestigator.getEmail()) ? null : healthCareSiteInvestigator.getEmail());
 						protocol.setInvestigator(studyInvestigator);
 					}
 					else
