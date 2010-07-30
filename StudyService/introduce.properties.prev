@@ -1,0 +1,11 @@
+#Introduce Properties
+#Thu Jul 29 11:45:09 CDT 2010
+introduce.skeleton.services.list=StudyService
+introduce.skeleton.extensions=
+introduce.skeleton.timestamp=1280421032531
+introduce.skeleton.service.name=StudyService
+introduce.skeleton.resource.options=main,singleton,identifiable,resourcePropertyManagement
+introduce.skeleton.destination.dir=D\:\\ccts\\lab-viewer-br\\StudyService
+introduce.skeleton.namespace.domain=http\://grid.labviewer.cagrid.nci.nih.gov/StudyService
+introduce.ns.excludes=\ -x gme\://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security
+introduce.soap.binding.excludes=\ 
