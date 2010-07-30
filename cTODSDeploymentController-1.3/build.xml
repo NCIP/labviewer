@@ -8,11 +8,10 @@
 	  <!-- ******************************************************************* -->
 	<!--
 	TARGET: Zip
-		Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService, StudyLookUpService
+		Zip the source code for cTomDataPersistence, cTomLabViewer,  LabLoader, RegistrationConsumerService, StudyConsumerService, StudyService
 	-->
 
 	<target name="build_zip">
-        <!-- RAM changed from ${zip.dest.dir} to ${temp.dir}  -->
         <mkdir dir="${temp.dir}" />
         <echo message="from build-zip: ${temp.dir}"/>
         <zip destfile="${temp.dir}/${module.name}.zip">
@@ -36,10 +35,10 @@
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
 			</zipfileset>
-			<!--<zipfileset dir="${studyLookupService.dir}" prefix="StudyLookupService">
+			<zipfileset dir="${studyService.dir}" prefix="StudyService">
 				<exclude name="**/build/**" />
 				<exclude name="**/bin/**" />
-			</zipfileset>-->
+			</zipfileset>
 			<zipfileset dir="${ddl.dir}" prefix="DDL" />
 		</zip>
 	</target>
@@ -47,57 +46,25 @@
 	
 	 <!-- ******************************************************************* -->
 	 <!-- ** Building the ctom-wsrf.war and ctodslabviewer war             ** -->
-	  <!-- ******************************************************************* -->
+     <!-- ******************************************************************* -->
 
 	<!-- Unzips the build download file -->
-<!-- RAM commented this
-	<target name="unZip" description="Unzips the build download">
-		<unzip src="${zip.dest.dir}/${module.name}.zip" dest="${unZip.dir}" />
-	</target>
-
--->
 
 	<!-- Builds the cTOM-wsrf war file -->
 	<target name="pre-stage" description="Builds the cTOM-wsrf war file">
 
 		<echo>Pre stage  Registration Service: ${unZip.dir} </echo>
         <echo>Dest Dir is: ${dest.dir} </echo>
-
-<!-- ram ON 10/21/2009 CHANGED NOT TO USE ZIP/UNZIP TARGETS -->
-        <!--<ant antfile="${unZip.dir}/RegistrationConsumerService/build-ctms.xml" dir="${unZip.dir}/RegistrationConsumerService" target="deploySkeletonService" inheritall="true">
-
-		</ant>-->
-        <ant antfile="${regConsumerService.dir}/build-ctms.xml"  dir="${regConsumerService.dir}" target="deploySkeletonService" inheritall="true">
-
-		</ant>
-
+        <ant antfile="${regConsumerService.dir}/build-ctms.xml"  dir="${regConsumerService.dir}" target="deploySkeletonService" inheritall="true"/>
 
         <echo>Pre stage  StudyConsumer Service </echo>
-<!--
-		<ant antfile="${unZip.dir}/StudyConsumerService/build-ctms.xml" dir="${unZip.dir}/StudyConsumerService" target="deploySkeletonService" inheritall="true">
+        <ant antfile="${studyconsumerservice.dir}/build-ctms.xml"  dir="${studyconsumerservice.dir}" target="deploySkeletonService" inheritall="true"/>
 
-		</ant>
--->
-        <ant antfile="${studyconsumerservice.dir}/build-ctms.xml"  dir="${studyconsumerservice.dir}" target="deploySkeletonService" inheritall="true">
+        <echo>Pre stage  Study Service </echo>
+        <ant antfile="${studyservice.dir}/build-ctms.xml"  dir="${studyservice.dir}" target="deploySkeletonService" inheritall="true"/>
 
-        </ant>
-
-
-        <!--	<echo>Pre stage  StudyLookup Service </echo>
-		<ant antfile="${unZip.dir}/StudyLookupService/build-ctms.xml" dir="${unZip.dir}/StudyLookupService" target="deploySkeletonService" inheritall="true">
-
-		</ant> -->
 		<echo>Pre stage  Lab Loader Service </echo>
-<!--
-		<ant antfile="${unZip.dir}/LabLoader/build-ctms.xml" dir="${unZip.dir}/LabLoader" target="deploySkeletonService" inheritall="true">
-
-		</ant>
--->
-
-        <ant antfile="${labLoader.dir}/build-ctms.xml" dir="${labLoader.dir}" target="deploySkeletonService" inheritall="true">
-
-        </ant>
-
+        <ant antfile="${labLoader.dir}/build-ctms.xml" dir="${labLoader.dir}" target="deploySkeletonService" inheritall="true"/>
 
 	</target>
 
@@ -108,41 +75,20 @@
 		<mkdir dir="${stage.dir}" />
 		<unzip dest="${stage.dir}" overwrite="true">
 
-
-            <!--- RAM changed unzip.dir to ${regConsumerService.dir} and other Study and LabLOader also -->
-            <!--
-			<fileset dir="${unZip.dir}/RegistrationConsumerService/build/">
-				<include name="*.zip" />
-			</fileset>
-			<fileset dir="${unZip.dir}/StudyConsumerService/build/">
-				<include name="*.zip" />
-			</fileset>
-			-->
             <fileset dir="${regConsumerService.dir}/build/">
                 <include name="*.zip" />
             </fileset>
             <fileset dir="${studyconsumerservice.dir}/build/">
                 <include name="*.zip" />
             </fileset>
-
-
-
-        <!--	<fileset dir="${unZip.dir}/StudyLookupService/build/">
-				<include name="*.zip" />
-			</fileset> -->
-
-            <!--- RAM changed unzip.dir to  labLoader.dir -->
-<!--
-            <fileset dir="${unZip.dir}/LabLoader/build/">
-				<include name="*.zip" />
-			</fileset>
--->
+            <fileset dir="${studyservice.dir}/build/">
+                <include name="*.zip" />
+            </fileset>
 
             <fileset dir="${labLoader.dir}/build/">
 				<include name="*.zip" />
 			</fileset>
         </unzip>
-
 
         <move todir="${webapps.dir}">
 			<fileset dir="${stage.dir}/webapps/wsrf"/>
@@ -192,15 +138,8 @@
 		<copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_common">
 			<fileset dir="wsrf-folder/globus_wsrf_common" />
 		</copy>
-        <!-- TODO:  RAM on 10/27/2009 : fix certificate paths in global_security_descriptor.xml file before you copy from globus_wsrf_core  -->
         <copy file="${ctomdeploymentcontroller.dir}/resources/global_security_descriptor_template.xml"
 			  toFile="${webapps.dir}/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml" overwrite="true" filtering="true">
-<!--
-                <filterset begintoken="@" endtoken="@">
-                    <filter token="cert.path" value="${cert.path}" />
-                    <filter token="key.path" value="${key.path}" />
-                </filterset>
--->
 		</copy>
 
         <copy todir="${webapps.dir}/WEB-INF/etc/globus_wsrf_core">
@@ -258,7 +197,6 @@
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
 		<war destfile="${war-dist.dir}/ctom-wsrf.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
-	    <!--<copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${software.dir}/target/dist/exploded/ctom-wsrf" overwrite="true"/>-->
         <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${artifacts.dir}/../ctom-wsrf" overwrite="true"/>
     </target>
 
@@ -270,14 +208,4 @@
 		<ant antfile="${unZip.dir}/CTOMDataPersistence/build.xml" dir="${unZip.dir}/CTOMDataPersistence" target="dist" inheritall="true" />
 	</target>
 	
-	<!-- Deploys the cTOM-wsrf and cTODSLabViewer war files -->
-	<target name="deploy_cTODS" depends="build-db-jars,build-ctom-wsrf" description="Deploys the cTOM-wsrf and cTODSLabViewer war files">
-		<echo>Deploying cTODSLabViewer to Tomcat webapps</echo>
-		<ant antfile="${unZip.dir}/cTODSLabViewer/build.xml" dir="${unZip.dir}/cTODSLabViewer" target="deployTomcat" inheritall="true" />
-		<echo>Deploying ctom-wsrf to Tomcat webapps</echo>
-		<copy todir="${env.CATALINA_HOME}/webapps" overwrite="true">
-			<fileset file="${war-dist.dir}/ctom-wsrf.war" />
-		</copy>
-		
-	</target>
 </project>
