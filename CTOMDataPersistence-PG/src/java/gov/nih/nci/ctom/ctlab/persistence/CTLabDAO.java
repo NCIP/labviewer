@@ -81,6 +81,7 @@
 package gov.nih.nci.ctom.ctlab.persistence;
 
 import gov.nih.nci.ctom.ctlab.domain.HealthCareSite;
+import gov.nih.nci.ctom.ctlab.domain.Identifier;
 import gov.nih.nci.ctom.ctlab.domain.Investigator;
 import gov.nih.nci.ctom.ctlab.domain.Participant;
 import gov.nih.nci.ctom.ctlab.domain.Protocol;
@@ -805,7 +806,7 @@ public class CTLabDAO extends BaseJDBCDAO
 	public Protocol getStudy(Connection con, Participant part) throws SQLException
 	{
 
-		logger.debug("Inside getStudy method");
+		logger.debug("entering getStudy method");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Protocol study = null;
@@ -814,25 +815,21 @@ public class CTLabDAO extends BaseJDBCDAO
 
 		try
 		{
-			ps =
-					con
-							.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where extension=? and study_participant_assignmnt_id is not null)) ");
-			ps.setString(1, part.getIdentifier().getExtension());
+		    ps = con.prepareStatement("select protocol_id,healthcare_site_id from study_site where id in (select study_site_id from study_Participant_assignment where id in (select study_Participant_assignmnt_id from identifier where extension=? and study_participant_assignmnt_id is not null)) ");
+		    ps.setString(1, part.getIdentifier().getExtension());
 			rs = ps.executeQuery();
 			if (rs.next())
 			{
-				protocolId = rs.getLong(1);
+			    protocolId = rs.getLong(1);
 				//healthCareSiteId = rs.getLong(2);
-
 			}
 			//Clean up
 			rs = SQLHelper.closeResultSet(rs);
 			ps = SQLHelper.closePreparedStatement(ps);
-			
+			logger.debug("Protocol Id = "+protocolId);
 			if (protocolId != null)
 			{
-				ps =
-						con
+				ps = con
 								.prepareStatement("select p.long_title_text,i.root,i.extension,i.assigning_authority_name from identifier i, protocol p where i.protocol_id=p.id and p.id=?");
 				ps.setLong(1, protocolId);
 				rs = ps.executeQuery();
@@ -840,10 +837,12 @@ public class CTLabDAO extends BaseJDBCDAO
 				{
 					study = new Protocol();
 					study.setLongTxtTitle(rs.getString("LONG_TITLE_TEXT"));
-					study.getIdentifier().setRoot(rs.getString("ROOT"));
-					study.getIdentifier().setExtension(rs.getString("EXTENSION"));
-					study.getIdentifier().setAssigningAuthorityName(
-							rs.getString("ASSIGNING_AUTHORITY_NAME"));
+					Identifier identifier = new Identifier();
+					identifier.setRoot(rs.getString("ROOT"));
+					identifier.setExtension(rs.getString("EXTENSION"));
+					identifier.setRoot(rs.getString("ROOT"));
+					identifier.setAssigningAuthorityName(rs.getString("ASSIGNING_AUTHORITY_NAME"));
+					study.setIdentifier(identifier);
 				}
 			}
 		}
@@ -854,11 +853,10 @@ public class CTLabDAO extends BaseJDBCDAO
 		}
 		finally
 		{
-			rs = SQLHelper.closeResultSet(rs);
+		    rs = SQLHelper.closeResultSet(rs);
 			ps = SQLHelper.closePreparedStatement(ps);
-
-
 		}
+        logger.debug("leaving getStudy method study = "+study);
 		return study;
 	}
 
@@ -886,8 +884,7 @@ public class CTLabDAO extends BaseJDBCDAO
 
 		try
 		{
-			ps =
-					con
+			ps = con
 							.prepareStatement("select study_participant_assignmnt_id, root from identifier where extension=? and study_participant_assignmnt_id is not null");
 			ps.setString(1, mrn);
 			rs = ps.executeQuery();
