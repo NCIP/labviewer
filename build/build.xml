@@ -80,6 +80,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
 	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
 	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
+	<property name="studyservice.base.dir" location="${software.dir}/StudyService"/>
 	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.3"/>
 	<property name="cchc.base.dir" location="${software.dir}/CancerCenterClient"/>
 
@@ -89,6 +90,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctomlabviewer.build.file" value="build.xml" />
 	<property name="registrationconsumerservice.build.file" value="build.xml" />
 	<property name="studyconsumerservice.build.file" value="build.xml" />
+	<property name="studyservice.build.file" value="build.xml" />
 	<property name="labloader.build.file" value="build.xml" />
 	<property name="cchc.build.file" value="build.xml" />
 
@@ -99,6 +101,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctomlabviewer.build.target" value="package-notest"/>
 	<property name="registrationconsumerservice.build.target" value="jar-notest"/>
 	<property name="studyconsumerservice.build.target" value="jar-notest"/>
+	<property name="studyservice.build.target" value="jar-notest"/>
 	<property name="labloader.build.target" value="jar-notest"/>
 	<property name="cchc.build.target" value="package-notest"/>
     <property name="ctomdeploymentcontroller.build.target" value="build-ctom-wsrf"/>
@@ -292,6 +295,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<property name="labLoader.dir" value="${labloader.base.dir}"/>
 		<property name="regConsumerService.dir" value="${registrationconsumerservice.base.dir}"/>
 		<property name="studyconsumerservice.dir" value="${studyconsumerservice.base.dir}"/>
+		<property name="studyservice.dir" value="${studyservice.base.dir}"/>
 	 	<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="labloader.dir.prefix" value="LabLoader-1.3"/>
 	 	<property name="registrationconsumerservice.dir.prefix" value="RegistrationConsumerService-1.3"/>
