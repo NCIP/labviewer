@@ -293,15 +293,23 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    			if (!userRoleMembership.isAllSites())
 		    		    {
 		    				log.debug("User is NOT authorized for all sites");
+		    				boolean userAuthorizedForSite = false;
+		    				
 		    				for (String siteNciInstituteCode : siteNciInstituteCodes)
 		    				{
 		    					log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
-		    					if (!userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+		    					if (userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
 		    					{
-		    					    throw new SuiteAuthorizationAccessException("Username %s is not authorized for site %s", username, siteNciInstituteCode);
+		    						log.debug("User is authorized for site NCI institute code:" + siteNciInstituteCode);
+		    						userAuthorizedForSite = true;
 		    					}
-		    					log.debug("User is authorized for this site");
 		    				}
+		    				
+		    				log.info("userAuthorizedForSite = " + userAuthorizedForSite);
+		    				if (!userAuthorizedForSite)
+	    					{
+		    					throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
+	    					}
 		    		    }
 		    		}
 		    	}
