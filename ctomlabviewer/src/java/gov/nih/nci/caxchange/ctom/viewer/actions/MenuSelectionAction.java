@@ -138,6 +138,7 @@ public class MenuSelectionAction extends Action
 		String username = util.checkUserLogin(session);
 		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
 		Set<SuiteRole> userRoles = authHelper.getUserRoles(username);
+		userRoles.remove(SuiteRole.USER_ADMINISTRATOR); // this is temporary until user provisioning in standalone mode is implemented
 		session.setAttribute(DisplayConstants.USER_ROLES, userRoles);
 
 		if (log.isDebugEnabled())
