@@ -166,10 +166,11 @@ public class HomeAction extends Action
 			try
 			{
 			    userRoles = authHelper.getUserRoles(username);
+			    userRoles.remove(SuiteRole.USER_ADMINISTRATOR); // this is temporary until user provisioning in standalone mode is implemented
 			    
 			    if (!(userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || 
-						  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
-					      userRoles.contains(SuiteRole.LAB_DATA_USER)))
+					  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
+					  userRoles.contains(SuiteRole.LAB_DATA_USER)))
 				{
 					log.error("User not authorized for LabViewer");
 					loggedIn = false;
