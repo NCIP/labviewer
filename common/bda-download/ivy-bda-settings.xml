@@ -12,7 +12,7 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 	<settings defaultResolver="ncicb-chain" />
 	<!-- defaultCacheDir causes the bda-utils module to use it's own cache directory -->
 	<!-- useOrigin causes avoiding the copy of local artifacts to the cache and use directly their original location -->
-	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
+	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}-labviewer" useOrigin="true"/>
 	<resolvers>
 		<!-- this is where you read from -->
 		<chain name="ncicb-chain">
