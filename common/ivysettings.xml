@@ -3,7 +3,7 @@
 	<property name="cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3"/>
 	<property name="cbiit-ivy-repo" value="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk"/>
 	<settings defaultResolver="nci-chain" />
-	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}-labviewer" useOrigin="true"/>
+	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
 	<resolvers>
 		<chain name="nci-chain">
 			<!-- this is where you can publish to, either your own code or for testing new thirdparty files -->
@@ -11,17 +11,10 @@
 				<artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="${local.repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem> 
-<!--			<url name="ncicb-ivy-repo" m2compatible="false">
+			<url name="ncicb-ivy-repo" m2compatible="false">
 				<ivy pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/ivy.xml" />
 				<artifact pattern="${nci.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
--->
-			<url name="ncicb-ivy-repo">
-				<!-- remote enterprise repository -->
-				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
-			</url>  
-			
 			<url name="cagrid.ivy.repo" m2compatible="false">
 				<ivy pattern="${cagrid.ivy.repo}/[organisation]/[module]/ivy-[revision].xml" />
 				<artifact pattern="${cagrid.ivy.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
