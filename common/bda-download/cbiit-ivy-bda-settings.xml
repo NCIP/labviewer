@@ -8,11 +8,11 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 <ivysettings>
 	<property name="ivy.project.repo" value="${target.dir}/local-repo-dir"/>
 	<property name="ivy.system.repo" value="${bda.local.repo.dir}"/>
-	<property name="ivy.local-enterprise.repo" value="${commonlibrary.dir}/ivy-repo"/>
+
 	<settings defaultResolver="ncicb-chain" />
 	<!-- defaultCacheDir causes the bda-utils module to use it's own cache directory -->
 	<!-- useOrigin causes avoiding the copy of local artifacts to the cache and use directly their original location -->
-	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
+	<caches defaultCacheDir="${user.home}/.ivy2-bda-utils-cbiit-labviewer" useOrigin="true"/>
 	<resolvers>
 		<!-- this is where you read from -->
 		<chain name="ncicb-chain">
@@ -26,16 +26,21 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="${ivy.system.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="${ivy.system.repo}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem>      
-			<filesystem name="local-ncicb-ivy-repo" local="true">
+			<filesystem name="local-cbiit-ivy-repo" local="true">
 				<!-- local enterprise repository checkout, best used when working remote or network disconnected -->
-				<artifact pattern="${ivy.local-enterprise.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="${ivy.local-enterprise.repo}/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<ivy pattern="${local.cbiit-ivy-repo.dir}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem>           
-			<url name="ncicb-ivy-repo">
+			<url name="cbiit-ivy-repo">
 				<!-- remote enterprise repository -->
-				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
-				<ivy pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
+				<artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+				<ivy pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/ivy.xml" />
 			</url>  
+			<!--<ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />-->
+			<url name="cbiit-maven-mirror" m2compatible="true">
+				<artifact pattern="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+			</url>
+
 			<!-- this is where you can publish to, either your own code or for testing new thirdparty files -->
 		</chain>
 	</resolvers>
