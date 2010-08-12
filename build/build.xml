@@ -70,7 +70,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 
 	<!-- Ivy Related props -->
-	<property name="ivy.settings.file" value="ivysettings.xml" />
+	<property name="ivy.settings.file" value="ivy-bda-settings.xml" />
 
 	<!-- Properties that relate to how to call build targets from sub-projects-->
 	<!-- Working directory passed to Ant tasks -->
