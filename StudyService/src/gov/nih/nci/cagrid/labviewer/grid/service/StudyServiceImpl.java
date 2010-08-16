@@ -77,6 +77,7 @@ public class StudyServiceImpl extends StudyServiceImplBase {
       {
           try
           {
+              logger.debug("Closing connections");
               con.close();
           }
           catch (SQLException e)
