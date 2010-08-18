@@ -79,7 +79,7 @@
 																								<font size="2" face="arial"> <br> *
 																									Please enter one or more search terms above and
 																									select the "Search" button.<br> ** Search
-																									will perform search in Fisrt name, Last name
+																									will perform search in First name, Last name
 																									and Identifier. </font>
 																							</td>
 																						</tr>
