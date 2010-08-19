@@ -87,6 +87,7 @@
 		<copy todir="${classes.dir}/resources">
 			<fileset dir="${resources.dir}"/>
 		</copy>
+		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}" />
 	</target>
 
 	<!-- Creates a zip file with CAXCHANGE.jar -->
