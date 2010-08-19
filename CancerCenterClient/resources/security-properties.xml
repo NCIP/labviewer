@@ -22,8 +22,8 @@
 	</authentication-service-list>
 	<delegated-application-list>
 		<delegated-application>
-			<application-name>CCTS App Server</application-name>
-			<host-identity>/O=CCTS/OU=DEV/OU=Trust Fabric/CN=host/cbvapp-d1017.nci.nih.gov</host-identity>
+			<application-name>CCTS DEV App Server</application-name>
+			<host-identity>/O=caBIG/OU=caGrid/OU=Stage LOA1/OU=Services/CN=ncias-c278-v.nci.nih.gov</host-identity>
 		</delegated-application>
 	</delegated-application-list>
 </security-properties>

@@ -223,14 +223,5 @@ public class InvokeGridService {
         }
     }
     
-     /* Invokes the Grid Service HUB to load the HL7V3 message.
-     * 
-     * @param fileList
-     * @param i
-     * @param HL7V3
-     * @throws Exception
-     */
-    public final void invokeGridService(MessageElement messageElement, File hl7v3XML) throws Exception {
-    
-    }
+
 }
