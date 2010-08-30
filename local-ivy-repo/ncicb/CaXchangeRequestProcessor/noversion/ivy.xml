@@ -15,18 +15,14 @@
     <conf name="runtime" extends="master"/>
   </configurations>
   
-  <!-- hmmm might be nice to separate client from service here? -->
   <publications>
     <artifact name="CaXchangeRequestProcessor-client" type="jar" conf="master, compile" />
     <artifact name="CaXchangeRequestProcessor-common" type="jar" conf="master" />
-    <artifact name="CaXchangeRequestProcessor-service" type="jar" conf="master, compile" />
-    <artifact name="CaXchangeRequestProcessor-stubs" type="jar" conf="master" />
-     <artifact name="CaXchangeRequestProcessor-tests" type="jar" conf="master, compile" />
+    <artifact name="CaXchangeRequestProcessor-stubs"  type="jar" conf="master" />
     
    </publications>
   
   <dependencies>  
-    <!-- boatload of stuff -->
   </dependencies>
   
 </ivy-module>

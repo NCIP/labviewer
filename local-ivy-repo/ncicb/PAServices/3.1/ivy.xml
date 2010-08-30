@@ -15,18 +15,13 @@
     <conf name="runtime" extends="master"/>
   </configurations>
   
-  <!-- hmmm might be nice to separate client from service here? -->
   <publications>
     <artifact name="PAServices-client" type="jar" conf="master, compile" />
     <artifact name="PAServices-common" type="jar" conf="master" />
-    <artifact name="PAServices-service" type="jar" conf="master, compile" />
     <artifact name="PAServices-stubs" type="jar" conf="master" />
-     <artifact name="PAServices-tests" type="jar" conf="master, compile" />
-    
    </publications>
   
   <dependencies>  
-    <!-- boatload of stuff -->
   </dependencies>
   
 </ivy-module>
