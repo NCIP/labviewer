@@ -42,7 +42,6 @@
 	<copy file="conf/project.properties.template" toFile="${src.dir}/project.properties" filtering="true" overwrite="true">
 				<filterset begintoken="@" endtoken="@">
 					<filter token="HELPDOC" value="${helpdocs}" />
-					<filter token="PROXYFILE" value="${PROXY.FILE}" />
 				</filterset>
 		</copy>
 	</target>	
@@ -68,7 +67,7 @@
 	        <copy todir="${resources.dir}">
 	        	<resources>
 	        	      <file file="${resources.org}/security-beans.xml"/>
-	        		<file file="${resources.org}/security-properties.xsd"/>
+	        		  <file file="${resources.org}/security-properties.xsd"/>
 	        	</resources>		
 	        </copy>	
 	  </target>
@@ -88,12 +87,6 @@
 		<copy todir="${classes.dir}/resources">
 			<fileset dir="${resources.dir}"/>
 		</copy>
-		<jar jarfile="${lib.home}/websso.jar" basedir="${classes.dir}"
-						 includes="**/websso/**">
-					<manifest>
-						<attribute name="Class-Path" value=".."/>
-					</manifest>
-				</jar>
 		<jar jarfile="${dist.home}\${jar.file}" basedir="${dist.home}" manifest="${src.dir}\Manifest.txt" excludes="${jar.file}" />
 	</target>
 

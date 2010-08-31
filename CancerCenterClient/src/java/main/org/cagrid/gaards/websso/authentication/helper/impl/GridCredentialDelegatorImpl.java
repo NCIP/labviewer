@@ -99,30 +99,23 @@ public class GridCredentialDelegatorImpl implements GridCredentialDelegator
 			throw new AuthenticationConfigurationException("Error accessing the Delegation Service : " + e.getMessage());
 		}
 		
-		String serializedDelegatedCredentialReference = null;
-
-		try
-		{
-			serializedDelegatedCredentialReference = ObjectSerializer.toString(delegatedCredentialReference, new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types", "DelegatedCredentialReference" ));
-		}
-		catch (SerializationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-//			StringWriter stringWriter = new StringWriter();
-//			try
-//			{
-//				Utils.serializeObject(delegatedCredentialReference, new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types", "DelegatedCredentialReference" ), stringWriter);
-//			}
-//			catch (Exception e)
-//			{
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			serializedDelegatedCredentialReference = new String(stringWriter.getBuffer());
-		return serializedDelegatedCredentialReference;
+        String serializedDelegatedCredentialReference = null;
+        try {
+            StringWriter stringWriter = new StringWriter();
+            Utils
+                    .serializeObject(
+                            delegatedCredentialReference,
+                            new QName(
+                                    "http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types",
+                                    "DelegatedCredentialReference"),
+                            stringWriter, DelegationUserClient.class.getResourceAsStream("client-config.wsdd"));
+            serializedDelegatedCredentialReference = stringWriter.toString();
+        } catch (Exception e) {
+            throw new AuthenticationConfigurationException(
+                    "Unable to serialize the message Delegated Credentials : "
+                            + e.getMessage(), e);
+        }
+        return serializedDelegatedCredentialReference;
 	}
 
 	private ProxyLifetime convertToCDSLifeTime(gov.nih.nci.cagrid.dorian.ifs.bean.ProxyLifetime credentialslifetime)

@@ -130,15 +130,22 @@ public class SPAIdentifierHandler extends CTLabDAO implements HL7V3MessageHandle
 		{
 			if (spa.getIdentifier() != null)
 			{
-				ps =
-						con
-								.prepareStatement("select ID,STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where EXTENSION = ? AND STUDY_PARTICIPANT_ASSIGNMNT_ID IS NOT NULL");
+				//ps = con.prepareStatement("select ID,STUDY_PARTICIPANT_ASSIGNMNT_ID from IDENTIFIER where EXTENSION = ? AND STUDY_PARTICIPANT_ASSIGNMNT_ID IS NOT NULL");
+				String query = "SELECT i.id, "
+                             +        "i.study_participant_assignmnt_id "
+                             +   "FROM identifier i "
+                             +   "JOIN study_participant_assignment spa ON(i.study_participant_assignmnt_id = spa.id) "
+                             +  "WHERE i.extension = ? "
+                             +    "AND spa.study_site_id = ?";
+				ps = con.prepareStatement(query);
 				ps.setString(1, spa.getIdentifier().getExtension());
+				ps.setLong(2, spa.getStudySiteId());
 				rs = ps.executeQuery();
 
 				// check if identifier is in DB
-				if (rs.next() && !rs.isBeforeFirst()
-						&& rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID") != 0)
+//				if (rs.next() && !rs.isBeforeFirst()
+//						&& rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID") != 0)
+				if (rs.next())
 				{
 					// already present;update the identifier table
 					id = rs.getLong("STUDY_PARTICIPANT_ASSIGNMNT_ID");

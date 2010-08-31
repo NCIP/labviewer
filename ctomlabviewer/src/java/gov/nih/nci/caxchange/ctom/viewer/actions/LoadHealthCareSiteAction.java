@@ -210,7 +210,7 @@ public class LoadHealthCareSiteAction extends Action
 		// if the call fails - retrieve the details currently stored in the
 		// database and display the details to the user
 		HealthCareSiteDAO hcsDAO = new HealthCareSiteDAO();
-		//hcsDAO.retrieveHealthCareSite(request, baseDBForm); // lisa - commented out because of code change!
+		hcsDAO.retrieveHealthCareSite(request, baseDBForm);
 		/*
 		 * baseDBForm.setName("NCI"); baseDBForm.setEmail("email@nci.nih.gov");
 		 * baseDBForm.setPhone("111-222-3333"); baseDBForm.setAddress("101,

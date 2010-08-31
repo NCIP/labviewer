@@ -15,19 +15,14 @@
     <conf name="runtime" extends="master"/>
   </configurations>
   
-  <!-- hmmm might be nice to separate client from service here? -->
   <publications>
     <artifact name="CoreServices-client" type="jar" conf="master, compile" />
     <artifact name="CoreServices-common" type="jar" conf="master" />
     <artifact name="CoreServices-config" type="jar" conf="master" />
-   <artifact name="CoreServices-service" type="jar" conf="master, compile" />
-   <artifact name="CoreServices-stubs" type="jar" conf="master" />
-   <artifact name="CoreServices-tests" type="jar" conf="master" />
-   
+    <artifact name="CoreServices-stubs" type="jar" conf="master" />
    </publications>
   
   <dependencies>  
-    <!-- boatload of stuff -->
   </dependencies>
   
 </ivy-module>

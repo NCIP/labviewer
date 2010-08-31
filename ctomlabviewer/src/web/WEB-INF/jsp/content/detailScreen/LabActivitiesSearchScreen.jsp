@@ -152,10 +152,10 @@
 																														border="0">
 																														<tr>
 																															<td>
-																																<html:cancel style="actionButton" property="org.apache.struts.taglib.html.CANCEL" value="Cancel">Reset</html:cancel>
+																																<html:button style="actionButton" property="reset" onclick="resetCriteria();">Reset</html:button>
 																															</td>
 																															<td>
-																																<html:submit style="actionButton">Search</html:submit>
+																																<html:submit style="actionButton">Filter</html:submit>
 																															</td>
 																														</tr>
 																													</table>
@@ -210,6 +210,14 @@
 <!-- laf box 2nd half -->
 <head>
 	<script type="text/javascript">
+	
+	function resetCriteria()
+	{
+	    document.LabActivitiesForm.selectedSite.selectedIndex = 0;
+	    document.LabActivitiesForm.selectedLabTest.selectedIndex = 0;
+	    document.LabActivitiesForm.selectedNumericResult.selectedIndex = 0;
+	    document.LabActivitiesForm.selectedDateRange.selectedIndex = 0;
+    }
 
 function handleCustomDates(element){
 	var selectedDateFilter=element.value;

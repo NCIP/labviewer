@@ -89,7 +89,7 @@ import java.util.Date;
 
 public class LabActivityResult
 {
-	private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 	private SubjectAssignment subjectAssignment = null;
 	private LaboratoryResult labResult = null;
 	private Date actualDate = null;
@@ -110,7 +110,7 @@ public class LabActivityResult
 	private boolean labLoadedToCDMS = false;
 	private String labLoadedToCDMSDate = "";
 	private String siteId = "";
-	private Date labsToCDMSDate;
+    private Date labsToCDMSDate;
     private Date labsToAEDate;
 
 	/**

@@ -7,6 +7,9 @@ import gov.nih.nci.cabig.ccts.domain.ParticipantType;
 import gov.nih.nci.cabig.ccts.domain.Registration;
 import gov.nih.nci.cabig.ccts.domain.StudyRefType;
 import gov.nih.nci.cabig.ccts.domain.StudySiteType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumerI;
 import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
@@ -22,9 +25,12 @@ import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -39,12 +45,11 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 {
 	private static final int MILLIS_PER_MINUTE = 60 * 1000;
 	private static final int THRESHOLD_MINUTE = 1;
-	private static final Logger logger =
+	private static final Logger log =
 			Logger.getLogger(LabViewerRegistrationConsumer.class);
-	private HashMap<String, ParticipantPersistTime> map =
-			new HashMap<String, ParticipantPersistTime>();
 	private ProtocolHandler dao = new ProtocolHandler();
 	private Connection con;
+	private LabViewerAuthorizationHelper authorizationHelper;
 
 	/**
 	 * commit is not currently implemented but is included in the grid service
@@ -85,7 +90,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	public void rollback(Registration registration) throws RemoteException,
 			InvalidRegistrationException
 	{
-		logger.debug("Received a rollback for participant");
+		log.debug("Received a rollback for participant");
 		ParticipantType participant = registration.getParticipant();
 		String participantGridId = participant.getGridId();
 		String participantExtension = participant.getIdentifier(0).getValue();
@@ -111,11 +116,11 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 					// issue Participant roll back
 					dao.rollbackParticipant(con, participantGridId,
 							participantExtension);
-					logger.info("deleted participant");
+					log.info("deleted participant");
 				}
 				else
 				{
-					logger
+					log
 							.info("There is no participant within the threshold time for rollback");
 				}
 			}
@@ -125,14 +130,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 						new InvalidRegistrationException();
 				ire
 						.setFaultString("Lab Viewer invalid patient rollback message - no patient found with given gridid");
-				logger.fatal(ire);
+				log.fatal(ire);
 				throw (ire);
 
 			}
 		}
 		catch (SQLException se)
 		{
-			logger.error("Error deleting participant", se);
+			log.error("Error deleting participant", se);
 			String msg =
 					"Lab Viewer unable to rollback participant"
 							+ se.getMessage();
@@ -146,7 +151,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error closing connection", e);
+				log.error("Error closing connection", e);
 			}
 		}
 
@@ -161,81 +166,229 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 			throws RemoteException, InvalidRegistrationException,
 			RegistrationConsumptionException
 	{
-		logger.debug("Lab Viewer Registration message received");
+		log.debug("Lab Viewer Registration message received");
+		checkAuthorization(RegistrationConsumerAuthorization.getCallerIdentity(), registration);
+		
+		// save the study data
+		Protocol protocol = new Protocol();
+		// populate the protocol and retrieve the MRN from the identifier
+		// type
+		String mrn = populateProtocol(protocol, registration);
+		// obtain database Connection
+		con = dao.getConnection();
+		log.info("Lab Viewer Registration message validated");
 
-		// Authorization code
-		String username = RegistrationConsumerAuthorization.getCallerIdentity();
-		if (!authorized(username))
+		try
 		{
-			logger.error("Error saving participant");
+//			// Perform the check to see if the patient exists - Demo case
+//			// where labs are loaded prior to registering a patient.
+//			Long spaid = dao.checkParticipantExists(con, protocol, mrn);
+//			if (spaid != null)
+//			{
+//				// protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().setRoot(root);
+//				log.debug(protocol.getHealthCareSite()
+//						.getStudyParticipantAssignment().getParticipant()
+//						.getIdentifier().getRoot());
+//				// update Participant Grid Id
+//				dao.updateParticipantGridId(con, registration.getGridId(),
+//						spaid, mrn);
+//			}
+//			else
+//			{
+				// Save Protocol.
+				dao.persist(con, protocol);
+//			}
+		}
+		catch (SQLException e)
+		{
+			log.error("Error saving participant", e);
 			RegistrationConsumptionException rce =
 					new RegistrationConsumptionException();
-			rce.setFaultString("User " + username
-					+ " not authorized for this operation");
+			rce.setFaultString(e.getMessage());
 			throw rce;
 		}
-		else
+		catch (Exception e)
 		{
-			// save the study data
-			Protocol protocol = new Protocol();
-			// populate the protocol and retrieve the MRN from the identifier
-			// type
-			String mrn = populateProtocol(protocol, registration);
-			// obtain database Connection
-			con = dao.getConnection();
-			logger.info("Lab Viewer Registration message validated");
-
+			log.error("Error saving participant", e);
+			RegistrationConsumptionException rce =
+					new RegistrationConsumptionException();
+			rce.setFaultString(e.getMessage());
+			throw rce;
+		}
+		finally
+		{
 			try
 			{
-				// Perform the check to see if the patient exists - Demo case
-				// where labs are loaded prior to registering a patient.
-				Long spaid = dao.checkParticipantExists(con, protocol, mrn);
-				if (spaid != null)
-				{
-					// protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().setRoot(root);
-					logger.debug(protocol.getHealthCareSite()
-							.getStudyParticipantAssignment().getParticipant()
-							.getIdentifier().getRoot());
-					// update Participant Grid Id
-					dao.updateParticipantGridId(con, registration.getGridId(),
-							spaid, mrn);
-				}
-				else
-				{
-					// Save Protocol.
-					dao.persist(con, protocol);
-				}
+				con.close();
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error saving participant", e);
-				RegistrationConsumptionException rce =
-						new RegistrationConsumptionException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
+				log.error("Error closing connection", e);
 			}
-			catch (Exception e)
-			{
-				logger.error("Error saving participant", e);
-				RegistrationConsumptionException rce =
-						new RegistrationConsumptionException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
-			}
-			finally
-			{
-				try
-				{
-					con.close();
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error closing connection", e);
-				}
-			}
-			logger.info("Lab Viewer Registration message stored");
 		}
+		log.info("Lab Viewer Registration message stored");
+
 		return registration;
+	}
+	
+	/**
+	 * @param callerId
+	 * @throws RegistrationConsumptionException
+	 */
+	private void checkAuthorization(String callerId, Registration registration) throws RegistrationConsumptionException
+	{	
+		if (callerId == null)
+		{
+			log.error("Error saving participant: no user credentials provided");
+			throw createRegistrationConsumptionException("No user credentials provided");
+		}
+
+		log.debug("Service called by: " + callerId);		
+		int beginIndex = callerId.lastIndexOf("=") + 1;
+		int endIndex = callerId.length();
+		String username = callerId.substring(beginIndex, endIndex);
+		log.debug("Username = " + username);
+		
+		try
+		{
+		    Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
+		    SuiteRole registrationConsumerRole = SuiteRole.REGISTRAR;
+		    if (userRoleMemberships.containsKey(registrationConsumerRole))
+		    {
+		    	log.debug("User role memberships contains role: " + registrationConsumerRole.toString());
+		    	if (registrationConsumerRole.isScoped())
+		    	{
+		    		log.debug("Role is scoped: " + registrationConsumerRole.toString());
+		    		SuiteRoleMembership userRoleMembership = userRoleMemberships.get(registrationConsumerRole);
+
+		    		if (registrationConsumerRole.isStudyScoped())
+		    		{
+		    			log.debug("Role is study scoped: " + registrationConsumerRole.toString());
+		    			String studyId = getStudyId(registration);
+		    			if (studyId == null)
+		    			{
+		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", registrationConsumerRole.getDisplayName());
+		    			}
+		    			log.debug("StudyId = " + studyId);
+		    			
+		    			// if the user has permission to access specific studies (not all studies), then verify the study
+		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
+		    		    {
+		    				throw new SuiteAuthorizationAccessException("Username %s is not authorized for study %s", username, studyId);
+		    		    }
+		    			log.debug("User is authorized for study");
+		    		}
+
+		    		if (registrationConsumerRole.isSiteScoped())
+		    		{
+		    			log.debug("Role is site scoped: " + registrationConsumerRole.toString());
+		    			List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(registration);
+		    			log.debug("Site NCI institute codes = " + siteNciInstituteCodes.toString());
+		    			if (siteNciInstituteCodes.isEmpty())
+		    			{
+		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", registrationConsumerRole.getDisplayName());
+		    			}
+		    			
+		    			// if the user has permission to access specific sites (not all sites), then verify the sites
+		    			if (!userRoleMembership.isAllSites())
+		    		    {
+		    				log.debug("User is NOT authorized for all sites");
+		    				boolean userAuthorizedForSite = false;
+		    				
+		    				for (String siteNciInstituteCode : siteNciInstituteCodes)
+		    				{
+		    					log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
+		    					if (userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+		    					{
+		    						log.debug("User is authorized for site NCI institute code:" + siteNciInstituteCode);
+		    						userAuthorizedForSite = true;
+		    					}
+		    				}
+		    				
+		    				log.info("userAuthorizedForSite = " + userAuthorizedForSite);
+		    				if (!userAuthorizedForSite)
+	    					{
+		    					throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
+	    					}
+		    		    }
+		    		}
+		    	}
+		    }
+		    else
+		    {
+		    	throw new SuiteAuthorizationAccessException("Username %s is not authorized for role %s", username, registrationConsumerRole.getDisplayName());
+		    }
+		}
+		catch (SuiteAuthorizationAccessException e)
+		{
+			log.error("Error saving participant: ", e);
+			throw createRegistrationConsumptionException(e.getMessage());
+		}
+		catch (Exception e)
+        {
+            log.error("Error saving participant: ", e);
+            throw createRegistrationConsumptionException(e.getMessage());
+        }
+	}
+	
+	private RegistrationConsumptionException createRegistrationConsumptionException(String message)
+	{
+		RegistrationConsumptionException exception = new RegistrationConsumptionException();
+		exception.setFaultString(message);
+		return exception;
+	}
+	
+	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new LabViewerAuthorizationHelper();
+        }
+        
+        return authorizationHelper;
+    }
+	
+	private String getStudyId(Registration registration)
+	{
+		String studyId = null;
+		
+		IdentifierType identifiers[] = registration.getStudyRef().getIdentifier();
+		for (IdentifierType identifier : identifiers)
+		{
+			if (identifier.getPrimaryIndicator())
+			{
+				studyId = identifier.getValue();
+				break; // since match has been found
+			}
+		}
+		
+		return studyId;
+	}
+	
+	private List<String> getSiteNciInstituteCodes(Registration registration)
+	{
+		List<String> siteNciInstituteCodes = new ArrayList<String>();
+		
+		StudySiteType studySite = registration.getStudySite();
+		if (studySite != null)
+		{
+		    HealthcareSiteType healthCareSiteTypes[] = studySite.getHealthcareSite();
+		    if (healthCareSiteTypes != null)
+		    {
+		    	for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+		        {
+			        if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
+			        {
+			        	if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
+			        	{
+			        	    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+			        	}
+			        }
+		        }
+		    }
+		}
+		
+		return siteNciInstituteCodes;
 	}
 
 	/**
@@ -340,45 +493,6 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		protocol.setCtomInsertDt(now);
 
 		return mrn;
-	}
-
-	/**
-	 * authorized checks if the user is authorized to perform the Registration
-	 * 
-	 * @param username
-	 * @return userAuthorized
-	 * @throws RegistrationConsumptionException
-	 */
-	private boolean authorized(String username)
-			throws RegistrationConsumptionException
-	{
-		boolean userAuthorized = false;
-		String user = "";
-		if (username == null)
-		{
-			logger.error("Error saving participant no username provided");
-			RegistrationConsumptionException rce =
-					new RegistrationConsumptionException();
-			rce.setFaultString("No user credentials provided");
-			throw rce;
-		}
-		else
-		{
-			logger.info("User " + username);
-			// call the LabViewer Authorization Helper
-			LabViewerAuthorizationHelper lvaHelper =
-					new LabViewerAuthorizationHelper();
-			if (username != null)
-			{
-				int beginIndex = username.lastIndexOf("=");
-				int endIndex = username.length();
-				user = username.substring(beginIndex + 1, endIndex);
-			}
-			// check if authorized
-			userAuthorized = lvaHelper.isAuthorized(user);
-		}
-		return userAuthorized;
-
 	}
 
 }

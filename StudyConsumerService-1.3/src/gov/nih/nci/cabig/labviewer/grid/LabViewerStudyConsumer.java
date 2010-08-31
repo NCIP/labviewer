@@ -6,6 +6,10 @@ import gov.nih.nci.cabig.ccts.domain.InvestigatorType;
 import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.Study;
 import gov.nih.nci.cabig.ccts.domain.StudyInvestigatorType;
+import gov.nih.nci.cabig.ccts.domain.StudyOrganizationType;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.studyconsumer.common.StudyConsumerI;
 import gov.nih.nci.ccts.grid.studyconsumer.service.globus.StudyConsumerAuthorization;
@@ -21,10 +25,14 @@ import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.oasis.wsrf.properties.GetMultipleResourcePropertiesResponse;
 import org.oasis.wsrf.properties.GetMultipleResourceProperties_Element;
@@ -34,11 +42,12 @@ import org.oasis.wsrf.properties.QueryResourceProperties_Element;
 
 public class LabViewerStudyConsumer implements StudyConsumerI
 {
-	Logger logger = Logger.getLogger(getClass());
+	Logger log = Logger.getLogger(getClass());
 	static final int MILLIS_PER_MINUTE = 60 * 1000;
 	static final int THRESHOLD_MINUTE = 1;
 	private ProtocolHandler dao = new ProtocolHandler();
 	private Connection con;
+	private LabViewerAuthorizationHelper authorizationHelper;
 
 	public void commit(Study study) throws RemoteException,
 			InvalidStudyException
@@ -72,63 +81,185 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 	public void createStudy(Study study) throws RemoteException,
 			InvalidStudyException, StudyCreationException
 	{
-		logger.info("Create Study message received");
+		log.info("Create Study message received");
+		checkAuthorization(StudyConsumerAuthorization.getCallerIdentity(), study);
 
-		// Authorization code
-		String username = StudyConsumerAuthorization.getCallerIdentity();
-
-		if (!authorized(username))
+		// save the study data
+		log.info("payload has Study information");
+		Protocol protocol = new Protocol();
+		// populate the Protocol object with Study message data
+		populateProtocol(protocol, study);
+		// obtain connection
+		con = dao.getConnection();
+		log.info("Create Study message validated");
+		try
 		{
-			logger.error("Error saving Study");
+			// save Protocol
+			dao.persist(con, protocol);
+			log.info("Persisted the study");
+		}
+		catch (SQLException e)
+		{
+			log.error("Error creating study", e);
 			StudyCreationException rce = new StudyCreationException();
-			rce.setFaultString("User " + username
-					+ " not authorized for this operation");
+			rce.setFaultString(e.getMessage());
 			throw rce;
 		}
-		else
+		catch (Exception e)
 		{
-
-			// save the study data
-			logger.info("payload has Study information");
-			Protocol protocol = new Protocol();
-			// populate the Protocol object with Study message data
-			populateProtocol(protocol, study);
-			// obtain connection
-			con = dao.getConnection();
-			logger.info("Create Study message validated");
+			log.error("Error creating study", e);
+			StudyCreationException rce = new StudyCreationException();
+			rce.setFaultString(e.getMessage());
+			throw rce;
+		}
+		finally
+		{
 			try
 			{
-				// save Protocol
-				dao.persist(con, protocol);
-				logger.info("Persisted the study");
+				con.close();
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error creating study", e);
-				StudyCreationException rce = new StudyCreationException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
+				log.error("Error closing connection", e);
 			}
-			catch (Exception e)
+		}
+		log.info("Study created");
+	}
+	
+	/**
+	 * @param callerId
+	 * @throws StudyCreationException
+	 */
+	private void checkAuthorization(String callerId, Study study) throws StudyCreationException
+	{	
+		if (callerId == null)
+		{
+			log.error("Error saving study: no user credentials provided");
+			throw createStudyCreationException("No user credentials provided");
+		}
+
+		log.debug("Service called by: " + callerId);		
+		int beginIndex = callerId.lastIndexOf("=") + 1;
+		int endIndex = callerId.length();
+		String username = callerId.substring(beginIndex, endIndex);
+		log.debug("Username = " + username);
+
+		List<String> siteNciInstituteCodes = getSiteNciInstituteCodes(study);
+		log.debug("Site NCI institute codes = " + siteNciInstituteCodes.toString());
+		if (siteNciInstituteCodes == null)
+		{
+			log.error("Error saving study: site NCI institute code is null");
+			throw createStudyCreationException("Site NCI institute code is null");
+		}
+
+		List<SuiteRole> studyConsumerRoles = new ArrayList<SuiteRole>();
+		studyConsumerRoles.add(SuiteRole.STUDY_CREATOR);
+		studyConsumerRoles.add(SuiteRole.STUDY_QA_MANAGER);
+		
+		try
+		{
+			Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
+			boolean userAuthorizedForStudyConsumerRole = false;
+			boolean userAuthorizedForSite = false;
+
+			for (SuiteRole studyConsumerRole : studyConsumerRoles)
 			{
-				logger.error("Error creating study", e);
-				StudyCreationException rce = new StudyCreationException();
-				rce.setFaultString(e.getMessage());
-				throw rce;
-			}
-			finally
-			{
-				try
+				log.debug("Checking study consumer role: " + studyConsumerRole.toString());
+				if (userRoleMemberships.containsKey(studyConsumerRole))
 				{
-					con.close();
-				}
-				catch (SQLException e)
-				{
-					logger.error("Error closing connection", e);
+					log.debug("User role memberships contains role: " + studyConsumerRole.toString());
+					userAuthorizedForStudyConsumerRole = true;										
+					
+					SuiteRoleMembership userRoleMembership = userRoleMemberships.get(studyConsumerRole);
+					// if the user has permission to access specific sites (not all sites), then verify the sites
+					if (userRoleMembership.isAllSites())
+					{
+						log.debug("User is authorized for all sites");
+						userAuthorizedForSite = true;
+					}
+					else
+				    {
+						for (String siteNciInstituteCode : siteNciInstituteCodes)
+						{
+							log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
+							if (userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
+							{
+								log.debug("User is authorized for site NCI institute code: " + siteNciInstituteCode);
+								userAuthorizedForSite = true;
+							}
+						}
+				    }
 				}
 			}
-			logger.info("Study created");
-		}// end of else
+			
+			log.info("userAuthorizedForStudyConsumerRole = " + userAuthorizedForStudyConsumerRole);
+			if (!userAuthorizedForStudyConsumerRole)
+	    	{
+				throw new SuiteAuthorizationAccessException("Username %s is not authorized for roles %s", username, studyConsumerRoles.toString());
+	    	}
+			
+			log.info("userAuthorizedForSite = " + userAuthorizedForSite);
+			if (!userAuthorizedForSite)
+	    	{
+				throw new SuiteAuthorizationAccessException("Username %s is not authorized for sites %s", username, siteNciInstituteCodes.toString());
+	    	}
+		}
+		catch (SuiteAuthorizationAccessException e)
+		{
+			log.error("Error saving study: ", e);
+			throw createStudyCreationException(e.getMessage());
+		}
+		catch (Exception e)
+        {
+            log.error("Error saving study: ", e);
+            throw createStudyCreationException(e.getMessage());
+        }		
+	}
+	
+	private StudyCreationException createStudyCreationException(String message)
+	{
+		StudyCreationException exception = new StudyCreationException();
+		exception.setFaultString(message);
+		return exception;
+	}
+	
+	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
+	{
+        if (authorizationHelper == null)
+        {
+            authorizationHelper = new LabViewerAuthorizationHelper();
+        }
+        
+        return authorizationHelper;
+    }
+	
+	private List<String> getSiteNciInstituteCodes(Study study)
+	{
+		List<String> siteNciInstituteCodes = new ArrayList<String>();
+		log.info("entering get getSiteNciInstituteCodes" );
+		StudyOrganizationType studyOrganizationTypes[] = study.getStudyOrganization();
+		if (studyOrganizationTypes != null)
+		{
+			for (StudyOrganizationType studyOrganizationType : studyOrganizationTypes)
+		    {
+			    HealthcareSiteType healthCareSiteTypes[] = studyOrganizationType.getHealthcareSite();
+			    if (healthCareSiteTypes != null)
+			    {
+				for (HealthcareSiteType healthCareSiteType : healthCareSiteTypes)
+				{
+					if (StringUtils.isNotBlank(healthCareSiteType.getNciInstituteCode()))
+					{
+						if (!siteNciInstituteCodes.contains(healthCareSiteType.getNciInstituteCode()))
+						{
+						    siteNciInstituteCodes.add(healthCareSiteType.getNciInstituteCode());
+						}
+					}
+				}
+			    }
+			}
+		}
+		log.info("leaving  getSiteNciInstituteCodes" );
+		return siteNciInstituteCodes;
 	}
 
 	/**
@@ -143,12 +274,18 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		protocol.setLongTxtTitle(study.getLongTitleText());
 		protocol.setShortTxtTitle(study.getShortTitleText());
 		protocol.setPhaseCode(study.getPhaseCode());
+		protocol.setBlindedId(StringUtils.isBlank(study.getBlindedIndicator()) ? null : study.getBlindedIndicator());
+		protocol.setMultiInstId(StringUtils.isBlank(study.getMultiInstitutionIndicator()) ? null : study.getMultiInstitutionIndicator());
+		protocol.setRandomId(StringUtils.isBlank(study.getRandomizedIndicator()) ? null : study.getRandomizedIndicator());
+		protocol.setDescTxt(StringUtils.isBlank(study.getDescriptionText()) ? null : study.getDescriptionText());
+		protocol.setPrecisTxt(StringUtils.isBlank(study.getPrecisText()) ? null : study.getPrecisText());
+		protocol.setIntentCode(StringUtils.isBlank(study.getType()) ? null : study.getType());
+		protocol.setTargetAccNum(study.getTargetAccrualNumber() == null ? null : study.getTargetAccrualNumber().longValue());
 		if (study.getCoordinatingCenterStudyStatus() != null)
 		{
 			ProtocolStatus protocolStatus = new ProtocolStatus();
 			protocolStatus.setCtom_insert_date(now);
-			protocolStatus.setStatus_code(study
-					.getCoordinatingCenterStudyStatus().getValue());
+			protocolStatus.setStatus_code(camelCase(study.getCoordinatingCenterStudyStatus().getValue()));
 			protocol.setStatus(protocolStatus);
 		}
 		else
@@ -191,18 +328,27 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 
 			if (study.getStudyOrganization(0).getHealthcareSite() != null)
 			{
-				logger.info("payload has HealthcareSite information");
+				log.info("payload has HealthcareSite information");
 				HealthcareSiteType hcsType =
 						study.getStudyOrganization(0).getHealthcareSite(0);
 				HealthCareSite healthCare = new HealthCareSite();
 				healthCare.setNciInstituteCd(hcsType.getNciInstituteCode());
 				healthCare.setName(hcsType.getName());
+				healthCare.setDescpTxt(StringUtils.isBlank(hcsType.getDescriptionText()) ? null : hcsType.getDescriptionText());
+				if (hcsType.getAddress() != null)
+	            {
+					healthCare.setStreetAddr(StringUtils.isBlank(hcsType.getAddress().getStreetAddress()) ? null : hcsType.getAddress().getStreetAddress());
+					healthCare.setCity(StringUtils.isBlank(hcsType.getAddress().getCity()) ? null : hcsType.getAddress().getCity());
+					healthCare.setStateCode(StringUtils.isBlank(hcsType.getAddress().getStateCode()) ? null : hcsType.getAddress().getStateCode());
+					healthCare.setPostalCode(StringUtils.isBlank(hcsType.getAddress().getPostalCode()) ? null : hcsType.getAddress().getPostalCode());
+					healthCare.setCountryCode(StringUtils.isBlank(hcsType.getAddress().getCountryCode()) ? null : hcsType.getAddress().getCountryCode());
+	            }
 				healthCare.setCtomInsertDt(now);
 				protocol.setHealthCareSite(healthCare);
 			}
 			else
 			{
-				logger.info("payload has no HealthcareSite information");
+				log.info("payload has no HealthcareSite information");
 				protocol.setHealthCareSite(null);
 			}
 			if (study.getStudyOrganization(0).getStudyInvestigator() != null)
@@ -216,17 +362,18 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 							.getInvestigator() != null)
 					{
 						// save the investigator data
-						logger.info("payload has Investigator information");
+						log.info("payload has Investigator information");
 						InvestigatorType healthCareSiteInvestigator = investigator.getHealthcareSiteInvestigator().getInvestigator(0);
 						studyInvestigator.setNciId(healthCareSiteInvestigator.getNciIdentifier());
 						studyInvestigator.setFirstName(healthCareSiteInvestigator.getFirstName());
 						studyInvestigator.setLastName(healthCareSiteInvestigator.getLastName());
 						studyInvestigator.setPhone(healthCareSiteInvestigator.getPhoneNumber());
+						studyInvestigator.setTelecomAddr(StringUtils.isBlank(healthCareSiteInvestigator.getEmail()) ? null : healthCareSiteInvestigator.getEmail());
 						protocol.setInvestigator(studyInvestigator);
 					}
 					else
 					{
-						logger.info("payload has no Investigator information");
+						log.info("payload has no Investigator information");
 						protocol.setInvestigator(null);
 					}
 				}// end if
@@ -235,43 +382,8 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		catch (Exception e)
 		{
-			logger.error("populateProtocol: Exception occurred: ", e);
+			log.error("populateProtocol: Exception occurred: ", e);
 		}
-	}
-
-	/**
-	 * @param username
-	 * @return
-	 * @throws StudyCreationException
-	 */
-	private boolean authorized(String username) throws StudyCreationException
-	{
-		boolean userAuthorized = false;
-		String user = "";
-		if (username == null)
-		{
-			logger.error("Error saving Study no username provided");
-			StudyCreationException rce = new StudyCreationException();
-			rce.setFaultString("No user credentials provided");
-			throw rce;
-		}
-		else
-		{
-			logger.debug("User who called the service was " + username);
-			// instantiate Lab Viewer authorization
-			LabViewerAuthorizationHelper lvaHelper =
-					new LabViewerAuthorizationHelper();
-			if (username != null)
-			{
-				int beginIndex = username.lastIndexOf("=");
-				int endIndex = username.length();
-				user = username.substring(beginIndex + 1, endIndex);
-			}
-			// check if authorized
-			userAuthorized = lvaHelper.isAuthorized(user);
-		}
-		return userAuthorized;
-
 	}
 
 	/*
@@ -283,7 +395,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			InvalidStudyException
 	{
 		String studyGridId = study.getGridId();
-		logger.debug("Received a Study Rollback StudyGridId" + studyGridId);
+		log.debug("Received a Study Rollback StudyGridId" + studyGridId);
 		// Obtain Connection
 		con = dao.getConnection();
 		try
@@ -305,7 +417,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				}
 				else
 				{
-					logger
+					log
 							.info("There is no study with in the threshold time for rollback");
 				}
 			}
@@ -315,13 +427,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				StudyCreationException ire = new StudyCreationException();
 				ire
 						.setFaultString("Invalid study rollback message- no study found with given gridid");
-				logger.fatal(ire);
+				log.fatal(ire);
 				throw (ire);
 			}
 		}
 		catch (SQLException se)
 		{
-			logger.error("Error deleting study", se);
+			log.error("Error deleting study", se);
 		}
 		finally
 		{
@@ -331,12 +443,23 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 			}
 			catch (SQLException e)
 			{
-				logger.error("Error closing connection", e);
+				log.error("Error closing connection", e);
 				String msg =
 						"Lab Viewer unable to rollback study" + e.getMessage();
 				throw new RemoteException(msg);
 			}
 		}
-		logger.info("deleted study");
+		log.info("deleted study");
 	}
+	
+	private static String camelCase(String string)
+	{
+        switch (string.length())
+        {
+            case 0:  return string;
+            case 1:  return string.toUpperCase();
+            default: return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+        }
+	}
+	
 }

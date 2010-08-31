@@ -1,6 +1,6 @@
 /**
- * Copyright Notice. Copyright 2008 ScenPro, Inc ("caBIG(TM)
- * Participant").caXchange was created with NCI funding and is part of the
+ * Copyright Notice. Copyright 2008 ScenPro, Inc (caBIG (TM)
+ * Participant).caXchange was created with NCI funding and is part of the
  * caBIG(TM) initiative. The software subject to this notice and license includes
  * both human readable source code form and machine readable, binary, object
  * code form (the "caBIG(TM) Software"). This caBIG(TM) Software License (the
