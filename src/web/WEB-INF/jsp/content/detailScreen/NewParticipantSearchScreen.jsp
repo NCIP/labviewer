@@ -1,12 +1,25 @@
 <%@ page isELIgnored="false"%>
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
+
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean"
+	prefix="bean"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html"
+	prefix="html"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic"
+	prefix="logic"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles"
+	prefix="tiles"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-template"
+	prefix="template"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
+	prefix="nested"%>
 
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 
-<s:form id="ParticipantForm" action="searchParticipant.action" method="post">
-    <s:hidden name="tableId" value="searchParticipant"/>
+
+
+<html:form action="participantSearch.do?operation=doParticipantSearch" method="post">									
 <!-- laf box 1st half -->
 <div style="margin-top: 0; padding-top: 0;">
    <!-- laf box 1st half -->
@@ -44,65 +57,32 @@
 																		width="100%" height="100%" class="contentBegins">
 																		<tr>
 																			<td>
-<!--																				<s:if test="hasActionErrors()"><div><s:actionerror /></div></s:if>-->
+																				<html:errors />
 																			</td>
 																		</tr>
 																		<tr>
 																			<td>
 																				<center>
 																					<table cellpadding="0" cellspacing="0" border="0">
-																					    <tr>
-													                                        <td>
-													                                            <font size="2" face="arial">Participant:</font>
-													                                        </td>
-													                                        <td>
-                                                                                                <s:textfield name="searchTerm" cssStyle="width: 2in"/>
-                                                                                            </td>
-												                                        </tr>
-												                                        <tr>
-																							<td colspan="2">																							
-																								<font size="2" face="arial">Enter one or more search terms. First name, last name and identifier will be searched.</font>
+																						<tr>
+																							<td>
+																								<html:text style="width: 4in"
+																									property="participantPhrase" />
+																							</td>
+																							<td>
+																								<!-- action buttons begins -->
+																								<html:submit style="actionButton">Search</html:submit>
 																							</td>
 																						</tr>
-																					    <tr>
-													                                        <td>
-													                                            <font size="2" face="arial">Study ID:</font>
-													                                        </td>
-													                                        <td>
-                                                                                                <s:textfield name="studyId" cssStyle="width: 2in"/>
-                                                                                            </td>
-												                                        </tr>
-												                                        <tr>
-													                                        <td>
-													                                            <font size="2" face="arial">Study Title:</font>
-													                                        </td>
-													                                        <td>
-														                                        <s:textfield name="studyTitle" cssStyle="width: 2in"/>
-													                                        </td>
-												                                        </tr>																						
 																						<tr>
-												                                            <td colspan="2" align="center">
-														                                        <s:submit type="button" cssClass="actionButton">Search</s:submit>
-													                                        </td>
-													                                    </tr>
-<!--																						<tr>-->
-<!--																							<td>-->
-<!--																								<html:text style="width: 4in"-->
-<!--																									property="participantPhrase" />-->
-<!--																							</td>-->
-<!--																							<td>--> 
-<!--																								<html:submit style="actionButton">Search</html:submit>-->
-<!--																							</td>-->
-<!--																						</tr>-->
-<!--																						<tr>-->
-<!--																							<td>-->
-<!--																								<font size="2" face="arial"> <br> *-->
-<!--																									Please enter one or more search terms above and-->
-<!--																									select the "Search" button.<br> ** Search-->
-<!--																									will perform search in Fisrt name, Last name-->
-<!--																									and Identifier. </font>-->
-<!--																							</td>-->
-<!--																						</tr>-->
+																							<td>
+																								<font size="2" face="arial"> <br> *
+																									Please enter one or more search terms above and
+																									select the "Search" button.<br> ** Search
+																									will perform search in First name, Last name
+																									and Identifier. </font>
+																							</td>
+																						</tr>
 																					</table>
 																				</center>
 																			</td>
@@ -131,13 +111,13 @@
  </div>
 <div style="height: 1em; white-space: nowrap;"></div>
 <div>
- <s:if test="searchResults != null">
+ <logic:present name="ParticipantSearchForm" property="participantsList">
   <!-- laf box 1st half -->
   <div class="box">
 	<div align=center>
 	    <!-- header -->
 	    <div class="header"><div class="background-L"><div class="background-R">
-	      <h2>Search Results:
+	      <h2>Search Results: <bean:write name="ParticipantSearchForm" property="participantPhrase"/>
 	    </div></div></div>
 	    <!-- end header -->
 	    <!-- inner border -->
@@ -153,11 +133,13 @@
 																			width="100%" height="100%" class="contentBegins">
 																			<tr>
 																				<td>
-     <display:table name="searchResults" sort="list" cellspacing="0" cellpadding="3"
-			               id="participantTable" export="true"
+     <display:table name="${sessionScope.ParticipantSearchForm.participantsList}" sort="list" cellspacing="0" cellpadding="3"
+			               id="participantTable" export="true" 
+			               size="totalParticipants" 
 			               defaultsort="1"
-                        requestURI=""                       
-	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">   
+                        requestURI=""
+                        decorator="gov.nih.nci.caxchange.ctom.viewer.util.ParticipantSearchDecorator"                        
+	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
            <display:setProperty name="paging.banner.placement" value="bottom" />    
            <display:setProperty name="paging.banner.item_name" value="Participants" />               
            <display:setProperty name="paging.banner.items_name" value="Participants" />    
@@ -170,18 +152,16 @@
            <display:setProperty name="export.excel.include_header" value="true"/>                                     
            <display:setProperty name="export.csv.include_header" value="true"/>                                     
            <display:setProperty name="export.xml.include_header" value="true"/>   
-           <display:column class="dataCellText" sortable="true" sortProperty="patientId" title="Participant ID (MRN)" media="html" >
-               <a href="#" onclick="displayLabs('<%=DisplayConstants.LABACTIVITES_ID%>', ${participantTable_rowNum})">${participantTable.patientId}</a>
+           <display:column class="dataCellText" sortable="true" sortProperty="patientId" title="Participant ID (MRN)" maxLength="90" media="html" >
+               <a href="#" onclick="loadLabs(${participantTable_rowNum})"> ${participantTable.patientId}</a>
            </display:column>
            <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
                ${participantTable.patientId}
            </display:column>
-           <display:column class="dataCellText" title="Participant ID (MRN)" media="csv excel xml" >
-               ${participantTable.patientId}
-           </display:column>
-           <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name"/>
+           <display:column property="firstName"  class="dataCellText" sortable="true" title="First Name" maxLength="200"/>
            <display:column property="lastName" class="dataCellText" sortable="true" title="Last Name" />
-          </display:table>
+          </display:table>	                       
+	      <input type="hidden" name="index" value=""/>
 																				</td>
 																			</tr>
 																		</table>
@@ -199,11 +179,13 @@
 	</div>
 </div>
 <!-- laf box 2nd half -->    
-  </s:if>
+  </logic:present>
 </div>
-</s:form>
-
+</html:form>
+<head>
 <script type="text/javascript">
+//var t = new ScrollableTable(document.getElementById('myScrollTable'), 82);
+//handles load action
 function loadLabs(indexValue){
  
     document.ParticipantSearchForm.index.value=indexValue;
@@ -211,3 +193,4 @@ function loadLabs(indexValue){
  	document.ParticipantSearchForm.submit();
 }
 </script>
+</head>

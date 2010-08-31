@@ -1,7 +1,22 @@
 <%@ page isELIgnored="false"%>
 
-<%@ taglib prefix="s" uri="/struts-tags"%>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net" %>
+
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean"
+	prefix="bean"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html"
+	prefix="html"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic"
+	prefix="logic"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles"
+	prefix="tiles"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-template"
+	prefix="template"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-nested"
+	prefix="nested"%>
+
+<html:form action="loadPI.do">
+<logic:present name="PIForm" property="piList">
 
 		<!-- laf box 1st half -->
 		<div class="box">
@@ -38,10 +53,12 @@
 																			width="100%" height="100%" class="contentBegins">
 																			<tr>
 																				<td>	
-	<display:table name="principalInvestigators" sort="list" cellspacing="0" cellpadding="3"
+	<display:table name="${sessionScope.PIForm.piList}" sort="list" cellspacing="0" cellpadding="3"
 			               pagesize="25" uid="hsctable" export="true" 
-			               defaultsort="1"
-                        requestURI=""                    
+			               size="totalPIs" 
+			               defaultsort="1" defaultorder="descending"
+                        requestURI=""
+                        decorator="gov.nih.nci.caxchange.ctom.viewer.util.PIDecorator"                        
 	    style="border: 1px solid black; margin-top: 1em; margin-bottom: 1em; width: 100%;" class="dataTable">    
            <display:setProperty name="paging.banner.placement" value="bottom" />    
            <display:setProperty name="paging.banner.item_name" value="Principal Investigators" />               
@@ -84,3 +101,5 @@
 			</div>
 		</div>
 		<!-- laf box 2nd half -->
+	</logic:present>
+</html:form>
