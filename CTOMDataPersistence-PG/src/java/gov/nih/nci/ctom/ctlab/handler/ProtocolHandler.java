@@ -100,6 +100,23 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
+	
+	private static final String PROTOCOL_INSERT = "INSERT INTO protocol (id, " +
+																	    "nci_identifier, " +
+																	    "identifier_assigning_authority, " +
+																	    "long_title_text, " +
+																	    "short_title_text, " +
+																	    "ctom_insert_date, " +
+																	    "sponsor_code, " +
+																	    "precis_text, " +
+																	    "description_text, " +
+																	    "phase_code, " +
+																	    "blinded_indicator, " +
+																	    "multi_institution_indicator, " +
+																	    "randomized_indicator, " +
+																	    "intent_code, " +
+																	    "target_accrual_number) " +
+																 "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	/*
 	 * (non-Javadoc)
@@ -156,9 +173,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 					identifierUpdInd = true;
 					// get ID from sequence
 					id = getNextVal(con, "protocol_seq");
-					ps =
-							con
-									.prepareStatement("insert into protocol (ID, NCI_IDENTIFIER, IDENTIFIER_ASSIGNING_AUTHORITY, LONG_TITLE_TEXT, SHORT_TITLE_TEXT, CTOM_INSERT_DATE, SPONSOR_CODE)  values(?,?,?,?,?,?,?)");
+					ps = con.prepareStatement(PROTOCOL_INSERT);
 					ps.setLong(1, id);
 					ps.setString(2, String.valueOf(protocol.getNciIdentifier()));
 					ps.setString(3, String.valueOf(protocol.getIdAssigningAuth()));
@@ -174,6 +189,15 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 								.getTime()));
 					}
 					ps.setString(7, String.valueOf(protocol.getSponsorCode()));
+					
+					ps.setString(8, protocol.getPrecisTxt());
+					ps.setString(9, protocol.getDescTxt());
+					ps.setString(10, protocol.getPhaseCode());
+					ps.setString(11, protocol.getBlindedId());
+					ps.setString(12, protocol.getMultiInstId());
+					ps.setString(13, protocol.getRandomId());
+					ps.setString(14, protocol.getIntentCode());
+					ps.setLong(15, protocol.getTargetAccNum());
 					ps.execute();
 					if (identifierUpdInd && protocol.getIdentifier() != null)
 					{

@@ -159,10 +159,10 @@ public class ParticipantSearchAction extends DispatchAction
 			if (searchResult.getSearchResultObjects() == null
 					|| searchResult.getSearchResultObjects().isEmpty())
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						DisplayConstants.ERROR_ID,
-						"The search criteria returned zero results"));
-				saveErrors(request, errors);
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//						DisplayConstants.ERROR_ID,
+//						"The search criteria returned zero results"));
+//				saveErrors(request, errors);
 				if (logDB.isDebugEnabled())
 					logDB
 							.debug(session.getId()

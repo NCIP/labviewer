@@ -180,10 +180,10 @@ public class LogoutAction extends Action
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_STUDY);
 		session.removeAttribute(DisplayConstants.SEARCH_RESULT_PART);
-		
+
 		String webssoCasServer = (String)session.getAttribute("webssoCasServer");
 		String webssoCasServerPort = (String)session.getAttribute("webssoCasServerPort");
-
+		
 		session.invalidate();
 		
 		if (loggedInthroWEBSSO)

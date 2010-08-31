@@ -81,6 +81,8 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LabActivitiesSearchForm;
@@ -88,13 +90,26 @@ import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
 import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 
 /**
- * @author Lisa Kelley
+ * @author Kunal Modi (Ekagra Software Technologies Ltd.)
  */
-public class HomeAction extends LabViewerActionSupport
+public class HomeAction extends Action
 {
+
 	private static final Logger log = Logger.getLogger(HomeAction.class);
 
 	/*
@@ -106,56 +121,95 @@ public class HomeAction extends LabViewerActionSupport
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
 
-	public String execute()
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		LoginForm loginForm = (LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT);
+		ActionErrors errors = new ActionErrors();
+		CommonUtil util = new CommonUtil();
+		ActionForward forward = null;
+		HttpSession session = request.getSession();
+
+		LoginForm loginForm =
+				(LoginForm) session.getAttribute(DisplayConstants.LOGIN_OBJECT);
 
 		// check for the user login information
-		CommonUtil util = new CommonUtil();
-		String loginID = util.checkUserLogin(session);
+		String userEmail = util.checkUserLogin(session);
 
-		if (loginForm == null && loginID == null)
+		if ((loginForm == null) && (userEmail == null))
 		{
-			log.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
-			return ForwardConstants.LOGIN_FAILURE;
+			log
+					.debug("||||Failure|No Session or User Object Forwarding to the Login Page||");
+			return mapping.findForward(ForwardConstants.LOGIN_PAGE);
 		}
 
+		/*
+		 * clear the junk in the session here
+		 */
 		util.clearSessionData(session);
-		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID, DisplayConstants.HOME_ID);
+
+		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
+				DisplayConstants.HOME_ID);
 
 		// If they got here by WebSSO then check authorization and set things up
-		if (loginID != null)
+		if (userEmail != null)
 		{
+			boolean loggedIn = true;
+			loginForm = new LoginForm();
+
+			String username = userEmail;
+			loginForm.setLoginId(username);
+
 			// Check their authorization
-			LabViewerAuthorizationHelper lvaHelper = new LabViewerAuthorizationHelper();
-			boolean authorized = lvaHelper.isAuthorized(loginID);
-
-			if (!authorized)
+			LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
+			Set<SuiteRole> userRoles = null;
+			try
 			{
-				log.error("User authenticated but not authorized");
-				this.addActionError("User does not have permissions for this application");
-				return ForwardConstants.LOGIN_FAILURE; // lisa - test this!
+			    userRoles = authHelper.getUserRoles(username);
+			    userRoles.remove(SuiteRole.USER_ADMINISTRATOR); // this is temporary until user provisioning in standalone mode is implemented
+			    
+			    if (!(userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR) || 
+					  userRoles.contains(SuiteRole.USER_ADMINISTRATOR) ||
+					  userRoles.contains(SuiteRole.LAB_DATA_USER)))
+				{
+					log.error("User not authorized for LabViewer");
+					loggedIn = false;
+					forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
+				}
 			}
-			
-			loginForm = new LoginForm();			
-			loginForm.setLoginId(loginID);
-			loginForm.setGridProxy("test");
-			
-			// retrieve and set properties
-			util.getProperties(session);
-			session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
-			
-			if (session.getAttribute("HOT_LINK") == "true")
+			catch (SuiteAuthorizationAccessException e)
 			{
-				LabActivitiesSearchForm labFm = (LabActivitiesSearchForm) session.getAttribute("CURRENT_FORM"); // lisa - test if this line and the next line are really necessary?
-				session.setAttribute("CURRENT_FORM", labFm);
-				return ForwardConstants.LOGIN_SUCCESS_HOTLINK;
+				log.error("Error authorizing user for LabViewer: ", e);
+				loggedIn = false;
+				forward = mapping.findForward(ForwardConstants.LOGIN_FAILURE);
 			}
 
-			return ForwardConstants.LOGIN_SUCCESS;
+			if (loggedIn)
+			{
+				loginForm.setGridProxy("test");
+				// retrieve and set properties
+				util.getProperties(session);
+				session.setAttribute(DisplayConstants.LOGIN_OBJECT, loginForm);
+				session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
+						DisplayConstants.HOME_ID);
+				
+				session.setAttribute(DisplayConstants.USER_ROLES, userRoles);
+				
+				if (session.getAttribute("HOT_LINK") == "true")
+				{
+					LabActivitiesSearchForm labFm =
+							(LabActivitiesSearchForm) session
+									.getAttribute("CURRENT_FORM");
+					session.setAttribute("CURRENT_FORM", labFm);
+					return (mapping
+							.findForward(ForwardConstants.LOGIN_SUCCESS_HOTLINK));
+				}
+
+				forward = mapping.findForward(ForwardConstants.LOGIN_SUCCESS);
+			}
 		}
 
-		return null; // lisa - figure out if this is correct?
+		return forward;
 	}
 
 }

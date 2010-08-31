@@ -81,11 +81,15 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.actions;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.constants.ForwardConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
 import gov.nih.nci.caxchange.ctom.viewer.forms.MenuForm;
 import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -130,6 +134,12 @@ public class MenuSelectionAction extends Action
 
 		session.setAttribute(DisplayConstants.CURRENT_TABLE_ID,
 				menuSelectionForm.getTableId());
+		
+		String username = util.checkUserLogin(session);
+		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
+		Set<SuiteRole> userRoles = authHelper.getUserRoles(username);
+		userRoles.remove(SuiteRole.USER_ADMINISTRATOR); // this is temporary until user provisioning in standalone mode is implemented
+		session.setAttribute(DisplayConstants.USER_ROLES, userRoles);
 
 		if (log.isDebugEnabled())
 			log.debug(session.getId()

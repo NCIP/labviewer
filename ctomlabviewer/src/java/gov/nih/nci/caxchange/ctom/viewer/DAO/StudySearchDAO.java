@@ -81,6 +81,8 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.cagrid.caxchange.client.CaXchangeRequestProcessorClient;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.caxchange.Credentials;
@@ -94,6 +96,8 @@ import gov.nih.nci.caxchange.Statuses;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.constants.DisplayConstants;
 import gov.nih.nci.caxchange.ctom.viewer.forms.LoginForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.StudySearchResult;
 import gov.nih.nci.coppa.common.LimitOffset;
@@ -175,7 +179,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		log.debug("Study search called with search term(s): " + studyID + studyTitle);
 
 		List<String> searchTerms = getSearchTerms(studyTitle);
-		if (StringUtils.isBlank(studyID) && searchTerms.isEmpty())
+		if (StringUtils.isEmpty(studyID.trim()) && searchTerms.isEmpty())
 		{
 			studyID = "%";
 		}
@@ -266,7 +270,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 	 * @param studyPhrase
 	 * @return
 	 * @throws Exception
-	 */
+	 */	
 	private List<StudySearchResult> getCTODSSearchResults(String studyID, List<String> searchTerms, HttpSession session) throws Exception
 	{
 		CQLQuery query = new CQLQuery();
@@ -281,14 +285,58 @@ public class StudySearchDAO extends HibernateDaoSupport
 			group.addAttribute(new CQLAttribute("shortTitle", CQLPredicate.LIKE, "%" + searchTerm + "%"));
 		}
 		    
-		if (StringUtils.isNotBlank(studyID))
+		if (StringUtils.isNotEmpty(studyID))
 		{
 		    CQLAssociation association = new CQLAssociation();
 		    association.setName("gov.nih.nci.labhub.domain.II"); 
-		    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to nci_identifier
+		    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to identifier table
 		    association.setAttribute(new CQLAttribute("extension", CQLPredicate.LIKE, "%" + studyID + "%"));
 		    group.addAssociation(association);
 		}
+		
+		CommonUtil util = new CommonUtil();		
+		String username = util.checkUserLogin(session);
+		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
+		SuiteRoleMembership roleMembership = authHelper.getUserRoleMembership(username, SuiteRole.LAB_DATA_USER);
+		
+		// if the user has permission to access specific studies (not all studies), then filter based upon these specific studies
+		if (!roleMembership.isAllStudies())
+		{
+			CQLGroup innerGroup = new CQLGroup();
+			for (String studyId : roleMembership.getStudyIdentifiers())
+			{
+				CQLAssociation association = new CQLAssociation();
+			    association.setName("gov.nih.nci.labhub.domain.II"); 
+			    association.setTargetRoleName("studyIdentifier"); // studyIdentifier correlates to identifier table
+			    association.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, studyId));
+			    innerGroup.addAssociation(association);
+			}
+			
+			innerGroup.setLogicOperator(CQLLogicalOperator.OR);
+			group.addGroup(innerGroup);
+	    }
+		
+		// if the user has permission to access specific sites (not all sites), then filter based upon these specific sites
+		if (!roleMembership.isAllSites())
+		{
+			CQLGroup innerGroup = new CQLGroup();
+			for (String siteId : roleMembership.getSiteIdentifiers())
+			{
+				CQLAssociation innerAssociation = new CQLAssociation();
+				innerAssociation.setName("gov.nih.nci.labhub.domain.HealthCareSite"); 
+				innerAssociation.setTargetRoleName("healthCareSite");
+				innerAssociation.setAttribute(new CQLAttribute("nci_institute_code", CQLPredicate.EQUAL_TO, siteId));
+			    
+				CQLAssociation association = new CQLAssociation();
+			    association.setName("gov.nih.nci.labhub.domain.StudySite"); 
+			    association.setTargetRoleName("studySiteCollection"); // studySiteCollection correlates to study_site table
+			    association.setAssociation(innerAssociation);
+			    innerGroup.addAssociation(association);
+			}
+			
+			innerGroup.setLogicOperator(CQLLogicalOperator.OR);
+			group.addGroup(innerGroup);
+	    }
 		
 		group.setLogicOperator(CQLLogicalOperator.AND);		
 		target.setGroup(group);
@@ -364,7 +412,7 @@ public class StudySearchDAO extends HibernateDaoSupport
                                        "WHERE ps.protocol_id = ? " +
                                          "AND ps.ctom_insert_date = (SELECT MAX(ctom_insert_date) FROM ProtocolStatus WHERE protocol_id = ps.protocol_id)";
 	
-	/**
+	/*
 	 * Checks and sets the Protocol/Study Status
 	 * 
 	 * @param studySearchResultList
@@ -406,7 +454,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		
 		StudyProtocol studyProtocol = new StudyProtocol();
 		
-		if (StringUtils.isNotBlank(studyID))
+		if (StringUtils.isNotEmpty(studyID))
 		{
 		    II assignedIdentifier = new II();
 		    assignedIdentifier.setExtension("%" + studyID + "%");
@@ -740,12 +788,13 @@ public class StudySearchDAO extends HibernateDaoSupport
 		else
 		{
 			if (ctodsSearchResults.isEmpty())
-			{					
-				for (Protocol paStudy : paStudies)
-		        {
-					StudySearchResult paSearchResult = createSearchResult(paStudy);
-					studySearchResults.add(paSearchResult);
-		        }
+			{	
+// users decided they just wanted CTODS search results displayed - need to clean this up				
+//				for (Protocol paStudy : paStudies)
+//		        {
+//					StudySearchResult paSearchResult = createSearchResult(paStudy);
+//					studySearchResults.add(paSearchResult);
+//		        }
 			}
 			else
 			{
@@ -783,10 +832,12 @@ public class StudySearchDAO extends HibernateDaoSupport
 			            }
 			        }
 			        						        
-			        studySearchResults.add(paSearchResult);
-			        if (removeObject != null){
-			            ctodsSearchResults.remove(removeObject);
-			        }
+// users decided they just wanted CTODS search results displayed - need to clean this up
+//			        studySearchResults.add(paSearchResult);
+//			        if (removeObject != null)
+//			        {
+//			            ctodsSearchResults.remove(removeObject);
+//			        }
 			    }
 		        
 		        // add any remaining CTODS search results

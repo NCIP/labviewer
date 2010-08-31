@@ -15,6 +15,8 @@
 
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.constants.*"%>
 <%@ page import="gov.nih.nci.caxchange.ctom.viewer.forms.*"%>
+<%@ page import="java.util.Set"%>
+<%@ page import="gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole"%>
 
 <script type="text/javascript" src="scripts/prototype.js"></script>
 <script type="text/javascript" src="scripts/ccts-hotlinks.js"></script>
@@ -206,11 +208,14 @@ function SelectAll()
 																			String C3Durl = "";//(String)session.getAttribute("BaseURLC3D");
 																			String gridId = (String) session.getAttribute("studySubjectGridId");
 																			String hotLinkType = (String) session.getAttribute("hotLinkType");
+																			Set userRoles = (Set) session.getAttribute(DisplayConstants.USER_ROLES);
 																		%>
+																		<%if (userRoles.contains(SuiteRole.AE_REPORTER)) {%>			                                                 
 																		<a
 																			href="<%=caAERSurl%>/pages/ae/list?studySubjectGridId=<%=gridId%>"
 																			target="<%=hotLinkType%>">View this patient in
 																			caAERS</a>
+																		<%}%>
 																		<!-- &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;<a href="<%=C3Durl%>/studySubject?studySubjectGridId=<%=gridId%>" target="c3d">View these labs in C3D</a> -->
 																	</td>
 																</tr>
@@ -283,7 +288,9 @@ function SelectAll()
 																										<display:column property="siteId"
 																											class="dataCellText" sortable="true"
 																											title="Site" maxLength="200" />
-																										<display:column title="Date / Time" property="actualDate" format="{0,date,yyyy-MM-dd} {0,time,hh:mm:ss a}" class="dataCellText" sortable="true" />
+																											
+																										<display:column title="Date / Time" property="actualDate" format="{0,date,yyyy-MM-dd} {0,time,hh:mm:ss a}" class="dataCellText" sortable="true" />																										
+																											
 																										<display:column property="labTestId"
 																											class="dataCellText" sortable="true"
 																											title="Lab Test" />
@@ -311,7 +318,7 @@ function SelectAll()
 																										<display:column property="highRange"
 																											class="dataCellText" sortable="true"
 																											title="Upper Limit" />
-
+																											
                                                                                                         <display:column title="Sent to CDMS" class="dataCellText" sortable="true" sortProperty="labsToCDMSDate" >
                                                                                                             <logic:empty name="labtable" property="labsToCDMSDate">Not Sent</logic:empty>
                                                                                                             <logic:notEmpty name="labtable" property="labsToCDMSDate">${labtable.labsToCDMSDateFormatted}</logic:notEmpty>

@@ -5,19 +5,17 @@ import gov.nih.nci.cagrid.authentication.bean.BasicAuthenticationCredential;
 import gov.nih.nci.cagrid.authentication.bean.Credential;
 import gov.nih.nci.cagrid.authentication.client.AuthenticationClient;
 import gov.nih.nci.cagrid.common.Utils;
-import gov.nih.nci.cagrid.dorian.client.IFSUserClient;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.ccts.grid.client.RegistrationConsumerClient;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
 import org.cagrid.gaards.dorian.federation.CertificateLifetime;
-import org.cagrid.gaards.dorian.federation.ProxyLifetime;
 import org.globus.gsi.GlobusCredential;
 import org.globus.wsrf.encoding.DeserializationException;
 import org.xml.sax.SAXException;
@@ -29,27 +27,14 @@ import org.xml.sax.SAXException;
  * @author Michael Holck
  */                                                                
 public class LabViewerRegistrationTest                       
-{                                                                                         
+{
 	String serviceUrl =
-		"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // DEV1
-        // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/RegistrationConsumer";  // DEV2 
-    
-                             
-    // private String serviceUrl=
-	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// https://cbvapp-d1017.nci.nih.gov:38443/wsrf/services/cagrid/Dorian
-	// String serviceUrl=
-	// "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl =
-	// "http://cbiovqa5010.nci.nih.gov:28080/wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl =
-	// "http://cbvapp-d1017.nci.nih.gov:28080/ctom-wsrf/services/cagrid/RegistrationConsumer";
-	// String serviceUrl
-
-	//private String sampleFile = "/SampleRegistrationMessage.xml";
-    String sampleFile = "C:/Development/sampleMessages/Registration_sample.xml";
-
-    String proxyFile = "C:/Development/proxy";
+	    "https://localhost:21443/ctom-wsrf/services/cagrid/RegistrationConsumer";
+		//"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/RegistrationConsumer"; // Dev1
+        // "https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/RegistrationConsumer"; // Dev2
+	
+	String sampleFile = "D:/CCTS/FILES/XML/REGISTER_SUBJECT.xml";
+	String proxyFile = "D:/CCTS/FILES/PROXY/proxy";
 	private Logger logger = Logger.getLogger(getClass());
 
 	/**

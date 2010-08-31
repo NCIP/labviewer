@@ -19,10 +19,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 	<!-- pass in the below property from commandline -->
 	<property name="properties.file" value="install.properties"/>
-    <!-- <property name="properties.file" value="install.properties"/> -->
 
-    <!-- RAM commented this out cause it is not an upgrade
-    <property name="upgrade.properties.file" value="upgrade.properties"/> -->
 	<echo message="Using properties file of ${properties.file}." />
 	<available file="${properties.file}" property="properties.file.exists" />
 	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail." />
@@ -42,9 +39,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<condition property="application.base.path" value="${application.base.path.windows}">
 		<os family="windows" />
 	</condition>
-    <!-- RAM on 10/21/2009 changed tomcat.home to ${tomcat.relative.path}
-    <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
-    -->
     <property name="tomcat.home" value="${tomcat.relative.path}"/>
 
 
@@ -76,7 +70,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 
 	<!-- Ivy Related props -->
-	<property name="ivy.settings.file" value="ivy-settings.xml" />
+	<property name="ivy.settings.file" value="ivy-bda-settings.xml" />
 
 	<!-- Properties that relate to how to call build targets from sub-projects-->
 	<!-- Working directory passed to Ant tasks -->
@@ -86,6 +80,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
 	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
 	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
+	<property name="studyservice.base.dir" location="${software.dir}/StudyService"/>
 	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.3"/>
 	<property name="cchc.base.dir" location="${software.dir}/CancerCenterClient"/>
 
@@ -95,19 +90,21 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctomlabviewer.build.file" value="build.xml" />
 	<property name="registrationconsumerservice.build.file" value="build.xml" />
 	<property name="studyconsumerservice.build.file" value="build.xml" />
+	<property name="studyservice.build.file" value="build.xml" />
 	<property name="labloader.build.file" value="build.xml" />
 	<property name="cchc.build.file" value="build.xml" />
 
 	 <!-- The target name that should be called from the sub-project build file -->
-	    <property name="labviewer-clean.build.target" value="clean"/>
-	    <property name="labviewer-ivy-clean.build.target" value="ivy-clean"/>
-	    <property name="ctomdatapersistence.build.target" value="package-notest"/>
-	    <property name="ctomlabviewer.build.target" value="package-notest"/>
-	    <property name="registrationconsumerservice.build.target" value="jar-notest"/>
-	    <property name="studyconsumerservice.build.target" value="jar-notest"/>
-	    <property name="labloader.build.target" value="jar-notest"/>
-	    <property name="cchc.build.target" value="package-notest"/>
-	   <property name="ctomdeploymentcontroller.build.target" value="build-ctom-wsrf"/>
+	<property name="labviewer-clean.build.target" value="clean"/>
+	<property name="labviewer-ivy-clean.build.target" value="ivy-clean"/>
+	<property name="ctomdatapersistence.build.target" value="package-notest"/>
+	<property name="ctomlabviewer.build.target" value="package-notest"/>
+	<property name="registrationconsumerservice.build.target" value="jar-notest"/>
+	<property name="studyconsumerservice.build.target" value="jar-notest"/>
+	<property name="studyservice.build.target" value="jar-notest"/>
+	<property name="labloader.build.target" value="jar-notest"/>
+	<property name="cchc.build.target" value="package-notest"/>
+    <property name="ctomdeploymentcontroller.build.target" value="build-ctom-wsrf"/>
 
 	<!-- Maven comamnd line arguments, bda profile is inside profiles.xml that gets copied to ear folder before build to override exiting properties -->
 
@@ -127,7 +124,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="cchc.dist.dir" value="${dist.exploded.dir}/${cchc.dist.relative.dir}"/>
 	<property name="ctomdatapersistence.dist.dir" value="${dist.exploded.dir}/${ctomdatapersistence.dist.relative.dir}"/>
     <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/artifacts"/>
-    <!--<property name="labviewer.artifact.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}" />-->
 	<property name="tools.dist.dir" value="${dist.exploded.dir}/${tools.dist.relative.dir}" />
 	<property name="common.dist.dir" value="${dist.exploded.dir}/${common.dist.relative.dir}" />
    	<property name="db-install.dist.dir" value="${dist.exploded.dir}/${db-install.dist.relative.dir}" />
@@ -166,11 +162,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<!-- retrive ivy.jar.files then retrieve bda files and librarires -->
 	<property name="commonlibrary.dir" value="" />
 	<property name="bda-download.file" value="bda-ivy-2.0.0-build.xml" />
-	<!--
-	<mkdir dir="${bda-download.dir}" />
-	<property name="bda-download.src.url" value="http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-download/${bda-download.file}" />
-	<get src="${bda-download.src.url}" dest="${bda-download.dir}/${bda-download.file}" />
-	-->
 	<mkdir dir="${download.dir}" />
     <ant inheritAll="false" inheritRefs="false" antfile="${bda-download.file}" target="retrieve-bda" dir="${bda-download.dir}">
 		<property name="bda.version" value="${bda.version}" />
@@ -246,16 +237,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
  </target>
 
 	<target name="ivy:clean" description="Cleans up the ivy cache of this project and all sub-projects">
-		<ivy:settings file="${ivy.settings.dir}/${ivy.settings.file}" />
+		<ivy:settings file="${common.dir}/${ivy.settings.file}" />
 		<ivy:cleancache />
 		<ant inheritAll="false" inheritRefs="false" antfile="bda-ivy-2.0.0-build.xml" target="ivy-cleancache" dir="${bda-download.dir}">
 			<property name="bda-utils.dir" value="${bda-utils.dir}" />
 			<property name="lib.dir" value="${lib.dir}" />
 			<property name="software.dir" value="${software.dir}" />
 		</ant>
-		<!--
-		<ant inheritAll="false" inheritRefs="false" antfile="${LabViewer-webapp.build.file}" target="ivy-clean" dir="${LabViewer-webapp.base.dir}" />
-		-->
 	</target>
 
 	<target name="validate:pre:build">
@@ -284,6 +272,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.username" value="${database.csm.username}"/>
+			<property name="database.csm.password" value="${database.csm.password}"/>
+			<property name="database.csm.url" value="${database.csm.url}"/>
 		</ant>
 	</target>
 	<target name="build:ctom-wsrf" depends="build:ctomdatapersistence">
@@ -295,36 +286,31 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	    <property name="database.url" value="${database.url}"/>
 		<property name="database.user" value="${database.user}"/>
 		<property name="database.password" value="${database.password}"/>
+	 	<property name="database.csm.username" value="${database.csm.username}"/>
+	 	<property name="database.csm.password" value="${database.csm.password}"/>
+	 	<property name="database.csm.url" value="${database.csm.url}"/>
 		<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="dest.dir" value="${target.dir}/wsrf-tmp"/>
-       <!--  <property name="software.dir" value="S{software.dir}"/>-->
-         <property name="temp.dir" value="${target.dir}"/>
+        <property name="temp.dir" value="${target.dir}"/>
 		<property name="labLoader.dir" value="${labloader.base.dir}"/>
 		<property name="regConsumerService.dir" value="${registrationconsumerservice.base.dir}"/>
 		<property name="studyconsumerservice.dir" value="${studyconsumerservice.base.dir}"/>
+		<property name="studyservice.dir" value="${studyservice.base.dir}"/>
 	 	<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
 	 	<property name="labloader.dir.prefix" value="LabLoader-1.3"/>
 	 	<property name="registrationconsumerservice.dir.prefix" value="RegistrationConsumerService-1.3"/>
 	 	<property name="registrationconsumerservice.dir" value="${registrationconsumerservice.base.dir}"/>
-	 	<!--<property name="studyconsumerservice.dir.prefix" value="StudyConsumerService-1.3"/> -->
 	 	<property name="artifacts.dir.prefix" value="artifacts"/>
         <property name="ctomdeploymentcontroller.dir" value="${ctodsdeploymentcontroller.base.dir}"/>
-         <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}" />
-         <!--<property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}" />-->
-         <property name="unZip.dir" value="${unZip.dir}"/>
-         <property name="stage.dir" value="${stage.dir}"/>
-         <property name="war-dist.dir" value="${war-dist.dir}"/>
-         <property name="webapps.dir" value="${webapps.dir}"/>
-
-         
+        <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}" />
+        <property name="unZip.dir" value="${unZip.dir}"/>
+        <property name="stage.dir" value="${stage.dir}"/>
+        <property name="war-dist.dir" value="${war-dist.dir}"/>
+        <property name="webapps.dir" value="${webapps.dir}"/>
 
          <property name="cert.path" value="${cert.path}"/>
 			<property name="key.path" value="${key.path}"/>
     </ant>
-		<!-- or if you have a static file then you copy it from your source -->
-		<!--<copy todir="${ctom-wsrf-webapp.dist.dir}">
-			  <fileset file="${war-dist.dir}/${war.name}.war" />
-		</copy>-->
 	</target>
 
 	<target name="build:ctodslabviewer-webapp" depends="init, build:ctomdatapersistence" description="Call webapp sub-projects build target to produce artifiacts">
@@ -337,6 +323,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<echo message="database.url= ${database.url}"/>
 			<echo message="database.user= ${database.user}"/>
 			<echo message="database.password= ${database.password}"/>
+		    <echo message="database.csm.username= ${database.csm.username}"/>
+		    <echo message="database.csm.password= ${database.csm.password}"/>
+		    <echo message="database.csm.url= ${database.csm.url}"/>
 			<echo message="artifacts.dir= ${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <echo message="ctomlabviewer.dir= ${ctomlabviewer.base.dir}"/>
 
@@ -376,6 +365,9 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="database.url" value="${database.url}"/>
 			<property name="database.user" value="${database.user}"/>
 			<property name="database.password" value="${database.password}"/>
+			<property name="database.csm.username" value="${database.csm.username}"/>
+			<property name="database.csm.password" value="${database.csm.password}"/>
+			<property name="database.csm.url" value="${database.csm.url}"/>
 			<property name="artifacts.dir" value="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
             <property name="ctomlabviewer.dir" value="${ctomlabviewer.base.dir}"/>
 
@@ -447,7 +439,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <target name="dist:tools:retrieve:tomcat" unless="tomcat.tools.exists" description="Downloads TOMCAT from binary repository and verifies checksum...">
                  <echo message="Downloading Tomcat from: ${tomcat.src.url}"/>
                  <get src="${tomcat.src.url}" dest="${tomcat.dest.file}" />
-                <!-- <get src="${tomcat.src.url.md5}" dest="${tomcat.dest.file}.md5" />-->
                  <checksum file="${tomcat.dest.file}" verifyProperty="tomcat.cksum.ok" />
                         <!--<if>
                                 <equals arg1="${tomcat.cksum.ok}" arg2="true" />
@@ -495,23 +486,17 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<delete file="${dist.dir}/${LabViewer-webapp.install.zip.file}" />
 		<!-- Set environment name to external -->
 		<delete file="${dist.exploded.dir}/upgrade.properties"/>
-
-
         <replaceregexp file="${dist.exploded.dir}/install.properties" byline="true" match="^(env.name)=.*" replace="\1=external" />
 		<obfuscate-properties-file
 			properties.file="${dist.exploded.dir}/install.properties"
-			required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.server,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname"
+			required.property.list="application.base.path.linux,application.base.path.windows,database.system.user,database.system.password,database.host,database.port,database.name,database.user,database.password,mail.smtp.host,jboss.server.hostname"
 			optional.property.list="ldap.url,ldap.basedn"
 			delete.property.list="exclude.jboss.backup"
 			/>
 
          <echo message="*** Copying ${properties.file} to ${dist.exploded.dir} ***"/>
         <copy file="${properties.file}" todir="${dist.exploded.dir}" overwrite="true" />
-        <!--<zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}" />-->
         <zip destfile="${dist.dir}/${LabViewer-webapp.install.zip.file}" basedir="${dist.exploded.dir}"/>
-       <!-- <copy file="${ctodslabviewer-webapp.dist.dir}/ctomlabviewer.war" toDir="${target.dir}" overwrite="true"/>
-        <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${target.dir}" overwrite="true"/>
-        -->
 	</target>
 
 	<target name="dist:upgrader:prep" depends="build:all,dist:tools:retrieve" description="Copies artifacts not generated by sub-project builds into the install distribution area">
@@ -568,12 +553,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<zip destfile="${dist.dir}/${LabViewer-webapp.install.name}_${LabViewer-webapp.version}-db.zip">
 			<zipfileset dir="${db-install.dist.dir}" prefix="${db-install.dist.relative.dir}" />
 			<zipfileset dir="${db-upgrade.dist.dir}" prefix="${db-upgrade.dist.relative.dir}" />
-			<!-- not needed for this target
-			<zipfileset dir="${LabViewer-webapp.dist.dir}" prefix="${LabViewer-webapp.dist.relative.dir}"/>
-			<zipfileset dir="${grid-sample.dist.dir}" prefix="${grid-sample.dist.relative.dir}"/>
-			<zipfileset dir="${tools.dist.dir}" prefix="${tools.dist.relative.dir}"/>
-			<zipfileset dir="${common.dist.dir}" prefix="${common.dist.relative.dir}"/>
-			-->
 			<zipfileset dir="${bda-utils.dir}" prefix="bda-utils"/>
 			<zipfileset dir="${dist.exploded.dir}">
 				<include name="build.xml" />
@@ -581,11 +560,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<include name="properties.template" />
 				<include name="project.properties" />
 			</zipfileset>
-			<!--  might want to add this
-			<zipfileset dir="${build.dir}">
-				<include name="local.properties" />
-			</zipfileset>
-			-->
 		</zip>          
 	</target>
 
@@ -773,7 +747,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<target name="init:ivy" description="Initializes ivy-repo.based on ivy definition file and ivy settings file">
 		<mkdir dir="${local.repo.dir}" />
 		<property name="ivy.dep.file" value="${ivy.settings.dir}/ivy-test.xml" />
-		<ivy:settings file="${ivy.settings.dir}/ivy.settings.xml" />
+		<ivy:settings file="${common.dir}/ivy.settings.xml" />
 	</target>
 
 	<target name="ivy-test-selenium" depends="init:ivy" description="Downloads selenium libraries from ivy into library directory">
@@ -850,8 +824,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<property name="ivy.report.dir" value="${reports.dir}/ivy" />
 		<delete dir="${ivy.report.dir}" />
 		<mkdir dir="${ivy.report.dir}" />
-		<ivy:report outputpattern="target/reports/ivy/[organisation]-[module]-[conf].[ext]" dot="true" graph="false" />
-		<util-dot-on-dir dot-file.dir="target/reports/ivy" />
+		<ivy:report outputpattern="../target/reports/ivy/[organisation]-[module]-[conf].[ext]" dot="true" graph="false" />
+		<util-dot-on-dir dot-file.dir="../target/reports/ivy" />
 	</target>
 
 	<target name="deploy:hot" depends="build:all" description="Hot deploys the deployment artifact">

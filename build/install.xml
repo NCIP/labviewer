@@ -56,8 +56,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="log.dir" location="${basedir}/logs" />
 	<property name="working.dir" location="../../working" />
 	<property name="temp.dir" location="${working.dir}/temp" />
-	<property name="database.type" value="postgresql" />
-	<property name="database.system.url" value="jdbc:${database.type}://${database.server}:${database.port}/postgres" />
 
 
 	<!-- Install Time properties -->
@@ -127,19 +125,24 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
 				<property name="database.driver.file" value="${bda-utils.dir}/ojdbc14-10.2.0.4.0.jar"/>
 				<property name="database.driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="db.install.create.file.list" value="${db.install.create.oracle.file.list}"/>
 				<property name="database.schema" value="${database.name}"/>
-			</case>
-			<case value="mysql">
-				<property name="database.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-				<property name="database.driver.file" value="${bda-utils.dir}/mysql-connector-java-5.0.8.jar"/>
-				<property name="database.driver" value="com.mysql.jdbc.Driver"/>
-				<property name="database.schema" value="${database.name}"/>
+				<property name="sql.delimiter" value="/" />
+				<property name="database.url" value="jdbc:${database.type}:thin://${database.host}:${database.port}/${database.name}" />
+				<property name="database.csm.url" value="jdbc:${database.csm.type}:thin://${database.csm.host}:${database.csm.port}/${database.csm.name}" />
+				<property name="database.csm.dialect" value="org.hibernate.dialect.OracleDialect"/>
+				<property name="database.csm.driver" value="oracle.jdbc.driver.OracleDriver"/>
 			</case>
 			<case value="postgresql">
 				<property name="database.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
 				<property name="database.driver.file" value="${bda-utils.dir}/postgresql-jdbc3-8.3-604.jar"/>
 				<property name="database.driver" value="org.postgresql.Driver"/>
+                <property name="db.install.create.file.list" value="${db.install.create.postgresql.file.list}"/>
 				<property name="database.schema" value="public"/>
+				<property name="database.url" value="jdbc:${database.type}://${database.host}:${database.port}/${database.name}" />
+				<property name="database.csm.url" value="jdbc:${database.csm.type}://${database.csm.host}:${database.csm.port}/${database.csm.name}" />
+				<property name="database.csm.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+				<property name="database.csm.driver" value="org.postgresql.Driver"/>
 			</case>
 			<default>
 				<fail message="Invalid database type ${database.type}"/>
@@ -290,26 +293,11 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		install:database:prep
 		">
 		<!-- Drop all schema objects or re-create the db -->
-		<database-clean/>
-		<!-- Run baseline scripts stored in db.install.create.${database.type}.file.list variable -->
-		<switch value="${database.type}">
-			<case value="oracle">
-				<database-install
-					db.install.create.file.list="${db.install.create.oracle.file.list}"
-					sql.delimiter="/"
-					sql.delimitertype="row"
-					/>
-			</case>
-			<case value="postgresql">
-				<database-install
-					db.install.create.file.list="${db.install.create.postgresql.file.list}"
-					sql.delimiter="/"
-					sql.delimitertype="row"
-					/>
-			</case>
-			</switch>
-		<database-upgrade database.changelog.file="${os.temp.dir}/${project.name}/db-upgrade.xml"/>
-    	<database-tag/>
+		<echo message="Checking if database properties exist: ${db.prop.list}" />
+    	<database-clean database.schema="${database.name}" database.url="${database.system.url}" database.user="${database.system.user}" database.password="${database.system.password}" database.name="${database.name}" database.server="${database.host}" />
+		<database-install database.url="${database.url}" database.user="${database.user}" database.password="${database.password}" db.install.create.file.list="${db.install.create.file.list}" db-install.dir="${db-install.dir.dest}"  sql.delimiter="${sql.delimiter}" sql.delimitertype="row"  />
+		<database-upgrade database.url="${database.url}" database.user="${database.user}" database.password="${database.password}" database.schema="${database.schema}" database.changelog.file="${db-upgrade.dir.dest}/${database.type}/db-upgrade.xml" />
+		<database-tag/>
 	</target>
 
 	<target name="install:validation:pre-install" description="Runs pre-install validation checks bda-utils" depends="init:install,init:common">
@@ -718,31 +706,48 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 			<echo message="Executing replace-ctom-wsrf"/>
 
-            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>			
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/global_security_descriptor.xml"
-	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">		
-               <filterset begintoken="@" endtoken="@">
-                    <filter token="cert.path" value="${cert.path}" />
-                    <filter token="key.path" value="${key.path}" />
-                </filterset>			
+            <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>	
+	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
+            
+			<copy todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp" filtering="true" overwrite="true">	
+				  <fileset dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core">
+					<include name="global_security_descriptor.xml"/>
+					<include name="server-config.wsdd"/>
+				  </fileset>
+	            
+				   <filterset begintoken="@" endtoken="@">
+						<filter token="cert.path" value="${cert.path}" />
+						<filter token="key.path" value="${key.path}" />
+						<filter token="tomcat_hostname" value="${tomcat.hostname}" />
+					</filterset>			
 			</copy>		
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp/global_security_descriptor.xml"
-	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true"/>	     				   
+
+			<copy todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core" overwrite="true">	
+				  <fileset dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp">
+					<include name="global_security_descriptor.xml"/>
+					<include name="server-config.wsdd"/>
+				  </fileset>
+			</copy>		
+
+	               
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/etc/globus_wsrf_core/tmp"/>
 
-	        <mkdir dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>			
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/applicationContext.xml"
 	            todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp" filtering="true" overwrite="true">		
 				<filterset begintoken="@" endtoken="@">
-					  <filter token="database_dialect" value="${database.dialect}" />
-					  <filter token="database_driver" value="${database.driver}" />
-					  <filter token="database_url" value="${database.url}" />
-					  <filter token="database_user" value="${database.user}" />
-					  <filter token="database_passwd" value="${database.password}" />
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
+	            	<filter token="database_csm_url" value="${database.csm.url}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
 				</filterset>
 			</copy>		
-			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+			<copy file="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp/applicationContext.xml"
 	               todir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes" overwrite="true"/>	     				   
+
 			<delete dir="${target.dir}/token-replace/ctom-wsrf/WEB-INF/classes/tmp"/>
 
 		    <echo message="target replace-ctom-wsrf completed"/>
@@ -755,7 +760,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			
 			<antcall target="configure-csm"/>
 			<antcall target="configure-ctods-hibernate"/>
-			<antcall target="configure-csm-app-security"/>
 			<antcall target="configure-log4j"/>
 			<antcall target="configure-labviewer-properties"/> 
 			<antcall target="configure-baseURL-properties"/>
@@ -807,9 +811,10 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
 				<filter token="websso.enabled" value="${websso.enabled}" />	
-				<filter token="websso.cas.server" value="${websso.cas.server}" />	
+				<filter token="websso.cas.server" value="${websso.cas.server}" />
 				<filter token="websso.cas.server.port" value="${websso.cas.server.port}" />
 				<filter token="version" value="${version}"/>
+				
 			</filterset>
 	    </copy>
 	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.properties"
@@ -837,17 +842,20 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	
 	<target name="configure-csm">
 		<echo message="configure-csm"/>
-		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/labviewer.csm.new.hibernate.cfg.xml"
+		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/applicationContext.xml"
 	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
 	            <filterset begintoken="@" endtoken="@">
-					<filter token="database_dialect" value="${database.dialect}" />
-					<filter token="database_driver" value="${database.driver}" />
-					<filter token="database_url" value="${database.url}" />
-					<filter token="database_user" value="${database.user}" />
-					<filter token="database_passwd" value="${database.password}" />
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
+	            	<filter token="database_csm_url" value="${database.csm.url}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
 				</filterset>
 	    </copy>
-	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/labviewer.csm.new.hibernate.cfg.xml"
+	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/applicationContext.xml"
 	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>
 	        
 	</target>
@@ -865,18 +873,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				</filterset>
 	    </copy>
 	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/cTODSlabviewer.hibernate.cfg.xml"
-	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
-	</target>
-
-	<target name="configure-csm-app-security">
-		<echo message="configure-csm-app-security"/>
-		<copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/ApplicationSecurityConfig.xml"
-	            todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp" filtering="true" overwrite="true">
-	            <filterset begintoken="@" endtoken="@">
-								<filter token="tomcat_dir" value="${env.CATALINA_HOME}" />
-				</filterset>
-	    </copy>
-	    <copy file="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes/tmp/ApplicationSecurityConfig.xml"
 	               todir="${target.dir}/token-replace/ctomlabviewer/WEB-INF/classes" overwrite="true"/>	        
 	</target>
 

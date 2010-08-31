@@ -141,8 +141,8 @@ public class DisplayConstants
 	public static final String ADMIN_ID = "Admin";
 	public static final String ADMIN_HOME_ID = "AdminHome";
 	public static final String LABACTIVITES_ID = "LabActivities";
-	public static final String STUDYSEARCH_ID = "searchStudy";
-	public static final String PARTICIPANTSEARCH_ID = "searchParticipant";
+	public static final String STUDYSEARCH_ID = "StudySearch";
+	public static final String PARTICIPANTSEARCH_ID = "ParticipantSearch";
 	public static final String TEST_ID = "Happy";
 	public static final String LOGOUT_ID = "Logout";
 	public static final String USER_CONFG_ID = "UserConfig";
@@ -177,5 +177,7 @@ public class DisplayConstants
 
 	public static final byte ONE = 1;
 	public static final byte ZERO = 0;
+	
+	public static final String USER_ROLES = "USER_ROLES";
 
 }

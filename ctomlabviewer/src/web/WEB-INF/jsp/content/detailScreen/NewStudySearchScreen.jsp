@@ -150,8 +150,7 @@
 																			width="100%" height="100%" class="contentBegins">
 																			<tr>
 																				<td>
-																				
-			 <!-- pagesize="200" -->
+			<!-- pagesize="200" -->																	
 			 <display:table name="${sessionScope.StudySearchForm.studiesList}" sort="list" cellspacing="0" cellpadding="3"
 			               id="studyTable" export="true" 
 			               size="totalStudies" 

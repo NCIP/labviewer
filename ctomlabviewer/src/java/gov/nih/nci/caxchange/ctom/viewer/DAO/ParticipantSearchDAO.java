@@ -81,9 +81,13 @@
 
 package gov.nih.nci.caxchange.ctom.viewer.DAO;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.caxchange.ctom.viewer.beans.HealthcareSitePart;
 import gov.nih.nci.caxchange.ctom.viewer.beans.util.HibernateUtil;
 import gov.nih.nci.caxchange.ctom.viewer.forms.ParticipantSearchForm;
+import gov.nih.nci.caxchange.ctom.viewer.util.CommonUtil;
+import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.ParticipantSearchResult;
 import gov.nih.nci.caxchange.ctom.viewer.viewobjects.SearchResult;
 import gov.nih.nci.labhub.domain.HealthCareSite;
@@ -163,7 +167,7 @@ public class ParticipantSearchDAO extends HibernateDaoSupport
 		{
 			List resultList =
 					executeQuery(searchTerm, studyId, pForm
-							.getParticipantPhrase());
+							.getParticipantPhrase(), session);
 			allLarList = printRecord(resultList, request);
 		}
 		catch (Exception ex)
@@ -185,7 +189,7 @@ public class ParticipantSearchDAO extends HibernateDaoSupport
 	 * @return List of participants
 	 * @throws Exception
 	 */
-	public List executeQuery(String searchTerm, String studyId, String phrase)
+	public List executeQuery(String searchTerm, String studyId, String phrase, HttpSession session)
 			throws Exception
 	{
 		ApplicationService appService =
@@ -219,30 +223,58 @@ public class ParticipantSearchDAO extends HibernateDaoSupport
 		participantAssociation.setName("gov.nih.nci.labhub.domain.Participant");
 		participantAssociation.setTargetRoleName("participant");
 		participantAssociation.setGroup(group);
-
-		// Now get to StudySite
-		CQLAssociation studySiteAssignmentAssociation = new CQLAssociation();
-		studySiteAssignmentAssociation
-				.setName("gov.nih.nci.labhub.domain.StudySite");
-		studySiteAssignmentAssociation.setTargetRoleName("studySite");
-
-		// Now get to Study
-		CQLAssociation studyAssociation = new CQLAssociation();
-		studyAssociation.setName("gov.nih.nci.labhub.domain.Study");
-		studyAssociation.setTargetRoleName("study");
-		studySiteAssignmentAssociation.setAssociation(studyAssociation);
-
+		
 		// Now set the study identifier on the association to II
 		CQLAssociation iiAssociation = new CQLAssociation();
 		iiAssociation.setName("gov.nih.nci.labhub.domain.II");
 		iiAssociation.setTargetRoleName("studyIdentifier");
-		iiAssociation.setAttribute(new CQLAttribute("extension",
-				CQLPredicate.EQUAL_TO, studyId.trim()));
+		iiAssociation.setAttribute(new CQLAttribute("extension", CQLPredicate.EQUAL_TO, studyId.trim()));
+		
+		// Now get to Study
+		CQLAssociation studyAssociation = new CQLAssociation();
+		studyAssociation.setName("gov.nih.nci.labhub.domain.Study");
+		studyAssociation.setTargetRoleName("study");
 		studyAssociation.setAssociation(iiAssociation);
+		
+		// Now get to StudySite
+		CQLAssociation studySiteAssociation = new CQLAssociation();
+		studySiteAssociation.setName("gov.nih.nci.labhub.domain.StudySite");
+		studySiteAssociation.setTargetRoleName("studySite");
+		
+		CommonUtil util = new CommonUtil();		
+		String username = util.checkUserLogin(session);
+		LabViewerAuthorizationHelper authHelper = new LabViewerAuthorizationHelper();
+		SuiteRoleMembership roleMembership = authHelper.getUserRoleMembership(username, SuiteRole.LAB_DATA_USER);
+		
+		// if the user has permission to access specific sites (not all sites), then filter based upon these specific sites
+		if (roleMembership.isAllSites())
+		{
+			studySiteAssociation.setAssociation(studyAssociation);
+		}
+		else
+		{
+			CQLGroup studySiteGroup = new CQLGroup();
+			studySiteGroup.addAssociation(studyAssociation);
+			CQLGroup healthcareSiteGroup = new CQLGroup();
+			
+			for (String siteId : roleMembership.getSiteIdentifiers())
+			{
+				CQLAssociation healthcareSiteAssociation = new CQLAssociation();
+				healthcareSiteAssociation.setName("gov.nih.nci.labhub.domain.HealthCareSite"); 
+				healthcareSiteAssociation.setTargetRoleName("healthCareSite");
+				healthcareSiteAssociation.setAttribute(new CQLAttribute("nci_institute_code", CQLPredicate.EQUAL_TO, siteId));
+				healthcareSiteGroup.addAssociation(healthcareSiteAssociation);
+			}
+			
+			healthcareSiteGroup.setLogicOperator(CQLLogicalOperator.OR);
+			studySiteGroup.addGroup(healthcareSiteGroup);
+			studySiteGroup.setLogicOperator(CQLLogicalOperator.AND);
+			studySiteAssociation.setGroup(studySiteGroup);
+	    }
 
 		CQLGroup finalgroup = new CQLGroup();
 		finalgroup.addAssociation(participantAssociation);
-		finalgroup.addAssociation(studySiteAssignmentAssociation);
+		finalgroup.addAssociation(studySiteAssociation);
 		finalgroup.setLogicOperator(CQLLogicalOperator.AND);
 		target.setGroup(finalgroup);
 

@@ -8,7 +8,10 @@ import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 import gov.nih.nci.ccts.grid.studyconsumer.client.StudyConsumerClient;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 import org.cagrid.gaards.dorian.client.GridUserClient;
@@ -28,26 +31,12 @@ import org.xml.sax.SAXException;
 public class LabViewerStudyTest                  
 {
 	String serviceUrl =
-			//"https://localhost:21443/ctom-wsrf/services/cagrid/StudyConsumer";
-            "https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/StudyConsumer";   // DEV1 URL
-           //"https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/StudyConsumer";  // new DEV2 URL
+	    "https://localhost:21443/ctom-wsrf/services/cagrid/StudyConsumer";
+        //"https://ncias-c278-v.nci.nih.gov:21443/ctom-wsrf/services/cagrid/StudyConsumer"; // Dev1
+        //"https://ncias-d282-v.nci.nih.gov:29543/ctom-wsrf/services/cagrid/StudyConsumer"; // Dev2
 
-
-
-
-    // ="https://cbvapp-d1029.nci.nih.gov:8443/ctom-wsrf/services/cagrid/StudyConsumer";
-	// String serviceUrl=
-	// "https://cbvapp-d1017.nci.nih.gov:28445/ctom-wsrf/services/cagrid/StudyConsumer";
-	// String serviceUrl =
-	// "http://cbvapp-d1017.nci.nih.gov:18080/ctom-wsrf/services/cagrid/StudyConsumer";
-	// String serviceUrl=
-	// "http://cbvapp-t1017.nci.nih.gov:8080/ctom-wsrf/services/cagrid/StudyConsumer";
-	//String sampleFile = "/SampleStudyMessage.xml";
-
-    String sampleFile = "C:/Development/sampleMessages/ccts_2.8_sample_study.xml";
-
-    //String sampleFile = "/StudyMessage.xml";
-	String proxyFile = "C:/Development/proxy";
+	String sampleFile = "D:/CCTS/FILES/XML/STUDY_CREATION.xml";
+	String proxyFile = "D:/CCTS/FILES/PROXY/proxy";
 	private Logger log = Logger.getLogger(getClass());
 
 	/**

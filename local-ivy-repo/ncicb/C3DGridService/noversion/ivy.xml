@@ -19,14 +19,10 @@
   <publications>
     <artifact name="C3DGridService-client" type="jar" conf="master, compile" />
     <artifact name="C3DGridService-common" type="jar" conf="master" />
-    <artifact name="C3DGridService-service" type="jar" conf="master, compile" />
-    <artifact name="C3DGridService-stubs" type="jar" conf="master" />
-    <artifact name="C3DGridService-tests" type="jar" conf="master, compile" />
-    
+    <artifact name="C3DGridService-stubs"  type="jar" conf="master" />
    </publications>
   
   <dependencies>  
-    <!-- boatload of stuff -->
   </dependencies>
   
 </ivy-module>
