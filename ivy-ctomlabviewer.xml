@@ -97,7 +97,7 @@
         </dependency>
 
         <dependency org="stax" 				name="stax-api" 				rev="1.0" />
-        <dependency org="jaxb" 				name="jaxb-impl" 				rev="2.0.1"/>
+        <dependency org="com.sun.xml.bind"  name="jaxb-impl"                rev="2.2" 			conf="compile->master"/>
         <dependency org="javax.transaction" name="jta" 						rev="1.0.1B"/>
         <dependency org="org.antlr" 		name="antlr" 					rev="2.7.6"/>
         <dependency org="javax.activation" 	name="activation" 				rev="1.0.2"/>
