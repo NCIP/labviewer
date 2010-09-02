@@ -457,6 +457,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 		if (StringUtils.isNotEmpty(studyID))
 		{
 		    II assignedIdentifier = new II();
+		    assignedIdentifier.setRoot("2.16.840.1.113883.3.26.4.3");
 		    assignedIdentifier.setExtension("%" + studyID + "%");
 		    studyProtocol.setAssignedIdentifier(assignedIdentifier);
 		}
@@ -809,7 +810,7 @@ public class StudySearchDAO extends HibernateDaoSupport
 			        	// the search method in the PA study protocol service always returns the root as null
 			        	// this will be fixed in 3.2
 			        	int index = paStudy.getNciIdentifier().indexOf(".");
-			        	if (paStudy.getNciIdentifier().substring(index + 1).equals(ctodsSearchResult.getStudyId()))
+			        	if (paStudy.getNciIdentifier().contains(ctodsSearchResult.getStudyId()))
 			        	//if (paStudy.getNciIdentifier().equals(ctodsSearchResult.getGridId() + "." + ctodsSearchResult.getStudyId()))
 			            {						        								        	
 			        		// if the study status from PA is the same as the current study status stored in the CTODS database,
