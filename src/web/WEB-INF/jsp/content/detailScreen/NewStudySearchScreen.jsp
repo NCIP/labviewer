@@ -243,8 +243,8 @@ function showHealthCareSite(indexValue){
 //handles show PI action
 function showPI(indexValue){
      document.StudySearchForm.index.value=indexValue;
-     window.open('','PI Details','width=1125,height=600');
-     document.StudySearchForm.target = "PI Details";
+     window.open('','PrincipalInvestigator','width=1125,height=600');
+     document.StudySearchForm.target = "PrincipalInvestigator";
      document.StudySearchForm.action="studySearch.do?operation=showPI";
  	document.StudySearchForm.submit();
 }
