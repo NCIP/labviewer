@@ -129,7 +129,6 @@
 		<mkdir dir="${artifacts.dir}"/>
 		<copy todir="${compile.jar.dir}" overwrite="true">
 			<fileset dir="${artifacts.dir}" includes="ctom*.jar" />
-            <fileset dir="${ctomlabviewer.dir}/src/resources/jar"/>
 		</copy>
 	</target>
 	
