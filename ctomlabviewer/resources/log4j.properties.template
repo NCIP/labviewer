@@ -1,4 +1,4 @@
-log4j.rootLogger=DEBUG, logfile, stdout
+log4j.rootLogger=INFO, logfile, stdout
 log4j.debug=false
 
 # in case any output is given to stdout, format it
