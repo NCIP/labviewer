@@ -34,3 +34,6 @@ log4j.category.org.hibernate.SQL=ERROR
 
 #csm logging
 log4j.gov.nih.nci.security=INFO
+
+log4j.logger.com.mchange=INFO
+log4j.logger.org.displaytag=INFO
