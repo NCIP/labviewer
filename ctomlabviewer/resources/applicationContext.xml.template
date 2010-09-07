@@ -49,6 +49,12 @@
         <entry key="hibernate.dialect" value="@database_csm_dialect@"></entry>
         <entry key="hibernate.connection.username" value="@database_csm_username@"></entry>
         <entry key="hibernate.connection.password" value="@database_csm_password@"></entry>
+		<entry key="hibernate.connection.release_mode" value="after_transaction"></entry>
+		<entry key="hibernate.c3p0.min_size" value="2"></entry>
+		<entry key="hibernate.c3p0.max_size" value="15"></entry>
+		<entry key="hibernate.c3p0.timeout" value="300"></entry>
+		<entry key="hibernate.c3p0.max_statements" value="50"></entry>
+		<entry key="hibernate.c3p0.idle_test_period" value="3000"></entry>        
     </util:map>
 
     <bean id="csmUserProvisioningManager" class="gov.nih.nci.security.provisioning.AuthorizationManagerImpl">
