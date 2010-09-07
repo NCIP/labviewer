@@ -1,4 +1,4 @@
-log4j.rootLogger=INFO, logfile, stdout
+log4j.rootLogger=DEBUG, logfile, stdout
 log4j.debug=false
 
 # in case any output is given to stdout, format it
@@ -34,3 +34,7 @@ log4j.category.org.hibernate.SQL=ERROR
 
 #csm logging
 log4j.gov.nih.nci.security=INFO
+
+log4j.logger.com.mchange=INFO
+log4j.logger.org.displaytag=INFO
+log4j.logger.gov.nih.nci.system.util=INFO
