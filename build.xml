@@ -41,7 +41,6 @@
     <property name="ctomlabviewer.build.dir" value="${ctomlabviewer.dir}/target"/>
     <property name="ctomlabviewer.build.outputDir" value="${ctomlabviewer.build.dir}/classes"/>
     <property name="ctomlabviewer.build.srcDir.0" value="${ctomlabviewer.dir}/src/java"/>
-    <property name="ctomlabviewer.build.resourceDir.0" value="${ctomlabviewer.dir}/src/resources"/>
     <property name="ctomlabviewer.build.testOutputDir" value="${ctomlabviewer.build.dir}/test-classes"/>
     <property name="ctomlabviewer.build.testDir.0" value="${ctomlabviewer.dir}/test/java"/>
     <property name="ctomlabviewer.build.testResourceDir.0" value="${ctomlabviewer.dir}/test/resources"/>
@@ -134,42 +133,53 @@
 	
 	<target name="configure" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
 		<copy file="${ctomlabviewer.resourceDir}/cTODSlabviewer.hibernate.cfg.xml.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
+			  toFile="${ctomlabviewer.build.outputDir}/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/applicationContext.xml" filtering="true" overwrite="true">
+			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
 		</copy>
 
 		<copy file="${ctomlabviewer.resourceDir}/log4j.properties.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/log4j.properties" filtering="true" overwrite="true">
+			  toFile="${ctomlabviewer.build.outputDir}/log4j.properties" filtering="true" overwrite="true">
 		</copy>
 		
 		<copy file="${ctomlabviewer.resourceDir}/labviewer.properties.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/labviewer.properties" filtering="true" overwrite="true">
-
+			  toFile="${ctomlabviewer.build.outputDir}/labviewer.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
 				<filter token="propertyFilePath" value="${propertyFilePath}" />
 			</filterset>
 
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/baseURL.properties.template" 
-			toFile="${ctomlabviewer.build.resourceDir.0}/baseURL.properties" filtering="true" overwrite="true">
+			toFile="${ctomlabviewer.build.outputDir}/baseURL.properties" filtering="true" overwrite="true">
 		</copy>
+		<copy todir="${ctomlabviewer.build.outputDir}">
+			 <fileset dir="${ctomlabviewer.resourceDir}">
+				 <patternset> 	
+				   <include name="application-config*.xml"/>
+				   <include name="ApplicationResources.properties"/>
+				   <include name="displaytag.properties"/>
+				   <include name="client-config.wsdd"/>
+				 </patternset>
+			</fileset>
+		</copy>
+		
+		
 	</target>
 
 	<target name="configureCSMAuthentication" unless="websso.enabled">
 		<echo message="configureCSMAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.csm.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/web.xml" overwrite="true" />
+			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" />
 	</target>
 
 	<target name="configureWebSSOAuthentication" if="websso.enabled">
 		<echo message="configureWebSSOAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/web.xml" overwrite="true" filtering="true">
+			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" filtering="true">
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
-			  toFile="${ctomlabviewer.build.resourceDir.0}/cas-client.properties" filtering="true" overwrite="true">
+			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
 		</copy>
 	</target>
 
@@ -196,13 +206,6 @@
 	            </classpath>
 	        </javac>
 	        <copy todir="${ctomlabviewer.build.outputDir}">
-	             <fileset dir="${ctomlabviewer.build.resourceDir.0}">
-	             <patternset> 	
-	        	   <exclude name="login.config"/>
-	               <exclude name="*.bat"/>
-                   <exclude name="web.xml"/>  
-                 </patternset>
-	        	</fileset>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
 	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/HealthCareSitePart.hbm.xml"/>
@@ -422,7 +425,7 @@
                 </delete>
                   <war destfile="${artifacts.dir}/../ctodslabviewer/${ctomlabviewer.war}"        
                      compress="false"
-		             webxml="${ctomlabviewer.build.resourceDir.0}/web.xml">
+		             webxml="${ctomlabviewer.build.outputDir}/web.xml">
 		            <lib dir="${ctomlabviewer.build.dir}/${ctomlabviewer.build.finalName}/WEB-INF/lib">
                     </lib>
                     <classes dir="${ctomlabviewer.build.outputDir}"/>
