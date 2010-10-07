@@ -294,7 +294,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		">
 		<!-- Drop all schema objects or re-create the db -->
 		<echo message="Checking if database properties exist: ${db.prop.list}" />
-    	<database-clean database.schema="${database.name}" database.url="${database.system.url}" database.user="${database.system.user}" database.password="${database.system.password}" database.name="${database.name}" database.server="${database.host}" />
+    	<database-clean database.url="${database.url}" database.user="${database.user}" database.password="${database.password}" database.name="${database.name}" database.server="${database.host}" /> 
 		<database-install database.url="${database.url}" database.user="${database.user}" database.password="${database.password}" db.install.create.file.list="${db.install.create.file.list}" db-install.dir="${db-install.dir.dest}"  sql.delimiter="${sql.delimiter}" sql.delimitertype="row"  />
 		<database-upgrade database.url="${database.url}" database.user="${database.user}" database.password="${database.password}" database.schema="${database.schema}" database.changelog.file="${db-upgrade.dir.dest}/${database.type}/db-upgrade.xml" />
 		<database-tag/>
