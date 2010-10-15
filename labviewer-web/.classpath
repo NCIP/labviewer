@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path="src/java"/>
+    <classpathentry kind="src" path="test/java"/>
+    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB2/labviewer/compile/commons-fileupload-1.2.1.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB2/labviewer/compile/struts2-core-2.1.8.1.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB2/labviewer/compile/struts2-sitemesh-plugin-2.1.8.1.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB2/labviewer/compile/sitemesh-2.4.2.jar"/>
+    <classpathentry kind="var" path="LAB_VIEWER_LIB2/labviewer/compile/xwork-core-2.1.6.jar"/>
+    <classpathentry kind="output" path="bin"/>
+</classpath>

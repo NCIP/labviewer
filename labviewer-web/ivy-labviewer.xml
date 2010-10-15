@@ -1,0 +1,43 @@
+<!--
+	
+	This is the definition of a virtual module called bda-download that has a dependency of bda-utils.  
+	This virtual project causes the download of bda-utils from the NCICB Ivy Repository.  
+	This file currently points to the 1.0 version of bda-utils if you want to use another version change the rev="1.0" 
+	to the desired version.
+-->
+<ivy-module version="1.0">
+	<info organisation="cbiit" module="labviewer" />
+	<configurations>
+		<conf name="compile" />
+		<conf name="default"/>
+		<conf name="client" />
+		<conf name="service"/>
+		<conf name="runtime" />
+		<conf name="container" />
+		<conf name="test" extends="runtime" />
+		<conf name="test" extends="compile" />
+		<conf name="test-pmd" />
+		<conf name="test-junit" />
+		<conf name="test-cobertura" />
+		<conf name="test-checkstyle" />
+		<conf name="test-simian" />
+		<conf name="test-selenium" />
+	</configurations>
+
+	<publications></publications>
+
+	<!-- runtime -->
+	<dependencies>
+		<dependency org="javax.servlet"     name="jstl"                     rev="1.1.2"         conf="runtime->default"/>
+		<dependency org="ncicb"             name="nci-commons-core"         rev="1.2.11"        conf="runtime->master"/>
+		<dependency org="ncicb"             name="nci-commons-struts2"      rev="1.2.11"        conf="runtime->default"/>
+		<dependency org="org.apache.struts" name="struts2-sitemesh-plugin"  rev="2.1.8.1"       conf="runtime->default">
+			<exclude module="commons-logging"/>
+		</dependency>
+		<dependency org="taglibs"           name="standard"                 rev="1.1.2"         conf="runtime->default"/>
+	
+		<!-- comiple -->
+		<dependency org="javax.servlet" 	name="servlet" 					rev="2.3.1"			conf="compile->master" />	
+
+	</dependencies>
+</ivy-module>

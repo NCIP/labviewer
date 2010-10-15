@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">          
+<hibernate-configuration>
+    <session-factory>
+        <!-- properties  -->
+	  <property name="connection.driver_class">@database_driver@</property>
+	  <property name="connection.url">@database_url@</property>
+	  <property name="connection.username">@database_user@</property>
+	  <property name="connection.password">@database_passwd@</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="dialect">@database_dialect@</property>
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+
+        <!--CCTS Additions -->
+        <mapping resource="LabViewerStatus.hbm.xml"/>
+         <mapping resource="ProtocolStatus.hbm.xml"/>
+         <mapping resource="HealthCareSitePart.hbm.xml"/>
+         <mapping resource="Users.hbm.xml"/>
+         
+         <!-- Mapped Resources -->
+	 		<mapping resource="gov/nih/nci/labhub/domain/Specimen.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/StudySite.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/SubjectAssignment.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/LaboratoryTest.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/Person.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/LaboratoryResult.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/Study.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/CD.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/Organization.hbm.xml" />
+	 		<mapping resource="gov/nih/nci/labhub/domain/II.hbm.xml" />
+		<mapping resource="gov/nih/nci/labhub/domain/Activity.hbm.xml" />
+        </session-factory>
+</hibernate-configuration>
