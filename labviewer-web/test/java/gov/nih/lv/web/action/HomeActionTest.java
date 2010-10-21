@@ -76,23 +76,32 @@
 *
 *
 */
-package gov.nih.nci.lv.web.action;
+package gov.nih.lv.web.action;
+
+import gov.nih.lv.web.AbstractActionTest;
+import gov.nih.nci.lv.web.action.HomeAction;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
  * 
- * @author NAmiruddin
+ * @author Naveen Amiruddin
+ * Test class for home Action
  *
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
+public class HomeActionTest extends AbstractActionTest {
     
-    private static final long serialVersionUID = 1234573645L;
+    HomeAction act = new HomeAction();
+    
     /**
      * {@inheritDoc}
      */    
-    public void prepare() {
-        
+    @Test
+    public void executeTest() throws Exception {
+        act.prepare();
+        assertEquals(ActionSupport.SUCCESS, act.execute());
     }
 
 }

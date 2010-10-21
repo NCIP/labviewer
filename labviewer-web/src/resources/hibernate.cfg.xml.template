@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration
+PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory name="java:/hibernate/SessionFactory" >
+        <property name="hibernate.connection.datasource">java:/lv-ds</property>
+        <property name="hibernate.current_session_context_class">managed</property>
+        <property name="hibernate.transaction.factory_class">org.hibernate.transaction.CMTTransactionFactory</property>
+        <property name="hibernate.transaction.manager_lookup_class">org.hibernate.transaction.JBossTransactionManagerLookup</property>
+        <property name="hibernate.dialect">@hibernate.dialect@</property>
+        <property name="hibernate.jdbc.batch_size">25</property>
+        <property name="hibernate.jdbc.batch_versioned_data">true</property>
+        <property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+        <property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.show_sql">false</property>
+     
+        <!-- mapping classes -->
+        <mapping class="gov.nih.nci.pa.domain.StudyProtocol" />
+        <mapping class="gov.nih.nci.pa.domain.InterventionalStudyProtocol" />
+        <mapping class="gov.nih.nci.pa.domain.StudyOverallStatus" />
+        <mapping class="gov.nih.nci.pa.domain.DocumentWorkflowStatus" />
+        <mapping class="gov.nih.nci.pa.domain.Country" />
+        <mapping class="gov.nih.nci.pa.domain.StudyContact" />
+        <mapping class="gov.nih.nci.pa.domain.StudySite" />
+        <mapping class="gov.nih.nci.pa.domain.Organization" />
+        <mapping class="gov.nih.nci.pa.domain.StudyCoordinatingCenter" />
+        <mapping class="gov.nih.nci.pa.domain.StudyCoordinatingCenterRole" />
+        <mapping class="gov.nih.nci.pa.domain.RegulatoryAuthority" />
+        <mapping class="gov.nih.nci.pa.domain.StudyRegulatoryAuthority" />
+        <mapping class="gov.nih.nci.pa.domain.Person" />
+        <mapping class="gov.nih.nci.pa.domain.HealthCareProvider" />
+        <mapping class="gov.nih.nci.pa.domain.ClinicalResearchStaff" />
+        <mapping class="gov.nih.nci.pa.domain.HealthCareFacility" />
+        <mapping class="gov.nih.nci.pa.domain.StudyResourcing" />
+        <mapping class="gov.nih.nci.pa.domain.FundingMechanism" />
+        <mapping class="gov.nih.nci.pa.domain.NIHinstitute" />
+        <mapping class="gov.nih.nci.pa.domain.StudySiteAccrualStatus" />
+        <mapping class="gov.nih.nci.pa.domain.StudySiteContact" />
+        <mapping class="gov.nih.nci.pa.domain.Document" />
+        <mapping class="gov.nih.nci.pa.domain.StudyRecruitmentStatus" />
+        <mapping class="gov.nih.nci.pa.domain.StratumGroup" />
+        <mapping class="gov.nih.nci.pa.domain.ResearchOrganization" />
+        <mapping class="gov.nih.nci.pa.domain.Intervention" />
+        <mapping class="gov.nih.nci.pa.domain.InterventionAlternateName" />
+        <mapping class="gov.nih.nci.pa.domain.PlannedActivity" />
+        <mapping class="gov.nih.nci.pa.domain.ObservationalStudyProtocol" />
+        <mapping class="gov.nih.nci.pa.domain.StudyOutcomeMeasure" />
+        <mapping class="gov.nih.nci.pa.domain.StudyIndlde" />
+        <mapping class="gov.nih.nci.pa.domain.Arm" />
+        <mapping class="gov.nih.nci.pa.domain.OrganizationalContact" />
+        <mapping class="gov.nih.nci.pa.domain.RegistryUser" />
+        <mapping class="gov.nih.nci.pa.domain.PlannedEligibilityCriterion" />
+        <mapping class="gov.nih.nci.pa.domain.OversightCommittee" />        
+        <mapping class="gov.nih.nci.pa.domain.StudyDisease" />
+        <mapping class="gov.nih.nci.pa.domain.Disease" />
+        <mapping class="gov.nih.nci.pa.domain.DiseaseAltername" />
+        <mapping class="gov.nih.nci.pa.domain.DiseaseParent" />
+        <mapping class="gov.nih.nci.pa.domain.PAProperties" />
+        <mapping class="gov.nih.nci.pa.domain.MessageLog" />
+        <mapping class="gov.nih.nci.pa.domain.StudyMilestone" />
+        <mapping class="gov.nih.nci.pa.domain.StudyOnhold" />
+        <mapping class="gov.nih.nci.pa.domain.StudyRelationship" />
+        <mapping class="gov.nih.nci.pa.domain.MessageLogAudit" />
+        <mapping class="gov.nih.nci.pa.domain.StudyObjective"/>
+        <mapping class="gov.nih.nci.pa.domain.StudySiteAccrualAccess"/>
+        <mapping class="gov.nih.nci.pa.domain.MappingIdentifier"/>
+        <mapping class="gov.nih.nci.pa.domain.StudySiteOverallStatus"/>
+        <mapping class="gov.nih.nci.pa.domain.StudyInbox"/>
+        <mapping class="gov.nih.nci.pa.domain.StudyCheckout"/>
+        <mapping class="gov.nih.nci.pa.domain.PlannedSubstanceAdministration" />
+        <mapping class="gov.nih.nci.pa.domain.DoseFrequency" />
+        <mapping class="gov.nih.nci.pa.domain.DoseForm" />
+        <mapping class="gov.nih.nci.pa.domain.RouteOfAdministration" />
+        <mapping class="gov.nih.nci.pa.domain.UnitOfMeasurement" />
+        <mapping class="gov.nih.nci.pa.domain.TargetSite" />
+        <mapping class="gov.nih.nci.pa.domain.MethodCode" />
+        <mapping class="gov.nih.nci.pa.domain.PlannedProcedure" />
+        
+        <mapping class="gov.nih.nci.pa.domain.ActivityRelationship" />
+        <mapping class="gov.nih.nci.pa.domain.StudyProtocolStage" />
+        <mapping class="gov.nih.nci.pa.domain.StudyFundingStage" />
+        <mapping class="gov.nih.nci.pa.domain.StudyIndIdeStage"/>
+        
+        <!-- mapping classes for Accrual -->
+        <mapping class="gov.nih.nci.pa.domain.Patient" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedActivity" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedAdministrativeActivity" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedSubjectMilestone" />
+        <mapping class="gov.nih.nci.pa.domain.StudySubject" />
+        <mapping class="gov.nih.nci.pa.domain.Submission" />
+        
+          <!-- mapping classes for Outcomes -->       
+        <mapping class="gov.nih.nci.pa.domain.PerformedObservation" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedImaging" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedProcedure" />        
+        <mapping class="gov.nih.nci.pa.domain.PerformedRadiationAdministration" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedSubstanceAdministration" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedObservationResult" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedClinicalResult" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedDiagnosis" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedHistopathology" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedImage" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedLesionDescription" />
+        <mapping class="gov.nih.nci.pa.domain.PerformedMedicalHistoryResult" />
+        <mapping class="gov.nih.nci.pa.domain.AnatomicSites" />
+        <mapping class="gov.nih.nci.pa.domain.AssessmentType" />
+        <mapping class="gov.nih.nci.pa.domain.LesionLocationAnatomicSite" />
+        <mapping class="gov.nih.nci.pa.domain.ProcedureName" />
+        <mapping class="gov.nih.nci.pa.domain.TumorMarker" />
+     </session-factory>
+</hibernate-configuration>

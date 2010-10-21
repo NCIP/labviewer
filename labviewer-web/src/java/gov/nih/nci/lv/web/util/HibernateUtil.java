@@ -74,25 +74,42 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
 * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
-*
 */
-package gov.nih.nci.lv.web.action;
+package gov.nih.nci.lv.web.util;
+import org.hibernate.Session;
 
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
- * 
- * @author NAmiruddin
- *
+ * Example implementation of HibernateUtil.
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
-    
-    private static final long serialVersionUID = 1234573645L;
+
+public class HibernateUtil {
+    private static final LVHibernateHelper HIBERNATE_HELPER = new HibernateHelper();
+    private static LVHibernateHelper testHelper = null;
+
     /**
-     * {@inheritDoc}
-     */    
-    public void prepare() {
-        
+     * Get the hibernate helper.
+     * @return the helper.
+     */
+    public static LVHibernateHelper getHibernateHelper() {
+        if (testHelper != null) {
+            return testHelper;
+        }
+        return HIBERNATE_HELPER;
     }
 
+    /**
+     * Get the current session.
+     * @return the session.
+     */
+    public static Session getCurrentSession() {
+        return getHibernateHelper().getCurrentSession();
+    }
+
+    /**
+     * @param testHelper the testHelper to set
+     */
+    public static void setTestHelper(LVHibernateHelper testHelper) {
+        HibernateUtil.testHelper = testHelper;
+    }
 }
+    

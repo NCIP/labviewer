@@ -7,11 +7,11 @@
 <struts>
     <constant name="struts.devMode" value="true"/>
     <package name="default" extends="struts-default">
-        <action name="home">
+        <action name="home*" class="gov.nih.nci.lv.web.action.HomeAction" method="{1}">
             <result>/WEB-INF/jsp/welcome.jsp</result>
         </action>    
 		<action name="studyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
-			<result>/WEB-INF/jsp/studyprotocolcriteria.jsp</result>    
+			<result>/WEB-INF/jsp/studyprotocollist.jsp</result>    
 		</action>
     </package>
 </struts>

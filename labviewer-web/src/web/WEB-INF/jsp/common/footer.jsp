@@ -1,11 +1,4 @@
-<%  
- // Properties prop = new Properties();  
- //prop.load(JNDIUtil.class.getClassLoader().getResourceAsStream("jndi.properties"));  
- //String buildId = prop.getProperty("buildId") != null ?  prop.getProperty("buildId") : " ";
- String LabViewer 2.3"  ;
-%>    
-
-<h5><center>	<%=versionString%> </center></h5>  
+<h5><center>	${sessionScope.versionNumber} </center></h5>  
 
 <div id="footerwrapper">
     <div id="footernav">

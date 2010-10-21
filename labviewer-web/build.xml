@@ -21,8 +21,10 @@
 		</fileset>
 	</path>	
     <!-- Task definitions -->
-      <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="macrodef"/>
+    <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="macrodef"/>
 
+	
+	
     <property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties" />
 	<property name="target.dir" value ="${software.dir}/target" />
     <property name="artifacts.dir" value = "${target.dir}/dist/exploded/artifacts"/>
@@ -77,6 +79,12 @@
         <fileset dir="${test.jar.dir}"/>
     </path>
     
+    <property name="test-junit.jar.dir" location="${lib.dir}/labviewer/test-junit" />
+    <path id="test-junit.classpath">
+        <fileset dir="${test-junit.jar.dir}"/>
+    </path>
+    
+    <!--
     <property name="test-simian.jar.dir" location="${lib.dir}/labviewer/test-simian" />
     <path id="test-simian.classpath">
         <fileset dir="${test-simian.jar.dir}"/>
@@ -106,7 +114,7 @@
     <path id="test-selenium.classpath">
         <fileset dir="${test-selenium.jar.dir}"/>
     </path>
-
+	-->
 
     <!-- ====================================================================== -->
     <!-- Task definitions                                                       -->
@@ -119,10 +127,10 @@
   <!-- Cleaning up target                                                     -->
   <!-- ====================================================================== -->
 
-	    <target name="clean" description="Clean the output directory">
-	        <delete dir="${ctomlabviewer.build.dir}"/>
-	        <delete dir="${ctomlabviewer.report.dir}/labviewer"/>
-	    </target>
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${ctomlabviewer.build.dir}"/>
+		<delete dir="${ctomlabviewer.report.dir}/labviewer"/>
+	</target>
  
 	<!-- ====================================================================== -->
 	<!-- Configure main compilation target                                      -->
@@ -145,6 +153,7 @@
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
+			  
 		</copy>
 
 		<copy file="${ctomlabviewer.resourceDir}/log4j.properties.template" 
@@ -171,6 +180,76 @@
 				   <include name="struts.xml"/>
 				 </patternset>
 			</fileset>
+		</copy>
+		
+		
+	</target>
+
+
+	<target name="configure-web" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
+		<copy file="${ctomlabviewer.resourceDir}/cTODSlabviewer.hibernate.cfg.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_driver" value="${database.driver}" />
+					<filter token="database_url" value="${database.url}" />
+					<filter token="database_user" value="${database.user}" />
+					<filter token="database_passwd" value="${database.password}" />
+				</filterset>
+			  
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
+	            	<filter token="database_csm_url" value="${database.csm.url}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
+				</filterset>
+			  
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/log4j.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/log4j.properties" filtering="true" overwrite="true">
+      		<filterset begintoken="@" endtoken="@">
+				<filter token="log_dir" value="${log.dir}" />
+			</filterset>
+			  
+		</copy>
+		
+		<copy file="${ctomlabviewer.resourceDir}/labviewer.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/labviewer.properties" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="propertyFilePath" value="${propertyFilePath}" />
+			</filterset>
+
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/baseURL.properties.template" 
+			toFile="${ctomlabviewer.build.outputDir}/baseURL.properties" filtering="true" overwrite="true">
+		</copy>
+		<copy todir="${ctomlabviewer.build.outputDir}">
+			 <fileset dir="${ctomlabviewer.resourceDir}">
+				 <patternset> 	
+				   <include name="application-config*.xml"/>
+				   <include name="ApplicationResources.properties"/>
+				   <include name="displaytag.properties"/>
+				   <include name="client-config.wsdd"/>
+				   <include name="struts.xml"/>
+				 </patternset>
+			</fileset>
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="WEBSSO.SERVER" value="${websso.cas.server}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${websso.client.server}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.cas.server.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+            </filterset>
 		</copy>
 		
 		
@@ -225,6 +304,36 @@ commented by naveen
 
 	    </target>
 	 
+
+	 <target name="deploy-web" depends="configure-web" description="Compile the code">
+	        <mkdir dir="${ctomlabviewer.build.outputDir}"/>
+	        <javac destdir="${ctomlabviewer.build.outputDir}" 
+	               nowarn="false" 
+	               debug="true" 
+	               optimize="false" 
+	               deprecation="true" 
+	               target="1.5" 
+	               verbose="false" 
+	               fork="false" 
+	               source="1.5">
+	            <src>
+	                <pathelement location="${ctomlabviewer.build.srcDir.0}"/>
+	            </src>
+	            <classpath>
+	                  <path refid="compile.classpath"/> 
+	            </classpath>
+	        </javac>
+<!--	        <copy todir="${ctomlabviewer.build.outputDir}">
+	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/LabViewerStatus.hbm.xml"/>
+	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/ProtocolStatus.hbm.xml"/>
+	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/HealthCareSitePart.hbm.xml"/>
+	        	<fileset file="${ctomlabviewer.srcHome}/java/gov/nih/nci/caxchange/ctom/viewer/beans/Users.hbm.xml"/>
+commented by naveen	        	
+	        </copy>
+-->	        	
+
+	    </target>
+
 	<!-- ====================================================================== -->
 	<!-- Configure tests target                                                 -->
 	<!-- ====================================================================== -->
@@ -386,7 +495,7 @@ commented by naveen
 	            description="Run dynamic analysis."/>
 	    
 	    <target name="test-static-analysis" 
-	            depends="ivy-get,compile,test-checkstyle,test-pmd,test-simian" 
+	            depends="ivy-get,compile" 
 	            description="Run static analysis."/>
 
 	    <target name="test-all" 
@@ -449,13 +558,57 @@ commented by naveen
 
 		    </target>
 
+		<target name="configure-prop" >
+			<property name="properties.file" value=""/>
+			<echo message="Using properties file of ${properties.file}."/>
+			<echo message="Using properties file of ${properties.file}."/>
+			<available file="${properties.file}" property="properties.file.exists" />
+			<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
+			<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+			<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+			<property file="${properties.file}" />
+		</target>
+
+		<target name="static-analysis:init">
+			<delete dir="${reports.checkstyle.dir}"/>
+<!--			<delete dir="${reports.jdepend.dir}"/>
+			<delete dir="${reports.pmd.dir}"/>
+			<delete dir="${reports.simian.dir}"/>
+			<mkdir dir="${reports.checkstyle.dir}"/>
+			<mkdir dir="${reports.jdepend.dir}"/>
+			<mkdir dir="${reports.pmd.dir}"/>
+			<mkdir dir="${reports.simian.dir}"/>
+			<available classname="jdepend.xmlui.JDepend" property="jdepend.available"/> 
+-->			
+		</target>
+
+
+		<target name="static-analysis:checkstyle" depends="ivy-checkstyle, static-analysis:init">
+			<static-analysis-checkstyle
+				checkstyle.src.dir="${ctomlabviewer.srcHome}"
+				checkstyle.rpt.dir="${reports.checkstyle.dir}"
+				checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-noframes.xsl"
+				checkstyle.config.file="${common.dir}/checkstyle/checkstyle_checks.xml"
+				checkstyle.xml.name="checkstyle.xml"
+				checkstyle.html.name="checkstyle.html"
+				checkstyle.classpath.ref.name="test-checkstyle.classpath"
+			   />
+		</target>
+		
 	    <target name="package-notest-noivy" depends="compile,war"/>
 
 	    <target name="package-notest" depends="clean,ivy-get,compile,war"
 	            description="Package the application.  Do not run tests."/>
 
+
+	    <target name="package-deploy-web" depends="configure-prop,clean,ivy-get,deploy-web,war"
+	            description="Package the application.  Do not run tests.">
+	    </target>        
+
 	    <target name="package" depends="ivy-get,compile,test-all,war" 
 	            description="Package the application"/>
+
+
 	    <!-- ====================================================================== -->
 	    <!-- Run Cobertura and JUnit                                                -->
 	    <!-- ====================================================================== -->
@@ -519,30 +672,6 @@ commented by naveen
 	        <property name="ivy.dep.file" value="${ivy.def.file}"/>
 	        <ivy:settings file="${ivy.settings.file}" />
 	    </target>
-	    <target name="ivy-test-cobertura" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-cobertura" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-cobertura" />
-	    </target>
-	    <target name="ivy-test-junit" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-junit" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-junit" />
-	    </target>
-	    <target name="ivy-test-pmd" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-pmd" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-pmd" />
-	    </target>
-	    <target name="ivy-test-checkstyle" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-checkstyle" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-checkstyle" />
-	    </target>
-	    <target name="ivy-test-simian" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-simian" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-simian" />
-	    </target>
-	    <target name="ivy-test-selenium" depends="init:ivy">
-	        <ivy:resolve refresh="true" conf="test-selenium" />
-	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-selenium" />
-	    </target>
 	    <target name="ivy-compile" depends="init:ivy">
 	        <ivy:resolve refresh="true" conf="compile" />
 	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="compile" />
@@ -551,14 +680,33 @@ commented by naveen
 	        <ivy:resolve refresh="true" conf="runtime" />
 	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
 	    </target>
+	    <target name="ivy-test-junit" depends="init:ivy">
+	        <ivy:resolve refresh="true" conf="test-junit" />
+	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-junit" />
+	    </target>
+
+		<target name="ivy-checkstyle" description="Resolves and retrieves the JARs needed for Checkstyle." depends="init:ivy">
+<!--		<mkdir dir="${subproject.lib.dir}/test-checkstyle"/>-->
+			<ivy:resolve refresh="true" conf="test-checkstyle"/>
+			<ivy:retrieve pattern="${subproject.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="test-checkstyle"/>
+		</target>
+
+
+<!--
+	    <target name="ivy-test" 
+	            depends="init:ivy,ivy-test-junit">
+	            <ivy:resolve refresh="true" conf="test" />
+	            <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test" />
+	    </target>
 	    
 	    <target name="ivy-test" 
 	            depends="init:ivy,ivy-test-cobertura,ivy-test-junit,ivy-test-pmd,ivy-test-checkstyle,ivy-test-simian,ivy-test-selenium">
 	            <ivy:resolve refresh="true" conf="test" />
 	            <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test" />
 	    </target>
+-->
 	    <target name="ivy-get" 
-	            depends="init:ivy,ivy-compile,ivy-runtime,ivy-test" 
+	            depends="init:ivy,ivy-compile,ivy-runtime,ivy-test-junit" 
 	            description="Updates the local ivy repository">
 	    </target>
 	    <target name="ivy-clean" description="Delete jars.">
