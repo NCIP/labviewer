@@ -4,29 +4,6 @@
       "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 
 <module name="Checker">
-  <metadata name="com.atlas-sw.eclipse" value="I like Sydney"/>
-
-  <property name="severity" value="error"/>
-
-  <module name="FileTabCharacter">
-    <property name="eachLine" value="false"/>
-  </module>
-
-  <module name="FileLength">
-    <property name="fileExtensions" value="java"/>
-  </module>
-
-  <module name="Header">
-    <property name="headerFile" value="${common.dir}/checkstyle/java.header"/>
-    <property name="fileExtensions" value="java"/>
-    <property name="id" value="header"/>
-  </module>
-
-  <module name="RegexpSingleline">
-    <property name="format" value="\s+$"/>
-    <property name="minimum" value="0"/>
-    <property name="maximum" value="0"/>
-  </module>
 
   <module name="TreeWalker">
 
