@@ -9,12 +9,12 @@
     <s:head/>
     <script type="text/javascript">
         function handleSearchAction() {
-            document.getElementById("studySearchWaitMsg").style.display='block'; 
-            document.studySearchFrom.style.display='none'; 
-            setTimeout('document.images["progress"].src = "../images/loading.gif"', 400);
             document.studySearchFrom.action = "studyProtocollist.action";
             document.studySearchFrom.submit();
         }
+        function showOrganization(pid) {
+            showPopup('ajaxStudyProtocolviewOrg.action?studyProtocolId='+pid, '', 'Organization');
+        }         
         </script>
 </head>
 <body>
@@ -26,13 +26,13 @@
             <tr>
                 <td class="label"><fmt:message key="studyProtocol.title"/></label> </td>
                 <td>
-                    <input type="text" name="studyTitle"  id="studyTitle" style="width:300px"/>
+                    <s:textfield name="ssDto.shortTitle"  id="shortTitle" style="width:300px"/>
                 </td>
             </tr>
             <tr>
                 <td class="label"><fmt:message key="studyProtocol.identifier"/></label> </td>
                 <td>
-                    <input type="text" name="studyIdentifier"  id="studyTitle" style="width:200px"/>
+                    <s:textfield  name="ssDto.nciIdentifier"  id="studyIdentifier" style="width:200px"/>
                 </td>
             </tr>
 
@@ -48,17 +48,15 @@
             </del>
 
         </div>
-
+        <s:if test="results != null">
+        <h2>Search Results</h2>
+        <jsp:include page="/WEB-INF/jsp/studyprotocolresults.jsp"/>
+         </s:if>
 
    </s:form>
 
  </div>
  <div class="line"></div>
-
-    <div id="studySearchWaitMsg" align="center" style="DISPLAY:none">
-        <font color="green" size="4">
-        <p style="border-color:black;border-style:solid;">Please wait while the system processes your request...</p></font><br/><br/>
-        <img id="progress2" src="../images/loading.gif"/>Loading...
-    </div> 
+ 
 </body>
 </html>

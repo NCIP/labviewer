@@ -77,7 +77,7 @@
 *
 */
 
-package gov.nih.nci.lv.web.util;
+package gov.nih.nci.lv.util;
 
 
 import java.io.Serializable;

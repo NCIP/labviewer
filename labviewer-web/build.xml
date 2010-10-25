@@ -148,9 +148,10 @@
 	</target>
 	
 	<target name="configure" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
-		<copy file="${ctomlabviewer.resourceDir}/cTODSlabviewer.hibernate.cfg.xml.template" 
-			  toFile="${ctomlabviewer.build.outputDir}/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
+		<copy file="${ctomlabviewer.resourceDir}/hibernate.cfg.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/hibernate.cfg.xml" filtering="true" overwrite="true">
 		</copy>
+
 		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
 			  
@@ -187,17 +188,17 @@
 
 
 	<target name="configure-web" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
-		<copy file="${ctomlabviewer.resourceDir}/cTODSlabviewer.hibernate.cfg.xml.template" 
-			  toFile="${ctomlabviewer.build.outputDir}/cTODSlabviewer.hibernate.cfg.xml" filtering="true" overwrite="true">
+		<copy file="${ctomlabviewer.resourceDir}/hibernate.cfg.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/hibernate.cfg.xml" filtering="true" overwrite="true">
 	            <filterset begintoken="@" endtoken="@">
 					<filter token="database_dialect" value="${database.dialect}" />
-					<filter token="database_driver" value="${database.driver}" />
-					<filter token="database_url" value="${database.url}" />
-					<filter token="database_user" value="${database.user}" />
-					<filter token="database_passwd" value="${database.password}" />
+					<filter token="database_user"  		value="${database.user}" />
+					<filter token="database_password"   value="${database.password}" />
+					<filter token="database_driver"  	value="${database.driver}" />
+					<filter token="database_url" 		value="${database.url}" />
 				</filterset>
-			  
 		</copy>
+
 		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
 	            <filterset begintoken="@" endtoken="@">

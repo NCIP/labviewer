@@ -76,28 +76,59 @@
 *
 *
 */
-package gov.nih.nci.lv.web.action;
 
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
+package gov.nih.nci.lv.util;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
+
 /**
- * 
+ * Hibernate bind session.
  * @author NAmiruddin
  *
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
-    
-    private static final long serialVersionUID = 1234573645L;
+public class BindHibernateSession implements Filter {
+
     /**
      * {@inheritDoc}
-     */    
-    public void prepare() {
-        
+     */
+    public void destroy() {
+        // no op
+        System.out.println(" destroy session");
     }
+
     /**
      * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        return SUCCESS;
+     */
+    public void doFilter(ServletRequest arg0, ServletResponse arg1,
+            FilterChain arg2) throws IOException, ServletException {
+        try {
+            System.out.println(" binding session");
+            HibernateUtil.getHibernateHelper().openAndBindSession();
+            System.out.println(" binding session 2");
+            arg2.doFilter(arg0, arg1);
+            HibernateUtil.getHibernateHelper().unbindAndCleanupSession();
+        } catch (Exception e) {
+            System.out.println(" exception e ");
+            e.printStackTrace();
+        } catch (Throwable e) {
+            System.out.println(" throwable e ");
+            e.printStackTrace();
+            
+        }
+
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void init(FilterConfig arg0) throws ServletException {
+     // no-op
+        System.out.println(" int session");
+    }
+
 }
