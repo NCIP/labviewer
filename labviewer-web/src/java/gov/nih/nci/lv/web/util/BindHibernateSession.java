@@ -98,7 +98,7 @@ public class BindHibernateSession implements Filter {
      */
     public void destroy() {
         // no op
-        System.out.println(" bind destroy ...");
+        System.out.println(" destroy session");
     }
 
     /**
@@ -106,10 +106,20 @@ public class BindHibernateSession implements Filter {
      */
     public void doFilter(ServletRequest arg0, ServletResponse arg1,
             FilterChain arg2) throws IOException, ServletException {
-        System.out.println(" bind do filte ...");
-        HibernateUtil.getHibernateHelper().openAndBindSession();
-        arg2.doFilter(arg0, arg1);
-        HibernateUtil.getHibernateHelper().unbindAndCleanupSession();
+        try {
+            System.out.println(" binding session");
+            HibernateUtil.getHibernateHelper().openAndBindSession();
+            System.out.println(" binding session 2");
+            arg2.doFilter(arg0, arg1);
+            HibernateUtil.getHibernateHelper().unbindAndCleanupSession();
+        } catch (Exception e) {
+            System.out.println(" exception e ");
+            e.printStackTrace();
+        } catch (Throwable e) {
+            System.out.println(" throwable e ");
+            e.printStackTrace();
+            
+        }
 
     }
 
@@ -118,7 +128,7 @@ public class BindHibernateSession implements Filter {
      */
     public void init(FilterConfig arg0) throws ServletException {
      // no-op
-        System.out.println(" bind init ...");
+        System.out.println(" int session");
     }
 
 }

@@ -79,6 +79,14 @@
 
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.lv.dao.StudySearchDAO;
+import gov.nih.nci.lv.dto.StudySearchDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.struts2.ServletActionContext;
+
 /**
  * Study protocol Action class for search.
  * @author NAmiruddin
@@ -87,55 +95,58 @@ package gov.nih.nci.lv.web.action;
 public class StudyProtocolAction extends LabViewerAction {
     private static final long serialVersionUID = 1234573645L;
     
-    private String studyTitle = null;
-    private String studyIdentifier = null;
-    /**
-     * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        System.out.println("execute");
-        return SUCCESS;
-    }
+    StudySearchDto ssDto = new StudySearchDto();
+    List<StudySearchDto> results = new ArrayList<StudySearchDto>();
+
     /**
      * 
-     * @return Sucess
+     * @return Success
      * @throws Exception on error
      */
     public String list() throws Exception {
-        System.out.println(" identifier " + studyIdentifier);
+        System.out.println("list");
+        StudySearchDAO ssDao = new StudySearchDAO();
+        results = ssDao.search(ssDto);
+        ServletActionContext.getRequest().setAttribute("results", results);
         return SUCCESS;
     }
 
     /**
      * 
-     * @return string
+     * @return Success
+     * @throws Exception on error
      */
-    public String getStudyTitle() {
-        return studyTitle;
-    }
-
+    public String viewOrg() throws Exception {
+        System.out.println("view org");
+        return SUCCESS;
+    }    
     /**
      * 
-     * @param studyTitle study title
+     * @return ssDto
      */
-    public void setStudyTitle(String studyTitle) {
-        this.studyTitle = studyTitle;
+    public StudySearchDto getSsDto() {
+        return ssDto;
     }
     /**
      * 
-     * @return String 
+     * @param ssDto ssDto
      */
-    public String getStudyIdentifier() {
-        return studyIdentifier;
+    public void setSsDto(StudySearchDto ssDto) {
+        this.ssDto = ssDto;
     }
-
     /**
      * 
-     * @param studyIdentifier study identifier
+     * @return results
      */
-    public void setStudyIdentifier(String studyIdentifier) {
-        this.studyIdentifier = studyIdentifier;
+    public List<StudySearchDto> getResults() {
+        return results;
+    }
+    /**
+     * 
+     * @param results results
+     */
+    public void setResults(List<StudySearchDto> results) {
+        this.results = results;
     }
 
-    
 }
