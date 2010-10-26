@@ -77,6 +77,8 @@
 
 package gov.nih.nci.lv.dto;
 
+import java.util.Date;
+
 /** 
  * Abstract dto.
  * @author NAmiruddin
@@ -86,6 +88,10 @@ public class AbstractDto<DTO> {
     
     private Long id;
     private String loggedUser;
+    private Date ctomInsertDate;
+    private Date ctomUpdateDate;
+    private String ctomInsertUser;
+    private String ctomUpdateUser;
 
     /**
      * 
@@ -118,8 +124,72 @@ public class AbstractDto<DTO> {
     public void setLoggedUser(String loggedUser) {
         this.loggedUser = loggedUser;
     }
+
+    /**
+     * 
+     * @return ctomInsertUser
+     */
+    public String getCtomInsertUser() {
+        return ctomInsertUser;
+    }
+
+    /**
+     * 
+     * @param ctomInsertUser ctomInsertUser
+     */
+    public void setCtomInsertUser(String ctomInsertUser) {
+        this.ctomInsertUser = ctomInsertUser;
+    }
+
+    /**
+     * 
+     * @return ctomUpdateUser
+     */
+    public String getCtomUpdateUser() {
+        return ctomUpdateUser;
+    }
+    /**
+     * 
+     * @param ctomUpdateUser ctomUpdateUser
+     */
+    public void setCtomUpdateUser(String ctomUpdateUser) {
+        this.ctomUpdateUser = ctomUpdateUser;
+    }
+
     
     
+    /**
+     * 
+     * @return insert date
+     */
+    public Date getCtomInsertDate() {
+        return ctomInsertDate;
+    }
+    /**
+     * 
+     * @param ctomInsertDate insert date
+     */
+    
+
+    public void setCtomInsertDate(Date ctomInsertDate) {
+        this.ctomInsertDate = ctomInsertDate;
+    }
+
+    /**
+     * 
+     * @return ctomUpdateDt
+     */
+    public Date getCtomUpdateDate() {
+        return ctomUpdateDate;
+    }
+    
+    /**
+     * 
+     * @param ctomUpdateDate ctomUpdateDate
+     */
+    public void setCtomUpdateDate(Date ctomUpdateDate) {
+        this.ctomUpdateDate = ctomUpdateDate;
+    }
     
 
 }

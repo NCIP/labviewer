@@ -14,7 +14,7 @@
 			<result>/WEB-INF/jsp/studyprotocollist.jsp</result>    
 		</action>
         <action name="ajaxHealthcareSite*" class="gov.nih.nci.lv.web.action.HealthcareSiteAction" method="{1}">
-            <result>/WEB-INF/jsp/nodecorate/studyprotocolhcslist.jsp</result>
+            <result>/WEB-INF/jsp/nodecorate/studyprotocolhcsresults.jsp</result>
         </action>		
     </package>
 </struts>

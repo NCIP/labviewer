@@ -74,169 +74,58 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package gov.nih.nci.lv.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
+
+
 
 /**
- * HealthcareSite domain.
+ * Base class for all domain classes.
  * @author Naveen Amiruddin
- *
+ * @since 05/22/2008
  */
-@Entity
-@Table(name = "HEALTHCARE_SITE")
-public class HealthcareSite extends AbstractDate {
-    
-    private String nciInstituteCode;
-    private String name;
-    private String streetAddress;
-    private String city;
-    private String stateCode;
-    private String postalCode;
-    private String countryCode;
-    private String telecomAddress;
-    private List<StudySite> studySites = new ArrayList<StudySite>();
-    /**
-     * 
-     * @return nciInstituteCode
-     */
-    @Column(name = "NCI_INSTITUTE_CODE")
-    public String getNciInstituteCode() {
-        return nciInstituteCode;
-    }
-    /**
-     * 
-     * @param nciInstituteCode nciInstituteCode
-     */
-    public void setNciInstituteCode(String nciInstituteCode) {
-        this.nciInstituteCode = nciInstituteCode;
-    }
-    /**
-     * 
-     * @return name
-     */
+@MappedSuperclass
+public class AbstractUser  extends AbstractDate  {
 
-    public String getName() {
-        return name;
+    private static final long serialVersionUID = 1234567890L;
+
+    private String ctomInsertUser;
+    private String ctomUpdateUser;
+
+
+    /**
+     * 
+     * @return ctomInsertUser
+     */
+    @Column(name = "CTOM_INSERT_USER")
+    public String getCtomInsertUser() {
+        return ctomInsertUser;
+    }
+
+    /**
+     * 
+     * @param ctomInsertUser ctomInsertUser
+     */
+    public void setCtomInsertUser(String ctomInsertUser) {
+        this.ctomInsertUser = ctomInsertUser;
+    }
+
+    /**
+     * 
+     * @return ctomUpdateUser
+     */
+    @Column(name = "CTOM_UPDATE_USER" , updatable = false)
+    public String getCtomUpdateUser() {
+        return ctomUpdateUser;
     }
     /**
      * 
-     * @param name name
+     * @param ctomUpdateUser ctomUpdateUser
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-    /**
-     * 
-     * @return streetAddress
-     */
-    @Column(name = "STREET_ADDRESS")
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-    /**
-     * 
-     * @param streetAddress streetAddress
-     */
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-    /**
-     * 
-     * @return city
-     */
-    public String getCity() {
-        return city;
-    }
-    /**
-     * 
-     * @param city city
-     */
-    public void setCity(String city) {
-        this.city = city;
-    }
-    /**
-     * 
-     * @return stateCode
-     */
-    @Column(name = "STATE_CODE")
-    public String getStateCode() {
-        return stateCode;
-    }
-    /**
-     * 
-     * @param stateCode stateCode
-     */
-     public void setStateCode(String stateCode) {
-        this.stateCode = stateCode;
-    }
-    /**
-     * 
-     * @return postalCode
-     */
-    @Column(name = "POSTAL_CODE")
-    public String getPostalCode() {
-        return postalCode;
-    }
-    /**
-     * 
-     * @param postalCode postalCode
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-    /**
-     * 
-     * @return countryCode
-     */
-    @Column(name = "COUNTRY_CODE")
-    public String getCountryCode() {
-        return countryCode;
-    }
-    /**
-     * 
-     * @param countryCode countryCode
-     */
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-    
-    /**
-     * 
-     * @return telecomAddress
-     */
-    @Column(name = "TELECOM_ADDRESS")
-    public String getTelecomAddress() {
-        return telecomAddress;
-    }
-    /**
-     * 
-     * @param telecomAddress telecomAddress
-     */
-    public void setTelecomAddress(String telecomAddress) {
-        this.telecomAddress = telecomAddress;
-    }
-    /**
-     * 
-     * @return studySites studySites
-     */
-    @OneToMany(mappedBy = "healthcareSite")
-    public List<StudySite> getStudySites() {
-        return studySites;
-    }
-    /**
-     * 
-     * @param studySites studySites
-     */
-    public void setStudySites(List<StudySite> studySites) {
-        this.studySites = studySites;
+    public void setCtomUpdateUser(String ctomUpdateUser) {
+        this.ctomUpdateUser = ctomUpdateUser;
     }
 
     

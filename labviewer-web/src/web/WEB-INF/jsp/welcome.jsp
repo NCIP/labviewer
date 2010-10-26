@@ -9,16 +9,24 @@
     </head>
     <body onload="setFocusToFirstControl();">
      <h1><fmt:message key="labviewer.home.title" /></h1>
-     <c:set var="topic" scope="request" value=""/> 
-    
         <div class="homepage" style="width:600px">
             <div class="homebanner"><img src="<%=request.getContextPath()%>/images/banner_labviewer.jpg" width="599" height="140" alt="" /></div>
-            <h1>LabViewer Home</h1>
-            <p class="padme2">
+            <h1><fmt:message key="labviewer.home.title2" /></h1>
+            <p class="padme8">
+            <b> Search for Laboratory Results by: </b>
             </p>
-            <ul class="padme10">
-				caBIG Lab Viewer is a web based application that allows users to view laboratory data stored in the CTODS Lab Domain database. Users may browse for laboratory activity by Patient Id, Study Id, Lab Start Date, and Lab End Date            
-			</ul>                    
+            <ul class="intro">
+                    <li> Study Title </li>
+                    <li> Study Identifier </li>
+                    <li> Participant First and Last Name </li>
+                    <li> Participant Identifier </li>
+                    <li> Lab Start or End Date </li>
+                    <li> Add a Study, Participant or Lab </li>
+                    <li> View Healthcare Site and Principal Investigator details for a Study </li>
+                    <li> Filter Lab Results by Participant, Lab Test Name, Result (In/Out of Range), or Date Range </li>
+                    <li> Send Lab data to other CCTS applications </li>
+                    <li> Export Lab Results as .CSV, .XLS or .XML       </li>                   
+            </ul>                    
         </div>
     </body>
 </html>

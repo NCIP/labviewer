@@ -18,6 +18,10 @@
 
 	<!-- runtime -->
 	<dependencies>
+	
+		<!--  caGrid 1.3 jars -->
+        
+	
 		<dependency org="javax.servlet"     name="jstl"                     		rev="1.1.2"         conf="runtime->default"/>
 		<dependency org="ncicb"             name="nci-commons-core"         		rev="1.2.11"        conf="runtime->master"/>
 		<dependency org="ncicb"             name="nci-commons-struts2"      		rev="1.2.11"        conf="runtime->default"/>

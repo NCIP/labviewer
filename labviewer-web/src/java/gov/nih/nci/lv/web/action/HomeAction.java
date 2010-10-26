@@ -81,6 +81,8 @@ package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.lv.web.util.LVConstants;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts2.ServletActionContext;
 
 /**
@@ -94,10 +96,20 @@ public class HomeAction extends LabViewerAction {
      * {@inheritDoc}
      */
     public String execute() throws Exception {
+        
         //@todo : get the value from the system table and put it into session
-        ServletActionContext.getRequest().getSession().setAttribute(LVConstants.VERSION_NUMBER, "CTODS 2.3");
-        ServletActionContext.getRequest().getSession().setAttribute(LVConstants.HELP_LINK, 
+        HttpSession session =  ServletActionContext.getRequest().getSession();
+        session.setAttribute(LVConstants.VERSION_NUMBER, "CTODS 2.3");
+        session.setAttribute(LVConstants.HELP_LINK, 
                 "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
+
+        String gridIDentity = (String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
+        if (gridIDentity != null) {
+            int beginIndex = gridIDentity.lastIndexOf("=");
+            int endIndex = gridIDentity.length();
+            session.setAttribute(LVConstants.LOGGED_USER, gridIDentity.substring(beginIndex + 1, endIndex));
+        }
+        
         return SUCCESS;
     }
 

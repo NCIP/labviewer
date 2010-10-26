@@ -78,6 +78,8 @@
 */
 package gov.nih.nci.lv.web.action;
 
+import org.apache.struts2.ServletActionContext;
+
 import gov.nih.nci.lv.dao.HealthcareSiteDAO;
 import gov.nih.nci.lv.domain.Protocol;
 
@@ -97,9 +99,8 @@ public class HealthcareSiteAction extends LabViewerAction {
         System.out.println("view viewHealthcareSites");
         HealthcareSiteDAO hcDoa = new HealthcareSiteDAO();
         Protocol protocol = new Protocol();
-        protocol.setId(super.getStudyProtocolId());
-        System.out.println("super.getStudyProtocolId() " + super.getStudyProtocolId());
-        hcDoa.getHealtcareSitesByStudyProtocol(protocol);
+        protocol.setId(this.getStudyProtocolId());
+        ServletActionContext.getRequest().setAttribute("results", hcDoa.getHealtcareSitesByStudyProtocol(protocol));
         return SUCCESS;
     }       
 
