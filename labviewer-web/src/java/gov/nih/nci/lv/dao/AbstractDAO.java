@@ -76,69 +76,61 @@
 *
 *
 */
+package gov.nih.nci.lv.dao;
 
-package gov.nih.nci.lv.web.action;
+import gov.nih.nci.lv.convert.AbstractConverter;
+import gov.nih.nci.lv.web.util.HibernateUtil;
 
-import gov.nih.nci.lv.dao.StudySearchDAO;
-import gov.nih.nci.lv.dto.StudySearchDto;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.struts2.ServletActionContext;
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
- * Study protocol Action class for search.
+ * An abstract Base DAO class.
  * @author NAmiruddin
- *
+ * @param <BO> domain object
+ * @param <DTO> dto object
+ * @param <CONVERTER> converter object
  */
-public class StudyProtocolAction extends LabViewerAction {
-    private static final long serialVersionUID = 1234573645L;
+public class AbstractDAO<BO, DTO , CONVERTER extends AbstractConverter<DTO, BO>> { 
     
-    StudySearchDto ssDto = new StudySearchDto();
-    List<StudySearchDto> results = new ArrayList<StudySearchDto>();
+    private static final Logger LOG  = Logger.getLogger(AbstractDAO.class);
 
+    
     /**
-     * 
-     * @return Success
-     * @throws Exception on error
+     * open a current session with a transaction.
+     * @return Session 
      */
-    public String list() throws Exception {
-        System.out.println("list");
-        StudySearchDAO ssDao = new StudySearchDAO();
-        results = ssDao.search(ssDto);
-        ServletActionContext.getRequest().setAttribute("results", results);
-        return SUCCESS;
+    Session getSession() {
+        Session session = HibernateUtil.getCurrentSession();
+        session.beginTransaction();
+        return session;
     }
-
- 
+    
     /**
      * 
-     * @return ssDto
+     * @param sql sql for execution
+     * @return list of domain objs
      */
-    public StudySearchDto getSsDto() {
-        return ssDto;
+    List<BO> executeSql(String sql) {
+        LOG.debug("sql " + sql);
+        Query query = getSession().createQuery(sql);
+        List<BO> bos = query.list();
+        LOG.debug("total retrieved " + bos.size());
+        return bos;
     }
+    
     /**
      * 
-     * @param ssDto ssDto
+     * @param bos domian
+     * @param converter dto converter
+     * @return list of dtos
      */
-    public void setSsDto(StudySearchDto ssDto) {
-        this.ssDto = ssDto;
-    }
-    /**
-     * 
-     * @return results
-     */
-    public List<StudySearchDto> getResults() {
-        return results;
-    }
-    /**
-     * 
-     * @param results results
-     */
-    public void setResults(List<StudySearchDto> results) {
-        this.results = results;
+    List<DTO> convertToDto(List<BO> bos , CONVERTER converter) {
+        return converter.convertToDTOs(bos);
     }
 
+    
 }

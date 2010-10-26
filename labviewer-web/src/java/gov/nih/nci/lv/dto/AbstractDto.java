@@ -80,9 +80,9 @@ package gov.nih.nci.lv.dto;
 /** 
  * Abstract dto.
  * @author NAmiruddin
- *
+ * @param <DTO> dto object
  */
-public class AbstractDto { 
+public class AbstractDto<DTO> { 
     
     private Long id;
     private String loggedUser;

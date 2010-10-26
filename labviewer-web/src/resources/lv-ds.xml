@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>pa-lv</jndi-name>
+    <user-name>@database.user@</user-name>
+    <password>@database.password@</password>
+    <driver-class>@database.driver@</driver-class>
+    <connection-url>@database.url@</connection-url>
+    <new-connection-sql>select 1</new-connection-sql>
+    <check-valid-connection-sql>select 1</check-valid-connection-sql>
+    <min-pool-size>5</min-pool-size>
+    <max-pool-size>20</max-pool-size>
+  </local-tx-datasource>
+</datasources>

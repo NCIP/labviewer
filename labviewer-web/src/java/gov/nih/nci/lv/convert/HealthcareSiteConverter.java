@@ -74,91 +74,42 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package gov.nih.nci.lv.convert;
 
-package gov.nih.nci.lv.domain;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import gov.nih.nci.lv.domain.HealthcareSite;
+import gov.nih.nci.lv.dto.HealthcareSiteDto;
 
 /**
  * 
- * @author Naveen Amiruddin
+ * @author NAmiruddin
  *
  */
-@Entity
-@Table(name = "PROTOCOL")
-public class Protocol extends AbstractEntity {
+public class HealthcareSiteConverter extends AbstractConverter<HealthcareSiteDto, HealthcareSite> {
 
-    String nciIdentifier;
-    String longTitleText;
-    String shortTitleText;
-    private List<StudySite> studySites = new ArrayList<StudySite>();
-    
-    /**
-     * 
-     * @return nciIdentifier
-     */
-    @Column(name = "NCI_IDENTIFIER")
-    public String getNciIdentifier() {
-        return nciIdentifier;
+    @Override
+    public HealthcareSite convertToBO(HealthcareSiteDto dto) {
+        HealthcareSite hc = new HealthcareSite();
+        hc.setId(dto.getId());
+        hc.setName(dto.getName());
+        hc.setCity(dto.getCity());
+        hc.setCountryCode(dto.getCountryCode());
+        hc.setNciInstituteCode(dto.getNciInstituteCode());
+        hc.setPostalCode(dto.getPostalCode());
+        hc.setStreetAddress(dto.getStreetAddress());
+        return hc;
     }
-    /**
-     * 
-     * @param nciIdentifier nciIdentifier
-     */
-    public void setNciIdentifier(String nciIdentifier) {
-        this.nciIdentifier = nciIdentifier;
+
+    @Override
+    public HealthcareSiteDto convertToDTO(HealthcareSite bo) {
+        HealthcareSiteDto dto = new HealthcareSiteDto();
+        dto.setId(bo.getId());
+        dto.setName(bo.getName());
+        dto.setCity(bo.getCity());
+        dto.setCountryCode(bo.getCountryCode());
+        dto.setNciInstituteCode(bo.getNciInstituteCode());
+        dto.setPostalCode(bo.getPostalCode());
+        dto.setStreetAddress(bo.getStreetAddress());
+        return dto;
     }
-    /**
-     * 
-     * @return longTitleText
-     */
-    @Column(name = "LONG_TITLE_TEXT")
-    public String getLongTitleText() {
-        return longTitleText;
-    }
-    /**
-     * 
-     * @param longTitleText longTitleText
-     */
-    public void setLongTitleText(String longTitleText) {
-        this.longTitleText = longTitleText;
-    }
-    /**
-     * 
-     * @return shortTitleText
-     */
-    @Column(name = "SHORT_TITLE_TEXT")
-    public String getShortTitleText() {
-        return shortTitleText;
-    }
-    /**
-     * 
-     * @param shortTitleText shortTitleText
-     */
-    public void setShortTitleText(String shortTitleText) {
-        this.shortTitleText = shortTitleText;
-    }
-    
-    /**
-     * 
-     * @return studySites
-     */
-    @OneToMany(mappedBy = "protocol")
-    public List<StudySite> getStudySites() {
-        return studySites;
-    }
-    /**
-     * 
-     * @param studySites studySites
-     */
-    public void setStudySites(List<StudySite> studySites) {
-        this.studySites = studySites;
-    }
-    
+
 }
