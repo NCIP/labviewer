@@ -13,7 +13,7 @@
             document.studySearchFrom.submit();
         }
         function showOrganization(pid) {
-            showPopup('ajaxStudyProtocolviewOrg.action?studyProtocolId='+pid, '', 'Organization');
+            showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '', 'Organization');
         }         
         </script>
 </head>

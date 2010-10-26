@@ -88,6 +88,8 @@ import com.opensymphony.xwork2.Preparable;
 public class LabViewerAction extends ActionSupport implements Preparable {
     
     private static final long serialVersionUID = 1234573645L;
+    private Long studyProtocolId = null;
+    
     /**
      * {@inheritDoc}
      */    
@@ -100,4 +102,22 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     public String execute() throws Exception {
         return SUCCESS;
     }
+
+    /**
+    *
+    * @return studyProtocolId
+    */
+   public Long getStudyProtocolId() {
+       return studyProtocolId;
+   }
+
+   /**
+    *
+    * @param studyProtocolId
+    *            studyProtocolId
+    */
+   public void setStudyProtocolId(Long studyProtocolId) {
+       this.studyProtocolId = studyProtocolId;
+   }
+    
 }

@@ -86,70 +86,131 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * 
+ * HealthcareSite domain.
  * @author Naveen Amiruddin
  *
  */
 @Entity
-@Table(name = "PROTOCOL")
-public class Protocol extends AbstractEntity {
-
-    String nciIdentifier;
-    String longTitleText;
-    String shortTitleText;
+@Table(name = "HEALTHCARE_SITE")
+public class HealthcareSite extends AbstractId {
+    
+    private String nciInstituteCode;
+    private String name;
+    private String streetAddress;
+    private String city;
+    private String stateCode;
+    private String postalCode;
+    private String countryCode;
     private List<StudySite> studySites = new ArrayList<StudySite>();
-    
     /**
      * 
-     * @return nciIdentifier
+     * @return nciInstituteCode
      */
-    @Column(name = "NCI_IDENTIFIER")
-    public String getNciIdentifier() {
-        return nciIdentifier;
+    @Column(name = "NCI_INSTITUTE_CODE")
+    public String getNciInstituteCode() {
+        return nciInstituteCode;
     }
     /**
      * 
-     * @param nciIdentifier nciIdentifier
+     * @param nciInstituteCode nciInstituteCode
      */
-    public void setNciIdentifier(String nciIdentifier) {
-        this.nciIdentifier = nciIdentifier;
+    public void setNciInstituteCode(String nciInstituteCode) {
+        this.nciInstituteCode = nciInstituteCode;
     }
     /**
      * 
-     * @return longTitleText
+     * @return name
      */
-    @Column(name = "LONG_TITLE_TEXT")
-    public String getLongTitleText() {
-        return longTitleText;
+
+    public String getName() {
+        return name;
     }
     /**
      * 
-     * @param longTitleText longTitleText
+     * @param name name
      */
-    public void setLongTitleText(String longTitleText) {
-        this.longTitleText = longTitleText;
+    public void setName(String name) {
+        this.name = name;
     }
     /**
      * 
-     * @return shortTitleText
+     * @return streetAddress
      */
-    @Column(name = "SHORT_TITLE_TEXT")
-    public String getShortTitleText() {
-        return shortTitleText;
+    @Column(name = "STREET_ADDRESS")
+    public String getStreetAddress() {
+        return streetAddress;
     }
     /**
      * 
-     * @param shortTitleText shortTitleText
+     * @param streetAddress streetAddress
      */
-    public void setShortTitleText(String shortTitleText) {
-        this.shortTitleText = shortTitleText;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
-    
     /**
      * 
-     * @return studySites
+     * @return city
      */
-    @OneToMany(mappedBy = "protocol")
+    public String getCity() {
+        return city;
+    }
+    /**
+     * 
+     * @param city city
+     */
+    public void setCity(String city) {
+        this.city = city;
+    }
+    /**
+     * 
+     * @return stateCode
+     */
+    @Column(name = "STATE_CODE")
+    public String getStateCode() {
+        return stateCode;
+    }
+    /**
+     * 
+     * @param stateCode stateCode
+     */
+     public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+    /**
+     * 
+     * @return postalCode
+     */
+    @Column(name = "POSTAL_CODE")
+    public String getPostalCode() {
+        return postalCode;
+    }
+    /**
+     * 
+     * @param postalCode postalCode
+     */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+    /**
+     * 
+     * @return countryCode
+     */
+    @Column(name = "COUNTRY_CODE")
+    public String getCountryCode() {
+        return countryCode;
+    }
+    /**
+     * 
+     * @param countryCode countryCode
+     */
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+    /**
+     * 
+     * @return studySites studySites
+     */
+    @OneToMany(mappedBy = "healthcareSite")
     public List<StudySite> getStudySites() {
         return studySites;
     }
@@ -160,5 +221,6 @@ public class Protocol extends AbstractEntity {
     public void setStudySites(List<StudySite> studySites) {
         this.studySites = studySites;
     }
+
     
 }

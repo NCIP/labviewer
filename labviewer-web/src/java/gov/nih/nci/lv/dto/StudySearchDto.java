@@ -81,7 +81,7 @@ package gov.nih.nci.lv.dto;
  * @author NAmiruddin
  *
  */
-public class StudySearchDto extends AbstractDto {
+public class StudySearchDto extends AbstractDto<StudySearchDto> {
     
     private String nciIdentifier;
     private String shortTitle;

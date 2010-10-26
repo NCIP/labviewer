@@ -76,69 +76,34 @@
 *
 *
 */
+package gov.nih.nci.lv.dao;
 
-package gov.nih.nci.lv.web.action;
+import gov.nih.nci.lv.convert.HealthcareSiteConverter;
+import gov.nih.nci.lv.domain.HealthcareSite;
+import gov.nih.nci.lv.domain.Protocol;
+import gov.nih.nci.lv.dto.HealthcareSiteDto;
 
-import gov.nih.nci.lv.dao.StudySearchDAO;
-import gov.nih.nci.lv.dto.StudySearchDto;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.struts2.ServletActionContext;
-
 /**
- * Study protocol Action class for search.
- * @author NAmiruddin
+ * DAO for healtcare site.
+ * @author Naveen Amiruddin
  *
  */
-public class StudyProtocolAction extends LabViewerAction {
-    private static final long serialVersionUID = 1234573645L;
+public class HealthcareSiteDAO  extends AbstractDAO<HealthcareSite, HealthcareSiteDto , HealthcareSiteConverter> {
     
-    StudySearchDto ssDto = new StudySearchDto();
-    List<StudySearchDto> results = new ArrayList<StudySearchDto>();
 
     /**
-     * 
-     * @return Success
-     * @throws Exception on error
+     * returns a list of healtcareSites for a given study.
+     * @param protocol protocol
+     * @return list of healtcareSites
      */
-    public String list() throws Exception {
-        System.out.println("list");
-        StudySearchDAO ssDao = new StudySearchDAO();
-        results = ssDao.search(ssDto);
-        ServletActionContext.getRequest().setAttribute("results", results);
-        return SUCCESS;
-    }
 
- 
-    /**
-     * 
-     * @return ssDto
-     */
-    public StudySearchDto getSsDto() {
-        return ssDto;
-    }
-    /**
-     * 
-     * @param ssDto ssDto
-     */
-    public void setSsDto(StudySearchDto ssDto) {
-        this.ssDto = ssDto;
-    }
-    /**
-     * 
-     * @return results
-     */
-    public List<StudySearchDto> getResults() {
-        return results;
-    }
-    /**
-     * 
-     * @param results results
-     */
-    public void setResults(List<StudySearchDto> results) {
-        this.results = results;
+    public List<HealthcareSiteDto> getHealtcareSitesByStudyProtocol(Protocol protocol) {
+        StringBuffer hql = new StringBuffer(" select distinct h from HealthcareSite as h ");
+        hql.append("join h.studySites as ss join ss.protocol as p where p.id = " + protocol.getId());
+        List<HealthcareSite> hcs =  super.executeSql(hql.toString());
+        return super.convertToDto(hcs, new HealthcareSiteConverter());
     }
 
 }

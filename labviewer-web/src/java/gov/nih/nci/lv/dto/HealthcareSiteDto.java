@@ -74,91 +74,123 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package gov.nih.nci.lv.dto;
 
-package gov.nih.nci.lv.domain;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
- * 
- * @author Naveen Amiruddin
+ * dto for healthcaresite.
+ * @author NAmiruddin
  *
  */
-@Entity
-@Table(name = "PROTOCOL")
-public class Protocol extends AbstractEntity {
+public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
+    
+    private String nciInstituteCode;
+    private String name;
+    private String streetAddress;
+    private String city;
+    private String stateCode;
+    private String postalCode;
+    private String countryCode;
 
-    String nciIdentifier;
-    String longTitleText;
-    String shortTitleText;
-    private List<StudySite> studySites = new ArrayList<StudySite>();
+    /**
+     * 
+     * @return nciInstituteCode
+     */
+    public String getNciInstituteCode() {
+        return nciInstituteCode;
+    }
+    /**
+     * 
+     * @param nciInstituteCode nciInstituteCode
+     */
+    public void setNciInstituteCode(String nciInstituteCode) {
+        this.nciInstituteCode = nciInstituteCode;
+    }
+    /**
+     * 
+     * @return name
+     */
+
+    public String getName() {
+        return name;
+    }
+    /**
+     * 
+     * @param name name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+    /**
+     * 
+     * @return streetAddress
+     */
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+    /**
+     * 
+     * @param streetAddress streetAddress
+     */
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+    /**
+     * 
+     * @return city
+     */
+    public String getCity() {
+        return city;
+    }
+    /**
+     * 
+     * @param city city
+     */
+    public void setCity(String city) {
+        this.city = city;
+    }
+    /**
+     * 
+     * @return stateCode
+     */
+    public String getStateCode() {
+        return stateCode;
+    }
+    /**
+     * 
+     * @param stateCode stateCode
+     */
+     public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+    /**
+     * 
+     * @return postalCode
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+    /**
+     * 
+     * @param postalCode postalCode
+     */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+    /**
+     * 
+     * @return countryCode
+     */
+    public String getCountryCode() {
+        return countryCode;
+    }
+    /**
+     * 
+     * @param countryCode countryCode
+     */
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
     
-    /**
-     * 
-     * @return nciIdentifier
-     */
-    @Column(name = "NCI_IDENTIFIER")
-    public String getNciIdentifier() {
-        return nciIdentifier;
-    }
-    /**
-     * 
-     * @param nciIdentifier nciIdentifier
-     */
-    public void setNciIdentifier(String nciIdentifier) {
-        this.nciIdentifier = nciIdentifier;
-    }
-    /**
-     * 
-     * @return longTitleText
-     */
-    @Column(name = "LONG_TITLE_TEXT")
-    public String getLongTitleText() {
-        return longTitleText;
-    }
-    /**
-     * 
-     * @param longTitleText longTitleText
-     */
-    public void setLongTitleText(String longTitleText) {
-        this.longTitleText = longTitleText;
-    }
-    /**
-     * 
-     * @return shortTitleText
-     */
-    @Column(name = "SHORT_TITLE_TEXT")
-    public String getShortTitleText() {
-        return shortTitleText;
-    }
-    /**
-     * 
-     * @param shortTitleText shortTitleText
-     */
-    public void setShortTitleText(String shortTitleText) {
-        this.shortTitleText = shortTitleText;
-    }
-    
-    /**
-     * 
-     * @return studySites
-     */
-    @OneToMany(mappedBy = "protocol")
-    public List<StudySite> getStudySites() {
-        return studySites;
-    }
-    /**
-     * 
-     * @param studySites studySites
-     */
-    public void setStudySites(List<StudySite> studySites) {
-        this.studySites = studySites;
-    }
-    
+
 }

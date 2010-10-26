@@ -13,8 +13,8 @@
 		<action name="studyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
 			<result>/WEB-INF/jsp/studyprotocollist.jsp</result>    
 		</action>
-        <action name="ajaxStudyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
-            <result>/WEB-INF/jsp/nodecorate/studyprotocolorglist.jsp</result>
+        <action name="ajaxHealthcareSite*" class="gov.nih.nci.lv.web.action.HealthcareSiteAction" method="{1}">
+            <result>/WEB-INF/jsp/nodecorate/studyprotocolhcslist.jsp</result>
         </action>		
     </package>
 </struts>

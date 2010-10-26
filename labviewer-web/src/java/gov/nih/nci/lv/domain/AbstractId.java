@@ -77,88 +77,41 @@
 
 package gov.nih.nci.lv.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 /**
- * 
- * @author Naveen Amiruddin
+ * Has only the id ( as some of the tables don't have all the 5 columns, id, ctominsert & update.
+ * @author NAmiruddin
  *
  */
-@Entity
-@Table(name = "PROTOCOL")
-public class Protocol extends AbstractEntity {
+@MappedSuperclass
+public class AbstractId implements Serializable {
+    
+    private static final long serialVersionUID = 1234567890L;
+    
+    private Long id;
+    /**
+     * set id.
+     * @param id id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    String nciIdentifier;
-    String longTitleText;
-    String shortTitleText;
-    private List<StudySite> studySites = new ArrayList<StudySite>();
-    
     /**
-     * 
-     * @return nciIdentifier
+     * Get the id of the object.
+     * @return the id
      */
-    @Column(name = "NCI_IDENTIFIER")
-    public String getNciIdentifier() {
-        return nciIdentifier;
-    }
-    /**
-     * 
-     * @param nciIdentifier nciIdentifier
-     */
-    public void setNciIdentifier(String nciIdentifier) {
-        this.nciIdentifier = nciIdentifier;
-    }
-    /**
-     * 
-     * @return longTitleText
-     */
-    @Column(name = "LONG_TITLE_TEXT")
-    public String getLongTitleText() {
-        return longTitleText;
-    }
-    /**
-     * 
-     * @param longTitleText longTitleText
-     */
-    public void setLongTitleText(String longTitleText) {
-        this.longTitleText = longTitleText;
-    }
-    /**
-     * 
-     * @return shortTitleText
-     */
-    @Column(name = "SHORT_TITLE_TEXT")
-    public String getShortTitleText() {
-        return shortTitleText;
-    }
-    /**
-     * 
-     * @param shortTitleText shortTitleText
-     */
-    public void setShortTitleText(String shortTitleText) {
-        this.shortTitleText = shortTitleText;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long getId() {
+        return this.id;
     }
     
-    /**
-     * 
-     * @return studySites
-     */
-    @OneToMany(mappedBy = "protocol")
-    public List<StudySite> getStudySites() {
-        return studySites;
-    }
-    /**
-     * 
-     * @param studySites studySites
-     */
-    public void setStudySites(List<StudySite> studySites) {
-        this.studySites = studySites;
-    }
-    
+
 }

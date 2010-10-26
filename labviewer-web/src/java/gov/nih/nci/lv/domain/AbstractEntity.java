@@ -76,13 +76,9 @@
  */
 package gov.nih.nci.lv.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -95,33 +91,15 @@ import javax.persistence.TemporalType;
  * @since 05/22/2008
  */
 @MappedSuperclass
-public class AbstractEntity  implements Serializable {
+public class AbstractEntity  extends AbstractId  {
 
     private static final long serialVersionUID = 1234567890L;
 
-    private Long id;
     private Date ctomInsertDt;
     private String ctomInsertUser;
     private Date ctomUpdateDt;
     private String ctomUpdateUser;
 
-    /**
-     * set id.
-     * @param id id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * Get the id of the object.
-     * @return the id
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return this.id;
-    }
     /**
      * 
      * @return insert date
