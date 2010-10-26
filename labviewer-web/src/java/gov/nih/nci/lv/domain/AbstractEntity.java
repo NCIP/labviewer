@@ -76,12 +76,8 @@
  */
 package gov.nih.nci.lv.domain;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 
 
@@ -91,33 +87,13 @@ import javax.persistence.TemporalType;
  * @since 05/22/2008
  */
 @MappedSuperclass
-public class AbstractEntity  extends AbstractId  {
+public class AbstractEntity  extends AbstractDate  {
 
     private static final long serialVersionUID = 1234567890L;
 
-    private Date ctomInsertDt;
     private String ctomInsertUser;
-    private Date ctomUpdateDt;
     private String ctomUpdateUser;
 
-    /**
-     * 
-     * @return insert date
-     */
-    @Column(name = "CTOM_INSERT_DATE" , updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)    
-    public Date getCtomInsertDt() {
-        return ctomInsertDt;
-    }
-    /**
-     * 
-     * @param ctomInsertDt insert date
-     */
-    
-
-    public void setCtomInsertDt(Date ctomInsertDt) {
-        this.ctomInsertDt = ctomInsertDt;
-    }
 
     /**
      * 
@@ -136,22 +112,6 @@ public class AbstractEntity  extends AbstractId  {
         this.ctomInsertUser = ctomInsertUser;
     }
 
-    /**
-     * 
-     * @return ctomUpdateDt
-     */
-    @Column(name = "CTOM_UPDATE_DATE" , updatable = false)
-    public Date getCtomUpdateDt() {
-        return ctomUpdateDt;
-    }
-    
-    /**
-     * 
-     * @param ctomUpdateDt ctomUpdateDt
-     */
-    public void setCtomUpdateDt(Date ctomUpdateDt) {
-        this.ctomUpdateDt = ctomUpdateDt;
-    }
     /**
      * 
      * @return ctomUpdateUser
