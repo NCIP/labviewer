@@ -92,7 +92,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "PROTOCOL")
-public class Protocol extends AbstractEntity {
+public class Protocol extends AbstractUser {
 
     String nciIdentifier;
     String longTitleText;

@@ -91,6 +91,7 @@ public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
     private String stateCode;
     private String postalCode;
     private String countryCode;
+    private String telecomAddress;
 
     /**
      * 
@@ -191,6 +192,22 @@ public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
+    /**
+     * 
+     * @return telecomAddress
+     */
+    public String getTelecomAddress() {
+        return telecomAddress;
+    }
+    /**
+     * 
+     * @param telecomAddress telecomAddress
+     */
+    public void setTelecomAddress(String telecomAddress) {
+        this.telecomAddress = telecomAddress;
+    }
+    
+    
     
 
 }

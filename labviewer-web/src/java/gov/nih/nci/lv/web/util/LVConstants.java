@@ -92,5 +92,8 @@ public class LVConstants {
     /** Lab Viewer help link . */
     public static final String HELP_LINK = "helpLink";
 
+    /** Lab Viewer help link . */
+    public static final String LOGGED_USER = "loggedUser";
 
+    
 }

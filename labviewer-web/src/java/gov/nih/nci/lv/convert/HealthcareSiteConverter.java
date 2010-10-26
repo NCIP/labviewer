@@ -96,6 +96,9 @@ public class HealthcareSiteConverter extends AbstractConverter<HealthcareSiteDto
         hc.setNciInstituteCode(dto.getNciInstituteCode());
         hc.setPostalCode(dto.getPostalCode());
         hc.setStreetAddress(dto.getStreetAddress());
+        hc.setTelecomAddress(dto.getTelecomAddress());
+        hc.setTelecomAddress(dto.getTelecomAddress());
+        hc.setCtomUpdateDate(dto.getCtomUpdateDate());
         return hc;
     }
 
@@ -109,6 +112,8 @@ public class HealthcareSiteConverter extends AbstractConverter<HealthcareSiteDto
         dto.setNciInstituteCode(bo.getNciInstituteCode());
         dto.setPostalCode(bo.getPostalCode());
         dto.setStreetAddress(bo.getStreetAddress());
+        dto.setTelecomAddress(bo.getTelecomAddress());
+        dto.setCtomUpdateDate(bo.getCtomUpdateDate());
         return dto;
     }
 

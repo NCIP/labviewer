@@ -74,59 +74,63 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package gov.nih.nci.lv.domain;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-
-
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * Base class for all domain classes.
- * @author Naveen Amiruddin
- * @since 05/22/2008
+ * Some of the tables have just ctom insert and upgate date only. So we are keeping these seperate classes.
+ * @author NAmiruddin
+ *
  */
 @MappedSuperclass
-public class AbstractEntity  extends AbstractDate  {
-
-    private static final long serialVersionUID = 1234567890L;
-
-    private String ctomInsertUser;
-    private String ctomUpdateUser;
-
-
-    /**
-     * 
-     * @return ctomInsertUser
-     */
-    @Column(name = "CTOM_INSERT_USER")
-    public String getCtomInsertUser() {
-        return ctomInsertUser;
-    }
-
-    /**
-     * 
-     * @param ctomInsertUser ctomInsertUser
-     */
-    public void setCtomInsertUser(String ctomInsertUser) {
-        this.ctomInsertUser = ctomInsertUser;
-    }
-
-    /**
-     * 
-     * @return ctomUpdateUser
-     */
-    @Column(name = "CTOM_UPDATE_USER" , updatable = false)
-    public String getCtomUpdateUser() {
-        return ctomUpdateUser;
-    }
-    /**
-     * 
-     * @param ctomUpdateUser ctomUpdateUser
-     */
-    public void setCtomUpdateUser(String ctomUpdateUser) {
-        this.ctomUpdateUser = ctomUpdateUser;
-    }
-
+public class AbstractDate extends AbstractId  {
     
+    private Date ctomInsertDate;
+    private Date ctomUpdateDate;
+    /**
+     * 
+     * @return insert date
+     */
+    @Column(name = "CTOM_INSERT_DATE" , updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)    
+    public Date getCtomInsertDate() {
+        return ctomInsertDate;
+    }
+    /**
+     * 
+     * @param ctomInsertDate insert date
+     */
+    
+
+    public void setCtomInsertDate(Date ctomInsertDate) {
+        this.ctomInsertDate = ctomInsertDate;
+    }
+
+    /**
+     * 
+     * @return ctomUpdateDt
+     */
+    @Column(name = "CTOM_UPDATE_DATE" , updatable = false)
+    public Date getCtomUpdateDate() {
+        return ctomUpdateDate;
+    }
+    
+    /**
+     * 
+     * @param ctomUpdateDate ctomUpdateDate
+     */
+    public void setCtomUpdateDate(Date ctomUpdateDate) {
+        this.ctomUpdateDate = ctomUpdateDate;
+    }
+    
+    
+
+
 }

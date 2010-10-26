@@ -178,6 +178,7 @@
 				   <include name="ApplicationResources.properties"/>
 				   <include name="displaytag.properties"/>
 				   <include name="client-config.wsdd"/>
+				   <include name="struts.properties"/>
 				   <include name="struts.xml"/>
 				 </patternset>
 			</fileset>
@@ -239,6 +240,7 @@
 				   <include name="ApplicationResources.properties"/>
 				   <include name="displaytag.properties"/>
 				   <include name="client-config.wsdd"/>
+				   <include name="struts.properties"/>
 				   <include name="struts.xml"/>
 				 </patternset>
 			</fileset>
@@ -252,7 +254,14 @@
                 <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
             </filterset>
 		</copy>
-		
+		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" filtering="true">
+			  <filterset begintoken="@" endtoken="@">
+				<filter token="cert.path" value="${cert.path}" />
+				<filter token="key.path" value="${key.path}" />
+				<filter token="cas_server" value="${websso.cas.server}" />			
+			   </filterset>
+		</copy>		
 		
 	</target>
 
