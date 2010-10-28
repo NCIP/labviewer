@@ -2,7 +2,9 @@
     "-//W3C//DTD XHTML 1.1 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<%@ include file="/WEB-INF/jsp/common/taglibs.jsp" %>
+<%@ taglib uri="/struts-tags" prefix="s" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><fmt:message key="studyProtocol.search.title"/></title>
@@ -15,6 +17,10 @@
         function showOrganization(pid) {
             showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '', 'Organization');
         }         
+        function showParticipant(pid) {
+            document.studySearchFrom.action = "studyparticipantlist.action?studyProtocolId="+pid;
+            document.studySearchFrom.submit();
+        }
         </script>
 </head>
 <body>
