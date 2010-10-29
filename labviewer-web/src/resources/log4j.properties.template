@@ -38,3 +38,8 @@ log4j.gov.nih.nci.security=INFO
 log4j.logger.com.mchange=INFO
 log4j.logger.org.displaytag=INFO
 log4j.logger.gov.nih.nci.system.util=INFO
+
+# removing unwanted debug messages
+log4j.logger.com.opensymphony.xwork2=INFO
+log4j.logger.freemarker=INFO
+log4j.logger.org.apache.struts2=INFO

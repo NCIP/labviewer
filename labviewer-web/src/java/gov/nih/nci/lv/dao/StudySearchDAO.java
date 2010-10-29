@@ -79,21 +79,20 @@
 
 package gov.nih.nci.lv.dao;
 
+import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.Protocol;
+import gov.nih.nci.lv.domain.ProtocolStatus;
 import gov.nih.nci.lv.dto.StudySearchDto;
-import gov.nih.nci.lv.web.util.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 /**
  * @author Naveen Amiruddin
  */
-public class StudySearchDAO {
+public class StudySearchDAO extends AbstractDAO {
     
 	private static Logger logger = Logger.getLogger(StudySearchDAO.class);
 	
@@ -107,32 +106,35 @@ public class StudySearchDAO {
 	 */
 	public List<StudySearchDto> search(StudySearchDto studySearchDto) 
 	throws Exception {
-	    Session session = HibernateUtil.getCurrentSession();
-	    session.beginTransaction();
 	    String nciIdentifier = studySearchDto.getNciIdentifier();
 	    String shortTitle = studySearchDto.getShortTitle();
+	    Long id = studySearchDto.getId();
 	    List<StudySearchDto> ssDtos = new ArrayList<StudySearchDto>();
-	    StringBuffer hql = new StringBuffer();
-	    hql.append(" select p from Protocol as p where 1 = 1 ");
+	    StringBuffer  hql = new StringBuffer(" Select i , p , ps  from Identifier as i ");
+	    hql.append("left outer join i.protocol as p ");
+	    hql.append(" join p.protocolStatuses as ps where 1 = 1 ");
         if (nciIdentifier != null) {
             hql.append(" and upper(p.nciIdentifier) like '%" + nciIdentifier.toUpperCase() + "%'");
         }
         if (shortTitle != null) {
             hql.append(" and upper(p.shortTitleText) like '%" + shortTitle.toUpperCase() + "%'");
         }
-        Query query = null;
-        System.out.println(" sql = " + hql);
-        query = session.createQuery(hql.toString());
-        List<Protocol> protocols = query.list();
-        for (Protocol p : protocols) {
-            StudySearchDto ssDto = new StudySearchDto();
-            ssDto.setId(p.getId());
-            ssDto.setShortTitle(p.getShortTitleText());
-            ssDto.setNciIdentifier(p.getShortTitleText());
-            ssDtos.add(ssDto);
+        if (id != null) {
+            hql.append(" and id = " + id);
         }
-        System.out.println(" prot = " + protocols.size());
-        session.getTransaction().commit();
+        hql.append(" and ( ps.id in (select max(id) from ProtocolStatus as ps1 "
+                + "                where ps.protocol = ps1.protocol )"
+                + " or ps.id is null ) ");
+        List<Object> obs = getSession().createQuery(hql.toString()).list();
+        Object[] data = null;
+        logger.info(" records retreived  size= " + obs.size());
+        for (Object d : obs) {
+            data = (Object[]) d;
+            Identifier identifier = (Identifier) data[0];
+            Protocol protocol = (Protocol) data[1];
+            ProtocolStatus ps = (ProtocolStatus) data[2];
+            ssDtos.add(new StudySearchDto(protocol, identifier , ps));
+        }
 	    return ssDtos;
 	}
 	

@@ -76,90 +76,38 @@
 *
 *
 */
+
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.lv.dao.StudyParticipantSearchDOA;
+import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.util.LVConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
- * 
- * @author NAmiruddin
+ * Action class for study participant.
+ * @author Naveen Amiruddin
  *
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
+public class StudyParticipantAction extends LabViewerAction {
     
-    private static final long serialVersionUID = 1234573645L;
-    private Long studyProtocolId = null;
-    private List<StudyParticipantSearchDto> spsDto = new ArrayList<StudyParticipantSearchDto>();
-    
-    /**
-     * {@inheritDoc}
-     */    
-    public void prepare() {
-        
-    }
-    /**
-     * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        ServletActionContext.getRequest().setAttribute("results", null);
-        return SUCCESS;
-    }
-
-    /**
-    *
-    * @return studyProtocolId
-    */
-   public Long getStudyProtocolId() {
-       return studyProtocolId;
-   }
-
-   /**
-    *
-    * @param studyProtocolId studyProtocolId
-    */
-   public void setStudyProtocolId(Long studyProtocolId) {
-       this.studyProtocolId = studyProtocolId;
-   }
-   
-
-   /**
-    * 
-    * @return spsDto
-    */
-    public List<StudyParticipantSearchDto> getSpsDto() {
-        return spsDto;
-    }
     /**
      * 
-     * @param spsDto spsDto
+     * @return Success
+     * @throws Exception on error
      */
-    public void setSpsDto(List<StudyParticipantSearchDto> spsDto) {
-        this.spsDto = spsDto;
+    public String list() throws Exception {
+        System.out.println("list.");
+        System.out.println("protocol id " + getStudyProtocolId());
+        // retrieve the protocol and set it in the session to be used later
+        getSession().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
+                new StudySearchDAO().search(new StudySearchDto(getStudyProtocolId())).get(0));
+        new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(getStudyProtocolId()));
+        getRequest().setAttribute(LVConstants.RESULTS, 
+                new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(getStudyProtocolId())));
+        return SUCCESS;
+        
     }
-    /**
-     * return the current http session.
-     * @return HttpSession
-     */
-    public HttpSession getSession() {
-        return ServletActionContext.getRequest().getSession();
-    }
-   
-   
-    /**
-     * return the current http session.
-     * @return HttpServletRequest
-     */
-    public HttpServletRequest getRequest() {
-        return ServletActionContext.getRequest();
-    }    
+
 }

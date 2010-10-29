@@ -76,90 +76,57 @@
 *
 *
 */
-package gov.nih.nci.lv.web.action;
+package gov.nih.nci.lv.dao;
 
+import gov.nih.nci.lv.domain.HealthcareSite;
+import gov.nih.nci.lv.domain.Identifier;
+import gov.nih.nci.lv.domain.Participant;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
  * 
- * @author NAmiruddin
+ * @author Naveen Amiruddin
  *
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
+public class StudyParticipantSearchDOA extends AbstractDAO {
+
+    private static Logger logger = Logger.getLogger(StudyParticipantSearchDOA.class);
     
-    private static final long serialVersionUID = 1234573645L;
-    private Long studyProtocolId = null;
-    private List<StudyParticipantSearchDto> spsDto = new ArrayList<StudyParticipantSearchDto>();
-    
-    /**
-     * {@inheritDoc}
-     */    
-    public void prepare() {
-        
-    }
-    /**
-     * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        ServletActionContext.getRequest().setAttribute("results", null);
-        return SUCCESS;
-    }
 
     /**
-    *
-    * @return studyProtocolId
-    */
-   public Long getStudyProtocolId() {
-       return studyProtocolId;
-   }
-
-   /**
-    *
-    * @param studyProtocolId studyProtocolId
-    */
-   public void setStudyProtocolId(Long studyProtocolId) {
-       this.studyProtocolId = studyProtocolId;
-   }
-   
-
-   /**
-    * 
-    * @return spsDto
-    */
-    public List<StudyParticipantSearchDto> getSpsDto() {
-        return spsDto;
-    }
-    /**
+     * SearchObjects retrieves the user entered search criteria and returns the study search results.
      * 
-     * @param spsDto spsDto
+     * @param spsDto study participant search dto
+     * @return searchResult
+     * @throws Exception on error
      */
-    public void setSpsDto(List<StudyParticipantSearchDto> spsDto) {
-        this.spsDto = spsDto;
+    
+    public List<StudyParticipantSearchDto> search(StudyParticipantSearchDto spsDto) 
+    throws Exception {
+        List<StudyParticipantSearchDto> spsDtos = new ArrayList<StudyParticipantSearchDto>();
+        StringBuffer hql = new StringBuffer(" Select i , part , hc from Identifier as i ");
+        hql.append(" left outer join i.studyParticipantAssignment as spa ");
+        hql.append(" join spa.studySite as ss ");
+        hql.append(" join ss.healthcareSite as hc ");
+        hql.append(" join spa.participant as part ");
+        hql.append(" join ss.protocol as p where p.id = " + spsDto.getProtocolIdentifier());
+        hql.append(" and i.studyParticipantAssignment is not null");
+        List<Object> obs = getSession().createQuery(hql.toString()).list();
+        Object[] data = null;
+        System.out.println(" hc1  size= " + obs.size());
+        for (Object d : obs) {
+            data = (Object[]) d;
+            Identifier identifier = (Identifier) data[0];
+            Participant participant = (Participant) data[1];
+            HealthcareSite healtcareSite = (HealthcareSite) data[2];
+            spsDtos.add(new StudyParticipantSearchDto(identifier, participant, healtcareSite));
+        }
+        
+        return spsDtos;
     }
-    /**
-     * return the current http session.
-     * @return HttpSession
-     */
-    public HttpSession getSession() {
-        return ServletActionContext.getRequest().getSession();
-    }
-   
-   
-    /**
-     * return the current http session.
-     * @return HttpServletRequest
-     */
-    public HttpServletRequest getRequest() {
-        return ServletActionContext.getRequest();
-    }    
 }

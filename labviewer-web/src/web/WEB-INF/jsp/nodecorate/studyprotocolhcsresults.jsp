@@ -1,6 +1,5 @@
-<%@ include file="/WEB-INF/jsp/common/taglibs.jsp" %>
-<%@ include file="/WEB-INF/jsp/common/includejs.jsp" %>
-<%@ include file="/WEB-INF/jsp/common/includecss.jsp" %>
+<link href="<%=request.getContextPath()%>/styles/style.css" rel="stylesheet" type="text/css" media="all"/>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 <s:form name="hcsResult">
     <s:actionerror/>
     <display:table class="data"  sort="list" pagesize="100" id="row"  name="results"  export="true">

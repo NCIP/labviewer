@@ -74,166 +74,73 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.lv.dto;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
+package gov.nih.nci.lv.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 /**
- * dto for healthcaresite.
- * @author NAmiruddin
- *
+ * Participant class.
  */
-public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
+@Entity
+public class Participant extends AbstractDate {
     
-    private String nciInstituteCode;
-    private String name;
-    private String streetAddress;
-    private String city;
-    private String stateCode;
-    private String postalCode;
-    private String countryCode;
-    private String telecomAddress;
-    
+    private String firstName;
+    private String lastName;
+    private List<StudyParticipantAssignment> spassignments = new ArrayList<StudyParticipantAssignment>();
     /**
      * 
+     * @return firstName
      */
-    public HealthcareSiteDto() {
+    @Column(name = "FIRST_NAME")
+    public String getFirstName() {
+        return firstName;
     }
-    
+    /**
+     * 
+     * @param firstName  firstName
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    /**
+     * 
+     * @return lastName
+     */
+    @Column(name = "LAST_NAME")
+    public String getLastName() {
+        return lastName;
+    }
+    /**
+     * 
+     * @param lastName lastName
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    /**
+     * 
+     * @return spassignments
+     */
+    @OneToMany(mappedBy = "participant")
+    public List<StudyParticipantAssignment> getSpassignments() {
+        return spassignments;
+    }
+    /**
+     * 
+     * @param spassignments spassignments
+     */
+    public void setSpassignments(List<StudyParticipantAssignment> spassignments) {
+        this.spassignments = spassignments;
+    }
 
-    /**
-     * 
-     * @param healthcareSite healthcareSite
-     */
-    public HealthcareSiteDto(HealthcareSite healthcareSite) {
-        super();
-        this.setId(healthcareSite.getId());
-        this.setName(healthcareSite.getName());
-        this.setCity(healthcareSite.getCity());
-        this.setCountryCode(healthcareSite.getCountryCode());
-        this.setNciInstituteCode(healthcareSite.getNciInstituteCode());
-        this.setPostalCode(healthcareSite.getPostalCode());
-        this.setStreetAddress(healthcareSite.getStreetAddress());
-        this.setTelecomAddress(healthcareSite.getTelecomAddress());
-        this.setCtomUpdateDate(healthcareSite.getCtomUpdateDate());        
-    }
-
-    /**
-     * 
-     * @return nciInstituteCode
-     */
-    public String getNciInstituteCode() {
-        return nciInstituteCode;
-    }
-    /**
-     * 
-     * @param nciInstituteCode nciInstituteCode
-     */
-    public void setNciInstituteCode(String nciInstituteCode) {
-        this.nciInstituteCode = nciInstituteCode;
-    }
-    /**
-     * 
-     * @return name
-     */
-
-    public String getName() {
-        return name;
-    }
-    /**
-     * 
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    /**
-     * 
-     * @return streetAddress
-     */
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-    /**
-     * 
-     * @param streetAddress streetAddress
-     */
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-    /**
-     * 
-     * @return city
-     */
-    public String getCity() {
-        return city;
-    }
-    /**
-     * 
-     * @param city city
-     */
-    public void setCity(String city) {
-        this.city = city;
-    }
-    /**
-     * 
-     * @return stateCode
-     */
-    public String getStateCode() {
-        return stateCode;
-    }
-    /**
-     * 
-     * @param stateCode stateCode
-     */
-     public void setStateCode(String stateCode) {
-        this.stateCode = stateCode;
-    }
-    /**
-     * 
-     * @return postalCode
-     */
-    public String getPostalCode() {
-        return postalCode;
-    }
-    /**
-     * 
-     * @param postalCode postalCode
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-    /**
-     * 
-     * @return countryCode
-     */
-    public String getCountryCode() {
-        return countryCode;
-    }
-    /**
-     * 
-     * @param countryCode countryCode
-     */
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-    /**
-     * 
-     * @return telecomAddress
-     */
-    public String getTelecomAddress() {
-        return telecomAddress;
-    }
-    /**
-     * 
-     * @param telecomAddress telecomAddress
-     */
-    public void setTelecomAddress(String telecomAddress) {
-        this.telecomAddress = telecomAddress;
-    }
     
     
     
-
+    
 }

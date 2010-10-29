@@ -11,10 +11,13 @@
             <result>/WEB-INF/jsp/welcome.jsp</result>
         </action>    
 		<action name="studyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
-			<result>/WEB-INF/jsp/studyprotocollist.jsp</result>    
+			<result>/WEB-INF/jsp/protocol/list.jsp</result>    
 		</action>
         <action name="ajaxHealthcareSite*" class="gov.nih.nci.lv.web.action.HealthcareSiteAction" method="{1}">
             <result>/WEB-INF/jsp/nodecorate/studyprotocolhcsresults.jsp</result>
         </action>		
+        <action name="studyparticipant*" class="gov.nih.nci.lv.web.action.StudyParticipantAction" method="{1}">
+            <result>/WEB-INF/jsp/studyparticipantresult.jsp</result>
+        </action>   
     </package>
 </struts>

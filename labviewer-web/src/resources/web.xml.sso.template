@@ -56,7 +56,7 @@
          <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-<!--
+
 	<filter>
 		<filter-name>CAS Client Info Logging Filter</filter-name>
 		<filter-class>org.inspektr.common.web.ClientInfoThreadLocalFilter</filter-class>
@@ -156,6 +156,7 @@
 		<url-pattern>/logout/*</url-pattern>
 	</filter-mapping>
 
+<!--
 	<filter-mapping>
     	<filter-name>ResponseOverrideFilter</filter-name>
     	<url-pattern>*.do</url-pattern>
@@ -166,7 +167,7 @@
   	</filter-mapping>
 -->
 
-<!--
+
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -178,7 +179,7 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
--->
+
 
     <!-- Servlets -->
     <servlet>
