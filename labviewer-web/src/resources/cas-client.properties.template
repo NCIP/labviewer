@@ -13,4 +13,4 @@ cas.server.renew=false
 logout.landing.url=www.google.com
 
 cas.server.url=https://@WEBSSO.SERVER@:@WEBSSO.SERVER.HTTPS.PORT@/webssoserver/
-cas.client.service=https://@WEBSSO.CLIENT.SERVER@:@WEBSSO.CLIENT.HTTP.PORT@/ctomlabviewer
+cas.client.service=https://@WEBSSO.CLIENT.SERVER@:@WEBSSO.CLIENT.HTTP.PORT@/labviewer

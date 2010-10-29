@@ -74,165 +74,60 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * dto for healthcaresite.
+ * Protocol Status class.
  * @author NAmiruddin
  *
  */
-public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
+@Entity
+@Table(name = "PROTOCOL_STATUS")
+public class ProtocolStatus  extends AbstractDate {
     
-    private String nciInstituteCode;
-    private String name;
-    private String streetAddress;
-    private String city;
-    private String stateCode;
-    private String postalCode;
-    private String countryCode;
-    private String telecomAddress;
-    
-    /**
-     * 
-     */
-    public HealthcareSiteDto() {
-    }
-    
+    private String statusCode;
+    private Protocol protocol;
 
     /**
      * 
-     * @param healthcareSite healthcareSite
+     * @return statusCode
      */
-    public HealthcareSiteDto(HealthcareSite healthcareSite) {
-        super();
-        this.setId(healthcareSite.getId());
-        this.setName(healthcareSite.getName());
-        this.setCity(healthcareSite.getCity());
-        this.setCountryCode(healthcareSite.getCountryCode());
-        this.setNciInstituteCode(healthcareSite.getNciInstituteCode());
-        this.setPostalCode(healthcareSite.getPostalCode());
-        this.setStreetAddress(healthcareSite.getStreetAddress());
-        this.setTelecomAddress(healthcareSite.getTelecomAddress());
-        this.setCtomUpdateDate(healthcareSite.getCtomUpdateDate());        
+    @Column(name = "STATUS_CODE")
+    public String getStatusCode() {
+        return statusCode;
     }
 
     /**
      * 
-     * @return nciInstituteCode
+     * @param statusCode statusCode
      */
-    public String getNciInstituteCode() {
-        return nciInstituteCode;
-    }
-    /**
-     * 
-     * @param nciInstituteCode nciInstituteCode
-     */
-    public void setNciInstituteCode(String nciInstituteCode) {
-        this.nciInstituteCode = nciInstituteCode;
-    }
-    /**
-     * 
-     * @return name
-     */
-
-    public String getName() {
-        return name;
-    }
-    /**
-     * 
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    /**
-     * 
-     * @return streetAddress
-     */
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-    /**
-     * 
-     * @param streetAddress streetAddress
-     */
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-    /**
-     * 
-     * @return city
-     */
-    public String getCity() {
-        return city;
-    }
-    /**
-     * 
-     * @param city city
-     */
-    public void setCity(String city) {
-        this.city = city;
-    }
-    /**
-     * 
-     * @return stateCode
-     */
-    public String getStateCode() {
-        return stateCode;
-    }
-    /**
-     * 
-     * @param stateCode stateCode
-     */
-     public void setStateCode(String stateCode) {
-        this.stateCode = stateCode;
-    }
-    /**
-     * 
-     * @return postalCode
-     */
-    public String getPostalCode() {
-        return postalCode;
-    }
-    /**
-     * 
-     * @param postalCode postalCode
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-    /**
-     * 
-     * @return countryCode
-     */
-    public String getCountryCode() {
-        return countryCode;
-    }
-    /**
-     * 
-     * @param countryCode countryCode
-     */
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-    /**
-     * 
-     * @return telecomAddress
-     */
-    public String getTelecomAddress() {
-        return telecomAddress;
-    }
-    /**
-     * 
-     * @param telecomAddress telecomAddress
-     */
-    public void setTelecomAddress(String telecomAddress) {
-        this.telecomAddress = telecomAddress;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
     
+    /**
+     * 
+     * @return protocol
+     */
+    @ManyToOne
+    @JoinColumn(name = "PROTOCOL_ID", updatable = false)    
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    /**
+     * 
+     * @param protocol protocol
+     */
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
     
     
 

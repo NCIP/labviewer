@@ -76,90 +76,52 @@
 *
 *
 */
-package gov.nih.nci.lv.web.action;
 
-import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+package gov.nih.nci.lv.dao;
 
-import java.util.ArrayList;
+import gov.nih.nci.lv.convert.AbstractConverter;
+
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
 
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
- * 
+ * A Base DAO class.
  * @author NAmiruddin
- *
+ * @param <BO> domain object
+ * @param <DTO> dto object
+ * @param <CONVERTER> converter object
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
+public class BaseDAO <BO, DTO , CONVERTER extends AbstractConverter<DTO, BO>>  extends AbstractDAO { 
     
-    private static final long serialVersionUID = 1234573645L;
-    private Long studyProtocolId = null;
-    private List<StudyParticipantSearchDto> spsDto = new ArrayList<StudyParticipantSearchDto>();
+    private static final Logger LOG  = Logger.getLogger(AbstractDAO.class);
+
     
-    /**
-     * {@inheritDoc}
-     */    
-    public void prepare() {
-        
-    }
-    /**
-     * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        ServletActionContext.getRequest().setAttribute("results", null);
-        return SUCCESS;
-    }
-
-    /**
-    *
-    * @return studyProtocolId
-    */
-   public Long getStudyProtocolId() {
-       return studyProtocolId;
-   }
-
-   /**
-    *
-    * @param studyProtocolId studyProtocolId
-    */
-   public void setStudyProtocolId(Long studyProtocolId) {
-       this.studyProtocolId = studyProtocolId;
-   }
-   
-
-   /**
-    * 
-    * @return spsDto
-    */
-    public List<StudyParticipantSearchDto> getSpsDto() {
-        return spsDto;
-    }
     /**
      * 
-     * @param spsDto spsDto
+     * @param sql sql for execution
+     * @return list of domain objs
      */
-    public void setSpsDto(List<StudyParticipantSearchDto> spsDto) {
-        this.spsDto = spsDto;
+    List<BO> executeSql(String sql) {
+        LOG.info("sql " + sql);
+        Query query = getSession().createQuery(sql);
+        List<BO> bos = query.list();
+        LOG.debug("total retrieved " + bos.size());
+        return bos;
     }
+    
     /**
-     * return the current http session.
-     * @return HttpSession
+     * 
+     * @param bos domian
+     * @param converter dto converter
+     * @return list of dtos
      */
-    public HttpSession getSession() {
-        return ServletActionContext.getRequest().getSession();
+    List<DTO> convertToDto(List<BO> bos , CONVERTER converter) {
+        return converter.convertToDTOs(bos);
     }
-   
-   
-    /**
-     * return the current http session.
-     * @return HttpServletRequest
-     */
-    public HttpServletRequest getRequest() {
-        return ServletActionContext.getRequest();
-    }    
+
+    
 }
+
+

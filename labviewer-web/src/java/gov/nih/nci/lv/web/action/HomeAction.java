@@ -79,14 +79,14 @@
 
 package gov.nih.nci.lv.web.action;
 
-import gov.nih.nci.lv.web.util.LVConstants;
+import gov.nih.nci.lv.util.LVConstants;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 
 /**
- * This intial class, gets the value from the LabViewer System table and puts the value in the session.
+ * This initial class, gets the value from the LabViewer System table and puts the value in the session.
  * @author NAmiruddin
  *
  */

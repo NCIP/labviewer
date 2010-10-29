@@ -16,7 +16,7 @@ public class StudySite extends AbstractId {
     
     /** The study protocol. */
     private Protocol protocol;
-    /** The study protocol. */
+    /** The healthcareSite. */
     private HealthcareSite healthcareSite;
     /**
      * 

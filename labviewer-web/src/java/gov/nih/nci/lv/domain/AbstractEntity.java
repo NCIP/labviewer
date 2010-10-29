@@ -74,166 +74,99 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS caBIG SOFTWARE, EVEN
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 
 
 /**
- * dto for healthcaresite.
- * @author NAmiruddin
- *
+ * Base class for all domain classes.
+ * @author Naveen Amiruddin
+ * @since 05/22/2008
  */
-public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
-    
-    private String nciInstituteCode;
-    private String name;
-    private String streetAddress;
-    private String city;
-    private String stateCode;
-    private String postalCode;
-    private String countryCode;
-    private String telecomAddress;
-    
-    /**
-     * 
-     */
-    public HealthcareSiteDto() {
-    }
-    
+@MappedSuperclass
+public class AbstractEntity  extends AbstractId  {
+
+    private static final long serialVersionUID = 1234567890L;
+
+    private Date ctomInsertDt;
+    private String ctomInsertUser;
+    private Date ctomUpdateDt;
+    private String ctomUpdateUser;
 
     /**
      * 
-     * @param healthcareSite healthcareSite
+     * @return insert date
      */
-    public HealthcareSiteDto(HealthcareSite healthcareSite) {
-        super();
-        this.setId(healthcareSite.getId());
-        this.setName(healthcareSite.getName());
-        this.setCity(healthcareSite.getCity());
-        this.setCountryCode(healthcareSite.getCountryCode());
-        this.setNciInstituteCode(healthcareSite.getNciInstituteCode());
-        this.setPostalCode(healthcareSite.getPostalCode());
-        this.setStreetAddress(healthcareSite.getStreetAddress());
-        this.setTelecomAddress(healthcareSite.getTelecomAddress());
-        this.setCtomUpdateDate(healthcareSite.getCtomUpdateDate());        
+    @Column(name = "CTOM_INSERT_DATE" , updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)    
+    public Date getCtomInsertDt() {
+        return ctomInsertDt;
+    }
+    /**
+     * 
+     * @param ctomInsertDt insert date
+     */
+    
+
+    public void setCtomInsertDt(Date ctomInsertDt) {
+        this.ctomInsertDt = ctomInsertDt;
     }
 
     /**
      * 
-     * @return nciInstituteCode
+     * @return ctomInsertUser
      */
-    public String getNciInstituteCode() {
-        return nciInstituteCode;
+    @Column(name = "CTOM_INSERT_USER")
+    public String getCtomInsertUser() {
+        return ctomInsertUser;
     }
-    /**
-     * 
-     * @param nciInstituteCode nciInstituteCode
-     */
-    public void setNciInstituteCode(String nciInstituteCode) {
-        this.nciInstituteCode = nciInstituteCode;
-    }
-    /**
-     * 
-     * @return name
-     */
 
-    public String getName() {
-        return name;
-    }
     /**
      * 
-     * @param name name
+     * @param ctomInsertUser ctomInsertUser
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setCtomInsertUser(String ctomInsertUser) {
+        this.ctomInsertUser = ctomInsertUser;
     }
-    /**
-     * 
-     * @return streetAddress
-     */
-    public String getStreetAddress() {
-        return streetAddress;
-    }
-    /**
-     * 
-     * @param streetAddress streetAddress
-     */
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
-    }
-    /**
-     * 
-     * @return city
-     */
-    public String getCity() {
-        return city;
-    }
-    /**
-     * 
-     * @param city city
-     */
-    public void setCity(String city) {
-        this.city = city;
-    }
-    /**
-     * 
-     * @return stateCode
-     */
-    public String getStateCode() {
-        return stateCode;
-    }
-    /**
-     * 
-     * @param stateCode stateCode
-     */
-     public void setStateCode(String stateCode) {
-        this.stateCode = stateCode;
-    }
-    /**
-     * 
-     * @return postalCode
-     */
-    public String getPostalCode() {
-        return postalCode;
-    }
-    /**
-     * 
-     * @param postalCode postalCode
-     */
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-    /**
-     * 
-     * @return countryCode
-     */
-    public String getCountryCode() {
-        return countryCode;
-    }
-    /**
-     * 
-     * @param countryCode countryCode
-     */
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-    /**
-     * 
-     * @return telecomAddress
-     */
-    public String getTelecomAddress() {
-        return telecomAddress;
-    }
-    /**
-     * 
-     * @param telecomAddress telecomAddress
-     */
-    public void setTelecomAddress(String telecomAddress) {
-        this.telecomAddress = telecomAddress;
-    }
-    
-    
-    
 
+    /**
+     * 
+     * @return ctomUpdateDt
+     */
+    @Column(name = "CTOM_UPDATE_DATE" , updatable = false)
+    public Date getCtomUpdateDt() {
+        return ctomUpdateDt;
+    }
+    
+    /**
+     * 
+     * @param ctomUpdateDt ctomUpdateDt
+     */
+    public void setCtomUpdateDt(Date ctomUpdateDt) {
+        this.ctomUpdateDt = ctomUpdateDt;
+    }
+    /**
+     * 
+     * @return ctomUpdateUser
+     */
+    @Column(name = "CTOM_UPDATE_USER" , updatable = false)
+    public String getCtomUpdateUser() {
+        return ctomUpdateUser;
+    }
+    /**
+     * 
+     * @param ctomUpdateUser ctomUpdateUser
+     */
+    public void setCtomUpdateUser(String ctomUpdateUser) {
+        this.ctomUpdateUser = ctomUpdateUser;
+    }
+
+    
 }

@@ -90,7 +90,7 @@ import java.util.List;
  * @author Naveen Amiruddin
  *
  */
-public class HealthcareSiteDAO  extends AbstractDAO<HealthcareSite, HealthcareSiteDto , HealthcareSiteConverter> {
+public class HealthcareSiteDAO  extends BaseDAO<HealthcareSite, HealthcareSiteDto , HealthcareSiteConverter> {
     
 
     /**
@@ -98,12 +98,10 @@ public class HealthcareSiteDAO  extends AbstractDAO<HealthcareSite, HealthcareSi
      * @param protocol protocol
      * @return list of healtcareSites
      */
-
     public List<HealthcareSiteDto> getHealtcareSitesByStudyProtocol(Protocol protocol) {
         StringBuffer hql = new StringBuffer(" select distinct h from HealthcareSite as h ");
         hql.append("join h.studySites as ss join ss.protocol as p where p.id = " + protocol.getId());
-        List<HealthcareSite> hcs =  super.executeSql(hql.toString());
-        return super.convertToDto(hcs, new HealthcareSiteConverter());
+        return convertToDto(executeSql(hql.toString()) , new HealthcareSiteConverter());
     }
 
 }

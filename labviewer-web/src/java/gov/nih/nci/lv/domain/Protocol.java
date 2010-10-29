@@ -94,11 +94,12 @@ import javax.persistence.Table;
 @Table(name = "PROTOCOL")
 public class Protocol extends AbstractUser {
 
-    String nciIdentifier;
-    String longTitleText;
-    String shortTitleText;
+    private String nciIdentifier;
+    private String longTitleText;
+    private String shortTitleText;
+    private String phaseCode;
     private List<StudySite> studySites = new ArrayList<StudySite>();
-    
+    private List<ProtocolStatus> protocolStatuses = new ArrayList<ProtocolStatus>();
     /**
      * 
      * @return nciIdentifier
@@ -147,6 +148,21 @@ public class Protocol extends AbstractUser {
     
     /**
      * 
+     * @return phaseCode
+     */
+    @Column(name = "PHASE_CODE")
+    public String getPhaseCode() {
+        return phaseCode;
+    }
+    /**
+     * 
+     * @param phaseCode phaseCode
+     */
+    public void setPhaseCode(String phaseCode) {
+        this.phaseCode = phaseCode;
+    }
+    /**
+     * 
      * @return studySites
      */
     @OneToMany(mappedBy = "protocol")
@@ -160,5 +176,20 @@ public class Protocol extends AbstractUser {
     public void setStudySites(List<StudySite> studySites) {
         this.studySites = studySites;
     }
-    
+    /**
+     * 
+     * @return protocolStatuses
+     */
+    @OneToMany(mappedBy = "protocol")
+    public List<ProtocolStatus> getProtocolStatuses() {
+        return protocolStatuses;
+    }
+    /**
+     * 
+     * @param protocolStatuses protocolStatuses
+     */
+    @OneToMany(mappedBy = "protocol")
+    public void setProtocolStatuses(List<ProtocolStatus> protocolStatuses) {
+        this.protocolStatuses = protocolStatuses;
+    }
 }
