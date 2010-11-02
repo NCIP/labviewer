@@ -80,6 +80,7 @@
 package gov.nih.nci.lv.dao;
 
 import gov.nih.nci.lv.convert.AbstractConverter;
+import gov.nih.nci.lv.domain.Protocol;
 
 import java.util.List;
 
@@ -93,7 +94,7 @@ import org.hibernate.Query;
  * @param <DTO> dto object
  * @param <CONVERTER> converter object
  */
-public class BaseDAO <BO, DTO , CONVERTER extends AbstractConverter<DTO, BO>>  extends AbstractDAO { 
+public abstract class BaseDAO <BO, DTO , CONVERTER extends AbstractConverter<DTO, BO>>  extends AbstractDAO { 
     
     private static final Logger LOG  = Logger.getLogger(AbstractDAO.class);
 
@@ -120,6 +121,13 @@ public class BaseDAO <BO, DTO , CONVERTER extends AbstractConverter<DTO, BO>>  e
     List<DTO> convertToDto(List<BO> bos , CONVERTER converter) {
         return converter.convertToDTOs(bos);
     }
+    
+    /**
+     * 
+     * @param protocol protocol
+     * @return list of dtos
+     */
+    public abstract List<DTO> getByStudyProtocol(Protocol protocol);
 
     
 }

@@ -19,13 +19,23 @@
             document.studySearchFrom.submit();
         }
         function showOrganization(pid) {
-            showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '1', 'Organization');
+            showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '', 'Healthcare Sites');
+        }         
+        function showInvestigator(pid) {
+            showPopup('ajaxInvestigatorview.action?studyProtocolId='+pid, '', 'Investigators');
+        }         
+
+        function showProtocol(pid) {
+            showPopup('ajaxStudyProtocolview.action?studyProtocolId='+pid, '', 'Study Details');
         }         
         function showParticipant(pid) {
             document.studySearchFrom.action = "studyparticipantlist.action?studyProtocolId="+pid;
             document.studySearchFrom.submit();
         }
-        
+        function resetValues() {
+            document.getElementById("shortTitle").value="";
+            document.getElementById("nciIdentifier").value="";
+        }        
         </script>
 </head>
 <body>
@@ -43,7 +53,7 @@
             <tr>
                 <td class="label"><fmt:message key="studyProtocol.identifier"/></label> </td>
                 <td>
-                    <s:textfield  name="ssDto.nciIdentifier"  id="studyIdentifier" style="width:200px"/>
+                    <s:textfield  name="ssDto.nciIdentifier"  id="nciIdentifier" style="width:200px"/>
                 </td>
             </tr>
 
@@ -64,8 +74,8 @@
         <c:when test="${results != null}">
             <h2>Search Results</h2>
             <jsp:include page="/WEB-INF/jsp/protocol/result.jsp"/>
-		</c:when>
-		</c:choose>
+        </c:when>
+        </c:choose>
    </s:form>
 
  </div>

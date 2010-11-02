@@ -78,7 +78,11 @@
 */
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.lv.dao.StudySearchDAO;
+import gov.nih.nci.lv.domain.Protocol;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.util.LVConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +126,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    public Long getStudyProtocolId() {
        return studyProtocolId;
    }
+   
+   /**
+    * 
+    * @return protocol
+    */
+   Protocol createProtocol() {
+       Protocol protocol = new Protocol();
+       protocol.setId(studyProtocolId);
+       return protocol;
+   }
 
    /**
     *
@@ -161,5 +175,10 @@ public class LabViewerAction extends ActionSupport implements Preparable {
      */
     public HttpServletRequest getRequest() {
         return ServletActionContext.getRequest();
-    }    
+    }   
+    
+    void setStudyProtocolInfo() throws Exception {
+        getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
+                new StudySearchDAO().search(new StudySearchDto(studyProtocolId)).get(0));
+    }
 }

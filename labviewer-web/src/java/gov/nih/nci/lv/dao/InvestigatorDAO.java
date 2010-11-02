@@ -78,30 +78,33 @@
 */
 package gov.nih.nci.lv.dao;
 
-import gov.nih.nci.lv.convert.HealthcareSiteConverter;
-import gov.nih.nci.lv.domain.HealthcareSite;
+import gov.nih.nci.lv.convert.AbstractConverter;
+import gov.nih.nci.lv.convert.InvestigatorConverter;
+import gov.nih.nci.lv.domain.Investigator;
 import gov.nih.nci.lv.domain.Protocol;
-import gov.nih.nci.lv.dto.HealthcareSiteDto;
+import gov.nih.nci.lv.dto.InvestigatorDto;
 
 import java.util.List;
 
 /**
- * DAO for healtcare site.
+ * DAO for Inv site.
  * @author Naveen Amiruddin
  *
  */
-public class HealthcareSiteDAO  extends BaseDAO<HealthcareSite, HealthcareSiteDto , HealthcareSiteConverter> {
+public class InvestigatorDAO extends 
+    BaseDAO<Investigator, InvestigatorDto, AbstractConverter<InvestigatorDto, Investigator> > {
+
+    @Override
+    public List<InvestigatorDto> getByStudyProtocol(Protocol protocol) {
+        StringBuffer hql = new StringBuffer(" select distinct i from Investigator i ");
+        hql.append("join i.studyInvestigators as p ");
+        hql.append("join p.protocol as p ");
+        hql.append("where p.id =  " + protocol.getId());
+        return convertToDto(executeSql(hql.toString()) , new InvestigatorConverter());
+
+    }
+
     
 
-    /**
-     * returns a list of healtcareSites for a given study.
-     * @param protocol protocol
-     * @return list of healtcareSites
-     */
-    public List<HealthcareSiteDto> getByStudyProtocol(Protocol protocol) {
-        StringBuffer hql = new StringBuffer(" select distinct h from HealthcareSite as h ");
-        hql.append("join h.studySites as ss join ss.protocol as p where p.id = " + protocol.getId());
-        return convertToDto(executeSql(hql.toString()) , new HealthcareSiteConverter());
-    }
 
 }

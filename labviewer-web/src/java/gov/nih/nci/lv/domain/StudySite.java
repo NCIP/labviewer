@@ -12,29 +12,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "STUDY_SITE")
-public class StudySite extends AbstractId {
+public class StudySite extends StudyProtocolId {
     
-    /** The study protocol. */
-    private Protocol protocol;
     /** The healthcareSite. */
     private HealthcareSite healthcareSite;
-    /**
-     * 
-     * @return protocol
-     */
-    @ManyToOne
-    @JoinColumn(name = "PROTOCOL_ID", updatable = false)    
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    /**
-     * 
-     * @param protocol protocol
-     */
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
-    }
     /**
      * 
      * @return healthcareSite

@@ -125,7 +125,6 @@ public class BindHibernateSession implements Filter {
      */
     public void init(FilterConfig arg0) throws ServletException {
      // no-op
-        System.out.println(" int session");
     }
 
 }

@@ -21,6 +21,7 @@
         <mapping class="gov.nih.nci.lv.domain.Participant" />
         <mapping class="gov.nih.nci.lv.domain.Identifier" />
         <mapping class="gov.nih.nci.lv.domain.ProtocolStatus" />
-        
+        <mapping class="gov.nih.nci.lv.domain.StudyInvestigator" />
+        <mapping class="gov.nih.nci.lv.domain.Investigator" />
     </session-factory>
 </hibernate-configuration>
