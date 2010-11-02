@@ -120,7 +120,7 @@ public class StudySearchDAO extends AbstractDAO {
             hql.append(" and upper(p.shortTitleText) like '%" + shortTitle.toUpperCase() + "%'");
         }
         if (id != null) {
-            hql.append(" and id = " + id);
+            hql.append(" and p.id = " + id);
         }
         hql.append(" and ( ps.id in (select max(id) from ProtocolStatus as ps1 "
                 + "                where ps.protocol = ps1.protocol )"

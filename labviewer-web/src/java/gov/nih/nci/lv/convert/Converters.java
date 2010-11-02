@@ -8,6 +8,7 @@ package gov.nih.nci.lv.convert;
 public class Converters {
 
     private static HealthcareSiteConverter hcs = new HealthcareSiteConverter();
+    private static InvestigatorConverter inv = new InvestigatorConverter();
     
     /**
      * @param clazz class
@@ -17,12 +18,13 @@ public class Converters {
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
     public static <TYPE extends AbstractConverter> TYPE get(Class<TYPE> clazz)  throws Exception {
-        // TODO - replace this lookup tree with a Map
-
         if (clazz.equals(HealthcareSiteConverter.class)) {
             return (TYPE) hcs;
         }
-        throw new Exception("Converter needs to be added to gov.nih.nci.pa.iso.convert.Converters.  ");
+        if (clazz.equals(InvestigatorConverter.class)) {
+            return (TYPE) inv;
+        }        
+        throw new Exception("Converter needs to be added to gov.nih.nci.lv.convert.Converters.  ");
     }
     
 }

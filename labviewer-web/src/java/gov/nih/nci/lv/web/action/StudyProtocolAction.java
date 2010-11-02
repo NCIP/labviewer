@@ -111,6 +111,15 @@ public class StudyProtocolAction extends LabViewerAction {
         return SUCCESS;
     }
 
+    /**
+     * 
+     * @return Success
+     * @throws Exception on error
+     */
+    public String view() throws Exception {
+        setStudyProtocolInfo();
+        return SUCCESS;
+    }       
  
     /**
      * 
