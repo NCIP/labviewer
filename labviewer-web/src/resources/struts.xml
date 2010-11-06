@@ -51,7 +51,8 @@
             <result>/WEB-INF/jsp/welcome.jsp</result>
         </action>    
 		<action name="studyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
-			<result>/WEB-INF/jsp/protocol/list.jsp</result>    
+			<result>/WEB-INF/jsp/protocol/list.jsp</result>
+			<result name="error">/WEB-INF/jsp/protocol/list.jsp</result>    
 		</action>
         <action name="ajaxStudyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
             <result>/WEB-INF/jsp/protocol/detail.jsp</result>    
@@ -62,9 +63,12 @@
         <action name="ajaxInvestigator*" class="gov.nih.nci.lv.web.action.InvestigatorAction" method="{1}">
             <result>/WEB-INF/jsp/nodecorate/invresult.jsp</result>
         </action>       
-
         <action name="studyparticipant*" class="gov.nih.nci.lv.web.action.StudyParticipantAction" method="{1}">
-            <result>/WEB-INF/jsp/studyparticipantresult.jsp</result>
+            <result>/WEB-INF/jsp/participant/result.jsp</result>
         </action>   
+        <action name="lab*" class="gov.nih.nci.lv.web.action.LabAction" method="{1}">
+            <result>/WEB-INF/jsp/participant/result.jsp</result>
+        </action>   
+
     </package>
 </struts>

@@ -99,7 +99,6 @@ public class InvestigatorConverter extends AbstractConverter<InvestigatorDto, In
         inv.setPostalCode(dto.getPostalCode());
         inv.setStreetAddress(dto.getStreetAddress());
         inv.setTelecomAddress(dto.getTelecomAddress());
-        inv.setTelecomAddress(dto.getTelecomAddress());
         inv.setCtomUpdateDate(dto.getCtomUpdateDate());
         return inv;
     }

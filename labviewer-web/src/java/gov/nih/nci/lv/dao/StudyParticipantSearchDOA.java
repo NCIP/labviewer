@@ -86,6 +86,7 @@ import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -116,9 +117,17 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
         hql.append(" join spa.participant as part ");
         hql.append(" join ss.protocol as p where p.id = " + spsDto.getProtocolIdentifier());
         hql.append(" and i.studyParticipantAssignment is not null");
+        if (StringUtils.isNotEmpty(spsDto.getFirstName())) {
+            hql.append(" and upper(part.firstName) like '%" + spsDto.getFirstName().toUpperCase() + "%'");
+        }
+        if (StringUtils.isNotEmpty(spsDto.getLastName())) {
+            hql.append(" and upper(part.lastName) like '%" + spsDto.getLastName().toUpperCase() + "%'");
+        }
+        if (StringUtils.isNotEmpty(spsDto.getIdentifier())) {
+            hql.append(" and upper(i.extension) like '%" + spsDto.getIdentifier().toUpperCase() + "%'");
+        }
         List<Object> obs = getSession().createQuery(hql.toString()).list();
         Object[] data = null;
-        System.out.println(" hc1  size= " + obs.size());
         for (Object d : obs) {
             data = (Object[]) d;
             Identifier identifier = (Identifier) data[0];

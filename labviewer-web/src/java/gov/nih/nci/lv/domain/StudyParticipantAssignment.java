@@ -76,9 +76,13 @@
  */
 package gov.nih.nci.lv.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -92,6 +96,7 @@ public class StudyParticipantAssignment extends AbstractDate {
     
     private StudySite studySite;
     private Participant participant;
+    private List<Activity> activities = new ArrayList<Activity>();
     /**
      * 
      * @return studySite
@@ -124,5 +129,22 @@ public class StudyParticipantAssignment extends AbstractDate {
     public void setParticipant(Participant participant) {
         this.participant = participant;
     }
+    /**
+     * 
+     * @return activities
+     */ 
+    @OneToMany(mappedBy = "studyParticipantAssignment")
+    public List<Activity> getActivities() {
+        return activities;
+    }
+    /**
+     * 
+     * @param activities activities
+     */
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+    
+    
 
 }

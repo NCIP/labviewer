@@ -75,106 +75,53 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * A formalized group of persons or other organizations collected together for a common purpose (such as administrative.
+ * legal, political) and the infrastructure to carry out that purpose.
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
-
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
-    /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
-    /**
-     * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
-     */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
-    }
-    /**
-     * 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "Lab_Hub_Organization")
+public class Organization extends AbstractId {
+     private String identifier;
+     private String name;
+     
+     /**
+     * Retreives the value of identifier attribute.
      * @return identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-    /**
-     * 
+     **/
+     public String getIdentifier() {
+         return identifier;
+     }
+     /**
+     * Sets the value of identifier attribue.
      * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+     **/
+     public void setIdentifier(String identifier) {
+         this.identifier = identifier;
+     }    
+     /**
+     * Retreives the value of name attribute.
+     * @return name
+     **/
+     public String getName() {
+         return name;
     }
+
     /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
+    * Sets the value of name attribue.
+    * @param name name 
+    **/
+    public void setName(String name) {
+        this.name = name;
     }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
-    
 }

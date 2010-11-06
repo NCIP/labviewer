@@ -1,9 +1,9 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
-
+<%@ taglib tagdir="/WEB-INF/tags" prefix="lv" %>
 <s:form name="Result">
-   <s:actionerror/>
+   <lv:actionerror/>
     <display:table class="data"  requestURI="studyProtocollist.action" sort="list" pagesize="100" id="row"  name="results"  export="false">
         <display:setProperty name="pagination.pagenumber.param" value="results.pageNumber" />
         <display:setProperty name="paging.banner.item_name" value="Studies" />               
@@ -18,10 +18,10 @@
             <s:a href="#" cssClass="btn" onclick="showOrganization(%{#attr.row.id})"><span class="btn_img"><span class="organization">View </span></span></s:a>
         </display:column>
         <display:column titleKey="studyProtocol.investigator" >
-            <s:a href="#" cssClass="btn" onclick="showInvestigator(%{#attr.row.id})"><span class="btn_img"><span class="organization">View </span></span></s:a>
+            <s:a href="#" cssClass="btn" onclick="showInvestigator(%{#attr.row.id})"><span class="btn_img"><span class="person">View </span></span></s:a>
         </display:column>
         <display:column titleKey="studyProtocol.participant"  >
-             <s:a href="#" cssClass="btn" onclick="showParticipant(%{#attr.row.id})"><span class="btn_img"><span class="person">View</span></span></s:a>
+             <s:a href="#" cssClass="btn" onclick="showParticipant(%{#attr.row.id})"><span class="btn_img"><span class="person">Participant</span></span></s:a>
         </display:column>
 
     </display:table>

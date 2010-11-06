@@ -77,104 +77,136 @@
 
 package gov.nih.nci.lv.dto;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import java.util.Date;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+public class LabSearchDto extends AbstractDto<LabSearchDto> {
+    
+    private Long studyParticipantId;
+    private Date actualStartDate;
+    private String labTestCode;
+    private Float numericResult;
+    private String textResult;
+    private String uom;
+    private Integer referenceLowRange;
+    private Integer referenceHighRange;
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
     /**
-     * no arg cons.
+     * 
+     * @return studyParticipantId
      */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
+    public Long getStudyParticipantId() {
+        return studyParticipantId;
     }
     /**
      * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
+     * @param studyParticipantId studyParticipantId
      */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
+    public void setStudyParticipantId(Long studyParticipantId) {
+        this.studyParticipantId = studyParticipantId;
     }
     /**
      * 
-     * @return identifier
+     * @return actualStartDate
      */
-    public String getIdentifier() {
-        return identifier;
+    public Date getActualStartDate() {
+        return actualStartDate;
     }
     /**
      * 
-     * @param identifier identifier
+     * @param actualStartDate actualStartDate
      */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setActualStartDate(Date actualStartDate) {
+        this.actualStartDate = actualStartDate;
     }
     /**
      * 
-     * @return firstName
+     * @return labTestCode 
      */
-    public String getFirstName() {
-        return firstName;
+    public String getLabTestCode() {
+        return labTestCode;
     }
     /**
      * 
-     * @param firstName firstName
+     * @param labTestCode labTestCode
      */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setLabTestCode(String labTestCode) {
+        this.labTestCode = labTestCode;
     }
     /**
      * 
-     * @return  lastName
+     * @return numericResult
      */
-    public String getLastName() {
-        return lastName;
+    public Float getNumericResult() {
+        return numericResult;
     }
     /**
      * 
-     * @param lastName lastName
+     * @param numericResult numericResult
      */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setNumericResult(Float numericResult) {
+        this.numericResult = numericResult;
     }
     /**
      * 
-     * @return healthcareSiteDto
+     * @return textResult
      */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
+    public String getTextResult() {
+        return textResult;
     }
     /**
      * 
-     * @param healthcareSiteDto healthcareSiteDto
+     * @param textResult textResult
      */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
+    public void setTextResult(String textResult) {
+        this.textResult = textResult;
     }
+    /**
+     * 
+     * @return uom
+     */
+    public String getUom() {
+        return uom;
+    }
+    /**
+     * 
+     * @param uom uom
+     */
+    public void setUom(String uom) {
+        this.uom = uom;
+    }
+    /**
+     * 
+     * @return referenceLowRange
+     */
+    public Integer getReferenceLowRange() {
+        return referenceLowRange;
+    }
+    /**
+     * 
+     * @param referenceLowRange referenceLowRange
+     */
+    public void setReferenceLowRange(Integer referenceLowRange) {
+        this.referenceLowRange = referenceLowRange;
+    }
+    /**
+     * 
+     * @return referenceHighRange
+     */
+    public Integer getReferenceHighRange() {
+        return referenceHighRange;
+    }
+    /**
+     * 
+     * @param referenceHighRange referenceHighRange
+     */
+    public void setReferenceHighRange(Integer referenceHighRange) {
+        this.referenceHighRange = referenceHighRange;
+    }
+    
     
 }

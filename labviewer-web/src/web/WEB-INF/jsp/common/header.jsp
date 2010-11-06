@@ -4,7 +4,7 @@
     <!--User Details-->
     <c:choose>
         <c:when test="${sessionScope.loggedUser != null}">
-            <div id="userarea">Welcome, <%=(String) session.getAttribute("loggedUser")%> |  <a id="signOutBtn" href='<c:url value="/signOut.action"/>' class="btn_logout">Log Out</a></div>
+            <div id="userarea">Welcome, <%=(String) session.getAttribute("loggedUser")%> |  <a id="signOutBtn" href='<c:url value="/logout"/>' class="btn_logout">Log Out</a></div>
         </c:when>
     </c:choose>
 </div>

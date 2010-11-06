@@ -12,6 +12,9 @@ import java.util.Date;
 public class AbstractDto<DTO> { 
     
     private Long id;
+    private Long protocolIdentifier; // this will be removed
+    private Long studyProtocolId;
+    
     private String loggedUser;
     private Date ctomInsertDate;
     private Date ctomUpdateDate;
@@ -34,6 +37,38 @@ public class AbstractDto<DTO> {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return studyProtocolId
+     */
+    public Long getStudyProtocolId() {
+        return studyProtocolId;
+    }
+
+    /**
+     * 
+     * @param studyProtocolId studyProtocolId
+     */
+    public void setStudyProtocolId(Long studyProtocolId) {
+        this.studyProtocolId = studyProtocolId;
+    }
+
+    /**
+     * 
+     * @return protocolIdentifier
+     */
+    public Long getProtocolIdentifier() {
+        return protocolIdentifier;
+    }
+    
+    /**
+     * 
+     * @param protocolIdentifier protocolIdentifier
+     */
+    public void setProtocolIdentifier(Long protocolIdentifier) {
+        this.protocolIdentifier = protocolIdentifier;
+    }
+    
     /**
      * 
      * @return loggedUser

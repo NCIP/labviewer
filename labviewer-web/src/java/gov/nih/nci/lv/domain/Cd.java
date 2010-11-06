@@ -75,106 +75,109 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * Cd class.
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+@Entity
+@Table(name = "CONCEPT_DESCRIPTOR")
+public class Cd extends AbstractId {
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
-    /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
-    /**
-     * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
-     */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
-    }
-    /**
-     * 
-     * @return identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-    /**
-     * 
-     * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
+     private String code;
+     private String codeSystem;     
+     private String codeSystemName;
+     private String codeSystemVersion;
+     private String displayName;
+     /**
+     * Retreives the value of code attribute.
+     * @return code
+     **/
+     public String getCode() {
+         return code;
+     }
+
+     /**
+     * Sets the value of code attribue.
+     * @param code 
+     **/
+     public void setCode(String code) {
+         this.code = code;
+     }
+     
+
+     /**
+     * Retreives the value of codeSystem attribute.
+     * @return codeSystem
+     **/
+     @Column(name = "CODE_SYSTEM")
+     public String getCodeSystem() {
+         return codeSystem;
+     }
+     /**
+      * 
+      * @param codeSystem codeSystem
+      */
+     public void setCodeSystem(String codeSystem) {
+         this.codeSystem = codeSystem;
+     }
+     
+     /**
+     * Retreives the value of codeSystemName attribute. 
+     * @return codeSystemName
+     **/
+     @Column(name = "CODE_SYSTEM_NAME")
+     public String getCodeSystemName() {
+         return codeSystemName;
+     }
+
+     /**
+     * Sets the value of codeSystemName attribue.
+     * @param codeSystemName codeSystemName
+     **/
+     public void setCodeSystemName(String codeSystemName) {
+         this.codeSystemName = codeSystemName;
+     }
+     
+     
+     /**
+     * Retreives the value of codeSystemVersion attribute.
+     * @return codeSystemVersion
+     **/
+     @Column(name = "CODE_SYSTEM_VERSION")
+     public String getCodeSystemVersion() {
+         return codeSystemVersion;
+     }
+     /**
+     * Sets the value of codeSystemVersion attribue.
+     * @param codeSystemVersion codeSystemVersion
+     **/
+     public void setCodeSystemVersion(String codeSystemVersion) {
+         this.codeSystemVersion = codeSystemVersion;
+     }
+     
+     
+     /**
+     * Retreives the value of displayName attribute.
+     * @return displayName
+     **/
+     @Column(name = "DISPLAY_TEXT")
+     public String getDisplayName() {
+         return displayName;
+     }
+
+     /**
+     * Sets the value of displayName attribue.
+     * @param displayName displayName
+     **/
+     public void setDisplayName(String displayName) {
+         this.displayName = displayName;
+     }
     
 }
