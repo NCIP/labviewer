@@ -19,18 +19,19 @@
             document.studySearchFrom.submit();
         }
         function showOrganization(pid) {
-            showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '', 'Healthcare Sites');
+            showPopup('ajaxHealthcareSiteview.action?studyProtocolId='+pid, '', 'Healthcare Site');
         }         
         function showInvestigator(pid) {
-            showPopup('ajaxInvestigatorview.action?studyProtocolId='+pid, '', 'Investigators');
+            showPopup('ajaxInvestigatorview.action?studyProtocolId='+pid, '', 'Investigator');
         }         
 
         function showProtocol(pid) {
-            showPopup('ajaxStudyProtocolview.action?studyProtocolId='+pid, '', 'Study Details');
+            showPopup('ajaxStudyProtocolview.action?studyProtocolId='+pid, '', 'Study Detail');
         }         
         function showParticipant(pid) {
-            document.studySearchFrom.action = "studyparticipantlist.action?studyProtocolId="+pid;
-            document.studySearchFrom.submit();
+            document.getElementById("studyProtocolId").value=pid;
+            document.participantForm.action = "studyparticipantlist.action";
+            document.participantForm.submit();
         }
         function resetValues() {
             document.getElementById("shortTitle").value="";
@@ -40,9 +41,13 @@
 </head>
 <body>
 <!-- main content begins-->
-
+    <c:set var="topic" scope="request" value="study_search"/>
     <h1><fmt:message key="studyProtocol.search.header"/></h1>
+    <s:form name="participantForm">
+        <s:hidden  name="studyProtocolId"  id="studyProtocolId"/>
+    </s:form>
     <s:form name="studySearchFrom">
+        <jsp:include page="/WEB-INF/tags/failureMessage.jsp"/>
         <table class="form" >
             <tr>
                 <td class="label"><fmt:message key="studyProtocol.title"/></label> </td>

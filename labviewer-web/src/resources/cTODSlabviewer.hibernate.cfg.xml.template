@@ -31,6 +31,7 @@
 	 		<mapping resource="gov/nih/nci/labhub/domain/CD.hbm.xml" />
 	 		<mapping resource="gov/nih/nci/labhub/domain/Organization.hbm.xml" />
 	 		<mapping resource="gov/nih/nci/labhub/domain/II.hbm.xml" />
-		<mapping resource="gov/nih/nci/labhub/domain/Activity.hbm.xml" />
+		    <mapping resource="gov/nih/nci/labhub/domain/Activity.hbm.xml" />
+		    
         </session-factory>
 </hibernate-configuration>

@@ -92,7 +92,7 @@ public class InvestigatorAction extends LabViewerAction {
      */
     public String view() throws Exception {
         setStudyProtocolInfo();
-        getRequest().setAttribute("results", new InvestigatorDAO().getByStudyProtocol(createProtocol()));
+        getRequest().setAttribute("results", new InvestigatorDAO().getByStudyProtocol(createProtocolObj()));
         return SUCCESS;
     }
 

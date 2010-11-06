@@ -75,106 +75,24 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.web.action;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.Preparable;
 
 /**
- * Study Participant Dto.
+ * logout action class.
  * @author NAmiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+public class LogoutAction extends ActionSupport implements Preparable {
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
     /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
+     * {@inheritDoc}
+     */ 
+    public void prepare() throws Exception {
+        // TODO Auto-generated method stub
         
     }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
-    /**
-     * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
-     */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
-    }
-    /**
-     * 
-     * @return identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-    /**
-     * 
-     * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
-    
+
 }

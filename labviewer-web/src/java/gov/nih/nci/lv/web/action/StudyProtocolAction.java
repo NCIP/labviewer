@@ -81,11 +81,12 @@ package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.util.LVConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.struts2.ServletActionContext;
+import org.apache.commons.lang.xwork.StringUtils;
 
 /**
  * Study protocol Action class for search.
@@ -104,10 +105,11 @@ public class StudyProtocolAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String list() throws Exception {
-        System.out.println("list");
-        StudySearchDAO ssDao = new StudySearchDAO();
-        results = ssDao.search(ssDto);
-        ServletActionContext.getRequest().setAttribute("results", results);
+        if (StringUtils.isEmpty(ssDto.getNciIdentifier()) && StringUtils.isEmpty(ssDto.getShortTitle())) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one criteria is requured to do the search");
+            return ERROR;
+        }
+        setAttribute("results", new StudySearchDAO().search(ssDto));
         return SUCCESS;
     }
 

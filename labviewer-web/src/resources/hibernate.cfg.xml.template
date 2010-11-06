@@ -23,5 +23,13 @@
         <mapping class="gov.nih.nci.lv.domain.ProtocolStatus" />
         <mapping class="gov.nih.nci.lv.domain.StudyInvestigator" />
         <mapping class="gov.nih.nci.lv.domain.Investigator" />
+        <mapping class="gov.nih.nci.lv.domain.SpecimenCollection" />
+        <mapping class="gov.nih.nci.lv.domain.Specimen" />
+        <mapping class="gov.nih.nci.lv.domain.Cd" />
+        <mapping class="gov.nih.nci.lv.domain.LaboratoryTest" />
+        <mapping class="gov.nih.nci.lv.domain.LaboratoryResult" />
+        <mapping class="gov.nih.nci.lv.domain.Organization" />
+        <mapping class="gov.nih.nci.lv.domain.PerformingLaboratory" />
+        <mapping class="gov.nih.nci.lv.domain.CentralLaboratory" />
     </session-factory>
 </hibernate-configuration>

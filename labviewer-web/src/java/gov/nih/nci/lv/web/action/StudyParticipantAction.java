@@ -91,23 +91,37 @@ import gov.nih.nci.lv.util.LVConstants;
  *
  */
 public class StudyParticipantAction extends LabViewerAction {
-    
+    private StudyParticipantSearchDto spsDto = new StudyParticipantSearchDto();
     /**
      * 
      * @return Success
      * @throws Exception on error
      */
     public String list() throws Exception {
-        System.out.println("list.");
-        System.out.println("protocol id " + getStudyProtocolId());
         // retrieve the protocol and set it in the session to be used later
-        getSession().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
+        setSession(LVConstants.STUDY_SEARCH_DTO, 
                 new StudySearchDAO().search(new StudySearchDto(getStudyProtocolId())).get(0));
-        new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(getStudyProtocolId()));
-        getRequest().setAttribute(LVConstants.RESULTS, 
-                new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(getStudyProtocolId())));
+        spsDto.setProtocolIdentifier(getStudyProtocolId());
+        setAttribute(LVConstants.RESULTS, new StudyParticipantSearchDOA().search(spsDto));
+        setAttribute(LVConstants.TOPIC, "participant");
         return SUCCESS;
         
     }
+    
+    /**
+     * 
+     * @return spsDto
+     */
+     public StudyParticipantSearchDto getSpsDto() {
+         return spsDto;
+     }
+     /**
+      * 
+      * @param spsDto spsDto
+      */
+     public void setSpsDto(StudyParticipantSearchDto spsDto) {
+         this.spsDto = spsDto;
+     }
+    
 
 }

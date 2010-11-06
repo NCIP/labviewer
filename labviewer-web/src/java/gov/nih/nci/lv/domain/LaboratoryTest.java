@@ -75,106 +75,76 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
-
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
-    /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
-    /**
-     * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
-     */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
-    }
-    /**
-     * 
-     * @return identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-    /**
-     * 
-     * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
+@Entity
+@Table(name = "LAB_HUB_LAB_TEST")
+public class LaboratoryTest extends AbstractId {
     
+    private Cd laboratoryTestCode;
+    private Specimen specimen;
+    private LaboratoryResult laboratoryResult;
+    
+    /**
+     * Retreives the value of laboratoryTestCode attribue.
+     * @return laboratoryTestCode
+     **/
+     
+    @ManyToOne
+    @JoinColumn(name = "LAB_TEST_CONCEPT_DESCRIPTOR_ID")    
+    public Cd getLaboratoryTestCode() {
+         return laboratoryTestCode;
+    }
+    /**
+    * Sets the value of laboratoryTestCode attribue.
+    * @param laboratoryTestCode laboratoryTestCode
+    **/
+    public void setLaboratoryTestCode(Cd laboratoryTestCode) {
+        this.laboratoryTestCode = laboratoryTestCode;
+    }
+
+    /**
+     * Retreives the value of specimen attribue.
+     * @return specimen
+     **/
+    @ManyToOne
+    @JoinColumn(name = "SPECIMEN_ID")    
+    public Specimen getSpecimen() {
+         return specimen;
+    }
+    /**
+     * Sets the value of specimen attribue.
+     * @param specimen specimen
+     **/
+    public void setSpecimen(Specimen specimen) {
+       this.specimen = specimen;
+    }
+   
+    /**
+    * Retreives the value of laboratoryResult attribue.
+    * @return laboratoryResult
+    **/
+    @ManyToOne
+    @JoinColumn(name = "LAB_RESULT_ID")         
+    public LaboratoryResult getLaboratoryResult() {
+        return laboratoryResult;
+    }
+    /**
+    * Sets the value of laboratoryResult attribue.
+    * @param laboratoryResult laboratoryResult
+    **/
+    public void setLaboratoryResult(LaboratoryResult laboratoryResult) {
+       this.laboratoryResult = laboratoryResult;
+    }    
+
 }

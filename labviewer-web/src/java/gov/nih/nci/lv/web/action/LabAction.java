@@ -76,124 +76,47 @@
 *
 *
 */
+
 package gov.nih.nci.lv.web.action;
 
-import gov.nih.nci.lv.dao.StudySearchDAO;
-import gov.nih.nci.lv.domain.Protocol;
-import gov.nih.nci.lv.dto.StudySearchDto;
-import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.dao.LabSearchDAO;
+import gov.nih.nci.lv.dto.LabSearchDto;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts2.ServletActionContext;
-
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.Preparable;
 /**
- * 
- * @author NAmiruddin
+ * Labs Action class.
+ * @author Naveen Amiruddin
  *
  */
-public class LabViewerAction extends ActionSupport implements Preparable {
-    
-    private static final long serialVersionUID = 1234573645L;
-    private Long studyProtocolId = null;
-    private Long studyParticipantId = null;
-   
+public class LabAction extends LabViewerAction {
+    LabSearchDto labSearhDto = new LabSearchDto();
     
     /**
-     * {@inheritDoc}
-     */    
-    public void prepare() {
-        
-    }
-    /**
-     * {@inheritDoc}
-     */    
-    public String execute() throws Exception {
-        ServletActionContext.getRequest().setAttribute("results", null);
+     * 
+     * @return Success
+     * @throws Exception on error
+     */
+    public String list() throws Exception {
+        System.out.println(" id .1"+labSearhDto.getProtocolIdentifier());
+        System.out.println(" id .2"+labSearhDto.getStudyParticipantId());
+        System.out.println(" id .3"+getStudyProtocolId());
+        labSearhDto.setStudyProtocolId(getStudyProtocolId());
+        setAttribute("results", new LabSearchDAO().search(labSearhDto));
         return SUCCESS;
     }
 
     /**
-    *
-    * @return studyProtocolId
-    */
-   public Long getStudyProtocolId() {
-       if (studyProtocolId == null) {
-           // if the value is not, then it will be in session
-           return getStudyProtocolIdFromSession();
-       }
-       return studyProtocolId;
-   }
-
-   /**
-   *
-   * @return studyProtocolId
-   */
-  public Long getStudyProtocolIdFromSession() {
-      return ((StudySearchDto) getSession().getAttribute(LVConstants.STUDY_SEARCH_DTO)).getId();
-  }
-   
-   /**
-    * 
-    * @return protocol
-    */
-   Protocol createProtocolObj() {
-       Protocol protocol = new Protocol();
-       protocol.setId(studyProtocolId);
-       return protocol;
-   }
-
-   /**
-    *
-    * @param studyProtocolId studyProtocolId
-    */
-   public void setStudyProtocolId(Long studyProtocolId) {
-       this.studyProtocolId = studyProtocolId;
-   }
-   
-   
-   /**
-    * 
-    * @return studyParticipantId
-    */
-    public Long getStudyParticipantId() {
-        return studyParticipantId;
+     * 
+     * @param labSearhDto labSearhDto
+     */
+    public void setLabSearhDto(LabSearchDto labSearhDto) {
+        this.labSearhDto = labSearhDto;
     }
+
     /**
      * 
-     * @param studyParticipantId studyParticipantId
+     * @return labSearhDto
      */
-    public void setStudyParticipantId(Long studyParticipantId) {
-        this.studyParticipantId = studyParticipantId;
-    }
-    /**
-     * return the current http session.
-     * @return HttpSession
-     */
-    public HttpSession getSession() {
-        return ServletActionContext.getRequest().getSession();
-    }
-   
-   
-    /**
-     * return the current http session.
-     * @return HttpServletRequest
-     */
-    public HttpServletRequest getRequest() {
-        return ServletActionContext.getRequest();
-    }   
-    
-    void setAttribute(String arg0, Object arg1) {
-        ServletActionContext.getRequest().setAttribute(arg0, arg1);
-    }
-    void setSession(String arg0, Object arg1) {
-        ServletActionContext.getRequest().getSession().setAttribute(arg0, arg1);
-    }
-    void setStudyProtocolInfo() throws Exception {
-        getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
-                new StudySearchDAO().search(new StudySearchDto(studyProtocolId)).get(0));
+    public LabSearchDto getLabSearhDto() {
+        return labSearhDto;
     }
 }

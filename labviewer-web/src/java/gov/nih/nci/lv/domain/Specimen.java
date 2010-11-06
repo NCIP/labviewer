@@ -75,106 +75,64 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * Specimen.
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+@Entity
+public class Specimen extends AbstractDate {
+    
+    private SpecimenCollection specimenCollection;
+    private List<LaboratoryTest> laboratoryTests = new ArrayList<LaboratoryTest>();
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
-    /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
     /**
      * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
+     * @return laboratoryTests
      */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
+    @OneToMany(mappedBy = "specimen")
+    public List<LaboratoryTest> getLaboratoryTests() {
+        return laboratoryTests;
     }
+
     /**
      * 
-     * @return identifier
+     * @param laboratoryTests laboratoryTests
      */
-    public String getIdentifier() {
-        return identifier;
+    public void setLaboratoryTests(List<LaboratoryTest> laboratoryTests) {
+        this.laboratoryTests = laboratoryTests;
     }
+
     /**
      * 
-     * @param identifier identifier
+     * @return specimenCollection
      */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    @ManyToOne
+    @JoinColumn(name = "SPECIMEN_COLLECTION_ID")       
+    public SpecimenCollection getSpecimenCollection() {
+        return specimenCollection;
     }
+
     /**
      * 
-     * @return firstName
+     * @param specimenCollection specimenCollection
      */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
+    public void setSpecimenCollection(SpecimenCollection specimenCollection) {
+        this.specimenCollection = specimenCollection;
     }
     
+    
+    
+    
+
 }

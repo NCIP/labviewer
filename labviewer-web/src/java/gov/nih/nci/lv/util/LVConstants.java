@@ -101,5 +101,10 @@ public class LVConstants {
     /** Results. . */
     public static final String RESULTS = "results";
     
+    /** Failure Message. . */
+    public static final String FAILURE_MESSAGE = "failureMessage";
+
+    /** topic. . */
+    public static final String TOPIC = "topic";
 
 }

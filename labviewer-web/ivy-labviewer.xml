@@ -53,7 +53,7 @@
         <dependency org="jakarta" 			name="commons-httpclient" 				rev="3.0.1" 		conf="runtime->master"/>
         <dependency org="apache" 			name="commons-beanutils" 				rev="1.7.0"			conf="runtime->default"/>
 		<dependency org="javax.persistence" name="persistence-api"          		rev="1.0"           conf="runtime->master"/>
-		
+		<dependency org="apache" 			name="log4j" 							rev="1.2.15" 		conf="runtime->master" />
 	
 		<!-- comiple -->
 		<dependency org="javax.servlet" 	name="servlet" 							rev="2.3.1"			conf="compile->master" />	

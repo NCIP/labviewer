@@ -75,106 +75,74 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.dao;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import gov.nih.nci.lv.domain.Activity;
+import gov.nih.nci.lv.domain.Cd;
+import gov.nih.nci.lv.domain.LaboratoryResult;
+import gov.nih.nci.lv.domain.LaboratoryTest;
+import gov.nih.nci.lv.domain.Specimen;
+import gov.nih.nci.lv.domain.SpecimenCollection;
+import gov.nih.nci.lv.domain.StudyParticipantAssignment;
+import gov.nih.nci.lv.dto.LabSearchDto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+public class LabSearchDAO  extends AbstractDAO {
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
+    private static Logger logger = Logger.getLogger(LabSearchDAO.class);
+
     /**
-     * no arg cons.
-     */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-    }
-    /**
+     * SearchObjects retrieves the user entered search criteria and returns the study search results.
      * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
+     * @param labDto study participant search dto
+     * @return searchResult
+     * @throws Exception on error
      */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
-    }
-    /**
-     * 
-     * @return identifier
-     */
-    public String getIdentifier() {
-        return identifier;
-    }
-    /**
-     * 
-     * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
     
+    public List<LabSearchDto> search(LabSearchDto labDto) 
+    throws Exception {
+        List<LabSearchDto> labs = new ArrayList<LabSearchDto>();
+        StringBuffer hql = new StringBuffer(" select spa from StudyParticipantAssignment as spa ");
+        hql.append("join spa.studySite as ss ");
+        hql.append("join ss.protocol as p ");
+        hql.append("join spa.participant as part where 1= 1 ");
+        hql.append(" and p.id = " + labDto.getStudyProtocolId());
+        hql.append(" and part.id = " + labDto.getStudyParticipantId());
+        List<StudyParticipantAssignment> spas = getSession().createQuery(hql.toString()).list();
+        for (StudyParticipantAssignment spa : spas) {
+            LabSearchDto lab = new LabSearchDto();
+            List<Activity> acts = spa.getActivities();
+            for (Activity act : acts) {
+                SpecimenCollection spc = (SpecimenCollection) act;
+                lab.setActualStartDate(spc.getActualEndDateTime());
+                List<Specimen> sps = spc.getSpeciments();
+                for (Specimen sp : sps) {
+                    List<LaboratoryTest>  laboratoryTests = sp.getLaboratoryTests();
+                    for (LaboratoryTest laboratoryTest : laboratoryTests) {
+                        LaboratoryResult labResult =  laboratoryTest.getLaboratoryResult();
+                        LaboratoryTest labTest = labResult.getLaboratoryTest();
+                        lab.setLabTestCode(labTest.getLaboratoryTestCode().getCode());
+                        lab.setNumericResult(labResult.getNumericResult());
+                        lab.setId(labResult.getId());
+                        lab.setTextResult(labResult.getTextResult());
+                        lab.setUom(labResult.getUnits().getCode());
+                        lab.setReferenceLowRange(labResult.getReferenceRangeLow());
+                        lab.setReferenceHighRange(labResult.getReferenceRangeHigh());
+                    }
+                }
+            }
+            labs.add(lab);
+        }
+        System.out.println(" size "+labs.size());
+        return labs;
+    }
 }

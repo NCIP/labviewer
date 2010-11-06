@@ -94,7 +94,7 @@ public class HealthcareSiteAction extends LabViewerAction {
      */
     public String view() throws Exception {
         setStudyProtocolInfo();
-        getRequest().setAttribute("results", new HealthcareSiteDAO().getByStudyProtocol(createProtocol()));
+        getRequest().setAttribute("results", new HealthcareSiteDAO().getByStudyProtocol(createProtocolObj()));
         return SUCCESS;
     }       
 
