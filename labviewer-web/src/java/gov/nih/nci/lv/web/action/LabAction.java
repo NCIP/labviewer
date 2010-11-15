@@ -80,7 +80,14 @@
 package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.lv.dao.LabSearchDAO;
+import gov.nih.nci.lv.dao.StudyParticipantSearchDOA;
 import gov.nih.nci.lv.dto.LabSearchDto;
+import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+import gov.nih.nci.lv.util.LVConstants;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Labs Action class.
@@ -89,6 +96,7 @@ import gov.nih.nci.lv.dto.LabSearchDto;
  */
 public class LabAction extends LabViewerAction {
     LabSearchDto labSearhDto = new LabSearchDto();
+    List<LabSearchDto> labResults = new ArrayList<LabSearchDto>();
     
     /**
      * 
@@ -96,14 +104,44 @@ public class LabAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String list() throws Exception {
-        System.out.println(" id .1"+labSearhDto.getProtocolIdentifier());
-        System.out.println(" id .2"+labSearhDto.getStudyParticipantId());
-        System.out.println(" id .3"+getStudyProtocolId());
+        Long studyPartId = null;
         labSearhDto.setStudyProtocolId(getStudyProtocolId());
-        setAttribute("results", new LabSearchDAO().search(labSearhDto));
+        if (labSearhDto.getStudyParticipantId() == null) {
+            studyPartId = getStudyPartIdFromSession();
+        } else if (labSearhDto.getStudyParticipantId() != null) {
+            studyPartId = labSearhDto.getStudyParticipantId();
+        }    
+        labSearhDto.setStudyParticipantId(studyPartId); 
+        setSession(LVConstants.STUDY_PART_SEARCH_DTO, 
+                new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
+                        getStudyProtocolId(), studyPartId)).get(0));  
+        labResults = new LabSearchDAO().search(labSearhDto);
+        setSession("labResults", labResults);
+        setAttribute(LVConstants.TOPIC, "labs");
         return SUCCESS;
     }
 
+    /**
+     * 
+     * @return Success
+     * @throws Exception on error
+     */
+    public String caers() throws Exception {
+        if (labSearhDto.getLabIds() == null) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one Labs must be selected to submit to caAERS");
+            return SUCCESS;
+        }
+        
+        StringTokenizer st = new StringTokenizer(labSearhDto.getLabIds(), ",");
+        List<Long> labs = new ArrayList<Long>();
+        while (st.hasMoreTokens()) {
+            labs.add(new Long(st.nextElement().toString()));
+        }
+        setAttribute(LVConstants.SUCCESS_MESSAGE, labs.size() + " Labs has been successfully submitted to caAERS");
+        labSearhDto.setLabIds(null);
+        return SUCCESS;
+    }
+    
     /**
      * 
      * @param labSearhDto labSearhDto
@@ -119,4 +157,22 @@ public class LabAction extends LabViewerAction {
     public LabSearchDto getLabSearhDto() {
         return labSearhDto;
     }
+
+    /**
+     * 
+     * @return labResults
+     */
+    public List<LabSearchDto> getLabResults() {
+        return labResults;
+    }
+
+    /**
+     * 
+     * @param labResults labResults
+     */
+    public void setLabResults(List<LabSearchDto> labResults) {
+        this.labResults = labResults;
+    }
+    
+    
 }

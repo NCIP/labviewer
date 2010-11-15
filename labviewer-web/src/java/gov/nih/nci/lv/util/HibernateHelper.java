@@ -144,7 +144,8 @@ public class HibernateHelper implements LVHibernateHelper {
 //            LOG.error(e.getMessage(), e);
 //            throw new ExceptionInInitializerError(e);
             LOG.warn("Failed to initialize HibernateHelper using hibernate.cfg.xml.  "
-                    + "This is expected behavior during unit testing.");
+                    + "This is expected behavior during unit testing." , e);
+            e.printStackTrace();
         }
     }
 

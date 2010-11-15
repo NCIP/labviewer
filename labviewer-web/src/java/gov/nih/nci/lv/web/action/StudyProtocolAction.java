@@ -110,6 +110,10 @@ public class StudyProtocolAction extends LabViewerAction {
             return ERROR;
         }
         setAttribute("results", new StudySearchDAO().search(ssDto));
+        if (getStudyProtocolIdFromSession() != getStudyProtocolIdentifier()) {
+            // user has changed the study, set null for participant
+            setSession(LVConstants.STUDY_PART_SEARCH_DTO, null);
+        }
         return SUCCESS;
     }
 

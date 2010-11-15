@@ -77,114 +77,214 @@
 
 package gov.nih.nci.lv.dto;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import gov.nih.nci.caxchange.Credentials;
+import gov.nih.nci.caxchange.Message;
+
+import org.globus.gsi.GlobusCredential;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+public class IntegrationHubDto {
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
+    private String messageXml;
+    private String qName;
+    private String qRequest;
+    private String externalIdentifier;
+    private String userName;
+    private String password;
+    private String credentialEpr;
+    private GlobusCredential globusCredential;
+    private String serviceType;
+    private Object requestObj;
+    private String hubUrl;
+    private Message requestMessage;
+
     /**
-     * no arg cons.
+     * 
+     * @return messageXml
      */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
+    public String getMessageXml() {
+        return messageXml;
     }
     /**
      * 
-     * @param protocolIdentifier protocolIdentifier
-     * @param studyParticipantIdentifier studyParticipantIdentifier
+     * @param messageXml messageXml
      */
-    public StudyParticipantSearchDto(long protocolIdentifier , long studyParticipantIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-        setId(studyParticipantIdentifier);
+    public void setMessageXml(String messageXml) {
+        this.messageXml = messageXml;
     }
     /**
      * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
+     * @return qName
      */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
+    public String getQName() {
+        return qName;
     }
     /**
      * 
-     * @return identifier
+     * @param qName qName
      */
-    public String getIdentifier() {
-        return identifier;
+    public void setQName(String qName) {
+        this.qName = qName;
     }
     /**
      * 
-     * @param identifier identifier
+     * @return qRequest
      */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public String getQRequest() {
+        return qRequest;
     }
     /**
      * 
-     * @return firstName
+     * @param qRequest qRequest
      */
-    public String getFirstName() {
-        return firstName;
+    public void setQRequest(String qRequest) {
+        this.qRequest = qRequest;
     }
     /**
      * 
-     * @param firstName firstName
+     * @return externalIdentifier
      */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getExternalIdentifier() {
+        return externalIdentifier;
     }
     /**
      * 
-     * @return  lastName
+     * @param externalIdentifier externalIdentifier
      */
-    public String getLastName() {
-        return lastName;
+    public void setExternalIdentifier(String externalIdentifier) {
+        this.externalIdentifier = externalIdentifier;
     }
     /**
      * 
-     * @param lastName lastName
+     * @return userName
      */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getUserName() {
+        return userName;
     }
     /**
      * 
-     * @return healthcareSiteDto
+     * @param userName userName
      */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
     /**
      * 
-     * @param healthcareSiteDto healthcareSiteDto
+     * @return password
      */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
+    public String getPassword() {
+        return password;
+    }
+    /**
+     * 
+     * @param password password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    /**
+     * 
+     * @return credentialEpr
+     */
+    public String getCredentialEpr() {
+        return credentialEpr;
+    }
+    /**
+     * 
+     * @param credentialEpr credentialEpr
+     */
+    public void setCredentialEpr(String credentialEpr) {
+        this.credentialEpr = credentialEpr;
+    }
+
+    /**
+     * 
+     * @return globusCredential
+     */
+    public GlobusCredential getGlobusCredential() {
+        return globusCredential;
+    }
+    /**
+     * 
+     * @param globusCredential globusCredential
+     */
+    public void setGlobusCredential(GlobusCredential globusCredential) {
+        this.globusCredential = globusCredential;
+    }
+    /**
+     * 
+     * @return Credentials
+     */
+    public Credentials getCredential() {
+        Credentials creds = new Credentials();
+        creds.setUserName(userName);
+        creds.setPassword(password);
+        creds.setDelegatedCredentialReference(credentialEpr);
+        return creds;
+    }
+    /**
+     * 
+     * @return serviceType
+     */
+    public String getServiceType() {
+        return serviceType;
+    }
+    /**
+     * 
+     * @param serviceType serviceType
+     */
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+    /**
+     * 
+     * @return requestObj
+     */
+    public Object getRequestObj() {
+        return requestObj;
+    }
+    /**
+     * 
+     * @param requestObj requestObj
+     */
+    public void setRequestObj(Object requestObj) {
+        this.requestObj = requestObj;
+    }
+    /**
+     * 
+     * @return hubUrl
+     */
+    public String getHubUrl() {
+        return hubUrl;
+    }
+    /**
+     * 
+     * @param hubUrl hubUrl
+     */
+    public void setHubUrl(String hubUrl) {
+        this.hubUrl = hubUrl;
+    }
+    /**
+     * 
+     * @return requestMessage
+     */
+    public Message getRequestMessage() {
+        return requestMessage;
+    }
+    /**
+     * 
+     * @param requestMessage requestMessage
+     */
+    public void setRequestMessage(Message requestMessage) {
+        this.requestMessage = requestMessage;
     }
     
+    
+    
+    
+
 }

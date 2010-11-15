@@ -97,6 +97,7 @@ public class StudyParticipantAssignment extends AbstractDate {
     private StudySite studySite;
     private Participant participant;
     private List<Activity> activities = new ArrayList<Activity>();
+    private List<Identifier> studySubjectIdentifiers = new ArrayList<Identifier>();
     /**
      * 
      * @return studySite
@@ -143,6 +144,21 @@ public class StudyParticipantAssignment extends AbstractDate {
      */
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
+    }
+    /**
+     * 
+     * @return studySubjectIdentifiers
+     */
+    @OneToMany(mappedBy = "studyParticipantAssignment")
+    public List<Identifier> getStudySubjectIdentifiers() {
+        return studySubjectIdentifiers;
+    }
+    /**
+     * 
+     * @param studySubjectIdentifiers studySubjectIdentifiers
+     */
+    public void setStudySubjectIdentifiers(List<Identifier> studySubjectIdentifiers) {
+        this.studySubjectIdentifiers = studySubjectIdentifiers;
     }
     
     

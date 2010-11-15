@@ -57,6 +57,12 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
+    <filter>
+        <filter-name>ResponseOverrideFilter</filter-name>
+        <filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class>
+    </filter>
+
+<!-- comment here for websso to remove -->  
 	<filter>
 		<filter-name>CAS Client Info Logging Filter</filter-name>
 		<filter-class>org.inspektr.common.web.ClientInfoThreadLocalFilter</filter-class>
@@ -116,11 +122,6 @@
 			<param-value>cas-client.properties</param-value>
 		</init-param>
 	</filter>
-	<filter>
-    	<filter-name>ResponseOverrideFilter</filter-name>
-    	<filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class>
-    </filter>
-
 	<filter-mapping>
 		<filter-name>CAS Single Sign Out Filter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -156,18 +157,6 @@
 		<url-pattern>/logout/*</url-pattern>
 	</filter-mapping>
 
-<!--
-	<filter-mapping>
-    	<filter-name>ResponseOverrideFilter</filter-name>
-    	<url-pattern>*.do</url-pattern>
-  	</filter-mapping>
-  	<filter-mapping>
-    	<filter-name>ResponseOverrideFilter</filter-name>
-    	<url-pattern>*.jsp</url-pattern>
-  	</filter-mapping>
--->
-
-
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -179,7 +168,8 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	
+<!--  end comment for web soo here -->
 
     <!-- Servlets -->
     <servlet>
@@ -193,10 +183,8 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
-
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file> 
 	</welcome-file-list>
-
 
 </web-app>

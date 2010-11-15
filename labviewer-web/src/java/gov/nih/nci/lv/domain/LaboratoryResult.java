@@ -244,7 +244,7 @@ public class LaboratoryResult extends AbstractId {
     * @param testPerformedDateTime testPerformedDateTime
     **/
     @Column(name = "TEST_PERFORMED_DATE_TIME")
-    public void setTestPerformedDateTime(java.util.Date testPerformedDateTime){
+    public void setTestPerformedDateTime(java.util.Date testPerformedDateTime) {
         this.testPerformedDateTime = testPerformedDateTime;
     }
     /**

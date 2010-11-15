@@ -79,11 +79,10 @@
 
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.lv.util.LVConstants;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts2.ServletActionContext;
+import java.util.Enumeration;
 
 /**
  * This initial class, gets the value from the LabViewer System table and puts the value in the session.
@@ -97,19 +96,34 @@ public class HomeAction extends LabViewerAction {
      */
     public String execute() throws Exception {
         
-        //@todo : get the value from the system table and put it into session
-        HttpSession session =  ServletActionContext.getRequest().getSession();
-        session.setAttribute(LVConstants.VERSION_NUMBER, "CTODS 2.3");
-        session.setAttribute(LVConstants.HELP_LINK, 
-                "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
-
-        String gridIDentity = (String) session.getAttribute("CAGRID_SSO_GRID_IDENTITY");
-        if (gridIDentity != null) {
-            int beginIndex = gridIDentity.lastIndexOf("=");
-            int endIndex = gridIDentity.length();
-            session.setAttribute(LVConstants.LOGGED_USER, gridIDentity.substring(beginIndex + 1, endIndex));
+        System.out.println("..............1");
+        try {
+            labViewerSetup();
+        } catch (SuiteAuthorizationAccessException sae) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, sae.getMessage());
+            return "no_access";
+        } catch (Exception sae) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, sae.getMessage());
+            return "no_access";
+        }
+        Boolean b = (Boolean) getSessionAttr(LVConstants.NO_ACCESS);
+        if (b != null && b.booleanValue()) {
+            return "no_access";
+        }
+        System.out.println("Begin Printing User Attributes");
+        Enumeration attributeNames = getSession().getAttributeNames();
+        for (; attributeNames.hasMoreElements();) {
+            // Get the name of the attribute
+            String name = (String) attributeNames.nextElement();
+            Object value = (Object) getSession().getAttribute(name); 
+            
+            if (name.contains("CAGRID")) {
+                System.out.println(" ---- ATTRIBUTE NAME ---- " + name 
+                        + " ---- ATTRIBUTE VALUE ----" + value + " type " + value.getClass().getName());
+            }
         }
         
+        //System.out.println(" gc ..." +gc.)
         return SUCCESS;
     }
 
