@@ -78,15 +78,22 @@
 */
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.domain.Protocol;
+import gov.nih.nci.lv.dto.IntegrationHubDto;
+import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 import gov.nih.nci.lv.dto.StudySearchDto;
 import gov.nih.nci.lv.util.LVConstants;
+
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
+import org.globus.gsi.GlobusCredential;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -132,10 +139,27 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    *
    * @return studyProtocolId
    */
-  public Long getStudyProtocolIdFromSession() {
-      return ((StudySearchDto) getSession().getAttribute(LVConstants.STUDY_SEARCH_DTO)).getId();
+  Long getStudyProtocolIdentifier() {
+      return studyProtocolId;
   }
-   
+
+   /**
+   *
+   * @return studyProtocolId
+   */
+  public Long getStudyProtocolIdFromSession() {
+      StudySearchDto ssDto = (StudySearchDto) getSession().getAttribute(LVConstants.STUDY_SEARCH_DTO);
+      return (ssDto != null ? ssDto.getId() : null);
+  }
+  /**
+  *
+  * @return studyProtocolId
+  */
+    public Long getStudyPartIdFromSession() {
+        StudyParticipantSearchDto spsDto = (StudyParticipantSearchDto) getSession().getAttribute(
+             LVConstants.STUDY_PART_SEARCH_DTO);
+        return (spsDto != null ? spsDto.getId() : null);
+    }   
    /**
     * 
     * @return protocol
@@ -160,6 +184,9 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     * @return studyParticipantId
     */
     public Long getStudyParticipantId() {
+        if (studyParticipantId == null) {
+            return getStudyPartIdFromSession();
+        }
         return studyParticipantId;
     }
     /**
@@ -176,7 +203,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     public HttpSession getSession() {
         return ServletActionContext.getRequest().getSession();
     }
-   
+    
    
     /**
      * return the current http session.
@@ -192,8 +219,66 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     void setSession(String arg0, Object arg1) {
         ServletActionContext.getRequest().getSession().setAttribute(arg0, arg1);
     }
+    Object getSessionAttr(String arg0) {
+        return getSession().getAttribute(arg0);
+    }
+
     void setStudyProtocolInfo() throws Exception {
         getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
                 new StudySearchDAO().search(new StudySearchDto(studyProtocolId)).get(0));
     }
+    //@todo : throw exception when gridIdentifity is null
+    private void setUserInfoInSession() {
+        String gridIDentity = (String) getSession().getAttribute(LVConstants.CAGRID_SSO_GRID_IDENTITY);
+        if (gridIDentity != null) {
+            int beginIndex = gridIDentity.lastIndexOf("=");
+            int endIndex = gridIDentity.length();
+            setSession(LVConstants.USER_NAME, gridIDentity.substring(beginIndex + 1, endIndex));
+            setSession(LVConstants.USER_ROLES, 
+                    new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
+        }
+        
+    }
+
+    /**
+     * this method to be called after calling setuserInfoInSession.
+     */
+    private void enableMenu() {
+        Set<SuiteRole> userRoles = (Set<SuiteRole>) getSessionAttr(LVConstants.USER_ROLES);
+        // todo : throw error on null
+        if (userRoles != null) {
+            setSession(LVConstants.ADMIN_ACCESS, Boolean.FALSE);
+            setSession(LVConstants.STUDY_ACCESS, Boolean.FALSE);
+            setSession(LVConstants.NO_ACCESS, Boolean.TRUE);
+            if (userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR)) {
+                System.out.println("................ user has admin access");
+                setSession(LVConstants.ADMIN_ACCESS, Boolean.TRUE);
+                setSession(LVConstants.NO_ACCESS, Boolean.FALSE);
+            }
+            if (userRoles.contains(SuiteRole.LAB_DATA_USER)) {
+                System.out.println("................ user has lab data user");
+                setSession(LVConstants.STUDY_ACCESS, Boolean.TRUE);
+                setSession(LVConstants.NO_ACCESS, Boolean.FALSE);
+            }
+        }
+    }
+
+    private void setLinks() {
+        //@todo : get the value from the system table and put it into session
+        setSession(LVConstants.VERSION_NUMBER, "CTODS 2.3");
+        setSession(LVConstants.HELP_LINK, 
+                "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
+    }
+    void labViewerSetup() {
+        setUserInfoInSession();
+        enableMenu();
+        setLinks();
+    }
+    IntegrationHubDto createHubDto() {
+        IntegrationHubDto hubDto = new IntegrationHubDto();
+        hubDto.setCredentialEpr((String) getSessionAttr(LVConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR));
+        hubDto.setGlobusCredential((GlobusCredential) getSessionAttr(LVConstants.CAGRID_SSO_GRID_CREDENTIAL));
+        return hubDto;
+    }
+
 }

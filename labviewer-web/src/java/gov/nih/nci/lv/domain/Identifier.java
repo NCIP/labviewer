@@ -93,7 +93,6 @@ public class Identifier extends AbstractDate {
     private String extension;
     private Protocol protocol;
     private Participant participant;
-
     private StudyParticipantAssignment studyParticipantAssignment;
    
     

@@ -88,23 +88,42 @@ public class LVConstants {
     
     /** Lab Viewer Version number . */
     public static final String VERSION_NUMBER = "versionNumber";
-    
     /** Lab Viewer help link . */
     public static final String HELP_LINK = "helpLink";
-
     /** Study Search Dto . */
     public static final String STUDY_SEARCH_DTO = "studySearchDto";
-    
+    /** Study Participant Search Dto . */
+    public static final String STUDY_PART_SEARCH_DTO = "studyPartSearchDto";    
     /** logged User. . */
-    public static final String LOGGED_USER = "loggedUser";
-    
+    public static final String USER_NAME = "userName";
+    /** logged User password. . */
+    public static final String PASSWORD = "password";
     /** Results. . */
     public static final String RESULTS = "results";
     
     /** Failure Message. . */
     public static final String FAILURE_MESSAGE = "failureMessage";
-
+    /** Success Message. . */
+    public static final String SUCCESS_MESSAGE = "successMessage";
     /** topic. . */
     public static final String TOPIC = "topic";
-
+    /** hub wait count. . */
+    public static final int HUB_TOT_CNT = 25;
+    /** hub sleep time. . */
+    public static final int HUB_SLEEP_TIME = 1000;
+    /** CAGRID_SSO_DELEGATION_SERVICE_EPR; . */
+    public static final String CAGRID_SSO_DELEGATION_SERVICE_EPR = "CAGRID_SSO_DELEGATION_SERVICE_EPR";
+    /** CAGRID_SSO_GRID_CREDENTIAL . */
+    public static final String CAGRID_SSO_GRID_CREDENTIAL = "CAGRID_SSO_GRID_CREDENTIAL";
+    /** CAGRID_SSO_GRID_IDENTITY . */
+    public static final String CAGRID_SSO_GRID_IDENTITY = "CAGRID_SSO_GRID_IDENTITY";
+    /** USER ROLES . */
+    public static final String USER_ROLES = "USER_ROLES";    
+    /** ADMIN ACCESS . */
+    public static final String ADMIN_ACCESS = "ADDMIN_ACCESS";    
+    /** STUDY ACCESS . */
+    public static final String STUDY_ACCESS = "STUDY_ACCESS";    
+    /** NO ACCESS . */
+    public static final String NO_ACCESS = "NO_ACCESS";    
+    
 }

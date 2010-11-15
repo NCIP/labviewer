@@ -78,7 +78,7 @@
 package gov.nih.nci.lv.dao;
 
 import gov.nih.nci.lv.domain.Activity;
-import gov.nih.nci.lv.domain.Cd;
+import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.LaboratoryResult;
 import gov.nih.nci.lv.domain.LaboratoryTest;
 import gov.nih.nci.lv.domain.Specimen;
@@ -119,17 +119,44 @@ public class LabSearchDAO  extends AbstractDAO {
         hql.append(" and part.id = " + labDto.getStudyParticipantId());
         List<StudyParticipantAssignment> spas = getSession().createQuery(hql.toString()).list();
         for (StudyParticipantAssignment spa : spas) {
-            LabSearchDto lab = new LabSearchDto();
             List<Activity> acts = spa.getActivities();
+            List<Identifier> ids = spa.getStudySubjectIdentifiers();
             for (Activity act : acts) {
                 SpecimenCollection spc = (SpecimenCollection) act;
-                lab.setActualStartDate(spc.getActualEndDateTime());
                 List<Specimen> sps = spc.getSpeciments();
                 for (Specimen sp : sps) {
                     List<LaboratoryTest>  laboratoryTests = sp.getLaboratoryTests();
                     for (LaboratoryTest laboratoryTest : laboratoryTests) {
+                        LabSearchDto lab = new LabSearchDto();
+                        lab.setActualStartDate(spc.getActualEndDateTime());
+                        lab.setStudySubjectId(ids);
                         LaboratoryResult labResult =  laboratoryTest.getLaboratoryResult();
                         LaboratoryTest labTest = labResult.getLaboratoryTest();
+                        if (labDto.getLabTestCode() != null  
+                                && !labDto.getLabTestCode().equals("ALL") 
+                                && !labDto.getLabTestCode().equals(labTest.getLaboratoryTestCode().getCode())) {
+                            continue;
+                        }
+                        float range = labResult.getNumericResult().floatValue(); 
+                        if (labDto.getRange() != null  && !labDto.getRange().equals("ALL")) {
+                            // check for in range
+                            if (labDto.getRange().equals("INRANGE")) {
+                                if (!(labResult.getReferenceRangeLow().floatValue() <= range
+                                         &&  range <= labResult.getReferenceRangeHigh().floatValue())) {
+                                    continue;
+                                }
+                            }
+                            if (labDto.getRange().equals("OUTOFRANGE")) {
+                                if ((labResult.getReferenceRangeLow().floatValue() <= range
+                                         &&  range <= labResult.getReferenceRangeHigh().floatValue())) {
+                                    continue;
+                                }
+                            }
+                        }
+                        if (labResult.getReferenceRangeLow().floatValue() <= range
+                                &&  range <= labResult.getReferenceRangeHigh().floatValue()) {
+                            lab.setIsWithinRange(true); 
+                        }
                         lab.setLabTestCode(labTest.getLaboratoryTestCode().getCode());
                         lab.setNumericResult(labResult.getNumericResult());
                         lab.setId(labResult.getId());
@@ -137,12 +164,12 @@ public class LabSearchDAO  extends AbstractDAO {
                         lab.setUom(labResult.getUnits().getCode());
                         lab.setReferenceLowRange(labResult.getReferenceRangeLow());
                         lab.setReferenceHighRange(labResult.getReferenceRangeHigh());
+                        labs.add(lab);
                     }
                 }
             }
-            labs.add(lab);
+            
         }
-        System.out.println(" size "+labs.size());
         return labs;
     }
 }

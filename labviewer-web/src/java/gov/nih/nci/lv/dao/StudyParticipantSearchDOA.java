@@ -126,6 +126,9 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
         if (StringUtils.isNotEmpty(spsDto.getIdentifier())) {
             hql.append(" and upper(i.extension) like '%" + spsDto.getIdentifier().toUpperCase() + "%'");
         }
+        if (spsDto.getId() != null) {
+            hql.append(" and part.id = " + spsDto.getId());
+        }
         List<Object> obs = getSession().createQuery(hql.toString()).list();
         Object[] data = null;
         for (Object d : obs) {

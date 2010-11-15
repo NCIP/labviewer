@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html PUBLIC 
     "-//W3C//DTD XHTML 1.1 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -7,7 +8,6 @@
         <title><fmt:message key="labviewer.home.title"/></title>
         <s:head />
     </head>
-    <body onload="setFocusToFirstControl();">
      <h1><fmt:message key="labviewer.home.title" /></h1>
         <div class="homepage" style="width:600px">
             <div class="homebanner"><img src="<%=request.getContextPath()%>/images/banner_labviewer.jpg" width="599" height="140" alt="" /></div>

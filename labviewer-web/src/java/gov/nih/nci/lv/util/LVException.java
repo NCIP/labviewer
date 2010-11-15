@@ -75,116 +75,54 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package gov.nih.nci.lv.dto;
+package gov.nih.nci.lv.util;
 
-import gov.nih.nci.lv.domain.HealthcareSite;
-import gov.nih.nci.lv.domain.Identifier;
-import gov.nih.nci.lv.domain.Participant;
+import org.apache.log4j.Logger;
 
 /**
- * Study Participant Dto.
- * @author NAmiruddin
+ * LabViewer Exception Class.
+ * @author Naveen Amiruddin
  *
  */
-public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearchDto> {
+public class LVException extends Exception {
 
-    private String identifier; // mrn
-    private String firstName;
-    private String lastName;
-    private HealthcareSiteDto healthcareSiteDto;
+    private static final long serialVersionUID = -412014421822871391L;
+    private static final Logger LOG = Logger.getLogger(LVException.class);
+
     /**
-     * no arg cons.
+     * no argument constructor.
      */
-    public StudyParticipantSearchDto() {
-        
-    }
-    /**
-     * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
-     */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
+    public LVException() {
         super();
-        setProtocolIdentifier(protocolIdentifier);
     }
+
     /**
-     * 
-     * @param protocolIdentifier protocolIdentifier
-     * @param studyParticipantIdentifier studyParticipantIdentifier
+     * String constructor.
+     * @param message message
      */
-    public StudyParticipantSearchDto(long protocolIdentifier , long studyParticipantIdentifier) {
-        super();
-        setProtocolIdentifier(protocolIdentifier);
-        setId(studyParticipantIdentifier);
+    public LVException(String message) {
+        super(message);
+        LOG.error(message);
     }
+
     /**
-     * 
-     * @param identifier identifier
-     * @param participant participant
-     * @param healthcareSite healthcareSite
+     * String and Throwable constructor.
+     * @param message message
+     * @param t t
      */
-    public StudyParticipantSearchDto(Identifier identifier, Participant participant, HealthcareSite healthcareSite) {
-        super();
-        this.setId(participant.getId());
-        this.firstName = participant.getFirstName();
-        this.lastName = participant.getLastName();
-        this.identifier  = identifier.getExtension();
-        this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
+    public LVException(String message, Throwable t) {
+        super(message, t);
+        LOG.error(message, t);
     }
+
     /**
-     * 
-     * @return identifier
+     *
+     * @param t t
      */
-    public String getIdentifier() {
-        return identifier;
+    public LVException(Throwable t) {
+        super(t);
+        LOG.error(t);
     }
-    /**
-     * 
-     * @param identifier identifier
-     */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    /**
-     * 
-     * @return firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-    /**
-     * 
-     * @param firstName firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    /**
-     * 
-     * @return  lastName
-     */
-    public String getLastName() {
-        return lastName;
-    }
-    /**
-     * 
-     * @param lastName lastName
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    /**
-     * 
-     * @return healthcareSiteDto
-     */
-    public HealthcareSiteDto getHealthcareSiteDto() {
-        return healthcareSiteDto;
-    }
-    /**
-     * 
-     * @param healthcareSiteDto healthcareSiteDto
-     */
-    public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
-        this.healthcareSiteDto = healthcareSiteDto;
-    }
+
     
 }

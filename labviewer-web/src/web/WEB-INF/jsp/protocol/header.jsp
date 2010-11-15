@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <br>
-<h2> Study Details</h2>
+<h3> Study Details</h3>
 <table class="form" >
   <tr>
     <td class="label"> <fmt:message key="studyProtocol.nciIdentifier"/>:</td>

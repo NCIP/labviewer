@@ -72,7 +72,7 @@
             </del>
 
         </div>
-        <display:table class="data"  sort="list" pagesize="100" id="row"  name="results"  requestURI="studyparticipantlist.action">
+        <display:table class="data"  sort="list" pagesize="100" id="row"  name="results"  requestURI="">
             <display:column titleKey="siteIdentifier"  property="healthcareSiteDto.nciInstituteCode" sortable="true" headerClass="sortable"/>
             <display:column titleKey="siteName" maxLength= "200" property="healthcareSiteDto.name" sortable="true" headerClass="sortable"/>
             <display:column titleKey="mrn" property="identifier" sortable="true" headerClass="sortable"/>
