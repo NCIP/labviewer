@@ -43,3 +43,5 @@ log4j.logger.gov.nih.nci.system.util=INFO
 log4j.logger.com.opensymphony.xwork2=INFO
 log4j.logger.freemarker=INFO
 log4j.logger.org.apache.struts2=INFO
+log4j.logger.gov.nih.nci.security.dao.AuthorizationDAOImpl=INFO
+log4j.logger.org.jasig.cas.client=INFO

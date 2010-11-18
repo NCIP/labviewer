@@ -196,6 +196,10 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     public void setStudyParticipantId(Long studyParticipantId) {
         this.studyParticipantId = studyParticipantId;
     }
+    
+    String getUserName() {
+        return (String) getSessionAttr(LVConstants.USER_NAME);
+    }
     /**
      * return the current http session.
      * @return HttpSession
@@ -222,10 +226,9 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     Object getSessionAttr(String arg0) {
         return getSession().getAttribute(arg0);
     }
-
     void setStudyProtocolInfo() throws Exception {
         getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
-                new StudySearchDAO().search(new StudySearchDto(studyProtocolId)).get(0));
+                new StudySearchDAO().search(new StudySearchDto(studyProtocolId, getUserName())).get(0));
     }
     //@todo : throw exception when gridIdentifity is null
     private void setUserInfoInSession() {
@@ -237,9 +240,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
             setSession(LVConstants.USER_ROLES, 
                     new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
         }
-        
     }
-
+    private void setDefaults() {
+        setSession(LVConstants.ADMIN_ACCESS, "no");
+        setSession(LVConstants.STUDY_ACCESS, "no");
+        setSession(LVConstants.ALLOW_ACCESS, "no");
+        setSession(LVConstants.VERSION_NUMBER, "CTODS 2.3");
+        setSession(LVConstants.HELP_LINK, 
+                "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
+    }
+    
     /**
      * this method to be called after calling setuserInfoInSession.
      */
@@ -247,32 +257,22 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         Set<SuiteRole> userRoles = (Set<SuiteRole>) getSessionAttr(LVConstants.USER_ROLES);
         // todo : throw error on null
         if (userRoles != null) {
-            setSession(LVConstants.ADMIN_ACCESS, Boolean.FALSE);
-            setSession(LVConstants.STUDY_ACCESS, Boolean.FALSE);
-            setSession(LVConstants.NO_ACCESS, Boolean.TRUE);
             if (userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR)) {
                 System.out.println("................ user has admin access");
-                setSession(LVConstants.ADMIN_ACCESS, Boolean.TRUE);
-                setSession(LVConstants.NO_ACCESS, Boolean.FALSE);
+                setSession(LVConstants.ADMIN_ACCESS, "yes");
+                setSession(LVConstants.ALLOW_ACCESS, "yes");
             }
             if (userRoles.contains(SuiteRole.LAB_DATA_USER)) {
                 System.out.println("................ user has lab data user");
-                setSession(LVConstants.STUDY_ACCESS, Boolean.TRUE);
-                setSession(LVConstants.NO_ACCESS, Boolean.FALSE);
+                setSession(LVConstants.STUDY_ACCESS, "yes");
+                setSession(LVConstants.ALLOW_ACCESS, "yes");
             }
         }
     }
-
-    private void setLinks() {
-        //@todo : get the value from the system table and put it into session
-        setSession(LVConstants.VERSION_NUMBER, "CTODS 2.3");
-        setSession(LVConstants.HELP_LINK, 
-                "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
-    }
     void labViewerSetup() {
+        setDefaults();
         setUserInfoInSession();
         enableMenu();
-        setLinks();
     }
     IntegrationHubDto createHubDto() {
         IntegrationHubDto hubDto = new IntegrationHubDto();

@@ -106,8 +106,8 @@ public class HomeAction extends LabViewerAction {
             setAttribute(LVConstants.FAILURE_MESSAGE, sae.getMessage());
             return "no_access";
         }
-        Boolean b = (Boolean) getSessionAttr(LVConstants.NO_ACCESS);
-        if (b != null && b.booleanValue()) {
+        String access = (String) getSessionAttr(LVConstants.ALLOW_ACCESS);
+        if (access != null && access.equals("no")) {
             return "no_access";
         }
         System.out.println("Begin Printing User Attributes");

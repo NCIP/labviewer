@@ -91,6 +91,7 @@ import gov.nih.nci.security.exceptions.CSConfigurationException;
 import gov.nih.nci.security.exceptions.CSException;
 import gov.nih.nci.security.provisioning.AuthorizationManagerImpl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -129,7 +130,6 @@ public class LabViewerAuthorizationHelper {
 			throw new SuiteAuthorizationAccessException("Username %s is not a CSM user", username);
 		} else {
 			userId = user.getUserId().longValue();
-			LOG.debug("UserId = " + userId);
 		}
 		return userId;
 	}
@@ -174,6 +174,39 @@ public class LabViewerAuthorizationHelper {
 	        }
 		return userRoleMembership;
 	}
+	/**
+	 * return true, if the user has access to to all Studies, else return false.
+	 * @param username username
+	 * @return boolean
+	 */
+	public boolean isAllStudies(String username) {
+	    return getUserRoleMembership(username , SuiteRole.LAB_DATA_USER).isAllStudies();
+	}
+    /**
+     * return true, if the user has access to to all Sites, else return false.
+     * @param userName username
+     * @return boolean
+     */
+    public boolean isAllSites(String userName) {
+        return getUserRoleMembership(userName , SuiteRole.LAB_DATA_USER).isAllSites();
+    }
+
+    /** 
+     * this method return the authorized studies for a given user.
+     * @param userName userName
+     * @return list of studies
+     */
+    public List<String> getAuthStudies(String userName) {
+        return getUserRoleMembership(userName , SuiteRole.LAB_DATA_USER).getStudyIdentifiers();
+    }
+    /** 
+     * this method return the authorized stites for a given user.
+     * @param userName userName
+     * @return list of sites
+     */
+    public List<String> getAuthSites(String userName) {
+        return getUserRoleMembership(userName , SuiteRole.LAB_DATA_USER).getSiteIdentifiers();
+    }
 	
 	// eventually remove ////////
 	/**

@@ -114,7 +114,7 @@ public class LabAction extends LabViewerAction {
         labSearhDto.setStudyParticipantId(studyPartId); 
         setSession(LVConstants.STUDY_PART_SEARCH_DTO, 
                 new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
-                        getStudyProtocolId(), studyPartId)).get(0));  
+                        getStudyProtocolId(), studyPartId , getUserName())).get(0));  
         labResults = new LabSearchDAO().search(labSearhDto);
         setSession("labResults", labResults);
         setAttribute(LVConstants.TOPIC, "labs");

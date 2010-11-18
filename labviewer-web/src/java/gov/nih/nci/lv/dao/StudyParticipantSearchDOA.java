@@ -78,10 +78,12 @@
 */
 package gov.nih.nci.lv.dao;
 
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.domain.HealthcareSite;
 import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.Participant;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,12 +112,15 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
     public List<StudyParticipantSearchDto> search(StudyParticipantSearchDto spsDto) 
     throws Exception {
         List<StudyParticipantSearchDto> spsDtos = new ArrayList<StudyParticipantSearchDto>();
+        LabViewerAuthorizationHelper labAuth = new LabViewerAuthorizationHelper();
+        boolean allSiteAccess = labAuth.isAllSites(spsDto.getUserName());
+        String ids = null;
         StringBuffer hql = new StringBuffer(" Select i , part , hc from Identifier as i ");
         hql.append(" left outer join i.studyParticipantAssignment as spa ");
         hql.append(" join spa.studySite as ss ");
         hql.append(" join ss.healthcareSite as hc ");
         hql.append(" join spa.participant as part ");
-        hql.append(" join ss.protocol as p where p.id = " + spsDto.getProtocolIdentifier());
+        hql.append(" join ss.protocol as p where p.id = " + spsDto.getStudyProtocolId());
         hql.append(" and i.studyParticipantAssignment is not null");
         if (StringUtils.isNotEmpty(spsDto.getFirstName())) {
             hql.append(" and upper(part.firstName) like '%" + spsDto.getFirstName().toUpperCase() + "%'");
@@ -129,6 +134,14 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
         if (spsDto.getId() != null) {
             hql.append(" and part.id = " + spsDto.getId());
         }
+        if (!allSiteAccess) {
+            ids = LVUtils.convertListToStringConcat(labAuth.getAuthSites(spsDto.getUserName()), ",");
+            if (StringUtils.isNotEmpty(ids)) {
+                System.out.println(" site ids "+ids);
+                hql.append(" and hc.nciInstituteCode in (" + ids + ")");
+            }
+        }
+
         List<Object> obs = getSession().createQuery(hql.toString()).list();
         Object[] data = null;
         for (Object d : obs) {

@@ -107,6 +107,16 @@ public class StudySearchDto extends AbstractDto<StudySearchDto> {
         this.setId(id);
     }
     /**
+     * no arg constructor.
+     * @param id protocol id
+     * @param userName userName
+     */
+    public StudySearchDto(Long id, String userName) {
+        super();
+        this.setId(id);
+        this.setUserName(userName);
+    }
+    /**
      * 
      * @param protocol protocol
      * @param identifier identifier

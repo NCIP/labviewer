@@ -79,14 +79,17 @@
 
 package gov.nih.nci.lv.dao;
 
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.Protocol;
 import gov.nih.nci.lv.domain.ProtocolStatus;
 import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -108,6 +111,9 @@ public class StudySearchDAO extends AbstractDAO {
 	throws Exception {
 	    String nciIdentifier = studySearchDto.getNciIdentifier();
 	    String shortTitle = studySearchDto.getShortTitle();
+	    String userName = studySearchDto.getUserName();
+	    String ids = null;
+	    LabViewerAuthorizationHelper labAuth = new LabViewerAuthorizationHelper();
 	    Long id = studySearchDto.getId();
 	    List<StudySearchDto> ssDtos = new ArrayList<StudySearchDto>();
 	    StringBuffer  hql = new StringBuffer(" Select i , p , ps  from Identifier as i ");
@@ -122,6 +128,15 @@ public class StudySearchDAO extends AbstractDAO {
         if (id != null) {
             hql.append(" and p.id = " + id);
         }
+        // add studies id
+        if (!labAuth.isAllStudies(userName)) {
+            
+            ids = LVUtils.convertListToStringConcat(labAuth.getAuthStudies(userName), ",");
+            if (StringUtils.isNotEmpty(ids)) {
+                hql.append(" and i.extension in (" + ids + ")");
+            }
+        }
+
         hql.append(" and ( ps.id in (select max(id) from ProtocolStatus as ps1 "
                 + "                where ps.protocol = ps1.protocol )"
                 + " or ps.id is null ) ");
@@ -133,6 +148,7 @@ public class StudySearchDAO extends AbstractDAO {
             Identifier identifier = (Identifier) data[0];
             Protocol protocol = (Protocol) data[1];
             ProtocolStatus ps = (ProtocolStatus) data[2];
+            
             ssDtos.add(new StudySearchDto(protocol, identifier , ps));
         }
 	    return ssDtos;
