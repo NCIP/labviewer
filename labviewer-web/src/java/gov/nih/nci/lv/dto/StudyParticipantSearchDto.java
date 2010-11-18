@@ -100,21 +100,33 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
     }
     /**
      * contructs with a protocol id.
-     * @param protocolIdentifier protocolIdentifier
+     * @param studyProtocolId studyProtocolId
      */
-    public StudyParticipantSearchDto(long protocolIdentifier) {
+    public StudyParticipantSearchDto(long studyProtocolId) {
         super();
-        setProtocolIdentifier(protocolIdentifier);
+        setStudyProtocolId(studyProtocolId);
     }
     /**
      * 
-     * @param protocolIdentifier protocolIdentifier
+     * @param studyProtocolId studyProtocolId
      * @param studyParticipantIdentifier studyParticipantIdentifier
      */
-    public StudyParticipantSearchDto(long protocolIdentifier , long studyParticipantIdentifier) {
+    public StudyParticipantSearchDto(long studyProtocolId , long studyParticipantIdentifier) {
         super();
-        setProtocolIdentifier(protocolIdentifier);
+        setStudyProtocolId(studyProtocolId);
         setId(studyParticipantIdentifier);
+    }
+    /**
+     * 
+     * @param studyProtocolId studyProtocolId
+     * @param studyParticipantIdentifier studyParticipantIdentifier
+     * @param userName userName
+     */
+    public StudyParticipantSearchDto(long studyProtocolId , long studyParticipantIdentifier, String userName) {
+        super();
+        setStudyProtocolId(studyProtocolId);
+        setId(studyParticipantIdentifier);
+        setUserName(userName);
     }
     /**
      * 

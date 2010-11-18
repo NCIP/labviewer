@@ -100,9 +100,10 @@ public class StudyParticipantAction extends LabViewerAction {
     public String list() throws Exception {
         // retrieve the protocol and set it in the session to be used later
         setSession(LVConstants.STUDY_SEARCH_DTO, 
-                new StudySearchDAO().search(new StudySearchDto(getStudyProtocolId())).get(0));
+                new StudySearchDAO().search(new StudySearchDto(getStudyProtocolId(), getUserName())).get(0));
         // remove the study participation
-        spsDto.setProtocolIdentifier(getStudyProtocolId());
+        spsDto.setStudyProtocolId(getStudyProtocolId());
+        spsDto.setUserName(getUserName());
         setAttribute(LVConstants.RESULTS, new StudyParticipantSearchDOA().search(spsDto));
         setAttribute(LVConstants.TOPIC, "participant");
         return SUCCESS;

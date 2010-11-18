@@ -120,10 +120,10 @@ public class LVConstants {
     /** USER ROLES . */
     public static final String USER_ROLES = "USER_ROLES";    
     /** ADMIN ACCESS . */
-    public static final String ADMIN_ACCESS = "ADDMIN_ACCESS";    
+    public static final String ADMIN_ACCESS = "adminAccess";    
     /** STUDY ACCESS . */
-    public static final String STUDY_ACCESS = "STUDY_ACCESS";    
+    public static final String STUDY_ACCESS = "studyAccess";    
     /** NO ACCESS . */
-    public static final String NO_ACCESS = "NO_ACCESS";    
+    public static final String ALLOW_ACCESS = "allowAccess";    
     
 }

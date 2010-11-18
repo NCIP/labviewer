@@ -40,13 +40,16 @@
         </script>
 </head>
 <body>
+
 <!-- main content begins-->
     <c:set var="topic" scope="request" value="study_search"/>
     <h1><fmt:message key="studyProtocol.search.header"/></h1>
     <s:form name="participantForm">
         <s:hidden  name="studyProtocolId"  id="studyProtocolId"/>
+        <input type="hidden"  name="userName"   value ="<%=(String) session.getAttribute("userName")%>"/>
     </s:form>
     <s:form name="studySearchFrom">
+        <input type="hidden"  name="ssDto.userName"   value ="<%=(String) session.getAttribute("userName")%>"/>
         <jsp:include page="/WEB-INF/tags/failureMessage.jsp"/>
         <table class="form" >
             <tr>
