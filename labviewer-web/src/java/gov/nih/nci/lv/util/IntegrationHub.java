@@ -96,17 +96,15 @@ import gov.nih.nci.lv.dto.LabSearchDto;
 
 import java.io.PrintWriter;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
 import org.apache.axis.message.MessageElement;
 import org.apache.axis.types.URI;
-import org.apache.commons.lang.xwork.StringUtils;
+import org.apache.axis.utils.StringUtils;
 import org.apache.log4j.Logger;
 
 import webservices.Documentation;
@@ -126,29 +124,34 @@ public class IntegrationHub {
     private static final Logger LOG = Logger.getLogger(IntegrationHub.class);
 
     
-    /**
-     * this method takes a string (sperated with a ' and returns a set of long ids.
-     * @param ids
-     * @return
-     */
-    Set<Long> convertToSet(String ids) {
-        Set<Long> labIds = new HashSet<Long>();
-        if (StringUtils.isEmpty(ids)) {
-            return labIds;
-        }
-        StringTokenizer st = new StringTokenizer(ids, ",");
-        while (st.hasMoreElements()) {
-            labIds.add(new Long(st.nextElement().toString()));
-        }
-        return labIds; 
-    }
-    
     void errorOnEmpty(Set<Long> labIds , String target) throws LVException {
         if (labIds == null || labIds.isEmpty()) {
             throw new LVException("Please select labs to loads to " + target);
         }
     }
     
+    IntegrationHubDto invokeHub(LabSearchDto labSearchDto , List<LabSearchDto> labs , 
+            IntegrationHubDto hubDto)  throws LVException {
+        StringBuffer error  = new StringBuffer();
+        error.append(hubDto.getServiceName() == null ? "Service Name is null" : "");
+        error.append(hubDto.getServiceType() == null ? "Service Type is null" : ""); 
+        error.append(hubDto.getHubUrl() == null ? "Hub URL is null" : "");
+        error.append(hubDto.getCredentialEpr() == null ? "Credential EPR is null" : "");
+        error.append(hubDto.getMessageXml() == null ? "Request message xml name is null" : "");
+        error.append(hubDto.getUserName() == null ? "User name is null" : "");
+        error.append(hubDto.getQName() == null ? "QName is null" : "");
+        error.append(hubDto.getQRequest() == null ? "Q Request is null" : "");
+        error.append(hubDto.getTarget() == null ? "Target is null" : "");
+        if (error.toString().length() > 0) {
+            throw new LVException(error.toString());
+        }
+            
+        hubDto.setRequestObj(createLoadLabRequestObj(labSearchDto, labs, hubDto));
+        hubDto.setRequestMessage(getRequestMessage(hubDto));
+        hubDto.setResponseObj(getResponseObj(hubDto));
+        return hubDto;
+        
+    }
     /**
      * converts the labSearch Dto to a Loab Labs Obj.
      * @param labSearchDto labs dto
@@ -157,14 +160,16 @@ public class IntegrationHub {
      * @param target (must be either CAERS or C3D
      * @throws LVException 
      */
-    LoadLabsRequest createLoadLabRequestObj(LabSearchDto labSearchDto , List<LabSearchDto> labs ,  String target) 
+    LoadLabsRequest createLoadLabRequestObj(LabSearchDto labSearchDto , List<LabSearchDto> labs ,  
+            IntegrationHubDto hubDto) 
     throws LVException {
         LoadLabsRequest labRequest = new LoadLabsRequest();
+        String target = hubDto.getTarget();
         // do error checks
-        Set<Long> labIds = convertToSet(labSearchDto.getLabIds());
+        Set<Long> labIds = LVUtils.convertStringToSet(labSearchDto.getLabIds(), ",");
         errorOnEmpty(labIds, target);
-        if (labSearchDto.getStudyProtocolId() == null) {
-            throw new LVException("Cannot load Labs, Study Protocol Id is null ");
+        if (hubDto.getStudyProtocolExtn() == null) {
+            throw new LVException("Cannot load Labs, Study Protocol Identifier is null ");
         }
         if (labSearchDto.getStudyParticipantId() == null) {
             throw new LVException("Cannot load Labs, Study Participant Id is null ");
@@ -180,7 +185,7 @@ public class IntegrationHub {
             Documentation documentation = new Documentation();
             PerformedStudy performedStudy = new PerformedStudy();
             // Set the study identifier on the document
-            documentation.setII(generateIiArray(labDto.getStudyProtocolId(), "CTODS" , target));
+            documentation.setII(generateIiArray(hubDto.getStudyProtocolExtn(), hubDto.getServiceName() , target));
             Documentation[] docs = new Documentation[1];
             docs[0] = documentation;
             performedStudy.setDocumentation(docs);
@@ -191,9 +196,8 @@ public class IntegrationHub {
             List<String> ids = labDto.getStudySubjectIdentifiers();
             if (!ids.isEmpty()) {
                 // from the old code, its setting the same value and also breaking after the first one
-                participant.setII(generateIiArray(ids.get(0), "CTODS" , target));
-                studySubject.setII(generateIiArray(ids.get(0), "CTODS" , target));
-                break;
+                participant.setII(generateIiArray(ids.get(0), hubDto.getServiceName() , target));
+                studySubject.setII(generateIiArray(ids.get(0), hubDto.getServiceName() , target));
             }
             studySubject.setParticipant(participant);
             studySubject.setPerformedStudy(performedStudy);
@@ -222,11 +226,11 @@ public class IntegrationHub {
         return labRequest;
     }
     
-    Message createRequestMessage(IntegrationHubDto hubDto) throws LVException {
+    Message getRequestMessage(IntegrationHubDto hubDto) throws LVException {
         try {
             QName qName = new QName(hubDto.getQName(), hubDto.getQRequest());
-            Utils.serializeObject(hubDto.getRequestObj(), 
-                    qName , new PrintWriter(hubDto.getMessageXml()));
+            LoadLabsRequest loadLabsRequest = hubDto.getRequestObj();
+            Utils.serializeObject(loadLabsRequest, qName , new PrintWriter(hubDto.getMessageXml()));
             Message requestMessage = new Message();
             Metadata metadata = new Metadata();
             metadata.setExternalIdentifier(hubDto.getExternalIdentifier());
@@ -238,7 +242,7 @@ public class IntegrationHub {
             URI uri = new URI();
             uri.setPath(hubDto.getQName());
             messagePayload.setXmlSchemaDefinition(uri);
-            MessageElement messageElement = new MessageElement(qName, hubDto.getRequestObj());
+            MessageElement messageElement = new MessageElement(qName, loadLabsRequest);
             messagePayload.set_any(new MessageElement[] {messageElement });
             requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
             return requestMessage;
@@ -247,7 +251,7 @@ public class IntegrationHub {
         }
     }
     
-    Response invokeHub(IntegrationHubDto hubDto) throws LVException {
+    Response getResponseObj(IntegrationHubDto hubDto) throws LVException {
         try {
             CaXchangeRequestProcessorClient client =
                 new CaXchangeRequestProcessorClient(hubDto.getHubUrl(), hubDto.getGlobusCredential());
@@ -307,7 +311,7 @@ public class IntegrationHub {
             throw new LVException(message);
         }
     }
-    private String getTargetResponse(Response response) {
+    public String getTargetResponse(Response response) {
         String status = "";
         String errorCode = "";
         String errorDesc = "";
