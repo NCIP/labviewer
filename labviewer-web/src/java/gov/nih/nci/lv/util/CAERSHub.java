@@ -77,12 +77,10 @@
 
 package gov.nih.nci.lv.util;
 
+import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.LabSearchDto;
 
 import java.util.List;
-import java.util.Set;
-
-import webservices.LabResult;
 
 /**
  * 
@@ -91,16 +89,24 @@ import webservices.LabResult;
  */
 public class CAERSHub extends IntegrationHub {
 
+
     /**
      * 
-     * @param criteria crit
-     * @param labs data
-     * @throws LVException   on error
+     * @param labSearchDto criteria
+     * @param labs labs
+     * @param hubDto hubdto
+     * @throws LVException on error
      */
-    public void loadToCAERS(LabSearchDto criteria , List<LabSearchDto> labs) throws LVException  {
-        Set<Long> labSet = convertToSet(criteria.getLabIds());
-        super.errorOnEmpty(labSet , "CAERS");
-        LabResult[] labResults = new LabResult[labSet.size()]; 
+    public void loadToCAERS(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto) 
+        throws LVException  {
+        hubDto.setTarget("CAERS");
+        hubDto.setQName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs");
+        hubDto.setQRequest("LoadLabsRequest");
+        hubDto.setMessageXml("caAERSmessage.xml");
+        hubDto.setServiceName("CTODS");
+        hubDto.setServiceType("LAB_BASED_AE");
+        hubDto.setExternalIdentifier("CTODS");
+        super.invokeHub(labSearchDto, labs, hubDto);
     }
     
     
