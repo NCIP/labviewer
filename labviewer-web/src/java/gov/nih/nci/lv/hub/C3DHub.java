@@ -77,84 +77,39 @@
 *
 */
 
-package gov.nih.nci.lv.web.action;
+package gov.nih.nci.lv.hub;
 
-import gov.nih.nci.lv.dao.StudySearchDAO;
-import gov.nih.nci.lv.dto.StudySearchDto;
-import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.dto.IntegrationHubDto;
+import gov.nih.nci.lv.dto.LabSearchDto;
+import gov.nih.nci.lv.util.LVException;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.xwork.StringUtils;
-
 /**
- * Study protocol Action class for search.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyProtocolAction extends LabViewerAction {
-    private static final long serialVersionUID = 1234573645L;
+public class C3DHub  extends IntegrationHub {
     
-    StudySearchDto ssDto = new StudySearchDto();
-    List<StudySearchDto> results = new ArrayList<StudySearchDto>();
-
     /**
      * 
-     * @return Success
-     * @throws Exception on error
+     * @param labSearchDto criteria
+     * @param labs labs
+     * @param hubDto hubdto
+     * @throws LVException on error
      */
-    public String list() throws Exception {
-        
-        if (StringUtils.isEmpty(ssDto.getNciIdentifier()) && StringUtils.isEmpty(ssDto.getShortTitle())) {
-            setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one criteria is requured to do the search");
-            return ERROR;
-        }
-        setAttribute("results", new StudySearchDAO().search(ssDto));
-        if (getStudyProtocolIdFromSession() != getStudyProtocolIdentifier()) {
-            // user has changed the study, set null for participant
-            setSession(LVConstants.STUDY_PART_SEARCH_DTO, null);
-        }
-        return SUCCESS;
+    public void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto) 
+        throws LVException  {
+        hubDto.setTarget("C3D");
+        hubDto.setQName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs");
+        hubDto.setQRequest("LoadLabsRequest");
+        hubDto.setMessageXml("caAERSmessage.xml");
+        hubDto.setServiceName("CTODS");
+        hubDto.setServiceType("LOAD_LAB_TO_CDMS");
+        hubDto.setExternalIdentifier("CTODS");
+        super.invokeHub(labSearchDto, labs, hubDto);
     }
-
-    /**
-     * 
-     * @return Success
-     * @throws Exception on error
-     */
-    public String view() throws Exception {
-        setStudyProtocolInfo();
-        return SUCCESS;
-    }       
- 
-    /**
-     * 
-     * @return ssDto
-     */
-    public StudySearchDto getSsDto() {
-        return ssDto;
-    }
-    /**
-     * 
-     * @param ssDto ssDto
-     */
-    public void setSsDto(StudySearchDto ssDto) {
-        this.ssDto = ssDto;
-    }
-    /**
-     * 
-     * @return results
-     */
-    public List<StudySearchDto> getResults() {
-        return results;
-    }
-    /**
-     * 
-     * @param results results
-     */
-    public void setResults(List<StudySearchDto> results) {
-        this.results = results;
-    }
+    
 
 }

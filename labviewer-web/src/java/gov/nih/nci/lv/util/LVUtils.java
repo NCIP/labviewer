@@ -79,6 +79,7 @@
 
 package gov.nih.nci.lv.util;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,6 +108,20 @@ public class LVUtils {
         return StringUtils.removeEnd(data.toString(), delimiter);
     }
     /**
+     * converts a string array to string concat with a , to be used in a sql.
+     * @param ids ids
+     * @param delimiter delimiter
+     * @return String
+     */
+    public static String convertListToNumberConcat(List<Long> ids , String delimiter) {
+        StringBuffer data = new StringBuffer();
+        for (Long id : ids) {
+            data.append(id + delimiter);
+        }
+        return StringUtils.removeEnd(data.toString(), delimiter);
+    }
+
+    /**
      * converts a ids seperated by a comma to a set.
      * @param ids ids
      * @param delimiter delimiter
@@ -114,6 +129,24 @@ public class LVUtils {
      */
     public static Set<Long> convertStringToSet(String ids , String delimiter) {
         Set<Long> labs = new HashSet<Long>();
+        if (StringUtils.isEmpty(ids)) {
+            return labs;
+        }        
+        StringTokenizer st = new StringTokenizer(ids, delimiter);
+        while (st.hasMoreTokens()) {
+            labs.add(new Long(st.nextElement().toString()));
+        }
+        return labs;
+    }
+
+    /**
+     * converts a ids seperated by a comma to a set.
+     * @param ids ids
+     * @param delimiter delimiter
+     * @return Set
+     */
+    public static List<Long> convertStringToList(String ids , String delimiter) {
+        List<Long> labs = new ArrayList<Long>();
         if (StringUtils.isEmpty(ids)) {
             return labs;
         }        

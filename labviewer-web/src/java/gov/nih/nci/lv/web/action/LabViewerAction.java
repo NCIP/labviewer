@@ -139,9 +139,11 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    *
    * @return studyProtocolId
    */
-  Long getStudyProtocolIdentifier() {
+   Long getStudyProtocolIdentifier() {
       return studyProtocolId;
-  }
+   }
+   
+   
 
    /**
    *
@@ -274,10 +276,12 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         setUserInfoInSession();
         enableMenu();
     }
-    IntegrationHubDto createHubDto() {
+    IntegrationHubDto getHubDto() {
         IntegrationHubDto hubDto = new IntegrationHubDto();
         hubDto.setCredentialEpr((String) getSessionAttr(LVConstants.CAGRID_SSO_DELEGATION_SERVICE_EPR));
         hubDto.setGlobusCredential((GlobusCredential) getSessionAttr(LVConstants.CAGRID_SSO_GRID_CREDENTIAL));
+        hubDto.setUserName((String) getSessionAttr(LVConstants.USER_NAME));
+        hubDto.setStudyProtocolExtn(((StudySearchDto) getSessionAttr(LVConstants.STUDY_SEARCH_DTO)).getNciIdentifier());
         return hubDto;
     }
 

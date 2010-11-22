@@ -81,15 +81,25 @@ import gov.nih.nci.lv.domain.Activity;
 import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.LaboratoryResult;
 import gov.nih.nci.lv.domain.LaboratoryTest;
+import gov.nih.nci.lv.domain.LoadLabStatus;
 import gov.nih.nci.lv.domain.Specimen;
 import gov.nih.nci.lv.domain.SpecimenCollection;
 import gov.nih.nci.lv.domain.StudyParticipantAssignment;
 import gov.nih.nci.lv.dto.LabSearchDto;
+import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 
 /**
  * 
@@ -118,6 +128,7 @@ public class LabSearchDAO  extends AbstractDAO {
         hql.append(" and p.id = " + labDto.getStudyProtocolId());
         hql.append(" and part.id = " + labDto.getStudyParticipantId());
         List<StudyParticipantAssignment> spas = getSession().createQuery(hql.toString()).list();
+        List<Long>  labIds = new ArrayList<Long>();
         for (StudyParticipantAssignment spa : spas) {
             List<Activity> acts = spa.getActivities();
             List<Identifier> ids = spa.getStudySubjectIdentifiers();
@@ -165,11 +176,79 @@ public class LabSearchDAO  extends AbstractDAO {
                         lab.setReferenceLowRange(labResult.getReferenceRangeLow());
                         lab.setReferenceHighRange(labResult.getReferenceRangeHigh());
                         labs.add(lab);
+                        labIds.add(labResult.getId());
                     }
                 }
             }
-            
+            // update the dates
+            Map<Long, LoadLabStatus> labStatuses = getLoadLabStatus(labIds);
+            LoadLabStatus labStatus = null;
+            for (LabSearchDto lab : labs) {
+                if (labStatuses.containsKey(lab.getId())) {
+                    labStatus = labStatuses.get(lab.getId());
+                    lab.setAeSentDate(labStatus.getAeSentDate());
+                    lab.setCdmsSentDate(labStatus.getCdmsDate());
+                }
+            }
         }
         return labs;
+    }
+    
+    /**
+     * 
+     * @param clinicalIds ids
+     * @param target target
+     */
+    public void saveLoadLabStatus(List<Long> clinicalIds, String target) {
+        Session session = getSession();
+        Transaction tran = session.beginTransaction();
+        for (Long id : clinicalIds) {
+            Criteria labCrit = session.createCriteria(LoadLabStatus.class);
+            LoadLabStatus llstatus = new LoadLabStatus();
+            llstatus.setClinicalResultId(id);
+            labCrit.add(Example.create(llstatus));
+            if (labCrit.list().isEmpty()) {
+                if (LVConstants.CAAERS.equals(target)) {
+                    llstatus.setAeIndicator("true");
+                    llstatus.setAeSentDate(new Date());
+                } else {
+                    llstatus.setCdmsIndicator("true");
+                    llstatus.setCdmsDate(new Date());
+                }
+                session.save(llstatus);
+            }
+        }
+        updateLabStatus(clinicalIds, target, session);
+        tran.commit();
+    }
+    
+    /**
+     * update the records for the selected labs.
+     * @param clinicalIds clinical ids
+     * @param target caAERS or C3D
+     */
+    private void updateLabStatus(List<Long> clinicalIds , String target , Session session) {
+        String sql = "";
+        String ids = LVUtils.convertListToNumberConcat(clinicalIds, ",");
+        if (LVConstants.CAAERS.equals(target)) {
+            sql = "update lab_viewer_status set adverse_event_sent_date = current_timestamp , " 
+            		+ " adverse_event_indicator = 'true'  where clinical_result_id  in ( "  + ids + " )";
+        } else if (LVConstants.C3D.equals(target)) {
+            sql = "update lab_viewer_status set cdms_sent_date = current_timestamp , " 
+                + " cdms_indicator = 'true'  where clinical_result_id  in ( "  + ids + " )";
+        }
+        session.createSQLQuery(sql).executeUpdate();
+    }
+    
+    private Map<Long, LoadLabStatus> getLoadLabStatus(List<Long> ids) {
+        String data = LVUtils.convertListToNumberConcat(ids, ",");
+        StringBuffer hql = new StringBuffer(
+                " Select lls from LoadLabStatus lls where clinicalResultId in ( " + data + " )");
+        List<LoadLabStatus> loadLabs = (List<LoadLabStatus>) getSession().createQuery(hql.toString()).list();        
+        Map<Long, LoadLabStatus> map = new HashMap<Long, LoadLabStatus>();
+        for (LoadLabStatus loadLab : loadLabs) {
+            map.put(loadLab.getClinicalResultId(), loadLab);
+        }
+        return map;
     }
 }

@@ -31,5 +31,6 @@
         <mapping class="gov.nih.nci.lv.domain.Organization" />
         <mapping class="gov.nih.nci.lv.domain.PerformingLaboratory" />
         <mapping class="gov.nih.nci.lv.domain.CentralLaboratory" />
+        <mapping class="gov.nih.nci.lv.domain.LoadLabStatus" />
     </session-factory>
 </hibernate-configuration>
