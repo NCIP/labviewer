@@ -79,8 +79,11 @@ package gov.nih.nci.lv.dto;
 
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
+import gov.nih.nci.caxchange.Response;
 
 import org.globus.gsi.GlobusCredential;
+
+import webservices.LoadLabsRequest;
 
 /**
  * 
@@ -89,6 +92,7 @@ import org.globus.gsi.GlobusCredential;
  */
 public class IntegrationHubDto {
 
+    private String studyProtocolExtn;
     private String messageXml;
     private String qName;
     private String qRequest;
@@ -98,9 +102,12 @@ public class IntegrationHubDto {
     private String credentialEpr;
     private GlobusCredential globusCredential;
     private String serviceType;
-    private Object requestObj;
+    private LoadLabsRequest requestObj;
     private String hubUrl;
     private Message requestMessage;
+    private Response responseObj;
+    private String target; // either CAERS or C3D
+    private String serviceName; // currently CTODS
 
     /**
      * 
@@ -244,14 +251,14 @@ public class IntegrationHubDto {
      * 
      * @return requestObj
      */
-    public Object getRequestObj() {
+    public LoadLabsRequest getRequestObj() {
         return requestObj;
     }
     /**
      * 
      * @param requestObj requestObj
      */
-    public void setRequestObj(Object requestObj) {
+    public void setRequestObj(LoadLabsRequest requestObj) {
         this.requestObj = requestObj;
     }
     /**
@@ -259,7 +266,8 @@ public class IntegrationHubDto {
      * @return hubUrl
      */
     public String getHubUrl() {
-        return hubUrl;
+        //return "https://ncias-d282-v.nci.nih.gov:29543/wsrf-ihub/services/cagrid/CaXchangeRequestProcessor";
+        return "https://ncias-c278-v.nci.nih.gov:58445/wsrf-ihub/services/cagrid/CaXchangeRequestProcessor";
     }
     /**
      * 
@@ -282,8 +290,62 @@ public class IntegrationHubDto {
     public void setRequestMessage(Message requestMessage) {
         this.requestMessage = requestMessage;
     }
-    
-    
+    /**
+     * 
+     * @return responseObj
+     */
+    public Response getResponseObj() {
+        return responseObj;
+    }
+    /**
+     * 
+     * @param responseObj responseObj
+     */
+    public void setResponseObj(Response responseObj) {
+        this.responseObj = responseObj;
+    }
+    /**
+     * 
+     * @return target
+     */
+    public String getTarget() {
+        return target;
+    }
+    /**
+     * 
+     * @param target target
+     */
+    public void setTarget(String target) {
+        this.target = target;
+    }
+    /**
+     * 
+     * @return studyProtocolExtn
+     */
+    public String getStudyProtocolExtn() {
+        return studyProtocolExtn;
+    }
+    /**
+     * 
+     * @param studyProtocolExtn studyProtocolExtn
+     */
+    public void setStudyProtocolExtn(String studyProtocolExtn) {
+        this.studyProtocolExtn = studyProtocolExtn;
+    }
+    /**
+     * 
+     * @return serviceName
+     */
+    public String getServiceName() {
+        return serviceName;
+    }
+    /**
+     * 
+     * @param serviceName serviceName
+     */
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
     
     
 

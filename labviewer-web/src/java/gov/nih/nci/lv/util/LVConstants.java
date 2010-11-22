@@ -127,7 +127,10 @@ public class LVConstants {
     public static final String ALLOW_ACCESS = "allowAccess";    
     /** LAB RESULTS . */
     public static final String LAB_RESULTS = "labResults";    
-
+    /** caAERS . */
+    public static final String CAAERS = "caAERS";    
+    /** C3D . */
+    public static final String C3D = "C3D";    
     
     
 }

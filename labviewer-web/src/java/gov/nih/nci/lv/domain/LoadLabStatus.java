@@ -77,84 +77,126 @@
 *
 */
 
-package gov.nih.nci.lv.web.action;
+package gov.nih.nci.lv.domain;
 
-import gov.nih.nci.lv.dao.StudySearchDAO;
-import gov.nih.nci.lv.dto.StudySearchDto;
-import gov.nih.nci.lv.util.LVConstants;
+import java.util.Date;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.xwork.StringUtils;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
- * Study protocol Action class for search.
- * @author NAmiruddin
+ * 
+ * @author Naveen Amiruddin
  *
  */
-public class StudyProtocolAction extends LabViewerAction {
-    private static final long serialVersionUID = 1234573645L;
+@Entity
+@Table(name = "LAB_VIEWER_STATUS")
+public class LoadLabStatus {
+
     
-    StudySearchDto ssDto = new StudySearchDto();
-    List<StudySearchDto> results = new ArrayList<StudySearchDto>();
-
+    private String aeIndicator;
+    private Date aeSentDate;
+    private String cdmsIndicator;
+    private Date cdmsDate;
+    private Long clinicalResultId;
+    private Long id;
     /**
-     * 
-     * @return Success
-     * @throws Exception on error
+     * set id.
+     * @param id id
      */
-    public String list() throws Exception {
-        
-        if (StringUtils.isEmpty(ssDto.getNciIdentifier()) && StringUtils.isEmpty(ssDto.getShortTitle())) {
-            setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one criteria is requured to do the search");
-            return ERROR;
-        }
-        setAttribute("results", new StudySearchDAO().search(ssDto));
-        if (getStudyProtocolIdFromSession() != getStudyProtocolIdentifier()) {
-            // user has changed the study, set null for participant
-            setSession(LVConstants.STUDY_PART_SEARCH_DTO, null);
-        }
-        return SUCCESS;
+    public void setId(Long id) {
+        this.id = id;
     }
-
+    
+    /**
+     * Get the id of the object.
+     * @return the id
+     */
+    @Id
+    @SequenceGenerator(name = "labviewer_seq", sequenceName = "LAB_VIEWER_STATUS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "labviewer_seq")
+    public Long getId() {
+        return this.id;
+    }
+    
     /**
      * 
-     * @return Success
-     * @throws Exception on error
+     * @return aeIndicator
      */
-    public String view() throws Exception {
-        setStudyProtocolInfo();
-        return SUCCESS;
-    }       
- 
-    /**
-     * 
-     * @return ssDto
-     */
-    public StudySearchDto getSsDto() {
-        return ssDto;
+    @Column(name = "ADVERSE_EVENT_INDICATOR")
+    public String getAeIndicator() {
+        return aeIndicator;
     }
     /**
      * 
-     * @param ssDto ssDto
+     * @param aeIndicator aeIndicator
      */
-    public void setSsDto(StudySearchDto ssDto) {
-        this.ssDto = ssDto;
+    public void setAeIndicator(String aeIndicator) {
+        this.aeIndicator = aeIndicator;
     }
     /**
      * 
-     * @return results
+     * @return aeSentDate
      */
-    public List<StudySearchDto> getResults() {
-        return results;
+    @Column(name = "ADVERSE_EVENT_SENT_DATE")
+    public Date getAeSentDate() {
+        return aeSentDate;
     }
     /**
      * 
-     * @param results results
+     * @param aeSentDate aeSentDate
      */
-    public void setResults(List<StudySearchDto> results) {
-        this.results = results;
+    public void setAeSentDate(Date aeSentDate) {
+        this.aeSentDate = aeSentDate;
     }
-
+    /**
+     * 
+     * @return cdmsIndicator
+     */
+    @Column(name = "CDMS_INDICATOR")
+    public String getCdmsIndicator() {
+        return cdmsIndicator;
+    }
+    /**
+     * 
+     * @param cdmsIndicator cdmsIndicator
+     */
+    public void setCdmsIndicator(String cdmsIndicator) {
+        this.cdmsIndicator = cdmsIndicator;
+    }
+    /**
+     * 
+     * @return cdmsDate
+     */
+    @Column(name = "CDMS_SENT_DATE")
+    public Date getCdmsDate() {
+        return cdmsDate;
+    }
+    /**
+     * 
+     * @param cdmsDate cdmsDate
+     */
+    public void setCdmsDate(Date cdmsDate) {
+        this.cdmsDate = cdmsDate;
+    }
+    /**
+     * 
+     * @return cdmsDate
+     */
+    @Column(name = "CLINICAL_RESULT_ID")
+    public Long getClinicalResultId() {
+        return clinicalResultId;
+    }
+    /**
+     * 
+     * @param clinicalResultId clinicalResultId
+     */
+    public void setClinicalResultId(Long clinicalResultId) {
+        this.clinicalResultId = clinicalResultId;
+    }
 }

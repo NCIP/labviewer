@@ -24,13 +24,12 @@
 
         function submitCAERSAction() {
             document.getElementById("submitWaitMsg").style.display='block'; 
-            document.labForm.style.display='none'; 
-            setTimeout('document.images["progress2"].src = "../images/loading.gif"', 400);
             document.labForm.action = "labcaers.action";
             document.labForm.submit();
         }
         function submitC3DAction() {
-            document.labForm.action = "labcaers.action";
+            document.getElementById("submitWaitMsg").style.display='block'; 
+            document.labForm.action = "labc3d.action";
             document.labForm.submit();
         }
 
@@ -40,7 +39,7 @@
             if (pos >= 0) { 
                 var str3 = rowId+",";
                 var str2 = str.replace(str3,'');
-                document.labForm.idsds.value=str2;
+                document.labForm.ids.value=str2;
             } else {
                 document.labForm.ids.value += rowId;
                 document.labForm.ids.value += ",";
@@ -102,7 +101,7 @@
         <div id="submitWaitMsg" align="center" style="DISPLAY:none">
             <font color="green" size="4">
             <p style="border-color:black;border-style:solid;">Please wait while the system processes your request...<br/>Do not click the [Back] button on your browser</p></font><br/><br/>
-            <img id="progress2" src="../images/loading.gif"/>Loading...
+            <img id="progress2" src="./images/loading.gif"/>Loading...
         </div> 
         <display:table class="data"  sort="list" pagesize="1000" id="row"  name="sessionScope.labResults"  requestURI="" decorator="dyndecorator" export="true">
             <display:setProperty name="export.excel.filename" value="LabResults.xls" />
@@ -121,6 +120,8 @@
             <display:column titleKey="lab.numericResult"  property="numericResult" sortable="true" headerClass="sortable"/> 
             <display:column titleKey="lab.lowerLimit"  property="referenceLowRange" sortable="true" headerClass="sortable"/> 
             <display:column titleKey="lab.upperLimit"  property="referenceHighRange" sortable="true" headerClass="sortable"/> 
+            <display:column titleKey="lab.aeSentDate"  property="aeSentDate" sortable="true" format="{0,date,MM-dd-yyyy}" headerClass="sortable"/> 
+            <display:column titleKey="lab.c3dSentDate"  property="cdmsSentDate" sortable="true" format="{0,date,MM-dd-yyyy}"  headerClass="sortable"/> 
         </display:table>
 
         <div class="line"></div>
@@ -129,7 +130,7 @@
                 <ul class="btnrow">
                     <li><li>
                             <s:a href="#" cssClass="btn" onclick="submitCAERSAction()"><span class="btn_img"><span class="save">Submit Labs to caAERS</span></span></s:a>
-                            <s:a href="#" cssClass="btn" onclick="handleC3DAction()"><span class="btn_img"><span class="save">Submit Labs to C3D</span></span></s:a>
+                            <s:a href="#" cssClass="btn" onclick="submitC3DAction()"><span class="btn_img"><span class="save">Submit Labs to C3D</span></span></s:a>
                         </li>
                 </ul>
             </del>

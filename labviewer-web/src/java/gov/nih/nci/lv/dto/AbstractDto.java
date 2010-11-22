@@ -78,6 +78,7 @@
 
 package gov.nih.nci.lv.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /** 
@@ -85,7 +86,7 @@ import java.util.Date;
  * @author NAmiruddin
  * @param <DTO> dto object
  */
-public class AbstractDto<DTO> { 
+public class AbstractDto<DTO>  implements Serializable { 
     
     private Long id;
     private Long studyProtocolId;

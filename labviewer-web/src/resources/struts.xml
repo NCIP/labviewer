@@ -46,7 +46,10 @@
             </interceptor-stack>
         </interceptors>
         <default-interceptor-ref name="lvDefaultInterceptor" />
-
+        <global-results>
+            <result name="logout">logout.jsp</result>
+        </global-results>
+        
         <action name="home*" class="gov.nih.nci.lv.web.action.HomeAction" method="{1}">
             <result>/WEB-INF/jsp/welcome.jsp</result>
             <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 

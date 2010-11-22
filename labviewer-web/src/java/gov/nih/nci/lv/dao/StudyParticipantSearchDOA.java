@@ -137,7 +137,6 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
         if (!allSiteAccess) {
             ids = LVUtils.convertListToStringConcat(labAuth.getAuthSites(spsDto.getUserName()), ",");
             if (StringUtils.isNotEmpty(ids)) {
-                System.out.println(" site ids "+ids);
                 hql.append(" and hc.nciInstituteCode in (" + ids + ")");
             }
         }

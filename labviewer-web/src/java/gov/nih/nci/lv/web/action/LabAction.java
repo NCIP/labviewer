@@ -81,13 +81,18 @@ package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.lv.dao.LabSearchDAO;
 import gov.nih.nci.lv.dao.StudyParticipantSearchDOA;
+import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.LabSearchDto;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
+import gov.nih.nci.lv.hub.C3DHub;
+import gov.nih.nci.lv.hub.CAERSHub;
+import gov.nih.nci.lv.hub.IntegrationHub;
 import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.util.LVException;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Labs Action class.
@@ -116,10 +121,20 @@ public class LabAction extends LabViewerAction {
                 new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
                         getStudyProtocolId(), studyPartId , getUserName())).get(0));  
         labResults = new LabSearchDAO().search(labSearhDto);
-        setSession("labResults", labResults);
+        setSession(LVConstants.LAB_RESULTS, labResults);
         setAttribute(LVConstants.TOPIC, "labs");
         return SUCCESS;
     }
+    
+    /**
+     * 
+     * @return Success
+     * @throws Exception on error
+     */
+    public String c3d() throws Exception {
+        return loadLabs(new C3DHub() , LVConstants.C3D);
+    }
+    
 
     /**
      * 
@@ -127,21 +142,26 @@ public class LabAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String caers() throws Exception {
-        if (labSearhDto.getLabIds() == null) {
-            setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one Labs must be selected to submit to caAERS");
-            return SUCCESS;
-        }
-        
-        StringTokenizer st = new StringTokenizer(labSearhDto.getLabIds(), ",");
-        List<Long> labs = new ArrayList<Long>();
-        while (st.hasMoreTokens()) {
-            labs.add(new Long(st.nextElement().toString()));
-        }
-        setAttribute(LVConstants.SUCCESS_MESSAGE, labs.size() + " Labs has been successfully submitted to caAERS");
-        labSearhDto.setLabIds(null);
-        return SUCCESS;
+        return loadLabs(new CAERSHub(), LVConstants.CAAERS);
     }
     
+    
+    private String loadLabs(IntegrationHub iHub , String target) throws Exception {
+        labResults = (List<LabSearchDto>) getSessionAttr(LVConstants.LAB_RESULTS);
+        IntegrationHubDto hubDto = super.getHubDto();
+        System.out.println(" labSearhDto.getLabIds() "+labSearhDto.getLabIds());    
+        try {
+            iHub.loadLabs(labSearhDto, labResults, hubDto);
+            setAttribute(LVConstants.SUCCESS_MESSAGE, " Labs has been successfully submitted to " + target);
+        } catch (LVException lve) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, lve.getMessage());
+        }
+        List<Long> clinicalIds = LVUtils.convertStringToList(labSearhDto.getLabIds(), ",");
+        new LabSearchDAO().saveLoadLabStatus(clinicalIds, target);
+        labSearhDto.setLabIds(null);
+        return list();
+
+    }
     /**
      * 
      * @param labSearhDto labSearhDto
@@ -173,6 +193,4 @@ public class LabAction extends LabViewerAction {
     public void setLabResults(List<LabSearchDto> labResults) {
         this.labResults = labResults;
     }
-    
-    
 }
