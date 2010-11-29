@@ -180,24 +180,21 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 
 		try
 		{
-//			// Perform the check to see if the patient exists - Demo case
-//			// where labs are loaded prior to registering a patient.
-//			Long spaid = dao.checkParticipantExists(con, protocol, mrn);
-//			if (spaid != null)
-//			{
-//				// protocol.getHealthCareSite().getStudyParticipantAssignment().getParticipant().getIdentifier().setRoot(root);
-//				log.debug(protocol.getHealthCareSite()
-//						.getStudyParticipantAssignment().getParticipant()
-//						.getIdentifier().getRoot());
-//				// update Participant Grid Id
-//				dao.updateParticipantGridId(con, registration.getGridId(),
-//						spaid, mrn);
-//			}
-//			else
-//			{
+			// Perform the check to see if the patient exists - Demo case
+			// where labs are loaded prior to registering a patient.
+			Long spaid = dao.checkParticipantExists(con, protocol, mrn);
+			if (spaid != null)
+			{
+			    // upgrade the grid id
+			    log.debug(" updating the grid id = " + registration.getGridId() +" mrn = "+ mrn + " spa id = "+spaid);
+			    dao.updateParticipantGridId(con, registration.getGridId(),spaid, mrn);
+			}
+			else
+			{
+			    log.debug(" Participation is not there so creating ....");
 				// Save Protocol.
 				dao.persist(con, protocol);
-//			}
+			}
 		}
 		catch (SQLException e)
 		{
