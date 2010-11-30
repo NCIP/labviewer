@@ -10,7 +10,7 @@ import gov.nih.nci.cabig.ccts.domain.StudySiteType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.common.RegistrationConsumerI;
 import gov.nih.nci.ccts.grid.service.globus.RegistrationConsumerAuthorization;
 import gov.nih.nci.ccts.grid.stubs.types.InvalidRegistrationException;
@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
  * for Lab Viewer. It consumes the patient registration message that is sent
  * from the patient registry application via the hub.
  * <P>
- * 
+ *
  * @author Anupama Sharma
  */
 public class LabViewerRegistrationConsumer implements RegistrationConsumerI
@@ -84,7 +84,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.ccts.grid.common.RegistrationConsumer#rollback(gov.nih.nci.ccts.grid.Registration)
 	 */
 	public void rollback(Registration registration) throws RemoteException,
@@ -159,7 +159,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see gov.nih.nci.ccts.grid.common.RegistrationConsumer#register(gov.nih.nci.ccts.grid.Registration)
 	 */
 	public Registration register(Registration registration)
@@ -168,7 +168,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 	{
 		log.debug("Lab Viewer Registration message received");
 		checkAuthorization(RegistrationConsumerAuthorization.getCallerIdentity(), registration);
-		
+
 		// save the study data
 		Protocol protocol = new Protocol();
 		// populate the protocol and retrieve the MRN from the identifier
@@ -227,25 +227,25 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 
 		return registration;
 	}
-	
+
 	/**
 	 * @param callerId
 	 * @throws RegistrationConsumptionException
 	 */
 	private void checkAuthorization(String callerId, Registration registration) throws RegistrationConsumptionException
-	{	
+	{
 		if (callerId == null)
 		{
 			log.error("Error saving participant: no user credentials provided");
 			throw createRegistrationConsumptionException("No user credentials provided");
 		}
 
-		log.debug("Service called by: " + callerId);		
+		log.debug("Service called by: " + callerId);
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		log.debug("Username = " + username);
-		
+
 		try
 		{
 		    Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
@@ -267,7 +267,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", registrationConsumerRole.getDisplayName());
 		    			}
 		    			log.debug("StudyId = " + studyId);
-		    			
+
 		    			// if the user has permission to access specific studies (not all studies), then verify the study
 		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
 		    		    {
@@ -285,13 +285,13 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    			{
 		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", registrationConsumerRole.getDisplayName());
 		    			}
-		    			
+
 		    			// if the user has permission to access specific sites (not all sites), then verify the sites
 		    			if (!userRoleMembership.isAllSites())
 		    		    {
 		    				log.debug("User is NOT authorized for all sites");
 		    				boolean userAuthorizedForSite = false;
-		    				
+
 		    				for (String siteNciInstituteCode : siteNciInstituteCodes)
 		    				{
 		    					log.debug("Checking site NCI institute code: " + siteNciInstituteCode);
@@ -301,7 +301,7 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		    						userAuthorizedForSite = true;
 		    					}
 		    				}
-		    				
+
 		    				log.info("userAuthorizedForSite = " + userAuthorizedForSite);
 		    				if (!userAuthorizedForSite)
 	    					{
@@ -327,28 +327,28 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
             throw createRegistrationConsumptionException(e.getMessage());
         }
 	}
-	
+
 	private RegistrationConsumptionException createRegistrationConsumptionException(String message)
 	{
 		RegistrationConsumptionException exception = new RegistrationConsumptionException();
 		exception.setFaultString(message);
 		return exception;
 	}
-	
+
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
 	{
         if (authorizationHelper == null)
         {
             authorizationHelper = new LabViewerAuthorizationHelper();
         }
-        
+
         return authorizationHelper;
     }
-	
+
 	private String getStudyId(Registration registration)
 	{
 		String studyId = null;
-		
+
 		IdentifierType identifiers[] = registration.getStudyRef().getIdentifier();
 		for (IdentifierType identifier : identifiers)
 		{
@@ -358,14 +358,14 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 				break; // since match has been found
 			}
 		}
-		
+
 		return studyId;
 	}
-	
+
 	private List<String> getSiteNciInstituteCodes(Registration registration)
 	{
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
-		
+
 		StudySiteType studySite = registration.getStudySite();
 		if (studySite != null)
 		{
@@ -384,15 +384,15 @@ public class LabViewerRegistrationConsumer implements RegistrationConsumerI
 		        }
 		    }
 		}
-		
+
 		return siteNciInstituteCodes;
 	}
 
 	/**
-	 * Populates the protocol object and returns the mrn from the identifierType 
+	 * Populates the protocol object and returns the mrn from the identifierType
 	 * @param protocol
 	 * @param registration
-	 * @return mrn 
+	 * @return mrn
 	 * @throws InvalidRegistrationException
 	 */
 	private String populateProtocol(Protocol protocol, Registration registration)

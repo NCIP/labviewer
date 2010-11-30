@@ -86,6 +86,8 @@ import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 import gov.nih.nci.lv.dto.StudySearchDto;
 import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.util.LVException;
+import gov.nih.nci.lv.util.LVPropertyReader;
 
 import java.util.Set;
 
@@ -243,13 +245,12 @@ public class LabViewerAction extends ActionSupport implements Preparable {
                     new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
         }
     }
-    private void setDefaults() {
+    private void setDefaults() throws LVException {
         setSession(LVConstants.ADMIN_ACCESS, "no");
         setSession(LVConstants.STUDY_ACCESS, "no");
         setSession(LVConstants.ALLOW_ACCESS, "no");
-        setSession(LVConstants.VERSION_NUMBER, "CTODS 2.3");
-        setSession(LVConstants.HELP_LINK, 
-                "https://cabig-kc.nci.nih.gov/CTMS/KC/index.php/CaBIG_Lab_Viewer_User_Guide%2C_v2.2_DRAFT");
+        setSession(LVConstants.VERSION_NUMBER, LVPropertyReader.getPropertyValue("version"));
+        setSession(LVConstants.HELP_LINK, LVPropertyReader.getPropertyValue("help.link"));
     }
     
     /**
@@ -260,18 +261,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         // todo : throw error on null
         if (userRoles != null) {
             if (userRoles.contains(SuiteRole.SYSTEM_ADMINISTRATOR)) {
-                System.out.println("................ user has admin access");
                 setSession(LVConstants.ADMIN_ACCESS, "yes");
                 setSession(LVConstants.ALLOW_ACCESS, "yes");
             }
             if (userRoles.contains(SuiteRole.LAB_DATA_USER)) {
-                System.out.println("................ user has lab data user");
                 setSession(LVConstants.STUDY_ACCESS, "yes");
                 setSession(LVConstants.ALLOW_ACCESS, "yes");
             }
         }
     }
-    void labViewerSetup() {
+    void labViewerSetup() throws LVException {
         setDefaults();
         setUserInfoInSession();
         enableMenu();

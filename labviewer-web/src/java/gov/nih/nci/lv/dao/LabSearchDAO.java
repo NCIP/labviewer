@@ -95,6 +95,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -241,11 +242,16 @@ public class LabSearchDAO  extends AbstractDAO {
     }
     
     private Map<Long, LoadLabStatus> getLoadLabStatus(List<Long> ids) {
+        Map<Long, LoadLabStatus> map = new HashMap<Long, LoadLabStatus>();
         String data = LVUtils.convertListToNumberConcat(ids, ",");
+        System.out.println(" data ..." + data);
+        if (StringUtils.isEmpty(data)) {
+            return map;
+        }
         StringBuffer hql = new StringBuffer(
                 " Select lls from LoadLabStatus lls where clinicalResultId in ( " + data + " )");
         List<LoadLabStatus> loadLabs = (List<LoadLabStatus>) getSession().createQuery(hql.toString()).list();        
-        Map<Long, LoadLabStatus> map = new HashMap<Long, LoadLabStatus>();
+        
         for (LoadLabStatus loadLab : loadLabs) {
             map.put(loadLab.getClinicalResultId(), loadLab);
         }

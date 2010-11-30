@@ -5,7 +5,7 @@ import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
 import gov.nih.nci.cagrid.labviewer.service.globus.LabLoaderAuthorization;
 import gov.nih.nci.cagrid.labviewer.xml.HL7v3CtLabUnMarshaller;
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.ctom.ctlab.handler.ProtocolHandler;
 
 import java.rmi.RemoteException;
@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 /**
  * LabLoaderImpl is the implementation of the Lab Loader grid service to accept
  * HL7v3 messages and persist them to the CTODS database.
- * 
+ *
  * @author Michael Holck
  */
 public class LabLoaderImpl extends LabLoaderImplBase
@@ -31,7 +31,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 	}
 
 	/**
-	 * loadLab method unmarshalls Lab message and calls into the 
+	 * loadLab method unmarshalls Lab message and calls into the
 	 * DAO to the persist the Lab message data
 	 * @param string
 	 * @throws RemoteException
@@ -93,7 +93,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 			}
 		}
 	}
-	
+
 	/**
 	 * @param callerId
 	 * @throws RemoteException
@@ -106,12 +106,12 @@ public class LabLoaderImpl extends LabLoaderImplBase
 			throw new RemoteException("No user credentials provided");
 		}
 
-		log.debug("Service called by: " + callerId);		
+		log.debug("Service called by: " + callerId);
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
 		log.debug("Username = " + username);
-		
+
 		try
 		{
 		    Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
@@ -134,7 +134,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		    				throw new SuiteAuthorizationAccessException("Role %s is study scoped - study identifier is null", labLoaderRole.getDisplayName());
 		    			}
 		    			log.debug("StudyId = " + studyId);
-		    			
+
 		    			// if the user has permission to access specific studies (not all studies), then verify the study
 		    			if (!userRoleMembership.isAllStudies() && !userRoleMembership.getStudyIdentifiers().contains(studyId))
 		    		    {
@@ -153,7 +153,7 @@ public class LabLoaderImpl extends LabLoaderImplBase
 		    				throw new SuiteAuthorizationAccessException("Role %s is site scoped - site NCI institute code is null", labLoaderRole.getDisplayName());
 		    			}
 		    			log.debug("Site NCI institute code = " + siteNciInstituteCode);
-		    			
+
 		    			// if the user has permission to access specific sites (not all sites), then verify the sites
 		    			if (!userRoleMembership.isAllSites() && !userRoleMembership.getSiteIdentifiers().contains(siteNciInstituteCode))
 		    		    {
@@ -179,14 +179,14 @@ public class LabLoaderImpl extends LabLoaderImplBase
 			throw new RemoteException(e.getMessage());
 		}
 	}
-	
+
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
 	{
         if (authorizationHelper == null)
         {
             authorizationHelper = new LabViewerAuthorizationHelper();
         }
-        
+
         return authorizationHelper;
     }
 
