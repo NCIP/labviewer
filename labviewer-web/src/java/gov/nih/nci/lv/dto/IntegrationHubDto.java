@@ -80,6 +80,8 @@ package gov.nih.nci.lv.dto;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.Response;
+import gov.nih.nci.lv.util.LVException;
+import gov.nih.nci.lv.util.LVPropertyReader;
 
 import org.globus.gsi.GlobusCredential;
 
@@ -264,10 +266,10 @@ public class IntegrationHubDto {
     /**
      * 
      * @return hubUrl
+     * @throws LVException 
      */
-    public String getHubUrl() {
-        //return "https://ncias-d282-v.nci.nih.gov:29543/wsrf-ihub/services/cagrid/CaXchangeRequestProcessor";
-        return "https://ncias-c278-v.nci.nih.gov:58445/wsrf-ihub/services/cagrid/CaXchangeRequestProcessor";
+    public String getHubUrl() throws LVException {
+        return (new LVPropertyReader().getPropertyValue("hub.url"));
     }
     /**
      * 

@@ -10,7 +10,7 @@ import gov.nih.nci.cabig.ccts.domain.StudyOrganizationType;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRoleMembership;
-import gov.nih.nci.caxchange.ctom.viewer.util.LabViewerAuthorizationHelper;
+import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.ccts.grid.studyconsumer.common.StudyConsumerI;
 import gov.nih.nci.ccts.grid.studyconsumer.service.globus.StudyConsumerAuthorization;
 import gov.nih.nci.ccts.grid.studyconsumer.stubs.types.InvalidStudyException;
@@ -125,20 +125,20 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		log.info("Study created");
 	}
-	
+
 	/**
 	 * @param callerId
 	 * @throws StudyCreationException
 	 */
 	private void checkAuthorization(String callerId, Study study) throws StudyCreationException
-	{	
+	{
 		if (callerId == null)
 		{
 			log.error("Error saving study: no user credentials provided");
 			throw createStudyCreationException("No user credentials provided");
 		}
 
-		log.debug("Service called by: " + callerId);		
+		log.debug("Service called by: " + callerId);
 		int beginIndex = callerId.lastIndexOf("=") + 1;
 		int endIndex = callerId.length();
 		String username = callerId.substring(beginIndex, endIndex);
@@ -155,7 +155,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		List<SuiteRole> studyConsumerRoles = new ArrayList<SuiteRole>();
 		studyConsumerRoles.add(SuiteRole.STUDY_CREATOR);
 		studyConsumerRoles.add(SuiteRole.STUDY_QA_MANAGER);
-		
+
 		try
 		{
 			Map<SuiteRole, SuiteRoleMembership> userRoleMemberships = getAuthorizationHelper().getUserRoleMemberships(username);
@@ -168,8 +168,8 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				if (userRoleMemberships.containsKey(studyConsumerRole))
 				{
 					log.debug("User role memberships contains role: " + studyConsumerRole.toString());
-					userAuthorizedForStudyConsumerRole = true;										
-					
+					userAuthorizedForStudyConsumerRole = true;
+
 					SuiteRoleMembership userRoleMembership = userRoleMemberships.get(studyConsumerRole);
 					// if the user has permission to access specific sites (not all sites), then verify the sites
 					if (userRoleMembership.isAllSites())
@@ -191,13 +191,13 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 				    }
 				}
 			}
-			
+
 			log.info("userAuthorizedForStudyConsumerRole = " + userAuthorizedForStudyConsumerRole);
 			if (!userAuthorizedForStudyConsumerRole)
 	    	{
 				throw new SuiteAuthorizationAccessException("Username %s is not authorized for roles %s", username, studyConsumerRoles.toString());
 	    	}
-			
+
 			log.info("userAuthorizedForSite = " + userAuthorizedForSite);
 			if (!userAuthorizedForSite)
 	    	{
@@ -213,26 +213,26 @@ public class LabViewerStudyConsumer implements StudyConsumerI
         {
             log.error("Error saving study: ", e);
             throw createStudyCreationException(e.getMessage());
-        }		
+        }
 	}
-	
+
 	private StudyCreationException createStudyCreationException(String message)
 	{
 		StudyCreationException exception = new StudyCreationException();
 		exception.setFaultString(message);
 		return exception;
 	}
-	
+
 	private synchronized LabViewerAuthorizationHelper getAuthorizationHelper()
 	{
         if (authorizationHelper == null)
         {
             authorizationHelper = new LabViewerAuthorizationHelper();
         }
-        
+
         return authorizationHelper;
     }
-	
+
 	private List<String> getSiteNciInstituteCodes(Study study)
 	{
 		List<String> siteNciInstituteCodes = new ArrayList<String>();
@@ -451,7 +451,7 @@ public class LabViewerStudyConsumer implements StudyConsumerI
 		}
 		log.info("deleted study");
 	}
-	
+
 	private static String camelCase(String string)
 	{
         switch (string.length())
@@ -461,5 +461,5 @@ public class LabViewerStudyConsumer implements StudyConsumerI
             default: return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
         }
 	}
-	
+
 }

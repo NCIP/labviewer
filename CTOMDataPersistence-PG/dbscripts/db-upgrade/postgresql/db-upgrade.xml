@@ -20,5 +20,9 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
         <comment>execute lab_hub_org_view.sql.sql</comment>
         <sqlFile path="@db-upgrade.run.dir@/2.2/lab_hub_org_view.sql"/>
     </changeSet>
+    <changeSet id="3" author="Naveen">
+        <comment>execute labviewer property sql</comment>
+        <sqlFile path="@db-upgrade.run.dir@/2.3/lv_property.sql"/>
+    </changeSet>
 
 </databaseChangeLog>

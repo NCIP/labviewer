@@ -186,7 +186,7 @@
 		</copy>
 
 
-		<copy file="${software.dir}/ctomlabviewer/resources/applicationContext.xml.template" 
+		<copy file="${software.dir}/labviewer-web/src/resources/applicationContext.xml.template" 
 			  toFile="${webapps.dir}/WEB-INF/classes/applicationContext.xml" filtering="true" overwrite="true">
 		</copy>
 	</target>
@@ -196,8 +196,8 @@
 	<target name="build-ctom-wsrf" depends="build-stage" description="Builds the ctom wsrf">
 		<echo>Building deployable WAR file ...</echo>
 		<mkdir dir="${war-dist.dir}" />
-		<war destfile="${war-dist.dir}/ctom-wsrf.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
-        <copy file="${war-dist.dir}/ctom-wsrf.war" toDir="${artifacts.dir}/../ctom-wsrf" overwrite="true"/>
+		<war destfile="${war-dist.dir}/wsrf-ctods.war" basedir="${webapps.dir}" update="true" webxml="${webapps.dir}/WEB-INF/web.xml" />
+        <copy file="${war-dist.dir}/wsrf-ctods.war" toDir="${artifacts.dir}/../wsrf-ctods" overwrite="true"/>
     </target>
 
 

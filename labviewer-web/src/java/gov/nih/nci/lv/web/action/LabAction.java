@@ -149,18 +149,17 @@ public class LabAction extends LabViewerAction {
     private String loadLabs(IntegrationHub iHub , String target) throws Exception {
         labResults = (List<LabSearchDto>) getSessionAttr(LVConstants.LAB_RESULTS);
         IntegrationHubDto hubDto = super.getHubDto();
-        System.out.println(" labSearhDto.getLabIds() "+labSearhDto.getLabIds());    
         try {
             iHub.loadLabs(labSearhDto, labResults, hubDto);
             setAttribute(LVConstants.SUCCESS_MESSAGE, " Labs has been successfully submitted to " + target);
+            List<Long> clinicalIds = LVUtils.convertStringToList(labSearhDto.getLabIds(), ",");
+            new LabSearchDAO().saveLoadLabStatus(clinicalIds, target);
+            labSearhDto.setLabIds(null);
+            return list();
         } catch (LVException lve) {
             setAttribute(LVConstants.FAILURE_MESSAGE, lve.getMessage());
         }
-        List<Long> clinicalIds = LVUtils.convertStringToList(labSearhDto.getLabIds(), ",");
-        new LabSearchDAO().saveLoadLabStatus(clinicalIds, target);
-        labSearhDto.setLabIds(null);
-        return list();
-
+        return SUCCESS;
     }
     /**
      * 
