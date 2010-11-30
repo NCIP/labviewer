@@ -65,7 +65,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
     <property name="unZip.dir" value="${temp.dir}"/>
     <property name="stage.dir" value="${unZip.dir}/stage"/>
     <property name="war-dist.dir" value="${stage.dir}/dist"/>
-    <property name="webapps.dir" value="${stage.dir}/webapps/ctom-wsrf/"/>
+    <property name="webapps.dir" value="${stage.dir}/webapps/wsrf-ctods/"/>
 
 
 
@@ -77,7 +77,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctodsdeploymentcontroller.base.dir" location="${software.dir}/cTODSDeploymentController-1.3"/>
 	<property name="ctomdatapersistence.base.dir" location="${software.dir}/CTOMDataPersistence-PG"/>
     <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}"/>
-    <property name="ctomlabviewer.base.dir" location="${software.dir}/ctomlabviewer"/>
+    <property name="ctomlabviewer.base.dir" location="${software.dir}/labviewer-web"/>
 	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
 	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
 	<property name="studyservice.base.dir" location="${software.dir}/StudyService"/>
@@ -118,9 +118,11 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<!-- Distribution Structure properties, used to copy files into the distribution area.
        		Use project.propertie relative dir names becasue they are used by install also-->
 	<property name="dist.exploded.dir" value="${dist.dir}/exploded" />
+	<property name="labviewer.dist.dir" location="${dist.exploded.dir}/labviewer" />
+
 	<property name="LabViewer-api.dist.dir" value="${dist.exploded.dir}/${LabViewer-api.dist.relative.dir}" />
-	<property name="ctodslabviewer-webapp.dist.dir" value="${dist.exploded.dir}/${ctodslabviewer-webapp.dist.relative.dir}" />
-	<property name="ctom-wsrf-webapp.dist.dir" value="${dist.exploded.dir}/${ctom-wsrf-webapp.dist.relative.dir}"/>
+	<property name="ctodslabviewer-webapp.dist.dir" value="${labviewer.dist.dir}" />
+	<property name="ctom-wsrf-webapp.dist.dir" value="${dist.exploded.dir}/${wsrf-ctods-webapp.dist.relative.dir}"/>
 	<property name="cchc.dist.dir" value="${dist.exploded.dir}/${cchc.dist.relative.dir}"/>
 	<property name="ctomdatapersistence.dist.dir" value="${dist.exploded.dir}/${ctomdatapersistence.dist.relative.dir}"/>
     <property name="labviewer.artifact.dir" value="${dist.exploded.dir}/artifacts"/>
@@ -153,8 +155,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<!-- Where grand stores it's outputed pdf reports of build files -->
 	<property name="grand.rpt.dir" value="${common.dir}/grand" />
 	<!-- Hot deploy variables -->
-	<property name="ctodslabviewer-webapp.name"  value="ctodslabviewer"/>
-	<property name="ctom-wsrf-webapp.name"  value="ctom-wsrf"/>
+	<property name="ctodslabviewer-webapp.name"  value="labviewer"/>
+	<property name="ctom-wsrf-webapp.name"  value="wsrf-ctods"/>
 	<property name="ctodslabviewer-webapp.file.name"  value="${ctodslabviewer-webapp.name}.war"/>
 	<property name="ctodslabviewer-webapp.src.dir" value="${ctodslabviewer.base.dir}/src/web"/>
 
@@ -223,7 +225,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.exploded.dir}" />
 		<mkdir dir="${dist.exploded.dir}/${labviewer.artifact.dir}"/>
-		<mkdir dir="${ctodslabviewer-webapp.dist.dir}" />
+		<echo message=" --- ${labviewer.dist.dir}" />
+		<mkdir dir="${labviewer.dist.dir}" />
 		<mkdir dir="${ctom-wsrf-webapp.dist.dir}"/>
 		<mkdir dir="${common.dist.dir}" />
 		<mkdir dir="${tools.dist.dir}" />
@@ -373,14 +376,14 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
             <property name="software.dir" value="${software.dir}"/>
            <property name="log.dir" value="${log.dir}"/>
-			<property name="loadLabURLS" value="${loadLabURLS}"/>
-			<property name="BaseURLcaAERS" value="${BaseURLcaAERS}"/>
-			<property name="BaseURLC3D" value="${BaseURLC3D}"/>
-            <property name="BaseURLC3PR" value="${BaseURLC3PR}"/>
-            <property name="tissueURL" value="${tissueURL}"/>
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
 			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
+			<property name="caers.url" value="${BaseURLcaAERS}" />
+			<property name="c3d.url" value="${BaseURLC3D}" />
+			<property name="c3pr.url" value="${BaseURLC3PR}" />
+			<property name="hub.url" value="${loadLabURLS}" />
+			<property name="help.link" value="${help.link}" />
 			
 			<property name="websso.enabled" value="${websso.enabled}"/>
 			<property name="websso.cas.server" value="${websso.cas.server}"/>
@@ -393,7 +396,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
 			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
-			<property  name="LabViewer-webapp.version" value="${version}"/>
 		</ant>
 	</target>
 	
