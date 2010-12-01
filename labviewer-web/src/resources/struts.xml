@@ -73,6 +73,10 @@
         <action name="lab*" class="gov.nih.nci.lv.web.action.LabAction" method="{1}">
             <result>/WEB-INF/jsp/lab/result.jsp</result>
         </action>   
+        <action name="property*" class="gov.nih.nci.lv.web.action.PropertyAction" method="{1}">
+            <result>/WEB-INF/jsp/admin/property.jsp</result>
+            <result name="input">/WEB-INF/jsp/admin/property.jsp</result>
+        </action>   
 
     </package>
 </struts>
