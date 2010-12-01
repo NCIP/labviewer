@@ -33,6 +33,18 @@
         </c:if>
     </c:if>
     <li><a href="${sessionScope.helpLink}" target="_blank">Help</a></li>
+    <c:if test= "${sessionScope.adminAccess =='yes'}">
+        <li><div>Admin</div>
+        <c:choose>
+           <c:when test="${requestScope.topic =='property'}">
+                <li><a href="propertylist.action" class="selected">General Settings</a></li>
+           </c:when>
+           <c:otherwise>
+                <li><a href="propertylist.action" >General Settings</a></li>
+           </c:otherwise>
+        </c:choose>
+    </c:if>
+
 </ul>
 </li>
 

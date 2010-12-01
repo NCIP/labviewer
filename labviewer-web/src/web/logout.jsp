@@ -1,0 +1,1 @@
+<% response.sendRedirect("/labviewer/logout"); %>
