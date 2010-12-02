@@ -32,7 +32,7 @@
             </c:choose>
         </c:if>
     </c:if>
-    <li><a href="${sessionScope.helpLink}" target="_blank">Help</a></li>
+    <li><a href="${sessionScope.help.link}" target="_blank">Help</a></li>
     <c:if test= "${sessionScope.adminAccess =='yes'}">
         <li><div>Admin</div>
         <c:choose>

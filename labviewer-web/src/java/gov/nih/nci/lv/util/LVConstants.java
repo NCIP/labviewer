@@ -86,10 +86,6 @@ package gov.nih.nci.lv.util;
  */
 public class LVConstants {
     
-    /** Lab Viewer Version number . */
-    public static final String VERSION_NUMBER = "versionNumber";
-    /** Lab Viewer help link . */
-    public static final String HELP_LINK = "helpLink";
     /** Study Search Dto . */
     public static final String STUDY_SEARCH_DTO = "studySearchDto";
     /** Study Participant Search Dto . */
@@ -131,6 +127,14 @@ public class LVConstants {
     public static final String CAAERS = "caAERS";    
     /** C3D . */
     public static final String C3D = "C3D";    
-    
-    
+    /** version.   */
+    public static final String VERSION = "version";
+    /** caers.url. */
+    public static final String CAERS_URL = "caers.url";
+    /** c3d.url.*/
+    public static final String C3D_URL = "c3d.url";
+    /** hub url.*/
+    public static final String HUB_URL = "hub.url";
+    /** help.link.*/
+    public static final String HELP_LINK = "help.link";
 }

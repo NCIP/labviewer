@@ -89,6 +89,7 @@ import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVException;
 import gov.nih.nci.lv.util.LVPropertyReader;
 
+import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -249,10 +250,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         setSession(LVConstants.ADMIN_ACCESS, "no");
         setSession(LVConstants.STUDY_ACCESS, "no");
         setSession(LVConstants.ALLOW_ACCESS, "no");
-        setSession(LVConstants.VERSION_NUMBER, LVPropertyReader.getPropertyValue("version"));
-        setSession(LVConstants.HELP_LINK, LVPropertyReader.getPropertyValue("help.link"));
+        setProperty(LVPropertyReader.getProperty());
     }
     
+    void setProperty(Properties prop) {
+        setSession(LVConstants.VERSION, prop.getProperty(LVConstants.VERSION));
+        setSession(LVConstants.HELP_LINK, prop.getProperty(LVConstants.HELP_LINK));
+        setSession(LVConstants.CAERS_URL, prop.getProperty(LVConstants.CAERS_URL));
+        setSession(LVConstants.C3D_URL, prop.getProperty(LVConstants.C3D_URL));
+        setSession(LVConstants.HUB_URL, prop.getProperty(LVConstants.HUB_URL));
+    }
     /**
      * this method to be called after calling setuserInfoInSession.
      */

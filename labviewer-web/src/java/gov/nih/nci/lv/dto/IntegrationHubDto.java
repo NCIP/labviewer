@@ -81,7 +81,6 @@ import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.lv.util.LVException;
-import gov.nih.nci.lv.util.LVPropertyReader;
 
 import org.globus.gsi.GlobusCredential;
 
@@ -269,7 +268,7 @@ public class IntegrationHubDto {
      * @throws LVException 
      */
     public String getHubUrl() throws LVException {
-        return (new LVPropertyReader().getPropertyValue("hub.url"));
+        return hubUrl;
     }
     /**
      * 

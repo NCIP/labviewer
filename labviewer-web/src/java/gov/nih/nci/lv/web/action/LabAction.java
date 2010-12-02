@@ -149,6 +149,7 @@ public class LabAction extends LabViewerAction {
     private String loadLabs(IntegrationHub iHub , String target) throws Exception {
         labResults = (List<LabSearchDto>) getSessionAttr(LVConstants.LAB_RESULTS);
         IntegrationHubDto hubDto = super.getHubDto();
+        hubDto.setHubUrl((String) getSessionAttr(LVConstants.HUB_URL));
         try {
             iHub.loadLabs(labSearhDto, labResults, hubDto);
             setAttribute(LVConstants.SUCCESS_MESSAGE, " Labs has been successfully submitted to " + target);
