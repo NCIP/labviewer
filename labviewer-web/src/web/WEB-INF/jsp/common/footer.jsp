@@ -1,4 +1,4 @@
-<h5><center>	${sessionScope.versionNumber} </center></h5>  
+<h5><center>	${sessionScope.version} </center></h5>  
 
 <div id="footerwrapper">
     <div id="footernav">

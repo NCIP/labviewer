@@ -79,13 +79,18 @@
 
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVPropertyReader;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+
 import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.hibernate.validator.NotEmpty;
 
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.Validation;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 /**
@@ -107,11 +112,11 @@ public class PropertyAction extends LabViewerAction {
      */
     @SkipValidation
     public String list() throws Exception {
-        setVersion(LVPropertyReader.getPropertyValue("version"));
-        setCaersUrl(LVPropertyReader.getPropertyValue("caers.url"));
-        setC3dUrl(LVPropertyReader.getPropertyValue("c3d.url"));
-        setHubUrl(LVPropertyReader.getPropertyValue("hub.url"));
-        setHelpLink(LVPropertyReader.getPropertyValue("help.link"));
+        setVersion(LVPropertyReader.getPropertyValue(LVConstants.VERSION));
+        setCaersUrl(LVPropertyReader.getPropertyValue(LVConstants.CAERS_URL));
+        setC3dUrl(LVPropertyReader.getPropertyValue(LVConstants.C3D_URL));
+        setHubUrl(LVPropertyReader.getPropertyValue(LVConstants.HUB_URL));
+        setHelpLink(LVPropertyReader.getPropertyValue(LVConstants.HELP_LINK));
         return SUCCESS;
     }
 
@@ -121,6 +126,18 @@ public class PropertyAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String save() throws Exception {
+        Properties prop = LVPropertyReader.getProperty();
+        prop.setProperty(LVConstants.VERSION, version);
+        prop.setProperty(LVConstants.HELP_LINK, helpLink);
+        prop.setProperty(LVConstants.CAERS_URL, caersUrl);
+        prop.setProperty(LVConstants.C3D, c3dUrl);
+        prop.setProperty(LVConstants.HUB_URL, hubUrl);
+        File file = new File(getSession().getServletContext().getRealPath("/WEB-INF/classes/lv.properties"));
+        OutputStream out =  new BufferedOutputStream(new FileOutputStream(file));
+        prop.store(out, "");
+        out.close();
+        setProperty(prop);
+        setAttribute(LVConstants.SUCCESS_MESSAGE, "Property file updated");
         return SUCCESS;
     }
     /**

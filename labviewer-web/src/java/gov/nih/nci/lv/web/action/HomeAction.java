@@ -82,8 +82,6 @@ package gov.nih.nci.lv.web.action;
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.lv.util.LVConstants;
 
-import java.util.Enumeration;
-
 /**
  * This initial class, gets the value from the LabViewer System table and puts the value in the session.
  * @author NAmiruddin
@@ -96,7 +94,6 @@ public class HomeAction extends LabViewerAction {
      */
     public String execute() throws Exception {
         
-        System.out.println("..............1");
         try {
             labViewerSetup();
         } catch (SuiteAuthorizationAccessException sae) {
@@ -110,20 +107,6 @@ public class HomeAction extends LabViewerAction {
         if (access != null && access.equals("no")) {
             return "no_access";
         }
-        System.out.println("Begin Printing User Attributes");
-        Enumeration attributeNames = getSession().getAttributeNames();
-        for (; attributeNames.hasMoreElements();) {
-            // Get the name of the attribute
-            String name = (String) attributeNames.nextElement();
-            Object value = (Object) getSession().getAttribute(name); 
-            
-            if (name.contains("CAGRID")) {
-                System.out.println(" ---- ATTRIBUTE NAME ---- " + name 
-                        + " ---- ATTRIBUTE VALUE ----" + value + " type " + value.getClass().getName());
-            }
-        }
-        
-        //System.out.println(" gc ..." +gc.)
         return SUCCESS;
     }
 

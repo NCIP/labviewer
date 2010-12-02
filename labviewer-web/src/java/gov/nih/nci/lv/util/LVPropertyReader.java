@@ -121,7 +121,7 @@ public class LVPropertyReader {
     /**
      * resets the property .
      */
-    public void resetProperty() {
+    public static void resetProperty() {
         try {
             LOG.debug("Property value has been reset");
             props = new Properties();
@@ -130,5 +130,13 @@ public class LVPropertyReader {
             LOG.error("Unable to read lv.properties ", e);
             throw new IllegalStateException(e);
         }
+    }
+    
+    /**
+     * 
+     * @return props property ;
+     */
+    public static Properties getProperty() {
+        return props;
     }
 }
