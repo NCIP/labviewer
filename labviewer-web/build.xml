@@ -61,6 +61,12 @@
 	<property name="ivy.settings.file" location="${common.dir}/ivysettings.xml" />
     <property name="ivy.def.file" location="ivy-labviewer.xml" />
     <property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+	<property name="cert.path" value="${tomcat.grid.secure.cert.location}"/>
+	<property name="key.path" value="${tomcat.grid.secure.key.location}"/>
+	<property name="websso.cas.server" value="${websso.hostname}"/>
+	<property name="websso.cas.server.port" value="${websso.port}"/>
+	<property name="websso.client.port" value="${tomcat.hostname}"/>
+	<property name="websso.client.server" value="${tomcat.port.ssl}"/>
 
     <!-- ====================================================================== -->
     <!-- Defining classpaths                                                    -->
