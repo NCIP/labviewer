@@ -124,6 +124,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<!-- Conditionals -->
 		<!-- LabViewer-webapp can use either Oracle or MySQL or PostgreSQL as its database platform, this is controled by the database.type property.  Based on the value of this property sent several variables for use during install -->
 		<echoproperties prefix="database"/>
+		<echoproperties prefix="c3d"/>
+		<echo message="C3d url = ${BaseURLC3D}"/>
 		<switch value="${database.type}">
 			<case value="oracle">
 				<property name="database.dialect" value="org.hibernate.dialect.OracleDialect"/>
@@ -269,8 +271,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<echo  message="Checking if database properties exist: ${db.prop.list}"/>
 		<properties-exist properties.list="${db.prop.list}"/>
 		<echoproperties prefix="database"/>
-		<echoproperties prefix="c3d"/>
-		<echo message="C3d url = ${BaseURLC3D}"/>
 		<echo  message="db.dir.dest: ${db.dir.dest}"/>
 		<echo  message="db.dir.src: ${db.dir.src}"/>
 		<copy todir="${db.dir.dest}" filtering="true">
