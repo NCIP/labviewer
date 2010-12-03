@@ -311,8 +311,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
         <property name="war-dist.dir" value="${war-dist.dir}"/>
         <property name="webapps.dir" value="${webapps.dir}"/>
 
-         <property name="cert.path" value="${cert.path}"/>
-			<property name="key.path" value="${key.path}"/>
+         <property name="cert.path" value="${tomcat.grid.secure.cert.location}"/>
+			<property name="key.path" value="${tomcat.grid.secure.cert.location}"/>
     </ant>
 	</target>
 
@@ -343,13 +343,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<echo message="SmokeTestGridURL= ${SmokeTestGridURL}"/>
 
 			<echo message="websso.enabled= ${websso.enabled}"/>
-			<echo message="websso.cas.server= ${websso.cas.server}"/>
-			<echo message="websso.client.server= ${websso.client.server}"/>
-            <echo message="websso.cas.server.port= ${websso.cas.server.port}"/>
-			<echo message="websso.client.port= ${websso.client.port}"/>
+			<echo message="websso.hostname= ${websso.hostname}"/>
+            <echo message="websso.port= ${websso.port}"/>
+			<echo message="tomcat.hostname= ${tomcat.hostname}"/>
+			<echo message="tomcat.port.ssl= ${tomcat.port.ssl}"/>
 
-            <echo message="cert.path= ${cert.path}"/>
-			<echo message="key.path= ${key.path}"/>
+            <echo message="tomcat.grid.secure.cert.location= ${tomcat.grid.secure.cert.location}"/>
+			<echo message="tomcat.grid.secure.key.location= ${tomcat.grid.secure.key.location}"/>
 			<echo message="hotLink_NAME= ${hotLink_NAME}"/>
 			<echo message="testEnabled= ${testEnabled}"/>
 
@@ -386,13 +386,13 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 			<property name="help.link" value="${help.link}" />
 			
 			<property name="websso.enabled" value="${websso.enabled}"/>
-			<property name="websso.cas.server" value="${websso.cas.server}"/>
-			<property name="websso.client.server" value="${websso.client.server}"/>
-            <property name="websso.cas.server.port" value="${websso.cas.server.port}"/>
-			<property name="websso.client.port" value="${websso.client.port}"/>
+			<property name="websso.cas.server" value="${websso.hostname}"/>
+            <property name="websso.cas.server.port" value="${websso.port}"/>
+			<property name="websso.client.port" value="${tomcat.hostname}"/>
+			<property name="websso.client.server" value="${tomcat.port.ssl}"/>
 
-            <property name="cert.path" value="${cert.path}"/>
-			<property name="key.path" value="${key.path}"/>
+            <property name="cert.path" value="${tomcat.grid.secure.cert.location}"/>
+			<property name="key.path" value="${tomcat.grid.secure.key.location}"/>
 			<property name="hotLink_NAME" value="${hotLink_NAME}"/>
 			<property name="testEnabled" value="${testEnabled}"/>
 			<property name="SmokeTestGridURL" value="${SmokeTestGridURL}"/>
