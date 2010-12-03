@@ -87,8 +87,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="labviewer.war" value="${labviewer}.war" />
 	<property name="cert.path" value="${tomcat.grid.secure.cert.location}"/>
 	<property name="key.path" value="${tomcat.grid.secure.key.location}"/>
-	
-	
 	<!-- Paths -->
 	<path id="bda-utils.classpath">
 		<fileset dir="${bda-utils.dir}">
@@ -271,6 +269,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<echo  message="Checking if database properties exist: ${db.prop.list}"/>
 		<properties-exist properties.list="${db.prop.list}"/>
 		<echoproperties prefix="database"/>
+		<echoproperties prefix="c3d"/>
+		<echo message="C3d url = ${BaseURLC3D}"/>
 		<echo  message="db.dir.dest: ${db.dir.dest}"/>
 		<echo  message="db.dir.src: ${db.dir.src}"/>
 		<copy todir="${db.dir.dest}" filtering="true">
