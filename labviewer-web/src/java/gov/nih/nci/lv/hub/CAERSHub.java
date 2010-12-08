@@ -88,7 +88,7 @@ import java.util.List;
  * @author Naveen Amiruddin
  *
  */
-public class CAERSHub extends IntegrationHub {
+public class CAERSHub extends LabHub {
 
 
     /**

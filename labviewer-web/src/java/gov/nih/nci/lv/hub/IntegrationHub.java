@@ -126,15 +126,7 @@ public abstract class IntegrationHub {
     private static final Logger LOG = Logger.getLogger(IntegrationHub.class);
 
     
-    /**
-     * 
-     * @param labSearchDto labSearchDto
-     * @param labs labs
-     * @param hubDto hubDto
-     * @throws LVException on error
-     */
-    public abstract void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto) 
-    throws LVException;
+
 
     void errorOnEmpty(Set<Long> labIds , String target) throws LVException {
         if (labIds == null || labIds.isEmpty()) {
@@ -216,10 +208,10 @@ public abstract class IntegrationHub {
             List<String> ids = labDto.getStudySubjectIdentifiers();
             if (!ids.isEmpty()) {
                 String id = ids.get(0);
-                id = (target.equals("C3D") ? "MRN:" + id : id);
-                participant.setII(generateIiArray(ids.get(0), hubDto.getServiceName() , target));
-                id = (target.equals("C3D") ? "PATIENTPOSITION:" + id : id);
-                studySubject.setII(generateIiArray(ids.get(0), hubDto.getServiceName() , target));
+                id = (LVConstants.C3D.equals(target) ? "MRN:" + id : id);
+                participant.setII(generateIiArray(id, hubDto.getServiceName() , target));
+                id = (LVConstants.C3D.equals(target) ? "PATIENTPOSITION:" + id : id);
+                studySubject.setII(generateIiArray(id, hubDto.getServiceName() , target));
             }
             studySubject.setParticipant(participant);
             studySubject.setPerformedStudy(performedStudy);
@@ -251,8 +243,8 @@ public abstract class IntegrationHub {
     Message getRequestMessage(IntegrationHubDto hubDto) throws LVException {
         try {
             QName qName = new QName(hubDto.getQName(), hubDto.getQRequest());
-            LoadLabsRequest loadLabsRequest = hubDto.getRequestObj();
-            Utils.serializeObject(loadLabsRequest, qName , new PrintWriter(hubDto.getMessageXml()));
+            Object requestObj = hubDto.getRequestObj();
+            Utils.serializeObject(requestObj, qName , new PrintWriter(hubDto.getMessageXml()));
             Message requestMessage = new Message();
             Metadata metadata = new Metadata();
             metadata.setExternalIdentifier(hubDto.getExternalIdentifier());
@@ -264,7 +256,7 @@ public abstract class IntegrationHub {
             URI uri = new URI();
             uri.setPath(hubDto.getQName());
             messagePayload.setXmlSchemaDefinition(uri);
-            MessageElement messageElement = new MessageElement(qName, loadLabsRequest);
+            MessageElement messageElement = new MessageElement(qName, requestObj);
             messagePayload.set_any(new MessageElement[] {messageElement });
             requestMessage.getRequest().setBusinessMessagePayload(messagePayload);
             return requestMessage;
