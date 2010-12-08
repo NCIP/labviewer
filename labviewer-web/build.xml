@@ -65,8 +65,8 @@
 	<property name="key.path" value="${tomcat.grid.secure.key.location}"/>
 	<property name="websso.cas.server" value="${websso.hostname}"/>
 	<property name="websso.cas.server.port" value="${websso.port}"/>
-	<property name="websso.client.port" value="${tomcat.hostname}"/>
-	<property name="websso.client.server" value="${tomcat.port.ssl}"/>
+	<property name="websso.client.port" value="${tomcat.port.ssl}"/>
+	<property name="websso.client.server" value="${tomcat.hostname}"/>
 
     <!-- ====================================================================== -->
     <!-- Defining classpaths                                                    -->
@@ -238,8 +238,8 @@
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
 				<filter token="websso.enabled" value="${websso.enabled}" />	
-				<filter token="websso.cas.server" value="${websso.cas.server}" />
-				<filter token="websso.cas.server.port" value="${websso.cas.server.port}" />
+				<filter token="websso.cas.server" value="${websso.hostname}" />
+				<filter token="websso.cas.server.port" value="${websso.port}" />
 				<filter token="version" value="${labviewer.version}"/>
 				<filter token="caers.url" value="${BaseURLcaAERS}" />
 				<filter token="c3d.url" value="${BaseURLC3D}" />
@@ -267,18 +267,18 @@
 		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
 			<filterset begintoken="@" endtoken="@">
-				<filter token="WEBSSO.SERVER" value="${websso.cas.server}" />
-				<filter token="WEBSSO.CLIENT.SERVER" value="${websso.client.server}" />
-                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.cas.server.port}"/>
-                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${websso.client.port}"/>
+				<filter token="WEBSSO.SERVER" value="${websso.hostname}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${tomcat.hostname}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${tomcat.port.ssl}"/>
             </filterset>
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" filtering="true">
 			  <filterset begintoken="@" endtoken="@">
-				<filter token="cert.path" value="${cert.path}" />
-				<filter token="key.path" value="${key.path}" />
-				<filter token="cas_server" value="${websso.cas.server}" />			
+				<filter token="cert.path" value="${tomcat.grid.secure.cert.location}" />
+				<filter token="key.path" value="${tomcat.grid.secure.key.location}" />
+				<filter token="cas_server" value="${websso.hostname}" />			
 			   </filterset>
 		</copy>		
 		

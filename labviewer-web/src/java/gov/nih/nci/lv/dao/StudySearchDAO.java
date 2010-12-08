@@ -79,11 +79,13 @@
 
 package gov.nih.nci.lv.dao;
 
+import gov.nih.nci.coppa.services.pa.StudyProtocol;
 import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.Protocol;
 import gov.nih.nci.lv.domain.ProtocolStatus;
 import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
@@ -91,6 +93,8 @@ import java.util.List;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author Naveen Amiruddin
@@ -153,5 +157,35 @@ public class StudySearchDAO extends AbstractDAO {
         }
 	    return ssDtos;
 	}
+	
+	/**
+	 * update the ctods study based on coppa study.
+	 * @param studyProtocol coppa study protocol
+	 * @throws Exception on error
+	 */
+	public void update(StudyProtocol studyProtocol) throws Exception {
+        if (studyProtocol == null) {
+            return;
+        }
+        StudySearchDto ssDto = new StudySearchDto();
+        ssDto.setNciIdentifier(studyProtocol.getAssignedIdentifier().getExtension());
+        List<StudySearchDto> ssDtos = search(ssDto);
+        Session session = getSession();
+        Transaction tran = session.beginTransaction();
+        for (StudySearchDto searchDto : ssDtos) {
+            logger.debug(" Updating Coppa Studies for NCI Id = " + ssDto.getNciIdentifier() 
+                    + " ctods id = " + searchDto.getId());
+            Protocol protocol = (Protocol) session.load(Protocol.class, searchDto.getId());
+            protocol.setLongTitleText(StringUtils.substring(studyProtocol.getOfficialTitle().getValue(), 0 ,
+                    LVConstants.NUM_500));
+            if (studyProtocol.getPublicTitle() != null) {
+                protocol.setShortTitleText(StringUtils.substring(studyProtocol.getPublicTitle().getValue() , 0 , 
+                        LVConstants.NUM_200));
+            }
+            session.update(protocol);
+        }
+        tran.commit();
+    }
+	
 	
 }

@@ -82,9 +82,9 @@ import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.Response;
 import gov.nih.nci.lv.util.LVException;
 
+import org.apache.axis.message.MessageElement;
 import org.globus.gsi.GlobusCredential;
-
-import webservices.LoadLabsRequest;
+import org.iso._21090.II;
 
 /**
  * 
@@ -103,12 +103,16 @@ public class IntegrationHubDto {
     private String credentialEpr;
     private GlobusCredential globusCredential;
     private String serviceType;
-    private LoadLabsRequest requestObj;
+    private Object requestObj;
     private String hubUrl;
     private Message requestMessage;
     private Response responseObj;
     private String target; // either CAERS or C3D
     private String serviceName; // currently CTODS
+    private String operationName;
+    private II coppaIi;
+    private MessageElement[] meArray = null;
+    
 
     /**
      * 
@@ -252,14 +256,14 @@ public class IntegrationHubDto {
      * 
      * @return requestObj
      */
-    public LoadLabsRequest getRequestObj() {
+    public Object getRequestObj() {
         return requestObj;
     }
     /**
      * 
      * @param requestObj requestObj
      */
-    public void setRequestObj(LoadLabsRequest requestObj) {
+    public void setRequestObj(Object requestObj) {
         this.requestObj = requestObj;
     }
     /**
@@ -347,6 +351,53 @@ public class IntegrationHubDto {
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
+    /**
+     * 
+     * @return operationName
+     */
+    public String getOperationName() {
+        return operationName;
+    }
+    /**
+     * 
+     * @param operationName operationName
+     */
+    public void setOperationName(String operationName) {
+        this.operationName = operationName;
+    }
+    /**
+     * 
+     * @return identifier
+     */
+    public II getCoppaIi() {
+        return coppaIi;
+    }
+    /**
+     * 
+     * @param coppaIi identifier
+     */
+    public void setCoppaIi(II coppaIi) {
+        this.coppaIi = coppaIi;
+    }
+    /**
+     * 
+     * @return meArray
+     */
+    public MessageElement[] getMeArray() {
+        return meArray;
+    }
+    /**
+     * 
+     * @param meArray meArray
+     */
+    public void setMeArray(MessageElement[] meArray) {
+        this.meArray = meArray;
+    }
+    
+    
+    
+    
+    
     
     
 

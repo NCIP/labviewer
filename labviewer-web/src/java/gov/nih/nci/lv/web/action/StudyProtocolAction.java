@@ -79,14 +79,19 @@
 
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.coppa.services.pa.StudyProtocol;
 import gov.nih.nci.lv.dao.StudySearchDAO;
+import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.StudySearchDto;
+import gov.nih.nci.lv.hub.COPPAHub;
 import gov.nih.nci.lv.util.LVConstants;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.xwork.StringUtils;
+import org.iso._21090.II;
 
 /**
  * Study protocol Action class for search.
@@ -124,6 +129,15 @@ public class StudyProtocolAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String view() throws Exception {
+        setStudyProtocolInfo();
+        IntegrationHubDto iHubDto = getHubDto();
+        setStudyIdentifier(iHubDto);
+        II ii = iHubDto.getCoppaIi();
+        if (!LVUtils.isIINull(ii) && ii.getExtension().startsWith(LVConstants.STUDY_ID_PREFIX)) {
+            // this is coppa study, perform coppa search
+            LOG.debug("Updating the coppa study");
+                new StudySearchDAO().update(new COPPAHub().invokeCoppaStudy(iHubDto));
+        }
         setStudyProtocolInfo();
         return SUCCESS;
     }       

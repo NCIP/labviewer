@@ -86,6 +86,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang.xwork.StringUtils;
+import org.iso._21090.II;
 
 /**
  * 
@@ -155,6 +156,18 @@ public class LVUtils {
             labs.add(new Long(st.nextElement().toString()));
         }
         return labs;
+    }
+    
+    /**
+     * returns true if iso ii is null.
+     * @param ii ii
+     * @return boolean
+     */
+    public static boolean isIINull(II ii) {
+        if (ii == null || ii.getExtension() == null || ii.getNullFlavor() != null) {
+            return true;
+        }
+        return false;
     }
 
 }

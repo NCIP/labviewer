@@ -97,6 +97,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
 import org.globus.gsi.GlobusCredential;
+import org.iso._21090.II;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -232,8 +233,10 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         return getSession().getAttribute(arg0);
     }
     void setStudyProtocolInfo() throws Exception {
-        getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, 
-                new StudySearchDAO().search(new StudySearchDto(studyProtocolId, getUserName())).get(0));
+        StudySearchDto ssDto = new StudySearchDAO().search(new StudySearchDto(studyProtocolId, getUserName())).get(0); 
+        //@todo: this to be removed
+        getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, ssDto);
+        getSession().setAttribute(LVConstants.STUDY_SEARCH_DTO, ssDto);
     }
     //@todo : throw exception when gridIdentifity is null
     private void setUserInfoInSession() {
@@ -288,7 +291,17 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         hubDto.setGlobusCredential((GlobusCredential) getSessionAttr(LVConstants.CAGRID_SSO_GRID_CREDENTIAL));
         hubDto.setUserName((String) getSessionAttr(LVConstants.USER_NAME));
         hubDto.setStudyProtocolExtn(((StudySearchDto) getSessionAttr(LVConstants.STUDY_SEARCH_DTO)).getNciIdentifier());
+        hubDto.setHubUrl((String) getSessionAttr(LVConstants.HUB_URL));
         return hubDto;
+    }
+    
+    void setStudyIdentifier(IntegrationHubDto iHubDto) {
+        II assignedIdentifier = new II();
+        StudySearchDto ssDto = (StudySearchDto) getSessionAttr(LVConstants.STUDY_SEARCH_DTO);
+        assignedIdentifier.setRoot(LVConstants.STUDY_PROTOCOL_ROOT);
+        assignedIdentifier.setExtension(ssDto.getNciIdentifier());
+        iHubDto.setCoppaIi(assignedIdentifier);
+        
     }
 
 }

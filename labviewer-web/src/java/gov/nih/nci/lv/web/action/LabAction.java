@@ -86,7 +86,7 @@ import gov.nih.nci.lv.dto.LabSearchDto;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 import gov.nih.nci.lv.hub.C3DHub;
 import gov.nih.nci.lv.hub.CAERSHub;
-import gov.nih.nci.lv.hub.IntegrationHub;
+import gov.nih.nci.lv.hub.LabHub;
 import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVException;
 import gov.nih.nci.lv.util.LVUtils;
@@ -146,7 +146,7 @@ public class LabAction extends LabViewerAction {
     }
     
     
-    private String loadLabs(IntegrationHub iHub , String target) throws Exception {
+    private String loadLabs(LabHub iHub , String target) throws Exception {
         labResults = (List<LabSearchDto>) getSessionAttr(LVConstants.LAB_RESULTS);
         IntegrationHubDto hubDto = super.getHubDto();
         hubDto.setHubUrl((String) getSessionAttr(LVConstants.HUB_URL));

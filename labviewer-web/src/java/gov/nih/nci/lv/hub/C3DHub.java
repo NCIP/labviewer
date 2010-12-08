@@ -90,7 +90,7 @@ import java.util.List;
  * @author Naveen Amiruddin
  *
  */
-public class C3DHub  extends IntegrationHub {
+public class C3DHub  extends LabHub {
     
     /**
      * 
