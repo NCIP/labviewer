@@ -87,6 +87,7 @@ import gov.nih.nci.caxchange.Request;
 import gov.nih.nci.caxchange.Statuses;
 import gov.nih.nci.caxchange.TargetResponseMessage;
 import gov.nih.nci.coppa.common.LimitOffset;
+import gov.nih.nci.coppa.po.Organization;
 import gov.nih.nci.coppa.po.Person;
 import gov.nih.nci.coppa.services.pa.StudyProtocol;
 import gov.nih.nci.lv.dto.IntegrationHubDto;
@@ -159,6 +160,21 @@ public class COPPAHub extends IntegrationHub {
         return getCoppaPerson(iHubDto);
     }
     
+    /**
+     * 
+     * @param iHubDto iHubDto
+     * @return StudyProtocol Coppa Study Protocol
+     * @throws LVException on error
+     */
+    public Organization invokeCoppaOrganization(IntegrationHubDto iHubDto) throws LVException  {
+        if (LVUtils.isIINull(iHubDto.getCoppaEntityId())) {
+            return null;
+        }
+        createMessageElementArray(iHubDto);
+        invoke(iHubDto);
+        return getCoppaOrganization(iHubDto);
+    }
+
     private void invoke(IntegrationHubDto iHubDto) throws LVException  {
         iHubDto.setRequestMessage(getRequestMessage(iHubDto));
         iHubDto.setRequestMessage(getRequestMessage(iHubDto));
@@ -199,7 +215,8 @@ public class COPPAHub extends IntegrationHub {
     private void createMessageElementArray(IntegrationHubDto iHubDto) throws LVException {
         if (LVConstants.STUDY_PROTOCOL.equals(iHubDto.getTarget())) {
             iHubDto.setMeArray(createCoppaStudyMessageElement(iHubDto));
-        } else if (LVConstants.PERSON.equals(iHubDto.getTarget())) {
+        } else if (LVConstants.PERSON.equals(iHubDto.getTarget()) 
+                || LVConstants.ORGANIZATION.equals(iHubDto.getTarget())) {
             iHubDto.setMeArray(createCoppaEntityMessageElement(iHubDto));
         }
     }
@@ -312,6 +329,36 @@ public class COPPAHub extends IntegrationHub {
             throw new LVException(e);
         }
         return person;
+    }
+
+    private Organization getCoppaOrganization(IntegrationHubDto iHubDto) throws LVException {
+        Organization organization = null;
+        if (iHubDto.getResponseObj().getResponseStatus().equals(Statuses.FAILURE))   {
+            return organization;
+        }
+        try {
+            javax.xml.transform.Transformer stringTransformer =   TransformerFactory.newInstance().newTransformer();
+            for (TargetResponseMessage msg : iHubDto.getResponseObj().getTargetResponse()) {
+                MessageElement[] messagePay = msg.getTargetBusinessMessage().get_any();
+                for (MessageElement mEle : messagePay) {
+                    if (mEle != null) {
+                        Element el = mEle.getAsDOM();
+                        StringWriter sw = new StringWriter();
+                        stringTransformer.transform(new DOMSource(el), new StreamResult(sw));
+                        InputStream wsddIs = getClass().getResourceAsStream(
+                                        "/gov/nih/nci/coppa/services/client/client-config.wsdd");
+                        organization =
+                                (Organization) Utils.deserializeObject(
+                                        new StringReader(sw.toString()),  Organization.class, wsddIs);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception occured while getting Coppa Organization ", e);
+            throw new LVException(e);
+        }
+        return organization;
     }
 
 }
