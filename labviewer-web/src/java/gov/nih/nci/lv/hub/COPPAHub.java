@@ -84,11 +84,15 @@ import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.MessagePayload;
 import gov.nih.nci.caxchange.Metadata;
 import gov.nih.nci.caxchange.Request;
+import gov.nih.nci.caxchange.Statuses;
+import gov.nih.nci.caxchange.TargetResponseMessage;
 import gov.nih.nci.coppa.common.LimitOffset;
+import gov.nih.nci.coppa.po.Person;
 import gov.nih.nci.coppa.services.pa.StudyProtocol;
 import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVException;
+import gov.nih.nci.lv.util.LVUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -140,6 +144,26 @@ public class COPPAHub extends IntegrationHub {
         return getCoppaStudy(iHubDto);
     }
     
+    /**
+     * 
+     * @param iHubDto iHubDto
+     * @return StudyProtocol Coppa Study Protocol
+     * @throws LVException on error
+     */
+    public Person invokeCoppaPerson(IntegrationHubDto iHubDto) throws LVException  {
+        if (LVUtils.isIINull(iHubDto.getCoppaEntityId())) {
+            return null;
+        }
+        createMessageElementArray(iHubDto);
+        invoke(iHubDto);
+        return getCoppaPerson(iHubDto);
+    }
+    
+    private void invoke(IntegrationHubDto iHubDto) throws LVException  {
+        iHubDto.setRequestMessage(getRequestMessage(iHubDto));
+        iHubDto.setRequestMessage(getRequestMessage(iHubDto));
+        iHubDto.setResponseObj(getResponseObj(iHubDto));
+    }
     
     @Override
     Message getRequestMessage(IntegrationHubDto iHubDto) throws LVException {
@@ -164,6 +188,7 @@ public class COPPAHub extends IntegrationHub {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         return message;
     }
+    
     private LimitOffset createLimitOffSet() {
         LimitOffset limit = new LimitOffset();
         limit.setLimit(LVConstants.MAX_SEARCH_RESULTS);
@@ -174,27 +199,37 @@ public class COPPAHub extends IntegrationHub {
     private void createMessageElementArray(IntegrationHubDto iHubDto) throws LVException {
         if (LVConstants.STUDY_PROTOCOL.equals(iHubDto.getTarget())) {
             iHubDto.setMeArray(createCoppaStudyMessageElement(iHubDto));
+        } else if (LVConstants.PERSON.equals(iHubDto.getTarget())) {
+            iHubDto.setMeArray(createCoppaEntityMessageElement(iHubDto));
         }
-        
     }
     
+    private MessageElement[] createCoppaEntityMessageElement(IntegrationHubDto iHubDto) throws LVException {
+        MessageElement[] meArray = new MessageElement[1];
+        QName qName = new QName("http://po.coppa.nci.nih.gov", "Id");
+        meArray[0] = createMessageElement(iHubDto.getCoppaEntityId(), qName , 
+                "/gov/nih/nci/coppa/services/client/client-config.wsdd");
+        return meArray;
+    }
+
     private MessageElement[] createCoppaStudyMessageElement(IntegrationHubDto iHubDto) throws LVException {
         MessageElement[] meArray = new MessageElement[2];
         StudyProtocol studyProtocol = new StudyProtocol();
         studyProtocol.setAssignedIdentifier(iHubDto.getCoppaIi());
         QName qName = new QName("http://pa.services.coppa.nci.nih.gov", "StudyProtocol");
-        meArray[0] = createMessageElement(studyProtocol, qName);
+        meArray[0] = createMessageElement(studyProtocol, qName , 
+                "/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
         qName = new QName("http://common.coppa.nci.nih.gov", "LimitOffset");
-        meArray[1] = createMessageElement(createLimitOffSet(), qName);
+        meArray[1] = createMessageElement(createLimitOffSet(), qName , 
+                "/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
         return meArray;
-
     }
     
-    private MessageElement createMessageElement(Object object, QName qName) throws LVException
+    private MessageElement createMessageElement(Object object, QName qName , String wsdl) throws LVException
     {
         MessageElement messageElement = null;   
         StringWriter writer = new StringWriter();
-        InputStream wsdd = getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
+        InputStream wsdd = getClass().getResourceAsStream(wsdl);
         try {
             Utils.serializeObject(object, qName, writer, wsdd);
             byte[] byteArray = writer.toString().getBytes();
@@ -220,6 +255,10 @@ public class COPPAHub extends IntegrationHub {
      */
     private StudyProtocol getCoppaStudy(IntegrationHubDto iHubDto) throws LVException {
         StudyProtocol studyProtocol = null;
+        if (iHubDto.getResponseObj().getResponseStatus().equals(Statuses.FAILURE))   {
+            return studyProtocol;
+        }
+
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             MessageElement messageElement = iHubDto.getResponseObj().getTargetResponse()[0].
@@ -234,6 +273,8 @@ public class COPPAHub extends IntegrationHub {
                     InputStream wsdd = 
                         getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
                     studyProtocol = (StudyProtocol) Utils.deserializeObject(reader, StudyProtocol.class, wsdd);
+                    // we can break after the reading the first object. its not expeced
+                    break;
                 }
             }
         } catch (Exception e) {
@@ -243,4 +284,34 @@ public class COPPAHub extends IntegrationHub {
         return studyProtocol;
     }
     
+    private Person getCoppaPerson(IntegrationHubDto iHubDto) throws LVException {
+        Person person = null;
+        if (iHubDto.getResponseObj().getResponseStatus().equals(Statuses.FAILURE))   {
+            return person;
+        }
+        try {
+            javax.xml.transform.Transformer stringTransformer =   TransformerFactory.newInstance().newTransformer();
+            for (TargetResponseMessage msg : iHubDto.getResponseObj().getTargetResponse()) {
+                MessageElement[] messagePay = msg.getTargetBusinessMessage().get_any();
+                for (MessageElement mEle : messagePay) {
+                    if (mEle != null) {
+                        Element el = mEle.getAsDOM();
+                        StringWriter sw = new StringWriter();
+                        stringTransformer.transform(new DOMSource(el), new StreamResult(sw));
+                        InputStream wsddIs = getClass().getResourceAsStream(
+                                        "/gov/nih/nci/coppa/services/client/client-config.wsdd");
+                        person =
+                                (gov.nih.nci.coppa.po.Person) Utils.deserializeObject(
+                                        new StringReader(sw.toString()),  gov.nih.nci.coppa.po.Person.class, wsddIs);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception occured while getting Coppa Person ", e);
+            throw new LVException(e);
+        }
+        return person;
+    }
+
 }

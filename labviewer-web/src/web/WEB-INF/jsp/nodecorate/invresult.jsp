@@ -12,7 +12,6 @@
     <s:actionerror/>
     <display:table class="data"  sort="list" pagesize="100" id="row"  name="results"  requestURI="ajaxInvestigatorview.action" >
         <display:setProperty name="paging.banner.onepage" value="Investigator" />
-        <display:column titleKey="nciIdentifier"    maxLength= "200" property="nciIdentifier" sortable="true" headerClass="sortable"/>
         <display:column titleKey="firstName"    maxLength= "100" property="firstName" sortable="true" headerClass="sortable"/>
         <display:column titleKey="lastName"    property="lastName" sortable="true" headerClass="sortable"/>
         <display:column titleKey="zip"              property="postalCode" sortable="true" headerClass="sortable"/>

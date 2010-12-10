@@ -153,6 +153,11 @@ public class LVConstants {
     public static final int NUM_500 = 500;
     /** 200.*/
     public static final int NUM_200 = 200;
+    /** ctep person root. **/
+    public static final String CTEP_PERSON_IDENTIFIER_ROOT = 
+        "Cancer Therapy Evaluation Program Person Other Identifier";
+    /** ctep org root. **/
+    public static final String CTEP_ORG_IDENTIFIER_ROOT =   "2.16.840.1.113883.3.26.6.2";
     
     
     
