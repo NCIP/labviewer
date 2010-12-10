@@ -80,6 +80,7 @@ package gov.nih.nci.lv.dto;
 import gov.nih.nci.caxchange.Credentials;
 import gov.nih.nci.caxchange.Message;
 import gov.nih.nci.caxchange.Response;
+import gov.nih.nci.coppa.po.Id;
 import gov.nih.nci.lv.util.LVException;
 
 import org.apache.axis.message.MessageElement;
@@ -111,6 +112,7 @@ public class IntegrationHubDto {
     private String serviceName; // currently CTODS
     private String operationName;
     private II coppaIi;
+    private Id coppaEntityId;
     private MessageElement[] meArray = null;
     
 
@@ -393,6 +395,22 @@ public class IntegrationHubDto {
     public void setMeArray(MessageElement[] meArray) {
         this.meArray = meArray;
     }
+    /**
+     * 
+     * @return Id
+     */
+    public Id getCoppaEntityId() {
+        return coppaEntityId;
+    }
+    /**
+     * 
+     * @param coppaEntityId Id
+     */
+    public void setCoppaEntityId(Id coppaEntityId) {
+        this.coppaEntityId = coppaEntityId;
+    }
+    
+    
     
     
     

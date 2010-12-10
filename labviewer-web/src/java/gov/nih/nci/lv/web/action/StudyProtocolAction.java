@@ -79,7 +79,6 @@
 
 package gov.nih.nci.lv.web.action;
 
-import gov.nih.nci.coppa.services.pa.StudyProtocol;
 import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.StudySearchDto;

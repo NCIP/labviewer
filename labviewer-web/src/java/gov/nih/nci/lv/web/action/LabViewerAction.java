@@ -79,6 +79,7 @@
 package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.cabig.ctms.suite.authorization.SuiteRole;
+import gov.nih.nci.coppa.po.Id;
 import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.domain.Protocol;
@@ -292,6 +293,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         hubDto.setUserName((String) getSessionAttr(LVConstants.USER_NAME));
         hubDto.setStudyProtocolExtn(((StudySearchDto) getSessionAttr(LVConstants.STUDY_SEARCH_DTO)).getNciIdentifier());
         hubDto.setHubUrl((String) getSessionAttr(LVConstants.HUB_URL));
+        hubDto.setExternalIdentifier("CTODS");
         return hubDto;
     }
     
@@ -301,6 +303,14 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         assignedIdentifier.setRoot(LVConstants.STUDY_PROTOCOL_ROOT);
         assignedIdentifier.setExtension(ssDto.getNciIdentifier());
         iHubDto.setCoppaIi(assignedIdentifier);
+        
+    }
+
+    Id setCoppaEntityId(String extn , String root) {
+        Id identifier = new Id();
+        //identifier.setRoot(root);
+        identifier.setExtension(extn);
+        return identifier;
         
     }
 

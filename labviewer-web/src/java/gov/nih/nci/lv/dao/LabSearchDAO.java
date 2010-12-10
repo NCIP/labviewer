@@ -149,7 +149,10 @@ public class LabSearchDAO  extends AbstractDAO {
                                 && !labDto.getLabTestCode().equals(labTest.getLaboratoryTestCode().getCode())) {
                             continue;
                         }
-                        float range = labResult.getNumericResult().floatValue(); 
+                        float range = 0;
+                        if (labResult != null && labResult.getNumericResult() != null) {
+                            range = labResult.getNumericResult().floatValue();
+                        }
                         if (labDto.getRange() != null  && !labDto.getRange().equals("ALL")) {
                             // check for in range
                             if (labDto.getRange().equals("INRANGE")) {
