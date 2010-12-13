@@ -259,7 +259,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     
     void setProperty(Properties prop) {
         setSession(LVConstants.VERSION, prop.getProperty(LVConstants.VERSION));
-        setSession(LVConstants.HELP_LINK, prop.getProperty(LVConstants.HELP_LINK));
+        setSession("help_link", prop.getProperty(LVConstants.HELP_LINK));
         setSession(LVConstants.CAERS_URL, prop.getProperty(LVConstants.CAERS_URL));
         setSession(LVConstants.C3D_URL, prop.getProperty(LVConstants.C3D_URL));
         setSession(LVConstants.HUB_URL, prop.getProperty(LVConstants.HUB_URL));

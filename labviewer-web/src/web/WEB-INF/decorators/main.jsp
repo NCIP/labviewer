@@ -39,7 +39,7 @@
     <div id="main">
        <div id="contentwrapper">
            <div id="content">
-                <a href="${sessionScope.help.link}" target="_blank" class="helpbutton">Help</a>
+                <a href="${sessionScope.help_link}" target="_blank" class="helpbutton">Help</a>
                <decorator:body/>
            </div>
            <div class="clear"></div>
