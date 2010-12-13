@@ -332,8 +332,8 @@ public abstract class IntegrationHub {
      */
     public String getTargetResponse(Response response) {
         String status = "";
-        String errorCode = "";
-        String errorDesc = "";
+        StringBuffer errorCode = new StringBuffer("");
+        StringBuffer errorDesc = new StringBuffer("");
         for (TargetResponseMessage msg : response.getTargetResponse()) {
             MessageElement[] messagePay =  msg.getTargetBusinessMessage().get_any();
             for (MessageElement mEle : messagePay) {
@@ -341,8 +341,12 @@ public abstract class IntegrationHub {
                     Iterator it = mEle.getChildElements();
                     while (it.hasNext()) {
                         MessageElement me = (MessageElement) it.next();
-                        if (me.getName().equalsIgnoreCase("Status"))  {
-                            status = me.getChildren().get(0).toString();
+                        if (me == null) {
+                            continue;
+                        }
+                        if (me.getName().equalsIgnoreCase("Status") && me.getChildren() != null 
+                                && me.getChildren().size() >= 0) {
+                                status = me.getChildren().get(0).toString();
                         } else if (me.getName().equalsIgnoreCase("Errors")) {
                             Iterator itr = me.getChildElements();
                             while (itr.hasNext()) {
@@ -351,10 +355,12 @@ public abstract class IntegrationHub {
                                     Iterator itr1 = me2.getChildElements();
                                     while (itr1.hasNext()) {
                                         MessageElement me3 = (MessageElement) itr1.next();
-                                        if (me3.getName().equalsIgnoreCase("ErrorCode")) {
-                                            errorCode = me3.getChildren().get(0).toString();
-                                        } else if (me3.getName().equalsIgnoreCase("ErrorDesc"))  {
-                                            errorDesc = me3.getChildren().get(0).toString();
+                                        if (me3.getName().equalsIgnoreCase("ErrorCode") && me3.getChildren() != null 
+                                                && me3.getChildren().size() >= 0) {  
+                                            errorCode.append(me3.getChildren().get(0).toString());
+                                        } else if (me3.getName().equalsIgnoreCase("ErrorDesc") 
+                                                && me3.getChildren() != null && me3.getChildren().size() >= 0) {  
+                                            errorDesc.append(me3.getChildren().get(0).toString());
                                         }
                                     } // while
                                 } // if
@@ -370,7 +376,7 @@ public abstract class IntegrationHub {
         if (status.equalsIgnoreCase("Processed")) {
             return status;
         } else {
-            return errorCode + "-" + errorDesc;
+            return (errorCode.append("-").append(errorDesc).toString());
         }
     }
 
