@@ -144,7 +144,7 @@
  		<delete dir="${ctomlabviewer.build.dir}"/>
  		<delete dir="${ctomlabviewer.report.dir}/labviewer"/>
  		<delete file="D:/apache-tomcat-5.5.27/webapps/${ctomlabviewer.war}" />
- 		<delete file="D:/apache-tomcat-5.5.27/webapps/labviewer"/>
+ 		<delete dir="D:/apache-tomcat-5.5.27/webapps/labviewer"/>
 	</target>
 	
 	<!-- ====================================================================== -->
