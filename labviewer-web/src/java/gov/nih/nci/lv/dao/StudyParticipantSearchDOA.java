@@ -82,6 +82,8 @@ import gov.nih.nci.lv.auth.LabViewerAuthorizationHelper;
 import gov.nih.nci.lv.domain.HealthcareSite;
 import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.domain.Participant;
+import gov.nih.nci.lv.domain.Protocol;
+import gov.nih.nci.lv.domain.StudyParticipantAssignment;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
 import gov.nih.nci.lv.util.LVUtils;
 
@@ -90,6 +92,8 @@ import java.util.List;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Example;
 
 /**
  * 
@@ -152,5 +156,37 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
         }
         
         return spsDtos;
+    }
+    
+
+    /**
+     * retrieves Identfier for a given Study Subject Grid id.
+     * @param gridId study subject grid id
+     * @return Protocol;
+     * @throws Exception on error
+     */
+    public Identifier getIdentiferByStudySubjectGridId(String gridId) throws Exception {
+        Identifier identifier = new Identifier();
+        if (gridId == null) {
+            throw new Exception("Grid Id is null");
+        }
+        identifier.setRoot(gridId);
+        Criteria crit = getSession().createCriteria(Identifier.class);
+        crit.add(Example.create(identifier));
+        List<Identifier> identifiers = crit.list();
+        if (!identifiers.isEmpty()) {
+            identifier = (Identifier) identifiers.get(0);
+        }
+        Protocol protocol = null;
+        StudyParticipantAssignment spa = identifier.getStudyParticipantAssignment();
+        protocol = identifier.getStudyParticipantAssignment().getStudySite().getProtocol();
+        
+        if (protocol == null) {
+            throw new Exception("Protcol cannot be retrieved for Grid id = " + gridId);
+        }
+        identifier.setStudyParticipantAssignment(spa);
+        identifier.setParticipant(spa.getParticipant());
+        identifier.setProtocol(protocol);
+        return identifier;
     }
 }

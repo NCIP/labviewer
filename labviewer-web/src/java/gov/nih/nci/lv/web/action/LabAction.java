@@ -81,6 +81,7 @@ package gov.nih.nci.lv.web.action;
 
 import gov.nih.nci.lv.dao.LabSearchDAO;
 import gov.nih.nci.lv.dao.StudyParticipantSearchDOA;
+import gov.nih.nci.lv.domain.Identifier;
 import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.LabSearchDto;
 import gov.nih.nci.lv.dto.StudyParticipantSearchDto;
@@ -94,6 +95,8 @@ import gov.nih.nci.lv.util.LVUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * Labs Action class.
  * @author Naveen Amiruddin
@@ -102,7 +105,8 @@ import java.util.List;
 public class LabAction extends LabViewerAction {
     LabSearchDto labSearhDto = new LabSearchDto();
     List<LabSearchDto> labResults = new ArrayList<LabSearchDto>();
-    
+    String studySubjectGridId = null;
+    private static Logger logger = Logger.getLogger(LabAction.class);
     /**
      * 
      * @return Success
@@ -110,6 +114,17 @@ public class LabAction extends LabViewerAction {
      */
     public String list() throws Exception {
         Long studyPartId = null;
+        if (studySubjectGridId != null) {
+            // the call is from psc, load the study and participant for the given grid id
+            logger.debug(" call from PSC grid id = " + studySubjectGridId);
+            Identifier identifier = 
+                new StudyParticipantSearchDOA().getIdentiferByStudySubjectGridId(studySubjectGridId);
+            setStudyProtocolId(identifier.getProtocol().getId());
+            setStudyProtocolInfo();
+            labSearhDto.setStudyParticipantId(identifier.getParticipant().getId());
+            logger.debug("retrieved Protocol id = " + identifier.getProtocol().getId());
+            logger.debug("retrieved Participant id = " + identifier.getParticipant().getId());
+        }
         labSearhDto.setStudyProtocolId(getStudyProtocolId());
         if (labSearhDto.getStudyParticipantId() == null) {
             studyPartId = getStudyPartIdFromSession();
@@ -126,6 +141,7 @@ public class LabAction extends LabViewerAction {
         return SUCCESS;
     }
     
+
     /**
      * 
      * @return Success
@@ -192,5 +208,21 @@ public class LabAction extends LabViewerAction {
      */
     public void setLabResults(List<LabSearchDto> labResults) {
         this.labResults = labResults;
+    }
+
+    /**
+     * 
+     * @return studySubjectGridId
+     */
+    public String getStudySubjectGridId() {
+        return studySubjectGridId;
+    }
+
+    /**
+     * 
+     * @param studySubjectGridId studySubjectGridId
+     */
+    public void setStudySubjectGridId(String studySubjectGridId) {
+        this.studySubjectGridId = studySubjectGridId;
     }
 }

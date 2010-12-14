@@ -91,6 +91,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
     private String identifier; // mrn
     private String firstName;
     private String lastName;
+    private String gridId;
     private HealthcareSiteDto healthcareSiteDto;
     /**
      * no arg cons.
@@ -198,5 +199,21 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
     public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
         this.healthcareSiteDto = healthcareSiteDto;
     }
+    /**
+     * 
+     * @return grid id
+     */
+    public String getGridId() {
+        return gridId;
+    }
+    /**
+     * 
+     * @param gridId grid id
+     */
+    public void setGridId(String gridId) {
+        this.gridId = gridId;
+    }
+    
+    
     
 }

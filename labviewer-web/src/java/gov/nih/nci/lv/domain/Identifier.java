@@ -92,10 +92,25 @@ public class Identifier extends AbstractDate {
     
     private String extension;
     private Protocol protocol;
+    private String root;
     private Participant participant;
     private StudyParticipantAssignment studyParticipantAssignment;
    
     
+    /**
+     * 
+     * @return root
+     */
+    public String getRoot() {
+        return root;
+    }
+    /**
+     * 
+     * @param root root
+     */
+    public void setRoot(String root) {
+        this.root = root;
+    }
 
     /**
      * 
