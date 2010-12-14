@@ -140,11 +140,11 @@
 	</target>
  
  
- 	<target name="clean-web" description="Clean the output directory">
+ 	<target name="clean-web" description="Clean the output directory" depends="configure-prop">
  		<delete dir="${ctomlabviewer.build.dir}"/>
  		<delete dir="${ctomlabviewer.report.dir}/labviewer"/>
- 		<delete file="D:/apache-tomcat-5.5.27/webapps/${ctomlabviewer.war}" />
- 		<delete dir="D:/apache-tomcat-5.5.27/webapps/labviewer"/>
+ 		<delete file="${labviewer.webapp.dir}/${ctomlabviewer.war}" />
+ 		<delete dir="${labviewer.webapp.dir}/labviewer"/>
 	</target>
 	
 	<!-- ====================================================================== -->
@@ -646,7 +646,7 @@
 	            description="Package the application.  Do not run tests."/>
 
 
-	    <target name="package-deploy-web" depends="clean-web, configure-prop,ivy-get,deploy-web,deploy-war"
+	    <target name="package-deploy-web" depends="configure-prop,clean-web, ivy-get,deploy-web,deploy-war"
 	            description="Package the application.  Do not run tests.">
 	    </target>        
 
