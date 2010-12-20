@@ -37,8 +37,8 @@
             <tr>
                 <td class="label"><fmt:message key="caers.url"/></label> <span class="required">*</span></td>
                 <td>
-                    <s:textfield name="caersUrl"  id="caersUrl" style="width:500px"/>
-                    <span class="formErrorMsg"><s:fielderror><s:param>caersUrl</s:param></s:fielderror></span>
+                    <s:textfield name="caaersUrl"  id="caaersUrl" style="width:500px"/>
+                    <span class="formErrorMsg"><s:fielderror><s:param>caaersUrl</s:param></s:fielderror></span>
                 </td>
             </tr>
             <tr>

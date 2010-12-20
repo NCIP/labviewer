@@ -100,7 +100,7 @@ import com.opensymphony.xwork2.validator.annotations.ValidatorType;
  */
 public class PropertyAction extends LabViewerAction {
     private String version;
-    private String caersUrl;
+    private String caaersUrl;
     private String c3dUrl;
     private String hubUrl;
     private String helpLink;
@@ -113,7 +113,7 @@ public class PropertyAction extends LabViewerAction {
     @SkipValidation
     public String list() throws Exception {
         setVersion(LVPropertyReader.getPropertyValue(LVConstants.VERSION));
-        setCaersUrl(LVPropertyReader.getPropertyValue(LVConstants.CAERS_URL));
+        setCaaersUrl(LVPropertyReader.getPropertyValue(LVConstants.CAAERS_URL));
         setC3dUrl(LVPropertyReader.getPropertyValue(LVConstants.C3D_URL));
         setHubUrl(LVPropertyReader.getPropertyValue(LVConstants.HUB_URL));
         setHelpLink(LVPropertyReader.getPropertyValue(LVConstants.HELP_LINK));
@@ -129,7 +129,7 @@ public class PropertyAction extends LabViewerAction {
         Properties prop = LVPropertyReader.getProperty();
         prop.setProperty(LVConstants.VERSION, version);
         prop.setProperty(LVConstants.HELP_LINK, helpLink);
-        prop.setProperty(LVConstants.CAERS_URL, caersUrl);
+        prop.setProperty(LVConstants.CAAERS_URL, caaersUrl);
         prop.setProperty(LVConstants.C3D, c3dUrl);
         prop.setProperty(LVConstants.HUB_URL, hubUrl);
         File file = new File(getSession().getServletContext().getRealPath("/WEB-INF/classes/lv.properties"));
@@ -159,19 +159,20 @@ public class PropertyAction extends LabViewerAction {
 
     /**
      * 
-     * @return caersUrl
+     * @return caaersUrl
      */
-    public String getCaersUrl() {
-        return caersUrl;
+    public String getCaaersUrl() {
+        return caaersUrl;
     }
 
     /**
      * 
-     * @param caersUrl caersUrl
+     * @param caaersUrl caaersUrl
      */
-   @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "caersUrl", message = "caAERS Url must be entered")
-    public void setCaersUrl(String caersUrl) {
-        this.caersUrl = caersUrl;
+   @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "caaersUrl", 
+           message = "caAERS Url must be entered")
+    public void setCaaersUrl(String caaersUrl) {
+        this.caaersUrl = caaersUrl;
     }
 
     /**

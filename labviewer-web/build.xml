@@ -241,7 +241,7 @@
 				<filter token="websso.cas.server" value="${websso.hostname}" />
 				<filter token="websso.cas.server.port" value="${websso.port}" />
 				<filter token="version" value="${labviewer.version}"/>
-				<filter token="caers.url" value="${BaseURLcaAERS}" />
+				<filter token="caaers_url" value="${BaseURLcaAERS}" />
 				<filter token="c3d.url" value="${BaseURLC3D}" />
 				<filter token="c3pr.url" value="${BaseURLC3PR}" />
 				<filter token="hub.url" value="${loadLabURLS}" />

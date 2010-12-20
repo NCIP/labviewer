@@ -160,33 +160,43 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
     
 
     /**
-     * retrieves Identfier for a given Study Subject Grid id.
+     * retrieves Identifier for a given Study Subject Grid id.
      * @param gridId study subject grid id
      * @return Protocol;
      * @throws Exception on error
      */
     public Identifier getIdentiferByStudySubjectGridId(String gridId) throws Exception {
         Identifier identifier = new Identifier();
+        logger.debug("Retrieving Identifier for a given Grid Id = " + gridId);
         if (gridId == null) {
             throw new Exception("Grid Id is null");
         }
         identifier.setRoot(gridId);
-        Criteria crit = getSession().createCriteria(Identifier.class);
-        crit.add(Example.create(identifier));
-        List<Identifier> identifiers = crit.list();
-        if (!identifiers.isEmpty()) {
-            identifier = (Identifier) identifiers.get(0);
-        }
+        identifier = getIdentifier(identifier);
         Protocol protocol = null;
         StudyParticipantAssignment spa = identifier.getStudyParticipantAssignment();
         protocol = identifier.getStudyParticipantAssignment().getStudySite().getProtocol();
-        
         if (protocol == null) {
-            throw new Exception("Protcol cannot be retrieved for Grid id = " + gridId);
+            throw new Exception("Protocol cannot be retrieved for Grid id = " + gridId);
         }
         identifier.setStudyParticipantAssignment(spa);
         identifier.setParticipant(spa.getParticipant());
         identifier.setProtocol(protocol);
         return identifier;
     }
+    
+    private Identifier getIdentifier(Identifier identifier) throws Exception {
+        Criteria crit = getSession().createCriteria(Identifier.class);
+        crit.add(Example.create(identifier));
+        List<Identifier> identifiers = crit.list();
+        Identifier identify = null;
+        if (!identifiers.isEmpty()) {
+            identify = (Identifier) identifiers.get(0);
+        }
+        if (identify == null) {
+            throw new Exception("Identifier cannot be retrived for given parameters ");
+        }
+        return identify;
+    }
+    
 }
