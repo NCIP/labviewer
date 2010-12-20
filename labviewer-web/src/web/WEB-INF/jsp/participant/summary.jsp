@@ -19,10 +19,8 @@
     String url = caAERSurl + gridId;
     %>
     
-    <c:if test= "${sessionScope.caaersAccess =='no'}">
+    <c:if test= "${sessionScope.caaersAccess =='yes'}">
     <tr>
-
-    
         <td colspan="6" align="center">
         <c:out value="${url}"/>
         <a href="<%=url%>" target="_blank">View this patient in caAERS</a>
