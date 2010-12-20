@@ -119,6 +119,8 @@ public class LVConstants {
     public static final String ADMIN_ACCESS = "adminAccess";    
     /** STUDY ACCESS . */
     public static final String STUDY_ACCESS = "studyAccess";    
+    /** STUDY ACCESS . */
+    public static final String CAAERS_ACCESS = "caaersAccess";    
     /** NO ACCESS . */
     public static final String ALLOW_ACCESS = "allowAccess";    
     /** LAB RESULTS . */
@@ -130,7 +132,7 @@ public class LVConstants {
     /** version.   */
     public static final String VERSION = "version";
     /** caers.url. */
-    public static final String CAERS_URL = "caers.url";
+    public static final String CAAERS_URL = "caaers_url";
     /** c3d.url.*/
     public static final String C3D_URL = "c3d.url";
     /** hub url.*/

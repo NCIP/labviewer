@@ -141,6 +141,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
         this.firstName = participant.getFirstName();
         this.lastName = participant.getLastName();
         this.identifier  = identifier.getExtension();
+        this.gridId = identifier.getRoot();
         this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
     }
     /**

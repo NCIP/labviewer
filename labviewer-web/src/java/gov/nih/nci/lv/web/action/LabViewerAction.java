@@ -254,13 +254,14 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         setSession(LVConstants.ADMIN_ACCESS, "no");
         setSession(LVConstants.STUDY_ACCESS, "no");
         setSession(LVConstants.ALLOW_ACCESS, "no");
+        setSession(LVConstants.CAAERS_ACCESS, "no");
         setProperty(LVPropertyReader.getProperty());
     }
     
     void setProperty(Properties prop) {
         setSession(LVConstants.VERSION, prop.getProperty(LVConstants.VERSION));
         setSession("help_link", prop.getProperty(LVConstants.HELP_LINK));
-        setSession(LVConstants.CAERS_URL, prop.getProperty(LVConstants.CAERS_URL));
+        setSession(LVConstants.CAAERS_URL, prop.getProperty(LVConstants.CAAERS_URL));
         setSession(LVConstants.C3D_URL, prop.getProperty(LVConstants.C3D_URL));
         setSession(LVConstants.HUB_URL, prop.getProperty(LVConstants.HUB_URL));
     }
@@ -278,6 +279,9 @@ public class LabViewerAction extends ActionSupport implements Preparable {
             if (userRoles.contains(SuiteRole.LAB_DATA_USER)) {
                 setSession(LVConstants.STUDY_ACCESS, "yes");
                 setSession(LVConstants.ALLOW_ACCESS, "yes");
+            }
+            if (userRoles.contains(SuiteRole.AE_REPORTER)) {
+                setSession(LVConstants.CAAERS_ACCESS, "yes");
             }
         }
     }
