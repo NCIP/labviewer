@@ -939,9 +939,12 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<delete dir="${tomcat.home}/work"  quiet="true"/>
 		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/${labviewer}" quiet="true"/>
 		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/wsrf-ctods" quiet="true"/>
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer" quiet="true"/>
+		<delete dir="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf" quiet="true"/>
 		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/${labviewer.war}" quiet="true"/>
 		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/wsrf-ctods.war" quiet="true"/>
-		
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctom-wsrf.war" quiet="true"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/ctomlabviewer.war" quiet="true"/>
         <antcall target="replace-tokens"/>
                 
         <copy file="to-be-deployed/${labviewer.war}" todir="${application.base.path}/${tomcat.relative.path}/webapps" overwrite="true" />
