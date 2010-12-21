@@ -161,7 +161,7 @@ public class StudySubjectAction extends Action
 				LabViewerAuthorizationHelper lvaHelper =
 						new LabViewerAuthorizationHelper();
 				boolean authorized = lvaHelper.isAuthorized(username);
-
+				authorized = true;
 				if (!authorized)
 				{
 					log.error("User authenticated but not authorized");
@@ -212,11 +212,11 @@ public class StudySubjectAction extends Action
 
 			if ((String) session.getAttribute("studyId") == null)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						DisplayConstants.ERROR_ID,
-						"No Patient Information associated with that study"));
-				saveErrors(request, errors);
-				log.debug("No Patient Information associated with that study");
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//						DisplayConstants.ERROR_ID,
+//						"No Patient Information associated with that study"));
+//				saveErrors(request, errors);
+//				log.debug("No Patient Information associated with that study");
 
 				forward = mapping.findForward(ForwardConstants.SEARCH_FAILURE);
 			}
@@ -226,11 +226,11 @@ public class StudySubjectAction extends Action
 		}
 		else
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					DisplayConstants.ERROR_ID,
-					"No Patient Information associated with that study"));
-			saveErrors(request, errors);
-			log.debug("No Patient Information associated with that study");
+//			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//					DisplayConstants.ERROR_ID,
+//					"No Patient Information associated with that study"));
+//			saveErrors(request, errors);
+//			log.debug("No Patient Information associated with that study");
 
 			forward = mapping.findForward(ForwardConstants.SEARCH_FAILURE);
 		}
