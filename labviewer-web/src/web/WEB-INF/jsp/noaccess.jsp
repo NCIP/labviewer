@@ -14,7 +14,7 @@
             <h1><fmt:message key="labviewer.home.noaccess" /></h1>
             <jsp:include page="/WEB-INF/tags/failureMessage.jsp"/>
             <p class="padme8">
-            <b> User do not have access to LabViewer: </b>
+            <b> User does not have access to LabViewer: </b>
             </p>
             <ul class="intro">
                     <li> Please contact System Administration to assign Lad Data User or Administration Role to the User  <b> <%=(String) session.getAttribute("userName")%> </b></li>
