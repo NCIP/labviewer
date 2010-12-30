@@ -43,6 +43,7 @@
 
     <property name="labviewer.build.finalName" value="labviewer"/>
     <property name="ctomlabviewer.build.dir" value="${ctomlabviewer.dir}/target"/>
+    <property name="labviewer.build.tmp.dir" value="${ctomlabviewer.build.dir}/tmp"/>
     <property name="ctomlabviewer.build.outputDir" value="${ctomlabviewer.build.dir}/classes"/>
     <property name="ctomlabviewer.build.srcDir.0" value="${ctomlabviewer.dir}/src/java"/>
     <property name="ctomlabviewer.build.testOutputDir" value="${ctomlabviewer.build.dir}/test-classes"/>
@@ -274,27 +275,27 @@
             </filterset>
 		</copy>
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
-			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" filtering="true">
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" filtering="true">
 			  <filterset begintoken="@" endtoken="@">
 				<filter token="cert.path" value="${tomcat.grid.secure.cert.location}" />
 				<filter token="key.path" value="${tomcat.grid.secure.key.location}" />
 				<filter token="cas_server" value="${websso.hostname}" />			
 			   </filterset>
 		</copy>		
-		
 	</target>
 
 	<target name="configureCSMAuthentication" unless="websso.enabled">
 		<echo message="configureCSMAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.csm.template" 
-			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" />
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" />
 	</target>
 
 	<target name="configureWebSSOAuthentication" if="websso.enabled">
 		<echo message="configureWebSSOAuthentication - websso enabled ${websso.enabled}." />
 		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
-			  toFile="${ctomlabviewer.build.outputDir}/web.xml" overwrite="true" filtering="true">
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" filtering="true">
 		</copy>
+
 		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
 			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
 		</copy>
@@ -556,14 +557,13 @@
                 </delete>
                   <war destfile="D:/apache-tomcat-5.5.27/webapps/${ctomlabviewer.war}"
                      compress="false"
-		             webxml="${ctomlabviewer.build.outputDir}/web.xml">
+		             webxml="${labviewer.build.tmp.dir}/web.xml">
 		            <lib dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
                     </lib>
                     <classes dir="${ctomlabviewer.build.outputDir}"/>
                       <fileset dir="${ctomlabviewer.webHome}"/>
 
                   </war>
-
 		    </target>
 
 		    <target name="war" depends="createAuthJar">
@@ -596,7 +596,7 @@
                 </delete>
                   <war destfile="${artifacts.dir}/../labviewer/${ctomlabviewer.war}"   
                      compress="false"
-		             webxml="${ctomlabviewer.build.outputDir}/web.xml">
+		             webxml="${labviewer.build.tmp.dir}/web.xml">
 		            <lib dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib"/>
                     <classes dir="${ctomlabviewer.build.outputDir}"/>
                     <fileset dir="${ctomlabviewer.webHome}"/>
