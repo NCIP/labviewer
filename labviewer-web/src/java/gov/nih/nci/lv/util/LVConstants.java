@@ -139,6 +139,9 @@ public class LVConstants {
     public static final String HUB_URL = "hub.url";
     /** help.link.*/
     public static final String HELP_LINK = "help.link";
+    /** help.link.*/
+    public static final String WEBSSO_ENABLED = "websso_enabled";
+    
     /** The maxmium number of search results to be returned for a remote service method.*/
     public static final int MAX_SEARCH_RESULTS = 100;
     /** Study Protocol root.*/

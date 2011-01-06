@@ -4,7 +4,14 @@
     <!--User Details-->
     <c:choose>
         <c:when test="${sessionScope.userName != null}">
-            <div id="userarea">Welcome, <%=(String) session.getAttribute("userName")%> |  <a id="signOutBtn" href='<c:url value="/logout"/>' class="btn_logout">Log Out</a></div>
+            <c:choose>
+                <c:when test="${sessionScope.websso_enabled}">
+                    <div id="userarea">Welcome, <%=(String) session.getAttribute("userName")%> |  <a id="signOutBtn" href='<c:url value="/loginwebsso.action"/>' class="btn_logout">Log Out</a></div>
+                </c:when>        
+                <c:otherwise>
+                    <div id="userarea">Welcome, <%=(String) session.getAttribute("userName")%> |  <a id="signOutBtn" href='<c:url value="loginlogout.action"/>' class="btn_logout">Log Out</a></div>
+                </c:otherwise>
+            </c:choose>
         </c:when>
     </c:choose>
 </div>

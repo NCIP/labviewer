@@ -103,6 +103,11 @@ public class HealthcareSiteAction extends LabViewerAction {
     public String view() throws Exception {
         setStudyProtocolInfo();
         List<HealthcareSiteDto> dtos = new HealthcareSiteDAO().getByStudyProtocol(createProtocolObj());
+        if (!isSuiteMode()) {
+            getRequest().setAttribute("results", dtos);
+            LOG.debug("Not synchronized with COPPA due to Standalone mode");
+            return SUCCESS;
+        }
         boolean dataSyn = false;
         boolean coppaSync = false;
         for (HealthcareSiteDto dto : dtos) {

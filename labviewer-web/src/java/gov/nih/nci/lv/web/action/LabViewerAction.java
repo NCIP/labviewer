@@ -124,7 +124,6 @@ public class LabViewerAction extends ActionSupport implements Preparable {
      * {@inheritDoc}
      */    
     public String execute() throws Exception {
-        ServletActionContext.getRequest().setAttribute("results", null);
         return SUCCESS;
     }
 
@@ -154,14 +153,14 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    *
    * @return studyProtocolId
    */
-  public Long getStudyProtocolIdFromSession() {
-      StudySearchDto ssDto = (StudySearchDto) getSession().getAttribute(LVConstants.STUDY_SEARCH_DTO);
-      return (ssDto != null ? ssDto.getId() : null);
-  }
-  /**
-  *
-  * @return studyProtocolId
-  */
+    public Long getStudyProtocolIdFromSession() {
+       StudySearchDto ssDto = (StudySearchDto) getSession().getAttribute(LVConstants.STUDY_SEARCH_DTO);
+       return (ssDto != null ? ssDto.getId() : null);
+   }
+    /**
+    *
+    * @return studyProtocolId
+    */
     public Long getStudyPartIdFromSession() {
         StudyParticipantSearchDto spsDto = (StudyParticipantSearchDto) getSession().getAttribute(
              LVConstants.STUDY_PART_SEARCH_DTO);
@@ -171,12 +170,11 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     * 
     * @return protocol
     */
-   Protocol createProtocolObj() {
+    Protocol createProtocolObj() {
        Protocol protocol = new Protocol();
        protocol.setId(studyProtocolId);
        return protocol;
-   }
-
+    }
    /**
     *
     * @param studyProtocolId studyProtocolId
@@ -250,6 +248,19 @@ public class LabViewerAction extends ActionSupport implements Preparable {
                     new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
         }
     }
+
+    /**
+     * this method will be called when coming from loging.
+     * @throws LVException 
+     */
+    void setUserInfoInSession(String username) throws LVException {
+        setDefaults();
+        setSession(LVConstants.USER_NAME, username);
+        setSession(LVConstants.USER_ROLES, 
+                new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
+        enableMenu();
+    }
+    
     private void setDefaults() throws LVException {
         setSession(LVConstants.ADMIN_ACCESS, "no");
         setSession(LVConstants.STUDY_ACCESS, "no");
@@ -264,6 +275,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         setSession(LVConstants.CAAERS_URL, prop.getProperty(LVConstants.CAAERS_URL));
         setSession(LVConstants.C3D_URL, prop.getProperty(LVConstants.C3D_URL));
         setSession(LVConstants.HUB_URL, prop.getProperty(LVConstants.HUB_URL));
+        setSession(LVConstants.WEBSSO_ENABLED, Boolean.parseBoolean(prop.getProperty(LVConstants.WEBSSO_ENABLED)));
     }
     /**
      * this method to be called after calling setuserInfoInSession.
@@ -317,5 +329,12 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         return identifier;
         
     }
-
+    /**
+     * true means suite mode, false means standalone mode.
+     * @return
+     * @throws LVException
+     */
+    boolean isSuiteMode() throws LVException {
+        return  Boolean.parseBoolean(LVPropertyReader.getPropertyValue(LVConstants.WEBSSO_ENABLED));  
+    }
 }

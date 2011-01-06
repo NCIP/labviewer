@@ -132,7 +132,7 @@ public class StudyProtocolAction extends LabViewerAction {
         IntegrationHubDto iHubDto = getHubDto();
         setStudyIdentifier(iHubDto);
         II ii = iHubDto.getCoppaIi();
-        if (!LVUtils.isIINull(ii) && ii.getExtension().startsWith(LVConstants.STUDY_ID_PREFIX)) {
+        if (!LVUtils.isIINull(ii) && ii.getExtension().startsWith(LVConstants.STUDY_ID_PREFIX) && isSuiteMode()) {
             // this is coppa study, perform coppa search
             LOG.debug("Updating the coppa study");
                 new StudySearchDAO().update(new COPPAHub().invokeCoppaStudy(iHubDto));

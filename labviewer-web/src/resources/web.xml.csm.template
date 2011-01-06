@@ -2,121 +2,94 @@
 <web-app version="2.4"
 	xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
-	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>CTOM Lab Viewer</display-name>
-	<description>CTOM Lab Viewer</description>
+	<display-name>LabViewer</display-name>
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>ApplicationResources</param-value>
+    </context-param>
 
-	<servlet>
-		<servlet-name>action</servlet-name>
-		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
-		<init-param>
-			<param-name>config</param-name>
-			<param-value>/WEB-INF/struts-config.xml</param-value>
-		</init-param>
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>3</param-value>
-		</init-param>
-		<init-param>
-			<param-name>detail</param-name>
-			<param-value>3</param-value>
-		</init-param>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext*.xml</param-value>
+    </context-param>    
+
+	<!-- Filters -->
+	    <filter>
+        <filter-name>action2-cleanup</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+    </filter>
+    
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>action2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+    </filter>
+    <filter>
+        <filter-name>BindHibernateSession</filter-name>
+        <filter-class>gov.nih.nci.lv.util.BindHibernateSession</filter-class>
+    </filter>    
+    <filter-mapping>
+        <filter-name>action2-cleanup</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+     </filter-mapping>
+    <filter-mapping>
+        <filter-name>action2</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BindHibernateSession</filter-name>
+        <url-pattern>*.action</url-pattern>
+         <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>ResponseOverrideFilter</filter-name>
+        <filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class>
+    </filter>
 
 
+
+    <!-- Servlets -->
     <servlet>
-		<servlet-name>jsp</servlet-name>
-		<servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
-		<init-param>
-			<param-name>fork</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<init-param>
-			<param-name>xpoweredBy</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<init-param>
-			<param-name>mappedfile</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>compilerTargetVM</param-name>
-			<param-value>1.5</param-value>
-		</init-param>
-		<init-param>
-			<param-name>compilerSourceVM</param-name>
-			<param-value>1.4</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
+        <servlet-name>jspSupportServlet</servlet-name>
+        <servlet-class>org.apache.struts2.views.JspSupportServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
 
-    <servlet-mapping>
-		<servlet-name>action</servlet-name>
-		<url-pattern>*.do</url-pattern>
-	</servlet-mapping>
 	<!--Application Configuration Parameters-->
 	<session-config>
-		<session-timeout>30</session-timeout>
+		<session-timeout>120</session-timeout>
 	</session-config>
 
-	<mime-mapping>
-		<extension>html</extension>
-		<mime-type>text/html</mime-type>
-	</mime-mapping>
-
-	<mime-mapping>
-		<extension>txt</extension>
-		<mime-type>text/plain</mime-type>
-	</mime-mapping>
-
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.jsp</welcome-file> 
 	</welcome-file-list>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/403.jsp</location>
+    </error-page>
 
-	<error-page>
-		<error-code>404</error-code>
-		<location>/WEB-INF/jsp/content/main/Error404.jsp</location>
-	</error-page>
-
-	<!-- JSTL Tag Library Descriptors -->
-	<taglib>
-		<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
-		<taglib-location>/WEB-INF/tld/c.tld</taglib-location>
-	</taglib>
-
-	<taglib>
-		<taglib-uri>http://java.sun.com/jstl/xml</taglib-uri>
-		<taglib-location>/WEB-INF/tld/x.tld</taglib-location>
-	</taglib>
-
-	<taglib>
-		<taglib-uri>http://gforge.nci.nih.gov/projects/ctmscommons/taglibs/laf</taglib-uri>
-		<taglib-location>/WEB-INF/tld/laf.tld</taglib-location>
-	</taglib>
-
-	<!-- Struts Tag Library Descriptors -->
-
-	<taglib>
-		<taglib-uri>/tags/struts-bean</taglib-uri>
-		<taglib-location>/WEB-INF/tld/struts-bean.tld</taglib-location>
-	</taglib>
-
-	<taglib>
-		<taglib-uri>/tags/struts-html</taglib-uri>
-		<taglib-location>/WEB-INF/tld/struts-html.tld</taglib-location>
-	</taglib>
-
-	<taglib>
-		<taglib-uri>/tags/struts-logic</taglib-uri>
-		<taglib-location>/WEB-INF/tld/struts-logic.tld</taglib-location>
-	</taglib>
-
-	<taglib>
-		<taglib-uri>/tags/tiles</taglib-uri>
-		<taglib-location>/WEB-INF/tld/struts-tiles.tld</taglib-location>
-	</taglib>
 </web-app>
-
