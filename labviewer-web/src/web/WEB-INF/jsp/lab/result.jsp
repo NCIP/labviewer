@@ -5,6 +5,7 @@
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page import="gov.nih.nci.lv.dto.LabSearchDto"%>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -124,19 +125,21 @@
             <display:column titleKey="lab.c3dSentDate"  property="cdmsSentDate" sortable="true" format="{0,date,MM-dd-yyyy}"  headerClass="sortable"/> 
         </display:table>
 
-        <div class="line"></div>
-        <div class="actionsrow">
-            <del class="btnwrapper">
-                <ul class="btnrow">
-                    <li><li>
-                            <s:a href="#" cssClass="btn" onclick="submitCAERSAction()"><span class="btn_img"><span class="save">Submit Labs to caAERS</span></span></s:a>
-                            <s:a href="#" cssClass="btn" onclick="submitC3DAction()"><span class="btn_img"><span class="save">Submit Labs to C3D</span></span></s:a>
-                        </li>
-                </ul>
-            </del>
-
-        </div>
-
+         <c:choose>
+             <c:when test="${sessionScope.websso_enabled}">
+		        <div class="line"></div>
+		        <div class="actionsrow">
+		            <del class="btnwrapper">
+		                <ul class="btnrow">
+		                    <li><li>
+		                            <s:a href="#" cssClass="btn" onclick="submitCAERSAction()"><span class="btn_img"><span class="save">Submit Labs to caAERS</span></span></s:a>
+		                            <s:a href="#" cssClass="btn" onclick="submitC3DAction()"><span class="btn_img"><span class="save">Submit Labs to C3D</span></span></s:a>
+		                        </li>
+		                </ul>
+		            </del>
+		        </div>
+           </c:when>        
+       </c:choose>
    </s:form>
 
  </div>

@@ -1,7 +1,7 @@
 #Lab Viewer properties
 testEnabled=@testEnabled@
 SmokeTestGridURL=@SmokeTestGridURL@
-websso.enabled=@websso.enabled@
+websso_enabled=@websso_enabled@
 websso.cas.server=@websso.cas.server@
 websso.cas.server.port=@websso.cas.server.port@
 version=@version@
@@ -11,3 +11,4 @@ c3d.url=@c3d.url@
 c3pr.url=@c3pr.url@
 hub.url=@hub.url@
 help.link=@help.link@
+login=@login@

@@ -62,7 +62,6 @@
         <filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class>
     </filter>
 
-<!-- comment here for websso to remove -->  
 	<filter>
 		<filter-name>CAS Client Info Logging Filter</filter-name>
 		<filter-class>org.inspektr.common.web.ClientInfoThreadLocalFilter</filter-class>
@@ -169,8 +168,6 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	
-<!--  end comment for web soo here -->
-
     <!-- Servlets -->
     <servlet>
         <servlet-name>jspSupportServlet</servlet-name>
@@ -186,5 +183,17 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file> 
 	</welcome-file-list>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/403.jsp</location>
+    </error-page>
 
 </web-app>

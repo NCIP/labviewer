@@ -49,7 +49,15 @@
         <global-results>
             <result name="logout">logout.jsp</result>
         </global-results>
-        
+		<action name="login*" class="gov.nih.nci.lv.web.action.LoginAction" method="{1}">
+		   <result>/WEB-INF/jsp/login.jsp</result>
+            <result name="welcome">/WEB-INF/jsp/welcome.jsp</result>
+            <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
+		    <result name="error">/WEB-INF/jsp/login.jsp</result>
+		    <result name="redirect" type="redirect">${url}</result> 
+
+		</action>
+
         <action name="home*" class="gov.nih.nci.lv.web.action.HomeAction" method="{1}">
             <result>/WEB-INF/jsp/welcome.jsp</result>
             <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
