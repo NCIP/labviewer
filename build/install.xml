@@ -812,7 +812,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 				<filter token="hotLink_Type" value="${hotLink_Type}" />
 				<filter token="testEnabled" value="${testEnabled}" />
 				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
-				<filter token="websso.enabled" value="${websso.enabled}" />	
+				<filter token="websso_enabled" value="${websso.enabled}" />	
 				<filter token="websso.cas.server" value="${websso.hostname}" />
 				<filter token="websso.cas.server.port" value="${websso.port}" />
 				<filter token="version" value="${labviewer.version}"/>
