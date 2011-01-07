@@ -157,7 +157,7 @@ public abstract class IntegrationHub {
         hubDto.setRequestObj(createLoadLabRequestObj(labSearchDto, labs, hubDto));
         hubDto.setRequestMessage(getRequestMessage(hubDto));
         hubDto.setResponseObj(getResponseObj(hubDto));
-        processResponseMessage(hubDto.getResponseObj());
+        processResponseMessage(hubDto.getResponseObj() , hubDto.getTarget());
         return hubDto;
         
     }
@@ -297,19 +297,22 @@ public abstract class IntegrationHub {
     }
 
 
-    void processResponseMessage(Response response) throws LVException {
+    void processResponseMessage(Response response , String target) throws LVException {
         LOG.info("caXchange response was " + response.getResponseStatus().toString());
         String status = "";
         Statuses respStatus = response.getResponseStatus();
         if (respStatus.equals(Statuses.SUCCESS)) {
-            if (response.getCaXchangeError() != null) {
-               LOG.info("Received a success from caxchange hub: " + response.getCaXchangeError().getErrorDescription());
-            }
-            if (response.getTargetResponse() != null) {
-                status = getTargetResponse(response);
-                LOG.info("Response from Target Service was " + status);
-                if (!status.equals("Processed")) {
-                    throw new LVException("Response from Target Service was " + status);
+            if ("CAERS".equals(target)) {
+                if (response.getCaXchangeError() != null) {
+                   LOG.info("Received a success from caxchange hub: " 
+                           + response.getCaXchangeError().getErrorDescription());
+                }
+                if (response.getTargetResponse() != null) {
+                    status = getTargetResponse(response);
+                    LOG.info("Response from Target Service was " + status);
+                    if (!status.equals("Processed")) {
+                        throw new LVException("Response from Target Service was " + status);
+                    }
                 }
             }
         } else if (respStatus.equals(Statuses.FAILURE)) {
