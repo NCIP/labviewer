@@ -130,10 +130,16 @@ public class InvestigatorAction extends LabViewerAction {
         iHubDto.setTarget(LVConstants.PERSON);
         iHubDto.setOperationName("getPersonByCTEPId");
         iHubDto.setServiceType("PERSON_BUSINESS_SERVICE");
-        Person person =  new COPPAHub().invokeCoppaPerson(iHubDto);
+        Person person = null;
+        try {
+            person =  new COPPAHub().invokeCoppaPerson(iHubDto);
+        } catch (Exception e) {
+            LOG.error("Error while calling COPPA Person", e);
+        }
         boolean syn = false;
         if (person != null) {
             LOG.info("Data has been updated for ctep id " + ctepId);
+            //@todo : show error message in the screen
             new InvestigatorDAO().update(dto, person);
             syn = true;
         }

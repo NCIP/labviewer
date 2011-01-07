@@ -88,6 +88,8 @@ import gov.nih.nci.lv.util.LVException;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 /**
  * Healthcaresite action class.
  * @author Naveen Amiruddin
@@ -132,7 +134,13 @@ public class HealthcareSiteAction extends LabViewerAction {
         iHubDto.setTarget(LVConstants.ORGANIZATION);
         iHubDto.setOperationName("getOrganizationByCTEPId");
         iHubDto.setServiceType("ORGANIZATION_BUSINESS_SERVICE");
-        Organization organization =  new COPPAHub().invokeCoppaOrganization(iHubDto);
+        Organization organization = null;
+        try {
+            organization =  new COPPAHub().invokeCoppaOrganization(iHubDto);
+        } catch (Exception e) {
+            LOG.error("Error while calling COPPA Organization", e);
+          //@todo : show error message in the screen
+        }
         boolean syn = false;
         if (organization != null) {
             LOG.info("Data has been updated for organization ctep id " + ctepId);
