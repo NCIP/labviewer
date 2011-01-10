@@ -324,7 +324,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
 
     Id setCoppaEntityId(String extn , String root) {
         Id identifier = new Id();
-        //identifier.setRoot(root);
+        identifier.setRoot(root);
         identifier.setExtension(extn);
         return identifier;
         
