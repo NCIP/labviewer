@@ -2,7 +2,7 @@
 <li class="stdnav">
 <div>LabViewer</div>
 <ul>
-    <c:if test="${sessionScope.allowAccess == 'yes'}">
+    <c:if test="${sessionScope.studyAccess == 'yes'}">
         <c:choose>
            <c:when test="${requestScope.topic =='study_search'}">
                 <li><a href="studyProtocolexecute.action" class="selected">Study Search</a></li>
