@@ -111,11 +111,6 @@ public class StudyProtocolAction extends LabViewerAction {
      */
     public String list() throws Exception {
 
-        StudySearchDto ssDto1 = null;
-//        ssDto1.getClass();
-        if (true) {
-            throw new SuiteAuthorizationAccessException(" test error msg");
-        }
         if (StringUtils.isEmpty(ssDto.getNciIdentifier()) && StringUtils.isEmpty(ssDto.getShortTitle())) {
             setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one criteria is requured to do the search");
             return ERROR;
