@@ -99,6 +99,8 @@ public class LVConstants {
     
     /** Failure Message. . */
     public static final String FAILURE_MESSAGE = "failureMessage";
+    /** Failure Message. . */
+    public static final String FAILURE_DETAILED_MESSAGE = "failureDetailedMessage";
     /** Success Message. . */
     public static final String SUCCESS_MESSAGE = "successMessage";
     /** topic. . */
@@ -141,7 +143,10 @@ public class LVConstants {
     public static final String HELP_LINK = "help.link";
     /** help.link.*/
     public static final String WEBSSO_ENABLED = "websso_enabled";
-    
+    /** web sso login. **/
+    public static final String WEB_SSO_LOGIN = "webssologin";
+    /** web CSM login. **/
+    public static final String WEB_CSM_LOGIN = "webcsmlogin";
     /** The maxmium number of search results to be returned for a remote service method.*/
     public static final int MAX_SEARCH_RESULTS = 100;
     /** Study Protocol root.*/
@@ -158,6 +163,9 @@ public class LVConstants {
     public static final int NUM_500 = 500;
     /** 200.*/
     public static final int NUM_200 = 200;
+    /** 200.*/
+    public static final int NUM_10 = 10;
+
     /** ctep person root. **/
     public static final String CTEP_PERSON_IDENTIFIER_ROOT = 
         "Cancer Therapy Evaluation Program Person Other Identifier";

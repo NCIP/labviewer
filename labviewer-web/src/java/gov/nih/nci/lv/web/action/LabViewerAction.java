@@ -90,6 +90,7 @@ import gov.nih.nci.lv.util.LVConstants;
 import gov.nih.nci.lv.util.LVException;
 import gov.nih.nci.lv.util.LVPropertyReader;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -232,13 +233,18 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         return getSession().getAttribute(arg0);
     }
     void setStudyProtocolInfo() throws Exception {
-        StudySearchDto ssDto = new StudySearchDAO().search(new StudySearchDto(studyProtocolId, getUserName())).get(0); 
+        //@todo : throw exception if it returned 0 result
+        List<StudySearchDto> ssDtos = new StudySearchDAO().search(new StudySearchDto(studyProtocolId, getUserName()));
+        StudySearchDto ssDto = null;
+        if (!ssDtos.isEmpty()) {
+            ssDto = ssDtos.get(0);
+        }
         //@todo: this to be removed
         getRequest().setAttribute(LVConstants.STUDY_SEARCH_DTO, ssDto);
         getSession().setAttribute(LVConstants.STUDY_SEARCH_DTO, ssDto);
     }
     //@todo : throw exception when gridIdentifity is null
-    private void setUserInfoInSession() {
+    void setUserInfoInSession() {
         String gridIDentity = (String) getSession().getAttribute(LVConstants.CAGRID_SSO_GRID_IDENTITY);
         if (gridIDentity != null) {
             int beginIndex = gridIDentity.lastIndexOf("=");
@@ -250,7 +256,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     }
 
     /**
-     * this method will be called when coming from loging.
+     * this method will be called when coming from login using csm.
      * @throws LVException 
      */
     void setUserInfoInSession(String username) throws LVException {

@@ -108,11 +108,18 @@ public class LoginAction extends LabViewerAction {
     private String url;
     
     
-
+    /**
+     * 
+     * @return url
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * 
+     * @param url url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
@@ -136,7 +143,6 @@ public class LoginAction extends LabViewerAction {
              setAttribute(LVConstants.FAILURE_MESSAGE, "Error while Encrypting password " + ep.getMessage()); 
              return ERROR;
         }
-        System.out.println(" encp " + encryptedPassword);
         if (executeQuery(username, encryptedPassword)) {
             logger.debug("Login sucessful for " + username);
             setUserInfoInSession(username);

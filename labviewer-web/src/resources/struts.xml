@@ -8,6 +8,8 @@
     <constant name="struts.devMode" value="true"/>
     <package name="default" extends="struts-default">
         <interceptors>
+            <interceptor name="exceptionHandler"
+               class="gov.nih.nci.lv.util.ExceptionHandlerInterceptor" />
             <interceptor name="parameterTrim"
                class="com.fiveamsolutions.nci.commons.web.struts2.interceptor.ParameterTrimInterceptor" />
             <interceptor name="servletConfig"
@@ -37,6 +39,7 @@
                     <param name="trimToNull">true</param>
                     <param name="trimFromFront">true</param>
                 </interceptor-ref>
+                <interceptor-ref name="exceptionHandler"/>
                 <interceptor-ref name="validation">
                     <param name="excludeMethods">input,back,cancel,reOrder</param>
                 </interceptor-ref>
@@ -48,11 +51,21 @@
         <default-interceptor-ref name="lvDefaultInterceptor" />
         <global-results>
             <result name="logout">logout.jsp</result>
+            <result name="webssologin">index.jsp</result>
+            <result name="webcsmlogin">/WEB-INF/jsp/login.jsp</result>
+            <result name="sae_error">error.jsp</result>
+            <result name="gen_error">error.jsp</result>
+            <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
         </global-results>
+
+        <global-exception-mappings>
+		    <exception-mapping exception="gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException" result="sae_error" />
+		    <exception-mapping exception="java.lang.Exception" result="gen_error" />
+        </global-exception-mappings>
+
 		<action name="login*" class="gov.nih.nci.lv.web.action.LoginAction" method="{1}">
 		   <result>/WEB-INF/jsp/login.jsp</result>
             <result name="welcome">/WEB-INF/jsp/welcome.jsp</result>
-            <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
 		    <result name="error">/WEB-INF/jsp/login.jsp</result>
 		    <result name="redirect" type="redirect">${url}</result> 
 
@@ -60,7 +73,6 @@
 
         <action name="home*" class="gov.nih.nci.lv.web.action.HomeAction" method="{1}">
             <result>/WEB-INF/jsp/welcome.jsp</result>
-            <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
         </action>    
         <action name="ajaxStudyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
             <result>/WEB-INF/jsp/protocol/detail.jsp</result>    

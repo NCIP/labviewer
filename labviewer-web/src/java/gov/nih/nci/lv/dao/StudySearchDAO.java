@@ -146,6 +146,7 @@ public class StudySearchDAO extends AbstractDAO {
                 + " or ps.id is null ) ");
         List<Object> obs = getSession().createQuery(hql.toString()).list();
         Object[] data = null;
+        logger.debug(" Study Protocol sql = " + hql.toString());
         logger.info(" records retreived  size= " + obs.size());
         for (Object d : obs) {
             data = (Object[]) d;

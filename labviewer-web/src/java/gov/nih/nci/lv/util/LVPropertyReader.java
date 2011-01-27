@@ -115,7 +115,7 @@ public class LVPropertyReader {
             throw new LVException(propertyName + " does not have value in LV.properties");
         }
         LOG.debug("Property name " + propertyName + " Property value = " + value);
-        return value;
+        return value.trim();
     }
     
     /**
