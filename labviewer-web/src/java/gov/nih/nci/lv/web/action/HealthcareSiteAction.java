@@ -88,8 +88,6 @@ import gov.nih.nci.lv.util.LVException;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 /**
  * Healthcaresite action class.
  * @author Naveen Amiruddin

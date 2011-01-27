@@ -79,6 +79,7 @@
 
 package gov.nih.nci.lv.web.action;
 
+import gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException;
 import gov.nih.nci.lv.dao.StudySearchDAO;
 import gov.nih.nci.lv.dto.IntegrationHubDto;
 import gov.nih.nci.lv.dto.StudySearchDto;
@@ -109,7 +110,12 @@ public class StudyProtocolAction extends LabViewerAction {
      * @throws Exception on error
      */
     public String list() throws Exception {
-        
+
+        StudySearchDto ssDto1 = null;
+//        ssDto1.getClass();
+        if (true) {
+            throw new SuiteAuthorizationAccessException(" test error msg");
+        }
         if (StringUtils.isEmpty(ssDto.getNciIdentifier()) && StringUtils.isEmpty(ssDto.getShortTitle())) {
             setAttribute(LVConstants.FAILURE_MESSAGE, "Minimum one criteria is requured to do the search");
             return ERROR;
