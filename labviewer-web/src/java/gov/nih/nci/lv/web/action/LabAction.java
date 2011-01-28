@@ -123,8 +123,9 @@ public class LabAction extends LabViewerAction {
             setStudyProtocolId(identifier.getProtocol().getId());
             setStudyProtocolInfo();
             if ((getSessionAttr(LVConstants.STUDY_SEARCH_DTO)) == null) {
-                setAttribute(LVConstants.FAILURE_MESSAGE, "User does not have access to the Study ");
-                return SUCCESS;
+                setAttribute(LVConstants.FAILURE_MESSAGE, 
+                        "User does not have access to the Study or Study does not exist");
+                return LVConstants.PROTOCOL;
             }
             labSearhDto.setStudyParticipantId(identifier.getParticipant().getId());
             logger.debug("retrieved Protocol id = " + identifier.getProtocol().getId());
@@ -137,9 +138,14 @@ public class LabAction extends LabViewerAction {
             studyPartId = labSearhDto.getStudyParticipantId();
         }    
         labSearhDto.setStudyParticipantId(studyPartId); 
-        setSession(LVConstants.STUDY_PART_SEARCH_DTO, 
-                new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
-                        getStudyProtocolId(), studyPartId , getUserName())).get(0));  
+        List<StudyParticipantSearchDto> spsDto = new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
+                getStudyProtocolId(), studyPartId , getUserName()));
+        if (spsDto.isEmpty()) {
+            setAttribute(LVConstants.FAILURE_MESSAGE, "Subject not found for a study ");
+            setSession(LVConstants.STUDY_PART_SEARCH_DTO, null);
+            return LVConstants.PARTICIPANT;
+        }
+        setSession(LVConstants.STUDY_PART_SEARCH_DTO, spsDto.get(0));  
         labResults = new LabSearchDAO().search(labSearhDto);
         setSession(LVConstants.LAB_RESULTS, labResults);
         setAttribute(LVConstants.TOPIC, "labs");

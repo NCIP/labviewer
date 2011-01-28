@@ -92,6 +92,9 @@
         </action>   
         <action name="lab*" class="gov.nih.nci.lv.web.action.LabAction" method="{1}">
             <result>/WEB-INF/jsp/lab/result.jsp</result>
+            <result name ="protocol">/WEB-INF/jsp/protocol/list.jsp</result>
+            <result name ="participant">/WEB-INF/jsp/participant/result.jsp</result>
+            
         </action>   
         <action name="property*" class="gov.nih.nci.lv.web.action.PropertyAction" method="{1}">
             <result>/WEB-INF/jsp/admin/property.jsp</result>

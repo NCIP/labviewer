@@ -96,7 +96,10 @@ public class LVConstants {
     public static final String PASSWORD = "password";
     /** Results. . */
     public static final String RESULTS = "results";
-    
+    /** Protocol. . */
+    public static final String PROTOCOL = "protocol";
+    /** Participant. . */
+    public static final String PARTICIPANT = "participant";
     /** Failure Message. . */
     public static final String FAILURE_MESSAGE = "failureMessage";
     /** Failure Message. . */
