@@ -97,6 +97,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.globus.gsi.GlobusCredential;
 import org.iso._21090.II;
@@ -113,7 +114,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     private static final long serialVersionUID = 1234573645L;
     private Long studyProtocolId = null;
     private Long studyParticipantId = null;
-   
+    private static Logger logger = Logger.getLogger(LabViewerAction.class);
     
     /**
      * {@inheritDoc}
@@ -246,12 +247,14 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     //@todo : throw exception when gridIdentifity is null
     void setUserInfoInSession() {
         String gridIDentity = (String) getSession().getAttribute(LVConstants.CAGRID_SSO_GRID_IDENTITY);
+        logger.debug(" grid id = " + gridIDentity);
         if (gridIDentity != null) {
             int beginIndex = gridIDentity.lastIndexOf("=");
             int endIndex = gridIDentity.length();
             setSession(LVConstants.USER_NAME, gridIDentity.substring(beginIndex + 1, endIndex));
             setSession(LVConstants.USER_ROLES, 
                     new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
+            logger.debug(" setting user info in session for " + gridIDentity.substring(beginIndex + 1, endIndex));
         }
     }
 
