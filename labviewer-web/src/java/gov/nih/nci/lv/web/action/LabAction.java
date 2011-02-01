@@ -116,11 +116,16 @@ public class LabAction extends LabViewerAction {
         Long studyPartId = null;
         if (studySubjectGridId != null) {
             // the call is from psc, load the study and participant for the given grid id
+            labViewerSetup();
             setUserInfoInSession();
-            logger.debug(" call from PSC grid id = " + studySubjectGridId);
+            logger.debug(" call from PSC/caAERS grid id = " + studySubjectGridId);
+            logger.debug(" user id = " + getSessionAttr(LVConstants.USER_NAME));
             Identifier identifier = 
                 new StudyParticipantSearchDOA().getIdentiferByStudySubjectGridId(studySubjectGridId);
             setStudyProtocolId(identifier.getProtocol().getId());
+            if (identifier != null) {
+                logger.debug(" Identifier is =  " + identifier.getExtension());
+            }
             setStudyProtocolInfo();
             if ((getSessionAttr(LVConstants.STUDY_SEARCH_DTO)) == null) {
                 setAttribute(LVConstants.FAILURE_MESSAGE, 
