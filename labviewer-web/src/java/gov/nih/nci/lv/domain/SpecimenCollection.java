@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -87,27 +87,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * 
+ *
  * @author NAmiruddin
  *
  */
 @Entity
 @Table(name = "Lab_Hub_Specimen_Collection")
 public class SpecimenCollection extends Activity {
-    
+
     private List<Specimen> speciments = new ArrayList<Specimen>();
     private CentralLaboratory centralLaboratory = null;
     /**
-     * 
+     *
      * @return speciments
      */
     @OneToMany(mappedBy = "specimenCollection")
     public List<Specimen> getSpeciments() {
         return speciments;
     }
-    
+
     /**
-     * 
+     *
      * @param speciments speciments
      */
     public void setSpeciments(List<Specimen> speciments) {
@@ -115,22 +115,22 @@ public class SpecimenCollection extends Activity {
     }
 
     /**
-     * 
+     *
      * @return centralLaboratory
      */
     @ManyToOne
-    @JoinColumn(name = "CENTRAL_LABORATORY_ID")        
+    @JoinColumn(name = "CENTRAL_LABORATORY_ID")
     public CentralLaboratory getCentralLaboratory() {
         return centralLaboratory;
     }
 
     /**
-     * 
+     *
      * @param centralLaboratory centralLaboratory
      */
     public void setCentralLaboratory(CentralLaboratory centralLaboratory) {
         this.centralLaboratory = centralLaboratory;
     }
-    
+
 
 }

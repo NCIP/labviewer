@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -86,7 +86,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
@@ -101,7 +101,7 @@ public class Protocol extends AbstractUser {
     private List<StudySite> studySites = new ArrayList<StudySite>();
     private List<ProtocolStatus> protocolStatuses = new ArrayList<ProtocolStatus>();
     /**
-     * 
+     *
      * @return nciIdentifier
      */
     @Column(name = "NCI_IDENTIFIER")
@@ -109,14 +109,14 @@ public class Protocol extends AbstractUser {
         return nciIdentifier;
     }
     /**
-     * 
+     *
      * @param nciIdentifier nciIdentifier
      */
     public void setNciIdentifier(String nciIdentifier) {
         this.nciIdentifier = nciIdentifier;
     }
     /**
-     * 
+     *
      * @return longTitleText
      */
     @Column(name = "LONG_TITLE_TEXT")
@@ -124,14 +124,14 @@ public class Protocol extends AbstractUser {
         return longTitleText;
     }
     /**
-     * 
+     *
      * @param longTitleText longTitleText
      */
     public void setLongTitleText(String longTitleText) {
         this.longTitleText = longTitleText;
     }
     /**
-     * 
+     *
      * @return shortTitleText
      */
     @Column(name = "SHORT_TITLE_TEXT")
@@ -139,15 +139,15 @@ public class Protocol extends AbstractUser {
         return shortTitleText;
     }
     /**
-     * 
+     *
      * @param shortTitleText shortTitleText
      */
     public void setShortTitleText(String shortTitleText) {
         this.shortTitleText = shortTitleText;
     }
-    
+
     /**
-     * 
+     *
      * @return phaseCode
      */
     @Column(name = "PHASE_CODE")
@@ -155,14 +155,14 @@ public class Protocol extends AbstractUser {
         return phaseCode;
     }
     /**
-     * 
+     *
      * @param phaseCode phaseCode
      */
     public void setPhaseCode(String phaseCode) {
         this.phaseCode = phaseCode;
     }
     /**
-     * 
+     *
      * @return studySites
      */
     @OneToMany(mappedBy = "protocol")
@@ -170,14 +170,14 @@ public class Protocol extends AbstractUser {
         return studySites;
     }
     /**
-     * 
+     *
      * @param studySites studySites
      */
     public void setStudySites(List<StudySite> studySites) {
         this.studySites = studySites;
     }
     /**
-     * 
+     *
      * @return protocolStatuses
      */
     @OneToMany(mappedBy = "protocol")
@@ -185,7 +185,7 @@ public class Protocol extends AbstractUser {
         return protocolStatuses;
     }
     /**
-     * 
+     *
      * @param protocolStatuses protocolStatuses
      */
     @OneToMany(mappedBy = "protocol")

@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -86,17 +86,17 @@ import gov.nih.nci.lv.domain.ProtocolStatus;
  *
  */
 public class StudySearchDto extends AbstractDto<StudySearchDto> {
-    
+
     private String nciIdentifier;
     private String shortTitle;
     private String phaseCode;
     private String statusCode;
-    
+
     /**
      * no arg constructor.
      */
     public StudySearchDto() {
-        
+
     }
     /**
      * no arg constructor.
@@ -117,7 +117,7 @@ public class StudySearchDto extends AbstractDto<StudySearchDto> {
         this.setUserName(userName);
     }
     /**
-     * 
+     *
      * @param protocol protocol
      * @param identifier identifier
      * @param protocolStatus protocolStatus
@@ -130,63 +130,63 @@ public class StudySearchDto extends AbstractDto<StudySearchDto> {
         this.statusCode = protocolStatus.getStatusCode();
     }
 
-    
+
     /**
-     * 
+     *
      * @return nciIdentifier
      */
     public String getNciIdentifier() {
         return nciIdentifier;
     }
     /**
-     * 
+     *
      * @param nciIdentifier nciIdentifier
      */
     public void setNciIdentifier(String nciIdentifier) {
         this.nciIdentifier = nciIdentifier;
     }
     /**
-     * 
+     *
      * @return shortTitle
      */
     public String getShortTitle() {
         return shortTitle;
     }
     /**
-     * 
+     *
      * @param shortTitle shortTitle
      */
     public void setShortTitle(String shortTitle) {
         this.shortTitle = shortTitle;
     }
     /**
-     * 
+     *
      * @return phaseCode
      */
     public String getPhaseCode() {
         return phaseCode;
     }
     /**
-     * 
+     *
      * @param phaseCode phaseCode
      */
     public void setPhaseCode(String phaseCode) {
         this.phaseCode = phaseCode;
     }
     /**
-     * 
+     *
      * @return statusCode
      */
     public String getStatusCode() {
         return statusCode;
     }
     /**
-     * 
+     *
      * @param statusCode statusCode
      */
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
 
-    
+
 }

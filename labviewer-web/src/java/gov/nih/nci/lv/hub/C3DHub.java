@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -86,20 +86,20 @@ import gov.nih.nci.lv.util.LVException;
 import java.util.List;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
 public class C3DHub  extends LabHub {
-    
+
     /**
-     * 
+     *
      * @param labSearchDto criteria
      * @param labs labs
      * @param hubDto hubdto
      * @throws LVException on error
      */
-    public void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto) 
+    public void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto)
         throws LVException  {
         hubDto.setTarget("C3D");
         hubDto.setQName("gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain.loadlabs");
@@ -110,6 +110,6 @@ public class C3DHub  extends LabHub {
         hubDto.setExternalIdentifier("CTODS");
         super.invokeHub(labSearchDto, labs, hubDto);
     }
-    
+
 
 }

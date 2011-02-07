@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -85,7 +85,7 @@ import gov.nih.nci.lv.domain.HealthcareSite;
  *
  */
 public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
-    
+
     private String nciInstituteCode;
     private String name;
     private String streetAddress;
@@ -94,16 +94,16 @@ public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
     private String postalCode;
     private String countryCode;
     private String telecomAddress;
-    
+
     /**
-     * 
+     *
      */
     public HealthcareSiteDto() {
     }
-    
+
 
     /**
-     * 
+     *
      * @param healthcareSite healthcareSite
      */
     public HealthcareSiteDto(HealthcareSite healthcareSite) {
@@ -116,25 +116,25 @@ public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
         this.setPostalCode(healthcareSite.getPostalCode());
         this.setStreetAddress(healthcareSite.getStreetAddress());
         this.setTelecomAddress(healthcareSite.getTelecomAddress());
-        this.setCtomUpdateDate(healthcareSite.getCtomUpdateDate());        
+        this.setCtomUpdateDate(healthcareSite.getCtomUpdateDate());
     }
 
     /**
-     * 
+     *
      * @return nciInstituteCode
      */
     public String getNciInstituteCode() {
         return nciInstituteCode;
     }
     /**
-     * 
+     *
      * @param nciInstituteCode nciInstituteCode
      */
     public void setNciInstituteCode(String nciInstituteCode) {
         this.nciInstituteCode = nciInstituteCode;
     }
     /**
-     * 
+     *
      * @return name
      */
 
@@ -142,98 +142,98 @@ public class HealthcareSiteDto extends AbstractDto<HealthcareSiteDto> {
         return name;
     }
     /**
-     * 
+     *
      * @param name name
      */
     public void setName(String name) {
         this.name = name;
     }
     /**
-     * 
+     *
      * @return streetAddress
      */
     public String getStreetAddress() {
         return streetAddress;
     }
     /**
-     * 
+     *
      * @param streetAddress streetAddress
      */
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
     }
     /**
-     * 
+     *
      * @return city
      */
     public String getCity() {
         return city;
     }
     /**
-     * 
+     *
      * @param city city
      */
     public void setCity(String city) {
         this.city = city;
     }
     /**
-     * 
+     *
      * @return stateCode
      */
     public String getStateCode() {
         return stateCode;
     }
     /**
-     * 
+     *
      * @param stateCode stateCode
      */
      public void setStateCode(String stateCode) {
         this.stateCode = stateCode;
     }
     /**
-     * 
+     *
      * @return postalCode
      */
     public String getPostalCode() {
         return postalCode;
     }
     /**
-     * 
+     *
      * @param postalCode postalCode
      */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
-     * 
+     *
      * @return countryCode
      */
     public String getCountryCode() {
         return countryCode;
     }
     /**
-     * 
+     *
      * @param countryCode countryCode
      */
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
-     * 
+     *
      * @return telecomAddress
      */
     public String getTelecomAddress() {
         return telecomAddress;
     }
     /**
-     * 
+     *
      * @param telecomAddress telecomAddress
      */
     public void setTelecomAddress(String telecomAddress) {
         this.telecomAddress = telecomAddress;
     }
-    
-    
-    
+
+
+
 
 }

@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -125,7 +125,7 @@ import webservices.StudySubject;
 public abstract class IntegrationHub {
     private static final Logger LOG = Logger.getLogger(IntegrationHub.class);
 
-    
+
 
 
     void errorOnEmpty(Set<Long> labIds , String target) throws LVException {
@@ -133,12 +133,12 @@ public abstract class IntegrationHub {
             throw new LVException("Please select labs to loads to " + target);
         }
     }
-    
-    IntegrationHubDto invokeHub(LabSearchDto labSearchDto , List<LabSearchDto> labs , 
+
+    IntegrationHubDto invokeHub(LabSearchDto labSearchDto , List<LabSearchDto> labs ,
             IntegrationHubDto hubDto)  throws LVException {
         StringBuffer error  = new StringBuffer();
         error.append(hubDto.getServiceName() == null ? "Service Name is null" : "");
-        error.append(hubDto.getServiceType() == null ? "Service Type is null" : ""); 
+        error.append(hubDto.getServiceType() == null ? "Service Type is null" : "");
         error.append(hubDto.getHubUrl() == null ? "Hub URL is null" : "");
         error.append(hubDto.getCredentialEpr() == null ? "Credential EPR is null" : "");
         error.append(hubDto.getMessageXml() == null ? "Request message xml name is null" : "");
@@ -149,32 +149,32 @@ public abstract class IntegrationHub {
         if (labSearchDto.getLabIds() == null) {
             error.append("Minimum one Labs must be selected to submit to caAERS or C3D");
         }
-        
+
         if (error.toString().length() > 0) {
             throw new LVException(error.toString());
         }
-            
+
         hubDto.setRequestObj(createLoadLabRequestObj(labSearchDto, labs, hubDto));
         hubDto.setRequestMessage(getRequestMessage(hubDto));
         hubDto.setResponseObj(getResponseObj(hubDto));
         processResponseMessage(hubDto.getResponseObj() , hubDto.getTarget());
         return hubDto;
-        
+
     }
     /**
      * converts the labSearch Dto to a Loab Labs Obj.
      * @param labSearchDto labs dto
      * @param labs set to of labs to load to hub
-     * @param labIds set of 
+     * @param labIds set of
      * @param target (must be either CAERS or C3D
-     * @throws LVException 
+     * @throws LVException
      */
-    LoadLabsRequest createLoadLabRequestObj(LabSearchDto labSearchDto , List<LabSearchDto> labs ,  
-            IntegrationHubDto hubDto) 
+    LoadLabsRequest createLoadLabRequestObj(LabSearchDto labSearchDto , List<LabSearchDto> labs ,
+            IntegrationHubDto hubDto)
     throws LVException {
         LoadLabsRequest labRequest = new LoadLabsRequest();
         String target = hubDto.getTarget();
-        String spExtn = (target.equals("C3D") ? "STUDY:" + hubDto.getStudyProtocolExtn() 
+        String spExtn = (target.equals("C3D") ? "STUDY:" + hubDto.getStudyProtocolExtn()
                 : hubDto.getStudyProtocolExtn());
         // do error checks
         Set<Long> labIds = LVUtils.convertStringToSet(labSearchDto.getLabIds(), ",");
@@ -185,7 +185,7 @@ public abstract class IntegrationHub {
         if (labSearchDto.getStudyParticipantId() == null) {
             throw new LVException("Cannot load Labs, Study Participant Id is null ");
         }
-        
+
         int size = labIds.size();
         LabResult[] labResults = new LabResult[size];
         int i = 0;
@@ -239,7 +239,7 @@ public abstract class IntegrationHub {
         labRequest.setLabResult(labResults);
         return labRequest;
     }
-    
+
     Message getRequestMessage(IntegrationHubDto hubDto) throws LVException {
         try {
             QName qName = new QName(hubDto.getQName(), hubDto.getQRequest());
@@ -264,13 +264,13 @@ public abstract class IntegrationHub {
             throw new LVException(e);
         }
     }
-    
+
     Response getResponseObj(IntegrationHubDto hubDto) throws LVException {
         try {
             CaXchangeRequestProcessorClient client =
                 new CaXchangeRequestProcessorClient(hubDto.getHubUrl(), hubDto.getGlobusCredential());
             CaXchangeResponseServiceReference crsr =  client.processRequestAsynchronously(hubDto.getRequestMessage());
-            CaXchangeResponseServiceClient responseService =   
+            CaXchangeResponseServiceClient responseService =
                 new CaXchangeResponseServiceClient(crsr.getEndpointReference(), hubDto.getGlobusCredential());
             boolean gotResponse = false;
             int responseCount = 0;
@@ -304,7 +304,7 @@ public abstract class IntegrationHub {
         if (respStatus.equals(Statuses.SUCCESS)) {
             if ("CAERS".equals(target)) {
                 if (response.getCaXchangeError() != null) {
-                   LOG.info("Received a success from caxchange hub: " 
+                   LOG.info("Received a success from caxchange hub: "
                            + response.getCaXchangeError().getErrorDescription());
                 }
                 if (response.getTargetResponse() != null) {
@@ -321,7 +321,7 @@ public abstract class IntegrationHub {
                 message =  response.getCaXchangeError().getErrorDescription();
             } else if (response.getTargetResponse() != null) {
                 for (TargetResponseMessage msg : response.getTargetResponse()) {
-                    message = msg.getTargetMessageStatus().getValue() + ":" 
+                    message = msg.getTargetMessageStatus().getValue() + ":"
                         + msg.getTargetError().getErrorDescription();
                 }
             }
@@ -329,7 +329,7 @@ public abstract class IntegrationHub {
         }
     }
     /**
-     * 
+     *
      * @param response response
      * @return string
      */
@@ -347,7 +347,7 @@ public abstract class IntegrationHub {
                         if (me == null) {
                             continue;
                         }
-                        if (me.getName().equalsIgnoreCase("Status") && me.getChildren() != null 
+                        if (me.getName().equalsIgnoreCase("Status") && me.getChildren() != null
                                 && me.getChildren().size() >= 0) {
                                 status = me.getChildren().get(0).toString();
                         } else if (me.getName().equalsIgnoreCase("Errors")) {
@@ -358,11 +358,11 @@ public abstract class IntegrationHub {
                                     Iterator itr1 = me2.getChildElements();
                                     while (itr1.hasNext()) {
                                         MessageElement me3 = (MessageElement) itr1.next();
-                                        if (me3.getName().equalsIgnoreCase("ErrorCode") && me3.getChildren() != null 
-                                                && me3.getChildren().size() >= 0) {  
+                                        if (me3.getName().equalsIgnoreCase("ErrorCode") && me3.getChildren() != null
+                                                && me3.getChildren().size() >= 0) {
                                             errorCode.append(me3.getChildren().get(0).toString());
-                                        } else if (me3.getName().equalsIgnoreCase("ErrorDesc") 
-                                                && me3.getChildren() != null && me3.getChildren().size() >= 0) {  
+                                        } else if (me3.getName().equalsIgnoreCase("ErrorDesc")
+                                                && me3.getChildren() != null && me3.getChildren().size() >= 0) {
                                             errorDesc.append(me3.getChildren().get(0).toString());
                                         }
                                     } // while
@@ -393,8 +393,8 @@ public abstract class IntegrationHub {
     private webservices.II generateIi(Long extn , String authName , String root) {
         return generateIi(extn.toString() , authName , root);
     }
-    
-    
+
+
     private webservices.II[] generateIiArray(Long extn , String authName , String root) {
         return generateIiArray(extn.toString() , authName , root);
     }

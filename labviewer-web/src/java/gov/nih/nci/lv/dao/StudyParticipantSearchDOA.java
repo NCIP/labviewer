@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -117,7 +117,12 @@ public class StudyParticipantSearchDOA extends AbstractDAO {
     throws Exception {
         List<StudyParticipantSearchDto> spsDtos = new ArrayList<StudyParticipantSearchDto>();
         LabViewerAuthorizationHelper labAuth = new LabViewerAuthorizationHelper();
-        boolean allSiteAccess = labAuth.isAllSites(spsDto.getUserName());
+        boolean allSiteAccess = true; 
+        // in 2.4, implement admin and cge. for now comment this functionality due to user info not set, while coming
+        // from psc or caAERS
+//        if (spsDto.getUserName() != null) {
+//            allSiteAccess = labAuth.isAllSites(spsDto.getUserName());
+//        }
         String ids = null;
         StringBuffer hql = new StringBuffer(" Select i , part , hc from Identifier as i ");
         hql.append(" left outer join i.studyParticipantAssignment as spa ");

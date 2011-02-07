@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -97,7 +97,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
      * no arg cons.
      */
     public StudyParticipantSearchDto() {
-        
+
     }
     /**
      * contructs with a protocol id.
@@ -108,7 +108,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
         setStudyProtocolId(studyProtocolId);
     }
     /**
-     * 
+     *
      * @param studyProtocolId studyProtocolId
      * @param studyParticipantIdentifier studyParticipantIdentifier
      */
@@ -118,7 +118,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
         setId(studyParticipantIdentifier);
     }
     /**
-     * 
+     *
      * @param studyProtocolId studyProtocolId
      * @param studyParticipantIdentifier studyParticipantIdentifier
      * @param userName userName
@@ -130,7 +130,7 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
         setUserName(userName);
     }
     /**
-     * 
+     *
      * @param identifier identifier
      * @param participant participant
      * @param healthcareSite healthcareSite
@@ -145,76 +145,76 @@ public class StudyParticipantSearchDto extends AbstractDto<StudyParticipantSearc
         this.healthcareSiteDto = new HealthcareSiteDto(healthcareSite);
     }
     /**
-     * 
+     *
      * @return identifier
      */
     public String getIdentifier() {
         return identifier;
     }
     /**
-     * 
+     *
      * @param identifier identifier
      */
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
     /**
-     * 
+     *
      * @return firstName
      */
     public String getFirstName() {
         return firstName;
     }
     /**
-     * 
+     *
      * @param firstName firstName
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
-     * 
+     *
      * @return  lastName
      */
     public String getLastName() {
         return lastName;
     }
     /**
-     * 
+     *
      * @param lastName lastName
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
-     * 
+     *
      * @return healthcareSiteDto
      */
     public HealthcareSiteDto getHealthcareSiteDto() {
         return healthcareSiteDto;
     }
     /**
-     * 
+     *
      * @param healthcareSiteDto healthcareSiteDto
      */
     public void setHealthcareSiteDto(HealthcareSiteDto healthcareSiteDto) {
         this.healthcareSiteDto = healthcareSiteDto;
     }
     /**
-     * 
+     *
      * @return grid id
      */
     public String getGridId() {
         return gridId;
     }
     /**
-     * 
+     *
      * @param gridId grid id
      */
     public void setGridId(String gridId) {
         this.gridId = gridId;
     }
-    
-    
-    
+
+
+
 }

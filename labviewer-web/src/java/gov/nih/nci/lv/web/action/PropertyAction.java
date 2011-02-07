@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -94,7 +94,7 @@ import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
@@ -104,9 +104,9 @@ public class PropertyAction extends LabViewerAction {
     private String c3dUrl;
     private String hubUrl;
     private String helpLink;
-    
+
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
@@ -121,8 +121,8 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
-     * @return String 
+     *
+     * @return String
      * @throws Exception on error
      */
     public String save() throws Exception {
@@ -141,7 +141,7 @@ public class PropertyAction extends LabViewerAction {
         return SUCCESS;
     }
     /**
-     * 
+     *
      * @return version
      */
     public String getVersion() {
@@ -149,7 +149,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param version version
      */
     @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "version", message = "Version must be entered")
@@ -158,7 +158,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return caaersUrl
      */
     public String getCaaersUrl() {
@@ -166,17 +166,17 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param caaersUrl caaersUrl
      */
-   @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "caaersUrl", 
+   @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "caaersUrl",
            message = "caAERS Url must be entered")
     public void setCaaersUrl(String caaersUrl) {
         this.caaersUrl = caaersUrl;
     }
 
     /**
-     * 
+     *
      * @return c3dUrl
      */
     public String getC3dUrl() {
@@ -184,7 +184,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param c3dUrl c3dUrl
      */
     @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "c3dUrl", message = "C3D Url must be entered")
@@ -193,7 +193,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return hubUrl
      */
     @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "hubUrl", message = "Hub Url must be entered")
@@ -202,7 +202,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param hubUrl hubUrl
      */
     public void setHubUrl(String hubUrl) {
@@ -210,7 +210,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return helpLink
      */
     public String getHelpLink() {
@@ -218,7 +218,7 @@ public class PropertyAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param helpLink helpLink
      */
     @RequiredStringValidator(type = ValidatorType.SIMPLE, fieldName = "helpLink", message = "Help link must be entered")

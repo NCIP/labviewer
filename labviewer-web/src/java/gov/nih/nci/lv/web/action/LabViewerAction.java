@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -105,26 +105,26 @@ import org.iso._21090.II;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 /**
- * 
+ *
  * @author NAmiruddin
  *
  */
 public class LabViewerAction extends ActionSupport implements Preparable {
-    
+
     private static final long serialVersionUID = 1234573645L;
     private Long studyProtocolId = null;
     private Long studyParticipantId = null;
     private static Logger logger = Logger.getLogger(LabViewerAction.class);
-    
+
     /**
      * {@inheritDoc}
-     */    
+     */
     public void prepare() {
-        
+
     }
     /**
      * {@inheritDoc}
-     */    
+     */
     public String execute() throws Exception {
         return SUCCESS;
     }
@@ -148,8 +148,8 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    Long getStudyProtocolIdentifier() {
       return studyProtocolId;
    }
-   
-   
+
+
 
    /**
    *
@@ -167,9 +167,9 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         StudyParticipantSearchDto spsDto = (StudyParticipantSearchDto) getSession().getAttribute(
              LVConstants.STUDY_PART_SEARCH_DTO);
         return (spsDto != null ? spsDto.getId() : null);
-    }   
+    }
    /**
-    * 
+    *
     * @return protocol
     */
     Protocol createProtocolObj() {
@@ -184,10 +184,10 @@ public class LabViewerAction extends ActionSupport implements Preparable {
    public void setStudyProtocolId(Long studyProtocolId) {
        this.studyProtocolId = studyProtocolId;
    }
-   
-   
+
+
    /**
-    * 
+    *
     * @return studyParticipantId
     */
     public Long getStudyParticipantId() {
@@ -197,13 +197,13 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         return studyParticipantId;
     }
     /**
-     * 
+     *
      * @param studyParticipantId studyParticipantId
      */
     public void setStudyParticipantId(Long studyParticipantId) {
         this.studyParticipantId = studyParticipantId;
     }
-    
+
     String getUserName() {
         return (String) getSessionAttr(LVConstants.USER_NAME);
     }
@@ -214,16 +214,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
     public HttpSession getSession() {
         return ServletActionContext.getRequest().getSession();
     }
-    
-   
+
+
     /**
      * return the current http session.
      * @return HttpServletRequest
      */
     public HttpServletRequest getRequest() {
         return ServletActionContext.getRequest();
-    }   
-    
+    }
+
     void setAttribute(String arg0, Object arg1) {
         ServletActionContext.getRequest().setAttribute(arg0, arg1);
     }
@@ -252,7 +252,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
             int beginIndex = gridIDentity.lastIndexOf("=");
             int endIndex = gridIDentity.length();
             setSession(LVConstants.USER_NAME, gridIDentity.substring(beginIndex + 1, endIndex));
-            setSession(LVConstants.USER_ROLES, 
+            setSession(LVConstants.USER_ROLES,
                     new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
             logger.debug(" setting user info in session for " + gridIDentity.substring(beginIndex + 1, endIndex));
         }
@@ -260,16 +260,16 @@ public class LabViewerAction extends ActionSupport implements Preparable {
 
     /**
      * this method will be called when coming from login using csm.
-     * @throws LVException 
+     * @throws LVException
      */
     void setUserInfoInSession(String username) throws LVException {
         setDefaults();
         setSession(LVConstants.USER_NAME, username);
-        setSession(LVConstants.USER_ROLES, 
+        setSession(LVConstants.USER_ROLES,
                 new LabViewerAuthorizationHelper().getUserRoles((String) getSessionAttr(LVConstants.USER_NAME)));
         enableMenu();
     }
-    
+
     private void setDefaults() throws LVException {
         setSession(LVConstants.ADMIN_ACCESS, "no");
         setSession(LVConstants.STUDY_ACCESS, "no");
@@ -277,7 +277,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         setSession(LVConstants.CAAERS_ACCESS, "no");
         setProperty(LVPropertyReader.getProperty());
     }
-    
+
     void setProperty(Properties prop) {
         setSession(LVConstants.VERSION, prop.getProperty(LVConstants.VERSION));
         setSession("help_link", prop.getProperty(LVConstants.HELP_LINK));
@@ -321,14 +321,14 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         hubDto.setExternalIdentifier("CTODS");
         return hubDto;
     }
-    
+
     void setStudyIdentifier(IntegrationHubDto iHubDto) {
         II assignedIdentifier = new II();
         StudySearchDto ssDto = (StudySearchDto) getSessionAttr(LVConstants.STUDY_SEARCH_DTO);
         assignedIdentifier.setRoot(LVConstants.STUDY_PROTOCOL_ROOT);
         assignedIdentifier.setExtension(ssDto.getNciIdentifier());
         iHubDto.setCoppaIi(assignedIdentifier);
-        
+
     }
 
     Id setCoppaEntityId(String extn , String root) {
@@ -336,7 +336,7 @@ public class LabViewerAction extends ActionSupport implements Preparable {
         identifier.setRoot(root);
         identifier.setExtension(extn);
         return identifier;
-        
+
     }
     /**
      * true means suite mode, false means standalone mode.
@@ -344,6 +344,6 @@ public class LabViewerAction extends ActionSupport implements Preparable {
      * @throws LVException
      */
     boolean isSuiteMode() throws LVException {
-        return  Boolean.parseBoolean(LVPropertyReader.getPropertyValue(LVConstants.WEBSSO_ENABLED));  
+        return  Boolean.parseBoolean(LVPropertyReader.getPropertyValue(LVConstants.WEBSSO_ENABLED));
     }
 }

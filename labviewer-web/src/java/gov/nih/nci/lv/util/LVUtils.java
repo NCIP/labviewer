@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -90,12 +90,12 @@ import org.iso._21090.II;
 import org.iso._21090.ST;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
 public class LVUtils {
-    
+
     /**
      * converts a string array to string concat with a , to be used in a sql.
      * @param ids ids
@@ -133,7 +133,7 @@ public class LVUtils {
         Set<Long> labs = new HashSet<Long>();
         if (StringUtils.isEmpty(ids)) {
             return labs;
-        }        
+        }
         StringTokenizer st = new StringTokenizer(ids, delimiter);
         while (st.hasMoreTokens()) {
             labs.add(new Long(st.nextElement().toString()));
@@ -151,14 +151,14 @@ public class LVUtils {
         List<Long> labs = new ArrayList<Long>();
         if (StringUtils.isEmpty(ids)) {
             return labs;
-        }        
+        }
         StringTokenizer st = new StringTokenizer(ids, delimiter);
         while (st.hasMoreTokens()) {
             labs.add(new Long(st.nextElement().toString()));
         }
         return labs;
     }
-    
+
     /**
      * returns true if iso ii is null.
      * @param ii ii
