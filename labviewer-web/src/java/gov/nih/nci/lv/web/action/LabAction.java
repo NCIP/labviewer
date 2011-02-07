@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -106,21 +106,22 @@ public class LabAction extends LabViewerAction {
     LabSearchDto labSearhDto = new LabSearchDto();
     List<LabSearchDto> labResults = new ArrayList<LabSearchDto>();
     String studySubjectGridId = null;
+    private static final long serialVersionUID = 1234573645L;
     private static Logger logger = Logger.getLogger(LabAction.class);
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
     public String list() throws Exception {
         Long studyPartId = null;
         if (studySubjectGridId != null) {
-            // the call is from psc, load the study and participant for the given grid id
             labViewerSetup();
             setUserInfoInSession();
+            setSession(LVConstants.STUDY_ACCESS, "yes");
             logger.debug(" call from PSC/caAERS grid id = " + studySubjectGridId);
             logger.debug(" user id = " + getSessionAttr(LVConstants.USER_NAME));
-            Identifier identifier = 
+            Identifier identifier =
                 new StudyParticipantSearchDOA().getIdentiferByStudySubjectGridId(studySubjectGridId);
             setStudyProtocolId(identifier.getProtocol().getId());
             if (identifier != null) {
@@ -128,7 +129,7 @@ public class LabAction extends LabViewerAction {
             }
             setStudyProtocolInfo();
             if ((getSessionAttr(LVConstants.STUDY_SEARCH_DTO)) == null) {
-                setAttribute(LVConstants.FAILURE_MESSAGE, 
+                setAttribute(LVConstants.FAILURE_MESSAGE,
                         "User does not have access to the Study or Study does not exist");
                 return LVConstants.PROTOCOL;
             }
@@ -141,8 +142,8 @@ public class LabAction extends LabViewerAction {
             studyPartId = getStudyPartIdFromSession();
         } else if (labSearhDto.getStudyParticipantId() != null) {
             studyPartId = labSearhDto.getStudyParticipantId();
-        }    
-        labSearhDto.setStudyParticipantId(studyPartId); 
+        }
+        labSearhDto.setStudyParticipantId(studyPartId);
         List<StudyParticipantSearchDto> spsDto = new StudyParticipantSearchDOA().search(new StudyParticipantSearchDto(
                 getStudyProtocolId(), studyPartId , getUserName()));
         if (spsDto.isEmpty()) {
@@ -150,34 +151,35 @@ public class LabAction extends LabViewerAction {
             setSession(LVConstants.STUDY_PART_SEARCH_DTO, null);
             return LVConstants.PARTICIPANT;
         }
-        setSession(LVConstants.STUDY_PART_SEARCH_DTO, spsDto.get(0));  
+        setSession(LVConstants.STUDY_PART_SEARCH_DTO, spsDto.get(0));
         labResults = new LabSearchDAO().search(labSearhDto);
         setSession(LVConstants.LAB_RESULTS, labResults);
         setAttribute(LVConstants.TOPIC, "labs");
         return SUCCESS;
     }
-    
+
+
 
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
     public String c3d() throws Exception {
         return loadLabs(new C3DHub() , LVConstants.C3D);
     }
-    
+
 
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
     public String caers() throws Exception {
         return loadLabs(new CAERSHub(), LVConstants.CAAERS);
     }
-    
-    
+
+
     private String loadLabs(LabHub iHub , String target) throws Exception {
         labResults = (List<LabSearchDto>) getSessionAttr(LVConstants.LAB_RESULTS);
         IntegrationHubDto hubDto = super.getHubDto();
@@ -195,7 +197,7 @@ public class LabAction extends LabViewerAction {
         return SUCCESS;
     }
     /**
-     * 
+     *
      * @param labSearhDto labSearhDto
      */
     public void setLabSearhDto(LabSearchDto labSearhDto) {
@@ -203,7 +205,7 @@ public class LabAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return labSearhDto
      */
     public LabSearchDto getLabSearhDto() {
@@ -211,7 +213,7 @@ public class LabAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return labResults
      */
     public List<LabSearchDto> getLabResults() {
@@ -219,7 +221,7 @@ public class LabAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param labResults labResults
      */
     public void setLabResults(List<LabSearchDto> labResults) {
@@ -227,7 +229,7 @@ public class LabAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return studySubjectGridId
      */
     public String getStudySubjectGridId() {
@@ -235,7 +237,7 @@ public class LabAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param studySubjectGridId studySubjectGridId
      */
     public void setStudySubjectGridId(String studySubjectGridId) {

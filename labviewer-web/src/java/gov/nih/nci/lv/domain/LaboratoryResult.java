@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -91,18 +91,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Lab_Hub_Lab_Result")
 public class LaboratoryResult extends AbstractId {
-    
+
     private Integer numericPrecision;
     private Float numericResult;
     private String referenceFlag;
     private String referenceRangeComment;
     private Integer referenceRangeHigh;
-    private Integer referenceRangeLow;    
+    private Integer referenceRangeLow;
     private String referenceTextList;
-    private String reportedResultStatus;    
-    private java.util.Date testPerformedDateTime;    
-    private String textResult;    
-    private Cd units;    
+    private String reportedResultStatus;
+    private java.util.Date testPerformedDateTime;
+    private String textResult;
+    private Cd units;
     private LaboratoryTest laboratoryTest;
     private PerformingLaboratory performingLaboratory;
     /**
@@ -133,13 +133,13 @@ public class LaboratoryResult extends AbstractId {
     * Sets the value of numericResult attribue.
     * @param numericResult numericResult
     **/
-    public void setNumericResult(Float numericResult) { 
+    public void setNumericResult(Float numericResult) {
         this.numericResult = numericResult;
     }
     /**
     * Retreives the value of referenceFlag attribute.
     * @return referenceFlag
-    **/     
+    **/
     @Column(name = "REFERENCE_FLAG")
     public String getReferenceFlag() {
         return referenceFlag;
@@ -151,7 +151,7 @@ public class LaboratoryResult extends AbstractId {
     public void setReferenceFlag(String referenceFlag) {
         this.referenceFlag = referenceFlag;
     }
-   
+
    /**
     * Retreives the value of referenceRangeComment attribute.
     * @return referenceRangeComment
@@ -183,7 +183,7 @@ public class LaboratoryResult extends AbstractId {
    public void setReferenceRangeHigh(Integer referenceRangeHigh) {
       this.referenceRangeHigh = referenceRangeHigh;
     }
-   
+
     /**
     * Retreives the value of referenceRangeLow attribute.
     * @return referenceRangeLow
@@ -267,7 +267,7 @@ public class LaboratoryResult extends AbstractId {
     * @return units
     **/
     @ManyToOne
-    @JoinColumn(name = "NUM_UOM_CONCEPT_DESCRIPTOR_ID")        
+    @JoinColumn(name = "NUM_UOM_CONCEPT_DESCRIPTOR_ID")
     public Cd getUnits() {
         return units;
     }
@@ -282,15 +282,15 @@ public class LaboratoryResult extends AbstractId {
      * Retreives the value of laboratoryTest attribue.
      * @return laboratoryTest
      **/
-     
+
     @ManyToOne
-    @JoinColumn(name = "LAB_TEST_ID")        
+    @JoinColumn(name = "LAB_TEST_ID")
     public LaboratoryTest getLaboratoryTest() {
          return laboratoryTest;
      }
      /**
      * Sets the value of laboratoryTest attribue.
-     * @param laboratoryTest laboratoryTest 
+     * @param laboratoryTest laboratoryTest
      **/
 
      public void setLaboratoryTest(LaboratoryTest laboratoryTest) {
@@ -302,7 +302,7 @@ public class LaboratoryResult extends AbstractId {
       * @return performingLaboratory
       **/
      @ManyToOne
-     @JoinColumn(name = "PERFORMING_LABORATORY_ID")          
+     @JoinColumn(name = "PERFORMING_LABORATORY_ID")
      public PerformingLaboratory getPerformingLaboratory() {
           return performingLaboratory;
       }
@@ -312,7 +312,7 @@ public class LaboratoryResult extends AbstractId {
       **/
       public void setPerformingLaboratory(PerformingLaboratory performingLaboratory) {
           this.performingLaboratory = performingLaboratory;
-      }     
-    
+      }
+
 
 }

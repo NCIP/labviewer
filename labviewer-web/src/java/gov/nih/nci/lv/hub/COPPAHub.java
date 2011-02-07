@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -126,9 +126,9 @@ public class COPPAHub extends IntegrationHub {
 
     private static final Logger LOG = Logger.getLogger(COPPAHub.class);
 
-    
+
     /**
-     * 
+     *
      * @param iHubDto iHubDto
      * @return StudyProtocol Coppa Study Protocol
      * @throws LVException on error
@@ -144,9 +144,9 @@ public class COPPAHub extends IntegrationHub {
         iHubDto.setResponseObj(getResponseObj(iHubDto));
         return getCoppaStudy(iHubDto);
     }
-    
+
     /**
-     * 
+     *
      * @param iHubDto iHubDto
      * @return StudyProtocol Coppa Study Protocol
      * @throws LVException on error
@@ -159,9 +159,9 @@ public class COPPAHub extends IntegrationHub {
         invoke(iHubDto);
         return getCoppaPerson(iHubDto);
     }
-    
+
     /**
-     * 
+     *
      * @param iHubDto iHubDto
      * @return StudyProtocol Coppa Study Protocol
      * @throws LVException on error
@@ -180,7 +180,7 @@ public class COPPAHub extends IntegrationHub {
         iHubDto.setRequestMessage(getRequestMessage(iHubDto));
         iHubDto.setResponseObj(getResponseObj(iHubDto));
     }
-    
+
     @Override
     Message getRequestMessage(IntegrationHubDto iHubDto) throws LVException {
         Message message = new Message();
@@ -191,7 +191,7 @@ public class COPPAHub extends IntegrationHub {
         metadata.setCredentials(iHubDto.getCredential());
         MessagePayload messagePayload = new MessagePayload();
         URI uri = new URI();
-        try {           
+        try {
             uri.setPath("http://coppa.nci.nih.gov");
         } catch (MalformedURIException e) {
             LOG.error("MalformedURIException occured while creating the caXchange message: ", e);
@@ -204,27 +204,27 @@ public class COPPAHub extends IntegrationHub {
         message.getRequest().setBusinessMessagePayload(messagePayload);
         return message;
     }
-    
+
     private LimitOffset createLimitOffSet() {
         LimitOffset limit = new LimitOffset();
         limit.setLimit(LVConstants.MAX_SEARCH_RESULTS);
         limit.setOffset(0);
         return limit;
     }
-    
+
     private void createMessageElementArray(IntegrationHubDto iHubDto) throws LVException {
         if (LVConstants.STUDY_PROTOCOL.equals(iHubDto.getTarget())) {
             iHubDto.setMeArray(createCoppaStudyMessageElement(iHubDto));
-        } else if (LVConstants.PERSON.equals(iHubDto.getTarget()) 
+        } else if (LVConstants.PERSON.equals(iHubDto.getTarget())
                 || LVConstants.ORGANIZATION.equals(iHubDto.getTarget())) {
             iHubDto.setMeArray(createCoppaEntityMessageElement(iHubDto));
         }
     }
-    
+
     private MessageElement[] createCoppaEntityMessageElement(IntegrationHubDto iHubDto) throws LVException {
         MessageElement[] meArray = new MessageElement[1];
         QName qName = new QName("http://po.coppa.nci.nih.gov", "Id");
-        meArray[0] = createMessageElement(iHubDto.getCoppaEntityId(), qName , 
+        meArray[0] = createMessageElement(iHubDto.getCoppaEntityId(), qName ,
                 "/gov/nih/nci/coppa/services/client/client-config.wsdd");
         return meArray;
     }
@@ -234,17 +234,17 @@ public class COPPAHub extends IntegrationHub {
         StudyProtocol studyProtocol = new StudyProtocol();
         studyProtocol.setAssignedIdentifier(iHubDto.getCoppaIi());
         QName qName = new QName("http://pa.services.coppa.nci.nih.gov", "StudyProtocol");
-        meArray[0] = createMessageElement(studyProtocol, qName , 
+        meArray[0] = createMessageElement(studyProtocol, qName ,
                 "/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
         qName = new QName("http://common.coppa.nci.nih.gov", "LimitOffset");
-        meArray[1] = createMessageElement(createLimitOffSet(), qName , 
+        meArray[1] = createMessageElement(createLimitOffSet(), qName ,
                 "/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
         return meArray;
     }
-    
+
     private MessageElement createMessageElement(Object object, QName qName , String wsdl) throws LVException
     {
-        MessageElement messageElement = null;   
+        MessageElement messageElement = null;
         StringWriter writer = new StringWriter();
         InputStream wsdd = getClass().getResourceAsStream(wsdl);
         try {
@@ -287,7 +287,7 @@ public class COPPAHub extends IntegrationHub {
                     StringWriter writer = new StringWriter();
                     transformer.transform(new DOMSource(element), new StreamResult(writer));
                     StringReader reader = new StringReader(writer.toString());
-                    InputStream wsdd = 
+                    InputStream wsdd =
                         getClass().getResourceAsStream("/gov/nih/nci/coppa/services/pa/client/client-config.wsdd");
                     studyProtocol = (StudyProtocol) Utils.deserializeObject(reader, StudyProtocol.class, wsdd);
                     // we can break after the reading the first object. its not expeced
@@ -300,7 +300,7 @@ public class COPPAHub extends IntegrationHub {
         }
         return studyProtocol;
     }
-    
+
     private Person getCoppaPerson(IntegrationHubDto iHubDto) throws LVException {
         Person person = null;
         if (iHubDto.getResponseObj().getResponseStatus().equals(Statuses.FAILURE))   {

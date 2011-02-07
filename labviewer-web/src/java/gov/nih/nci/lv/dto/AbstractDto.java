@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -81,16 +81,16 @@ package gov.nih.nci.lv.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-/** 
+/**
  * Abstract dto.
  * @author NAmiruddin
  * @param <DTO> dto object
  */
-public class AbstractDto<DTO>  implements Serializable { 
-    
+public class AbstractDto<DTO>  implements Serializable {
+
     private Long id;
     private Long studyProtocolId;
-    
+
     private String userName;
     private Date ctomInsertDate;
     private Date ctomUpdateDate;
@@ -98,15 +98,15 @@ public class AbstractDto<DTO>  implements Serializable {
     private String ctomUpdateUser;
 
     /**
-     * 
-     * @return id 
+     *
+     * @return id
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 
+     *
      * @param id identifier
      */
     public void setId(Long id) {
@@ -114,7 +114,7 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return studyProtocolId
      */
     public Long getStudyProtocolId() {
@@ -122,16 +122,16 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param studyProtocolId studyProtocolId
      */
     public void setStudyProtocolId(Long studyProtocolId) {
         this.studyProtocolId = studyProtocolId;
     }
 
-   
+
     /**
-     * 
+     *
      * @return userName
      */
     public String getUserName() {
@@ -139,7 +139,7 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param userName userName
      */
     public void setUserName(String userName) {
@@ -147,7 +147,7 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return ctomInsertUser
      */
     public String getCtomInsertUser() {
@@ -155,7 +155,7 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param ctomInsertUser ctomInsertUser
      */
     public void setCtomInsertUser(String ctomInsertUser) {
@@ -163,54 +163,54 @@ public class AbstractDto<DTO>  implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return ctomUpdateUser
      */
     public String getCtomUpdateUser() {
         return ctomUpdateUser;
     }
     /**
-     * 
+     *
      * @param ctomUpdateUser ctomUpdateUser
      */
     public void setCtomUpdateUser(String ctomUpdateUser) {
         this.ctomUpdateUser = ctomUpdateUser;
     }
 
-    
-    
+
+
     /**
-     * 
+     *
      * @return insert date
      */
     public Date getCtomInsertDate() {
         return ctomInsertDate;
     }
     /**
-     * 
+     *
      * @param ctomInsertDate insert date
      */
-    
+
 
     public void setCtomInsertDate(Date ctomInsertDate) {
         this.ctomInsertDate = ctomInsertDate;
     }
 
     /**
-     * 
+     *
      * @return ctomUpdateDt
      */
     public Date getCtomUpdateDate() {
         return ctomUpdateDate;
     }
-    
+
     /**
-     * 
+     *
      * @param ctomUpdateDate ctomUpdateDate
      */
     public void setCtomUpdateDate(Date ctomUpdateDate) {
         this.ctomUpdateDate = ctomUpdateDate;
     }
-    
+
 
 }

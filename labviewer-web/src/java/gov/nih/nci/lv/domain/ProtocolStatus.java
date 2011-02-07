@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -90,12 +90,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PROTOCOL_STATUS")
 public class ProtocolStatus  extends AbstractDate {
-    
+
     private String statusCode;
     private Protocol protocol;
 
     /**
-     * 
+     *
      * @return statusCode
      */
     @Column(name = "STATUS_CODE")
@@ -104,31 +104,31 @@ public class ProtocolStatus  extends AbstractDate {
     }
 
     /**
-     * 
+     *
      * @param statusCode statusCode
      */
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
-    
+
     /**
-     * 
+     *
      * @return protocol
      */
     @ManyToOne
-    @JoinColumn(name = "PROTOCOL_ID", updatable = false)    
+    @JoinColumn(name = "PROTOCOL_ID", updatable = false)
     public Protocol getProtocol() {
         return protocol;
     }
 
     /**
-     * 
+     *
      * @param protocol protocol
      */
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
     }
-    
-    
+
+
 
 }

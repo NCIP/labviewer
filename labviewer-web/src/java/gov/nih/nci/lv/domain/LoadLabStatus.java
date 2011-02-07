@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -90,7 +90,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
@@ -98,7 +98,7 @@ import javax.persistence.Table;
 @Table(name = "LAB_VIEWER_STATUS")
 public class LoadLabStatus {
 
-    
+
     private String aeIndicator;
     private Date aeSentDate;
     private String cdmsIndicator;
@@ -112,7 +112,7 @@ public class LoadLabStatus {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     /**
      * Get the id of the object.
      * @return the id
@@ -123,9 +123,9 @@ public class LoadLabStatus {
     public Long getId() {
         return this.id;
     }
-    
+
     /**
-     * 
+     *
      * @return aeIndicator
      */
     @Column(name = "ADVERSE_EVENT_INDICATOR")
@@ -133,14 +133,14 @@ public class LoadLabStatus {
         return aeIndicator;
     }
     /**
-     * 
+     *
      * @param aeIndicator aeIndicator
      */
     public void setAeIndicator(String aeIndicator) {
         this.aeIndicator = aeIndicator;
     }
     /**
-     * 
+     *
      * @return aeSentDate
      */
     @Column(name = "ADVERSE_EVENT_SENT_DATE")
@@ -148,14 +148,14 @@ public class LoadLabStatus {
         return aeSentDate;
     }
     /**
-     * 
+     *
      * @param aeSentDate aeSentDate
      */
     public void setAeSentDate(Date aeSentDate) {
         this.aeSentDate = aeSentDate;
     }
     /**
-     * 
+     *
      * @return cdmsIndicator
      */
     @Column(name = "CDMS_INDICATOR")
@@ -163,14 +163,14 @@ public class LoadLabStatus {
         return cdmsIndicator;
     }
     /**
-     * 
+     *
      * @param cdmsIndicator cdmsIndicator
      */
     public void setCdmsIndicator(String cdmsIndicator) {
         this.cdmsIndicator = cdmsIndicator;
     }
     /**
-     * 
+     *
      * @return cdmsDate
      */
     @Column(name = "CDMS_SENT_DATE")
@@ -178,14 +178,14 @@ public class LoadLabStatus {
         return cdmsDate;
     }
     /**
-     * 
+     *
      * @param cdmsDate cdmsDate
      */
     public void setCdmsDate(Date cdmsDate) {
         this.cdmsDate = cdmsDate;
     }
     /**
-     * 
+     *
      * @return cdmsDate
      */
     @Column(name = "CLINICAL_RESULT_ID")
@@ -193,7 +193,7 @@ public class LoadLabStatus {
         return clinicalResultId;
     }
     /**
-     * 
+     *
      * @param clinicalResultId clinicalResultId
      */
     public void setClinicalResultId(Long clinicalResultId) {

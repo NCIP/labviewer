@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -89,23 +89,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "IDENTIFIER")
 public class Identifier extends AbstractDate {
-    
+
     private String extension;
     private Protocol protocol;
     private String root;
     private Participant participant;
     private StudyParticipantAssignment studyParticipantAssignment;
-   
-    
+
+
     /**
-     * 
+     *
      * @return root
      */
     public String getRoot() {
         return root;
     }
     /**
-     * 
+     *
      * @param root root
      */
     public void setRoot(String root) {
@@ -113,71 +113,71 @@ public class Identifier extends AbstractDate {
     }
 
     /**
-     * 
+     *
      * @return extension
      */
     public String getExtension() {
         return extension;
     }
     /**
-     * 
+     *
      * @param extension extension
      */
     public void setExtension(String extension) {
         this.extension = extension;
     }
-    
+
 
     /**
-     * 
+     *
      * @return protocol
      */
     @OneToOne
-    @JoinColumn(name = "PROTOCOL_ID", updatable = false)        
+    @JoinColumn(name = "PROTOCOL_ID", updatable = false)
     public Protocol getProtocol() {
         return protocol;
     }
     /**
-     * 
+     *
      * @param protocol protocol
      */
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
     }
     /**
-     * 
+     *
      * @return participant
      */
     @OneToOne
-    @JoinColumn(name = "PARTICIPANT_ID", updatable = false)        
+    @JoinColumn(name = "PARTICIPANT_ID", updatable = false)
     public Participant getParticipant() {
         return participant;
     }
     /**
-     * 
+     *
      * @param participant participant
      */
     public void setParticipant(Participant participant) {
         this.participant = participant;
     }
     /**
-     * 
+     *
      * @return studyParticipantAssignment
      */
     @OneToOne
-    @JoinColumn(name = "STUDY_PARTICIPANT_ASSIGNMNT_ID", updatable = false)        
+    @JoinColumn(name = "STUDY_PARTICIPANT_ASSIGNMNT_ID", updatable = false)
     public StudyParticipantAssignment getStudyParticipantAssignment() {
         return studyParticipantAssignment;
     }
     /**
-     * 
+     *
      * @param studyParticipantAssignment studyParticipantAssignment
      */
     public void setStudyParticipantAssignment(
             StudyParticipantAssignment studyParticipantAssignment) {
         this.studyParticipantAssignment = studyParticipantAssignment;
     }
-    
-    
+
+
 
 }

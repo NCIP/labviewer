@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -88,7 +88,7 @@ import org.globus.gsi.GlobusCredential;
 import org.iso._21090.II;
 
 /**
- * 
+ *
  * @author Naveen Amiruddin
  *
  */
@@ -114,101 +114,101 @@ public class IntegrationHubDto {
     private II coppaIi;
     private Id coppaEntityId;
     private MessageElement[] meArray = null;
-    
+
 
     /**
-     * 
+     *
      * @return messageXml
      */
     public String getMessageXml() {
         return messageXml;
     }
     /**
-     * 
+     *
      * @param messageXml messageXml
      */
     public void setMessageXml(String messageXml) {
         this.messageXml = messageXml;
     }
     /**
-     * 
+     *
      * @return qName
      */
     public String getQName() {
         return qName;
     }
     /**
-     * 
+     *
      * @param qName qName
      */
     public void setQName(String qName) {
         this.qName = qName;
     }
     /**
-     * 
+     *
      * @return qRequest
      */
     public String getQRequest() {
         return qRequest;
     }
     /**
-     * 
+     *
      * @param qRequest qRequest
      */
     public void setQRequest(String qRequest) {
         this.qRequest = qRequest;
     }
     /**
-     * 
+     *
      * @return externalIdentifier
      */
     public String getExternalIdentifier() {
         return externalIdentifier;
     }
     /**
-     * 
+     *
      * @param externalIdentifier externalIdentifier
      */
     public void setExternalIdentifier(String externalIdentifier) {
         this.externalIdentifier = externalIdentifier;
     }
     /**
-     * 
+     *
      * @return userName
      */
     public String getUserName() {
         return userName;
     }
     /**
-     * 
+     *
      * @param userName userName
      */
     public void setUserName(String userName) {
         this.userName = userName;
     }
     /**
-     * 
+     *
      * @return password
      */
     public String getPassword() {
         return password;
     }
     /**
-     * 
+     *
      * @param password password
      */
     public void setPassword(String password) {
         this.password = password;
     }
     /**
-     * 
+     *
      * @return credentialEpr
      */
     public String getCredentialEpr() {
         return credentialEpr;
     }
     /**
-     * 
+     *
      * @param credentialEpr credentialEpr
      */
     public void setCredentialEpr(String credentialEpr) {
@@ -216,21 +216,21 @@ public class IntegrationHubDto {
     }
 
     /**
-     * 
+     *
      * @return globusCredential
      */
     public GlobusCredential getGlobusCredential() {
         return globusCredential;
     }
     /**
-     * 
+     *
      * @param globusCredential globusCredential
      */
     public void setGlobusCredential(GlobusCredential globusCredential) {
         this.globusCredential = globusCredential;
     }
     /**
-     * 
+     *
      * @return Credentials
      */
     public Credentials getCredential() {
@@ -241,182 +241,182 @@ public class IntegrationHubDto {
         return creds;
     }
     /**
-     * 
+     *
      * @return serviceType
      */
     public String getServiceType() {
         return serviceType;
     }
     /**
-     * 
+     *
      * @param serviceType serviceType
      */
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
     /**
-     * 
+     *
      * @return requestObj
      */
     public Object getRequestObj() {
         return requestObj;
     }
     /**
-     * 
+     *
      * @param requestObj requestObj
      */
     public void setRequestObj(Object requestObj) {
         this.requestObj = requestObj;
     }
     /**
-     * 
+     *
      * @return hubUrl
-     * @throws LVException 
+     * @throws LVException
      */
     public String getHubUrl() throws LVException {
         return hubUrl;
     }
     /**
-     * 
+     *
      * @param hubUrl hubUrl
      */
     public void setHubUrl(String hubUrl) {
         this.hubUrl = hubUrl;
     }
     /**
-     * 
+     *
      * @return requestMessage
      */
     public Message getRequestMessage() {
         return requestMessage;
     }
     /**
-     * 
+     *
      * @param requestMessage requestMessage
      */
     public void setRequestMessage(Message requestMessage) {
         this.requestMessage = requestMessage;
     }
     /**
-     * 
+     *
      * @return responseObj
      */
     public Response getResponseObj() {
         return responseObj;
     }
     /**
-     * 
+     *
      * @param responseObj responseObj
      */
     public void setResponseObj(Response responseObj) {
         this.responseObj = responseObj;
     }
     /**
-     * 
+     *
      * @return target
      */
     public String getTarget() {
         return target;
     }
     /**
-     * 
+     *
      * @param target target
      */
     public void setTarget(String target) {
         this.target = target;
     }
     /**
-     * 
+     *
      * @return studyProtocolExtn
      */
     public String getStudyProtocolExtn() {
         return studyProtocolExtn;
     }
     /**
-     * 
+     *
      * @param studyProtocolExtn studyProtocolExtn
      */
     public void setStudyProtocolExtn(String studyProtocolExtn) {
         this.studyProtocolExtn = studyProtocolExtn;
     }
     /**
-     * 
+     *
      * @return serviceName
      */
     public String getServiceName() {
         return serviceName;
     }
     /**
-     * 
+     *
      * @param serviceName serviceName
      */
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
     /**
-     * 
+     *
      * @return operationName
      */
     public String getOperationName() {
         return operationName;
     }
     /**
-     * 
+     *
      * @param operationName operationName
      */
     public void setOperationName(String operationName) {
         this.operationName = operationName;
     }
     /**
-     * 
+     *
      * @return identifier
      */
     public II getCoppaIi() {
         return coppaIi;
     }
     /**
-     * 
+     *
      * @param coppaIi identifier
      */
     public void setCoppaIi(II coppaIi) {
         this.coppaIi = coppaIi;
     }
     /**
-     * 
+     *
      * @return meArray
      */
     public MessageElement[] getMeArray() {
         return meArray;
     }
     /**
-     * 
+     *
      * @param meArray meArray
      */
     public void setMeArray(MessageElement[] meArray) {
         this.meArray = meArray;
     }
     /**
-     * 
+     *
      * @return Id
      */
     public Id getCoppaEntityId() {
         return coppaEntityId;
     }
     /**
-     * 
+     *
      * @param coppaEntityId Id
      */
     public void setCoppaEntityId(Id coppaEntityId) {
         this.coppaEntityId = coppaEntityId;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
 
 }

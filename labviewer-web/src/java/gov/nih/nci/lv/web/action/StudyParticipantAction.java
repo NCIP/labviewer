@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -93,13 +93,13 @@ import gov.nih.nci.lv.util.LVConstants;
 public class StudyParticipantAction extends LabViewerAction {
     private StudyParticipantSearchDto spsDto = new StudyParticipantSearchDto();
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
     public String list() throws Exception {
         // retrieve the protocol and set it in the session to be used later
-        setSession(LVConstants.STUDY_SEARCH_DTO, 
+        setSession(LVConstants.STUDY_SEARCH_DTO,
                 new StudySearchDAO().search(new StudySearchDto(getStudyProtocolId(), getUserName())).get(0));
         // remove the study participation
         spsDto.setStudyProtocolId(getStudyProtocolId());
@@ -107,23 +107,23 @@ public class StudyParticipantAction extends LabViewerAction {
         setAttribute(LVConstants.RESULTS, new StudyParticipantSearchDOA().search(spsDto));
         setAttribute(LVConstants.TOPIC, "participant");
         return SUCCESS;
-        
+
     }
-    
+
     /**
-     * 
+     *
      * @return spsDto
      */
      public StudyParticipantSearchDto getSpsDto() {
          return spsDto;
      }
      /**
-      * 
+      *
       * @param spsDto spsDto
       */
      public void setSpsDto(StudyParticipantSearchDto spsDto) {
          this.spsDto = spsDto;
      }
-    
+
 
 }

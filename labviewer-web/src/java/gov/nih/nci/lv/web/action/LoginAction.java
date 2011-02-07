@@ -1,7 +1,7 @@
 /**
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -106,10 +106,10 @@ public class LoginAction extends LabViewerAction {
     private String username;
     private String password;
     private String url;
-    
-    
+
+
     /**
-     * 
+     *
      * @return url
      */
     public String getUrl() {
@@ -117,7 +117,7 @@ public class LoginAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @param url url
      */
     public void setUrl(String url) {
@@ -126,21 +126,21 @@ public class LoginAction extends LabViewerAction {
 
     /**
      * {@inheritDoc}
-     */    
+     */
     public String submit() throws Exception {
         String encryptedPassword;
         StringEncrypter se;
         if (username == null || password == null) {
-            setAttribute(LVConstants.FAILURE_MESSAGE, "Either Username or password is null"); 
+            setAttribute(LVConstants.FAILURE_MESSAGE, "Either Username or password is null");
             return ERROR;
         }
-        
+
         try {
              se = new StringEncrypter();
              encryptedPassword = se.encrypt(new String(password));
         } catch (StringEncrypter.EncryptionException ep) {
              logger.error("Error while Encrypting password" , ep);
-             setAttribute(LVConstants.FAILURE_MESSAGE, "Error while Encrypting password " + ep.getMessage()); 
+             setAttribute(LVConstants.FAILURE_MESSAGE, "Error while Encrypting password " + ep.getMessage());
              return ERROR;
         }
         if (executeQuery(username, encryptedPassword)) {
@@ -149,64 +149,64 @@ public class LoginAction extends LabViewerAction {
             return "welcome";
         } else {
             logger.error("Could not login for user " + username);
-            setAttribute(LVConstants.FAILURE_MESSAGE, 
+            setAttribute(LVConstants.FAILURE_MESSAGE,
                     "Sorry, your username and password are incorrect - please try again");
             return ERROR;
         }
     }
-    
+
     /**
      * {@inheritDoc}
-     */    
+     */
     public String logout() throws Exception {
         getSession().invalidate();
         return SUCCESS;
     }
     /**
      * {@inheritDoc}
-     */    
+     */
     public String websso() throws Exception {
         String webssoCasServer = LVPropertyReader.getPropertyValue("websso.cas.server");
         String webssoCasServerPort = LVPropertyReader.getPropertyValue("websso.cas.server.port");
         getSession().invalidate();
         String url1 = "https://" + webssoCasServer + ":" + webssoCasServerPort + "/webssoserver/logout";
         logger.debug("logging out of cas url" + url1);
-        setUrl(url1);    
+        setUrl(url1);
         return "redirect";
     }
 
     /**
      * {@inheritDoc}
-     */    
+     */
     public String execute() throws Exception {
         return SUCCESS;
     }
-    
-    
-    
+
+
+
     /**
-     * 
+     *
      * @return username
      */
     public String getUsername() {
         return username;
     }
     /**
-     * 
+     *
      * @param username username
      */
     public void setUsername(String username) {
         this.username = username;
     }
     /**
-     * 
+     *
      * @return password
      */
     public String getPassword() {
         return password;
     }
     /**
-     * 
+     *
      * @param password password
      */
     public void setPassword(String password) {

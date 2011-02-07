@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -93,13 +93,13 @@ import java.util.List;
 public abstract class LabHub extends IntegrationHub {
 
     /**
-     * 
+     *
      * @param labSearchDto labSearchDto
      * @param labs labs
      * @param hubDto hubDto
      * @throws LVException on error
      */
-    public abstract void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto) 
+    public abstract void loadLabs(LabSearchDto labSearchDto , List<LabSearchDto> labs , IntegrationHubDto hubDto)
     throws LVException;
 
 }

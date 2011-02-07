@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -89,12 +89,12 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Participant extends AbstractDate {
-    
+
     private String firstName;
     private String lastName;
     private List<StudyParticipantAssignment> spassignments = new ArrayList<StudyParticipantAssignment>();
     /**
-     * 
+     *
      * @return firstName
      */
     @Column(name = "FIRST_NAME")
@@ -102,14 +102,14 @@ public class Participant extends AbstractDate {
         return firstName;
     }
     /**
-     * 
+     *
      * @param firstName  firstName
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
-     * 
+     *
      * @return lastName
      */
     @Column(name = "LAST_NAME")
@@ -117,14 +117,14 @@ public class Participant extends AbstractDate {
         return lastName;
     }
     /**
-     * 
+     *
      * @param lastName lastName
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     /**
-     * 
+     *
      * @return spassignments
      */
     @OneToMany(mappedBy = "participant")
@@ -132,15 +132,15 @@ public class Participant extends AbstractDate {
         return spassignments;
     }
     /**
-     * 
+     *
      * @param spassignments spassignments
      */
     public void setSpassignments(List<StudyParticipantAssignment> spassignments) {
         this.spassignments = spassignments;
     }
 
-    
-    
-    
-    
+
+
+
+
 }

@@ -1,7 +1,7 @@
 /*
 * caBIG Open Source Software License
 *
-* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+* Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
 * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
 * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
 *
@@ -99,12 +99,12 @@ import org.iso._21090.II;
  */
 public class StudyProtocolAction extends LabViewerAction {
     private static final long serialVersionUID = 1234573645L;
-    
+
     StudySearchDto ssDto = new StudySearchDto();
     List<StudySearchDto> results = new ArrayList<StudySearchDto>();
 
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
@@ -123,7 +123,7 @@ public class StudyProtocolAction extends LabViewerAction {
     }
 
     /**
-     * 
+     *
      * @return Success
      * @throws Exception on error
      */
@@ -139,31 +139,31 @@ public class StudyProtocolAction extends LabViewerAction {
         }
         setStudyProtocolInfo();
         return SUCCESS;
-    }       
- 
+    }
+
     /**
-     * 
+     *
      * @return ssDto
      */
     public StudySearchDto getSsDto() {
         return ssDto;
     }
     /**
-     * 
+     *
      * @param ssDto ssDto
      */
     public void setSsDto(StudySearchDto ssDto) {
         this.ssDto = ssDto;
     }
     /**
-     * 
+     *
      * @return results
      */
     public List<StudySearchDto> getResults() {
         return results;
     }
     /**
-     * 
+     *
      * @param results results
      */
     public void setResults(List<StudySearchDto> results) {

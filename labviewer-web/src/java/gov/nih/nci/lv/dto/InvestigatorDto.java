@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -93,16 +93,16 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
     private String postalCode;
     private String countryCode;
     private String telecomAddress;
-    
+
     /**
-     * 
+     *
      */
     public InvestigatorDto() {
     }
-    
+
 
     /**
-     * 
+     *
      * @param investigator investigator
      */
 
@@ -117,14 +117,14 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
         this.setPostalCode(investigator.getPostalCode());
         this.setStreetAddress(investigator.getStreetAddress());
         this.setTelecomAddress(investigator.getTelecomAddress());
-        this.setCtomUpdateDate(investigator.getCtomUpdateDate());        
+        this.setCtomUpdateDate(investigator.getCtomUpdateDate());
     }
 
-    
+
 
 
     /**
-     * 
+     *
      * @return nciIdentifier
      */
     public String getNciIdentifier() {
@@ -132,7 +132,7 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
     }
 
     /**
-     * 
+     *
      * @param nciIdentifier nciIdentifier
      */
     public void setNciIdentifier(String nciIdentifier) {
@@ -141,7 +141,7 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
 
 
     /**
-     * 
+     *
      * @return firstName firstName
      */
     public String getFirstName() {
@@ -150,7 +150,7 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
 
 
     /**
-     * 
+     *
      * @param firstName firstName
      */
     public void setFirstName(String firstName) {
@@ -158,7 +158,7 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
     }
 
     /**
-     * 
+     *
      * @return LastName
      */
     public String getLastName() {
@@ -166,7 +166,7 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
     }
 
     /**
-     * 
+     *
      * @param lastName lastName
      */
     public void setLastName(String lastName) {
@@ -175,91 +175,91 @@ public class InvestigatorDto extends AbstractDto<InvestigatorDto> {
 
 
     /**
-     * 
+     *
      * @return streetAddress
      */
     public String getStreetAddress() {
         return streetAddress;
     }
     /**
-     * 
+     *
      * @param streetAddress streetAddress
      */
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
     }
     /**
-     * 
+     *
      * @return city
      */
     public String getCity() {
         return city;
     }
     /**
-     * 
+     *
      * @param city city
      */
     public void setCity(String city) {
         this.city = city;
     }
     /**
-     * 
+     *
      * @return stateCode
      */
     public String getStateCode() {
         return stateCode;
     }
     /**
-     * 
+     *
      * @param stateCode stateCode
      */
      public void setStateCode(String stateCode) {
         this.stateCode = stateCode;
     }
     /**
-     * 
+     *
      * @return postalCode
      */
     public String getPostalCode() {
         return postalCode;
     }
     /**
-     * 
+     *
      * @param postalCode postalCode
      */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
-     * 
+     *
      * @return countryCode
      */
     public String getCountryCode() {
         return countryCode;
     }
     /**
-     * 
+     *
      * @param countryCode countryCode
      */
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
     /**
-     * 
+     *
      * @return telecomAddress
      */
     public String getTelecomAddress() {
         return telecomAddress;
     }
     /**
-     * 
+     *
      * @param telecomAddress telecomAddress
      */
     public void setTelecomAddress(String telecomAddress) {
         this.telecomAddress = telecomAddress;
     }
-    
-    
-        
+
+
+
 
 }

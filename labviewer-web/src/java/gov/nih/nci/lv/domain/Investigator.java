@@ -1,7 +1,7 @@
 /**
  * caBIG Open Source Software License
  *
- * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The Protocol  Abstraction (PA) Application
+ * Copyright Notice.  Copyright 2008, ScenPro, Inc,  (caBIG Participant).   The LabViewer (LV) Application
  * was created with NCI funding and is part of  the caBIG initiative. The  software subject to  this notice  and license
  * includes both  human readable source code form and machine readable, binary, object code form (the caBIG Software).
  *
@@ -90,7 +90,7 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Investigator extends AbstractDate {
-    
+
     private String nciIdentifier;
     private String firstName;
     private String lastName;
@@ -101,9 +101,9 @@ public class Investigator extends AbstractDate {
     private String countryCode;
     private String telecomAddress;
     private List<StudyInvestigator> studyInvestigators = new ArrayList<StudyInvestigator>();
-    
+
     /**
-     * 
+     *
      * @return nciIdentifier
      */
     @Column(name = "NCI_IDENTIFIER")
@@ -111,15 +111,15 @@ public class Investigator extends AbstractDate {
         return nciIdentifier;
     }
     /**
-     * 
+     *
      * @param nciIdentifier nciIdentifier
      */
     public void setNciIdentifier(String nciIdentifier) {
         this.nciIdentifier = nciIdentifier;
     }
-    
+
     /**
-     * 
+     *
      * @return firstName
      */
     @Column(name = "FIRST_NAME")
@@ -127,14 +127,14 @@ public class Investigator extends AbstractDate {
         return firstName;
     }
     /**
-     * 
+     *
      * @param firstName  firstName
      */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
     /**
-     * 
+     *
      * @return lastName
      */
     @Column(name = "LAST_NAME")
@@ -142,7 +142,7 @@ public class Investigator extends AbstractDate {
         return lastName;
     }
     /**
-     * 
+     *
      * @param lastName lastName
      */
     public void setLastName(String lastName) {
@@ -150,7 +150,7 @@ public class Investigator extends AbstractDate {
     }
 
     /**
-     * 
+     *
      * @return streetAddress
      */
     @Column(name = "STREET_ADDRESS")
@@ -158,28 +158,28 @@ public class Investigator extends AbstractDate {
         return streetAddress;
     }
     /**
-     * 
+     *
      * @param streetAddress streetAddress
      */
     public void setStreetAddress(String streetAddress) {
         this.streetAddress = streetAddress;
     }
     /**
-     * 
+     *
      * @return city
      */
     public String getCity() {
         return city;
     }
     /**
-     * 
+     *
      * @param city city
      */
     public void setCity(String city) {
         this.city = city;
     }
     /**
-     * 
+     *
      * @return stateCode
      */
     @Column(name = "STATE")
@@ -187,14 +187,14 @@ public class Investigator extends AbstractDate {
         return stateCode;
     }
     /**
-     * 
+     *
      * @param stateCode stateCode
      */
      public void setStateCode(String stateCode) {
         this.stateCode = stateCode;
     }
     /**
-     * 
+     *
      * @return postalCode
      */
     @Column(name = "ZIP_CODE")
@@ -202,14 +202,14 @@ public class Investigator extends AbstractDate {
         return postalCode;
     }
     /**
-     * 
+     *
      * @param postalCode postalCode
      */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
-     * 
+     *
      * @return countryCode
      */
     @Column(name = "COUNTRY_CODE")
@@ -217,31 +217,31 @@ public class Investigator extends AbstractDate {
         return countryCode;
     }
     /**
-     * 
+     *
      * @param countryCode countryCode
      */
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
     }
-    
+
     /**
-     * 
+     *
      * @return telecomAddress
      */
     @Column(name = "TELECOM_ADDRESS")
     public String getTelecomAddress() {
         return telecomAddress;
     }
-    
+
     /**
-     * 
+     *
      * @param telecomAddress telecomAddress
      */
     public void setTelecomAddress(String telecomAddress) {
         this.telecomAddress = telecomAddress;
     }
     /**
-     * 
+     *
      * @return studyInvestigators
      */
     @OneToMany(mappedBy = "investigator")
@@ -249,7 +249,7 @@ public class Investigator extends AbstractDate {
         return studyInvestigators;
     }
     /**
-     * 
+     *
      * @param studyInvestigators studyInvestigators
      */
     public void setStudyInvestigators(List<StudyInvestigator> studyInvestigators) {
