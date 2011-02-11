@@ -17,7 +17,7 @@
             <b> User does not have access to LabViewer: </b>
             </p>
             <ul class="intro">
-                    <li> Please contact System Administration to assign Lad Data User or Administration Role to the User  <b> <%=(String) session.getAttribute("userName")%> </b></li>
+                    <li> Please contact System Administration to assign Lab Data User or Administration Role to the User  <b> <%=(String) session.getAttribute("userName")%> </b></li>
             </ul>                    
         </div>
     </body>
