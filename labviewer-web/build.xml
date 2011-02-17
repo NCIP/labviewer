@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== -->
+<!--     ctomlabviewer ant script                                     -->
+<!-- ====================================================================== -->
+
+<project name="labviewer" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <property name="software.dir" value=".."/>
+	<property name="bda-utils" value="${software.dir}/target/bda-utils" />
+	    
+	<!-- PATHS -->
+	<path id="macrodef">
+	        <fileset dir="${bda-utils}">
+	            <include name="**/*.jar" />
+	        </fileset>
+	    </path>
+	<path id="ivy.classpath">
+		<fileset dir="${software.dir}/target/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>	
+    <!-- Task definitions -->
+    <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="macrodef"/>
+
+	
+	
+    <property name="propertyFilePath" value="/WEB-INF/classes/baseURL.properties" />
+	<property name="target.dir" value ="${software.dir}/target" />
+    <property name="artifacts.dir" value = "${target.dir}/dist/exploded/artifacts"/>
+	<property name="ctomlabviewer.dir" value="${software.dir}/labviewer-web"/>
+	<property name="ctomlabviewer.report.dir" value="${ctomlabviewer.dir}/target/labviewer/reports"/>
+    <property file="${ctomlabviewer.dir}/build.properties"/>
+    <property name="ctomlabviewer.resourceDir" value="${ctomlabviewer.dir}/src/resources"/>
+	<property name="ctomlabviewer.webHome" value="${ctomlabviewer.dir}/src/web"/>
+	<property name="ctomlabviewer.srcHome" value="${ctomlabviewer.dir}/src"/>
+	<property name="ctomlabviewer.libHome" value="${ctomlabviewer.dir}/lib"/>
+
+    <property name="ctomlabviewer.pmd" value="${ctomlabviewer.resourceDir}/ctomlabviewerPmd.xml"/>
+    <property name="ctomlabviewer.checkstyle" value="${ctomlabviewer.resourceDir}/ctomlabviewerCheckstyle.xml"/>
+
+    <property name="labviewer.build.finalName" value="labviewer"/>
+    <property name="ctomlabviewer.build.dir" value="${ctomlabviewer.dir}/target"/>
+    <property name="labviewer.build.tmp.dir" value="${ctomlabviewer.build.dir}/tmp"/>
+    <property name="ctomlabviewer.build.outputDir" value="${ctomlabviewer.build.dir}/classes"/>
+    <property name="ctomlabviewer.build.srcDir.0" value="${ctomlabviewer.dir}/src/java"/>
+    <property name="ctomlabviewer.build.testOutputDir" value="${ctomlabviewer.build.dir}/test-classes"/>
+    <property name="ctomlabviewer.build.testDir.0" value="${ctomlabviewer.dir}/test/java"/>
+    <property name="ctomlabviewer.build.testResourceDir.0" value="${ctomlabviewer.dir}/test/resources"/>
+    <property name="ctomlabviewer.test.reports" value="${ctomlabviewer.report.dir}/test-reports"/>
+    <property name="ctomlabviewer.coverage.reports" value="${ctomlabviewer.report.dir}/coverage-reports"/>
+    <property name="ctomlabviewer.reporting.outputDirectory" value="${ctomlabviewer.report.dir}/site"/>
+    <property name="ctomlabviewer.jar" value="${labviewer.build.finalName}.jar"/>
+	<property name="ctomlabviewer.war" value="${labviewer.build.finalName}.war"/>
+    <property name="ctomlabviewer.build.coberturaOutputDir" value="${ctomlabviewer.build.dir}/generated-classes"/>
+
+    <property name="lib.dir" value="${ctomlabviewer.dir}/target/labviewer/lib"/>
+    <property name="common.dir" value="${software.dir}/common"/>
+    <property name="ivy.file" value="ivy-2.0.0.jar" />
+	<property name="ivy.settings.file" location="${common.dir}/ivysettings.xml" />
+    <property name="ivy.def.file" location="ivy-labviewer.xml" />
+    <property name="local.repo.dir" location="${software.dir}/local-ivy-repo" />
+	<property name="cert.path" value="${tomcat.grid.secure.cert.location}"/>
+	<property name="key.path" value="${tomcat.grid.secure.key.location}"/>
+	<property name="websso.cas.server" value="${websso.hostname}"/>
+	<property name="websso.cas.server.port" value="${websso.port}"/>
+	<property name="websso.client.port" value="${tomcat.port.ssl}"/>
+	<property name="websso.client.server" value="${tomcat.hostname}"/>
+
+    <!-- ====================================================================== -->
+    <!-- Defining classpaths                                                    -->
+    <!-- ====================================================================== -->
+
+    <property name="compile.jar.dir" location="${lib.dir}/labviewer/compile" />
+	<property name="runtime.jar.dir" location="${lib.dir}/labviewer/runtime" />
+	
+    <path id="compile.classpath">
+        <fileset dir="${compile.jar.dir}"/>
+        <fileset dir="${runtime.jar.dir}"/>
+    </path>
+
+    <property name="test.jar.dir" location="${lib.dir}/labviewer/test" />
+    <path id="test.classpath">
+        <fileset dir="${test.jar.dir}"/>
+    </path>
+    
+    <property name="test-junit.jar.dir" location="${lib.dir}/labviewer/test-junit" />
+    <path id="test-junit.classpath">
+        <fileset dir="${test-junit.jar.dir}"/>
+    </path>
+    
+    <!--
+    <property name="test-simian.jar.dir" location="${lib.dir}/labviewer/test-simian" />
+    <path id="test-simian.classpath">
+        <fileset dir="${test-simian.jar.dir}"/>
+    </path>
+    
+    <property name="test-junit.jar.dir" location="${lib.dir}/labviewer/test-junit" />
+    <path id="test-junit.classpath">
+        <fileset dir="${test-junit.jar.dir}"/>
+    </path>
+    
+    <property name="test-cobertura.jar.dir" location="${lib.dir}/labviewer/test-cobertura" />
+    <path id="test-cobertura.classpath">
+        <fileset dir="${test-cobertura.jar.dir}"/>
+    </path>
+    
+    <property name="test-checkstyle.jar.dir" location="${lib.dir}/labviewer/test-checkstyle" />
+    <path id="test-checkstyle.classpath">
+        <fileset dir="${test-checkstyle.jar.dir}"/>
+    </path>
+
+    <property name="test-pmd.jar.dir" location="${lib.dir}/labviewer/test-pmd" />
+    <path id="test-pmd.classpath">
+        <fileset dir="${test-pmd.jar.dir}"/>
+    </path>
+    
+    <property name="test-selenium.jar.dir" location="${lib.dir}/labviewer/test-selenium" />
+    <path id="test-selenium.classpath">
+        <fileset dir="${test-selenium.jar.dir}"/>
+    </path>
+	-->
+
+    <!-- ====================================================================== -->
+    <!-- Task definitions                                                       -->
+    <!-- ====================================================================== -->
+    <mkdir dir="${lib.dir}"/>
+    <mkdir dir="${ctomlabviewer.report.dir}/labviewer"/>
+    <taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.classpath"/>
+
+  <!-- ====================================================================== -->
+  <!-- Cleaning up target                                                     -->
+  <!-- ====================================================================== -->
+
+	<target name="clean" description="Clean the output directory">
+		<delete dir="${ctomlabviewer.build.dir}"/>
+		<delete dir="${ctomlabviewer.report.dir}/labviewer"/>
+		<delete file="${application.base.path}/${tomcat.relative.path}/webapps/${ctomlabviewer.war}" quiet="true"/>
+	</target>
+ 
+ 
+ 	<target name="clean-web" description="Clean the output directory" depends="configure-prop">
+ 		<delete dir="${ctomlabviewer.build.dir}"/>
+ 		<delete dir="${ctomlabviewer.report.dir}/labviewer"/>
+ 		<delete file="${labviewer.webapp.dir}/${ctomlabviewer.war}" />
+ 		<delete dir="${labviewer.webapp.dir}/labviewer"/>
+	</target>
+	
+	<!-- ====================================================================== -->
+	<!-- Configure main compilation target                                      -->
+	<!-- ====================================================================== -->
+
+	<target name="prepareBuild" >
+		<mkdir dir="${artifacts.dir}"/>
+		<copy todir="${runtime.jar.dir}" overwrite="true">
+			<fileset dir="${artifacts.dir}" includes="ctom*.jar" />
+		</copy>
+		<copy todir="${compile.jar.dir}" overwrite="true">
+			<fileset dir="${artifacts.dir}" includes="ctom*.jar" />
+		</copy>
+
+	</target>
+	
+	<target name="configure" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
+		<copy file="${ctomlabviewer.resourceDir}/hibernate.cfg.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/hibernate.cfg.xml" filtering="true" overwrite="true">
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
+			  
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/log4j.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/log4j.properties" filtering="true" overwrite="true">
+		</copy>
+		
+		<copy file="${ctomlabviewer.resourceDir}/labviewer.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/lv.properties" filtering="true" overwrite="true">
+		</copy>
+		<copy todir="${ctomlabviewer.build.outputDir}">
+			 <fileset dir="${ctomlabviewer.resourceDir}">
+				 <patternset> 	
+				   <include name="application-config*.xml"/>
+				   <include name="ApplicationResources.properties"/>
+				   <include name="displaytag.properties"/>
+				   <include name="client-config.wsdd"/>
+				   <include name="struts.properties"/>
+				   <include name="struts.xml"/>
+				 </patternset>
+			</fileset>
+		</copy>
+		
+		
+	</target>
+
+
+	<target name="configure-web" depends="prepareBuild, configureCSMAuthentication, configureWebSSOAuthentication">
+		<copy file="${ctomlabviewer.resourceDir}/hibernate.cfg.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/hibernate.cfg.xml" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_dialect" value="${database.dialect}" />
+					<filter token="database_user"  		value="${database.user}" />
+					<filter token="database_password"   value="${database.password}" />
+					<filter token="database_driver"  	value="${database.driver}" />
+					<filter token="database_url" 		value="${database.url}" />
+				</filterset>
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/applicationContext.xml.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/applicationContext.xml" filtering="true" overwrite="true">
+	            <filterset begintoken="@" endtoken="@">
+					<filter token="database_csm_dialect" value="${database.csm.dialect}" />
+					<filter token="database_csm_driver" value="${database.csm.driver}" />
+	            	<filter token="database_csm_username" value="${database.csm.username}" />
+	            	<filter token="database_csm_password" value="${database.csm.password}" />
+	            	<filter token="database_csm_url" value="${database.csm.url}" />
+					<filter token="database_csm.user" value="${database.csm.user}" />
+					<filter token="database_csm.password" value="${database.csm.password}" />
+					<filter token="csm_context_name" value="${csm.context.name}" />
+				</filterset>
+			  
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/log4j.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/log4j.properties" filtering="true" overwrite="true">
+      		<filterset begintoken="@" endtoken="@">
+				<filter token="log_dir" value="${log.dir}" />
+			</filterset>
+			  
+		</copy>
+		
+		<copy file="${ctomlabviewer.resourceDir}/labviewer.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/lv.properties" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="hotLink_Type" value="${hotLink_Type}" />
+				<filter token="testEnabled" value="${testEnabled}" />
+				<filter token="SmokeTestGridURL" value="${SmokeTestGridURL}" />
+				<filter token="websso_enabled" value="${websso.enabled}" />	
+				<filter token="websso.cas.server" value="${websso.hostname}" />
+				<filter token="websso.cas.server.port" value="${websso.port}" />
+				<filter token="version" value="${labviewer.version}"/>
+				<filter token="caaers_url" value="${BaseURLcaAERS}" />
+				<filter token="c3d.url" value="${BaseURLC3D}" />
+				<filter token="c3pr.url" value="${BaseURLC3PR}" />
+				<filter token="hub.url" value="${loadLabURLS}" />
+				<filter token="help.link" value="${help.link}" />
+			</filterset>
+
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/baseURL.properties.template" 
+			toFile="${ctomlabviewer.build.outputDir}/baseURL.properties" filtering="true" overwrite="true">
+		</copy>
+		<copy todir="${ctomlabviewer.build.outputDir}">
+			 <fileset dir="${ctomlabviewer.resourceDir}">
+				 <patternset> 	
+				   <include name="application-config*.xml"/>
+				   <include name="ApplicationResources.properties"/>
+				   <include name="displaytag.properties"/>
+				   <include name="client-config.wsdd"/>
+				   <include name="struts.properties"/>
+				   <include name="struts.xml"/>
+				 </patternset>
+			</fileset>
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
+			<filterset begintoken="@" endtoken="@">
+				<filter token="WEBSSO.SERVER" value="${websso.hostname}" />
+				<filter token="WEBSSO.CLIENT.SERVER" value="${tomcat.hostname}" />
+                <filter token="WEBSSO.SERVER.HTTPS.PORT" value="${websso.port}"/>
+                <filter token="WEBSSO.CLIENT.HTTP.PORT" value="${tomcat.port.ssl}"/>
+            </filterset>
+		</copy>
+		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" filtering="true">
+			  <filterset begintoken="@" endtoken="@">
+				<filter token="cert.path" value="${tomcat.grid.secure.cert.location}" />
+				<filter token="key.path" value="${tomcat.grid.secure.key.location}" />
+				<filter token="cas_server" value="${websso.hostname}" />			
+			   </filterset>
+		</copy>		
+	</target>
+
+	<target name="configureCSMAuthentication" unless="websso.enabled">
+		<echo message="configureCSMAuthentication - websso enabled ${websso.enabled}." />
+		<copy file="${ctomlabviewer.resourceDir}/web.xml.csm.template" 
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" />
+	</target>
+
+	<target name="configureWebSSOAuthentication" if="websso.enabled">
+		<echo message="configureWebSSOAuthentication - websso enabled ${websso.enabled}." />
+		<copy file="${ctomlabviewer.resourceDir}/web.xml.sso.template" 
+			  toFile="${labviewer.build.tmp.dir}/web.xml" overwrite="true" filtering="true">
+		</copy>
+
+		<copy file="${ctomlabviewer.resourceDir}/cas-client.properties.template" 
+			  toFile="${ctomlabviewer.build.outputDir}/cas-client.properties" filtering="true" overwrite="true">
+		</copy>
+	</target>
+
+    <!-- ====================================================================== -->
+    <!-- Compilation target                                                     -->
+    <!-- ====================================================================== -->
+
+	 <target name="compile" depends="configure" description="Compile the code">
+	        <mkdir dir="${ctomlabviewer.build.outputDir}"/>
+	        <javac destdir="${ctomlabviewer.build.outputDir}" 
+	               nowarn="false" 
+	               debug="true" 
+	               optimize="false" 
+	               deprecation="true" 
+	               target="1.5" 
+	               verbose="false" 
+	               fork="false" 
+	               source="1.5">
+	            <src>
+	                <pathelement location="${ctomlabviewer.build.srcDir.0}"/>
+	            </src>
+	            <classpath>
+	                  <path refid="compile.classpath"/> 
+	            </classpath>
+	        </javac>
+	    </target>
+	 
+
+	 <target name="deploy-web" depends="configure-web" description="Compile the code">
+	        <mkdir dir="${ctomlabviewer.build.outputDir}"/>
+	        <javac destdir="${ctomlabviewer.build.outputDir}" 
+	               nowarn="false" 
+	               debug="true" 
+	               optimize="false" 
+	               deprecation="true" 
+	               target="1.5" 
+	               verbose="false" 
+	               fork="false" 
+	               source="1.5">
+	            <src>
+	                <pathelement location="${ctomlabviewer.build.srcDir.0}"/>
+	            </src>
+	            <classpath>
+	                  <path refid="compile.classpath"/> 
+	            </classpath>
+	        </javac>
+	    </target>
+
+	<!-- ====================================================================== -->
+	<!-- Configure tests target                                                 -->
+	<!-- ====================================================================== -->
+
+	    <target name="configure-tests">
+	        <copy file="${pa.resourceDir}/test.properties.pa-web" 
+	              tofile="${ctomlabviewer.build.testResourceDir.0}/test.properties"
+	              overwrite="true">
+	            <filterset>
+	                <filter token="test.java.security.login.config" 
+	                        value="${ctomlabviewer.build.testOutputDir}/login.config"/>
+	            </filterset>
+	        </copy>
+	        <replaceregexp file="${ctomlabviewer.build.testResourceDir.0}/test.properties"
+	                       match="\\"
+	                       replace="/"
+	                       flags="g"/>
+	    </target>
+	 <!-- ====================================================================== -->
+	    <!-- Test-compilation target                                                -->
+	    <!-- ====================================================================== -->
+
+	    <target name="compile-tests" 
+	      depends="compile,configure-tests" 
+	      description="Compile the test code"> 
+	        <mkdir dir="${ctomlabviewer.build.testOutputDir}"/>
+	        <javac destdir="${ctomlabviewer.build.testOutputDir}" 
+	               nowarn="false" 
+	               debug="true" 
+	               optimize="false" 
+	               deprecation="true" 
+	               target="1.5" 
+	               verbose="false" 
+	               fork="false" 
+	               source="1.5">
+	            <src>
+	                <pathelement location="${ctomlabviewer.build.testDir.0}"/>
+	            </src>
+	            <classpath>
+	                <pathelement location="${ctomlabviewer.build.outputDir}"/> 
+	                <path refid="test.classpath"/>
+	                <path refid="test-junit.classpath"/>
+	                <path refid="test-selenium.classpath"/>
+	                <path refid="compile.classpath"/>  
+	                  
+	            </classpath>
+	        </javac>
+	        <copy todir="${ctomlabviewer.build.testOutputDir}">
+	            <fileset dir="${ctomlabviewer.build.testResourceDir.0}"/>
+	        </copy>
+	    </target>
+
+	    <!-- ====================================================================== -->
+	    <!-- Run Cobertura and JUnit                                                -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-selenium-class" depends="compile-tests">
+	        
+	        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
+
+	        <delete file="${ctomlabviewer.build.dir}/cobertura.ser" />
+
+	        <cobertura-instrument datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                              toDir="${ctomlabviewer.build.coberturaOutputDir}">
+	            <fileset dir="${ctomlabviewer.build.outputDir}">
+	                <include name="**/*.class" />
+	            </fileset>
+	        </cobertura-instrument>   
+	        
+	        <mkdir dir="${pa-web.test.reports}"/>
+	        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir=".">
+	            <sysproperty key="basedir" value="."/>
+	            <sysproperty key="net.sourceforge.cobertura.datafile"
+	                    file="${ctomlabviewer.build.dir}/cobertura.ser" />
+	            <formatter type="xml"/>
+	            <formatter type="plain" usefile="false"/>
+	            <classpath location="${ctomlabviewer.build.coberturaOutputDir}"/>
+	            <classpath location="${ctomlabviewer.build.outputDir}"/>
+	            <classpath location="${ctomlabviewer.build.testOutputDir}"/>
+	            <classpath refid="cobertura.classpath"/>
+	            <classpath refid="build.test.classpath"/>
+	            <batchtest todir="${ctomlabviewer.test.reports}">
+	                <fileset dir="${ctomlabviewer.build.testDir.0}">
+	                    <include name="**/*Test.java"/>	                       
+	                </fileset>
+	            </batchtest>
+	        </junit>
+	        
+	        <cobertura-report datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                          destdir="${ctomlabviewer.coverage.reports}" 
+	                          srcdir="${ctomlabviewer.build.srcDir.0}" />
+	        
+	        <cobertura-check datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                         totalbranchrate="70" 
+	                         totallinerate="70"
+	                         haltonfailure="false"/>
+	     </target>
+
+	    <!-- ====================================================================== -->
+	    <!-- Run checkstyle                                                         -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-checkstyle">
+	        <taskdef resource="checkstyletask.properties" 
+	             classpath="${test-checkstyle.jar.dir}/checkstyle-all-4.4.jar"/>
+	        <checkstyle config="${ctomlabviewer.checkstyle}" failOnViolation="true">
+	            <classpath>	              
+	                <path refid="compile.classpath"/>
+	            </classpath>
+	            <fileset dir="src" includes="**/*.java" />
+	            <formatter type="plain"/>
+	            <formatter type="plain" toFile="${ctomlabviewer.report.dir}/labviewer/checkstyle.txt"/>
+	            <formatter type="xml"   toFile="${ctomlabviewer.report.dir}/labviewer/checkstyle.xml"/>
+	        </checkstyle>
+	    </target>
+
+	    <!-- ====================================================================== -->
+	    <!-- Run PMD                                                                -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-pmd">
+	        <taskdef name="pmd" 
+	             classpath="${test-pmd.jar.dir}/pmd-4.2.2.jar"
+	             classname="net.sourceforge.pmd.ant.PMDTask"/>
+	             
+	        <pmd shortFilenames="true" failOnRuleViolation="true" 
+	                                   rulesetfiles="${ctomlabviewer.pmd}">
+	            <formatter type="text" toConsole="true"/>
+	            <formatter type="text" toFile="${ctomlabviewer.report.dir}/labviewer/pmd.txt"/>
+	            <formatter type="xml"  toFile="${ctomlabviewer.report.dir}/labviewer/pmd.xml"/>
+	            <fileset dir="src">
+	                <include name="**/*.java"/>
+	            </fileset>
+	         </pmd>
+	    </target>
+
+	    <!-- ====================================================================== -->
+	    <!-- Run Simian                                                             -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-simian">
+	       <taskdef resource="simiantask.properties" 
+	             classpath="${test-simian.jar.dir}/simian-2.2.24.jar"/>
+	       <simian>
+	            <fileset dir="src" includes="**/*.java"/>
+	            <formatter type="plain" toFile="${ctomlabviewer.report.dir}/labviewer/simian.txt"/>
+	            <formatter type="xml" toFile="${ctomlabviewer.report.dir}/labviewer/simian.xml"/>
+	            <formatter type="plain"/>
+	        </simian>
+	    </target>
+
+
+	     <!-- ====================================================================== -->
+	    <!-- Run all tests                                                          -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-dynamic-analysis" 
+	            depends="ivy-get,ivy-compile" 
+	            description="Run dynamic analysis."/>
+	    
+	    <target name="test-static-analysis" 
+	            depends="ivy-get,compile" 
+	            description="Run static analysis."/>
+
+	    <target name="test-all" 
+	            depends="test-static-analysis,test-dynamic-analysis" 
+	            description="Run all tests"/>
+	
+	    <!-- ====================================================================== -->
+	    <!-- Packagee target                                                         -->
+	    <!-- ====================================================================== -->
+
+	        <target name="createAuthJar" description="Creates auth jar">	  	
+			   	<jar jarfile="${artifacts.dir}/labviewerauth.jar">
+			   		<fileset dir="${ctomlabviewer.build.outputDir}">
+			   	        <include name="**/LabViewerAuthorizationHelper.class" />
+			   	        <include name="**/ObjectFactory.class" />
+			   	    </fileset>
+			   	</jar>
+		  	</target>
+	
+		    <target name="deploy-war" depends="createAuthJar">
+		        <copy todir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
+		            <fileset dir="${ctomlabviewer.dir}/target/labviewer/lib/labviewer/runtime"/>
+		        </copy>
+                <delete>
+                    <fileset dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
+                        <include name="axis-1.4.2_10.jar"/>
+                        <include name="cog-jglobus*.jar"/>
+                         <include name="cryptix*.jar"/>
+                         <include name="pull-parser-2.jar"/>
+                         <include name="servlet*.jar"/>
+                         <include name="spring-1.2.8.jar"/>
+                         <include name="spring-beans-1.2.8.jar"/>
+                         <include name="spring-core-1.2.8.jar"/>
+                         <include name="caGrid-CQL-cql.1.0-1.3.jar"/>
+                         <include name="cas-client-uportal-3.0.jar"/>
+                         <include name="cas-server-core-3.2.2.jar"/>
+                         <include name="commons-collections-3.1.jar"/>
+                         <include name="commons-dbcp-1.2.1.jar"/>
+						<include name="commons-discovery-0.2.jar"/>
+						<include name="commons-logging-1.0.4.jar"/>
+						<include name="commons-pool-1.2.jar"/>
+                        <include name="caCORE_SDK_321-3.2.1.zip"/>
+                        <include name="cog-jglobus-1.2.jar"/>
+                        <include name="cas-client-core-3.0.jar"/>
+                        <include name="cas-server-3.0.5.jar"/>
+                    </fileset>
+                </delete>
+                  <war destfile="D:/apache-tomcat-5.5.27/webapps/${ctomlabviewer.war}"
+                     compress="false"
+		             webxml="${labviewer.build.tmp.dir}/web.xml">
+		            <lib dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
+                    </lib>
+                    <classes dir="${ctomlabviewer.build.outputDir}"/>
+                      <fileset dir="${ctomlabviewer.webHome}"/>
+
+                  </war>
+		    </target>
+
+		    <target name="war" depends="createAuthJar">
+		        <copy todir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
+		            <fileset dir="${ctomlabviewer.dir}/target/labviewer/lib/labviewer/runtime"/>
+		        </copy>
+                <delete>
+                    <fileset dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib">
+                        <include name="axis-1.4.2_10.jar"/>
+                        <include name="cog-jglobus*.jar"/>
+                         <include name="cryptix*.jar"/>
+                         <include name="pull-parser-2.jar"/>
+                         <include name="servlet*.jar"/>
+                         <include name="spring-1.2.8.jar"/>
+                         <include name="spring-beans-1.2.8.jar"/>
+                         <include name="spring-core-1.2.8.jar"/>
+                         <include name="caGrid-CQL-cql.1.0-1.3.jar"/>
+                         <include name="cas-client-uportal-3.0.jar"/>
+                         <include name="cas-server-core-3.2.2.jar"/>
+                         <include name="commons-collections-3.1.jar"/>
+                         <include name="commons-dbcp-1.2.1.jar"/>
+						<include name="commons-discovery-0.2.jar"/>
+						<include name="commons-logging-1.0.4.jar"/>
+						<include name="commons-pool-1.2.jar"/>
+                        <include name="caCORE_SDK_321-3.2.1.zip"/>
+                        <include name="cog-jglobus-1.2.jar"/>
+                        <include name="cas-client-core-3.0.jar"/>
+                        <include name="cas-server-3.0.5.jar"/>
+                    </fileset>
+                </delete>
+                  <war destfile="${artifacts.dir}/../labviewer/${ctomlabviewer.war}"   
+                     compress="false"
+		             webxml="${labviewer.build.tmp.dir}/web.xml">
+		            <lib dir="${ctomlabviewer.build.dir}/${labviewer.build.finalName}/WEB-INF/lib"/>
+                    <classes dir="${ctomlabviewer.build.outputDir}"/>
+                    <fileset dir="${ctomlabviewer.webHome}"/>
+                  </war>
+		    </target>
+
+		<target name="configure-prop" >
+			<property name="properties.file" value=""/>
+			<echo message="Using properties file of ${properties.file}."/>
+			<echo message="Using properties file of ${properties.file}."/>
+			<available file="${properties.file}" property="properties.file.exists" />
+			<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
+			<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
+			<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=[ \t]+(.*[\w\d\/\{\}\\]+)\r*$" replace="\1=\2"/>
+			<property file="${properties.file}" />
+		</target>
+
+		<target name="static-analysis:init">
+			<delete dir="${reports.checkstyle.dir}"/>
+<!--			<delete dir="${reports.jdepend.dir}"/>
+			<delete dir="${reports.pmd.dir}"/>
+			<delete dir="${reports.simian.dir}"/>
+			<mkdir dir="${reports.checkstyle.dir}"/>
+			<mkdir dir="${reports.jdepend.dir}"/>
+			<mkdir dir="${reports.pmd.dir}"/>
+			<mkdir dir="${reports.simian.dir}"/>
+			<available classname="jdepend.xmlui.JDepend" property="jdepend.available"/> 
+-->			
+		</target>
+
+
+		<target name="static-analysis:checkstyle" depends="ivy-checkstyle, static-analysis:init">
+			<static-analysis-checkstyle
+				checkstyle.src.dir="${ctomlabviewer.srcHome}"
+				checkstyle.rpt.dir="${reports.checkstyle.dir}"
+				checkstyle.report-xsl.file="${common.dir}/checkstyle/checkstyle-noframes.xsl"
+				checkstyle.config.file="${common.dir}/checkstyle/checkstyle_checks.xml"
+				checkstyle.xml.name="checkstyle.xml"
+				checkstyle.html.name="checkstyle.html"
+				checkstyle.classpath.ref.name="test-checkstyle.classpath"
+			   />
+		</target>
+		
+	    <target name="package-notest-noivy" depends="compile,war"/>
+
+	    <target name="package-notest" depends="clean,ivy-get,compile,war"
+	            description="Package the application.  Do not run tests."/>
+
+
+	    <target name="package-deploy-web" depends="configure-prop,clean-web, ivy-get,deploy-web,deploy-war"
+	            description="Package the application.  Do not run tests.">
+	    </target>        
+
+	    <target name="package" depends="ivy-get,compile,test-all,war" 
+	            description="Package the application"/>
+
+
+	    <!-- ====================================================================== -->
+	    <!-- Run Cobertura and JUnit                                                -->
+	    <!-- ====================================================================== -->
+
+	    <target name="test-cobertura" depends="compile-tests">
+	        
+	        <taskdef classpathref="test-cobertura.classpath" resource="tasks.properties" />
+
+	        <delete file="${ctomlabviewer.build.dir}/cobertura.ser" />
+
+	        <cobertura-instrument datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                              toDir="${ctomlabviewer.build.coberturaOutputDir}">
+	            <fileset dir="${ctomlabviewer.build.outputDir}">
+	                <include name="**/*.class" />
+	            </fileset>
+	        </cobertura-instrument>   
+	        
+	        <mkdir dir="${ctomlabviewer.test.reports}"/>
+	        <junit printSummary="yes" haltonerror="true" haltonfailure="true" fork="true" dir=".">
+	            <sysproperty key="basedir" value="."/>
+	            <sysproperty key="net.sourceforge.cobertura.datafile"
+	                    file="${ctomlabviewer.build.dir}/cobertura.ser" />
+	            <formatter type="xml"/>
+	            <formatter type="plain" usefile="false"/>
+	            <classpath location="${ctomlabviewer.build.coberturaOutputDir}"/>
+	            <classpath location="${ctomlabviewer.build.outputDir}"/>
+	            <classpath location="${ctomlabviewer.build.testOutputDir}"/>
+	            <classpath refid="test.classpath"/>
+	            <classpath refid="test-junit.classpath"/>
+	            <classpath refid="test-cobertura.classpath"/>
+	            <classpath refid="compile.classpath"/>
+	            <batchtest todir="${ctomlabviewer.test.reports}">
+	                <fileset dir="${ctomlabviewer.build.testDir.0}">
+	                    <include name="**/*Test.java"/>
+	                    
+	                </fileset>
+	            </batchtest>
+	        </junit>
+	        
+	        <cobertura-report datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                          destdir="${ctomlabviewer.coverage.reports}" 
+	                          srcdir="${ctomlabviewer.build.srcDir.0}" />
+	        
+	        <cobertura-report datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                          format="xml"        
+	                          destdir="${ctomlabviewer.coverage.reports}" 
+	                          srcdir="${ctomlabviewer.build.srcDir.0}" />
+	        
+	        <cobertura-check datafile="${ctomlabviewer.build.dir}/cobertura.ser"
+	                         totalbranchrate="10" 
+	                         totallinerate="10"
+	                         haltonfailure="false"/>
+	     </target>
+	     
+	    <!-- ====================================================================== -->
+	    <!-- Ivy Targets                                                            -->
+	    <!-- ====================================================================== -->
+	    <target name="init:ivy">
+	        <mkdir dir="${local.repo.dir}"/>
+	        <mkdir dir="${lib.dir}"/>
+	        <property name="ivy.dep.file" value="${ivy.def.file}"/>
+	        <ivy:settings file="${ivy.settings.file}" />
+	    </target>
+	    <target name="ivy-compile" depends="init:ivy">
+	        <ivy:resolve refresh="true" conf="compile" />
+	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="compile" />
+	    </target>
+	    <target name="ivy-runtime" depends="init:ivy">
+	        <ivy:resolve refresh="true" conf="runtime" />
+	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
+	    </target>
+	    <target name="ivy-test-junit" depends="init:ivy">
+	        <ivy:resolve refresh="true" conf="test-junit" />
+	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-junit" />
+	    </target>
+
+		<target name="ivy-checkstyle" description="Resolves and retrieves the JARs needed for Checkstyle." depends="init:ivy">
+<!--		<mkdir dir="${subproject.lib.dir}/test-checkstyle"/>-->
+			<ivy:resolve refresh="true" conf="test-checkstyle"/>
+			<ivy:retrieve pattern="${subproject.lib.dir}/[conf]/[artifact]-[revision].[ext]" conf="test-checkstyle"/>
+		</target>
+
+
+<!--
+	    <target name="ivy-test" 
+	            depends="init:ivy,ivy-test-junit">
+	            <ivy:resolve refresh="true" conf="test" />
+	            <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test" />
+	    </target>
+	    
+	    <target name="ivy-test" 
+	            depends="init:ivy,ivy-test-cobertura,ivy-test-junit,ivy-test-pmd,ivy-test-checkstyle,ivy-test-simian,ivy-test-selenium">
+	            <ivy:resolve refresh="true" conf="test" />
+	            <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test" />
+	    </target>
+-->
+	    <target name="ivy-get" 
+	            depends="init:ivy,ivy-compile,ivy-runtime,ivy-test-junit" 
+	            description="Updates the local ivy repository">
+	    </target>
+	    <target name="ivy-clean" description="Delete jars.">
+	        <delete dir="${lib.dir}/labviewer"/>
+	    </target>
+    
+</project>

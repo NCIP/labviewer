@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC 
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <package name="default" extends="struts-default">
+        <interceptors>
+            <interceptor name="exceptionHandler"
+               class="gov.nih.nci.lv.util.ExceptionHandlerInterceptor" />
+            <interceptor name="parameterTrim"
+               class="com.fiveamsolutions.nci.commons.web.struts2.interceptor.ParameterTrimInterceptor" />
+            <interceptor name="servletConfig"
+               class="org.apache.struts2.interceptor.ServletConfigInterceptor"/>
+            <interceptor name="maliciousInput"
+               class="com.fiveamsolutions.nci.commons.web.struts2.interceptor.XSSFilterInterceptor">
+               <param name="filterSymbols">false</param>
+               <param name="filterControlChars">true</param>
+            </interceptor>
+
+            <interceptor-stack name="lvDefaultInterceptor">
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="checkbox"/>
+                <interceptor-ref name="i18n" />
+                <interceptor-ref name="conversionError"/>
+                <interceptor-ref name="fileUpload" />
+                <interceptor-ref name="params">
+                    <!-- Excludes the jQuery no-cache _ parameter and the Displaytag d-#-X parameter(s) -->
+                    <param name="excludeParams">
+                        _,d-\d+?-[sop]
+                    </param>
+                </interceptor-ref>
+                <interceptor-ref name="maliciousInput"/>
+                <interceptor-ref name="parameterTrim">
+                    <param name="trimToNull">true</param>
+                    <param name="trimFromFront">true</param>
+                </interceptor-ref>
+                <interceptor-ref name="exceptionHandler"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel,reOrder</param>
+                </interceptor-ref>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">input,back,cancel,reOrder</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="lvDefaultInterceptor" />
+        <global-results>
+            <result name="logout">logout.jsp</result>
+            <result name="webssologin">index.jsp</result>
+            <result name="webcsmlogin">/WEB-INF/jsp/login.jsp</result>
+            <result name="sae_error">error.jsp</result>
+            <result name="gen_error">error.jsp</result>
+            <result name="no_access">/WEB-INF/jsp/noaccess.jsp</result> 
+        </global-results>
+
+        <global-exception-mappings>
+		    <exception-mapping exception="gov.nih.nci.cabig.ctms.suite.authorization.SuiteAuthorizationAccessException" result="sae_error" />
+		    <exception-mapping exception="java.lang.Exception" result="gen_error" />
+        </global-exception-mappings>
+
+		<action name="login*" class="gov.nih.nci.lv.web.action.LoginAction" method="{1}">
+		   <result>/WEB-INF/jsp/login.jsp</result>
+            <result name="welcome">/WEB-INF/jsp/welcome.jsp</result>
+		    <result name="error">/WEB-INF/jsp/login.jsp</result>
+		    <result name="redirect" type="redirect">${url}</result> 
+
+		</action>
+
+        <action name="home*" class="gov.nih.nci.lv.web.action.HomeAction" method="{1}">
+            <result>/WEB-INF/jsp/welcome.jsp</result>
+        </action>    
+        <action name="ajaxStudyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
+            <result>/WEB-INF/jsp/protocol/detail.jsp</result>    
+        </action>
+        <action name="ajaxHealthcareSite*" class="gov.nih.nci.lv.web.action.HealthcareSiteAction" method="{1}">
+            <result>/WEB-INF/jsp/nodecorate/hcsresult.jsp</result>
+        </action>		
+        <action name="ajaxInvestigator*" class="gov.nih.nci.lv.web.action.InvestigatorAction" method="{1}">
+            <result>/WEB-INF/jsp/nodecorate/invresult.jsp</result>
+        </action>       
+        <action name="studyProtocol*" class="gov.nih.nci.lv.web.action.StudyProtocolAction" method="{1}">
+            <result>/WEB-INF/jsp/protocol/list.jsp</result>
+            <result name="error">/WEB-INF/jsp/protocol/list.jsp</result>    
+        </action>
+        <action name="studyparticipant*" class="gov.nih.nci.lv.web.action.StudyParticipantAction" method="{1}">
+            <result>/WEB-INF/jsp/participant/result.jsp</result>
+        </action>   
+        <action name="lab*" class="gov.nih.nci.lv.web.action.LabAction" method="{1}">
+            <result>/WEB-INF/jsp/lab/result.jsp</result>
+            <result name ="protocol">/WEB-INF/jsp/protocol/list.jsp</result>
+            <result name ="participant">/WEB-INF/jsp/participant/result.jsp</result>
+            
+        </action>   
+        <action name="property*" class="gov.nih.nci.lv.web.action.PropertyAction" method="{1}">
+            <result>/WEB-INF/jsp/admin/property.jsp</result>
+            <result name="input">/WEB-INF/jsp/admin/property.jsp</result>
+        </action>   
+
+    </package>
+</struts>

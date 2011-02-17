@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<display-name>LabViewer</display-name>
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>ApplicationResources</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext*.xml</param-value>
+    </context-param>    
+
+	<!-- Filters -->
+	    <filter>
+        <filter-name>action2-cleanup</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
+    </filter>
+    
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>action2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+    </filter>
+    <filter>
+        <filter-name>BindHibernateSession</filter-name>
+        <filter-class>gov.nih.nci.lv.util.BindHibernateSession</filter-class>
+    </filter>    
+    <filter-mapping>
+        <filter-name>action2-cleanup</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+     </filter-mapping>
+    <filter-mapping>
+        <filter-name>action2</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BindHibernateSession</filter-name>
+        <url-pattern>*.action</url-pattern>
+         <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter>
+        <filter-name>ResponseOverrideFilter</filter-name>
+        <filter-class>org.displaytag.filter.ResponseOverrideFilter</filter-class>
+    </filter>
+
+	<filter>
+		<filter-name>CAS Client Info Logging Filter</filter-name>
+		<filter-class>org.inspektr.common.web.ClientInfoThreadLocalFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetBeanName</param-name>
+			<param-value>casAuthenticationFilter</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>CAS Validation Filter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetBeanName</param-name>
+			<param-value>casValidationFilter</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>caGRID WebSSO Attribute Loader Filter</filter-name>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSOAttributeLoaderFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSODelegationLookupFilter</filter-class>
+		<init-param>
+			<param-name>certificate-file-path</param-name>
+			<param-value>@cert.path@</param-value>
+		</init-param>
+		<init-param>
+			<param-name>key-file-path</param-name>
+			<param-value>@key.path@</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>caGRID WebSSO Logout Filter</filter-name>
+		<filter-class>org.cagrid.websso.client.filter.CaGridWebSSOLogoutFilter</filter-class>
+		<init-param>
+			<param-name>cas-client-property-file</param-name>
+			<param-value>cas-client.properties</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CAS Single Sign Out Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Authentication Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS Validation Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>caGRID WebSSO Attribute Loader Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>caGRID WebSSO Delegation Lookup Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>caGRID WebSSO Logout Filter</filter-name>
+		<url-pattern>/logout/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>jspSupportServlet</servlet-name>
+        <servlet-class>org.apache.struts2.views.JspSupportServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+
+	<!--Application Configuration Parameters-->
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file> 
+	</welcome-file-list>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/403.jsp</location>
+    </error-page>
+
+</web-app>

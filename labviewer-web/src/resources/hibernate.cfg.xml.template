@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">          
+<hibernate-configuration>
+    <session-factory>
+        <!-- properties  -->
+	  	<property name="connection.driver_class">@database_driver@</property>
+	  	<property name="connection.url">@database_url@</property>
+	  	<property name="connection.username">@database_user@</property>
+	  	<property name="connection.password">@database_password@</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="dialect">@database_dialect@</property>
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+        <!-- mapping classes -->
+        <mapping class="gov.nih.nci.lv.domain.Protocol" />
+        <mapping class="gov.nih.nci.lv.domain.StudySite" />
+        <mapping class="gov.nih.nci.lv.domain.HealthcareSite" />
+        <mapping class="gov.nih.nci.lv.domain.StudyParticipantAssignment" />
+        <mapping class="gov.nih.nci.lv.domain.Participant" />
+        <mapping class="gov.nih.nci.lv.domain.Identifier" />
+        <mapping class="gov.nih.nci.lv.domain.ProtocolStatus" />
+        <mapping class="gov.nih.nci.lv.domain.StudyInvestigator" />
+        <mapping class="gov.nih.nci.lv.domain.Investigator" />
+        <mapping class="gov.nih.nci.lv.domain.SpecimenCollection" />
+        <mapping class="gov.nih.nci.lv.domain.Specimen" />
+        <mapping class="gov.nih.nci.lv.domain.Cd" />
+        <mapping class="gov.nih.nci.lv.domain.LaboratoryTest" />
+        <mapping class="gov.nih.nci.lv.domain.LaboratoryResult" />
+        <mapping class="gov.nih.nci.lv.domain.Organization" />
+        <mapping class="gov.nih.nci.lv.domain.PerformingLaboratory" />
+        <mapping class="gov.nih.nci.lv.domain.CentralLaboratory" />
+        <mapping class="gov.nih.nci.lv.domain.LoadLabStatus" />
+    </session-factory>
+</hibernate-configuration>

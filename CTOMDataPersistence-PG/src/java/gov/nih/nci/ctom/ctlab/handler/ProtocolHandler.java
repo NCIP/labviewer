@@ -100,7 +100,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 
 	// Logging File
 	private static Logger logger = Logger.getLogger("client");
-	
+
 	private static final String PROTOCOL_INSERT = "INSERT INTO protocol (id, " +
 																	    "nci_identifier, " +
 																	    "identifier_assigning_authority, " +
@@ -116,7 +116,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 																	    "randomized_indicator, " +
 																	    "intent_code, " +
 																	    "target_accrual_number) " +
-																 "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+																 "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,null)";
 
 	/*
 	 * (non-Javadoc)
@@ -189,7 +189,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 								.getTime()));
 					}
 					ps.setString(7, String.valueOf(protocol.getSponsorCode()));
-					
+
 					ps.setString(8, protocol.getPrecisTxt());
 					ps.setString(9, protocol.getDescTxt());
 					ps.setString(10, protocol.getPhaseCode());
@@ -197,7 +197,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 					ps.setString(12, protocol.getMultiInstId());
 					ps.setString(13, protocol.getRandomId());
 					ps.setString(14, protocol.getIntentCode());
-					ps.setLong(15, protocol.getTargetAccNum());
+					//ps.setLong(15, );
 					ps.execute();
 					if (identifierUpdInd && protocol.getIdentifier() != null)
 					{
@@ -286,7 +286,7 @@ public class ProtocolHandler extends CTLabDAO implements HL7V3MessageHandlerInte
 			throw (new Exception(se.getLocalizedMessage()));
 
 		}
-		
+
 		// save protocol status
 		if (protocol.getStatus() != null)
 		{
