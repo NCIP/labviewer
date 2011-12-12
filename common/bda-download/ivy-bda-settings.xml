@@ -31,6 +31,10 @@ This file is the is the settings file used by IVY.  It is a good starting point 
 				<artifact pattern="${ivy.local-enterprise.repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 				<ivy pattern="${ivy.local-enterprise.repo}/[organisation]/[module]/[revision]/ivy.xml" />
 			</filesystem>           
+			
+			<!-- Maven 2 -->
+			<ibiblio name="maven2" m2compatible="true"/>
+			
 			<url name="ncicb-ivy-repo">
 				<!-- remote enterprise repository -->
 				<artifact pattern="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />

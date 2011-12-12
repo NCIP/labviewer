@@ -712,20 +712,24 @@
 	    <target name="init:ivy">
 	        <mkdir dir="${local.repo.dir}"/>
 	        <mkdir dir="${lib.dir}"/>
+	    	<mkdir dir="${lib.dir}/dependency-reports"/>
 	        <property name="ivy.dep.file" value="${ivy.def.file}"/>
 	        <ivy:settings file="${ivy.settings.file}" />
 	    </target>
 	    <target name="ivy-compile" depends="init:ivy">
 	        <ivy:resolve refresh="true" conf="compile" />
 	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="compile" />
+	    	<ivy:report todir="${lib.dir}/dependency-reports"/>
 	    </target>
 	    <target name="ivy-runtime" depends="init:ivy">
 	        <ivy:resolve refresh="true" conf="runtime" />
 	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="runtime" />
+	    	<ivy:report todir="${lib.dir}/dependency-reports"/>
 	    </target>
 	    <target name="ivy-test-junit" depends="init:ivy">
 	        <ivy:resolve refresh="true" conf="test-junit" />
 	        <ivy:retrieve pattern="${lib.dir}/labviewer/[conf]/[artifact]-[revision].[ext]" conf="test-junit" />
+	    	<ivy:report todir="${lib.dir}/dependency-reports"/>
 	    </target>
 
 		<target name="ivy-checkstyle" description="Resolves and retrieves the JARs needed for Checkstyle." depends="init:ivy">
