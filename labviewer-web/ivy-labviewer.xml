@@ -19,8 +19,6 @@
 	<!-- runtime -->
 	<dependencies>
 	
-		<dependency org="commons-collections" 		name="commons-collections" 		rev="3.2" 			conf="runtime->default"/>
-	
 		<dependency org="javax.servlet"     name="jstl"                     		rev="1.1.2"         conf="runtime->default"/>
 		<dependency org="org.apache.struts" name="struts2-sitemesh-plugin"  		rev="2.1.8.1"       conf="runtime->default">
 			<exclude module="commons-logging"/>
@@ -110,7 +108,7 @@
 		
 		<dependency org="apache" 			name="addressing" 				rev="1.0"/>
 		
-		<dependency org="apache" 			name="axis" 					rev="1.4.2_10"  conf="runtime->master">
+		<dependency org="apache" 			name="axis" 					rev="1.4.2_10">
 			<exclude module="commons-logging"/>
 			<exclude module="commons-discovery"/>
 		</dependency>
@@ -119,6 +117,7 @@
         <dependency org="commons-beanutils" 		name="commons-beanutils" 			rev="1.7.0"			conf="runtime->default"/>
 		<dependency org="commons-digester" 			name="commons-digester" 			rev="1.5" 			conf="runtime->default"/>
         <dependency org="commons-discovery" 		name="commons-discovery" 			rev="0.4" 			conf="runtime->default"/>
+		<dependency org="commons-collections" 		name="commons-collections" 		rev="3.2" 			conf="runtime->default"/>        
 		
 
 		<!--  ncicb jars -->
