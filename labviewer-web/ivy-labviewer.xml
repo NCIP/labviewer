@@ -19,6 +19,8 @@
 	<!-- runtime -->
 	<dependencies>
 	
+		<dependency org="commons-collections" 		name="commons-collections" 		rev="3.2" 			conf="runtime->default"/>
+	
 		<dependency org="javax.servlet"     name="jstl"                     		rev="1.1.2"         conf="runtime->default"/>
 		<dependency org="org.apache.struts" name="struts2-sitemesh-plugin"  		rev="2.1.8.1"       conf="runtime->default">
 			<exclude module="commons-logging"/>
@@ -36,8 +38,10 @@
         <dependency org="org.springframework" 	name="spring-context-support" 	rev="3.0.6.RELEASE" conf="runtime->default"/>
         <dependency org="org.springframework" 	name="spring-orm" 				rev="3.0.6.RELEASE" conf="runtime->default"/>
         <dependency org="org.springframework" 	name="spring-webmvc" 			rev="3.0.6.RELEASE" conf="runtime->default"/>
+        
         <dependency org="org.acegisecurity"   	name="acegi-security" 			rev="1.0.7"  		conf="runtime->default">
         	<exclude module="commons-logging"/>
+        	<exclude module="commons-collections"/>
         </dependency>	
 	
 	<!-- Bean Shell (Spring & Hibernate)-->
@@ -51,15 +55,14 @@
         <dependency org="cglib" name="cglib-nodep" rev="2.2" conf="runtime->default"/>
 		
 		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.4.Final" conf="runtime->default"/>
+			
+		
 		<dependency org="javassist" name="javassist" rev="3.12.0.GA" conf="runtime->default"/>
 		
         <dependency org="org.slf4j" 		name="slf4j-simple" 					rev="1.6.1" 		conf="runtime->master"/>
         <dependency org="org.slf4j" 		name="slf4j-api" 						rev="1.6.1" 		conf="runtime->master"/>
         
         
-        <dependency org="commons-digester" 	name="commons-digester" 				rev="1.5" 			conf="runtime->master"/>
-        <dependency org="commons-discovery" name="commons-discovery" 				rev="0.4" 			conf="runtime->master"/>
-        <dependency org="commons-lang" 		name="commons-lang" 					rev="2.4" 			conf="runtime->master"/>
         <dependency org="c3p0" 				name="c3p0" 							rev="0.9.0" />
         <dependency org="dom4j" 			name="dom4j" 							rev="1.6.1" 		conf="runtime->master">
         	<exclude module="pull-parser"/>
@@ -71,9 +74,6 @@
         <dependency org="org.antlr" 		name="antlr" 							rev="2.7.6" 		conf="runtime->master"/>
         <dependency org="javax.activation" 	name="activation" 						rev="1.0.2" 		conf="runtime->master"/>
 
-        <dependency org="jakarta" 			name="commons-httpclient" 				rev="3.0.1" 		conf="runtime->master"/>
-        
-        <dependency org="apache" 			name="commons-beanutils" 				rev="1.7.0"			conf="runtime->default"/>
         
 		<dependency org="javax.persistence" name="persistence-api"          		rev="1.0"           conf="runtime->master"/>
 		<dependency org="apache" 			name="log4j" 							rev="1.2.15" 		conf="runtime->master" />
@@ -106,6 +106,7 @@
 		<dependency org="globus" 			name="wss4j" 					rev="noversion"		conf="runtime->master"/>
         <dependency org="globus" 			name="jcogfx" 					rev="noversion" 	conf="runtime->master"/>
 		<dependency org="globus" 			name="jcog" 					rev="1.2" />
+		
 		<dependency org="apache" 			name="addressing" 				rev="1.0"/>
 		
 		<dependency org="apache" 			name="axis" 					rev="1.4.2_10">
