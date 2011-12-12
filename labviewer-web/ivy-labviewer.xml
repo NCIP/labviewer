@@ -42,14 +42,14 @@
         	<exclude module="commons-collections"/>
         </dependency>	
 	
-	<!-- Bean Shell (Spring & Hibernate)-->
+	
 	    <dependency org="org.beanshell" 		name="bsh" 						rev="2.0b4" 		conf="runtime->default"/>
 
-        <!-- ASM dependency (Spring & Hibernate) 2.2.3 -->
+       
         <dependency org="asm" 					name="asm-commons" 				rev="3.2" 			conf="runtime->default"/>
         <dependency org="asm" 					name="asm" 						rev="3.2" 			conf="runtime->default"/>
 
-        <!-- CGLIB No dependency (needed for Spring)-->
+        
         <dependency org="cglib" name="cglib-nodep" rev="2.2" conf="runtime->default"/>
 		
 		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.4.Final" conf="runtime->default"/>
