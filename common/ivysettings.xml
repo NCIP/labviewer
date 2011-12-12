@@ -25,6 +25,10 @@
 				<artifact pattern="${cbiit-ivy-repo}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
 			</url>
             <ibiblio name="cbiit-maven-mirror" m2compatible="true" root="https://ncisvn.nci.nih.gov/svn/maven-mirror/trunk" changingPattern=".*SNAPSHOT" />
+            
+			<!-- Maven 2 -->
+			<ibiblio name="maven2" m2compatible="true"/>
+            
 		</chain>
 	</resolvers>
 </ivysettings>
