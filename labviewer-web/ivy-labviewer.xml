@@ -103,16 +103,23 @@
 		
 		<!--  other caGrid dependent jars -->
 		<dependency org="jasig" 			name="cas-client-core" 			rev="3.1.3" 		transitive="false"/>
+		<dependency org="globus" 			name="axis" 					rev="1.2RC2" 		conf="runtime->master"/>
 		<dependency org="globus" 			name="wss4j" 					rev="noversion"		conf="runtime->master"/>
         <dependency org="globus" 			name="jcogfx" 					rev="noversion" 	conf="runtime->master"/>
 		<dependency org="globus" 			name="jcog" 					rev="1.2" />
 		
 		<dependency org="apache" 			name="addressing" 				rev="1.0"/>
 		
-		<dependency org="apache" 			name="axis" 					rev="1.4.2_10">
+		<dependency org="apache" 			name="axis" 					rev="1.4.2_10"  conf="runtime->master">
 			<exclude module="commons-logging"/>
 			<exclude module="commons-discovery"/>
 		</dependency>
+		
+		<dependency org="commons-httpclient" 		name="commons-httpclient" 			rev="3.0.1" 		conf="runtime->default"/>
+        <dependency org="commons-beanutils" 		name="commons-beanutils" 			rev="1.7.0"			conf="runtime->default"/>
+		<dependency org="commons-digester" 			name="commons-digester" 			rev="1.5" 			conf="runtime->default"/>
+        <dependency org="commons-discovery" 		name="commons-discovery" 			rev="0.4" 			conf="runtime->default"/>
+		
 
 		<!--  ncicb jars -->
 		<dependency org="ncicb" 			name="C3DGridService" 			rev="noversion" 	conf="runtime->master" />
