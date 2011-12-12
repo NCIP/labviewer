@@ -53,8 +53,10 @@
 		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.4.Final" conf="runtime->default"/>
 		<dependency org="javassist" name="javassist" rev="3.12.0.GA" conf="runtime->default"/>
 		
-        <dependency org="org.slf4j" 		name="slf4j-log4j12" 					rev="1.5.5" 		conf="runtime->master"/>
-        <dependency org="org.slf4j" 		name="slf4j-api" 						rev="1.5.11" 		conf="runtime->master"/>
+        <dependency org="org.slf4j" 		name="slf4j-simple" 					rev="1.6.1" 		conf="runtime->master"/>
+        <dependency org="org.slf4j" 		name="slf4j-api" 						rev="1.6.1" 		conf="runtime->master"/>
+        
+        
         <dependency org="commons-digester" 	name="commons-digester" 				rev="1.5" 			conf="runtime->master"/>
         <dependency org="commons-discovery" name="commons-discovery" 				rev="0.4" 			conf="runtime->master"/>
         <dependency org="commons-lang" 		name="commons-lang" 					rev="2.4" 			conf="runtime->master"/>
