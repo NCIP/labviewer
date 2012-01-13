@@ -1,0 +1,653 @@
+
+<project name="common" basedir="."
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+	
+	<property environment="env" />
+	<!-- Ivy jar location -->
+	<!--property name="ivy.jar.dir" value="${user.home}/.ivy2/jars" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" /-->
+
+	<condition property="ivy.available">
+		<available file="${ivy.jar.file}" />
+	</condition>
+	
+	<!-- The default DB setting to be used
+		 can be overriden using -Ddb=xxxx runtime option. 
+	-->
+	<condition property="databaseConfigurationName" else="datasource" value="${db}">
+		<isset property="db"/>
+	</condition>
+	
+	<condition property="jsch.available">
+		<available file="${ivy.jar.dir}/jsch-0.1.31.jar" />
+	</condition>
+	
+	<!-- ===================================================================
+		copy-resources : This task, copy files from source to destination, with filtering on
+	======================================================================= -->
+	<macrodef name="copy-resources" description="copies files from src to dest, with filtering">
+		<attribute name="src" />
+		<attribute name="dest"/>
+		<attribute name="filter" />
+		<sequential>
+			<filter token="databaseConfigurationName" value="${databaseConfigurationName}" />
+			<filter token="project.version" value="${project.version}" />
+			<filter token="buildNumber" value="${today}" />
+			<copy todir="@{dest}" filtering="@{filter}">
+				<fileset dir="@{src}" includes="**/*.*">
+					<exclude name=".svn"/>
+					<exclude name="applicationContext-test.xml"/>
+				</fileset>
+			</copy>
+		</sequential>
+	</macrodef>
+	
+	<!-- ===================================================================
+		makeJar : This task, can be used to make a jarfile.
+	======================================================================= -->
+	
+	<macrodef name="makeJar" description="Task will help in making jar files with manifest">
+		<attribute name="file.name"/>
+		<attribute name="dir"/>
+		<attribute name="dir.classes" />
+		<sequential>
+			<mkdir dir="@{dir}"/>
+	        <jar destfile="@{file.name}">
+	            <fileset dir="@{dir.classes}" />
+	            <manifest>
+	                <attribute name="Built-By" value="${user.name}"/>
+	                <attribute name="Build-Version" value="${version}" />
+	            </manifest>
+	        </jar>
+		</sequential>
+	</macrodef>
+	<!-- =============================================================================
+		ivyResolve : Will resolve the confs to the libDir
+	================================================================================= -->
+	<macrodef name="ivyResolve">
+		<attribute name="libDir"/>
+		<attribute name="confs"/>
+		<attribute name="resolveId"/>
+		<sequential>
+			<ivy:resolve file="${ivy.file}" conf="@{confs}" resolveid="@{resolveId}" haltonfailure="false" settingsRef="ccts.ivy.instance"/>
+			<ivy:retrieve pattern="@{libDir}/[artifact]-[revision].[ext]" resolveid="@{resolveId}" haltonfailure="false" settingsRef="ccts.ivy.instance"/>
+		</sequential>
+	</macrodef>
+	
+	<!-- ==================================================================================
+		ivyPublish: Will publish the files to a repository
+	======================================================================================= -->
+	<macrodef name="ivyPublish">
+			<attribute name="artifactspattern"/>
+			<attribute name="resolver"/>
+			<attribute name="pubrevision"/>
+			<attribute name="status"/>
+			<sequential>
+				<ivy:publish artifactspattern="@{artifactspattern}" 
+						    		resolver="@{resolver}"
+						    		pubrevision="@{pubrevision}"
+						    		status="@{status}"
+						    		forcedeliver="true"
+						    		pubdate="${now}"
+						    		overwrite="true" settingsRef="ccts.ivy.instance"/>
+			</sequential>
+	</macrodef>
+
+	
+	<!-- If present, will skip the execution of testcases -->
+	<property name="skip.test" value="${env.skip.test}" />
+	<condition property="run.test">
+		<isfalse value="${skip.test}" />
+	</condition>
+
+	<!-- For Cobertura and PMD report -->
+	<property name="run.review.reports" value="${env.run.review.reports}" />
+	<condition property="skip.review.reports">
+		<isfalse value="${run.review.reports}" />
+	</condition>
+	
+	<!--Check for JDK version, we need to make sure that JDK 1.5 we use -->
+	<condition property="isJDK1.5">
+		<or>
+			<equals arg1="${ant.java.version}" arg2="1.5" />
+			<equals arg1="${ant.java.version}" arg2="1.6" />
+		</or>
+	</condition>
+	<fail message="JDK 1.5 is currently required to build this project!" unless="isJDK1.5" />
+	
+	<!-- This path will contain all the libraries required to compile
+		the main application -->
+	<path id="main.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- This path will contain all the classes that are required to 
+		compile test cases -->
+	<path id="test.classpath">
+		<pathelement path="${jar.file}" />
+		<path refid="main.classpath" />
+		<fileset dir="${test.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- This path will contain the test dependencies and test classes -->
+	<path id="test.run.classpath">
+		<path refid="test.classpath" />
+		<pathelement path="${test.classes.dir}" />
+	</path>
+	
+	
+	
+	<!-- refers to project root dir -->
+	<dirname file="${ant.file.common}" property="proj.root.dir"/>
+	<property name="local.repo.dir" value="${proj.root.dir}/repository" />
+	<condition property="local.repo.available">
+		<available file="${local.repo.dir}" /> 
+	</condition>
+	<!-- ====================================================
+			target : create-local-repo
+			This target will create local repository if one is not available
+	=======================================================-->
+	<target name="create-repo" unless="local.repo.available"
+		 description="Will create a local repository directory if it is not available">
+		<echo message="create-local-repo: Creating a local repository : ${local.repo.dir}" />
+		<mkdir dir="${local.repo.dir}"/>
+	</target>
+	
+	<!-- ====================================================
+		target : init
+		This target will contain the intiailziation
+	=======================================================-->
+	
+	<target name="init" unless="no.init" depends="create-repo"
+		description="This target will contain the intiailziation">
+		<echo message="Executing ${ant.project.name} : init" />
+		<mkdir dir="${lib.dir}"/>
+		<mkdir dir="${test.lib.dir}"/>
+		<mkdir dir="${classes.dir}" />
+		<mkdir dir="${test.classes.dir}" />
+		<mkdir dir="${instrumented.classes.dir}"/>
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${generated.src.dir}" />
+		<mkdir dir="${cobertura.report.dir}" />
+		<property name="no.init" value="true" />
+	</target>
+	
+	<!-- ==================================================
+		target : download-jsch
+	====================================================== -->
+	<target name="download-jsch" unless="jsch.available">
+		<echo message="Downloading jsch....." />
+		<get src="${ivy.sftp.remote}" dest="${ivy.jar.dir}/jsch-0.1.31.jar" verbose="true" usetimestamp="true"/>
+	</target>
+	
+	<!-- ====================================================
+		target : download-ivy
+		Download ivy if one is not available.
+		=======================================================-->
+	<target name="download-ivy" unless="ivy.available">
+		<mkdir dir="${ivy.jar.dir}"/>
+		<echo message="Downloading IVY....." />
+		<get src="${ivy.jar.location}" dest="${ivy.jar.file}" usetimestamp="true"/>
+	</target>
+	
+	<property name="offline" value="${env.offline}" />
+	<condition property="online">
+		<isfalse value="${offline}"/>
+	</condition>
+
+	
+	<!-- ====================================================
+		target: load-ivy         
+            This target is not necessary if you put ivy.jar in your ant lib directory
+            if you already have ivy 2.0 in your ant lib, you can simply remove this
+            target
+        Note:- Forced to load only once, as I observed that in this task is getting called in every
+        	subant invoke.    
+		=======================================================-->
+	<target name="load-online-settings" if="online">
+		<echo message="Going for online settings" />
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+		         uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"  />
+		<ivy:settings file="${proj.root.dir}/ivysettings.xml" id="ccts.ivy.instance" />
+		<property name="loaded.ivy.settings" value="true" />
+	</target>
+	<target name="load-offline-settings" unless="loaded.ivy.settings">
+		<echo message="Going for offline settings" />
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+		         uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"  />
+		<ivy:settings file="${proj.root.dir}/ivysettings-offline.xml" id="ccts.ivy.instance" />
+	</target>
+	<target name="load-ivy" depends="download-ivy,download-jsch, load-online-settings, load-offline-settings" unless="ivy.loaded">
+				<property name="ivy.loaded" location="true"/>
+	</target>
+	
+    <!-- ======================================================== 
+          target: resolve              
+    	============================================================ -->
+    <target name="resolve" depends="clean-lib, init, load-ivy" unless="already.resolved"
+    	description="--> resolve and retrieve dependencies with ivy">
+    	<condition property="configs" value="${resolve.confs}" else="default">
+    		<isset property="resolve.confs"/>
+    	</condition>
+    	<condition property="to.dir" value="${resolve.to.dir}" else="${lib.dir}">
+    		<isset property="resolve.to.dir"/>
+    	</condition>
+    	
+    	<echo message="Executing ${ant.project.name} : resolve with confs : ${configs}" />
+    	<ivyResolve confs="${configs}" libdir="${to.dir}" resolveid="[org]-[module]"/>
+    	<property name="already.resolved" value="true"/>
+    </target>
+
+	
+    <!-- ======================================================== 
+          target: resolve-test              
+    	============================================================ -->
+    <target name="resolve-test" depends="clean-lib-test, init, load-ivy" unless="already.resolved-test" 
+    	description="--> resolve and retrieve 'test' dependencies with ivy">
+    	<echo message="Executing ${ant.project.name} : resolve-test" />
+    	<ivyResolve confs="test" libdir="${test.lib.dir}" resolveid="[org]-[module]-test"/>
+    	<property name="already.resolved-test" value="true"/>
+    </target>
+  
+    <!-- ========================================================== 
+          target: report              
+    	============================================================ -->
+    <target name="report" depends="resolve" description="--> generates a report of dependencies">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<mkdir dir="${build.dir}/dependency-reports"/>
+        <ivy:report todir="${build.dir}/dependency-reports"/>
+    </target>
+    
+    <!-- =============================================================== 
+          target: compile              
+         ============================================================= -->
+    <target name="compile" depends="resolve" description="--> compile the project">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<copy-resources src="${main.src.resources}" dest="${classes.dir}" filter="true"/>
+    	<javac srcdir="${generated.src.dir}" destdir="${classes.dir}" classpathref="main.classpath" debug="true" source="1.5" target="1.5"/>
+        <javac srcdir="${main.src}" destdir="${classes.dir}" classpathref="main.classpath" debug="true" source="1.5" target="1.5"/>
+    </target>
+
+    
+	<!-- ========================================================== 
+          target: compile-test              
+    =========================================================== -->
+    <target name="compile-test" depends="resolve-test" 
+    		description="--> compile the test classes of this project">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<copy-resources src="${test.src.resources}" dest="${test.classes.dir}" filter="true"/>
+        <javac srcdir="${test.src}" destdir="${test.classes.dir}" classpathref="test.classpath" 
+        	   debug="true" source="1.5"  target="1.5" />
+    </target>
+    
+	<!-- =====================================================================
+		target : ivy-new-version 
+			Will generate a new verion number
+	========================================================================= -->
+	<target name="ivy-new-version" depends="load-ivy" unless="ivy.new.revision"
+			description="Will generate a new version number">
+		<echo message="Executing in ${ant.project.name}" />
+		<echo message="Executing ${ant.project.name} : ivy-new-version" />
+		<!-- default module version prefix value -->
+		<property name="module.version.prefix" value="${project.version}" />
+		
+    	<!-- asks to ivy an available version number -->
+		<ivy:info file="${ivy.file}" settingsRef="ccts.ivy.instance"/>
+    	<ivy:buildnumber 
+    		organisation="${ivy.organisation}" module="${ivy.module}" 
+    		revision="${module.version.prefix}" defaultBuildNumber="1" revSep="." settingsRef="ccts.ivy.instance"/>
+	</target>
+    
+	<!-- =====================================================================
+		target : local-version 
+			Will generate a new verion number for publishing in local repository
+	========================================================================= -->
+    <target name="local-version" description="Will generate a new verion number for publishing in local repository">
+    	<echo message="Executing in ${ant.project.name}" />
+		<tstamp>
+			<format property="now" pattern="yyyyMMddHHmmss"/>
+			<format property="today" pattern="yyyy-MM-dd hh:mm:ss.mmm" />
+		</tstamp>
+        <property name="ivy.new.revision" value="${project.version}-local-${now}"/>
+    </target>
+
+	<!-- =====================================================================
+		target : version
+			Will generate a new verion number for publishing in release repository
+	========================================================================= -->
+	<target name="version" depends="ivy-new-version"
+			description="Will generate a new verion number for publishing in release repository">
+		<echo message="Executing in ${ant.project.name}" />
+		<tstamp>
+			<format property="today" pattern="yyyy-MM-dd hh:mm:ss" />
+		</tstamp>
+    	<!-- create version file in classpath for later inclusion in jar -->
+		<echo message="version=${ivy.new.revision}" file="${classes.dir}/${ant.project.name}.properties" append="false" />
+		<!-- load generated version properties file -->
+        <property file="${classes.dir}/${ant.project.name}.properties" />
+    </target>
+	<!-- ===============================================================================================
+		target:generate-jaxb
+		This target will generate the java objects using XSD available in ${main.src.resources}/schema
+	===================================================================================================-->
+	<target name="generate-jaxb" description="This target will generate the java objects using XSD available in ${main.src.resources}/schema">
+		<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+	    	<classpath>
+	    		<path refid="main.classpath" />
+	        </classpath>	        		
+	    </taskdef>
+		
+		<mkdir dir="${generated.src.dir}"/>
+	    <xjc destdir="${generated.src.dir}" extension="true" >
+	    	<arg line="-npa
+	    			   -Xcollection-setter-injector"/>
+	    	<schema dir="${main.src.resources}/schema">
+	        	<include name="*.xsd"/>
+	        </schema>
+	        <produces dir="${generated.src.dir}" includes="**/schema/**/*.java"/>
+	    </xjc>
+    </target>
+	<!-- ===============================================================================================
+		target:generate-jibx
+		This target will generate the java objects using XSD available in ${main.src.resources}/schema
+	===================================================================================================-->
+	<target name="generate-jibx" description="This target will generate the java objects using XSD available in ${main.src.resources}/schema">
+		<mkdir dir="${generated.src.dir}"/>
+		<taskdef name="xsd2jibx" classname="org.jibx.xsd2jibx.GeneratorAntTask">
+			<classpath>
+				<path refid="main.classpath" />
+			</classpath>
+		</taskdef>
+		<xsd2jibx outputdir="${generated.src.dir}" >
+			<xmlnamespacetojavapackage xmlnamespace="http://semanticbits.com/aeNotification" javapackage="com.semanticbits.aenotification"/>
+			<xsdfileset dir="${main.src.resources}/schema" includes="AENotification.xsd">
+			</xsdfileset>
+		</xsd2jibx>
+	</target>
+
+	<!-- ===============================================================================================
+		target:module-specific-flow
+		This target is used for module specific flow.
+	===================================================================================================-->
+	
+	<target name="module-specific-flow" description="The module specific overriding should be mentioned in this target">
+		<!-- overwrite this module flow in module specific ivy-build.xml-->
+	</target>
+    <!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="module-specific-flow, compile, version" 
+    	description="--> make a jar file for this project">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<makeJar dir="${dist.dir}" dir.classes="${classes.dir}" file.name="${jar.file}"/>
+    </target>
+
+    <!-- ================================= 
+          target: jar-test              
+         ================================= -->
+    <target name="jar-test" depends="compile-test, version" 
+    	description="--> make a jar file containing test classes of this project">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<makeJar dir="${dist.dir}" dir.classes="${test.classes.dir}" file.name="${test.jar.file}"/>
+    </target>
+
+	
+    <!-- ================================= 
+          target: publish              
+         ================================= -->
+    <target name="publish" depends="clean-dist, init, jar, jar-test, test-report" 
+    		description="--> publish this project in the ivy repository">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<ivyPublish artifactspattern="${dist.dir}/[artifact].[ext]" 
+    		resolver="semanticbits-repo-sftp"
+    		pubrevision="${version}" 
+    		status="release"
+    		/>
+        <echo message="project ${ant.project.name} released with version ${version}" />
+    </target>
+
+    <!-- ================================= 
+          target: publish-local              
+         ================================= -->
+    <target name="publish-local" depends="clean-dist, init, local-version, jar, jar-test, debug-info,test-report" 
+    	description="--> publish this project in the local ivy repository">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<ivyPublish artifactspattern="${dist.dir}/[artifact].[ext]" 
+    		resolver="ccts-local"
+    		pubrevision="${version}"
+    		status="integration"
+    		/>
+        <echo message="project ${ant.project.name} published locally with version ${version}" />
+    </target>
+
+
+	<!-- ====================================================
+          target: clean-lib              
+    =======================================================-->
+    <target name="clean-lib" description="--> clean the project libraries directory (dependencies)">
+    	<echo message="Executing in ${ant.project.name}" />
+    	<echo message="Executing in ${ant.project.name}" />
+        <delete includeemptydirs="true" dir="${lib.dir}"/>
+    </target>
+	
+	<!-- ====================================================
+		target : clean-lib-test
+		Cleans the 3rd party libraries
+	=======================================================-->
+    <target name="clean-lib-test" description="--> clean the project libraries directory (dependencies)">
+    	<echo message="Executing in ${ant.project.name}" />
+        <delete includeemptydirs="true" dir="${test.lib.dir}"/>
+    </target>
+	
+    <!-- ================================= 
+          target: clean-dist              
+         ================================= -->
+    <target name="clean-dist" description="--> clean the project built files">
+    	<echo message="Executing in ${ant.project.name}" />
+        <delete includeemptydirs="true" dir="${dist.dir}"/>
+    </target>
+	
+    <!-- ================================= 
+          target: clean-classes              
+         ================================= -->	
+	<target name="clean-classes" description="--> clean the classes dir">
+		<echo message="Executing in ${ant.project.name}" />
+		<delete includeemptydirs="true" dir="${classes.dir}" />
+	</target>
+	
+    <!-- ================================= 
+          target: clean-classes-test              
+         ================================= -->	
+	<target name="clean-classes-test" description="--> clean the test classes dir">
+		<echo message="Executing in ${ant.project.name}" />
+		<delete includeemptydirs="true" dir="${test.classes.dir}" />
+	</target>
+	
+    <!-- ================================= 
+          target: clean-generated-src              
+         ================================= -->	
+	<target name="clean-generated-src" description="--> clean the generated sources dir">
+		<echo message="Executing in ${ant.project.name}" />
+		<delete includeemptydirs="true" dir="${generated.src.dir}" />
+	</target>
+	
+    <!-- ================================= 
+          target: clean-test-results           
+         ================================= -->	
+	<target name="clean-test-results" description="--> clean the test result dir">
+		<echo message="Executing in ${ant.project.name}" />
+		<delete includeemptydirs="true" dir="${test.results.dir}" />
+	</target>
+	
+    <!-- ================================= 
+          target: clean-test-reports              
+         ================================= -->	
+	<target name="clean-test-reports" description="--> clean the test report dir">
+		<echo message="Executing in ${ant.project.name}" />
+		<delete includeemptydirs="true" dir="${test.reports.dir}" />
+	</target>
+	
+	<!-- ================================= 
+	          target: clean-cobertura-dir             
+	         ================================= -->	
+		<target name="clean-cobertura-dir" description="--> clean the cobertura report dir">
+			<echo message="Executing in ${ant.project.name}" />
+			<delete includeemptydirs="true" dir="${cobertura.report.dir}" />
+		</target>
+	<!-- ================================================================
+	    target : clean-cobertura-instruments
+	===================================================================-->
+	<target name="clean-cobertura-instruments" unless="skip.review.reports" description="--> clean the cobertura instruments classes dir">
+				<echo message="Executing in ${ant.project.name}" />
+				<delete includeemptydirs="true" dir="${instrumented.classes.dir}" />
+	</target>
+    <!-- ================================= 
+          target: clean              
+         ================================= -->
+    <target name="clean" depends="clean-classes, clean-classes-test, clean-generated-src, clean-dist, clean-lib, 
+    			clean-lib-test, clean-test-results, clean-test-reports,clean-cobertura-instruments,clean-cobertura-dir" 
+    	description="--> clean the project">
+    	<delete dir="${main.src}" includes="**/*.class" />
+		<delete dir="${test.src}" includes="**/*.class" />
+    </target>
+	
+	<!-- ============================================================== 
+		target: corbetura-init                                                
+	============================================================== -->
+		
+	<target name="corbetura-init" unless="skip.review.reports" depends="clean-cobertura-dir">
+			<!--
+			cobertura-instrument=net.sourceforge.cobertura.ant.InstrumentTask
+			cobertura-merge=net.sourceforge.cobertura.ant.MergeTask
+			cobertura-report=net.sourceforge.cobertura.ant.ReportTask
+			cobertura-check=net.sourceforge.cobertura.ant.CheckTask
+			-->
+			<mkdir dir="${cobertura.report.dir}" />
+			<mkdir dir="${cobertura.report.dir}/xmlreport" />
+			<taskdef  resource="tasks.properties">
+				<classpath>
+					<fileset dir="${test.lib.dir}">
+						<include name="**/*.jar" />
+					</fileset>
+				</classpath>
+			</taskdef>
+			<cobertura-instrument todir="${instrumented.classes.dir}" datafile="${cobertura.report.dir}/cobertura.ser">
+			    <fileset dir="${classes.dir}">
+			        <include name="**/*.class"/>
+			    </fileset>
+			</cobertura-instrument>
+	</target>
+		
+	<!-- ============================================================== 
+		target: test                                                
+	============================================================== -->
+	<condition property="testPattern" value="**/${test}.class" else="gov/nih/nci/cabig/**/*Test.class">
+		<isset property="test"/>
+	</condition>
+	<target name="test" if="run.test" depends="corbetura-init , clean-test-results" description="Runs the testcases">
+		<echo message="Executing in ${ant.project.name}" />
+		<echo message="Test results dir: ${test.results.dir}, with pattern ${testPattern} and classes from ${test.classes.dir}" />
+		<mkdir dir="${test.results.dir}" />
+		
+		<junit printsummary="yes" errorproperty="test.failed" failureproperty="test.failed" 
+			showoutput="true" fork="true" forkmode="once" timeout="600000" >
+			
+			<classpath location="${instrumented.classes.dir}" />
+			<classpath refid="test.run.classpath" />
+			
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.report.dir}/cobertura.ser" />
+			
+			<formatter type="plain"/>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${test.results.dir}">
+				<fileset dir="${test.classes.dir}">
+					<include name="${testPattern}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+ 	<!-- ============================================================== 
+			target: cobertura-report                                                
+	============================================================== -->
+	<target name="cobertura-report" unless="skip.review.reports" description="-> Will create the corbetura coverage report">
+		<cobertura-report format="html" destdir="${cobertura.report.dir}" srcdir="${main.src}" datafile="${cobertura.report.dir}/cobertura.ser"/>
+		<cobertura-report format="xml" destdir="${cobertura.report.dir}/xmlreport" srcdir="${main.src}" datafile="${cobertura.report.dir}/cobertura.ser"/>
+	</target>
+	
+	<!-- ============================================================== 
+		target: test-report                                                
+	============================================================== -->
+	<target name="test-report" if="run.test" depends="test,cobertura-report">
+		<echo message="Executing in ${ant.project.name}" />
+		<mkdir dir="${test.reports.dir}"/>
+        <junitreport todir="${test.reports.dir}">
+            <fileset dir="${test.results.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${test.reports.dir}"/>
+        </junitreport>
+		<fail message="Tests failed! ${ant.project.name} , Check test reports in ${test.reports.dir} for more details." 
+					if="test.failed" />
+	</target>
+	
+	
+	
+	<!-- ==========================================================
+		target: debug-info
+	=============================================================-->
+	<target name="debug-info" description="Echoes useful debug information" >
+			<echo message="base.dir=${basedir}" />
+			<echo message="ant.file=${ant.file}" />
+			<echo message="ivy.available = ${ivy.available}" />
+			<echo message="ant.project.name = ${ant.project.name}" />
+			<echo message="module.version.target = ${module.version.target}" />
+			<echo message="main.src = ${main.src}" />
+			<echo message="main.src.resources=${main.src.resources}" />
+			<echo message="skip.test = ${skip.test}" />
+			<echo message="run.test = ${run.test}" />
+			<echo message="${ant.file.common}" />
+			<echo message="db = ${db}" />
+			<echo message="databaseConfigurationName = ${databaseConfigurationName}" />
+			<echo message="offline : ${offline}" />
+			<echo message="online :${online}" />
+			<echo message="skip.review.reports : ${skip.review.reports}" />
+			<echo message="run.review.reports : ${run.review.reports}" />
+	</target>
+	
+	<!-- ================================= 
+          target: testing              
+         ================================= -->
+    <target name="testing" depends="load-ivy" 
+    		description="--> this target is for ant build file development. Should not be called for performing usual tasks" />
+	
+<!-- ================================= 
+          target: uctrace-report              
+         ================================= -->
+    <target name="uctrace-report" depends="load-ivy, resolve, resolve-test" description="--> Tracebility matrix report">
+    	<taskdef name="useCaseTraceabilityReport" classname="gov.nih.nci.cabig.caaers.ant.UseCaseTraceabilityReportTask" 
+    			 classpathref="test.classpath" />
+    	<useCaseTraceabilityReport destDir="${build.dir}/uctrace"
+    	    	                   srcDir="${test.src}"
+    	    	                   useCasesAnnotationClassName="gov.nih.nci.cabig.caaers.CaaersUseCases">
+    		<classpath>
+    		   <path refid="test.classpath"/>
+    		   <pathelement path="${test.classes.dir}"/>
+    		   <pathelement path="${classes.dir}"/>
+    		</classpath>
+    	</useCaseTraceabilityReport>
+    </target>
+
+
+
+</project>

@@ -1,0 +1,64 @@
+<ivysettings>
+    <settings defaultResolver="ccts-resolver" validate="false" />
+
+    <resolvers>
+
+        <chain name="ccts-resolver" returnFirst="true" dual="true">
+
+            <!--  Local Ivy repository -->
+            <filesystem name="ccts-local" local="true">
+                <ivy pattern="${local.repo.dir}/[organisation]/[module]/ivy-[revision].xml"/>
+                <artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+                <artifact pattern="${local.repo.dir}/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </filesystem>
+
+            <!-- Local Ivy Cache -->
+            <filesystem name="ivy-cache" local="true" >
+                <ivy pattern="${user.home}/.ivy2/ccts-cache/[organisation]/[module]/ivy-[revision].xml"/>
+                <artifact pattern="${user.home}/.ivy2/ccts-cache/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>
+            </filesystem>
+
+            <!-- NCI IVY repository -->
+            <url name="nci-ivy-repo" >
+                <ivy pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/ivy.xml" />
+                <artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[module]-[revision].[ext]" />
+                <artifact pattern="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            </url>
+
+            <!-- caGrid 1.4 repository -->
+            <url name="nci-cagrid-repo">
+                <ivy pattern="http://software.cagrid.org/repository-1.4/[organisation]/[module]/ivy-[revision].xml" />
+                <artifact pattern="http://software.cagrid.org/repository-1.4/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+                <artifact pattern="http://software.cagrid.org/repository-1.4/[organisation]/[module]/[revision]/[artifact].[ext]" />
+            </url>
+
+            <!--  Semanticbits shared repository [using http] -->
+            <url name="semanticbits-repo-http">
+                <ivy pattern="http://repo.semanticbits.com/ivy-repo/[organisation]/[module]/[revision]/ivy.xml" />
+                <artifact pattern="http://repo.semanticbits.com/ivy-repo/[organisation]/[module]/[revision]/[artifact].[ext]" />
+            </url>
+
+            <!-- Maven 2 -->
+            <ibiblio name="maven2" m2compatible="true"/>
+
+            <!--  Northwestern RHLCCC Bioinformatics  -->
+            <ibiblio name="maven2-northwestern" m2compatible="true"
+                     root="http://download.bioinformatics.northwestern.edu/download/maven2"
+                     changingPattern=".*SNAPSHOT" />
+
+            <!--  SemanticBits shared repository [using sftp] -->
+            <sftp name="semanticbits-repo-sftp" user="caaers" userPassword="caaers" host="10.10.10.2">
+                <ivy pattern="/usr/local/tomcats/caaers/demo/tomcat-caaers-demo-8030/webapps/ivy-repo/[organisation]/[module]/[revision]/ivy.xml"/>
+                <artifact pattern="/usr/local/tomcats/caaers/demo/tomcat-caaers-demo-8030/webapps/ivy-repo/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </sftp>
+
+            <!--  SemanticBits shared repository [using sftp] -->
+            <sftp name="semanticbits-grid-repo-sftp" user="caaers" userPassword="caaers" host="10.10.10.2">
+                <ivy pattern="/usr/local/tomcats/caaers/demo/tomcat-caaers-demo-8030/webapps/ivy-repo/caGRID/[organisation]/[module]/[revision]/ivy.xml"/>
+                <artifact pattern="/usr/local/tomcats/caaers/demo/tomcat-caaers-demo-8030/webapps/ivy-repo/caGRID/[organisation]/[module]/[revision]/[artifact].[ext]"/>
+            </sftp>
+
+        </chain>
+
+    </resolvers>
+</ivysettings>
