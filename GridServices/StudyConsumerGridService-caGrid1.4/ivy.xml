@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="1.4">
+
+    <info organisation="gov.nih.nci.ccts.grid"
+          module="StudyConsumer"
+          status="integration" revision="${project.version}"/>
+
+
+    <configurations>
+        <conf name="default" visibility="public" extends="publish,runtime"
+              description="Dependencies needed for default setting"  />
+        <conf name="build" visibility="public"
+              description="Dependencies required for build time, all classpath should have this"/>
+        <conf name="publish" visibility="public"
+              description="Dependencies along with this module is published in repository" />
+        <conf name="distGrid" visibility="public"
+              description="Dependencies that are required in grid distribution of this module" />
+        <conf name="dist" visibility="public"  extends="distGrid"
+              description="Dependencies needed for standalone distribution" />
+        <conf name="runtime" visibility="public"
+              description="The dependencies that are needed for runtime" extends="build" />
+        <conf name="test" visibility="public"
+              description="Dependencies needed for testing purposes"/>
+    </configurations>
+
+    <!--  Items to be published  -->
+    <publications>
+        <artifact name="${ivy.module}-client" conf="publish,distGrid" type="jar" ext="jar"/>
+        <artifact name="${ivy.module}-common" conf="publish,distGrid" type="jar" ext="jar"/>
+        <artifact name="${ivy.module}-service" conf="publish,distGrid" type="jar" ext="jar"/>
+        <artifact name="${ivy.module}-stubs" conf="publish,distGrid" type="jar" ext="jar"/>
+        <artifact name="${ivy.module}-tests" conf="test" type="jar" ext="jar"/>
+    </publications>
+
+    <dependencies>
+
+        <!-- Dependencies copied by caGrid introduce tool -->
+        <dependency org="caGrid" name="advertisement" rev="1.4" conf="*->default" />
+        <dependency org="caGrid" name="introduce-servicetools" rev="1.4" conf="*->default" />
+        <dependency org="caGrid" name="service-security-provider" rev="1.4" conf="*->client" />
+        <dependency org="globus" name="mds" rev="4.0.3-bigindex" conf="*->jars" />
+
+        <!-- Spring framework -->
+        <dependency org="org.springframework" name="spring-web" rev="3.0.6.RELEASE" conf="build->default"/>
+
+        <!-- Castor -->
+        <dependency org="castor" name="castor" rev="0.9.9"/>
+
+        <!-- Logging-->
+        <dependency  org="org.slf4j" name="slf4j-simple" rev="1.6.1" force="true"  conf="build->default"/>
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1" force="true" conf="build->default" />
+
+
+    </dependencies>
+</ivy-module>
