@@ -78,8 +78,8 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property name="ctomdatapersistence.base.dir" location="${software.dir}/CTOMDataPersistence-PG"/>
     <property name="ctomdatapersistence.dir" value="${ctomdatapersistence.base.dir}"/>
     <property name="ctomlabviewer.base.dir" location="${software.dir}/labviewer-web"/>
-	<property name="registrationconsumerservice.base.dir" location="${software.dir}/RegistrationConsumerService-1.3"/>
-	<property name="studyconsumerservice.base.dir" location="${software.dir}/StudyConsumerService-1.3"/>
+	<property name="registrationconsumerservice.base.dir" location="${software.dir}/GridServices/RegistrationConsumerGridService-caGrid1.4"/>
+	<property name="studyconsumerservice.base.dir" location="${software.dir}/GridServices/StudyConsumerGridService-caGrid1.4"/>
 	<property name="studyservice.base.dir" location="${software.dir}/StudyService"/>
 	<property name="labloader.base.dir" location="${software.dir}/LabLoader-1.3"/>
 	<property name="cchc.base.dir" location="${software.dir}/CancerCenterClient"/>

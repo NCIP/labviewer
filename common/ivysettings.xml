@@ -1,7 +1,7 @@
 <ivysettings>
-	<property name="nci.ivy.repo" value="http://gforge.nci.nih.gov/svnroot/commonlibrary/trunk/ivy-repo" /> <!-- this is gradually being replaced by cbiit-ivy-repo and maven repo -->
+	<property name="nci.ivy.repo" value="https://ncisvn.nci.nih.gov/svn/deprecated-ivy-repo/trunk" /> <!-- this is gradually being replaced by cbiit-ivy-repo and maven repo -->
 	<property name="cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3"/>
-	<property name="cbiit-ivy-repo" value="https://ncisvn.nci.nih.gov/svn/cbiit-ivy-repo/trunk"/>
+	<property name="cbiit-ivy-repo" value="https://ncisvn.nci.nih.gov/svn/deprecated-cbiit-ivy-repo/trunk"/>
 	<settings defaultResolver="nci-chain" />
 	<caches defaultCacheDir="${user.home}/.ivy2-${ant.project.name}" useOrigin="true"/>
 	<resolvers>
