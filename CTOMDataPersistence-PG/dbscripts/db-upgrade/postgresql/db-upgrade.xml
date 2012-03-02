@@ -12,10 +12,12 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
 <dbms type="postgresql" />
 </or>
 </preConditions>
+	<!--
 	<changeSet id="1" author="Anupama">
 		<comment>Need to have at least one changeset to allow tagging to work.</comment>
 		<sql>select now()</sql>
 	</changeSet>
+	-->
     <changeSet id="2" author="Naveen">
         <comment>execute lab_hub_org_view.sql.sql</comment>
         <sqlFile path="@db-upgrade.run.dir@/2.2/lab_hub_org_view.sql"/>
@@ -24,5 +26,20 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
         <comment>execute labviewer property sql</comment>
         <sqlFile path="@db-upgrade.run.dir@/2.3/lv_property.sql"/>
     </changeSet>
+	<changeSet id="4" author="chandrasekaravr">
+		<comment>Increase column size</comment>
+		<modifyColumn tableName="protocol" >
+			<column name="short_title_text" type="varchar(250)"/>
+		</modifyColumn>
+		<modifyColumn tableName="protocol" >
+			<column name="long_title_text" type="varchar(1500)"/>
+		</modifyColumn>
+		<modifyColumn tableName="protocol" >
+			<column name="description_text" type="varchar(2500)"/>
+		</modifyColumn>
+		<modifyColumn tableName="protocol" >
+			<column name="precis_text" type="varchar(250)"/>
+		</modifyColumn>
+	</changeSet>
 
 </databaseChangeLog>

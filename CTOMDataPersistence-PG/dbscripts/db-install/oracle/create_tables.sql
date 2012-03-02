@@ -1628,10 +1628,10 @@ CREATE TABLE Protocol (
 	amendment_Date DATE,
 	amendment_Date_orig VARCHAR2(200),    --  added to handle invalid values 
 	navy_Nci_Identifier VARCHAR2(200),
-	long_Title_Text VARCHAR2(500),
-	short_Title_Text VARCHAR2(200),    --  [Additional Documentation] A name or abbreviated title by which the document is known. [BRIDG] [End Documentation] 
-	precis_Text VARCHAR2(200),
-	description_Text VARCHAR2(200),
+	long_Title_Text VARCHAR2(1500),
+	short_Title_Text VARCHAR2(250),    --  [Additional Documentation] A name or abbreviated title by which the document is known. [BRIDG] [End Documentation] 
+	precis_Text VARCHAR2(250),
+	description_Text VARCHAR2(2500),
 	disease_Code VARCHAR2(200),    --  Values Include: A-AIDS, B-Benign, C-Cancer. 
 	intent_Code VARCHAR2(200),    --  Values include: D-Diagnostic Protocol, GN-Genetic Non-therapeutic Protocol, etc. 
 	monitor_Code VARCHAR2(200),    --  Values include: CTEP, CTEP-CTMS, CTEP-CDUS Complete, etc. 

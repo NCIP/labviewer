@@ -24,7 +24,8 @@
 			<exclude module="commons-logging"/>
 		</dependency>
 		<dependency org="taglibs"           name="standard"                 		rev="1.1.2"         conf="runtime->default"/>
-		<dependency org="postgresql" 		name="postgresql-jdbc3" 				rev="8.3-603" 		conf="runtime->master" />
+		<!-- <dependency org="postgresql" 		name="postgresql-jdbc3" 				rev="8.3-603" 		conf="runtime->master" /> -->
+		<dependency org="postgresql"            name="postgresql"                               rev="9.0-801.jdbc4"             conf="runtime->master" />
 		<dependency org="displaytag" 		name="displaytag" 						rev="1.2" 			conf="runtime->master" />
 		
      	<dependency org="org.springframework" 	name="spring-core" 				rev="3.0.6.RELEASE" conf="runtime->default"/>

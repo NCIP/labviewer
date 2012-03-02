@@ -40,9 +40,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 <!-- load the properties file -->
 	<property name="properties.file" value="${basedir}/install.properties"/>
     <echo message="Using properties file of ${properties.file}."/>
-
-
-    <echo message="Using properties file of ${properties.file}."/>
 	<available file="${properties.file}" property="properties.file.exists" />
 	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
 	<replaceregexp file="${properties.file}" byline="true" match="^([\w\d.]+)=(.*[\w\d\/\{\}\\]+)[ \t]+\r*$" replace="\1=\2"/>
@@ -215,7 +212,18 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<condition property="os.temp.dir" value="c:/temp">
 			<os family="windows" />
 		</condition>
-
+		
+		<!-- Set application.base.path based on platform -->
+		<condition property="application.base.path" value="${application.base.path.linux}">
+			<or>
+				<os family="unix" />
+				<os family="mac" />
+			</or>
+		</condition>
+	
+		<condition property="application.base.path" value="${application.base.path.windows}">
+			<os family="windows" />
+		</condition>
 	</target>
 
 	<target name="diag">
@@ -963,28 +971,15 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
     </target>
 
-	<target name="init:install" unless="upgrade.running">
+	<target name="init:install" depends="init:common" unless="upgrade.running">
 		<property name="install.running" value="true"/>
-		<!-- Set application.base.path based on platform -->
-		<condition property="application.base.path" value="${application.base.path.linux}">
-			<or>
-				<os family="unix" />
-				<os family="mac" />
-			</or>
-		</condition>
-	
-		<condition property="application.base.path" value="${application.base.path.windows}">
-			<os family="windows" />
-		</condition>
-		<echo message="application.base.path=${application.base.path}"/>
-
         <!-- Ram changed this -->
         <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
         <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
 
     </target>
 
-	<target name="init:upgrade" depends="
+	<target name="init:upgrade" depends="init:common,
 		init:upgrade:tomcat
 		" unless="install.running">
 	</target>
