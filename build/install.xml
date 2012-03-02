@@ -38,10 +38,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property file="project.properties"/>
 
 <!-- load the properties file -->
-	<property name="properties.file" value="${basedir}/labviewer-sbhost08-vm04-install.properties"/>
-    <echo message="Using properties file of ${properties.file}."/>
-
-
+	<property name="properties.file" value="${basedir}/install.properties"/>
     <echo message="Using properties file of ${properties.file}."/>
 	<available file="${properties.file}" property="properties.file.exists" />
 	<fail unless="properties.file.exists" message="The properties.file ${properties.file} does not exist, please make sure that you pass in an accurate file name with the 'ant -Dproperties.file=somepath/somefile', otherwise the build will fail."/>
