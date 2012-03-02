@@ -38,7 +38,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 	<property file="project.properties"/>
 
 <!-- load the properties file -->
-	<property name="properties.file" value="${basedir}/install.properties"/>
+	<property name="properties.file" value="${basedir}/labviewer-sbhost08-vm04-install.properties"/>
     <echo message="Using properties file of ${properties.file}."/>
 
 
@@ -215,7 +215,18 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 		<condition property="os.temp.dir" value="c:/temp">
 			<os family="windows" />
 		</condition>
-
+		
+		<!-- Set application.base.path based on platform -->
+		<condition property="application.base.path" value="${application.base.path.linux}">
+			<or>
+				<os family="unix" />
+				<os family="mac" />
+			</or>
+		</condition>
+	
+		<condition property="application.base.path" value="${application.base.path.windows}">
+			<os family="windows" />
+		</condition>
 	</target>
 
 	<target name="diag">
@@ -963,20 +974,20 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
     </target>
 
-	<target name="init:install" unless="upgrade.running">
+	<target name="init:install" depends="init:common" unless="upgrade.running">
 		<property name="install.running" value="true"/>
-		<!-- Set application.base.path based on platform -->
-		<condition property="application.base.path" value="${application.base.path.linux}">
-			<or>
-				<os family="unix" />
-				<os family="mac" />
-			</or>
-		</condition>
-	
-		<condition property="application.base.path" value="${application.base.path.windows}">
-			<os family="windows" />
-		</condition>
-		<echo message="application.base.path=${application.base.path}"/>
+
+
+
+
+
+
+
+
+
+
+
+
 
         <!-- Ram changed this -->
         <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
@@ -984,7 +995,7 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
     </target>
 
-	<target name="init:upgrade" depends="
+	<target name="init:upgrade" depends="init:common,
 		init:upgrade:tomcat
 		" unless="install.running">
 	</target>
