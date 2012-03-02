@@ -973,19 +973,6 @@ $HeadURL: http://gforge.nci.nih.gov/svnroot/automation/trunk/software/bda-build-
 
 	<target name="init:install" depends="init:common" unless="upgrade.running">
 		<property name="install.running" value="true"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
         <!-- Ram changed this -->
         <!--<property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>-->
         <property name="tomcat.home" value="${application.base.path}/${tomcat.relative.path}"/>
