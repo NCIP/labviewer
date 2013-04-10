@@ -1,3 +1,9 @@
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <ns1:ServiceDescription introduceVersion="1.3" xmlns:ns1="gme://gov.nih.nci.cagrid/1/Introduce">
  <ns2:Namespaces xsi:type="ns2:NamespacesType" xmlns:ns2="gme://gov.nih.nci.cagrid.introduce/1/Namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns2:Namespace location="./gme_ccts.cabig_1.0_gov.nih.nci.cabig.ccts.domain.xsd" namespace="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain" packageName="gov.nih.nci.cabig.ccts.domain" xsi:type="ns2:NamespaceType">

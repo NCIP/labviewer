@@ -1,3 +1,9 @@
+<%--
+Copyright ScenPro, Inc and SemanticBits, LLC
+
+Distributed under the OSI-approved BSD 3-Clause License.
+See http://ncip.github.com/labviewer/LICENSE.txt for details.
+--%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div id="header">
    <div id="logo"><a href="#"><img src="<%=request.getContextPath()%>/images/logo_labviewer.gif" width="442" height="41" alt="LabViewer" /></a></div>

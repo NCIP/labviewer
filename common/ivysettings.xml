@@ -1,3 +1,9 @@
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <ivysettings>
 	<property name="nci.ivy.repo" value="https://ncisvn.nci.nih.gov/svn/deprecated-ivy-repo/trunk" /> <!-- this is gradually being replaced by cbiit-ivy-repo and maven repo -->
 	<property name="cagrid.ivy.repo" value="http://software.cagrid.org/repository-1.3"/>

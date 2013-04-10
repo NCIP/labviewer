@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <decorators defaultdir="/WEB-INF/decorators">
     <!-- Any urls that are excluded will never be decorated by Sitemesh -->
     <excludes>
