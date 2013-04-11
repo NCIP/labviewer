@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <registration xmlns="gme://ccts.cabig/1.0/gov.nih.nci.cabig.ccts.domain"
         gridId="000ffb14-adcf-4c1a-a47b-9144bae0a45d7-anu">
 	<studySite gridId="2.16.840.1.113883.19.2">

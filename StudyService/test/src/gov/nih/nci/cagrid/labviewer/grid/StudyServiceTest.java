@@ -1,3 +1,9 @@
+/*
+* Copyright ScenPro, Inc and SemanticBits, LLC
+* 
+* Distributed under the OSI-approved BSD 3-Clause License.
+* See http://ncip.github.com/labviewer/LICENSE.txt for details.
+*/
 package gov.nih.nci.cagrid.labviewer.grid;
 import gov.nih.nci.cabig.ccts.domain.OrganizationAssignedIdentifierType;
 import gov.nih.nci.cabig.ccts.domain.ParticipantType;

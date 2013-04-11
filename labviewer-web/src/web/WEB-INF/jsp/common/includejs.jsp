@@ -1,3 +1,9 @@
+<%--
+Copyright ScenPro, Inc and SemanticBits, LLC
+
+Distributed under the OSI-approved BSD 3-Clause License.
+See http://ncip.github.com/labviewer/LICENSE.txt for details.
+--%>
 <script type="text/javascript" language="javascript" src="<c:url value="/scripts/js/subModal.js"/>"></script>
 <script type="text/javascript" language="javascript" src="<c:url value="/scripts/js/subModalcommon.js"/>"></script>
 <script type="text/javascript" language="javascript" src="<c:url value="/scripts/js/calendarpopup.js"/>"></script>

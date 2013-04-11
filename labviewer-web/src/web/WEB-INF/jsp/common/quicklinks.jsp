@@ -1,3 +1,9 @@
+<%--
+Copyright ScenPro, Inc and SemanticBits, LLC
+
+Distributed under the OSI-approved BSD 3-Clause License.
+See http://ncip.github.com/labviewer/LICENSE.txt for details.
+--%>
 <li class="stdnav"><div>QUICK LINKS</div>
     <ul class="quicklinks">
         <li><a href="http://www.cancer.gov/" class="external" target="new2">National Cancer Institute (NCI)</a></li>
