@@ -1,3 +1,9 @@
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <ns1:ServiceSecurityMetadata xsi:type="ns1:ServiceSecurityMetadata" xmlns:ns1="gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
  <ns1:defaultCommunicationMechanism anonymousPermitted="false" xsi:type="ns1:CommunicationMechanism">
   <ns1:GSITransport protectionLevel="privacy" xsi:type="ns1:GSITransport"/>
