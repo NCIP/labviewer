@@ -1,0 +1,13 @@
+.metadata
+.classpath
+build
+bin
+.project
+RemoteSystemsTempFiles
+apache-tomcat-5.5.27
+target/
+CTOMDataPersistence-PG/src/resources/
+LabLoader-1.3/lib/ctomdatapersistence.jar
+LabLoader-1.3/lib/ctomlabapi-orm.jar
+ctomlabviewer/cobertura/instrumented/
+.iml
