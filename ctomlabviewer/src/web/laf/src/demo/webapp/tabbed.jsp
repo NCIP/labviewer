@@ -1,3 +1,9 @@
+<%--
+Copyright ScenPro, Inc and SemanticBits, LLC
+
+Distributed under the OSI-approved BSD 3-Clause License.
+See http://ncip.github.com/labviewer/LICENSE.txt for details.
+--%>
 <%@ page import="gov.nih.nci.cabig.ctms.web.tabs.Flow" %>
 <%@ page import="gov.nih.nci.cabig.ctms.web.tabs.Tab" %>
 <%@ page import="java.util.Map" %>

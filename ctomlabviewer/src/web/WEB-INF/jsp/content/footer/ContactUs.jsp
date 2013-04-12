@@ -1,3 +1,9 @@
+<%--
+Copyright ScenPro, Inc and SemanticBits, LLC
+
+Distributed under the OSI-approved BSD 3-Clause License.
+See http://ncip.github.com/labviewer/LICENSE.txt for details.
+--%>
 <tr>
 	<td valign="top">
       	<!-- target of anchor to skip menus --><a name="content" />
