@@ -1,3 +1,9 @@
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 #Put this llt context information inbetween the host tag of server.xml in tomcat where you are deploying LLT#
 			<Context path="/llt" docBase="llt">
 					<Resource name="CLMDS" auth="Container" type="javax.sql.DataSource" className="org.apache.commons.dbcp.BasicDataSource"/>

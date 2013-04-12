@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+  
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <ns1:caXchangeRequestMessage xmlns:ns1="http://caXchange.nci.nih.gov/messaging">
  <ns1:metadata>
   <ns1:operation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
