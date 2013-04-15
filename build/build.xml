@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <!-- bda-build-template version 1.1.1  -->
 <!--
 $Id: build.xml 1730 2009-05-28 18:53:06Z saksass $

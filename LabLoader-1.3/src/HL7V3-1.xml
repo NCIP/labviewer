@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- section='HM' subSection='PO' realm='UV' artifact='MT-deprecated' domain='RT' xmlns:mif='urn:hl7-org:v3/mif' version='01' root='DEFN'-->
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
 <ClinicalTrial xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" classCode="CLNTRL" moodCode="EVN">
   
  <id assigningAuthorityName="NCI" extension="04_C_0121-testanu" root="f3551f50-9812-4e12-bc48-47ad1a49ed71-testanu" xsi:type="II"/>
