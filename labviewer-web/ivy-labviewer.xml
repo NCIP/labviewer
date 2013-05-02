@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
+
 <!--
 	
 	This is the definition of a virtual module called bda-download that has a dependency of bda-utils.  

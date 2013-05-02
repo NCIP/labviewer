@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
+
 <!--
 
 This is the definition of a virtual module called bda-download that has a dependency of bda-utils.  This virtual project causes the download of bda-utils from the NCICB Ivy Repository.  This file currently points to the 1.0 version of bda-utils if you want to use another version change the rev="1.0" to the desired version.

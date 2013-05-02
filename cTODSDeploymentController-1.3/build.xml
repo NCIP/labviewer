@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright ScenPro, Inc and SemanticBits, LLC
+
+  Distributed under the OSI-approved BSD 3-Clause License.
+  See http://ncip.github.com/labviewer/LICENSE.txt for details.
+-->
+
 <project name="cTomLabViewer" default="build_zip" basedir=".">
 	<property file="build-download.properties" />
 	<property environment="env" />
