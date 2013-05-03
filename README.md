@@ -1,9 +1,7 @@
 Welcome to the LabViewer Project!
 =====================================
 
-LabViewer is a web-based application that allows users to view laboratory data stored in the Clinical Trials Object Data System (CTODS) Lab Domain database.
-
-LabViewer is distributed under the BSD 3-Clause License. 
+LabViewer is a web application used to view and store clinical laboratory data. It is distributed under the BSD 3-Clause License. 
 
 Please see the NOTICE and LICENSE files for details.
 
