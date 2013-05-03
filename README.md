@@ -2,7 +2,6 @@ Welcome to the LabViewer Project!
 =====================================
 
 LabViewer is a web application used to view and store clinical laboratory data. It is distributed under the BSD 3-Clause License. 
-
 Please see the NOTICE and LICENSE files for details.
 
 You will find more details about LabViewer in the following links:
