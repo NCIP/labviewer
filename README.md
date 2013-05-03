@@ -17,7 +17,7 @@ You will find more details about LabViewer in the following links:
 Please join us in further developing and improving LabViewer.
 
 # Prerequisites
- * [Requiremements Matrix] (https://wiki.nci.nih.gov/display/LabViewer/caBIG+Lab+Viewer+2010+System+Requirement+Matrix)
+ * [System Requiremements] (https://wiki.nci.nih.gov/display/LabViewer/caBIG+Lab+Viewer+2010+System+Requirement+Matrix)
  * JDK 1.5.0_16
  * PostgreSQL 8.2.x
  * Apache Tomcat-5.5.x  (SSL enabled)
