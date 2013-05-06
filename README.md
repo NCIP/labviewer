@@ -9,7 +9,6 @@ You will find more details about LabViewer in the following links:
  * [Community wiki](https://wiki.nci.nih.gov/x/HQBTAw)
  * [Forums](https://cabig-kc.nci.nih.gov/CTMS/forums/viewforum.php?f=13&start=0&sid=5b6f012d9a22fded386e767a6d2ccdad)
  * [Issue tracker](https://tracker.nci.nih.gov/browse/CTMSLV)
- * [Documentation wiki](https://wiki.nci.nih.gov/x/IgBTAw)
  * [Documentation Git repo](https://github.com/NCIP/labviewer-docs)
  * [Development Git repo](https://github.com/NCIP/labviewer)
 
