@@ -6,10 +6,10 @@ Please see the NOTICE and LICENSE files for details.
 
 You will find more details about LabViewer in the following links:
 
- * [Community wiki](https://wiki.nci.nih.gov/display/LabViewer/caBIG+Lab+Viewer)
+ * [Community wiki](https://wiki.nci.nih.gov/x/HQBTAw)
  * [Forums](https://cabig-kc.nci.nih.gov/CTMS/forums/viewforum.php?f=13&start=0&sid=5b6f012d9a22fded386e767a6d2ccdad)
  * [Issue tracker](https://tracker.nci.nih.gov/browse/CTMSLV)
- * [Documentation wiki](https://wiki.nci.nih.gov/display/LabViewer/caBIG+Lab+Viewer+Documentation)
+ * [Documentation wiki](https://wiki.nci.nih.gov/x/IgBTAw)
  * [Documentation Git repo](https://github.com/NCIP/labviewer-docs)
  * [Development Git repo](https://github.com/NCIP/labviewer)
 
@@ -17,7 +17,7 @@ You will find more details about LabViewer in the following links:
 Please join us in further developing and improving LabViewer.
 
 # Prerequisites
- * [System Requiremements] (https://wiki.nci.nih.gov/display/LabViewer/caBIG+Lab+Viewer+2010+System+Requirement+Matrix)
+ * [System Requiremements] (https://wiki.nci.nih.gov/x/JgBTAw)
  * JDK 1.5.0_16
  * PostgreSQL 8.2.x
  * Apache Tomcat-5.5.x  (SSL enabled)
