@@ -17,15 +17,16 @@ Getting Started
 
 * Fork the repository on GitHub to publish any proposed changes
 
-* Submit a ticket for your issue at https://tracker.nci.nih.gov/browse/CTMSLV,
+* Submit a ticket for your issue at `issue tracker`_, 
   assuming one does not already exist.
 
-  - Click on https://tracker.nci.nih.gov/secure/CreateIssue.jspa?pid=10002&issuetype=8 to get a jira account.
+  - `Click here`_ to get a jira account.
   - Clearly describe the issue including steps to reproduce when it is a bug.
   - Make sure you fill in the earliest version that you know has the issue.
 
 .. _`GitHub Account`: https://github.com/signup/free
-
+.. _`issue tracker`: https://tracker.nci.nih.gov/browse/CTMSLV
+.. _`Click here`: https://tracker.nci.nih.gov/secure/CreateIssue.jspa?pid=10002&issuetype=8
 --------------
 Making Changes
 --------------
@@ -69,12 +70,13 @@ Submitting Changes
 .. If the project uses an issue tracker, use the next bullet.
    Otherwise, remove the next bullet.  Delete this note either way.
 
-* Update your https://tracker.nci.nih.gov/browse/CTMSLV ticket to mark that you have submitted
+* Update your `LabViewer ticket`_ to mark that you have submitted
   code and are ready for it to be reviewed.
 
   - Include a link to the pull request in the ticket
 
 .. _`BSD 3-Clause License`: http://opensource.org/licenses/BSD-3-Clause
+.. _`LabViewer ticket`: https://tracker.nci.nih.gov/browse/CTMSLV
 
 --------------------
 Additional Resources
